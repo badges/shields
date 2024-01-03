@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { addv } from '../text-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import { latestVersion } from './luarocks-version-helpers.js'
 
 const schema = Joi.object({
   repository: Joi.object()
     .pattern(
       Joi.string(),
-      Joi.object().pattern(Joi.string(), Joi.array().strip())
+      Joi.object().pattern(Joi.string(), Joi.array().strip()),
     )
     .required(),
 }).required()
@@ -20,16 +20,23 @@ export default class Luarocks extends BaseJsonService {
     pattern: ':user/:moduleName/:version?',
   }
 
-  static examples = [
-    {
-      title: 'LuaRocks',
-      namedParams: {
-        user: 'mpeterv',
-        moduleName: 'luacheck',
+  static openApi = {
+    '/luarocks/v/{user}/{moduleName}': {
+      get: {
+        summary: 'LuaRocks',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'mpeterv',
+          },
+          {
+            name: 'moduleName',
+            example: 'luacheck',
+          },
+        ),
       },
-      staticPreview: this.render({ version: '0.23.0-1' }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'luarocks',
@@ -57,10 +64,10 @@ export default class Luarocks extends BaseJsonService {
   async fetch({ user, moduleName }) {
     const { repository } = await this._requestJson({
       url: `https://luarocks.org/manifests/${encodeURIComponent(
-        user
+        user,
       )}/manifest.json`,
       schema,
-      errorMessages: {
+      httpErrors: {
         404: 'user not found',
       },
     })

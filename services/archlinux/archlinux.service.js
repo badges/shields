@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   pkgver: Joi.string().required(),
@@ -13,17 +13,27 @@ export default class ArchLinux extends BaseJsonService {
     pattern: ':repository/:architecture/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Arch Linux package',
-      namedParams: {
-        architecture: 'x86_64',
-        repository: 'core',
-        packageName: 'pacman',
+  static openApi = {
+    '/archlinux/v/{repository}/{architecture}/{packageName}': {
+      get: {
+        summary: 'Arch Linux package',
+        parameters: pathParams(
+          {
+            name: 'repository',
+            example: 'core',
+          },
+          {
+            name: 'architecture',
+            example: 'x86_64',
+          },
+          {
+            name: 'packageName',
+            example: 'pacman',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '5.1.3' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'arch linux' }
 
@@ -31,9 +41,9 @@ export default class ArchLinux extends BaseJsonService {
     const data = await this._requestJson({
       schema,
       url: `https://www.archlinux.org/packages/${encodeURIComponent(
-        repository
+        repository,
       )}/${encodeURIComponent(architecture)}/${encodeURIComponent(
-        packageName
+        packageName,
       )}/json/`,
     })
     return renderVersionBadge({ version: data.pkgver })

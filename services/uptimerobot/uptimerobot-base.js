@@ -25,7 +25,7 @@ const singleMonitorResponse = Joi.alternatives(
   Joi.object({
     stat: Joi.equal('ok').required(),
     monitors: Joi.array().length(1).items(monitor).required(),
-  }).required()
+  }).required(),
 )
 
 const singleMonitorResponseWithUptime = Joi.alternatives(
@@ -33,7 +33,7 @@ const singleMonitorResponseWithUptime = Joi.alternatives(
   Joi.object({
     stat: Joi.equal('ok').required(),
     monitors: Joi.array().length(1).items(monitorWithUptime).required(),
-  }).required()
+  }).required(),
 )
 
 export default class UptimeRobotBase extends BaseJsonService {
@@ -74,6 +74,7 @@ export default class UptimeRobotBase extends BaseJsonService {
           ...opts,
         },
       },
+      logErrors: [],
     })
 
     if (stat === 'fail') {

@@ -3,7 +3,7 @@ import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
-  const baseUrl = process.env.GATSBY_BASE_URL || 'https://img.shields.io'
+  const baseUrl = 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
     ask.res.statusCode = 302 // Found.
@@ -17,7 +17,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
     })
     ask.res.setHeader(
       'Location',
-      `https://github.com/login/oauth/authorize?${query}`
+      `https://github.com/login/oauth/authorize?${query}`,
     )
     end('')
   })
@@ -73,7 +73,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         'therefore more robust.</p>' +
         '<p>Thanks for contributing to a smoother experience for ' +
         'everyone!</p>' +
-        '<p><a href="/">Back to the website</a></p>'
+        '<p><a href="/">Back to the website</a></p>',
     )
 
     onTokenAccepted(token)

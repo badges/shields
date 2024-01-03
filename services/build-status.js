@@ -60,7 +60,7 @@ const allStatuses = greenStatuses
  * Joi schema for validating Build Status.
  * Checks if the build status is present in the list of allowed build status.
  *
- * @type {object}
+ * @type {Joi}
  */
 const isBuildStatus = Joi.equal(...allStatuses)
 

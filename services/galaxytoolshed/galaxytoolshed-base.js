@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { nonNegativeInteger, semver } from '../validators.js'
+import { nonNegativeInteger } from '../validators.js'
 import { NotFound, BaseJsonService } from '../index.js'
 
 const orderedInstallableRevisionsSchema = Joi.array()
@@ -12,26 +12,6 @@ const repositoryRevisionInstallInfoSchema = Joi.array()
       create_time: Joi.date().required(),
       times_downloaded: nonNegativeInteger,
     }).required(),
-    Joi.object({
-      changeset_revision: Joi.string().required(),
-      valid_tools: Joi.array()
-        .ordered(
-          Joi.object({
-            requirements: Joi.array()
-              .ordered(
-                Joi.object({
-                  name: Joi.string(),
-                  version: semver,
-                })
-              )
-              .items(Joi.any()),
-            id: Joi.string(),
-            name: Joi.string(),
-            version: semver,
-          })
-        )
-        .items(Joi.any()),
-    }).required()
   )
   .items(Joi.any())
 

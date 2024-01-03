@@ -97,14 +97,39 @@ self-hosted Shields installation access to private repositories hosted on bitbuc
 Bitbucket badges use basic auth. Provide a username and password to give your
 self-hosted Shields installation access to a private Bitbucket Server instance.
 
+### CurseForge
+
+- `CURSEFORGE_API_KEY` (yml: `private.curseforge_api_key`)
+
+A CurseForge API key is required to use the [CurseForge API][cf api]. To obtain
+an API key, [signup to CurseForge Console][cf signup] with a Google account and
+create an organization, then go to the [API keys page][cf api key] and copy the
+generated API key.
+
+[cf api]: https://docs.curseforge.com
+[cf signup]: https://console.curseforge.com/#/signup
+[cf api key]: https://console.curseforge.com/#/api-keys
+
 ### Discord
 
-Using a token for Dicsord is optional but will allow higher API rates.
+Using a token for Discord is optional but will allow higher API rates.
 
 - `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
 
 Register an application in the [Discord developer console](https://discord.com/developers).
 To obtain a token, simply create a bot for your application.
+
+### DockerHub
+
+Using authentication for DockerHub is optional but can be used to allow
+higher API rates or access to private repos.
+
+- `DOCKERHUB_USER` (yml: `private.dockerhub_username`)
+- `DOCKERHUB_PAT` (yml: `private.dockerhub_pat`)
+
+`DOCKERHUB_PAT` is a Personal Access Token. Generate a token in your
+[account security settings](https://hub.docker.com/settings/security) with
+"Read-Only" or "Public Repo Read-Only", depending on your needs.
 
 ### Drone
 
@@ -125,10 +150,16 @@ Because of GitHub rate limits, you will need to provide a token, or else badges
 will stop working once you hit 60 requests per hour, the
 [unauthenticated rate limit][github rate limit].
 
-You can [create a personal access token][personal access tokens] through the
+You can [create a personal access token][personal access tokens] (PATs) through the
 GitHub website. When you create the token, you can choose to give read access
 to your repositories. If you do that, your self-hosted Shields installation
 will have access to your private repositories.
+
+For most users we recommend using a classic PAT as opposed to a [fine-grained PAT][fine-grained pat].
+It is possible to request a fairly large subset of the GitHub badge suite using a
+fine-grained PAT for authentication but there are also some badges that won't work.
+This is because some of our badges make use of GitHub's v4 GraphQL API and the
+GraphQL API only supports authentication with a classic PAT.
 
 When a `gh_token` is specified, it is used in place of the Shields token
 rotation logic.
@@ -139,6 +170,7 @@ token, though it's not required.
 
 [github rate limit]: https://developer.github.com/v3/#rate-limiting
 [personal access tokens]: https://github.com/settings/tokens
+[fine-grained pat]: https://github.blog/2022-10-18-introducing-fine-grained-personal-access-tokens-for-github/
 
 - `GH_CLIENT_ID` (yml: `private.gh_client_id`)
 - `GH_CLIENT_SECRET` (yml: `private.gh_client_secret`)
@@ -146,6 +178,15 @@ token, though it's not required.
 These settings are used by shields.io for GitHub OAuth app authorization
 but will not be necessary for most self-hosted installations. See
 [production-hosting.md](./production-hosting.md).
+
+### Gitea
+
+- `GITEA_ORIGINS` (yml: `public.services.gitea.authorizedOrigins`)
+- `GITEA_TOKEN` (yml: `private.gitea_token`)
+
+A Gitea [Personal Access Token][gitea-pat] is required for accessing private content. If you need a Gitea token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
+
+[gitea-pat]: https://docs.gitea.com/development/api-usage#generating-and-listing-api-tokens
 
 ### GitLab
 
@@ -211,7 +252,7 @@ installation access to private npm packages
 
 [npm token]: https://docs.npmjs.com/getting-started/working_with_tokens
 
-## Open Build Service
+### Open Build Service
 
 - `OBS_USER` (yml: `private.obs_user`)
 - `OBS_PASS` (yml: `private.obs_user`)
@@ -225,6 +266,22 @@ While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-us
 they can only be scoped to execute specific actions on a POST request. This
 means however, that an actual account is required to read the build status
 of a package.
+
+### OpenCollective
+
+- `OPENCOLLECTIVE_TOKEN` (yml: `opencollective_token`)
+
+OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
+An [API token](https://graphql-docs-v2.opencollective.com/access)
+can be provided to access a higher rate limit of 100 reqs/minute.
+
+### Pepy
+
+- `PEPY_KEY` (yml: `pepy_key`)
+
+The Pepy API requires authentication. To obtain a key,
+Create an account, sign in and obtain generate a key on your
+[account page](https://www.pepy.tech/user).
 
 ### SymfonyInsight (formerly Sensiolabs)
 
@@ -243,6 +300,17 @@ Create an account, sign in and obtain a uuid and token from your
 [Generate a token](https://docs.sonarqube.org/latest/user-guide/user-token/)
 to give your self-hosted Shields installation access to a
 private SonarQube instance or private project on a public instance.
+
+### StackApps (for StackExchange and StackOverflow)
+
+- `STACKAPPS_API_KEY`: (yml: `private.stackapps_api_key`)
+
+Anonymous requests to the stackexchange API are limited to 300 calls per day.
+To increase your quota to 10,000 calls per day, create an account at
+[StackApps](https://stackapps.com/) and
+[register an OAuth app](https://stackapps.com/apps/oauth/register). Having registered
+an OAuth app, you'll be granted a key which can be used to increase your request quota.
+It is not necessary to performa full OAuth Flow to gain an access token.
 
 ### TeamCity
 

@@ -8,7 +8,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('unknown build definition')
-  .get(`/swellaby/opensource/99999999.json`)
+  .get('/swellaby/opensource/99999999.json')
   .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('404 latest build error response')
@@ -22,7 +22,7 @@ t.create('404 latest build error response')
         statusFilter: 'completed',
         'api-version': '5.0-preview.4',
       })
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'tests',
@@ -43,7 +43,7 @@ t.create('no test result summary response')
       .reply(200, { count: 1, value: [{ id: 1234 }] })
       .get('/test/ResultSummaryByBuild')
       .query({ buildId: 1234 })
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'tests',
@@ -51,7 +51,7 @@ t.create('no test result summary response')
   })
 
 t.create('no build response')
-  .get(`/swellaby/opensource/174.json`)
+  .get('/swellaby/opensource/174.json')
   .expectBadge({ label: 'tests', message: 'build pipeline not found' })
 
 t.create('no tests in test result summary response')

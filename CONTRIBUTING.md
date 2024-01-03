@@ -134,9 +134,19 @@ Prettier before a commit by default.
 When adding or changing a service [please write tests][service-tests], and ensure the [title of your Pull Requests follows the required conventions](#running-service-tests-in-pull-requests) to ensure your tests are executed.
 When changing other code, please add unit tests.
 
-To run the integration tests, you must have redis installed and in your PATH.
-Use `brew install redis`, `yum install redis`, etc. The test runner will
-start the server automatically.
+The integration tests are not run by default. For most contributions it is OK to skip these unless you're working directly on the code for storing the GitHub token pool in postgres.
+
+To run the integration tests:
+
+- You must have PostgreSQL installed. Use `brew install postgresql`, `apt-get install postgresql`, etc.
+- Set a connection string either with an env var `POSTGRES_URL=postgresql://user:pass@127.0.0.1:5432/db_name` or by using
+  ```yaml
+  private:
+    postgres_url: 'postgresql://user:pass@127.0.0.1:5432/db_name'
+  ```
+  in a yaml config file.
+- Run `npm run migrate up` to apply DB migrations
+- Run `npm run test:integration` to run the tests
 
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 

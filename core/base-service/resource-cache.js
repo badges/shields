@@ -14,14 +14,16 @@ let resourceCache = Object.create(null)
 /**
  * Make a HTTP request using an in-memory cache
  *
- * @param {object} attrs Refer to individual attrs
- * @param {string} attrs.url URL to request
- * @param {number} attrs.ttl Number of milliseconds to keep cached value for
- * @param {boolean} [attrs.json=true] True if we expect to parse the response as JSON
- * @param {Function} [attrs.scraper=buffer => buffer] Function to extract value from the response
- * @param {object} [attrs.options={}] Options to pass to got
- * @param {Function} [attrs.requestFetcher=fetch] Custom fetch function
- * @returns {*} Parsed response
+ * @async
+ * @param {object} attrs - Refer to individual attrs
+ * @param {string} attrs.url - URL to request
+ * @param {number} attrs.ttl - Number of milliseconds to keep cached value for
+ * @param {boolean} [attrs.json=true] - True if we expect to parse the response as JSON
+ * @param {Function} [attrs.scraper=buffer => buffer] - Function to extract value from the response
+ * @param {object} [attrs.options={}] - Options to pass to got
+ * @param {Function} [attrs.requestFetcher=fetch] - Custom fetch function
+ * @throws {InvalidResponse} - Error if unable to parse response
+ * @returns {Promise<*>} Promise that resolves to parsed response
  */
 async function getCachedResource({
   url,
@@ -38,7 +40,7 @@ async function getCachedResource({
   }
 
   const { buffer } = await checkErrorResponse({})(
-    await requestFetcher(url, options)
+    await requestFetcher(url, options),
   )
 
   let reqData

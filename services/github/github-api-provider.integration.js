@@ -17,11 +17,32 @@ describe('Github API provider', function () {
 
   let githubApiProvider
 
-  context('without token pool', function () {
+  context('with no auth', function () {
     before(function () {
       githubApiProvider = new GithubApiProvider({
         baseUrl,
-        withPooling: false,
+        authType: GithubApiProvider.AUTH_TYPES.NO_AUTH,
+      })
+    })
+
+    it('should be able to run 10 requests', async function () {
+      this.timeout('20s')
+      for (let i = 0; i < 10; ++i) {
+        const { res } = await githubApiProvider.fetch(
+          fetch,
+          '/repos/rust-lang/rust',
+          {},
+        )
+        expect(res.statusCode).to.equal(200)
+      }
+    })
+  })
+
+  context('with global token', function () {
+    before(function () {
+      githubApiProvider = new GithubApiProvider({
+        baseUrl,
+        authType: GithubApiProvider.AUTH_TYPES.GLOBAL_TOKEN,
         globalToken: token,
         reserveFraction,
       })
@@ -30,7 +51,12 @@ describe('Github API provider', function () {
     it('should be able to run 10 requests', async function () {
       this.timeout('20s')
       for (let i = 0; i < 10; ++i) {
-        await githubApiProvider.fetch(fetch, '/repos/rust-lang/rust', {})
+        const { res } = await githubApiProvider.fetch(
+          fetch,
+          '/repos/rust-lang/rust',
+          {},
+        )
+        expect(res.statusCode).to.equal(200)
       }
     })
   })
@@ -40,7 +66,7 @@ describe('Github API provider', function () {
     before(function () {
       githubApiProvider = new GithubApiProvider({
         baseUrl,
-        withPooling: true,
+        authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
         reserveFraction,
       })
       githubApiProvider.addToken(token)
@@ -51,7 +77,7 @@ describe('Github API provider', function () {
       const { res } = await githubApiProvider.fetch(
         fetch,
         '/repos/rust-lang/rust',
-        {}
+        {},
       )
       expect(res.statusCode).to.equal(200)
       headers.push(res.headers)
@@ -69,7 +95,7 @@ describe('Github API provider', function () {
         const current = headers[i]
         const previous = headers[i - 1]
         expect(+current['x-ratelimit-remaining']).to.be.lessThan(
-          +previous['x-ratelimit-remaining']
+          +previous['x-ratelimit-remaining'],
         )
       }
     })

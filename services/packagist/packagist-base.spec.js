@@ -64,13 +64,13 @@ describe('BasePackagistService', function () {
           'foobar/foobar': minifiedSample,
         },
       },
-      'foobar/foobar'
+      'foobar/foobar',
     )
     it('should expand the minified package array to match the expanded sample', function () {
       assert.deepStrictEqual(
         expanded,
         expandedSample,
-        'The expanded array should match the sample'
+        'The expanded array should match the sample',
       )
     })
   })

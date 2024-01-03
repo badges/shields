@@ -1,0 +1,42 @@
+name: Services
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+  push:
+    branches:
+      - 'gh-readonly-queue/**'
+
+jobs:
+  test-services:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 20
+
+      - name: Service tests (triggered from local branch)
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: ./.github/actions/service-tests
+        with:
+          github-token: '${{ secrets.GH_PAT }}'
+          librariesio-tokens: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
+          obs-user: '${{ secrets.SERVICETESTS_OBS_USER }}'
+          obs-pass: '${{ secrets.SERVICETESTS_OBS_PASS }}'
+          pepy-key: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
+          sl-insight-user-uuid: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
+          sl-insight-api-token: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
+          twitch-client-id: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
+          twitch-client-secret: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
+          wheelmap-token: '${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}'
+          youtube-api-key: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
+
+      - name: Service tests (triggered from fork)
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        uses: ./.github/actions/service-tests
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'

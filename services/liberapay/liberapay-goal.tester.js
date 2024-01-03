@@ -14,7 +14,7 @@ t.create('Goal (missing goal key)')
       npatrons: 0,
       giving: null,
       receiving: null,
-    })
+    }),
   )
   .expectBadge({ label: 'liberapay', message: 'no public goals' })
 

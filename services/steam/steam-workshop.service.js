@@ -3,10 +3,10 @@ import prettyBytes from 'pretty-bytes'
 import { renderDownloadsBadge } from '../downloads.js'
 import { metric, formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import BaseSteamAPI from './steam-base.js'
 
-const documentation = `
+const description = `
 <p>
   Using a web browser, you can find the ID in the url here:
 </p>
@@ -18,7 +18,7 @@ const documentation = `
 </p>
 <img
   src="https://user-images.githubusercontent.com/7288322/46567027-27c83400-c987-11e8-9850-ab67d987202f.png"
-  alt="Right-Click and 'Copy Page URL'">
+  alt="Right-Click and 'Copy Page URL'" />
 `
 
 const steamCollectionSchema = Joi.object({
@@ -28,7 +28,7 @@ const steamCollectionSchema = Joi.object({
         .items(
           Joi.object({
             children: Joi.array().required(),
-          }).required()
+          }).required(),
         )
         .required(),
     })
@@ -42,7 +42,7 @@ const steamCollectionNotFoundSchema = Joi.object({
         .items(
           Joi.object({
             result: Joi.number().integer().min(9).max(9).required(),
-          }).required()
+          }).required(),
         )
         .required(),
     })
@@ -51,7 +51,7 @@ const steamCollectionNotFoundSchema = Joi.object({
 
 const collectionFoundOrNotSchema = Joi.alternatives(
   steamCollectionSchema,
-  steamCollectionNotFoundSchema
+  steamCollectionNotFoundSchema,
 )
 
 const steamFileSchema = Joi.object({
@@ -68,7 +68,7 @@ const steamFileSchema = Joi.object({
             lifetime_subscriptions: Joi.number().integer().required(),
             lifetime_favorited: Joi.number().integer().required(),
             views: Joi.number().integer().required(),
-          })
+          }),
         )
         .min(1)
         .max(1)
@@ -84,7 +84,7 @@ const steamFileNotFoundSchema = Joi.object({
         .items(
           Joi.object({
             result: Joi.number().integer().min(9).max(9).required(),
-          }).required()
+          }).required(),
         )
         .min(1)
         .max(1)
@@ -95,7 +95,7 @@ const steamFileNotFoundSchema = Joi.object({
 
 const fileFoundOrNotSchema = Joi.alternatives(
   steamFileSchema,
-  steamFileNotFoundSchema
+  steamFileNotFoundSchema,
 )
 
 class SteamCollectionSize extends BaseSteamAPI {
@@ -106,14 +106,18 @@ class SteamCollectionSize extends BaseSteamAPI {
     pattern: ':collectionId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Collection Files',
-      namedParams: { collectionId: '180077636' },
-      staticPreview: this.render({ size: 32 }),
-      documentation,
+  static openApi = {
+    '/steam/collection-files/{collectionId}': {
+      get: {
+        summary: 'Steam Collection Files',
+        description,
+        parameters: pathParams({
+          name: 'collectionId',
+          example: '180077636',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'files',
@@ -191,14 +195,18 @@ class SteamFileSize extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam File Size',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({ fileSize: 20000 }),
-      documentation,
+  static openApi = {
+    '/steam/size/{fileId}': {
+      get: {
+        summary: 'Steam File Size',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'size',
@@ -221,16 +229,18 @@ class SteamFileReleaseDate extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Release Date',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({
-        releaseDate: new Date(0).setUTCSeconds(1538288239),
-      }),
-      documentation,
+  static openApi = {
+    '/steam/release-date/{fileId}': {
+      get: {
+        summary: 'Steam Release Date',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'release date',
@@ -254,16 +264,18 @@ class SteamFileUpdateDate extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Update Date',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({
-        updateDate: new Date(0).setUTCSeconds(1538288239),
-      }),
-      documentation,
+  static openApi = {
+    '/steam/update-date/{fileId}': {
+      get: {
+        summary: 'Steam Update Date',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'update date',
@@ -287,14 +299,18 @@ class SteamFileSubscriptions extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Subscriptions',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({ subscriptions: 20124 }),
-      documentation,
+  static openApi = {
+    '/steam/subscriptions/{fileId}': {
+      get: {
+        summary: 'Steam Subscriptions',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'subscriptions',
@@ -317,14 +333,18 @@ class SteamFileFavorites extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Favorites',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({ favorites: 20000 }),
-      documentation,
+  static openApi = {
+    '/steam/favorites/{fileId}': {
+      get: {
+        summary: 'Steam Favorites',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'favorites',
@@ -347,14 +367,18 @@ class SteamFileDownloads extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Downloads',
-      namedParams: { fileId: '100' },
-      staticPreview: renderDownloadsBadge({ downloads: 20124 }),
-      documentation,
+  static openApi = {
+    '/steam/downloads/{fileId}': {
+      get: {
+        summary: 'Steam Downloads',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
@@ -371,14 +395,18 @@ class SteamFileViews extends SteamFileService {
     pattern: ':fileId',
   }
 
-  static examples = [
-    {
-      title: 'Steam Views',
-      namedParams: { fileId: '100' },
-      staticPreview: this.render({ views: 20000 }),
-      documentation,
+  static openApi = {
+    '/steam/views/{fileId}': {
+      get: {
+        summary: 'Steam Views',
+        description,
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'views',

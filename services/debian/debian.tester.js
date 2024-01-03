@@ -25,7 +25,7 @@ t.create('Debian package (valid)')
         {
           apt: { unstable: { '1.8.0': { source: 'apt', component: 'main' } } },
         },
-      ])
+      ]),
   )
   .expectBadge({ label: 'debian', message: 'v1.8.0' })
 
@@ -41,7 +41,7 @@ t.create('Debian package (invalid, more than one result)')
         {
           apt: { unstable: { '1.8.1': { source: 'apt', component: 'main' } } },
         },
-      ])
+      ]),
   )
   .expectBadge({ label: 'debian', message: 'invalid response data' })
 
@@ -56,7 +56,7 @@ t.create('Debian package (invalid, requested package missing from response)')
             unstable: { '1.8.0': { source: 'apt', component: 'main' } },
           },
         },
-      ])
+      ]),
   )
   .expectBadge({ label: 'debian', message: 'invalid response data' })
 

@@ -4,18 +4,23 @@ on:
     branches:
       - master
 
+permissions:
+  packages: write
+
 jobs:
-  build:
+  publish-docker-next:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: v0.9.1
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -23,11 +28,31 @@ jobs:
       - name: Set Git Short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
+      - name: Build and push to DockerHub
+        id: docker_build_push
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: shieldsio/shields:next
+          build-args: |
+            version=${{ env.SHORT_SHA }}
+
+      - name: Output Image Digest
+        run: echo ${{ steps.docker_build_push.outputs.digest }} >> $GITHUB_STEP_SUMMARY
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to GHCR
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/badges/shields:next
           build-args: |
             version=${{ env.SHORT_SHA }}

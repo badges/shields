@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -10,38 +10,45 @@ const schema = Joi.object({
 export default class JitPackVersion extends BaseJsonService {
   static category = 'version'
 
+  // Changed endpoint to allow any groupId, custom domains included
+  // See: https://github.com/badges/shields/issues/8312
   static route = {
-    base: 'jitpack/v',
-    pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
+    base: 'jitpack/version',
+    pattern: ':groupId/:artifactId',
   }
 
-  static examples = [
-    {
-      title: 'JitPack',
-      namedParams: {
-        vcs: 'github',
-        user: 'jitpack',
-        repo: 'maven-simple',
+  static openApi = {
+    '/jitpack/version/{groupId}/{artifactId}': {
+      get: {
+        summary: 'JitPack',
+        parameters: pathParams(
+          {
+            name: 'groupId',
+            example: 'com.github.jitpack',
+          },
+          {
+            name: 'artifactId',
+            example: 'maven-simple',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: 'v1.1' }),
-      keywords: ['java', 'maven'],
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'jitpack' }
 
-  async fetch({ vcs, user, repo }) {
-    const url = `https://jitpack.io/api/builds/com.${vcs}.${user}/${repo}/latestOk`
+  async fetch({ groupId, artifactId }) {
+    const url = `https://jitpack.io/api/builds/${groupId}/${artifactId}/latestOk`
 
     return this._requestJson({
       schema,
       url,
-      errorMessages: { 401: 'project not found or private' },
+      httpErrors: { 401: 'project not found or private' },
     })
   }
 
-  async handle({ vcs, user, repo }) {
-    const { version } = await this.fetch({ vcs, user, repo })
+  async handle({ groupId, artifactId }) {
+    const { version } = await this.fetch({ groupId, artifactId })
     return renderVersionBadge({ version })
   }
 }

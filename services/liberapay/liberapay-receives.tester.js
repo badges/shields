@@ -19,6 +19,6 @@ t.create('Receiving (null)')
       giving: null,
       receiving: null,
       goal: null,
-    })
+    }),
   )
   .expectBadge({ label: 'liberapay', message: 'no public receiving stats' })

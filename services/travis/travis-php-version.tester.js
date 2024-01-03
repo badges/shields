@@ -1,19 +1,10 @@
-import { isPhpVersionReduction } from '../test-validators.js'
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
+export const t = new ServiceTester({
+  id: 'TravisPhpVersion',
+  title: 'TravisPhpVersion',
+  pathPrefix: '/travis/php-v',
+})
 
-t.create('gets the package version of symfony 5.1')
+t.create('travis php version, deprecated')
   .get('/symfony/symfony/5.1.json')
-  .expectBadge({ label: 'php', message: isPhpVersionReduction })
-
-t.create('gets the package version of yii')
-  .get('/yiisoft/yii/master.json')
-  .expectBadge({ label: 'php', message: isPhpVersionReduction })
-
-t.create('gets the package version of pagination-bundle')
-  .get('/gpslab/pagination-bundle/master.json')
-  .expectBadge({ label: 'php', message: isPhpVersionReduction })
-
-t.create('invalid package name')
-  .get('/frodo/is-not-a-package/master.json')
-  .expectBadge({ label: 'php', message: 'repo not found' })
+  .expectBadge({ label: 'php', message: 'no longer available' })

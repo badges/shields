@@ -1,4 +1,5 @@
-import { documentation, YouTubeVideoBase } from './youtube-base.js'
+import { pathParams } from '../index.js'
+import { description, YouTubeVideoBase } from './youtube-base.js'
 
 export default class YouTubeViews extends YouTubeVideoBase {
   static route = {
@@ -6,21 +7,17 @@ export default class YouTubeViews extends YouTubeVideoBase {
     pattern: ':videoId',
   }
 
-  static get examples() {
-    const preview = this.render({
-      statistics: { viewCount: 14577 },
-      id: 'abBdk8bSPKU',
-    })
-    // link[] is not allowed in examples
-    delete preview.link
-    return [
-      {
-        title: 'YouTube Video Views',
-        namedParams: { videoId: 'abBdk8bSPKU' },
-        staticPreview: preview,
-        documentation,
+  static openApi = {
+    '/youtube/views/{videoId}': {
+      get: {
+        summary: 'YouTube Video Views',
+        description,
+        parameters: pathParams({
+          name: 'videoId',
+          example: 'abBdk8bSPKU',
+        }),
       },
-    ]
+    },
   }
 
   static render({ statistics, id }) {

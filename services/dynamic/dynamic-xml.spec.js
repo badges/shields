@@ -35,7 +35,7 @@ describe('DynamicXml', function () {
         DynamicXml.prototype.transform({
           pathExpression: '//book/title',
           buffer: exampleXml,
-        })
+        }),
       )
         .to.throw(InvalidResponse)
         .with.property('prettyMessage', 'unsupported query')
@@ -52,7 +52,7 @@ describe('DynamicXml', function () {
     given({ pathExpression: '//book/title/text()', buffer: exampleXml }).expect(
       {
         values: ["XML Developer's Guide", 'Midnight Rain'],
-      }
+      },
     )
     given({
       pathExpression: 'string(//book[1]/title)',

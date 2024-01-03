@@ -1,5 +1,10 @@
 import Joi from 'joi'
-import { BaseJsonService, InvalidResponse } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  pathParam,
+  queryParam,
+} from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { pep440VersionColor } from '../color-formatters.js'
 
@@ -11,7 +16,7 @@ const schema = Joi.object({
         prerelease: Joi.boolean().required(),
         yanked: Joi.boolean().required(),
         files: Joi.object().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -20,30 +25,31 @@ const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
 }).required()
 
-const keywords = ['python', 'arm', 'raspberry pi']
-
 export default class PiWheelsVersion extends BaseJsonService {
   static category = 'version'
 
   static route = { base: 'piwheels/v', pattern: ':wheel', queryParamSchema }
 
-  static examples = [
-    {
-      title: 'piwheels',
-      namedParams: { wheel: 'numpy' },
-      staticPreview: this.render({ version: '1.22.2' }),
-      keywords,
-    },
-    {
-      title: 'piwheels (including prereleases)',
-      namedParams: { wheel: 'flask' },
-      queryParams: {
-        include_prereleases: null,
+  static openApi = {
+    '/piwheels/v/{wheel}': {
+      get: {
+        summary: 'PiWheels Version',
+        description:
+          '[PiWheels](https://www.piwheels.org/) is a Python package repository providing Arm platform wheels for the Raspberry Pi',
+        parameters: [
+          pathParam({
+            name: 'wheel',
+            example: 'flask',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
       },
-      staticPreview: this.render({ version: '2.0.0rc2' }),
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'piwheels' }
 
@@ -55,7 +61,7 @@ export default class PiWheelsVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.piwheels.org/project/${wheel}/json/`,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 
@@ -69,7 +75,7 @@ export default class PiWheelsVersion extends BaseJsonService {
             yanked: releases[key].yanked,
             hasFiles: Object.keys(releases[key].files).length > 0,
           }),
-        []
+        [],
       )
       .filter(release => !release.yanked) // exclude any yanked releases
       .filter(release => release.hasFiles) // exclude any releases with no wheels

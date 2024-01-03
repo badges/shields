@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import WeblateBase from './weblate-base.js'
+import { pathParam, queryParam } from '../index.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   license: Joi.string().required(),
@@ -17,15 +18,19 @@ export default class WeblateComponentLicense extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Weblate component license',
-      namedParams: { project: 'godot-engine', component: 'godot' },
-      queryParams: { server: 'https://hosted.weblate.org' },
-      staticPreview: this.render({ license: 'MIT' }),
-      keywords: ['i18n', 'translation', 'internationalization'],
+  static openApi = {
+    '/weblate/l/{project}/{component}': {
+      get: {
+        summary: 'Weblate component license',
+        description,
+        parameters: [
+          pathParam({ name: 'project', example: 'godot-engine' }),
+          pathParam({ name: 'component', example: 'godot' }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license', color: 'informational' }
 
@@ -33,15 +38,15 @@ export default class WeblateComponentLicense extends WeblateBase {
     return { message: `${license}` }
   }
 
-  async fetch({ project, component, server = 'https://hosted.weblate.org' }) {
+  async fetch({ project, component, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/components/${project}/${component}/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'component not found',
-        429: 'rate limited by remote server',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

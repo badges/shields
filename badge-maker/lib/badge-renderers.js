@@ -69,7 +69,7 @@ function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
 
 function renderBadge(
   { links, leftWidth, rightWidth, height, accessibleText },
-  content
+  content,
 ) {
   const width = leftWidth + rightWidth
   const leftLink = links[0]
@@ -397,7 +397,7 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement]
+      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -446,7 +446,7 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement]
+      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -478,7 +478,7 @@ class FlatSquare extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [backgroundGroup, this.foregroundGroupElement]
+      [backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -748,7 +748,7 @@ function social({
       accessibleText,
       height: externalHeight,
     },
-    [style, gradients, backgroundGroup, logoElement, foregroundGroup]
+    [style, gradients, backgroundGroup, logoElement, foregroundGroup],
   )
 }
 
@@ -978,7 +978,7 @@ function forTheBadge({
       accessibleText: createAccessibleText({ label, message }),
       height: BADGE_HEIGHT,
     },
-    [backgroundGroup, foregroundGroup]
+    [backgroundGroup, foregroundGroup],
   )
 }
 

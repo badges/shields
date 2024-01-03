@@ -3,11 +3,13 @@ import { nonNegativeInteger } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 import {
+  archSchema,
   buildDockerUrl,
   getDockerHubUser,
   getMultiPageData,
   getDigestSemVerMatches,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -18,36 +20,31 @@ const buildSchema = Joi.object({
         Joi.object({
           digest: Joi.string(),
           architecture: Joi.string().required(),
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
-  arch: Joi.string()
-    // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
-    .valid(
-      'amd64',
-      'arm',
-      'arm64',
-      's390x',
-      '386',
-      'ppc64',
-      'ppc64le',
-      'wasm',
-      'mips',
-      'mipsle',
-      'mips64',
-      'mips64le'
-    )
-    .default('amd64'),
+  arch: archSchema.default('amd64'),
 }).required()
 
 export default class DockerVersion extends BaseJsonService {
   static category = 'version'
   static route = { ...buildDockerUrl('v', true), queryParamSchema }
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: [
+      'https://hub.docker.com',
+      'https://registry.hub.docker.com',
+    ],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Image Version (latest by date)',
@@ -79,12 +76,12 @@ export default class DockerVersion extends BaseJsonService {
 
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson({
+    return await fetch(this, {
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
-      errorMessages: { 404: 'repository or tag not found' },
+      httpErrors: { 404: 'repository or tag not found' },
     })
   }
 

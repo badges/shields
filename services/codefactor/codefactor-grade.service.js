@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 import { isValidGrade, gradeColor } from './codefactor-helpers.js'
 
 const schema = Joi.object({
@@ -13,18 +13,52 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
     pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'CodeFactor Grade',
-      namedParams: {
-        vcsType: 'github',
-        user: 'microsoft',
-        repo: 'powertoys',
-        branch: 'main',
+  static openApi = {
+    '/codefactor/grade/{vcsType}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'CodeFactor Grade (with branch)',
+        parameters: pathParams(
+          {
+            name: 'vcsType',
+            example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
+          },
+          {
+            name: 'user',
+            example: 'microsoft',
+          },
+          {
+            name: 'repo',
+            example: 'powertoys',
+          },
+          {
+            name: 'branch',
+            example: 'main',
+          },
+        ),
       },
-      staticPreview: this.render({ grade: 'B+' }),
     },
-  ]
+    '/codefactor/grade/{vcsType}/{user}/{repo}': {
+      get: {
+        summary: 'CodeFactor Grade',
+        parameters: pathParams(
+          {
+            name: 'vcsType',
+            example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
+          },
+          {
+            name: 'user',
+            example: 'microsoft',
+          },
+          {
+            name: 'repo',
+            example: 'powertoys',
+          },
+        ),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'code quality' }
 
@@ -41,7 +75,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
       url: `https://codefactor.io/repository/${vcsType}/${user}/${repo}/badge/${
         branch || ''
       }`,
-      errorMessages: { 404: 'repo or branch not found' },
+      httpErrors: { 404: 'repo or branch not found' },
     })
     return this.constructor.render({ grade: message })
   }

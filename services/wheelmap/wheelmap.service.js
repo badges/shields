@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   node: Joi.object({
@@ -21,13 +21,17 @@ export default class Wheelmap extends BaseJsonService {
     isRequired: true,
   }
 
-  static examples = [
-    {
-      title: 'Wheelmap',
-      namedParams: { nodeId: '26699541' },
-      staticPreview: this.render({ accessibility: 'yes' }),
+  static openApi = {
+    '/wheelmap/a/{nodeId}': {
+      get: {
+        summary: 'Wheelmap',
+        parameters: pathParams({
+          name: 'nodeId',
+          example: '26699541',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'accessibility' }
 
@@ -50,12 +54,12 @@ export default class Wheelmap extends BaseJsonService {
         {
           schema,
           url: `https://wheelmap.org/api/nodes/${nodeId}`,
-          errorMessages: {
+          httpErrors: {
             401: 'invalid token',
             404: 'node not found',
           },
-        }
-      )
+        },
+      ),
     )
   }
 

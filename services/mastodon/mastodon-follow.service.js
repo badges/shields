@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   username: Joi.string().required(),
@@ -12,10 +12,12 @@ const queryParamSchema = Joi.object({
   domain: optionalUrl,
 }).required()
 
-const documentation = `
-<p>To find your user id, you can use <a link target="_blank" href="https://prouser123.me/misc/mastodon-userid-lookup.html">this tool</a>.</p><br>
-<p>Alternatively you can make a request to <code><br>https://your.mastodon.server/.well-known/webfinger?resource=acct:{user}@{domain}</br></code></p>
-<p>Failing that, you can also visit your profile page, where your user ID will be in the header in a tag like this: <code>&lt;link href='https://your.mastodon.server/api/salmon/{your-user-id}' rel='salmon'></code></p>
+const description = `
+To find your user id, you can use [this tool](https://prouser123.me/misc/mastodon-userid-lookup.html).
+
+Alternatively you can make a request to \`https://your.mastodon.server/.well-known/webfinger?resource=acct:<user>@<domain>\`
+
+Failing that, you can also visit your profile page, where your user ID will be in the header in a tag like this: \`<link href='https://your.mastodon.server/api/salmon/<your-user-id>' rel='salmon'>\`
 `
 
 export default class MastodonFollow extends BaseJsonService {
@@ -27,21 +29,24 @@ export default class MastodonFollow extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Mastodon Follow',
-      namedParams: {
-        id: '26471',
+  static openApi = {
+    '/mastodon/follow/{id}': {
+      get: {
+        summary: 'Mastodon Follow',
+        description,
+        parameters: [
+          pathParam({
+            name: 'id',
+            example: '26471',
+          }),
+          queryParam({
+            name: 'domain',
+            example: 'https://mastodon.social',
+          }),
+        ],
       },
-      queryParams: { domain: 'https://mastodon.social' },
-      staticPreview: {
-        label: 'Follow',
-        message: '862',
-        style: 'social',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     namedLogo: 'mastodon',

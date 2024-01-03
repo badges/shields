@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   presence_count: nonNegativeInteger,
 }).required()
 
-const documentation = `
+const description = `
 <p>
   The Discord badge requires the <code>SERVER ID</code> in order access the Discord JSON API.
 </p>
@@ -36,16 +36,20 @@ export default class Discord extends BaseJsonService {
     isRequired: false,
   }
 
-  static examples = [
-    {
-      title: 'Discord',
-      namedParams: { serverId: '102860784329052160' },
-      staticPreview: this.render({ members: 23 }),
-      documentation,
+  static openApi = {
+    '/discord/{serverId}': {
+      get: {
+        summary: 'Discord',
+        description,
+        parameters: pathParams({
+          name: 'serverId',
+          example: '102860784329052160',
+        }),
+      },
     },
-  ]
+  }
 
-  static _cacheLength = 30
+  static _cacheLength = 300
 
   static defaultBadgeData = { label: 'chat' }
 
@@ -63,13 +67,13 @@ export default class Discord extends BaseJsonService {
         {
           url,
           schema,
-          errorMessages: {
+          httpErrors: {
             404: 'invalid server',
             403: 'widget disabled',
           },
         },
-        'Bot'
-      )
+        'Bot',
+      ),
     )
   }
 

@@ -1,26 +1,33 @@
+import { pathParams } from '../index.js'
 import OpencollectiveBase from './opencollective-base.js'
 
 export default class OpencollectiveSponsors extends OpencollectiveBase {
   static route = this.buildRoute('sponsors')
 
-  static examples = [
-    {
-      title: 'Open Collective sponsors',
-      namedParams: { collective: 'shields' },
-      staticPreview: this.render(10),
-      keywords: ['opencollective'],
+  static openApi = {
+    '/opencollective/sponsors/{collective}': {
+      get: {
+        summary: 'Open Collective sponsors',
+        parameters: pathParams({
+          name: 'collective',
+          example: 'shields',
+        }),
+      },
     },
-  ]
+  }
+
+  static _cacheLength = 3600
 
   static defaultBadgeData = {
     label: 'sponsors',
   }
 
   async handle({ collective }) {
-    const { backersCount } = await this.fetchCollectiveBackersCount(
+    const data = await this.fetchCollectiveInfo({
       collective,
-      { userType: 'organizations' }
-    )
+      accountType: ['ORGANIZATION'],
+    })
+    const backersCount = this.getCount(data)
     return this.constructor.render(backersCount)
   }
 }

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import EclipseMarketplaceBase from './eclipse-marketplace-base.js'
 
 const licenseResponseSchema = Joi.object({
@@ -11,14 +12,22 @@ const licenseResponseSchema = Joi.object({
 
 export default class EclipseMarketplaceLicense extends EclipseMarketplaceBase {
   static category = 'license'
-  static route = this.buildRoute('eclipse-marketplace/l')
-  static examples = [
-    {
-      title: 'Eclipse Marketplace',
-      namedParams: { name: 'notepad4e' },
-      staticPreview: this.render({ license: 'GPL' }),
+  static route = {
+    base: 'eclipse-marketplace/l',
+    pattern: ':name',
+  }
+
+  static openApi = {
+    '/eclipse-marketplace/l/{name}': {
+      get: {
+        summary: 'Eclipse Marketplace License',
+        parameters: pathParams({
+          name: 'name',
+          example: 'notepad4e',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 

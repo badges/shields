@@ -1,0 +1,38 @@
+name: Package Library
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
+
+jobs:
+  test-package-lib:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - node: '16'
+            npm: '^9'
+            engine-strict: 'false'
+          - node: '18'
+            npm: '^9'
+            engine-strict: 'false'
+          - node: '20'
+            npm: '^10'
+            engine-strict: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+          npm-version: ${{ matrix.npm }}
+        env:
+          NPM_CONFIG_ENGINE_STRICT: ${{ matrix.engine-strict }}
+
+      - name: Package tests
+        uses: ./.github/actions/package-tests

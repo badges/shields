@@ -6,24 +6,21 @@ const packageSchema = Joi.array().items(
   Joi.object({
     version: Joi.string().required(),
     require: Joi.alternatives(
-      Joi.object({
-        php: Joi.string(),
-      }).required(),
-      Joi.string().valid('__unset')
+      Joi.object().pattern(Joi.string(), Joi.string()).required(),
+      Joi.string().valid('__unset'),
     ),
-  })
+  }),
 )
 
 const allVersionsSchema = Joi.object({
   packages: Joi.object().pattern(/^/, packageSchema).required(),
 }).required()
-const keywords = ['PHP']
 
 class BasePackagistService extends BaseJsonService {
   /**
    * Default fetch method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
@@ -47,7 +44,7 @@ class BasePackagistService extends BaseJsonService {
   /**
    * Fetch dev releases method.
    *
-   * This method utilize composer metadata API which
+   * This method utilizes composer metadata API which
    * "... is the preferred way to access the data as it is always up to date,
    * and dumped to static files so it is very efficient on our end." (comment from official documentation).
    * For more information please refer to https://packagist.org/apidoc#get-package-data.
@@ -152,7 +149,7 @@ class BasePackagistService extends BaseJsonService {
       .filter(
         version =>
           typeof version.version === 'string' ||
-          version.version instanceof String
+          version.version instanceof String,
       )
       .map(version => version.version)
     if (versionStrings.length < 1) {
@@ -167,24 +164,24 @@ class BasePackagistService extends BaseJsonService {
   }
 }
 
-const customServerDocumentationFragment = `
-    <p>
-        Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.
-    </p>
-    `
+const description = `<p>
+  <a href="https://packagist.org/">Packagist</a> is a registry for PHP packages which can be installed with Composer.
+</p>`
 
-const cacheDocumentationFragment = `
-  <p>
-      Displayed data may be slightly outdated.
-      Due to performance reasons, data fetched from packagist JSON API is cached for twelve hours on packagist infrastructure.
-      For more information please refer to <a target="_blank" href="https://packagist.org/apidoc#get-package-data">official packagist documentation</a>.
-  </p>
-  `
+const customServerDocumentationFragment = `<p>
+    Note that only network-accessible packagist.org and other self-hosted Packagist instances are supported.
+</p>`
+
+const cacheDocumentationFragment = `<p>
+  Displayed data may be slightly outdated.
+  Due to performance reasons, data fetched from packagist JSON API is cached for twelve hours on packagist infrastructure.
+  For more information please refer to <a target="_blank" href="https://packagist.org/apidoc#get-package-data">official packagist documentation</a>.
+</p>`
 
 export {
   allVersionsSchema,
-  keywords,
   BasePackagistService,
+  description,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
 }

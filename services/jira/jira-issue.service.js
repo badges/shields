@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { authConfig } from './jira-common.js'
 
 const queryParamSchema = Joi.object({
@@ -29,22 +29,24 @@ export default class JiraIssue extends BaseJsonService {
 
   static auth = authConfig
 
-  static examples = [
-    {
-      title: 'JIRA issue',
-      namedParams: {
-        issueKey: 'KAFKA-2896',
+  static openApi = {
+    '/jira/issue/{issueKey}': {
+      get: {
+        summary: 'JIRA issue',
+        parameters: [
+          pathParam({
+            name: 'issueKey',
+            example: 'KAFKA-2896',
+          }),
+          queryParam({
+            name: 'baseUrl',
+            example: 'https://issues.apache.org/jira',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        baseUrl: 'https://issues.apache.org/jira',
-      },
-      staticPreview: this.render({
-        issueKey: 'KAFKA-2896',
-        statusName: 'Resolved',
-        statusColor: 'green',
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { color: 'lightgrey', label: 'jira' }
 
@@ -75,8 +77,8 @@ export default class JiraIssue extends BaseJsonService {
       this.authHelper.withBasicAuth({
         schema,
         url: `${baseUrl}/rest/api/2/issue/${encodeURIComponent(issueKey)}`,
-        errorMessages: { 404: 'issue not found' },
-      })
+        httpErrors: { 404: 'issue not found' },
+      }),
     )
 
     const issueStatus = json.fields.status

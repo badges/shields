@@ -45,7 +45,7 @@ class BaseSteamAPI extends BaseJsonService {
     return this._requestJson({
       url,
       schema,
-      errorMessages: {
+      httpErrors: {
         400: 'bad request',
       },
       options,

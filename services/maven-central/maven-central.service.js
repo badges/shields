@@ -28,7 +28,7 @@ export default redirector({
       documentation,
     },
   ],
-  transformPath: () => `/maven-metadata/v`,
+  transformPath: () => '/maven-metadata/v',
   transformQueryParams: ({ groupId, artifactId, versionPrefix }) => {
     const group = encodeURIComponent(groupId).replace(/\./g, '/')
     const artifact = encodeURIComponent(artifactId)

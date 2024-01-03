@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { metric as metricCount } from '../text-formatters.js'
 import TestspaceBase from './testspace-base.js'
 
@@ -5,24 +6,35 @@ export default class TestspaceTestCount extends TestspaceBase {
   static route = {
     base: 'testspace',
     pattern:
-      ':metric(total|passed|failed|skipped|errored)/:org/:project/:space+',
+      ':metric(total|passed|failed|skipped|errored|untested)/:org/:project/:space+',
   }
 
-  static examples = [
-    {
-      title: 'Testspace tests',
-      namedParams: {
-        metric: 'passed',
-        org: 'swellaby',
-        project: 'swellaby:testspace-sample',
-        space: 'main',
+  static openApi = {
+    '/testspace/{metric}/{org}/{project}/{space}': {
+      get: {
+        summary: 'Testspace tests count',
+        parameters: pathParams(
+          {
+            name: 'metric',
+            example: 'passed',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          },
+          {
+            name: 'org',
+            example: 'swellaby',
+          },
+          {
+            name: 'project',
+            example: 'swellaby:testspace-sample',
+          },
+          {
+            name: 'space',
+            example: 'main',
+          },
+        ),
       },
-      staticPreview: this.render({
-        metric: 'passed',
-        value: 31,
-      }),
     },
-  ]
+  }
 
   static render({ value, metric }) {
     let color = 'informational'
@@ -39,7 +51,7 @@ export default class TestspaceTestCount extends TestspaceBase {
   }
 
   transform({ json, metric }) {
-    const { passed, failed, skipped, errored, total } =
+    const { passed, failed, skipped, errored, untested, total } =
       this.transformCaseCounts(json)
     if (metric === 'total') {
       return { value: total }
@@ -49,6 +61,8 @@ export default class TestspaceTestCount extends TestspaceBase {
       return { value: failed }
     } else if (metric === 'skipped') {
       return { value: skipped }
+    } else if (metric === 'untested') {
+      return { value: untested }
     } else {
       return { value: errored }
     }

@@ -30,4 +30,13 @@ export default [
     dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
+  redirector({
+    route: {
+      base: 'jenkins/coverage/api',
+      pattern: '',
+    },
+    category: 'coverage',
+    transformPath: () => '/jenkins/coverage/apiv1',
+    dateAdded: new Date('2023-03-21'),
+  }),
 ]

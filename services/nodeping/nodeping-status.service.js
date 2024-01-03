@@ -1,10 +1,10 @@
 import Joi from 'joi'
 import {
   queryParamSchema,
-  exampleQueryParams,
+  queryParams,
   renderWebsiteStatus,
 } from '../website-status.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.object().keys({ su: Joi.boolean() }))
@@ -24,14 +24,17 @@ export default class NodePingStatus extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'NodePing status',
-      namedParams: { checkUuid: exampleCheckUuid },
-      queryParams: exampleQueryParams,
-      staticPreview: renderWebsiteStatus({ isUp: true }),
+  static openApi = {
+    '/nodeping/status/{checkUuid}': {
+      get: {
+        summary: 'NodePing status',
+        parameters: pathParams({
+          name: 'checkUuid',
+          example: exampleCheckUuid,
+        }).concat(queryParams),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'status' }
 
@@ -56,7 +59,7 @@ export default class NodePingStatus extends BaseJsonService {
       down_message: downMessage,
       up_color: upColor,
       down_color: downColor,
-    }
+    },
   ) {
     const { isUp } = await this.fetch({ checkUuid })
     return renderWebsiteStatus({

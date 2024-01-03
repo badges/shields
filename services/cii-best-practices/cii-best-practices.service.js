@@ -1,13 +1,11 @@
 import Joi from 'joi'
 import { colorScale, coveragePercentage } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   badge_level: Joi.string().required(),
   tiered_percentage: Joi.number().required(),
 }).required()
-
-const keywords = ['core infrastructure initiative']
 
 const summaryColorScale = colorScale(
   [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300],
@@ -25,7 +23,7 @@ const summaryColorScale = colorScale(
     'brightgreen',
     '#BBBBBB',
     '#E9C504',
-  ]
+  ],
 )
 
 export default class CIIBestPracticesService extends BaseJsonService {
@@ -35,37 +33,26 @@ export default class CIIBestPracticesService extends BaseJsonService {
     pattern: ':metric(level|percentage|summary)/:projectId',
   }
 
-  static exampless = [
-    {
-      title: 'CII Best Practices Level',
-      pattern: 'level/:projectId',
-      namedParams: {
-        projectId: '1',
+  static openApi = {
+    '/cii/{metric}/{projectId}': {
+      get: {
+        summary: 'CII Best Practices',
+        description:
+          'The Core Infrastructure Initiative (CII) Best Practices badge is a way for Open Source projects to show that they follow best practices',
+        parameters: pathParams(
+          {
+            name: 'metric',
+            example: 'level',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          },
+          {
+            name: 'projectId',
+            example: '1',
+          },
+        ),
       },
-      staticPreview: this.renderLevelBadge({ level: 'gold' }),
-      keywords,
     },
-    {
-      title: 'CII Best Practices Tiered Percentage',
-      pattern: 'percentage/:projectId',
-      namedParams: {
-        projectId: '29',
-      },
-      staticPreview: this.renderTieredPercentageBadge({ percentage: 107 }),
-      keywords,
-    },
-    {
-      title: 'CII Best Practices Summary',
-      pattern: 'summary/:projectId',
-      namedParams: {
-        projectId: '33',
-      },
-      staticPreview: this.renderSummaryBadge({ percentage: 94 }),
-      keywords,
-      documentation:
-        'This badge uses the same message and color scale as the native CII one, but with all the configuration and goodness that Shields provides!',
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'cii' }
 
@@ -115,7 +102,7 @@ export default class CIIBestPracticesService extends BaseJsonService {
       await this._requestJson({
         schema,
         url: `https://bestpractices.coreinfrastructure.org/projects/${projectId}/badge.json`,
-        errorMessages: {
+        httpErrors: {
           404: 'project not found',
         },
       })

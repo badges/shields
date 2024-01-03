@@ -10,7 +10,7 @@ describe('DroneBuild', function () {
     const token = 'abc123'
 
     const scope = nock('https://cloud.drone.io', {
-      reqheaders: { Authorization: `Bearer abc123` },
+      reqheaders: { Authorization: 'Bearer abc123' },
     })
       .get(/.*/)
       .reply(200, { status: 'passing' })
@@ -30,8 +30,8 @@ describe('DroneBuild', function () {
             drone_token: token,
           },
         },
-        { user: 'atlassian', repo: 'python-bitbucket' }
-      )
+        { user: 'atlassian', repo: 'python-bitbucket' },
+      ),
     ).to.deep.equal({
       label: undefined,
       message: 'passing',

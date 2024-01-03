@@ -1,6 +1,10 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
+import {
+  BaseSvgScrapingService,
+  deprecatedService,
+  pathParams,
+} from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -8,57 +12,51 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-export default class TravisBuild extends BaseSvgScrapingService {
+export class TravisComBuild extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
     base: 'travis',
-    format: '(?:(com)/)?(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
-    capture: ['comDomain', 'userRepo', 'branch'],
+    format: 'com/(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
+    capture: ['userRepo', 'branch'],
   }
 
-  static examples = [
-    {
-      title: 'Travis (.org)',
-      pattern: ':user/:repo',
-      namedParams: { user: 'rust-lang', repo: 'rust' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+  static openApi = {
+    '/travis/com/{user}/{repo}': {
+      get: {
+        summary: 'Travis (.com)',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+        ),
       },
     },
-    {
-      title: 'Travis (.org) branch',
-      pattern: ':user/:repo/:branch',
-      namedParams: { user: 'rust-lang', repo: 'rust', branch: 'master' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+    '/travis/com/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Travis (.com) branch',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
     },
-    {
-      title: 'Travis (.com)',
-      pattern: 'com/:user/:repo',
-      namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
-      },
-    },
-    {
-      title: 'Travis (.com) branch',
-      pattern: 'com/:user/:repo/:branch',
-      namedParams: {
-        user: 'ivandelabeldad',
-        repo: 'rackian-gateway',
-        branch: 'master',
-      },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
-      },
-    },
-  ]
+  }
 
   static staticPreview = {
     message: 'passing',
@@ -73,11 +71,10 @@ export default class TravisBuild extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ comDomain, userRepo, branch }) {
-    const domain = comDomain || 'org'
+  async handle({ userRepo, branch }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.travis-ci.${domain}/${userRepo}.svg`,
+      url: `https://api.travis-ci.com/${userRepo}.svg`,
       options: { searchParams: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
@@ -85,3 +82,14 @@ export default class TravisBuild extends BaseSvgScrapingService {
     return this.constructor.render({ status })
   }
 }
+
+export const TravisOrgBuild = deprecatedService({
+  category: 'build',
+  route: {
+    base: 'travis',
+    format: '(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
+    capture: ['userRepo', 'branch'],
+  },
+  label: 'build',
+  dateAdded: new Date('2023-05-13'),
+})

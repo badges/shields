@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { authConfig } from './jira-common.js'
 
 const queryParamSchema = Joi.object({
@@ -17,17 +17,15 @@ const schema = Joi.object({
             name: Joi.string(),
           }).allow(null),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()
 
-const documentation = `
-<p>
-  To get the <code>Sprint ID</code>, go to your Backlog view in your project,
-  right click on your sprint name and get the value of
-  <code>data-sprint-id</code>.
-</p>
+const description = `
+To get the \`Sprint ID\`, go to your Backlog view in your project,
+right click on your sprint name and get the value of
+\`data-sprint-id\`.
 `
 
 export default class JiraSprint extends BaseJsonService {
@@ -41,22 +39,25 @@ export default class JiraSprint extends BaseJsonService {
 
   static auth = authConfig
 
-  static examples = [
-    {
-      title: 'JIRA sprint completion',
-      namedParams: {
-        sprintId: '94',
+  static openApi = {
+    '/jira/sprint/{sprintId}': {
+      get: {
+        summary: 'JIRA sprint completion',
+        description,
+        parameters: [
+          pathParam({
+            name: 'sprintId',
+            example: '94',
+          }),
+          queryParam({
+            name: 'baseUrl',
+            example: 'https://issues.apache.org/jira',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        baseUrl: 'https://jira.spring.io',
-      },
-      staticPreview: this.render({
-        numCompletedIssues: 27,
-        numTotalIssues: 28,
-      }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'jira' }
 
@@ -92,11 +93,11 @@ export default class JiraSprint extends BaseJsonService {
             maxResults: 500,
           },
         },
-        errorMessages: {
+        httpErrors: {
           400: 'sprint not found',
           404: 'sprint not found',
         },
-      })
+      }),
     )
 
     const numTotalIssues = json.total

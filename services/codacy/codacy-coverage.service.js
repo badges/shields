@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
-import { BaseSvgScrapingService, NotFound } from '../index.js'
+import { BaseSvgScrapingService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -12,23 +12,32 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
   static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
 
-  static examples = [
-    {
-      title: 'Codacy coverage',
-      pattern: ':projectId',
-      namedParams: { projectId: 'd5402a91aa7b4234bd1c19b5e86a63be' },
-      staticPreview: this.render({ percentage: 90 }),
-    },
-    {
-      title: 'Codacy branch coverage',
-      pattern: ':projectId/:branch',
-      namedParams: {
-        projectId: 'd5402a91aa7b4234bd1c19b5e86a63be',
-        branch: 'master',
+  static openApi = {
+    '/codacy/coverage/{projectId}': {
+      get: {
+        summary: 'Codacy coverage',
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'd5402a91aa7b4234bd1c19b5e86a63be',
+        }),
       },
-      staticPreview: this.render({ percentage: 90 }),
     },
-  ]
+    '/codacy/coverage/{projectId}/{branch}': {
+      get: {
+        summary: 'Codacy coverage (branch)',
+        parameters: pathParams(
+          {
+            name: 'projectId',
+            example: 'd5402a91aa7b4234bd1c19b5e86a63be',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 
@@ -49,11 +58,11 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
     const { message: coverageString } = await this._requestSvg({
       schema,
       url: `https://api.codacy.com/project/badge/coverage/${encodeURIComponent(
-        projectId
+        projectId,
       )}`,
       options: { searchParams: { branch } },
       valueMatcher: /text-anchor="middle">([^<>]+)<\/text>/,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

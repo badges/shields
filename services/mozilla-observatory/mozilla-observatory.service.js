@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, queryParam, pathParam } from '../index.js'
 
 const schema = Joi.object({
   state: Joi.string()
@@ -25,22 +25,20 @@ const queryParamSchema = Joi.object({
   publish: Joi.equal(''),
 }).required()
 
-const documentation = `
-<p>
-  The <a href="https://observatory.mozilla.org">Mozilla HTTP Observatory</a>
-  is a set of tools to analyze your website
-  and inform you if you are utilizing the many available methods to secure it.
-</p>
-</p>
-  By default the scan result is hidden from the public result list.
-  You can activate the publication of the scan result
-  by setting the <code>publish</code> parameter.
-<p>
-<p>
-  The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
-  If you need to force invalidating the cache,
-  you can to do it manually through the <a href="https://observatory.mozilla.org">Mozilla Observatory Website</a>
-</p>
+const description = `
+The [Mozilla HTTP Observatory](https://observatory.mozilla.org)
+is a set of security tools to analyze your website
+and inform you if you are utilizing the many available methods to secure it.
+`
+
+const publishDescription = `
+By default the scan result is hidden from the public result list.
+You can activate the publication of the scan result
+by setting the \`publish\` parameter.
+
+The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
+If you need to force invalidating the cache,
+you can to do it manually through the [Mozilla Observatory Website](https://observatory.mozilla.org)
 `
 
 export default class MozillaObservatory extends BaseJsonService {
@@ -54,21 +52,31 @@ export default class MozillaObservatory extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Mozilla HTTP Observatory Grade',
-      namedParams: { format: 'grade', host: 'github.com' },
-      staticPreview: this.render({
-        format: 'grade',
-        state: 'FINISHED',
-        grade: 'A+',
-        score: 115,
-      }),
-      queryParams: { publish: null },
-      keywords: ['scanner', 'security'],
-      documentation,
+  static openApi = {
+    '/mozilla-observatory/{format}/{host}': {
+      get: {
+        summary: 'Mozilla HTTP Observatory Grade',
+        description,
+        parameters: [
+          pathParam({
+            name: 'format',
+            example: 'grade',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          }),
+          pathParam({
+            name: 'host',
+            example: 'github.com',
+          }),
+          queryParam({
+            name: 'publish',
+            schema: { type: 'boolean' },
+            example: null,
+            description: publishDescription,
+          }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'observatory',
@@ -99,7 +107,7 @@ export default class MozillaObservatory extends BaseJsonService {
   async fetch({ host, publish }) {
     return this._requestJson({
       schema,
-      url: `https://http-observatory.security.mozilla.org/api/v1/analyze`,
+      url: 'https://http-observatory.security.mozilla.org/api/v1/analyze',
       options: {
         method: 'POST',
         searchParams: { host },

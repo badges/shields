@@ -6,7 +6,7 @@
   our own functions to parse and sort django versions
 */
 
-function parseDjangoVersionString(str) {
+function parsePypiVersionString(str) {
   if (typeof str !== 'string') {
     return false
   }
@@ -20,18 +20,12 @@ function parseDjangoVersionString(str) {
 }
 
 // Sort an array of django versions low to high.
-function sortDjangoVersions(versions) {
+function sortPypiVersions(versions) {
   return versions.sort((a, b) => {
-    if (
-      parseDjangoVersionString(a).major === parseDjangoVersionString(b).major
-    ) {
-      return (
-        parseDjangoVersionString(a).minor - parseDjangoVersionString(b).minor
-      )
+    if (parsePypiVersionString(a).major === parsePypiVersionString(b).major) {
+      return parsePypiVersionString(a).minor - parsePypiVersionString(b).minor
     } else {
-      return (
-        parseDjangoVersionString(a).major - parseDjangoVersionString(b).major
-      )
+      return parsePypiVersionString(a).major - parsePypiVersionString(b).major
     }
   })
 }
@@ -56,7 +50,17 @@ function getLicenses(packageData) {
   const {
     info: { license },
   } = packageData
-  if (license) {
+
+  /*
+  The .license field may either contain
+  - a short license description (e.g: 'MIT' or 'GPL-3.0') or
+  - the full text of a license
+  but there is nothing in the response that tells us explicitly.
+  We have to make an assumption based on the length.
+  See https://github.com/badges/shields/issues/8689 and
+  https://github.com/badges/shields/pull/8690 for more info.
+  */
+  if (license && license.length < 40) {
     return [license]
   } else {
     const parenthesizedAcronymRegex = /\(([^)]+)\)/
@@ -68,7 +72,7 @@ function getLicenses(packageData) {
     }
     let licenses = parseClassifiers(packageData, /^License :: (.+)$/, true)
       .map(classifier =>
-        classifier in spdxAliases ? spdxAliases[classifier] : classifier
+        classifier in spdxAliases ? spdxAliases[classifier] : classifier,
       )
       .map(classifier => classifier.split(' :: ').pop())
       .map(license => license.replace(' License', ''))
@@ -88,25 +92,21 @@ function getLicenses(packageData) {
 }
 
 function getPackageFormats(packageData) {
-  const {
-    info: { version },
-    releases,
-  } = packageData
-  const releasesForVersion = releases[version]
+  const { urls } = packageData
   return {
-    hasWheel: releasesForVersion.some(({ packagetype }) =>
-      ['wheel', 'bdist_wheel'].includes(packagetype)
+    hasWheel: urls.some(({ packagetype }) =>
+      ['wheel', 'bdist_wheel'].includes(packagetype),
     ),
-    hasEgg: releasesForVersion.some(({ packagetype }) =>
-      ['egg', 'bdist_egg'].includes(packagetype)
+    hasEgg: urls.some(({ packagetype }) =>
+      ['egg', 'bdist_egg'].includes(packagetype),
     ),
   }
 }
 
 export {
   parseClassifiers,
-  parseDjangoVersionString,
-  sortDjangoVersions,
+  parsePypiVersionString,
+  sortPypiVersions,
   getLicenses,
   getPackageFormats,
 }

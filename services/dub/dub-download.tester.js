@@ -8,7 +8,7 @@ const isDownloadsColor = Joi.equal(
   'yellow',
   'yellowgreen',
   'green',
-  'brightgreen'
+  'brightgreen',
 )
 
 t.create('total downloads (valid)').get('/dt/vibe-d.json').expectBadge({

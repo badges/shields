@@ -113,7 +113,7 @@ export default class NpmDependencyVersion extends NpmBase {
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
-      queryParams
+      queryParams,
     )
     const { kind, dependency, dependencyScope } = namedParams
     const wantedDependency = `${
@@ -127,7 +127,7 @@ export default class NpmDependencyVersion extends NpmBase {
         registryUrl,
       })
 
-    const { range } = getDependencyVersion({
+    const range = getDependencyVersion({
       kind,
       wantedDependency,
       dependencies,

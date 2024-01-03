@@ -1,0 +1,44 @@
+name: 'Set up project'
+description: 'Set up project'
+inputs:
+  node-version:
+    description: 'Version Spec of the node version to use. Examples: 12.x, 10.15.1, >=10.15.0.'
+    required: true
+  npm-version:
+    description: 'Version Spec of the npm version to use. Examples: 9.x, 10.2.3, >=10.1.0.'
+    required: false
+    default: '^10'
+  cypress:
+    description: 'Install Cypress binary (boolean)'
+    type: boolean
+    # https://docs.cypress.io/guides/getting-started/installing-cypress.html#Skipping-installation
+    # We don't need to install the Cypress binary in jobs that aren't actually running Cypress.
+    required: false
+    default: false
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Node JS ${{ inputs.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install NPM ${{ inputs.npm-version }}
+      run: npm install -g npm@${{ inputs.npm-version }}
+      shell: bash
+
+    - name: Install dependencies
+      if: ${{ inputs.cypress == 'false' }}
+      env:
+        CYPRESS_INSTALL_BINARY: 0
+      run: |
+        echo "skipping cypress binary"
+        npm ci
+      shell: bash
+
+    - name: Install dependencies (including cypress binary)
+      if: ${{ inputs.cypress == 'true' }}
+      run: |
+        echo "installing cypress binary"
+        npm ci
+      shell: bash

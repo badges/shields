@@ -5,7 +5,7 @@ import { getCachedResource } from '../../core/base-service/resource-cache.js'
 const dateFormat = 'YYYY-MM-DD'
 
 async function getVersion(version) {
-  let semver = ``
+  let semver = ''
   if (version) {
     semver = `-${version}.x`
   }

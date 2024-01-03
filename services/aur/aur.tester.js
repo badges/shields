@@ -63,7 +63,7 @@ t.create('license (no license)')
             LastModified: 1,
           },
         ],
-      })
+      }),
   )
   .expectBadge({ label: 'license', message: 'not specified' })
 
@@ -75,7 +75,7 @@ t.create('license (package not found)')
 
 t.create('maintainer (valid)')
   .get('/maintainer/google-chrome.json')
-  .expectBadge({ label: 'maintainer', message: 'luzifer' })
+  .expectBadge({ label: 'maintainer', message: 'gromit' })
 
 t.create('maintainer (not found)')
   .get('/maintainer/not-a-package.json')

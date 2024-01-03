@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -9,18 +9,40 @@ const schema = Joi.object({
 // No way to permalink to current "stable", https://pagure.io/mdapi/issue/69
 const defaultBranch = 'rawhide'
 
+const description =
+  'See <a href="https://apps.fedoraproject.org/mdapi/">mdapi docs</a> for information on valid branches.'
+
 export default class Fedora extends BaseJsonService {
   static category = 'version'
   static route = { base: 'fedora/v', pattern: ':packageName/:branch?' }
-  static examples = [
-    {
-      title: 'Fedora package',
-      namedParams: { packageName: 'rpm', branch: 'rawhide' },
-      staticPreview: renderVersionBadge({ version: '4.14.2.1' }),
-      documentation:
-        'See <a href="https://apps.fedoraproject.org/mdapi/">mdapi docs</a> for information on valid branches.',
+  static openApi = {
+    '/fedora/v/{packageName}/{branch}': {
+      get: {
+        summary: 'Fedora package (with branch)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'packageName',
+            example: 'rpm',
+          },
+          {
+            name: 'branch',
+            example: 'rawhide',
+          },
+        ),
+      },
     },
-  ]
+    '/fedora/v/{packageName}': {
+      get: {
+        summary: 'Fedora package',
+        description,
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'rpm',
+        }),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'fedora' }
 
@@ -28,9 +50,9 @@ export default class Fedora extends BaseJsonService {
     const data = await this._requestJson({
       schema,
       url: `https://apps.fedoraproject.org/mdapi/${encodeURIComponent(
-        branch
+        branch,
       )}/pkg/${encodeURIComponent(packageName)}`,
-      errorMessages: {
+      httpErrors: {
         400: 'branch not found',
       },
     })

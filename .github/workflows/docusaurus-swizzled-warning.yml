@@ -1,0 +1,22 @@
+name: Docusaurus swizzled component changes warning
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  docusaurus-swizzled-warning:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install action dependencies
+        run: cd .github/actions/docusaurus-swizzled-warning && npm ci
+
+      - uses: ./.github/actions/docusaurus-swizzled-warning
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'

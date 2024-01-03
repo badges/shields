@@ -15,7 +15,7 @@ t.create('valid repo -- compliant')
   .intercept(nock =>
     nock('https://api.reuse.software/status')
       .get('/github.com/username/repo')
-      .reply(200, { status: 'compliant' })
+      .reply(200, { status: 'compliant' }),
   )
   .expectBadge({
     label: 'reuse',
@@ -28,7 +28,7 @@ t.create('valid repo -- non-compliant')
   .intercept(nock =>
     nock('https://api.reuse.software/status')
       .get('/github.com/username/repo')
-      .reply(200, { status: 'non-compliant' })
+      .reply(200, { status: 'non-compliant' }),
   )
   .expectBadge({
     label: 'reuse',
@@ -41,7 +41,7 @@ t.create('valid repo -- checking')
   .intercept(nock =>
     nock('https://api.reuse.software/status')
       .get('/github.com/username/repo')
-      .reply(200, { status: 'checking' })
+      .reply(200, { status: 'checking' }),
   )
   .expectBadge({
     label: 'reuse',
@@ -54,7 +54,7 @@ t.create('valid repo -- unregistered')
   .intercept(nock =>
     nock('https://api.reuse.software/status')
       .get('/github.com/username/repo')
-      .reply(200, { status: 'unregistered' })
+      .reply(200, { status: 'unregistered' }),
   )
   .expectBadge({
     label: 'reuse',
@@ -62,7 +62,10 @@ t.create('valid repo -- unregistered')
     color: COLOR_MAP.unregistered,
   })
 
-t.create('invalid repo').get('/github.com/repo/invalid-repo.json').expectBadge({
-  label: 'reuse',
-  message: 'Not a Git repository',
-})
+t.create('invalid repo')
+  .timeout(15000)
+  .get('/github.com/repo/invalid-repo.json')
+  .expectBadge({
+    label: 'reuse',
+    message: 'Not a Git repository',
+  })

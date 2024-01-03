@@ -107,7 +107,7 @@ export default class Codecov extends BaseSvgScrapingService {
   async legacyFetch({ vcsName, user, repo, branch, token }) {
     // Codecov Docs: https://docs.codecov.io/reference#section-get-a-single-repository
     const url = `https://codecov.io/api/${vcsName}/${user}/${repo}${
-      branch ? `/branches/${branch}` : ''
+      branch ? `/branch/${branch}` : ''
     }`
     const { buffer } = await this._request({
       url,
@@ -117,7 +117,7 @@ export default class Codecov extends BaseSvgScrapingService {
           Authorization: `token ${token}`,
         },
       },
-      errorMessages: {
+      httpErrors: {
         401: 'not authorized to access repository',
         404: 'repository not found',
       },
@@ -153,7 +153,7 @@ export default class Codecov extends BaseSvgScrapingService {
       options: {
         searchParams: { token, flag },
       },
-      errorMessages: token ? { 400: 'invalid token pattern' } : {},
+      httpErrors: token ? { 400: 'invalid token pattern' } : {},
     })
   }
 

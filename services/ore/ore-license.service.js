@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
-import { BaseOreService, documentation, keywords } from './ore-base.js'
+import { BaseOreService, description } from './ore-base.js'
 
 export default class OreLicense extends BaseOreService {
   static category = 'license'
@@ -9,17 +10,18 @@ export default class OreLicense extends BaseOreService {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'Ore License',
-      namedParams: {
-        pluginId: 'nucleus',
+  static openApi = {
+    '/ore/l/{pluginId}': {
+      get: {
+        summary: 'Ore License',
+        description,
+        parameters: pathParams({
+          name: 'pluginId',
+          example: 'nucleus',
+        }),
       },
-      staticPreview: this.render({ license: 'MIT' }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'license',

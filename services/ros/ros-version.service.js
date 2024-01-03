@@ -3,7 +3,7 @@ import Joi from 'joi'
 import yaml from 'js-yaml'
 import { renderVersionBadge } from '../version.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
-import { NotFound, InvalidResponse } from '../index.js'
+import { NotFound, InvalidResponse, pathParams } from '../index.js'
 
 const tagsSchema = Joi.object({
   data: Joi.object({
@@ -34,31 +34,50 @@ const contentSchema = Joi.object({
 const distroSchema = Joi.object({
   repositories: Joi.object().required(),
 })
-const packageSchema = Joi.object({
+const repoSchema = Joi.object({
   release: Joi.object({
     version: Joi.string().required(),
   }).required(),
 })
 
+const description = `
+<p>
+  To use this badge, specify the ROS <a href="http://docs.ros.org">distribution</a>
+  (e.g. <code>noetic</code> or <code>humble</code>) and the package repository name
+  (in the case of single-package repos, this may be the same as the package name).
+  This badge determines which versions are part of an official ROS distribution by
+  fetching from the <a href="https://github.com/ros/rosdistro">rosdistro</a> YAML files,
+  at the tag corresponding to the latest release.
+</p>
+`
+
 export default class RosVersion extends GithubAuthV4Service {
   static category = 'version'
 
-  static route = { base: 'ros/v', pattern: ':distro/:packageName' }
+  static route = { base: 'ros/v', pattern: ':distro/:repoName' }
 
-  static examples = [
-    {
-      title: 'ROS Package Index',
-      namedParams: { distro: 'humble', packageName: 'vision_msgs' },
-      staticPreview: {
-        ...renderVersionBadge({ version: '4.0.0' }),
-        label: 'ros | humble',
+  static openApi = {
+    '/ros/v/{distro}/{repoName}': {
+      get: {
+        summary: 'ROS Package Index',
+        description,
+        parameters: pathParams(
+          {
+            name: 'distro',
+            example: 'humble',
+          },
+          {
+            name: 'repoName',
+            example: 'vision_msgs',
+          },
+        ),
       },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'ros' }
 
-  async handle({ distro, packageName }) {
+  async handle({ distro, repoName }) {
     const tagsJson = await this._requestGraphql({
       query: gql`
         query ($refPrefix: String!) {
@@ -116,13 +135,13 @@ export default class RosVersion extends GithubAuthV4Service {
     }
     const version = this.constructor._parseReleaseVersionFromDistro(
       contentJson.data.repository.object.text,
-      packageName
+      repoName,
     )
 
     return { ...renderVersionBadge({ version }), label: `ros | ${distro}` }
   }
 
-  static _parseReleaseVersionFromDistro(distroYaml, packageName) {
+  static _parseReleaseVersionFromDistro(distroYaml, repoName) {
     let distro
     try {
       distro = yaml.load(distroYaml)
@@ -136,19 +155,19 @@ export default class RosVersion extends GithubAuthV4Service {
     const validatedDistro = this._validate(distro, distroSchema, {
       prettyErrorMessage: 'invalid distribution.yml',
     })
-    if (!validatedDistro.repositories[packageName]) {
-      throw new NotFound({ prettyMessage: `package not found: ${packageName}` })
+    if (!validatedDistro.repositories[repoName]) {
+      throw new NotFound({ prettyMessage: `repo not found: ${repoName}` })
     }
 
-    const packageInfo = this._validate(
-      validatedDistro.repositories[packageName],
-      packageSchema,
+    const repoInfo = this._validate(
+      validatedDistro.repositories[repoName],
+      repoSchema,
       {
-        prettyErrorMessage: `invalid section for ${packageName} in distribution.yml`,
-      }
+        prettyErrorMessage: `invalid section for ${repoName} in distribution.yml`,
+      },
     )
 
     // Strip off "release inc" suffix
-    return packageInfo.release.version.replace(/-\d+$/, '')
+    return repoInfo.release.version.replace(/-\d+$/, '')
   }
 }

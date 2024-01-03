@@ -28,8 +28,8 @@ describe('BitbucketPullRequest', function () {
           },
           private: { bitbucket_username: user, bitbucket_password: pass },
         },
-        { user: 'atlassian', repo: 'python-bitbucket' }
-      )
+        { user: 'atlassian', repo: 'python-bitbucket' },
+      ),
     ).to.deep.equal({
       message: '42',
       color: 'yellow',
@@ -61,8 +61,8 @@ describe('BitbucketPullRequest', function () {
           },
         },
         { user: 'project', repo: 'repo' },
-        { server: 'https://bitbucket.example.test' }
-      )
+        { server: 'https://bitbucket.example.test' },
+      ),
     ).to.deep.equal({
       message: '42',
       color: 'yellow',

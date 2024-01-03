@@ -34,8 +34,8 @@ describe('GitLabTag', function () {
           defaultContext,
           config,
           { project: 'foo/bar' },
-          {}
-        )
+          {},
+        ),
       ).to.deep.equal({
         message: 'v1.9',
         color: 'blue',

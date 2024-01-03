@@ -12,7 +12,7 @@ const queryParamSchema = Joi.object({
   server: optionalUrl,
 }).required()
 
-const errorMessages = {
+const httpErrors = {
   401: 'invalid credentials',
   403: 'private repo',
   404: 'not found',
@@ -27,7 +27,7 @@ function pullRequestClassGenerator(raw) {
     static category = 'issue-tracking'
     static route = {
       base: `bitbucket/${routePrefix}`,
-      pattern: `:user/:repo`,
+      pattern: ':user/:repo',
       queryParamSchema,
     }
 
@@ -69,7 +69,7 @@ function pullRequestClassGenerator(raw) {
           passKey: 'bitbucket_password',
           authorizedOrigins: ['https://bitbucket.org'],
         },
-        config
+        config,
       )
       this.bitbucketServerAuthHelper = new AuthHelper(
         {
@@ -77,7 +77,7 @@ function pullRequestClassGenerator(raw) {
           passKey: 'bitbucket_server_password',
           serviceKey: 'bitbucketServer',
         },
-        config
+        config,
       )
     }
 
@@ -87,8 +87,8 @@ function pullRequestClassGenerator(raw) {
           url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
           schema,
           options: { searchParams: { state: 'OPEN', limit: 0 } },
-          errorMessages,
-        })
+          httpErrors,
+        }),
       )
     }
 
@@ -106,8 +106,8 @@ function pullRequestClassGenerator(raw) {
               withAttributes: false,
             },
           },
-          errorMessages,
-        })
+          httpErrors,
+        }),
       )
     }
 

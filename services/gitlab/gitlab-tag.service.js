@@ -3,32 +3,25 @@ import { version as versionColor } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
 import { latest } from '../version.js'
 import { addv } from '../text-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
-  })
+  }),
 )
+
+const sortEnum = ['date', 'semver']
 
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   include_prereleases: Joi.equal(''),
-  sort: Joi.string().valid('date', 'semver').default('date'),
+  sort: Joi.string()
+    .valid(...sortEnum)
+    .default('date'),
 }).required()
-
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
-</p>
-`
-const commonProps = {
-  namedParams: {
-    project: 'shields-ops-group/tag-test',
-  },
-  documentation,
-}
 
 export default class GitlabTag extends GitLabBase {
   static category = 'version'
@@ -39,42 +32,34 @@ export default class GitlabTag extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab tag (latest by date)',
-      ...commonProps,
-      queryParams: { sort: 'date' },
-      staticPreview: this.render({ version: 'v2.0.0' }),
-    },
-    {
-      title: 'GitLab tag (latest by SemVer)',
-      ...commonProps,
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({ version: 'v4.0.0' }),
-    },
-    {
-      title: 'GitLab tag (latest by SemVer pre-release)',
-      ...commonProps,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
+  static openApi = {
+    '/gitlab/v/tag/{project}': {
+      get: {
+        summary: 'GitLab Tag',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'shields-ops-group/tag-test',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+          queryParam({
+            name: 'sort',
+            schema: { type: 'string', enum: sortEnum },
+            example: 'semver',
+          }),
+        ],
       },
-      staticPreview: this.render({ version: 'v5.0.0-beta.1', sort: 'semver' }),
     },
-    {
-      title: 'GitLab tag (self-managed)',
-      namedParams: {
-        project: 'GNOME/librsvg',
-      },
-      documentation,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
-        gitlab_url: 'https://gitlab.gnome.org',
-      },
-      staticPreview: this.render({ version: 'v2.51.4' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'tag' }
 
@@ -93,12 +78,10 @@ export default class GitlabTag extends GitLabBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
-        project
+        project,
       )}/repository/tags`,
       options: { searchParams: { order_by: 'updated' } },
-      errorMessages: {
-        404: 'repo not found',
-      },
+      httpErrors: httpErrorsFor('project not found'),
     })
   }
 
@@ -113,7 +96,7 @@ export default class GitlabTag extends GitLabBase {
 
     return latest(
       tags.map(t => t.name),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
   }
 
@@ -123,7 +106,7 @@ export default class GitlabTag extends GitLabBase {
       gitlab_url: baseUrl = 'https://gitlab.com',
       include_prereleases: pre,
       sort,
-    }
+    },
   ) {
     const tags = await this.fetch({ project, baseUrl })
     const version = this.constructor.transform({

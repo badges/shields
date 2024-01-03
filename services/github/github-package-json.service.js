@@ -159,7 +159,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
 
   async handle(
     { user, repo, kind, branch = 'HEAD', scope, packageName },
-    { filename = 'package.json' }
+    { filename = 'package.json' },
   ) {
     const {
       dependencies,
@@ -175,7 +175,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     })
 
     const wantedDependency = scope ? `${scope}/${packageName}` : packageName
-    const { range } = getDependencyVersion({
+    const range = getDependencyVersion({
       kind,
       wantedDependency,
       dependencies,

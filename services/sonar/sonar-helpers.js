@@ -12,12 +12,12 @@ const ratingScaleColors = [
 ]
 const negativeMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
-  ratingScaleColors
+  ratingScaleColors,
 )
 const positiveMetricColorScale = colorScale(
   ratingPercentageScaleSteps,
   ratingScaleColors,
-  true
+  true,
 )
 
 function isLegacyVersion({ sonarVersion }) {
@@ -32,7 +32,7 @@ const sonarVersionSchema = Joi.alternatives(
   Joi.string()
     .regex(/[0-9.]+/)
     .optional(),
-  Joi.number().optional()
+  Joi.number().optional(),
 )
 
 const queryParamSchema = Joi.object({
@@ -47,15 +47,14 @@ const queryParamWithFormatSchema = Joi.object({
 }).required()
 
 const keywords = ['sonarcloud', 'sonarqube']
-const documentation = `
-  <p>
+const documentation = `<p>
     The Sonar badges will work with both SonarCloud.io and self-hosted SonarQube instances.
     Just enter the correct protocol and path for your target Sonar deployment.
   </p>
   <p>
     If you are targeting a legacy SonarQube instance that is version 5.3 or earlier, then be sure
     to include the version query parameter with the value of your SonarQube version.
-  </p
+  </p>
 `
 
 export {

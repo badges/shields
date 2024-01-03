@@ -14,7 +14,7 @@ import { InvalidResponse } from './index.js'
  *
  * @type {object}
  */
-const errorMessages = {
+const httpErrors = {
   404: 'resource not found',
 }
 
@@ -22,7 +22,7 @@ const errorMessages = {
  * Joi schema for validating individual value.
  * Checks if the individual value is of type string or number.
  *
- * @type {object}
+ * @type {Joi}
  */
 const individualValueSchema = Joi.alternatives()
   .try(Joi.string(), Joi.number())
@@ -32,12 +32,12 @@ const individualValueSchema = Joi.alternatives()
  * Joi schema for validating compound value.
  * Checks if the compound value is of type individualValueSchema, array of individualValueSchema or empty array.
  *
- * @type {object}
+ * @type {Joi}
  */
 const compoundValueSchema = Joi.alternatives().try(
   individualValueSchema,
   Joi.array().items(individualValueSchema).required(),
-  Joi.array().length(0)
+  Joi.array().length(0),
 )
 
 /**
@@ -58,7 +58,7 @@ function transformAndValidate({ data, key }) {
       traceSuccessMessage: 'Key value after validation',
     },
     data[key],
-    compoundValueSchema
+    compoundValueSchema,
   )
 }
 
@@ -93,7 +93,7 @@ function renderDynamicBadge({
 }
 
 export {
-  errorMessages,
+  httpErrors,
   individualValueSchema,
   transformAndValidate,
   renderDynamicBadge,

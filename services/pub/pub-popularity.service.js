@@ -1,31 +1,32 @@
 import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
+import { baseDescription } from './pub-common.js'
 
-const documentation = `<p>A measure of how many developers use a package, providing insight into what other developers are using.</p>`
-
-const keywords = ['dart', 'flutter']
+const description = `${baseDescription}
+  <p>This badge shows a measure of how many developers use a package, providing insight into what other developers are using.</p>`
 
 const schema = Joi.object({
   popularityScore: Joi.number().min(0).max(1).required(),
 }).required()
-
-const title = 'Pub Popularity'
 
 export default class PubPopularity extends BaseJsonService {
   static category = 'rating'
 
   static route = { base: 'pub/popularity', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title,
-      keywords,
-      documentation,
-      namedParams: { packageName: 'analysis_options' },
-      staticPreview: this.render({ popularityScore: 0.9 }),
+  static openApi = {
+    '/pub/popularity/{packageName}': {
+      get: {
+        summary: 'Pub Popularity',
+        description,
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'analysis_options',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'popularity' }
 

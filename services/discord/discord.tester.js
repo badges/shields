@@ -22,7 +22,7 @@ t.create('widget disabled')
       .reply(403, {
         code: 50004,
         message: 'Widget Disabled',
-      })
+      }),
   )
   .expectBadge({ label: 'chat', message: 'widget disabled' })
 
@@ -31,6 +31,6 @@ t.create('server error')
   .intercept(nock =>
     nock('https://discord.com/')
       .get('/api/v6/guilds/12345/widget.json')
-      .reply(500, 'Something broke')
+      .reply(500, 'Something broke'),
   )
   .expectBadge({ label: 'chat', message: 'inaccessible' })

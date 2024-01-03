@@ -1,0 +1,23 @@
+name: Check Docusaurus Plugin Versions
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
+
+jobs:
+  check-docusaurus-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 20
+          cypress: true
+
+      - run: .github/scripts/check-docusaurus-versions.sh

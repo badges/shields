@@ -6,7 +6,7 @@ import {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } from '../test-validators.js'
 const isPlatform = Joi.string().regex(
-  /^(windows|linux|macos)( \| (windows|linux|macos))*$/
+  /^(windows|linux|macos)( \| (windows|linux|macos))*$/,
 )
 
 export const t = new ServiceTester({
@@ -47,7 +47,7 @@ t.create('version (legacy redirect: vpre)')
   .get('/vpre/ACMESharp.svg')
   .expectRedirect('/powershellgallery/v/ACMESharp.svg?include_prereleases')
 
-t.create('platform (valid').get('/p/DNS.1.1.1.1.json').expectBadge({
+t.create('platform (valid)').get('/p/PackageManagement.json').expectBadge({
   label: 'platform',
   message: isPlatform,
 })

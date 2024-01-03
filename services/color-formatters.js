@@ -6,7 +6,7 @@
  */
 
 import dayjs from 'dayjs'
-import pep440 from '@renovate/pep440'
+import pep440 from '@renovatebot/pep440'
 
 /**
  * Determines the color used for a badge based on version.
@@ -23,7 +23,7 @@ function version(version) {
   if (first === 'v') {
     first = version[1]
   }
-  if (first === '0' || /alpha|beta|snapshot|dev|pre/i.test(version)) {
+  if (first === '0' || /alpha|beta|snapshot|dev|pre|rc/i.test(version)) {
     return 'orange'
   } else {
     return 'blue'
@@ -155,7 +155,7 @@ function colorScale(steps, colors, reversed) {
 
   if (steps.length !== colors.length - 1) {
     throw Error(
-      'When colors are provided, there should be n + 1 colors for n steps.'
+      'When colors are provided, there should be n + 1 colors for n steps.',
     )
   }
 

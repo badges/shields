@@ -36,8 +36,8 @@ describe('JiraSprint', function () {
         {
           sprintId,
         },
-        { baseUrl: `https://${host}/jira` }
-      )
+        { baseUrl: `https://${host}/jira` },
+      ),
     ).to.deep.equal({
       label: 'completion',
       message: '50%',

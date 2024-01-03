@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { starRating } from '../text-formatters.js'
 import { colorScale } from '../color-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import JetbrainsBase from './jetbrains-base.js'
 
 const pluginRatingColor = colorScale([2, 3, 4])
@@ -14,7 +14,7 @@ const intelliJschema = Joi.object({
         .items(
           Joi.object({
             rating: Joi.string().required(),
-          })
+          }),
         )
         .single()
         .required(),
@@ -38,30 +38,24 @@ export default class JetbrainsRating extends JetbrainsBase {
     pattern: ':format(rating|stars)/:pluginId',
   }
 
-  static examples = [
-    {
-      title: 'JetBrains Plugins',
-      pattern: 'rating/:pluginId',
-      namedParams: {
-        pluginId: '11941',
+  static openApi = {
+    '/jetbrains/plugin/r/{format}/{pluginId}': {
+      get: {
+        summary: 'JetBrains Plugin Rating',
+        parameters: pathParams(
+          {
+            name: 'format',
+            example: 'rating',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          },
+          {
+            name: 'pluginId',
+            example: '11941',
+          },
+        ),
       },
-      staticPreview: this.render({
-        rating: '4.5',
-        format: 'rating',
-      }),
     },
-    {
-      title: 'JetBrains Plugins',
-      pattern: 'stars/:pluginId',
-      namedParams: {
-        pluginId: '11941',
-      },
-      staticPreview: this.render({
-        rating: '4.5',
-        format: 'stars',
-      }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'rating' }
 
@@ -90,9 +84,9 @@ export default class JetbrainsRating extends JetbrainsBase {
       const jetbrainsPluginData = await this._requestJson({
         schema: jetbrainsSchema,
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
-          pluginId
+          pluginId,
         )}/rating`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
 
       let voteSum = 0

@@ -14,6 +14,10 @@ t.create('last commit (on branch)')
   .get('/badges/badgr.co/shielded.json')
   .expectBadge({ label: 'last commit', message: 'july 2013' })
 
+t.create('last commit (by committer)')
+  .get('/badges/badgr.co/shielded.json?display_timestamp=committer')
+  .expectBadge({ label: 'last commit', message: 'july 2013' })
+
 t.create('last commit (repo not found)')
   .get('/badges/helmets.json')
   .expectBadge({ label: 'last commit', message: 'repo not found' })

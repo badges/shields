@@ -1,6 +1,7 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { colorScale } from '../color-formatters.js'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   translated_percent: Joi.number().required(),
@@ -19,15 +20,20 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Weblate project translated',
-      namedParams: { project: 'godot-engine' },
-      queryParams: { server: 'https://hosted.weblate.org' },
-      staticPreview: this.render({ translatedPercent: 20.5 }),
-      keywords: ['i18n', 'translation', 'internationalization'],
+  static openApi = {
+    '/weblate/progress/{project}': {
+      get: {
+        summary: 'Weblate project translated',
+        description,
+        parameters: [
+          pathParam({ name: 'project', example: 'godot-engine' }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
+
+  static _cacheLength = 600
 
   static defaultBadgeData = { label: 'translated' }
 
@@ -45,15 +51,15 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
     return { message: `${translatedPercent.toFixed(0)}%`, color }
   }
 
-  async fetch({ project, server = 'https://hosted.weblate.org' }) {
+  async fetch({ project, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/projects/${project}/statistics/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'project not found',
-        429: 'rate limited by remote server',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import KeybaseProfile from './keybase-profile.js'
 
@@ -13,14 +14,14 @@ const bitcoinAddressSchema = Joi.object({
           bitcoin: Joi.array().items(
             Joi.object({
               address: Joi.string().required(),
-            }).required()
+            }).required(),
           ),
         })
           .required()
           .allow(null),
       })
         .required()
-        .allow(null)
+        .allow(null),
     )
     .min(0)
     .max(1),
@@ -32,25 +33,28 @@ export default class KeybaseBTC extends KeybaseProfile {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'Keybase BTC',
-      namedParams: { username: 'skyplabs' },
-      staticPreview: this.render({
-        address: '12ufRLmbEmgjsdGzhUUFY4pcfiQZyRPV9J',
-      }),
-      keywords: ['bitcoin'],
+  static openApi = {
+    '/keybase/btc/{username}': {
+      get: {
+        summary: 'Keybase BTC',
+        parameters: pathParams({
+          name: 'username',
+          example: 'skyplabs',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'btc',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ address }) {
     return {
       message: address,
+      style: 'social',
     }
   }
 

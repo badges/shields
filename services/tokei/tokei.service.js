@@ -1,27 +1,24 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   lines: nonNegativeInteger,
 }).required()
 
-const documentation = `
-<p>
-  The <code>provider</code> is the domain name of git host.
-  If no TLD is provided, <code>.com</code> will be added.
-  For example, setting <code>gitlab</code> or <code>bitbucket.org</code> as the
-  provider also works.
-  <br><br>
-  Tokei will automatically count all files with a recognized extension. It will
-  automatically ignore files and folders in <code>.ignore</code> files. If you
-  want to ignore files or folders specifically for tokei, add them to the
-  <code>.tokeignore</code> in the root of your repository.
-  See 
-    <a href="https://github.com/XAMPPRocky/tokei#excluding-folders">https://github.com/XAMPPRocky/tokei#excluding-folders</a>
-  for more info.
-</p>
+const description = `
+The \`provider\` is the domain name of git host.
+If no TLD is provided, \`.com\` will be added.
+For example, setting \`gitlab\` or \`bitbucket.org\` as the
+provider also works.
+
+Tokei will automatically count all files with a recognized extension. It will
+automatically ignore files and folders in \`.ignore\` files. If you
+want to ignore files or folders specifically for tokei, add them to the
+\`.tokeignore\` in the root of your repository. See
+[https://github.com/XAMPPRocky/tokei#excluding-folders](https://github.com/XAMPPRocky/tokei#excluding-folders)
+for more info.
 `
 
 export default class Tokei extends BaseJsonService {
@@ -29,19 +26,28 @@ export default class Tokei extends BaseJsonService {
 
   static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }
 
-  static examples = [
-    {
-      title: 'Lines of code',
-      namedParams: {
-        provider: 'github',
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/tokei/lines/{provider}/{user}/{repo}': {
+      get: {
+        summary: 'Lines of code',
+        description,
+        parameters: pathParams(
+          {
+            name: 'provider',
+            example: 'github',
+          },
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+        ),
       },
-      staticPreview: this.render({ lines: 119500 }),
-      keywords: ['loc', 'tokei'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'total lines',
@@ -65,7 +71,7 @@ export default class Tokei extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://tokei.rs/b1/${provider}/${user}/${repo}`,
-      errorMessages: {
+      httpErrors: {
         400: 'repo not found',
       },
     })

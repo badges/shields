@@ -12,5 +12,6 @@ export default class NodeLtsVersion extends NodeVersionBase {
 
   static colorResolver = versionColorForRangeLts
 
-  static documentation = `This badge indicates whether the package supports <b>all</b> LTS node versions`
+  static documentation =
+    'This badge indicates whether the package supports <b>all</b> LTS node versions'
 }

@@ -1,12 +1,13 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const pullsSchema = Joi.object({
   pull_count: nonNegativeInteger,
@@ -15,16 +16,33 @@ const pullsSchema = Joi.object({
 export default class DockerPulls extends BaseJsonService {
   static category = 'downloads'
   static route = buildDockerUrl('pulls')
-  static examples = [
-    {
-      title: 'Docker Pulls',
-      namedParams: {
-        user: '_',
-        repo: 'ubuntu',
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com'],
+    isRequired: false,
+  }
+
+  static openApi = {
+    '/docker/pulls/{user}/{repo}': {
+      get: {
+        summary: 'Docker Pulls',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: '_',
+          },
+          {
+            name: 'repo',
+            example: 'ubuntu',
+          },
+        ),
       },
-      staticPreview: this.render({ count: 765400000 }),
     },
-  ]
+  }
+
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'docker pulls' }
 
@@ -33,12 +51,12 @@ export default class DockerPulls extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
+    return await fetch(this, {
       schema: pullsSchema,
       url: `https://hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
-      errorMessages: { 404: 'repo not found' },
+      httpErrors: { 404: 'repo not found' },
     })
   }
 

@@ -39,8 +39,8 @@ describe('SonarFortifyRating', function () {
         defaultContext,
         config,
         { component: 'org.ow2.petals:petals-se-ase' },
-        { server: 'http://sonar.petalslink.com' }
-      )
+        { server: 'http://sonar.petalslink.com' },
+      ),
     ).to.deep.equal({
       color: 'green',
       message: '4/5',

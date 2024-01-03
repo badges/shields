@@ -1,0 +1,12 @@
+name: 'docusaurus-theme-openapi swizzled component changes warning'
+description: 'Check for changes in docusaurus-theme-openapi components which are swizzled and prints out a warning'
+branding:
+  icon: 'alert-triangle'
+  color: 'yellow'
+inputs:
+  github-token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+runs:
+  using: 'node20'
+  main: 'index.js'

@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
@@ -9,15 +10,17 @@ export default class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
     pattern: ':alias(v|version)/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Vaadin Directory',
-      pattern: 'v/:packageName',
-      namedParams: { packageName: 'vaadinvaadin-grid' },
-      staticPreview: renderVersionBadge({ version: 'v5.3.0-alpha4' }),
-      keywords: ['vaadin-directory', 'latest'],
+  static openApi = {
+    '/vaadin-directory/v/{packageName}': {
+      get: {
+        summary: 'Vaadin Directory Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'vaadinvaadin-grid',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'vaadin directory',

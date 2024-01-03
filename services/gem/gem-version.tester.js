@@ -17,7 +17,7 @@ t.create('version (not found)')
 // this is the same as isVPlusDottedVersionNClausesWithOptionalSuffix from test-validators.js
 // except that it also accepts regexes like 5.0.0.rc5 - the . before the rc5 is not accepted in the original
 const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
-  /^v\d+(\.\d+)*([-+~.].*)?$/
+  /^v\d+(\.\d+)*([-+~.].*)?$/,
 )
 t.create('version including prereleases (valid)')
   .get('/flame.json?include_prereleases')

@@ -55,7 +55,7 @@ export default class CodeclimateCoverage extends BaseJsonService {
   async fetch({ user, repo }) {
     const repoInfos = await fetchRepo(this, { user, repo })
     const repoInfosWithTestReport = repoInfos.filter(
-      repoInfo => repoInfo.relationships.latest_default_branch_test_report.data
+      repoInfo => repoInfo.relationships.latest_default_branch_test_report.data,
     )
     if (repoInfosWithTestReport.length === 0) {
       throw new NotFound({ prettyMessage: 'test report not found' })

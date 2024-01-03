@@ -35,7 +35,7 @@ t.create('user-karma (link - math check)')
   .intercept(nock =>
     nock('https://www.reddit.com/u')
       .get('/user_simulator/about.json')
-      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
+      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } }),
   )
   .expectBadge({
     label: 'u/user_simulator karma (link)',
@@ -47,7 +47,7 @@ t.create('user-karma (comment - math check)')
   .intercept(nock =>
     nock('https://www.reddit.com/u')
       .get('/user_simulator/about.json')
-      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
+      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } }),
   )
   .expectBadge({
     label: 'u/user_simulator karma (comment)',
@@ -59,7 +59,7 @@ t.create('user-karma (combined - math check)')
   .intercept(nock =>
     nock('https://www.reddit.com/u')
       .get('/user_simulator/about.json')
-      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } })
+      .reply(200, { kind: 't2', data: { link_karma: 20, comment_karma: 80 } }),
   )
   .expectBadge({
     label: 'u/user_simulator karma',
@@ -71,7 +71,7 @@ t.create('user-karma (combined - missing data)')
   .intercept(nock =>
     nock('https://www.reddit.com/u')
       .get('/user_simulator/about.json')
-      .reply(200, { kind: 't2', data: { link_karma: 20 } })
+      .reply(200, { kind: 't2', data: { link_karma: 20 } }),
   )
   .expectBadge({
     label: 'reddit karma',

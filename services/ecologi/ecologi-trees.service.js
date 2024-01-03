@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const apiSchema = Joi.object({
   total: nonNegativeInteger,
@@ -11,13 +11,17 @@ const apiSchema = Joi.object({
 export default class EcologiTrees extends BaseJsonService {
   static category = 'other'
   static route = { base: 'ecologi/trees', pattern: ':username' }
-  static examples = [
-    {
-      title: 'Ecologi (Trees)',
-      namedParams: { username: 'ecologi' },
-      staticPreview: this.render({ count: 250 }),
+  static openApi = {
+    '/ecologi/trees/{username}': {
+      get: {
+        summary: 'Ecologi (Trees)',
+        parameters: pathParams({
+          name: 'username',
+          example: 'ecologi',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'trees' }
 
@@ -30,7 +34,7 @@ export default class EcologiTrees extends BaseJsonService {
     return this._requestJson({
       url,
       schema: apiSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'username not found',
       },
     })

@@ -7,7 +7,7 @@ export default class TeamCityBase extends BaseJsonService {
     serviceKey: 'teamcity',
   }
 
-  async fetch({ url, schema, searchParams = {}, errorMessages = {} }) {
+  async fetch({ url, schema, searchParams = {}, httpErrors = {} }) {
     // JetBrains API Auth Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-RESTAuthentication
     const options = { searchParams }
     if (!this.authHelper.isConfigured) {
@@ -19,8 +19,8 @@ export default class TeamCityBase extends BaseJsonService {
         url,
         schema,
         options,
-        errorMessages: { 404: 'build not found', ...errorMessages },
-      })
+        httpErrors: { 404: 'build not found', ...httpErrors },
+      }),
     )
   }
 }

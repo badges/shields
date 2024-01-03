@@ -90,6 +90,8 @@ Past that point, all related code will be deleted, and a not found error will be
 
 Here is a listing of all deleted badges that were once part of the Shields.io service:
 
+- Beerpay
+- Bintray
 - bitHound
 - Cauditor
 - CocoaPods Apps
@@ -97,6 +99,8 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - Codetally
 - continuousphp
 - Coverity
+- David
+- dependabot
 - Dockbit
 - Dotnet Status
 - Gemnasium
@@ -107,8 +111,11 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - Leanpub
 - Libscore
 - Magnum CI
+- MicroBadger
 - NSP
 - PHP Eye
+- requires.io
+- Shippable
 - Snap CI
 - VersionEye
 - Waffle

@@ -11,15 +11,15 @@ export default class JenkinsBase extends BaseJsonService {
     url,
     schema,
     searchParams,
-    errorMessages = { 404: 'instance or job not found' },
+    httpErrors = { 404: 'instance or job not found' },
   }) {
     return this._requestJson(
       this.authHelper.withBasicAuth({
         url,
         options: { searchParams },
         schema,
-        errorMessages,
-      })
+        httpErrors,
+      }),
     )
   }
 }

@@ -2,7 +2,6 @@ extends:
   - standard
   - standard-jsx
   - standard-react
-  - plugin:@typescript-eslint/recommended
   - prettier
   - eslint:recommended
 
@@ -18,12 +17,13 @@ settings:
   react:
     version: '16.8'
   jsdoc:
-    mode: jsdoc
+    mode: typescript
 
 plugins:
   - chai-friendly
   - jsdoc
   - mocha
+  - icedfrisby
   - no-extension-in-require
   - sort-class-members
   - import
@@ -36,39 +36,33 @@ overrides:
   # rules listed here are only ones which conflict.
 
   - files:
-      - '**/*.js'
-      - '!frontend/**/*.js'
+      - 'badge-maker/**/*.js'
+      - '**/*.cjs'
     env:
       node: true
       es6: true
+
+  - files:
+      - '**/*.js'
+      - '!frontend/**/*.js'
+      - '!badge-maker/**/*.js'
+    env:
+      node: true
+      es6: true
+    parserOptions:
+      sourceType: 'module'
+    parser: '@typescript-eslint/parser'
     rules:
       no-console: 'off'
-      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
-      - '**/*.@(ts|tsx)'
+      - '**/*.ts'
     parserOptions:
       sourceType: 'module'
     parser: '@typescript-eslint/parser'
-    rules:
-      # Argh.
-      '@typescript-eslint/explicit-function-return-type':
-        ['error', { 'allowExpressions': true }]
-      '@typescript-eslint/no-empty-function': 'error'
-      '@typescript-eslint/no-var-requires': 'error'
-      '@typescript-eslint/no-object-literal-type-assertion': 'off'
-      '@typescript-eslint/no-explicit-any': 'error'
-      '@typescript-eslint/ban-ts-ignore': 'off'
-      '@typescript-eslint/explicit-module-boundary-types': 'off'
 
   - files:
-      - core/**/*.ts
-    parserOptions:
-      sourceType: 'module'
-    parser: '@typescript-eslint/parser'
-  - files:
-      - gatsby-browser.js
-      - 'frontend/**/*.@(js|ts|tsx)'
+      - 'frontend/**/*.js'
     parserOptions:
       sourceType: 'module'
     env:
@@ -113,21 +107,20 @@ overrides:
       mocha: true
     rules:
       mocha/no-exclusive-tests: 'error'
+      mocha/no-skipped-tests: 'error'
       mocha/no-mocha-arrows: 'error'
       mocha/prefer-arrow-callback: 'error'
+
+  - files:
+      - 'services/**/*.tester.js'
+    rules:
+      icedfrisby/no-exclusive-tests: 'error'
+      icedfrisby/no-skipped-tests: 'error'
 
 rules:
   # Disable some rules from eslint:recommended.
   no-empty: ['error', { 'allowEmptyCatch': true }]
 
-  # Allow unused parameters. In callbacks, removing them seems to obscure
-  # what the functions are doing.
-  '@typescript-eslint/no-unused-vars': ['error', { 'args': 'none' }]
-  no-unused-vars: 'off'
-
-  '@typescript-eslint/no-var-requires': 'off'
-
-  '@typescript-eslint/no-use-before-define': 'error'
   no-use-before-define: 'off'
 
   # These should be disabled by eslint-config-prettier, but are not.
@@ -144,6 +137,8 @@ rules:
   func-style: ['error', 'declaration', { 'allowArrowFunctions': true }]
   new-cap: ['error', { 'capIsNew': true }]
   import/order: ['error', { 'newlines-between': 'never' }]
+  quotes:
+    ['error', 'single', { 'avoidEscape': true, 'allowTemplateLiterals': false }]
 
   # Account for destructuring responses from upstream services,
   # many of which do not follow camelcase
@@ -176,7 +171,7 @@ rules:
   jsdoc/check-tag-names: 'error'
   jsdoc/check-types: 'error'
   jsdoc/implements-on-classes: 'error'
-  jsdoc/newline-after-description: 'error'
+  jsdoc/tag-lines: ['error', 'any', { 'startLines': 1 }]
   jsdoc/require-param: 'error'
   jsdoc/require-param-description: 'error'
   jsdoc/require-param-name: 'error'
@@ -187,11 +182,7 @@ rules:
   jsdoc/require-returns-type: 'error'
   jsdoc/valid-types: 'error'
 
-  # Disable some from TypeScript.
-  '@typescript-eslint/camelcase': off
-  '@typescript-eslint/explicit-function-return-type': 'off'
-  '@typescript-eslint/no-empty-function': 'off'
-
+  react/prop-types: 'off'
   react/jsx-sort-props: 'error'
   react-hooks/rules-of-hooks: 'error'
   react-hooks/exhaustive-deps: 'error'

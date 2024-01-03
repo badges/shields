@@ -1,0 +1,44 @@
+name: Create/Update Review App
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR Number to deploy e.g: 1234'
+        required: true
+
+permissions:
+  pull-requests: write
+
+jobs:
+  deploy-review-app:
+    runs-on: ubuntu-latest
+    environment: 'Review Apps'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: install jq
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install -y jq
+
+      - run: .github/scripts/deploy-review-app.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          PR_NUMBER: ${{ github.event.inputs.pr_number }}
+          # credentials to set when we create the review app
+          SECRETS: |
+            GH_TOKEN=${{ secrets.GH_PAT }}
+            LIBRARIESIO_TOKENS=${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}
+            OBS_USER=${{ secrets.SERVICETESTS_OBS_USER }}
+            OBS_PASS=${{ secrets.SERVICETESTS_OBS_PASS }}
+            PEPY_KEY=${{ secrets.SERVICETESTS_PEPY_KEY }}
+            SL_INSIGHT_API_TOKEN=${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}
+            SL_INSIGHT_USER_UUID=${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}
+            TWITCH_CLIENT_ID=${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}
+            TWITCH_CLIENT_SECRET=${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}
+            WHEELMAP_TOKEN=${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}
+            YOUTUBE_API_KEY=${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}

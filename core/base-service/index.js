@@ -3,6 +3,7 @@ import BaseJsonService from './base-json.js'
 import BaseGraphqlService from './base-graphql.js'
 import BaseStaticService from './base-static.js'
 import BaseSvgScrapingService from './base-svg-scraping.js'
+import BaseTomlService from './base-toml.js'
 import BaseXmlService from './base-xml.js'
 import BaseYamlService from './base-yaml.js'
 import deprecatedService from './deprecated-service.js'
@@ -15,6 +16,7 @@ import {
   Deprecated,
   ImproperlyConfigured,
 } from './errors.js'
+import { pathParam, pathParams, queryParam, queryParams } from './openapi.js'
 
 export {
   BaseService,
@@ -22,6 +24,7 @@ export {
   BaseGraphqlService,
   BaseStaticService,
   BaseSvgScrapingService,
+  BaseTomlService,
   BaseXmlService,
   BaseYamlService,
   deprecatedService,
@@ -32,4 +35,8 @@ export {
   InvalidParameter,
   ImproperlyConfigured,
   Deprecated,
+  pathParam,
+  pathParams,
+  queryParam,
+  queryParams,
 }

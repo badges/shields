@@ -6,18 +6,18 @@ export const t = await createServiceTester()
 const isDroneBuildStatus = Joi.alternatives().try(
   isBuildStatus,
   Joi.equal('none'),
-  Joi.equal('killed')
+  Joi.equal('killed'),
 )
 
 t.create('cloud-hosted build status on default branch')
-  .get('/harness/drone.json')
+  .get('/drone/autoscaler.json')
   .expectBadge({
     label: 'build',
     message: isDroneBuildStatus,
   })
 
 t.create('cloud-hosted build status on named branch')
-  .get('/harness/drone/master.json')
+  .get('/drone/autoscaler/master.json')
   .expectBadge({
     label: 'build',
     message: isDroneBuildStatus,
@@ -35,7 +35,7 @@ t.create('self-hosted build status on default branch')
   .intercept(nock =>
     nock('https://drone.shields.io/api/repos')
       .get('/badges/shields/builds/latest')
-      .reply(200, { status: 'success' })
+      .reply(200, { status: 'success' }),
   )
   .expectBadge({
     label: 'build',
@@ -44,13 +44,13 @@ t.create('self-hosted build status on default branch')
 
 t.create('self-hosted build status on named branch')
   .get(
-    '/badges/shields/feat/awesome-thing.json?server=https://drone.shields.io'
+    '/badges/shields/feat/awesome-thing.json?server=https://drone.shields.io',
   )
   .intercept(nock =>
     nock('https://drone.shields.io/api/repos')
       .get('/badges/shields/builds/latest')
       .query({ ref: 'refs/heads/feat/awesome-thing' })
-      .reply(200, { status: 'success' })
+      .reply(200, { status: 'success' }),
   )
   .expectBadge({
     label: 'build',

@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   translated: nonNegativeInteger,
@@ -29,15 +30,25 @@ export default class WeblateUserStatistic extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: `Weblate user statistic`,
-      namedParams: { statistic: 'translations', user: 'nijel' },
-      queryParams: { server: 'https://hosted.weblate.org' },
-      staticPreview: this.render({ statistic: 'translations', count: 30585 }),
-      keywords: ['i18n', 'internationalization'],
+  static openApi = {
+    '/weblate/{statistic}/{user}': {
+      get: {
+        summary: 'Weblate user statistic',
+        description,
+        parameters: [
+          pathParam({
+            name: 'statistic',
+            example: 'translations',
+            schema: { type: 'string', enum: this.getEnum('statistic') },
+          }),
+          pathParam({ name: 'user', example: 'nijel' }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
+
+  static _cacheLength = 600
 
   static defaultBadgeData = { color: 'informational' }
 
@@ -45,15 +56,15 @@ export default class WeblateUserStatistic extends WeblateBase {
     return { label: statistic, message: metric(count) }
   }
 
-  async fetch({ user, server = 'https://hosted.weblate.org' }) {
+  async fetch({ user, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/users/${user}/statistics/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
         404: 'user not found',
-        429: 'rate limited by remote server',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

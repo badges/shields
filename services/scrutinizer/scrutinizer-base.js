@@ -6,7 +6,7 @@ export default class ScrutinizerBase extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://scrutinizer-ci.com/api/repositories/${vcs}/${slug}`,
-      errorMessages: {
+      httpErrors: {
         401: 'not authorized to access project',
         404: 'project not found',
       },

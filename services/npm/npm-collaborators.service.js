@@ -37,7 +37,7 @@ export default class NpmCollaborators extends NpmBase {
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
       namedParams,
-      queryParams
+      queryParams,
     )
     const { maintainers } = await this.fetchPackageData({
       scope,

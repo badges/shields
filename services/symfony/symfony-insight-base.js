@@ -13,7 +13,7 @@ const schema = Joi.object({
         'running',
         'measured',
         'analyzed',
-        'finished'
+        'finished',
       )
         .allow('')
         .required(),
@@ -30,7 +30,8 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const keywords = ['sensiolabs', 'sensio']
+const description =
+  'SymfonyInsight (formerly SensioLabs) is a code analysis service'
 
 const gradeColors = {
   none: 'red',
@@ -62,7 +63,7 @@ class SymfonyInsightBase extends BaseXmlService {
         options: {
           headers: { Accept: 'application/vnd.com.sensiolabs.insight+xml' },
         },
-        errorMessages: {
+        httpErrors: {
           401: 'not authorized to access project',
           404: 'project not found',
         },
@@ -70,7 +71,7 @@ class SymfonyInsightBase extends BaseXmlService {
           attributeNamePrefix: '',
           ignoreAttributes: false,
         },
-      })
+      }),
     )
   }
 
@@ -124,4 +125,4 @@ class SymfonyInsightBase extends BaseXmlService {
   }
 }
 
-export { SymfonyInsightBase, keywords, gradeColors }
+export { SymfonyInsightBase, description, gradeColors }

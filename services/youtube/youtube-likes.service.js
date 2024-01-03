@@ -1,4 +1,5 @@
-import { documentation, YouTubeVideoBase } from './youtube-base.js'
+import { pathParams } from '../index.js'
+import { description, YouTubeVideoBase } from './youtube-base.js'
 
 export default class YouTubeLikes extends YouTubeVideoBase {
   static route = {
@@ -6,29 +7,24 @@ export default class YouTubeLikes extends YouTubeVideoBase {
     pattern: ':videoId',
   }
 
-  static get examples() {
-    const previewLikes = this.render({
-      statistics: { likeCount: 7 },
-      id: 'abBdk8bSPKU',
-    })
-    // link[] is not allowed in examples
-    delete previewLikes.link
-    return [
-      {
-        title: 'YouTube Video Likes',
-        namedParams: { videoId: 'abBdk8bSPKU' },
-        staticPreview: previewLikes,
-        documentation,
+  static openApi = {
+    '/youtube/likes/{videoId}': {
+      get: {
+        summary: 'YouTube Video Likes',
+        description,
+        parameters: pathParams({
+          name: 'videoId',
+          example: 'abBdk8bSPKU',
+        }),
       },
-    ]
+    },
   }
 
-  static render({ statistics, id }, queryParams) {
-    const renderedBadge = super.renderSingleStat({
+  static render({ statistics, id }) {
+    return super.renderSingleStat({
       statistics,
       statisticName: 'like',
       id,
     })
-    return renderedBadge
   }
 }

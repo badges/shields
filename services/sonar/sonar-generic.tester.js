@@ -5,7 +5,7 @@ export const t = await createServiceTester()
 t.create('Security Rating')
   .timeout(10000)
   .get(
-    '/security_rating/com.luckybox:luckybox.json?server=https://sonarcloud.io'
+    '/security_rating/com.luckybox:luckybox.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'security rating',
@@ -16,7 +16,7 @@ t.create('Security Rating')
 t.create('Security Rating (branch)')
   .timeout(10000)
   .get(
-    '/security_rating/com.luckybox:luckybox/master.json?server=https://sonarcloud.io'
+    '/security_rating/com.luckybox:luckybox/master.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'security rating',

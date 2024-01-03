@@ -1,11 +1,12 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import { matcher } from 'matcher'
 import { addv } from '../text-formatters.js'
 import { version as versionColor } from '../color-formatters.js'
 import { latest } from '../version.js'
 import { NotFound, redirector } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
-import { queryParamSchema } from './github-common-release.js'
+import { filterDocs, queryParamSchema } from './github-common-release.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
@@ -60,6 +61,16 @@ class GithubTag extends GithubAuthV4Service {
       }),
       documentation,
     },
+    {
+      title: 'GitHub tag (with filter)',
+      namedParams: { user: 'badges', repo: 'shields' },
+      queryParams: { filter: '!server-*' },
+      staticPreview: this.render({
+        version: 'v3.3.1',
+        sort: 'date',
+      }),
+      documentation: documentation + filterDocs,
+    },
   ]
 
   static defaultBadgeData = {
@@ -73,8 +84,21 @@ class GithubTag extends GithubAuthV4Service {
     }
   }
 
-  async fetch({ user, repo, sort }) {
-    const limit = sort === 'semver' ? 100 : 1
+  static getLimit({ sort, filter }) {
+    if (!filter && sort === 'date') {
+      return 1
+    }
+    return 100
+  }
+
+  static applyFilter({ tags, filter }) {
+    if (!filter) {
+      return tags
+    }
+    return matcher(tags, filter)
+  }
+
+  async fetch({ user, repo, limit }) {
     return this._requestGraphql({
       query: gql`
         query ($user: String!, $repo: String!, $limit: Int!) {
@@ -109,11 +133,17 @@ class GithubTag extends GithubAuthV4Service {
   async handle({ user, repo }, queryParams) {
     const sort = queryParams.sort
     const includePrereleases = queryParams.include_prereleases !== undefined
+    const filter = queryParams.filter
+    const limit = this.constructor.getLimit({ sort, filter })
 
-    const json = await this.fetch({ user, repo, sort })
-    const tags = json.data.repository.refs.edges.map(edge => edge.node.name)
+    const json = await this.fetch({ user, repo, limit })
+    const tags = this.constructor.applyFilter({
+      tags: json.data.repository.refs.edges.map(edge => edge.node.name),
+      filter,
+    })
     if (tags.length === 0) {
-      throw new NotFound({ prettyMessage: 'no tags found' })
+      const prettyMessage = filter ? 'no matching tags found' : 'no tags found'
+      throw new NotFound({ prettyMessage })
     }
     return this.constructor.render({
       version: this.constructor.getLatestTag({

@@ -19,7 +19,7 @@ describe('The server', function () {
         public: {
           documentRoot: path.resolve(
             path.dirname(fileURLToPath(import.meta.url)),
-            'test-public'
+            'test-public',
           ),
         },
       })
@@ -60,12 +60,14 @@ describe('The server', function () {
     })
 
     it('should serve badges with custom maxAge', async function () {
-      const { headers } = await got(`${baseUrl}npm/l/express`)
-      expect(headers['cache-control']).to.equal('max-age=3600, s-maxage=3600')
+      const { headers } = await got(`${baseUrl}badge/foo-bar-blue`)
+      expect(headers['cache-control']).to.equal('max-age=86400, s-maxage=86400')
     })
 
     it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
+      const { statusCode, headers } = await got(
+        `${baseUrl}badge/foo-bar-blue.svg`,
+      )
       expect(statusCode).to.equal(200)
       expect(headers['access-control-allow-origin']).to.equal('*')
     })
@@ -75,27 +77,35 @@ describe('The server', function () {
         `${baseUrl}:fruit-apple-green.png`,
         {
           followRedirect: false,
-        }
+        },
       )
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        'http://raster.example.test/:fruit-apple-green.png'
+        'http://raster.example.test/:fruit-apple-green.png',
       )
     })
 
     it('should redirect modern PNG badges as configured', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.png`, {
-        followRedirect: false,
-      })
+      const { statusCode, headers } = await got(
+        `${baseUrl}badge/foo-bar-blue.png`,
+        {
+          followRedirect: false,
+        },
+      )
       expect(statusCode).to.equal(301)
       expect(headers.location).to.equal(
-        'http://raster.example.test/npm/v/express.png'
+        'http://raster.example.test/badge/foo-bar-blue.png',
       )
+    })
+
+    it('should not redirect for PNG requests in /img', async function () {
+      const { statusCode } = await got(`${baseUrl}img/frontend-image.png`)
+      expect(statusCode).to.equal(200)
     })
 
     it('should produce SVG badges with expected headers', async function () {
       const { statusCode, headers } = await got(
-        `${baseUrl}:fruit-apple-green.svg`
+        `${baseUrl}:fruit-apple-green.svg`,
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
@@ -109,7 +119,7 @@ describe('The server', function () {
 
     it('should produce JSON badges with expected headers', async function () {
       const { statusCode, body, headers } = await got(
-        `${baseUrl}:fruit-apple-green.json`
+        `${baseUrl}:fruit-apple-green.json`,
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('application/json')
@@ -127,7 +137,7 @@ describe('The server', function () {
     // https://github.com/badges/shields/pull/1319
     it('should not crash with a numeric logo', async function () {
       const { statusCode, body } = await got(
-        `${baseUrl}:fruit-apple-green.svg?logo=1`
+        `${baseUrl}:fruit-apple-green.svg?logo=1`,
       )
       expect(statusCode).to.equal(200)
       expect(body)
@@ -138,7 +148,7 @@ describe('The server', function () {
 
     it('should not crash with a numeric link', async function () {
       const { statusCode, body } = await got(
-        `${baseUrl}:fruit-apple-green.svg?link=1`
+        `${baseUrl}:fruit-apple-green.svg?link=1`,
       )
       expect(statusCode).to.equal(200)
       expect(body)
@@ -149,7 +159,7 @@ describe('The server', function () {
 
     it('should not crash with a boolean link', async function () {
       const { statusCode, body } = await got(
-        `${baseUrl}:fruit-apple-green.svg?link=true`
+        `${baseUrl}:fruit-apple-green.svg?link=true`,
       )
       expect(statusCode).to.equal(200)
       expect(body)
@@ -163,7 +173,7 @@ describe('The server', function () {
         `${baseUrl}this/is/not/a/badge.svg`,
         {
           throwHttpErrors: false,
-        }
+        },
       )
       expect(statusCode).to.equal(404)
       expect(body)
@@ -177,7 +187,7 @@ describe('The server', function () {
         `${baseUrl}this/is/most/definitely/not/a/badge.js`,
         {
           throwHttpErrors: false,
-        }
+        },
       )
       expect(statusCode).to.equal(404)
       expect(body)
@@ -197,21 +207,18 @@ describe('The server', function () {
     })
 
     it('should return the 410 badge for obsolete formats', async function () {
-      const { statusCode, body } = await got(`${baseUrl}npm/v/express.jpg`, {
-        throwHttpErrors: false,
-      })
+      const { statusCode, body } = await got(
+        `${baseUrl}badge/foo-bar-blue.jpg`,
+        {
+          throwHttpErrors: false,
+        },
+      )
       // TODO It would be nice if this were 404 or 410.
       expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('410')
         .and.to.include('jpg no longer available')
-    })
-
-    it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(`${baseUrl}npm/v/express.svg`)
-      expect(statusCode).to.equal(200)
-      expect(headers['access-control-allow-origin']).to.equal('*')
     })
   })
 
@@ -229,7 +236,7 @@ describe('The server', function () {
       await server.start()
 
       const { statusCode, body } = await got(
-        `${server.baseUrl}badge/foo-bar-blue.svg`
+        `${server.baseUrl}badge/foo-bar-blue.svg`,
       )
 
       expect(statusCode).to.be.equal(200)
@@ -358,7 +365,7 @@ describe('The server', function () {
       it('should require url when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.url
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.url" is required'
+          '"metrics.influx.url" is required',
         )
       })
 
@@ -371,21 +378,21 @@ describe('The server', function () {
       it('should require timeoutMilliseconds when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.timeoutMilliseconds
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.timeoutMilliseconds" is required'
+          '"metrics.influx.timeoutMilliseconds" is required',
         )
       })
 
       it('should require intervalSeconds when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.intervalSeconds
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.intervalSeconds" is required'
+          '"metrics.influx.intervalSeconds" is required',
         )
       })
 
       it('should require instanceIdFrom when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.instanceIdFrom
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.instanceIdFrom" is required'
+          '"metrics.influx.instanceIdFrom" is required',
         )
       })
 
@@ -393,7 +400,7 @@ describe('The server', function () {
         customConfig.public.metrics.influx.instanceIdFrom = 'env-var'
         delete customConfig.public.metrics.influx.instanceIdEnvVarName
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.instanceIdEnvVarName" is required'
+          '"metrics.influx.instanceIdEnvVarName" is required',
         )
       })
 
@@ -415,7 +422,7 @@ describe('The server', function () {
       it('should require envLabel when influx configuration is enabled', function () {
         delete customConfig.public.metrics.influx.envLabel
         expect(() => new Server(customConfig)).to.throw(
-          '"metrics.influx.envLabel" is required'
+          '"metrics.influx.envLabel" is required',
         )
       })
 
@@ -432,14 +439,14 @@ describe('The server', function () {
       it('should require username when influx configuration is enabled', function () {
         delete customConfig.private.influx_username
         expect(() => new Server(customConfig)).to.throw(
-          'Private configuration is invalid. Check these paths: influx_username'
+          'Private configuration is invalid. Check these paths: influx_username',
         )
       })
 
       it('should require password when influx configuration is enabled', function () {
         delete customConfig.private.influx_password
         expect(() => new Server(customConfig)).to.throw(
-          'Private configuration is invalid. Check these paths: influx_password'
+          'Private configuration is invalid. Check these paths: influx_password',
         )
       })
 
@@ -498,7 +505,7 @@ describe('The server', function () {
       })
         .post(
           '/metrics',
-          /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/
+          /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/,
         )
         .basicAuth({ user: 'influx-username', pass: 'influx-password' })
         .reply(200)
@@ -508,7 +515,7 @@ describe('The server', function () {
 
       expect(scope.isDone()).to.be.equal(
         true,
-        `pending mocks: ${scope.pendingMocks()}`
+        `pending mocks: ${scope.pendingMocks()}`,
       )
     })
   })

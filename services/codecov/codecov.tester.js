@@ -39,7 +39,7 @@ t.create('handles unknown repository')
 
 t.create('handles unknown repository with flag')
   .get(
-    '/github/codecov2/fake-not-even-a-little-bit-real-node.json?flag=istanbul_mocha'
+    '/github/codecov2/fake-not-even-a-little-bit-real-node.json?flag=istanbul_mocha',
   )
   .expectBadge({
     label: 'coverage',
@@ -60,9 +60,9 @@ t.create('handles unauthorized private repository')
   .intercept(nock =>
     nock('https://codecov.io')
       .get('/github/codecov/private-example-python/graph/badge.svg')
-      .reply(200, `<g><text x="105.5" y="14">unknown</text></g>`, {
+      .reply(200, '<g><text x="105.5" y="14">unknown</text></g>', {
         'Content-Type': 'image/svg+xml',
-      })
+      }),
   )
   .expectBadge({
     label: 'coverage',
@@ -78,7 +78,7 @@ t.create('handles unauthorized error (with api token)')
       },
     })
       .get('/github/codecov/private-example-python')
-      .reply(401)
+      .reply(401),
   )
   .expectBadge({
     label: 'coverage',
@@ -87,7 +87,7 @@ t.create('handles unauthorized error (with api token)')
 
 t.create('handles unknown repository (with api token)')
   .get(
-    '/github/codecov2/fake-not-even-a-little-bit-real-python.json?token=a1b2c3d4e5f6g7h8'
+    '/github/codecov2/fake-not-even-a-little-bit-real-python.json?token=a1b2c3d4e5f6g7h8',
   )
   .intercept(nock =>
     nock('https://codecov.io/api', {
@@ -96,7 +96,7 @@ t.create('handles unknown repository (with api token)')
       },
     })
       .get('/github/codecov2/fake-not-even-a-little-bit-real-python')
-      .reply(404)
+      .reply(404),
   )
   .expectBadge({
     label: 'coverage',
@@ -108,11 +108,11 @@ t.create('gets coverage for private repository')
   .intercept(nock =>
     nock('https://codecov.io')
       .get(
-        '/gh/codecov/private-example-python/graph/badge.svg?token=a1b2c3d4e5'
+        '/gh/codecov/private-example-python/graph/badge.svg?token=a1b2c3d4e5',
       )
-      .reply(200, `<g><text x="105.5" y="14">100%</text></g>`, {
+      .reply(200, '<g><text x="105.5" y="14">100%</text></g>', {
         'Content-Type': 'image/svg+xml',
-      })
+      }),
   )
   .expectBadge({
     label: 'coverage',
@@ -134,7 +134,7 @@ t.create('gets coverage for private repository (with api token)')
             c: 94.75,
           },
         },
-      })
+      }),
   )
   .expectBadge({
     label: 'coverage',

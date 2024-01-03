@@ -1,6 +1,7 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   color: Joi.string().hex().required(),
@@ -9,18 +10,28 @@ const schema = Joi.object({
 export default class GithubLabels extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = { base: 'github/labels', pattern: ':user/:repo/:name' }
-  static examples = [
-    {
-      title: 'GitHub labels',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        name: 'help-wanted',
+  static openApi = {
+    '/github/labels/{user}/{repo}/{name}': {
+      get: {
+        summary: 'GitHub labels',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'atom',
+          },
+          {
+            name: 'repo',
+            example: 'atom',
+          },
+          {
+            name: 'name',
+            example: 'help-wanted',
+          },
+        ),
       },
-      staticPreview: this.render({ name: 'help-wanted', color: '#159818' }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: ' ' }
 
@@ -35,7 +46,7 @@ export default class GithubLabels extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/labels/${name}`,
       schema,
-      errorMessages: errorMessagesFor(`repo or label not found`),
+      httpErrors: httpErrorsFor('repo or label not found'),
     })
   }
 

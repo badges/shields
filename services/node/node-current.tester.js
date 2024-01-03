@@ -22,10 +22,10 @@ t.create('engines satisfies current node version')
     mockPackageData({
       packageName: 'passport',
       engines: '>=0.4.0',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
+  .expectBadge({ label: 'node', message: '>=0.4.0', color: 'brightgreen' })
 
 t.create('engines does not satisfy current node version')
   .get('/passport.json')
@@ -33,10 +33,10 @@ t.create('engines does not satisfy current node version')
     mockPackageData({
       packageName: 'passport',
       engines: '12',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node', message: `12`, color: `yellow` })
+  .expectBadge({ label: 'node', message: '12', color: 'yellow' })
 
 t.create('gets the node version of @stdlib/stdlib')
   .get('/@stdlib/stdlib.json')
@@ -54,10 +54,10 @@ t.create('engines satisfies current node version - scoped')
       scope: '@stdlib',
       tag: '',
       registry: '',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node', message: `>=0.4.0`, color: `brightgreen` })
+  .expectBadge({ label: 'node', message: '>=0.4.0', color: 'brightgreen' })
 
 t.create('engines does not satisfy current node version - scoped')
   .get('/@stdlib/stdlib.json')
@@ -68,10 +68,10 @@ t.create('engines does not satisfy current node version - scoped')
       scope: '@stdlib',
       tag: '',
       registry: '',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node', message: `12`, color: `yellow` })
+  .expectBadge({ label: 'node', message: '12', color: 'yellow' })
 
 t.create("gets the tagged release's node version version of ionic")
   .get('/ionic/testing.json')
@@ -87,13 +87,13 @@ t.create('engines satisfies current node version - tagged')
       packageName: 'ionic',
       engines: '>=0.4.0',
       tag: 'testing',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({
     label: 'node@testing',
-    message: `>=0.4.0`,
-    color: `brightgreen`,
+    message: '>=0.4.0',
+    color: 'brightgreen',
   })
 
 t.create('engines does not satisfy current node version - tagged')
@@ -103,10 +103,10 @@ t.create('engines does not satisfy current node version - tagged')
       packageName: 'ionic',
       engines: '12',
       tag: 'testing',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node@testing', message: `12`, color: `yellow` })
+  .expectBadge({ label: 'node@testing', message: '12', color: 'yellow' })
 
 t.create("gets the tagged release's node version of @cycle/core")
   .get('/@cycle/core/canary.json')
@@ -123,13 +123,13 @@ t.create('engines satisfies current node version - scoped and tagged')
       engines: '>=0.4.0',
       scope: '@cycle',
       tag: 'canary',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
   .expectBadge({
     label: 'node@canary',
-    message: `>=0.4.0`,
-    color: `brightgreen`,
+    message: '>=0.4.0',
+    color: 'brightgreen',
   })
 
 t.create('engines does not satisfy current node version - scoped and tagged')
@@ -140,10 +140,10 @@ t.create('engines does not satisfy current node version - scoped and tagged')
       engines: '12',
       scope: '@cycle',
       tag: 'canary',
-    })
+    }),
   )
   .intercept(mockCurrentSha(13))
-  .expectBadge({ label: 'node@canary', message: `12`, color: `yellow` })
+  .expectBadge({ label: 'node@canary', message: '12', color: 'yellow' })
 
 t.create('gets the node version of passport from a custom registry')
   .get('/passport.json?registry_uri=https://registry.npmjs.com')

@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { documentation, BaseWordpress } from './wordpress-base.js'
+import { pathParams } from '../index.js'
+import { description, BaseWordpress } from './wordpress-base.js'
 
 const dateSchema = Joi.object()
   .pattern(Joi.date().iso(), Joi.number().integer())
@@ -52,14 +53,29 @@ function DownloadsForExtensionType(extensionType) {
       pattern: ':interval(dd|dw|dm|dy|dt)/:slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Downloads`,
-        namedParams: { interval: 'dm', slug: exampleSlug },
-        staticPreview: this.render({ interval: 'dm', downloads: 200000 }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/{interval}/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Downloads`,
+          description,
+          parameters: pathParams(
+            {
+              name: 'interval',
+              example: 'dm',
+              schema: { type: 'string', enum: this.getEnum('interval') },
+              description: 'Daily, Weekly, Monthly, Yearly, or Total downloads',
+            },
+            {
+              name: 'slug',
+              example: exampleSlug,
+            },
+          ),
+        },
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'downloads' }
 
@@ -92,7 +108,7 @@ function DownloadsForExtensionType(extensionType) {
           },
         })
         downloads = Object.values(json).reduce(
-          (a, b) => parseInt(a) + parseInt(b)
+          (a, b) => parseInt(a) + parseInt(b),
         )
       }
 
@@ -114,14 +130,21 @@ function InstallsForExtensionType(extensionType) {
       pattern: ':slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Active Installs`,
-        namedParams: { slug: exampleSlug },
-        staticPreview: renderDownloadsBadge({ downloads: 300000 }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/installs/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Active Installs`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'active installs' }
 

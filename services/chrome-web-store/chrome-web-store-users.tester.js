@@ -10,7 +10,7 @@ export const t = new ServiceTester({
 t.create('Downloads (redirect)')
   .get('/d/alhjnofcnnpeaphgeakdhkebafjcpeae.svg')
   .expectRedirect(
-    '/chrome-web-store/users/alhjnofcnnpeaphgeakdhkebafjcpeae.svg'
+    '/chrome-web-store/users/alhjnofcnnpeaphgeakdhkebafjcpeae.svg',
   )
 
 t.create('Users')

@@ -77,7 +77,7 @@ export default class NpmDownloads extends BaseJsonService {
     const json = await this._requestJson({
       schema,
       url: `https://api.npmjs.org/downloads/${query}/${slug}`,
-      errorMessages: { 404: 'package not found or too new' },
+      httpErrors: { 404: 'package not found or too new' },
     })
 
     const downloadCount = transform(json)

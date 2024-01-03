@@ -12,7 +12,7 @@ t.create('homebrew cask (valid)')
   .intercept(nock =>
     nock('https://formulae.brew.sh')
       .get('/api/cask/iterm2.json')
-      .reply(200, { version: '3.3.6' })
+      .reply(200, { version: '3.3.6' }),
   )
   .expectBadge({ label: 'homebrew cask', message: 'v3.3.6' })
 

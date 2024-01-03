@@ -2,8 +2,6 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
-const keywords = ['Rust']
-
 const crateSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
@@ -15,7 +13,7 @@ const crateSchema = Joi.object({
       Joi.object({
         downloads: nonNegativeInteger,
         license: Joi.string().required().allow(null),
-      })
+      }),
     )
     .min(1)
     .required(),
@@ -44,9 +42,12 @@ class BaseCratesService extends BaseJsonService {
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
-      : `https://crates.io/api/v1/crates/${crate}`
+      : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
     return this._requestJson({ schema, url })
   }
 }
 
-export { BaseCratesService, keywords }
+const description =
+  '[Crates.io](https://crates.io/) is a package registry for Rust.'
+
+export { BaseCratesService, description }

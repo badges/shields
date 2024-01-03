@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
+import { pathParam, queryParam } from '../index.js'
 import TeamCityBase from './teamcity-base.js'
 
 const buildStatusSchema = Joi.object({
@@ -20,37 +21,35 @@ export default class TeamCityBuild extends TeamCityBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'TeamCity Simple Build Status',
-      namedParams: {
-        verbosity: 's',
-        buildId: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
+  static openApi = {
+    '/teamcity/build/s/{buildId}': {
+      get: {
+        summary: 'TeamCity Simple Build Status',
+        parameters: [
+          pathParam({
+            name: 'buildId',
+            example: 'IntelliJIdeaCe_JavaDecompilerEngineTests',
+          }),
+          queryParam({
+            name: 'server',
+            example: 'https://teamcity.jetbrains.com',
+          }),
+        ],
       },
-      queryParams: {
-        server: 'https://teamcity.jetbrains.com',
-      },
-      staticPreview: this.render({
-        status: 'SUCCESS',
-      }),
     },
-    {
-      title: 'TeamCity Full Build Status',
-      namedParams: {
-        verbosity: 'e',
-        buildId: 'bt345',
+    '/teamcity/build/e/{buildId}': {
+      get: {
+        summary: 'TeamCity Full Build Status',
+        parameters: [
+          pathParam({ name: 'buildId', example: 'bt345' }),
+          queryParam({
+            name: 'server',
+            example: 'https://teamcity.jetbrains.com',
+          }),
+        ],
       },
-      queryParams: {
-        server: 'https://teamcity.jetbrains.com',
-      },
-      staticPreview: this.render({
-        status: 'FAILURE',
-        statusText: 'Tests failed: 4, passed: 1103, ignored: 2',
-        useVerbose: true,
-      }),
-      keywords: ['test', 'test results'],
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'build',
@@ -77,7 +76,7 @@ export default class TeamCityBuild extends TeamCityBase {
 
   async handle(
     { verbosity, buildId },
-    { server = 'https://teamcity.jetbrains.com' }
+    { server = 'https://teamcity.jetbrains.com' },
   ) {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-BuildStatusIcon
     const buildLocator = `buildType:(id:${buildId})`

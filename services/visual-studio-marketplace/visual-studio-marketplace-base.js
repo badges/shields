@@ -14,23 +14,31 @@ const extensionQuerySchema = Joi.object({
                   Joi.object({
                     statisticName: Joi.string().required(),
                     value: Joi.number().required(),
-                  })
+                  }),
                 )
-                .required(),
+                .default([]),
               versions: Joi.array()
                 .items(
                   Joi.object({
                     version: Joi.string().required(),
-                  })
+                    properties: Joi.array()
+                      .items(
+                        Joi.object({
+                          key: Joi.string().required(),
+                          value: Joi.any().required(),
+                        }),
+                      )
+                      .default([]),
+                  }),
                 )
                 .min(1)
                 .required(),
               releaseDate: Joi.string().required(),
               lastUpdated: Joi.string().required(),
-            })
+            }),
           )
           .required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -67,7 +75,12 @@ export default class VisualStudioMarketplaceBase extends BaseJsonService {
           criteria: [{ filterType: 7, value: extensionId }],
         },
       ],
-      flags: 914,
+      // Microsoft does not provide a clear API doc. It seems that the flag value is calculated
+      // as the combined hex values of the requested flags, converted to base 10.
+      // This was found using the vscode repo at:
+      // https://github.com/microsoft/vscode/blob/main/src/vs/platform/extensionManagement/common/extensionGalleryService.ts
+      // This flag value is 0x192.
+      flags: 402,
     }
     const options = {
       method: 'POST',
@@ -82,7 +95,7 @@ export default class VisualStudioMarketplaceBase extends BaseJsonService {
       schema: extensionQuerySchema,
       url,
       options,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid extension id',
       },
     })

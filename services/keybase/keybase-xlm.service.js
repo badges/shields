@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import KeybaseProfile from './keybase-profile.js'
 
@@ -18,7 +19,7 @@ const stellarAddressSchema = Joi.object({
         }).required(),
       })
         .required()
-        .allow(null)
+        .allow(null),
     )
     .min(0)
     .max(1),
@@ -30,25 +31,28 @@ export default class KeybaseXLM extends KeybaseProfile {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'Keybase XLM',
-      namedParams: { username: 'skyplabs' },
-      staticPreview: this.render({
-        address: 'GCGH37DYONEBPGAZGCHJEZZF3J2Q3EFYZBQBE6UJL5QKTULCMEA6MXLA',
-      }),
-      keywords: ['stellar'],
+  static openApi = {
+    '/keybase/xlm/{username}': {
+      get: {
+        summary: 'Keybase XLM',
+        parameters: pathParams({
+          name: 'username',
+          example: 'skyplabs',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'xlm',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ address }) {
     return {
       message: address,
+      style: 'social',
     }
   }
 

@@ -1,0 +1,21 @@
+name: 'Core tests'
+description: 'Run core and entrypoint tests'
+runs:
+  using: 'composite'
+  steps:
+    - name: Core tests
+      if: always()
+      run: npm run test:core -- --reporter json --reporter-option 'output=reports/core.json'
+      shell: bash
+
+    - name: Entrypoint tests
+      if: always()
+      run: npm run test:entrypoint -- --reporter json --reporter-option 'output=reports/entrypoint.json'
+      shell: bash
+
+    - name: Write Markdown Summary
+      if: always()
+      run: |
+        node scripts/mocha2md.js Core reports/core.json >> $GITHUB_STEP_SUMMARY
+        node scripts/mocha2md.js Entrypoint reports/entrypoint.json >> $GITHUB_STEP_SUMMARY
+      shell: bash

@@ -8,7 +8,7 @@ export const t = await createServiceTester()
 
 const isDownloadsOverTimePeriod = Joi.alternatives().try(
   isMetricOverTimePeriod,
-  isZeroOverTimePeriod
+  isZeroOverTimePeriod,
 )
 
 t.create('jquery hits/day').timeout(10000).get('/hd/ky.json').expectBadge({

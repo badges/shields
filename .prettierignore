@@ -10,5 +10,5 @@ public
 private/*.json
 /.nyc_output
 analytics.json
-supported-features.json
-service-definitions.yml
+frontend/.docusaurus
+frontend/categories

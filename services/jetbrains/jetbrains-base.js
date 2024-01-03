@@ -54,7 +54,7 @@ export default class JetbrainsBase extends BaseXmlService {
     return super._validate(data, schema)
   }
 
-  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
+  async _requestJson({ schema, url, options = {}, httpErrors = {} }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -62,7 +62,7 @@ export default class JetbrainsBase extends BaseXmlService {
     const { buffer } = await this._request({
       url,
       options: mergedOptions,
-      errorMessages,
+      httpErrors,
     })
     const json = this._parseJson(buffer)
     return this.constructor._validateJson(json, schema)

@@ -1,6 +1,9 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
-import renderQuestionsBadge from './stackexchange-helpers.js'
+import { pathParams } from '../index.js'
+import {
+  renderQuestionsBadge,
+  StackExchangeBase,
+} from './stackexchange-base.js'
 
 const tagSchema = Joi.object({
   items: Joi.array()
@@ -8,34 +11,33 @@ const tagSchema = Joi.object({
     .items(
       Joi.object({
         count: Joi.number().min(0).required(),
-      })
+      }),
     )
     .required(),
 }).required()
 
-export default class StackExchangeQuestions extends BaseJsonService {
-  static category = 'chat'
-
+export default class StackExchangeQuestions extends StackExchangeBase {
   static route = {
     base: 'stackexchange',
     pattern: ':stackexchangesite/t/:query',
   }
 
-  static examples = [
-    {
-      title: 'Stack Exchange questions',
-      namedParams: { stackexchangesite: 'stackoverflow', query: 'gson' },
-      staticPreview: this.render({
-        stackexchangesite: 'stackoverflow',
-        query: 'gson',
-        numValue: 10,
-      }),
-      keywords: ['stackexchange', 'stackoverflow'],
+  static openApi = {
+    '/stackexchange/{stackexchangesite}/t/{query}': {
+      get: {
+        summary: 'Stack Exchange questions',
+        parameters: pathParams(
+          {
+            name: 'stackexchangesite',
+            example: 'stackoverflow',
+          },
+          {
+            name: 'query',
+            example: 'gson',
+          },
+        ),
+      },
     },
-  ]
-
-  static defaultBadgeData = {
-    label: 'stackoverflow',
   }
 
   static render(props) {
@@ -48,7 +50,7 @@ export default class StackExchangeQuestions extends BaseJsonService {
   async handle({ stackexchangesite, query }) {
     const path = `tags/${query}/info`
 
-    const parsedData = await this._requestJson({
+    const parsedData = await this.fetch({
       schema: tagSchema,
       options: { decompress: true, searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,

@@ -1,11 +1,11 @@
 import Joi from 'joi'
 import { renderLicenseBadge } from '../licenses.js'
 import { optionalUrl } from '../validators.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import {
-  keywords,
   BasePackagistService,
   customServerDocumentationFragment,
+  description,
 } from './packagist-base.js'
 
 const packageSchema = Joi.array()
@@ -13,7 +13,7 @@ const packageSchema = Joi.array()
     Joi.object({
       version: Joi.string(),
       license: Joi.array(),
-    }).required()
+    }).required(),
   )
   .required()
 
@@ -34,22 +34,29 @@ export default class PackagistLicense extends BasePackagistService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Packagist License',
-      namedParams: { user: 'doctrine', repo: 'orm' },
-      staticPreview: renderLicenseBadge({ license: 'MIT' }),
-      keywords,
+  static openApi = {
+    '/packagist/l/{user}/{repo}': {
+      get: {
+        summary: 'Packagist License',
+        description,
+        parameters: [
+          pathParam({
+            name: 'user',
+            example: 'guzzlehttp',
+          }),
+          pathParam({
+            name: 'repo',
+            example: 'guzzle',
+          }),
+          queryParam({
+            name: 'server',
+            description: customServerDocumentationFragment,
+            example: 'https://packagist.org',
+          }),
+        ],
+      },
     },
-    {
-      title: 'Packagist License (custom server)',
-      namedParams: { user: 'doctrine', repo: 'orm' },
-      queryParams: { server: 'https://packagist.org' },
-      staticPreview: renderLicenseBadge({ license: 'MIT' }),
-      keywords,
-      documentation: customServerDocumentationFragment,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'license',
@@ -60,7 +67,7 @@ export default class PackagistLicense extends BasePackagistService {
 
     const versions = BasePackagistService.expandPackageVersions(
       json,
-      packageName
+      packageName,
     )
 
     const version = this.findLatestRelease(versions)

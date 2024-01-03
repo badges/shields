@@ -21,6 +21,7 @@ import {
 } from './errors.js'
 import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
+import { getEnum } from './openapi.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -44,7 +45,7 @@ const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   {
     is: Joi.string().required(),
     then: Joi.string(),
-  }
+  },
 )
 
 const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
@@ -103,6 +104,26 @@ class BaseService {
   }
 
   /**
+   * Extract an array of allowed values from this service's route pattern
+   * for a given route parameter
+   *
+   * @param {string} param The name of a param in this service's route pattern
+   * @returns {string[]} Array of allowed values for this param
+   */
+  static getEnum(param) {
+    if (!('pattern' in this.route)) {
+      throw new Error('getEnum() requires route to have a .pattern property')
+    }
+    const enumeration = getEnum(this.route.pattern, param)
+    if (!Array.isArray(enumeration)) {
+      throw new Error(
+        `Could not extract enum for param ${param} from pattern ${this.route.pattern}`,
+      )
+    }
+    return enumeration
+  }
+
+  /**
    * Configuration for the authentication helper that prepares credentials
    * for upstream requests.
    *
@@ -140,6 +161,15 @@ class BaseService {
    */
   static examples = []
 
+  /**
+   * Optional: an OpenAPI Paths Object describing this service's
+   * route or routes in OpenAPI format.
+   *
+   * @see https://swagger.io/specification/#paths-object
+   * @abstract
+   */
+  static openApi = undefined
+
   static get _cacheLength() {
     const cacheLengths = {
       build: 30,
@@ -174,21 +204,37 @@ class BaseService {
     Joi.assert(
       this.defaultBadgeData,
       defaultBadgeDataSchema,
-      `Default badge data for ${this.name}`
+      `Default badge data for ${this.name}`,
     )
 
     this.examples.forEach((example, index) =>
-      validateExample(example, index, this)
+      validateExample(example, index, this),
     )
+
+    // ensure openApi spec matches route
+    if (this.openApi) {
+      const preparedRoute = prepareRoute(this.route)
+      for (const [key, value] of Object.entries(this.openApi)) {
+        let example = key
+        for (const param of value.get.parameters) {
+          example = example.replace(`{${param.name}}`, param.example)
+        }
+        if (!example.match(preparedRoute.regex)) {
+          throw new Error(
+            `Inconsistent Open Api spec and Route found for service ${this.name}`,
+          )
+        }
+      }
+    }
   }
 
   static getDefinition() {
-    const { category, name, isDeprecated } = this
+    const { category, name, isDeprecated, openApi } = this
     const { base, format, pattern } = this.route
     const queryParams = getQueryParamNames(this.route)
 
     const examples = this.examples.map((example, index) =>
-      transformExample(example, index, this)
+      transformExample(example, index, this),
     )
 
     let route
@@ -200,7 +246,7 @@ class BaseService {
       route = undefined
     }
 
-    const result = { category, name, isDeprecated, route, examples }
+    const result = { category, name, isDeprecated, route, examples, openApi }
 
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 
@@ -209,7 +255,7 @@ class BaseService {
 
   constructor(
     { requestFetcher, authHelper, metricHelper },
-    { handleInternalErrors }
+    { handleInternalErrors },
   ) {
     this._requestFetcher = requestFetcher
     this.authHelper = authHelper
@@ -217,24 +263,40 @@ class BaseService {
     this._metricHelper = metricHelper
   }
 
-  async _request({ url, options = {}, errorMessages = {} }) {
+  async _request({
+    url,
+    options = {},
+    httpErrors = {},
+    systemErrors = {},
+    logErrors = [429],
+  }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
-    if ('searchParams' in options) {
-      const params = new URLSearchParams(options.searchParams)
+    if ('searchParams' in options && options.searchParams != null) {
+      const params = new URLSearchParams(
+        Object.fromEntries(
+          Object.entries(options.searchParams).filter(
+            ([k, v]) => v !== undefined,
+          ),
+        ),
+      )
       logUrl = `${url}?${params.toString()}`
       delete logOptions.searchParams
     }
     logTrace(
       emojic.bowAndArrow,
       'Request',
-      `${logUrl}\n${JSON.stringify(logOptions, null, 2)}`
+      `${logUrl}\n${JSON.stringify(logOptions, null, 2)}`,
     )
-    const { res, buffer } = await this._requestFetcher(url, options)
+    const { res, buffer } = await this._requestFetcher(
+      url,
+      options,
+      systemErrors,
+    )
     await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse(errorMessages)({ buffer, res })
+    return checkErrorResponse(httpErrors, logErrors)({ buffer, res })
   }
 
   static enabledMetrics = []
@@ -260,7 +322,7 @@ class BaseService {
       prettyErrorMessage = 'invalid response data',
       includeKeys = false,
       allowAndStripUnknownKeys = true,
-    } = {}
+    } = {},
   ) {
     return validate(
       {
@@ -272,7 +334,7 @@ class BaseService {
         allowAndStripUnknownKeys,
       },
       data,
-      schema
+      schema,
     )
   }
 
@@ -313,18 +375,22 @@ class BaseService {
       error instanceof Deprecated
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
-      return {
+      const serviceData = {
         isError: true,
         message: error.prettyMessage,
         color: 'lightgray',
       }
+      if (error.cacheSeconds !== undefined) {
+        serviceData.cacheSeconds = error.cacheSeconds
+      }
+      return serviceData
     } else if (this._handleInternalErrors) {
       if (
         !trace.logTrace(
           'unhandledError',
           emojic.boom,
           'Unhandled internal error',
-          error
+          error,
         )
       ) {
         // This is where we end up if an unhandled exception is thrown in
@@ -342,7 +408,7 @@ class BaseService {
         'unhandledError',
         emojic.boom,
         'Unhandled internal error',
-        error
+        error,
       )
       throw error
     }
@@ -352,7 +418,7 @@ class BaseService {
     context = {},
     config = {},
     namedParams = {},
-    queryParams = {}
+    queryParams = {},
   ) {
     trace.logTrace('inbound', emojic.womanCook, 'Service class', this.name)
     trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
@@ -386,13 +452,13 @@ class BaseService {
             traceSuccessMessage: 'Query params after validation',
           },
           queryParams,
-          queryParamSchema
+          queryParamSchema,
         )
         trace.logTrace(
           'inbound',
           emojic.crayon,
           'Query params after validation',
-          queryParams
+          queryParams,
         )
       } catch (error) {
         serviceError = error
@@ -406,7 +472,7 @@ class BaseService {
       try {
         serviceData = await serviceInstance.handle(
           namedParams,
-          transformedQueryParams
+          transformedQueryParams,
         )
         serviceInstance._validateServiceData(serviceData)
       } catch (error) {
@@ -431,7 +497,7 @@ class BaseService {
       librariesIoApiProvider,
       metricInstance,
     },
-    serviceConfig
+    serviceConfig,
   ) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
     const { regex, captureNames } = prepareRoute(this.route)
@@ -459,14 +525,14 @@ class BaseService {
             },
             serviceConfig,
             namedParams,
-            queryParams
+            queryParams,
           )
 
           const badgeData = coalesceBadge(
             queryParams,
             serviceData,
             this.defaultBadgeData,
-            this
+            this,
           )
           // The final capture group is the extension.
           const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
@@ -475,7 +541,7 @@ class BaseService {
           metricHandle.noteResponseSent()
         },
         cacheLength: this._cacheLength,
-      })
+      }),
     )
   }
 }

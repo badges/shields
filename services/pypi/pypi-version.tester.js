@@ -22,7 +22,7 @@ t.create('version (semver)').get('/requests.json').expectBadge({
   message: isSemver,
 })
 
-// ..whereas this project does not folow SemVer
+// ..whereas this project does not follow SemVer
 t.create('version (not semver)').get('/psycopg2.json').expectBadge({
   label: 'pypi',
   message: isPsycopg2Version,
@@ -43,8 +43,8 @@ t.create('no trove classifiers')
           license: 'foo',
           classifiers: [],
         },
-        releases: {},
-      })
+        urls: [],
+      }),
   )
   .expectBadge({
     label: 'pypi',

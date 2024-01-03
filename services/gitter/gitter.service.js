@@ -1,4 +1,4 @@
-import { BaseStaticService } from '../index.js'
+import { BaseStaticService, pathParams } from '../index.js'
 
 export default class Gitter extends BaseStaticService {
   static category = 'chat'
@@ -8,16 +8,23 @@ export default class Gitter extends BaseStaticService {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'Gitter',
-      namedParams: {
-        user: 'nwjs',
-        repo: 'nw.js',
+  static openApi = {
+    '/gitter/room/{user}/{repo}': {
+      get: {
+        summary: 'Gitter',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'nwjs',
+          },
+          {
+            name: 'repo',
+            example: 'nw.js',
+          },
+        ),
       },
-      staticPreview: this.render(),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'chat' }
 

@@ -11,7 +11,7 @@ t.create('Valid Build')
         {
           result: 'succeeded',
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'build',

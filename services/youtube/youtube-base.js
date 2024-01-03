@@ -3,9 +3,11 @@ import { BaseJsonService, NotFound } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
-const documentation = `
-<p>By using the YouTube badges provided by Shields.io, you are agreeing to be bound by the YouTube Terms of Service. These can be found here:
-<a target="_blank" href="https://www.youtube.com/t/terms">https://www.youtube.com/t/terms</a></p>`
+const description = `
+The YouTube badges provided by Shields.io leverage the YouTube API Services. By using this badge, you are:
+* agreeing to be bound by the YouTube Terms of Service, which can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)
+* acknowledging and accepting the Google Privacy Policy, which can be found here: [https://policies.google.com/privacy](https://policies.google.com/privacy)
+`
 
 const schema = Joi.object({
   pageInfo: Joi.object({
@@ -23,9 +25,9 @@ const schema = Joi.object({
         Joi.object({
           viewCount: nonNegativeInteger,
           subscriberCount: nonNegativeInteger,
-        })
+        }),
       ),
-    })
+    }),
   ),
 }).required()
 
@@ -63,12 +65,12 @@ class YouTubeBase extends BaseJsonService {
           options: {
             searchParams: { id, part: 'statistics' },
           },
-        }
-      )
+        },
+      ),
     )
   }
 
-  async handle({ channelId, videoId }, queryParams) {
+  async handle({ channelId, videoId }) {
     const id = channelId || videoId
     const json = await this.fetch({ id })
     if (json.pageInfo.totalResults === 0) {
@@ -77,7 +79,7 @@ class YouTubeBase extends BaseJsonService {
       })
     }
     const statistics = json.items[0].statistics
-    return this.constructor.render({ statistics, id }, queryParams)
+    return this.constructor.render({ statistics, id })
   }
 }
 
@@ -89,4 +91,4 @@ class YouTubeChannelBase extends YouTubeBase {
   static type = 'channel'
 }
 
-export { documentation, YouTubeVideoBase, YouTubeChannelBase }
+export { description, YouTubeVideoBase, YouTubeChannelBase }

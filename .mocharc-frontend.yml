@@ -1,5 +1,0 @@
-reporter: mocha-env-reporter
-require:
-  - '@babel/polyfill'
-  - '@babel/register'
-  - mocha-yaml-loader

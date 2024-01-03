@@ -1,47 +1,33 @@
 import Joi from 'joi'
+import { pathParam } from '../index.js'
 import {
+  testResultOpenApiQueryParams,
   testResultQueryParamSchema,
   renderTestResultBadge,
   documentation as commonDocumentation,
 } from '../test-results.js'
 import AzureDevOpsBase from './azure-devops-base.js'
 
-const commonAttrs = {
-  keywords: ['vso', 'vsts', 'azure-devops'],
-  namedParams: {
-    organization: 'azuredevops-powershell',
-    project: 'azuredevops-powershell',
-    definitionId: '1',
-    branch: 'master',
-  },
-  queryParams: {
-    passed_label: 'passed',
-    failed_label: 'failed',
-    skipped_label: 'skipped',
-    compact_message: null,
-  },
-  documentation: `
-<p>
-  To obtain your own badge, you need to get 3 pieces of information:
-  <code>ORGANIZATION</code>, <code>PROJECT</code> and <code>DEFINITION_ID</code>.
-</p>
-<p>
-  First, you need to select your build definition and look at the url:
-</p>
+const description = `
+[Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
+
+To obtain your own badge, you need to get 3 pieces of information:
+\`ORGANIZATION\`, \`PROJECT\`, \`DEFINITION_ID\`.
+
+First, you need to select your build definition and look at the url:
+
 <img
   src="https://user-images.githubusercontent.com/3749820/47259976-e2d9ec80-d4b2-11e8-92cc-7c81089a7a2c.png"
   alt="ORGANIZATION is after the dev.azure.com part, PROJECT is right after that, DEFINITION_ID is at the end after the id= part." />
-<p>
-  Your badge will then have the form:
-  <code>https://img.shields.io/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID.svg</code>.
-</p>
-<p>
-  Optionally, you can specify a named branch:
-  <code>https://img.shields.io/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg</code>.
-</p>
+
+Your badge will then have the form:
+\`https://img.shields.io/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID.svg\`.
+
+Optionally, you can specify a named branch:
+\`https://img.shields.io/azure-devops/tests/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg\`.
+
 ${commonDocumentation}
-`,
-}
+`
 
 const buildTestResultSummarySchema = Joi.object({
   aggregatedResultsAnalysis: Joi.object({
@@ -68,48 +54,54 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
     queryParamSchema: testResultQueryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Azure DevOps tests',
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-      }),
-      ...commonAttrs,
-    },
-    {
-      title: 'Azure DevOps tests (compact)',
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-        isCompact: true,
-      }),
-      ...commonAttrs,
-    },
-    {
-      title: 'Azure DevOps tests with custom labels',
-      queryParams: {
-        passed_label: 'good',
-        failed_label: 'bad',
-        skipped_label: 'n/a',
-        compact_message: null,
+  static openApi = {
+    '/azure-devops/tests/{organization}/{project}/{definitionId}': {
+      get: {
+        summary: 'Azure DevOps tests',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'project',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '1',
+          }),
+          ...testResultOpenApiQueryParams,
+        ],
       },
-      staticPreview: this.render({
-        passed: 20,
-        failed: 1,
-        skipped: 1,
-        total: 22,
-        passedLabel: 'good',
-        failedLabel: 'bad',
-        skippedLabel: 'n/a',
-      }),
-      ...commonAttrs,
     },
-  ]
+    '/azure-devops/tests/{organization}/{project}/{definitionId}/{branch}': {
+      get: {
+        summary: 'Azure DevOps tests (branch)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'project',
+            example: 'azuredevops-powershell',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '1',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'master',
+          }),
+          ...testResultOpenApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'tests' }
 
@@ -145,7 +137,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
   }
 
   async fetchTestResults({ organization, project, definitionId, branch }) {
-    const errorMessages = {
+    const httpErrors = {
       404: 'build pipeline or test result summary not found',
     }
     const buildId = await this.getLatestCompletedBuildId(
@@ -153,7 +145,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       project,
       definitionId,
       branch,
-      errorMessages
+      httpErrors,
     )
 
     // https://dev.azure.com/azuredevops-powershell/azuredevops-powershell/_apis/test/ResultSummaryByBuild?buildId=20
@@ -163,7 +155,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
         searchParams: { buildId },
       },
       schema: buildTestResultSummarySchema,
-      errorMessages,
+      httpErrors,
     })
   }
 
@@ -174,7 +166,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
       passed_label: passedLabel,
       failed_label: failedLabel,
       skipped_label: skippedLabel,
-    }
+    },
   ) {
     const json = await this.fetchTestResults({
       organization,

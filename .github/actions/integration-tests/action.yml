@@ -1,0 +1,28 @@
+name: 'Integration tests'
+description: 'Run integration tests'
+inputs:
+  github-token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Migrate DB
+      if: always()
+      run: npm run migrate up
+      env:
+        POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
+      shell: bash
+
+    - name: Integration Tests
+      if: always()
+      run: npm run test:integration -- --reporter json --reporter-option 'output=reports/integration-tests.json'
+      env:
+        GH_TOKEN: '${{ inputs.github-token }}'
+        POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
+      shell: bash
+
+    - name: Write Markdown Summary
+      if: always()
+      run: node scripts/mocha2md.js Integration reports/integration-tests.json >> $GITHUB_STEP_SUMMARY
+      shell: bash

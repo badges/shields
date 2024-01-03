@@ -1,37 +1,34 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
   Joi.object({
     name: Joi.string().required(),
     tag_name: Joi.string().required(),
-  })
+  }),
 )
+
+const sortEnum = ['date', 'semver']
+const displayNameEnum = ['tag', 'release']
+const dateOrderByEnum = ['created_at', 'released_at']
 
 const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   include_prereleases: Joi.equal(''),
-  sort: Joi.string().valid('date', 'semver').default('date'),
-  display_name: Joi.string().valid('tag', 'release').default('tag'),
+  sort: Joi.string()
+    .valid(...sortEnum)
+    .default('date'),
+  display_name: Joi.string()
+    .valid(...displayNameEnum)
+    .default('tag'),
   date_order_by: Joi.string()
-    .valid('created_at', 'released_at')
+    .valid(...dateOrderByEnum)
     .default('created_at'),
 }).required()
-
-const documentation = `
-<p>
-  You may use your GitLab Project Id (e.g. 25813592) or your Project Path (e.g. megabyte-labs/dockerfile/ci-pipeline/ansible-lint)
-</p>
-`
-const commonProps = {
-  namedParams: {
-    project: 'shields-ops-group/tag-test',
-  },
-  documentation,
-}
 
 export default class GitLabRelease extends GitLabBase {
   static category = 'version'
@@ -42,58 +39,44 @@ export default class GitLabRelease extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab Release (latest by date)',
-      ...commonProps,
-      queryParams: { sort: 'date', date_order_by: 'created_at' },
-      staticPreview: renderVersionBadge({ version: 'v2.0.0' }),
-    },
-    {
-      title: 'GitLab Release (latest by SemVer)',
-      ...commonProps,
-      queryParams: { sort: 'semver' },
-      staticPreview: renderVersionBadge({ version: 'v4.0.0' }),
-    },
-    {
-      title: 'GitLab Release (latest by SemVer pre-release)',
-      ...commonProps,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
+  static openApi = {
+    '/gitlab/v/release/{project}': {
+      get: {
+        summary: 'GitLab Release',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+          queryParam({
+            name: 'sort',
+            schema: { type: 'string', enum: sortEnum },
+            example: 'semver',
+          }),
+          queryParam({
+            name: 'display_name',
+            schema: { type: 'string', enum: displayNameEnum },
+            example: 'release',
+          }),
+          queryParam({
+            name: 'date_order_by',
+            schema: { type: 'string', enum: dateOrderByEnum },
+            example: 'created_at',
+          }),
+        ],
       },
-      staticPreview: renderVersionBadge({ version: 'v5.0.0-beta.1' }),
     },
-    {
-      title: 'GitLab Release (self-managed)',
-      namedParams: {
-        project: 'GNOME/librsvg',
-      },
-      documentation,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
-        gitlab_url: 'https://gitlab.gnome.org',
-        date_order_by: 'created_at',
-      },
-      staticPreview: renderVersionBadge({ version: 'v2.51.4' }),
-    },
-    {
-      title: 'GitLab Release (by release name)',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
-      },
-      documentation,
-      queryParams: {
-        sort: 'semver',
-        include_prereleases: null,
-        gitlab_url: 'https://gitlab.com',
-        display_name: 'release',
-        date_order_by: 'created_at',
-      },
-      staticPreview: renderVersionBadge({ version: 'GitLab 14.2' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'release' }
 
@@ -102,9 +85,7 @@ export default class GitLabRelease extends GitLabBase {
     return this.fetchPaginatedArrayData({
       schema,
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(project)}/releases`,
-      errorMessages: {
-        404: 'project not found',
-      },
+      httpErrors: httpErrorsFor('project not found'),
       options: {
         searchParams: { order_by: orderBy },
       },
@@ -125,7 +106,7 @@ export default class GitLabRelease extends GitLabBase {
 
     return latest(
       releases.map(t => t[displayKey]),
-      { pre: includePrereleases }
+      { pre: includePrereleases },
     )
   }
 
@@ -137,7 +118,7 @@ export default class GitLabRelease extends GitLabBase {
       sort,
       display_name: displayName,
       date_order_by: orderBy,
-    }
+    },
   ) {
     const isSemver = sort === 'semver'
     const releases = await this.fetch({ project, baseUrl, isSemver, orderBy })

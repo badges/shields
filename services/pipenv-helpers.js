@@ -1,11 +1,28 @@
+/**
+ * Common functions and utilities for tasks related to pipenv
+ *
+ * @module
+ */
+
 import Joi from 'joi'
 import { InvalidParameter } from './index.js'
 
+/**
+ * Joi schema for validating dependency.
+ *
+ * @type {Joi}
+ */
 const isDependency = Joi.object({
   version: Joi.string(),
   ref: Joi.string(),
 }).required()
 
+/**
+ * Joi schema for validating lock file object.
+ * Checks if the lock file object has required properties and the properties are valid.
+ *
+ * @type {Joi}
+ */
 const isLockfile = Joi.object({
   _meta: Joi.object({
     requires: Joi.object({
@@ -16,6 +33,18 @@ const isLockfile = Joi.object({
   develop: Joi.object().pattern(Joi.string(), isDependency),
 }).required()
 
+/**
+ * Determines the dependency version based on the dependency type.
+ *
+ * @param {object} attrs - Refer to individual attributes
+ * @param {string} attrs.kind - Wanted dependency type ('dev' or 'default'), defaults to 'default'
+ * @param {string} attrs.wantedDependency - Name of the wanted dependency
+ * @param {object} attrs.lockfileData - Object containing lock file data
+ * @throws {Error} - Error if unknown dependency type provided
+ * @throws {InvalidParameter} - Error if wanted dependency is not present in lock file data
+ * @throws {InvalidParameter} - Error if version or ref is not present for the wanted dependency
+ * @returns {object} Object containing wanted dependency version or ref
+ */
 function getDependencyVersion({
   kind = 'default',
   wantedDependency,

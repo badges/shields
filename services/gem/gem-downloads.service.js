@@ -3,9 +3,13 @@ import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { latest as latestVersion } from '../version.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
-
-const keywords = ['ruby']
+import {
+  BaseJsonService,
+  InvalidParameter,
+  InvalidResponse,
+  pathParams,
+} from '../index.js'
+import { description } from './gem-helpers.js'
 
 const gemSchema = Joi.object({
   downloads: nonNegativeInteger,
@@ -18,7 +22,7 @@ const versionSchema = Joi.array()
       prerelease: Joi.boolean().required(),
       number: Joi.string().required(),
       downloads_count: nonNegativeInteger,
-    })
+    }),
   )
   .min(1)
   .required()
@@ -26,56 +30,44 @@ const versionSchema = Joi.array()
 export default class GemDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
-  static examples = [
-    {
-      title: 'Gem',
-      pattern: 'dv/:gem/:version',
-      namedParams: {
-        gem: 'rails',
-        version: 'stable',
+  static openApi = {
+    '/gem/dt/{gem}': {
+      get: {
+        summary: 'Gem Total Downloads',
+        description,
+        parameters: pathParams({
+          name: 'gem',
+          example: 'rails',
+        }),
       },
-      staticPreview: this.render({
-        variant: 'dv',
-        version: 'stable',
-        downloads: 70000,
-      }),
-      keywords,
     },
-    {
-      title: 'Gem',
-      pattern: 'dv/:gem/:version',
-      namedParams: {
-        gem: 'rails',
-        version: '4.1.0',
+    '/gem/dtv/{gem}': {
+      get: {
+        summary: 'Gem Downloads (for latest version)',
+        description,
+        parameters: pathParams({
+          name: 'gem',
+          example: 'rails',
+        }),
       },
-      staticPreview: this.render({
-        variant: 'dv',
-        version: '4.1.0',
-        downloads: 50000,
-      }),
-      keywords,
     },
-    {
-      title: 'Gem',
-      pattern: 'dtv/:gem',
-      namedParams: { gem: 'rails' },
-      staticPreview: this.render({
-        variant: 'dtv',
-        downloads: 70000,
-      }),
-      keywords,
+    '/gem/dv/{gem}/{version}': {
+      get: {
+        summary: 'Gem Downloads (for specified version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'gem',
+            example: 'rails',
+          },
+          {
+            name: 'version',
+            example: '4.1.0',
+          },
+        ),
+      },
     },
-    {
-      title: 'Gem',
-      pattern: 'dt/:gem',
-      namedParams: { gem: 'rails' },
-      staticPreview: this.render({
-        variant: 'dt',
-        downloads: 900000,
-      }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
@@ -88,7 +80,7 @@ export default class GemDownloads extends BaseJsonService {
     const json = await this._requestJson({
       url: `https://rubygems.org/api/v1/versions/${gem}.json`,
       schema: versionSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'gem not found',
       },
     })
@@ -96,7 +88,9 @@ export default class GemDownloads extends BaseJsonService {
     let wantedVersion
     if (version === 'stable') {
       wantedVersion = latestVersion(
-        json.filter(({ prerelease }) => !prerelease).map(({ number }) => number)
+        json
+          .filter(({ prerelease }) => !prerelease)
+          .map(({ number }) => number),
       )
     } else {
       wantedVersion = version
@@ -117,7 +111,7 @@ export default class GemDownloads extends BaseJsonService {
       await this._requestJson({
         url: `https://rubygems.org/api/v1/gems/${gem}.json`,
         schema: gemSchema,
-        errorMessages: {
+        httpErrors: {
           404: 'gem not found',
         },
       })

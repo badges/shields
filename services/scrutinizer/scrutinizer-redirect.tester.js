@@ -21,7 +21,7 @@ t.create('scrutinizer quality Bitbucket')
 t.create('scrutinizer quality Bitbucket (branch)')
   .get('/b/atlassian/python-bitbucket/develop.svg')
   .expectRedirect(
-    '/scrutinizer/quality/b/atlassian/python-bitbucket/develop.svg'
+    '/scrutinizer/quality/b/atlassian/python-bitbucket/develop.svg',
   )
 
 t.create('scrutinizer quality GitLab')

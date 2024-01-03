@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { downloadCount } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const collectionSchema = Joi.object({
   payload: Joi.object({
@@ -17,14 +17,23 @@ export default class BitComponents extends BaseJsonService {
     pattern: ':owner/:collection',
   }
 
-  static examples = [
-    {
-      title: 'bit',
-      namedParams: { owner: 'ramda', collection: 'ramda' },
-      staticPreview: this.render({ count: 330 }),
-      keywords: ['components'],
+  static openApi = {
+    '/bit/collection/total-components/{owner}/{collection}': {
+      get: {
+        summary: 'Bit Components',
+        parameters: pathParams(
+          {
+            name: 'owner',
+            example: 'ramda',
+          },
+          {
+            name: 'collection',
+            example: 'ramda',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'components' }
 
@@ -37,7 +46,7 @@ export default class BitComponents extends BaseJsonService {
     return this._requestJson({
       url,
       schema: collectionSchema,
-      errorMessages: {
+      httpErrors: {
         404: 'collection not found',
       },
     })

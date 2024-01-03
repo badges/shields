@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { BaseService, NotFound, InvalidResponse } from '../index.js'
+import { BaseService, NotFound, InvalidResponse, pathParams } from '../index.js'
 
 export default class OpmVersion extends BaseService {
   static category = 'version'
@@ -9,16 +9,23 @@ export default class OpmVersion extends BaseService {
     pattern: ':user/:moduleName',
   }
 
-  static examples = [
-    {
-      title: 'OPM',
-      namedParams: {
-        user: 'openresty',
-        moduleName: 'lua-resty-lrucache',
+  static openApi = {
+    '/opm/v/{user}/{moduleName}': {
+      get: {
+        summary: 'OPM Version',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'openresty',
+          },
+          {
+            name: 'moduleName',
+            example: 'lua-resty-lrucache',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: 'v0.08' }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'opm',
@@ -26,7 +33,7 @@ export default class OpmVersion extends BaseService {
 
   async fetch({ user, moduleName }) {
     const { res } = await this._request({
-      url: `https://opm.openresty.org/api/pkg/fetch`,
+      url: 'https://opm.openresty.org/api/pkg/fetch',
       options: {
         method: 'HEAD',
         searchParams: {
@@ -34,7 +41,7 @@ export default class OpmVersion extends BaseService {
           name: moduleName,
         },
       },
-      errorMessages: {
+      httpErrors: {
         404: 'module not found',
       },
     })

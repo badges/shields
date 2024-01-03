@@ -10,42 +10,42 @@ describe('PiWheelsVersion', function () {
         '2.0.0rc1': { prerelease: true, yanked: false, files: { foobar: {} } },
         '1.9.0': { prerelease: false, yanked: false, files: { foobar: {} } },
       },
-      false
+      false,
     ).expect('1.9.0')
     given(
       {
         '2.0.0rc1': { prerelease: true, yanked: false, files: { foobar: {} } },
         '1.9.0': { prerelease: false, yanked: false, files: { foobar: {} } },
       },
-      true
+      true,
     ).expect('2.0.0rc1')
     given(
       {
         '2.0.0': { prerelease: false, yanked: true, files: { foobar: {} } },
         '1.9.0': { prerelease: false, yanked: false, files: { foobar: {} } },
       },
-      false
+      false,
     ).expect('1.9.0')
     given(
       {
         '2.0.0': { prerelease: false, yanked: false, files: {} },
         '1.9.0': { prerelease: false, yanked: false, files: { foobar: {} } },
       },
-      false
+      false,
     ).expect('1.9.0')
     given(
       {
         '2.0.0': { prerelease: false, yanked: false, files: { foobar: {} } },
         '1.9.0': { prerelease: false, yanked: false, files: { foobar: {} } },
       },
-      false
+      false,
     ).expect('2.0.0')
     given(
       {
         '2.0.0rc2': { prerelease: true, yanked: false, files: { foobar: {} } },
         '2.0.0rc1': { prerelease: true, yanked: false, files: { foobar: {} } },
       },
-      false
+      false,
     ).expect('2.0.0rc2')
   })
 
@@ -56,8 +56,8 @@ describe('PiWheelsVersion', function () {
           '1.0.1': { prerelease: false, yanked: false, files: {} },
           '1.0.0': { prerelease: false, yanked: true, files: { foobar: {} } },
         },
-        false
-      )
+        false,
+      ),
     )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'no versions found')

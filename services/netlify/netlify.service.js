@@ -1,5 +1,5 @@
 import { renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 
 const pendingStatus = 'building'
 const notBuiltStatus = 'not built'
@@ -22,17 +22,19 @@ export default class Netlify extends BaseSvgScrapingService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'Netlify',
-      namedParams: {
-        projectId: 'e6d5a4e0-dee1-4261-833e-2f47f509c68f',
+  static openApi = {
+    '/netlify/{projectId}': {
+      get: {
+        summary: 'Netlify',
+        description:
+          'To locate your project id, visit your project settings, scroll to "Status badges" under "General", and copy the ID between "/api/v1/badges/" and "/deploy-status" in the code sample',
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'e6d5a4e0-dee1-4261-833e-2f47f509c68f',
+        }),
       },
-      documentation:
-        'To locate your project id, visit your project settings, scroll to "Status badges" under "General", and copy the ID between "/api/v1/badges/" and "/deploy-status" in the code sample',
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'netlify',
@@ -52,9 +54,10 @@ export default class Netlify extends BaseSvgScrapingService {
     const { buffer } = await this._request({
       url,
     })
-    if (buffer.includes('#0D544F')) return { message: 'passing' }
-    if (buffer.includes('#900B31')) return { message: 'failing' }
-    if (buffer.includes('#AB6F10')) return { message: 'building' }
+    if (buffer.includes('#0F4A21')) return { message: 'passing' }
+    if (buffer.includes('#800A20')) return { message: 'failing' }
+    if (buffer.includes('#603408')) return { message: 'building' }
+    if (buffer.includes('#181A1C')) return { message: 'canceled' }
     return { message: 'unknown' }
   }
 

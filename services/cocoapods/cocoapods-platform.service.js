@@ -1,18 +1,21 @@
+import { pathParams } from '../index.js'
 import BaseCocoaPodsService from './cocoapods-base.js'
 
 export default class CocoapodsPlatform extends BaseCocoaPodsService {
   static category = 'platform-support'
   static route = { base: 'cocoapods/p', pattern: ':spec' }
 
-  static examples = [
-    {
-      title: 'Cocoapods platforms',
-      namedParams: { spec: 'AFNetworking' },
-      staticPreview: this.render({
-        platforms: ['ios', 'osx', 'watchos', 'tvos'],
-      }),
+  static openApi = {
+    '/cocoapods/p/{spec}': {
+      get: {
+        summary: 'Cocoapods platforms',
+        parameters: pathParams({
+          name: 'spec',
+          example: 'AFNetworking',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'platform' }
 

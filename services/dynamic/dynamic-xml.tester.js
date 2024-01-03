@@ -28,7 +28,7 @@ t.create('XML from url')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: "//book[@id='bk102']/title",
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -42,7 +42,7 @@ t.create('uri query parameter alias')
     `.json?${queryString.stringify({
       uri: exampleUrl,
       query: "//book[@id='bk102']/title",
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -56,7 +56,7 @@ t.create('attribute')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//book[2]/@id',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -69,7 +69,7 @@ t.create('multiple results')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//book/title',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -85,7 +85,7 @@ t.create('prefix and suffix')
       query: "//book[@id='bk102']/title",
       prefix: 'title is ',
       suffix: ', innit',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -97,7 +97,7 @@ t.create('query doesnt exist')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//does/not/exist',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -111,7 +111,7 @@ t.create('query doesnt exist (attribute)')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//does/not/@exist',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -125,7 +125,7 @@ t.create('Cannot resolve QName')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//a:si',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -139,7 +139,7 @@ t.create('XPath parse error')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//a[contains(@href, "foo"]',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -150,7 +150,7 @@ t.create('XPath parse error')
 
 t.create('XML from url | invalid url')
   .get(
-    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version'
+    '.json?url=https://github.com/badges/shields/raw/master/notafile.xml&query=//version',
   )
   .expectBadge({
     label: 'custom badge',
@@ -163,14 +163,14 @@ t.create('request should set Accept header')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: "//book[@id='bk102']/title",
-    })}`
+    })}`,
   )
   .intercept(nock =>
     nock('https://example.test', {
       reqheaders: { accept: 'application/xml, text/xml' },
     })
       .get('/example.xml')
-      .reply(200, exampleXml)
+      .reply(200, exampleXml),
   )
   .expectBadge({ label: 'custom badge', message: 'Midnight Rain' })
 
@@ -179,7 +179,7 @@ t.create('query with node function')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: '//book[1]/title/text()',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -193,7 +193,7 @@ t.create('query with type conversion to string')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: 'string(//book[1]/title)',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({
@@ -207,7 +207,7 @@ t.create('query with type conversion to number')
     `.json?${queryString.stringify({
       url: exampleUrl,
       query: 'number(//book[1]/price)',
-    })}`
+    })}`,
   )
   .intercept(withExampleXml)
   .expectBadge({

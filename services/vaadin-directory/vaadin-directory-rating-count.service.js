@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
@@ -10,15 +11,17 @@ export default class VaadinDirectoryRatingCount extends BaseVaadinDirectoryServi
     pattern: ':alias(rc|rating-count)/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Vaadin Directory',
-      pattern: 'rating-count/:packageName',
-      namedParams: { packageName: 'vaadinvaadin-grid' },
-      staticPreview: this.render({ ratingCount: 6 }),
-      keywords: ['vaadin-directory', 'rating-count'],
+  static openApi = {
+    '/vaadin-directory/rating-count/{packageName}': {
+      get: {
+        summary: 'Vaadin Directory Rating Count',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'vaadinvaadin-grid',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'rating count',

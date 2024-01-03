@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const apiSchema = Joi.object({
   total: Joi.number().required(),
@@ -16,13 +16,23 @@ export default class TreewareTrees extends BaseJsonService {
     pattern: ':owner/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'Treeware (Trees)',
-      namedParams: { owner: 'stoplightio', packageName: 'spectral' },
-      staticPreview: this.render({ count: 250 }),
+  static openApi = {
+    '/treeware/trees/{owner}/{packageName}': {
+      get: {
+        summary: 'Treeware (Trees)',
+        parameters: pathParams(
+          {
+            name: 'owner',
+            example: 'stoplightio',
+          },
+          {
+            name: 'packageName',
+            example: 'spectral',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'trees',
@@ -33,7 +43,7 @@ export default class TreewareTrees extends BaseJsonService {
   }
 
   async fetch({ reference }) {
-    const url = `https://public.offset.earth/users/treeware/trees`
+    const url = 'https://public.offset.earth/users/treeware/trees'
     return this._requestJson({
       url,
       schema: apiSchema,

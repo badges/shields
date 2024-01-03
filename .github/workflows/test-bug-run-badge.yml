@@ -1,0 +1,69 @@
+name: Test new bug report badge
+run-name: Test bug report on issue ${{ github.event.issue.number }}
+on:
+  issues:
+    types: [opened]
+jobs:
+  extract-bug-badge-url:
+    if: ${{ contains(github.event.issue.labels.*.name, 'question') }}
+    runs-on: ubuntu-latest
+    outputs:
+      runBadgeTest: ${{ steps.testCondition.outputs.runNext }}
+      link: ${{ steps.testCondition.outputs.link }}
+    steps:
+      - name: Test badge test run conditions
+        id: testCondition
+        env:
+          ISSUE_BODY: '${{ github.event.issue.body }}'
+        run: |
+          product=$(echo "$ISSUE_BODY" | grep -A2 "Are you experiencing an issue with.*" | tail -n 1)
+          link=$(echo "$ISSUE_BODY" | grep -A2 "Link to the badge.*" | tail -n 1)
+
+          if [[ "$product" == "shields.io" && "$link" == "https://img.shields.io"* ]]; then
+            echo "runNext=true" >> "$GITHUB_OUTPUT"
+            echo "link=$link" >> "$GITHUB_OUTPUT"
+          else
+            echo "Conditions not met. Skipping the workflow..."
+            echo "runNext=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  run-bug-badge-url-test:
+    needs: extract-bug-badge-url
+    if: needs.extract-bug-badge-url.outputs.runBadgeTest == 'true'
+    permissions:
+      issues: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 20
+          cypress: false
+
+      - name: Output debug info
+        env:
+          TEST_BADGE_LINK: '${{ needs.extract-bug-badge-url.outputs.link }}'
+        run: npm run badge $TEST_BADGE_LINK
+
+      - name: Add Comment to Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runId = context.runId;
+            const jobUrl = `https://github.com/${owner}/${repo}/actions/runs/${runId}`;
+            const issueComment = `
+              Badge tested using \`npm run badge ${{ needs.extract-bug-badge-url.outputs.link }}\`
+              Output is available [here](${jobUrl})
+            `;
+            github.rest.issues.createComment({
+              issue_number: issueNumber,
+              owner: owner,
+              repo: repo,
+              body: issueComment
+            });

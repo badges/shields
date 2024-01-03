@@ -16,13 +16,6 @@ const extensionQuerySchema = Joi.object({
 }).required()
 
 export default class OpenVSXBase extends BaseJsonService {
-  static keywords = [
-    'ovsx',
-    'open-vsx',
-    'ovsx-marketplace',
-    'open-vsx-marketplace',
-  ]
-
   static defaultBadgeData = {
     label: 'open vsx',
     color: 'blue',
@@ -31,13 +24,18 @@ export default class OpenVSXBase extends BaseJsonService {
   async fetch({ namespace, extension, version }) {
     return this._requestJson({
       schema: extensionQuerySchema,
-      url: `https://open-vsx.org/api/${namespace}/${extension}/${
-        version || ''
+      url: `https://open-vsx.org/api/${namespace}/${extension}${
+        version ? `/${version}` : ''
       }`,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid extension id',
         404: 'extension not found',
       },
     })
   }
 }
+
+const description =
+  '[Open VSX](https://open-vsx.org/) (OVSX) is a registry of extensions for VS Code compatible editors.'
+
+export { OpenVSXBase, description }

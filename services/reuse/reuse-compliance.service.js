@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { isReuseCompliance, COLOR_MAP } from './reuse-compliance-helper.js'
 
 const responseSchema = Joi.object({
@@ -14,16 +14,17 @@ export default class Reuse extends BaseJsonService {
     pattern: ':remote+',
   }
 
-  static examples = [
-    {
-      title: 'REUSE Compliance',
-      namedParams: {
-        remote: 'github.com/fsfe/reuse-tool',
+  static openApi = {
+    '/reuse/compliance/{remote}': {
+      get: {
+        summary: 'REUSE Compliance',
+        parameters: pathParams({
+          name: 'remote',
+          example: 'github.com/fsfe/reuse-tool',
+        }),
       },
-      staticPreview: this.render({ status: 'compliant' }),
-      keywords: ['license'],
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'reuse',
@@ -41,7 +42,7 @@ export default class Reuse extends BaseJsonService {
     return await this._requestJson({
       schema: responseSchema,
       url: `https://api.reuse.software/status/${remote}`,
-      errorMessages: {
+      httpErrors: {
         400: 'Not a Git repository',
       },
     })

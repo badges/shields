@@ -16,6 +16,6 @@ t.create('hackage version (unexpected response)')
   .intercept(nock =>
     nock('https://hackage.haskell.org')
       .get('/package/lens/lens.cabal')
-      .reply(200, '')
+      .reply(200, ''),
   )
   .expectBadge({ label: 'hackage', message: 'invalid response data' })

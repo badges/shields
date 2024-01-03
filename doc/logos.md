@@ -1,26 +1,6 @@
 # Logos
 
-## Using Logos
-
-### SimpleIcons
-
-We support a wide range of logos via [SimpleIcons][]. They should be referenced by the logo slug e.g:
-
-![](https://img.shields.io/npm/v/npm.svg?logo=nodedotjs) - https://img.shields.io/npm/v/npm.svg?logo=nodedotjs
-
-The set of Simple Icon slugs can be found in the [slugs.md](https://github.com/simple-icons/simple-icons/blob/develop/slugs.md) file in the Simple Icons repository. NB - the Simple Icons site and that slugs.md page may at times contain new icons that haven't yet been pulled into the Shields.io runtime. More information on how and when we incorporate icon updates can be found [here](https://github.com/badges/shields/discussions/5369).
-
-### Shields logos
-
-We also maintain a small number of custom logos for some services: https://github.com/badges/shields/tree/master/logo They can also be referenced by name and take preference to SimpleIcons e.g:
-
-![](https://img.shields.io/npm/v/npm.svg?logo=npm) - https://img.shields.io/npm/v/npm.svg?logo=npm
-
-### Custom Logos
-
-Any custom logo can be passed in a URL parameter by base64 encoding it. e.g:
-
-![](https://img.shields.io/badge/play-station-blue.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIj48cGF0aCBkPSJNMTI5IDExMWMtNTUgNC05MyA2Ni05MyA3OEwwIDM5OGMtMiA3MCAzNiA5MiA2OSA5MWgxYzc5IDAgODctNTcgMTMwLTEyOGgyMDFjNDMgNzEgNTAgMTI4IDEyOSAxMjhoMWMzMyAxIDcxLTIxIDY5LTkxbC0zNi0yMDljMC0xMi00MC03OC05OC03OGgtMTBjLTYzIDAtOTIgMzUtOTIgNDJIMjM2YzAtNy0yOS00Mi05Mi00MmgtMTV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+) - https://img.shields.io/badge/play-station-blue.svg?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIj48cGF0aCBkPSJNMTI5IDExMWMtNTUgNC05MyA2Ni05MyA3OEwwIDM5OGMtMiA3MCAzNiA5MiA2OSA5MWgxYzc5IDAgODctNTcgMTMwLTEyOGgyMDFjNDMgNzEgNTAgMTI4IDEyOSAxMjhoMWMzMyAxIDcxLTIxIDY5LTkxbC0zNi0yMDljMC0xMi00MC03OC05OC03OGgtMTBjLTYzIDAtOTIgMzUtOTIgNDJIMjM2YzAtNy0yOS00Mi05Mi00MmgtMTV6IiBmaWxsPSIjZmZmIi8+PC9zdmc+
+For documentation on using logos, see https://shields.io/docs/logos
 
 ## Contributing Logos
 
@@ -57,7 +37,6 @@ If you are submitting a pull request for a custom logo, please:
 
 We try to ensure our logos are compliant with brand guidelines. If one of our custom logos does not conform to the necessary brand guidelines, please open an issue on the [shields.io tracker](https://github.com/badges/shields/issues) and we'll work with you to resolve it. If a logo from the simple-icons set does not conform to the relevant brand guidelines, please open an issue on the [simple-icons tracker](https://github.com/simple-icons/simple-icons/issues) first.
 
-[simpleicons]: https://simpleicons.org/
 [simple-icons github]: https://github.com/simple-icons/simple-icons
 [svgo]: https://github.com/svg/svgo
 [svgomg]: https://jakearchibald.github.io/svgomg/

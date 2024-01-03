@@ -1,22 +1,20 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
+
 const label = 'hsts preloaded'
 const schema = Joi.object({
   status: Joi.string().required(),
 }).required()
 
-const documentation = `
-<p>
-  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">
-  <code>Strict-Transport-Security</code> is an HTTP response header</a> that signals that browsers should
-  only access the site using HTTPS.
-</p>
-<p>
-  For a higher level of security, it's possible for a domain owner to
-  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#Preloading_Strict_Transport_Security">preload
-  this behavior into participating web browsers</a>. Chromium maintains the <a href="https://www.chromium.org/hsts">HSTS preload list</a>, which
-  is the de facto standard that has been adopted by several browsers. This service checks a domain's status in that list.
-</p>
+const description = `
+[\`Strict-Transport-Security\` is an HTTP response header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
+that signals that browsers should only access the site using HTTPS.
+
+For a higher level of security, it's possible for a domain owner to
+[preload this behavior into participating web browsers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security#Preloading_Strict_Transport_Security).
+Chromium maintains the [HSTS preload list](https://www.chromium.org/hsts), which
+is the de facto standard that has been adopted by several browsers.
+This service checks a domain's status in that list.
 `
 
 export default class HSTS extends BaseJsonService {
@@ -27,15 +25,18 @@ export default class HSTS extends BaseJsonService {
     pattern: ':domain',
   }
 
-  static examples = [
-    {
-      title: 'Chromium HSTS preload',
-      namedParams: { domain: 'github.com' },
-      staticPreview: this.render({ status: 'preloaded' }),
-      keywords: ['security'],
-      documentation,
+  static openApi = {
+    '/hsts/preload/{domain}': {
+      get: {
+        summary: 'Chromium HSTS preload',
+        description,
+        parameters: pathParams({
+          name: 'domain',
+          example: 'github.com',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ status }) {
     let color = 'red'
@@ -55,7 +56,7 @@ export default class HSTS extends BaseJsonService {
   async fetch({ domain }) {
     return this._requestJson({
       schema,
-      url: `https://hstspreload.org/api/v2/status`,
+      url: 'https://hstspreload.org/api/v2/status',
       options: { searchParams: { domain } },
     })
   }

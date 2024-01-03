@@ -1,13 +1,26 @@
 /**
  * Commonly-used functions for formatting text in badge labels. Includes
  * ordinal numbers, currency codes, star ratings, versions, etc.
+ *
+ * @module
  */
+
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar.js'
 import relativeTime from 'dayjs/plugin/relativeTime.js'
 dayjs.extend(calendar)
 dayjs.extend(relativeTime)
 
+/**
+ * Creates a string of stars and empty stars based on the rating.
+ * The number of stars is determined by the integer part of the rating.
+ * An additional star or a three-quarter star or a half star or a quarter star is added based on the decimal part of the rating.
+ * The remaining stars are empty stars until the maximum number of stars is reached.
+ *
+ * @param {number} rating - Current rating
+ * @param {number} [max] - Maximum rating
+ * @returns {string} A string of stars and empty stars
+ */
 function starRating(rating, max = 5) {
   const flooredRating = Math.floor(rating)
   let stars = ''
@@ -31,7 +44,13 @@ function starRating(rating, max = 5) {
   return stars
 }
 
-// Convert ISO 4217 code to unicode string.
+/**
+ * Converts the ISO 4217 code to the corresponding currency symbol.
+ * If the the symbol for the code is not found, then the code itself is returned.
+ *
+ * @param {string} code - ISO 4217 code
+ * @returns {string} Currency symbol for the code
+ */
 function currencyFromCode(code) {
   return (
     {
@@ -43,16 +62,30 @@ function currencyFromCode(code) {
   )
 }
 
+/**
+ * Calculates the ordinal number of the given number.
+ * For example, if the input is 1, the output is “1ˢᵗ”.
+ *
+ * @param {number} n - Input number
+ * @returns {string} Ordinal number of the input number
+ */
 function ordinalNumber(n) {
   const s = ['ᵗʰ', 'ˢᵗ', 'ⁿᵈ', 'ʳᵈ']
   const v = n % 100
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
 
-// Given a number (positive or negative), string with appropriate unit in the metric system, SI.
-// Note: numbers beyond the peta- cannot be represented as integers in JS.
 const metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
 const metricPower = metricPrefix.map((a, i) => Math.pow(1000, i + 1))
+
+/**
+ * Given a number (positive or negative), returns a string with appropriate unit in the metric system, SI.
+ * Note: numbers beyond the peta- cannot be represented as integers in JS.
+ * For example, if you call metric(1000), it will return "1k", which means one kilo or one thousand.
+ *
+ * @param {number} n - Input number
+ * @returns {string} String with appropriate unit in the metric system, SI
+ */
 function metric(n) {
   for (let i = metricPrefix.length - 1; i >= 0; i--) {
     const limit = metricPower[i]
@@ -80,7 +113,13 @@ function metric(n) {
   return `${n}`
 }
 
-// Remove the starting v in a string.
+/**
+ * Remove the starting v in a string if it exists.
+ * For example, omitv("v1.2.3") returns "1.2.3", but omitv("hello") returns "hello".
+ *
+ * @param {string} version - Version string
+ * @returns {string} Version string without the starting v
+ */
 function omitv(version) {
   if (version.charCodeAt(0) === 118) {
     return version.slice(1)
@@ -88,10 +127,15 @@ function omitv(version) {
   return version
 }
 
-// Add a starting v to the version unless:
-// - it does not start with a digit
-// - it is a date (yyyy-mm-dd)
 const ignoredVersionPatterns = /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}/
+
+/**
+ * Add a starting v to the version unless it doesn't starts with a digit or is a date (yyyy-mm-dd)
+ * For example, addv("1.2.3") returns "v1.2.3", but addv("hello") or addv("2021-10-31"), returns "hello" and "2021-10-31" respectively.
+ *
+ * @param {string} version - Version string
+ * @returns {string} Version string with the starting v
+ */
 function addv(version) {
   version = `${version}`
   if (version.startsWith('v') || ignoredVersionPatterns.test(version)) {
@@ -101,6 +145,15 @@ function addv(version) {
   }
 }
 
+/**
+ * Returns a string that is either the singular or the plural form of a word,
+ * depending on the length of the countable parameter.
+ *
+ * @param {string} singular - Singular form of the word
+ * @param {string[]} countable - Array of values you want to count
+ * @param {string} plural - Plural form of the word
+ * @returns {string} Singular or plural form of the word
+ */
 function maybePluralize(singular, countable, plural) {
   plural = plural || `${singular}s`
 
@@ -111,6 +164,12 @@ function maybePluralize(singular, countable, plural) {
   }
 }
 
+/**
+ * Returns a formatted date string without the year based on the value of input date param d.
+ *
+ * @param {Date | string | number | object } d - Input date in dayjs compatible format, date object, datestring, Unix timestamp etc.
+ * @returns {string} Formatted date string
+ */
 function formatDate(d) {
   const date = dayjs(d)
   const dateString = date.calendar(null, {
@@ -123,10 +182,19 @@ function formatDate(d) {
   return dateString.replace(` ${dayjs().year()}`, '').toLowerCase()
 }
 
+/**
+ * Returns a relative date from the input timestamp.
+ * For example, day after tomorrow's timestamp will return 'in 2 days'.
+ *
+ * @param {number | string} timestamp - Unix timestamp
+ * @returns {string} Relative date from the unix timestamp
+ */
 function formatRelativeDate(timestamp) {
-  return dayjs()
-    .to(dayjs.unix(parseInt(timestamp, 10)))
-    .toLowerCase()
+  const parsedDate = dayjs.unix(parseInt(timestamp, 10))
+  if (!parsedDate.isValid()) {
+    return 'invalid date'
+  }
+  return dayjs().to(parsedDate).toLowerCase()
 }
 
 export {

@@ -14,7 +14,7 @@ t.create('version')
       .get('/api/v1/cookbooks/chef-sugar/versions/latest')
       .reply(200, {
         version: '4.1.0',
-      })
+      }),
   )
   .expectBadge({
     label: 'cookbook',

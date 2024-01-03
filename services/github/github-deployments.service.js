@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
 const greenStates = ['SUCCESS']
 const redStates = ['ERROR', 'FAILURE']
 const blueStates = ['INACTIVE']
-const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING', 'NO_STATUS']
+const otherStates = ['IN_PROGRESS', 'QUEUED', 'PENDING', 'NO_STATUS', 'WAITING']
 
 const stateToMessageMappings = {
   IN_PROGRESS: 'in progress',
@@ -34,7 +34,7 @@ const schema = Joi.object({
                 }),
                 null,
               ]),
-            })
+            }),
           )
           .required(),
       }).required(),
@@ -49,20 +49,28 @@ export default class GithubDeployments extends GithubAuthV4Service {
     pattern: ':user/:repo/:environment',
   }
 
-  static examples = [
-    {
-      title: 'GitHub deployments',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        environment: 'shields-staging',
+  static openApi = {
+    '/github/deployments/{user}/{repo}/{environment}': {
+      get: {
+        summary: 'GitHub deployments',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'environment',
+            example: 'shields-staging',
+          },
+        ),
       },
-      staticPreview: this.render({
-        state: 'SUCCESS',
-      }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'state' }
 

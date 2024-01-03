@@ -1,21 +1,26 @@
 import Joi from 'joi'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
+import { description } from './gem-helpers.js'
 
 const ownerSchema = Joi.array().required()
 
 export default class GemOwner extends BaseJsonService {
   static category = 'other'
   static route = { base: 'gem/u', pattern: ':user' }
-  static examples = [
-    {
-      title: 'Gems',
-      namedParams: { user: 'raphink' },
-      staticPreview: this.render({ count: 34 }),
-      keywords: ['ruby'],
+  static openApi = {
+    '/gem/u/{user}': {
+      get: {
+        summary: 'Gem Owner',
+        description,
+        parameters: pathParams({
+          name: 'user',
+          example: 'raphink',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'gems' }
 

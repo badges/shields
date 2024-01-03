@@ -2,11 +2,11 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { formatDate, metric } from '../text-formatters.js'
 import { age } from '../color-formatters.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   documentation,
-  errorMessagesFor,
+  httpErrorsFor,
   issueStateColor,
   commentsColor,
 } from './github-helpers.js'
@@ -86,7 +86,7 @@ const labelMap = {
         Joi.object({
           name: Joi.string().required(),
           color: Joi.string().required(),
-        })
+        }),
       )
       .required(),
   }).required(),
@@ -179,35 +179,38 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
       ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
   }
 
-  static examples = [
-    {
-      title: 'GitHub issue/pull request detail',
-      namedParams: {
-        issueKind: 'issues',
-        property: 'state',
-        user: 'badges',
-        repo: 'shields',
-        number: '979',
+  static openApi = {
+    '/github/{issueKind}/detail/{property}/{user}/{repo}/{number}': {
+      get: {
+        summary: 'GitHub issue/pull request detail',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'issueKind',
+            example: 'issues',
+            schema: { type: 'string', enum: this.getEnum('issueKind') },
+          },
+          {
+            name: 'property',
+            example: 'state',
+            schema: { type: 'string', enum: this.getEnum('property') },
+          },
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'number',
+            example: '979',
+          },
+        ),
       },
-      staticPreview: this.render({
-        property: 'state',
-        value: { state: 'closed' },
-        isPR: false,
-        number: '979',
-      }),
-      keywords: [
-        'state',
-        'title',
-        'author',
-        'label',
-        'comments',
-        'age',
-        'last update',
-        'milestone',
-      ],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'issue/pull request',
@@ -222,7 +225,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
     return this._requestJson({
       url: `/repos/${user}/${repo}/${issueKind}/${number}`,
       schema: propertyMap[property].schema,
-      errorMessages: errorMessagesFor('issue, pull request or repo not found'),
+      httpErrors: httpErrorsFor('issue, pull request or repo not found'),
     })
   }
 

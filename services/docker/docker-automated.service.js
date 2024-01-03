@@ -1,10 +1,11 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import {
   dockerBlue,
   buildDockerUrl,
   getDockerHubUser,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const automatedBuildSchema = Joi.object({
   is_automated: Joi.boolean().required(),
@@ -13,16 +14,36 @@ const automatedBuildSchema = Joi.object({
 export default class DockerAutomatedBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('automated')
-  static examples = [
-    {
-      title: 'Docker Automated build',
-      namedParams: {
-        user: 'jrottenberg',
-        repo: 'ffmpeg',
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: [
+      'https://hub.docker.com',
+      'https://registry.hub.docker.com',
+    ],
+    isRequired: false,
+  }
+
+  static openApi = {
+    '/docker/automated/{user}/{repo}': {
+      get: {
+        summary: 'Docker Automated build',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'jrottenberg',
+          },
+          {
+            name: 'repo',
+            example: 'ffmpeg',
+          },
+        ),
       },
-      staticPreview: this.render({ isAutomated: true }),
     },
-  ]
+  }
+
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'docker build' }
 
@@ -35,12 +56,12 @@ export default class DockerAutomatedBuild extends BaseJsonService {
   }
 
   async fetch({ user, repo }) {
-    return this._requestJson({
+    return await fetch(this, {
       schema: automatedBuildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
-        user
+        user,
       )}/${repo}`,
-      errorMessages: { 404: 'repo not found' },
+      httpErrors: { 404: 'repo not found' },
     })
   }
 

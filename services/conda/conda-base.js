@@ -9,7 +9,7 @@ const condaSchema = Joi.object({
     .items(
       Joi.object({
         ndownloads: nonNegativeInteger,
-      })
+      }),
     )
     .required(),
 }).required()
@@ -17,10 +17,10 @@ const condaSchema = Joi.object({
 export default class BaseCondaService extends BaseJsonService {
   static defaultBadgeData = { label: 'conda' }
 
-  async fetch({ channel, pkg }) {
+  async fetch({ channel, packageName }) {
     return this._requestJson({
       schema: condaSchema,
-      url: `https://api.anaconda.org/package/${channel}/${pkg}`,
+      url: `https://api.anaconda.org/package/${channel}/${packageName}`,
     })
   }
 }

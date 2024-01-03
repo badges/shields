@@ -49,7 +49,7 @@ describe('validate', function () {
         sinon.match.string,
         traceSuccessMessage,
         { requiredString: 'bar' },
-        { deep: true }
+        { deep: true },
       )
     })
   })
@@ -60,13 +60,13 @@ describe('validate', function () {
         validate(
           options,
           { requiredString: ['this', "shouldn't", 'work'] },
-          schema
+          schema,
         )
         expect.fail('Expected to throw')
       } catch (e) {
         expect(e).to.be.an.instanceof(InvalidParameter)
         expect(e.message).to.equal(
-          'Invalid Parameter: "requiredString" must be a string'
+          'Invalid Parameter: "requiredString" must be a string',
         )
         expect(e.prettyMessage).to.equal(prettyErrorMessage)
       }
@@ -74,7 +74,7 @@ describe('validate', function () {
         'validate',
         sinon.match.string,
         traceErrorMessage,
-        '"requiredString" must be a string'
+        '"requiredString" must be a string',
       )
     })
 
@@ -86,16 +86,16 @@ describe('validate', function () {
             {
               requiredString: ['this', "shouldn't", 'work'],
             },
-            schema
+            schema,
           )
           expect.fail('Expected to throw')
         } catch (e) {
           expect(e).to.be.an.instanceof(InvalidParameter)
           expect(e.message).to.equal(
-            'Invalid Parameter: "requiredString" must be a string'
+            'Invalid Parameter: "requiredString" must be a string',
           )
           expect(e.prettyMessage).to.equal(
-            `${prettyErrorMessage}: requiredString`
+            `${prettyErrorMessage}: requiredString`,
           )
         }
       })
@@ -107,13 +107,13 @@ describe('validate', function () {
       validate(
         { ...options, allowAndStripUnknownKeys: false, includeKeys: true },
         { requiredString: 'bar', extra: 'nonsense', more: 'bogus' },
-        schema
+        schema,
       )
       expect.fail('Expected to throw')
     } catch (e) {
       expect(e).to.be.an.instanceof(InvalidParameter)
       expect(e.message).to.equal(
-        'Invalid Parameter: "extra" is not allowed. "more" is not allowed'
+        'Invalid Parameter: "extra" is not allowed. "more" is not allowed',
       )
       expect(e.prettyMessage).to.equal(`${prettyErrorMessage}: extra, more`)
     }

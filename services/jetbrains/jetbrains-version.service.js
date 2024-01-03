@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import JetbrainsBase from './jetbrains-base.js'
 
@@ -10,7 +11,7 @@ const intelliJschema = Joi.object({
         .items(
           Joi.object({
             version: Joi.string().required(),
-          })
+          }),
         )
         .single()
         .required(),
@@ -23,7 +24,7 @@ const jetbrainsSchema = Joi.array()
   .items(
     Joi.object({
       version: Joi.string().required(),
-    }).required()
+    }).required(),
   )
   .required()
 
@@ -35,15 +36,17 @@ export default class JetbrainsVersion extends JetbrainsBase {
     pattern: ':pluginId',
   }
 
-  static examples = [
-    {
-      title: 'JetBrains Plugins',
-      namedParams: {
-        pluginId: '9630',
+  static openApi = {
+    '/jetbrains/plugin/v/{pluginId}': {
+      get: {
+        summary: 'JetBrains Plugin Version',
+        parameters: pathParams({
+          name: 'pluginId',
+          example: '9630',
+        }),
       },
-      staticPreview: this.render({ version: 'v1.7' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'jetbrains plugin' }
 
@@ -65,9 +68,9 @@ export default class JetbrainsVersion extends JetbrainsBase {
       const jetbrainsPluginData = await this._requestJson({
         schema: jetbrainsSchema,
         url: `https://plugins.jetbrains.com/api/plugins/${this.constructor._cleanPluginId(
-          pluginId
+          pluginId,
         )}/updates`,
-        errorMessages: { 400: 'not found' },
+        httpErrors: { 400: 'not found' },
       })
       version = jetbrainsPluginData[0].version
     }

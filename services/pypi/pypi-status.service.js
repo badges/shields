@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import PypiBase from './pypi-base.js'
 import { parseClassifiers } from './pypi-helpers.js'
 
@@ -6,15 +7,17 @@ export default class PypiStatus extends PypiBase {
 
   static route = this.buildRoute('pypi/status')
 
-  static examples = [
-    {
-      title: 'PyPI - Status',
-      pattern: ':packageName',
-      namedParams: { packageName: 'Django' },
-      staticPreview: this.render({ status: 'stable' }),
-      keywords: ['python'],
+  static openApi = {
+    '/pypi/status/{packageName}': {
+      get: {
+        summary: 'PyPI - Status',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Django',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'status' }
 
@@ -51,7 +54,7 @@ export default class PypiStatus extends PypiBase {
     // https://pypi.org/pypi?%3Aaction=list_classifiers
     const status = parseClassifiers(
       packageData,
-      /^Development Status :: (\d - \S+)$/
+      /^Development Status :: (\d - \S+)$/,
     )
       .sort()
       .map(classifier => classifier.split(' - ').pop())

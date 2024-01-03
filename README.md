@@ -19,15 +19,9 @@
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields"
             alt="coverage"></a>
-    <a href="https://lgtm.com/projects/g/badges/shields/alerts/">
-        <img src="https://img.shields.io/lgtm/alerts/g/badges/shields"
-            alt="Total alerts"/></a>
     <a href="https://discord.gg/HjJCwm5">
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
             alt="chat on Discord"></a>
-    <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=twitter"
-            alt="follow on Twitter"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
@@ -73,7 +67,7 @@ This repo hosts:
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
-[custom badges]: https://shields.io/#your-badge
+[custom badges]: https://img.shields.io/badges/static-badge
 
 ### Quickstart
 
@@ -95,14 +89,17 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 [![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
+If you intend on reporting or contributing a fix related to security vulnerabilities, please first refer to our [security policy][security].
+
 [service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md
 [contributing]: https://github.com/badges/shields/blob/master/CONTRIBUTING.md
+[security]: https://github.com/badges/shields/blob/master/SECURITY.md
 
 ## Development
 
-1. Install Node 16 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 16 and 17.
+1. Install Node 20 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 20 and 21.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -110,7 +107,7 @@ You can read a [tutorial on how to add a badge][tutorial].
 
 When server source files change, the badge server should automatically restart
 itself (using [nodemon][]). When the frontend files change, the frontend dev
-server (`gatsby dev`) should also automatically reload. However the badge
+server (`docusaurus start`) should also automatically reload. However the badge
 definitions are built only before the server first starts. To regenerate those,
 either run `npm run defs` or manually restart the server.
 

@@ -20,7 +20,7 @@ const nexus2SearchApiSchema = Joi.object({
         // the entire history of each published version for the artifact.
         // Example artifact that includes such a historical version: https://oss.sonatype.org/service/local/lucene/search?g=com.google.guava&a=guava
         version: Joi.string(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -31,7 +31,7 @@ const nexus3SearchApiSchema = Joi.object({
       Joi.object({
         // This schema is relaxed similarly to nexux2SearchApiSchema
         version: Joi.string().required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -81,8 +81,7 @@ export default class Nexus extends BaseJsonService {
       staticPreview: this.render({
         version: '3.9',
       }),
-      documentation: `
-    <p>
+      documentation: `<p>
       Specifying 'nexusVersion=3' when targeting Nexus 3 servers will speed up the badge rendering.
       Note that you can use this query parameter with any Nexus badge type (Releases, Snapshots, or Repository).
     </p>
@@ -132,8 +131,7 @@ export default class Nexus extends BaseJsonService {
       staticPreview: this.render({
         version: '7.0.1-SNAPSHOT',
       }),
-      documentation: `
-    <p>
+      documentation: `<p>
       Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository).
     </p>
     <p>
@@ -144,7 +142,7 @@ export default class Nexus extends BaseJsonService {
       <ul>
         <li><a href="https://nexus.pentaho.org/swagger-ui/#/search/search">All Nexus 3 badges</a></li>
         <li><a href="https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_resolve.html">Nexus 2 Releases and Snapshots badges</a></li>
-        <li><a href=https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
+        <li><a href="https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
       </ul>
     </p>
     `,
@@ -222,10 +220,10 @@ export default class Nexus extends BaseJsonService {
         schema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'artifact not found',
         },
-      })
+      }),
     )
 
     return { actualNexusVersion: '2', json }
@@ -263,10 +261,10 @@ export default class Nexus extends BaseJsonService {
         schema: nexus3SearchApiSchema,
         url,
         options: { searchParams },
-        errorMessages: {
+        httpErrors: {
           404: 'artifact not found',
         },
-      })
+      }),
     )
 
     return { actualNexusVersion: '3', json }
@@ -321,7 +319,7 @@ export default class Nexus extends BaseJsonService {
 
   async handle(
     { repo, groupId, artifactId },
-    { server, queryOpt, nexusVersion }
+    { server, queryOpt, nexusVersion },
   ) {
     const { actualNexusVersion, json } = await this.fetch({
       repo,

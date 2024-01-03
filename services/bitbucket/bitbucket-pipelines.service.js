@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import { BaseJsonService, redirector } from '../index.js'
+import { BaseJsonService, redirector, pathParams } from '../index.js'
 
 const bitbucketPipelinesSchema = Joi.object({
   values: Joi.array()
@@ -14,11 +14,11 @@ const bitbucketPipelinesSchema = Joi.object({
               'FAILED',
               'ERROR',
               'STOPPED',
-              'EXPIRED'
+              'EXPIRED',
             ),
           }).required(),
         }).required(),
-      })
+      }),
     )
     .required(),
 }).required()
@@ -30,17 +30,27 @@ class BitbucketPipelines extends BaseJsonService {
     pattern: ':user/:repo/:branch+',
   }
 
-  static examples = [
-    {
-      title: 'Bitbucket Pipelines',
-      namedParams: {
-        user: 'atlassian',
-        repo: 'adf-builder-javascript',
-        branch: 'task/SECO-2168',
+  static openApi = {
+    '/bitbucket/pipelines/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Bitbucket Pipelines',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'atlassian',
+          },
+          {
+            name: 'repo',
+            example: 'adf-builder-javascript',
+          },
+          {
+            name: 'branch',
+            example: 'task/SECO-2168',
+          },
+        ),
       },
-      staticPreview: this.render({ status: 'SUCCESSFUL' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 
@@ -63,13 +73,13 @@ class BitbucketPipelines extends BaseJsonService {
           'target.ref_name': branch,
         },
       },
-      errorMessages: { 403: 'private repo' },
+      httpErrors: { 403: 'private repo' },
     })
   }
 
   static transform(data) {
     const values = data.values.filter(
-      value => value.state && value.state.name === 'COMPLETED'
+      value => value.state && value.state.name === 'COMPLETED',
     )
     if (values.length > 0) {
       return values[0].state.result.name

@@ -1,25 +1,30 @@
 name: Build Docker Image
 on:
   pull_request:
+  push:
+    branches:
+      - 'gh-readonly-queue/**'
 
 jobs:
-  build:
+  build-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: v0.9.1
 
       - name: Set Git Short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: false
-          tags: shieldsio/shields:pr-validation
+          tags: ghcr.io/badges/shields:pr-validation
           build-args: |
             version=${{ env.SHORT_SHA }}

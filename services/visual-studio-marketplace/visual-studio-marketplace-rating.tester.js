@@ -22,7 +22,7 @@ t.create('rating')
   .get('/visual-studio-marketplace/r/ritwickdey.LiveServer.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {
@@ -49,7 +49,7 @@ t.create('rating')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',
@@ -61,7 +61,7 @@ t.create('zero rating')
   .get('/visual-studio-marketplace/r/ritwickdey.LiveServer.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {
@@ -79,7 +79,7 @@ t.create('zero rating')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',
@@ -91,7 +91,7 @@ t.create('stars')
   .get('/visual-studio-marketplace/stars/ritwickdey.LiveServer.json')
   .intercept(nock =>
     nock('https://marketplace.visualstudio.com/_apis/public/gallery/')
-      .post(`/extensionquery/`)
+      .post('/extensionquery/')
       .reply(200, {
         results: [
           {
@@ -118,7 +118,7 @@ t.create('stars')
             ],
           },
         ],
-      })
+      }),
   )
   .expectBadge({
     label: 'rating',

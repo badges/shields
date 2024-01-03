@@ -54,7 +54,7 @@ describe('Version helpers', function () {
         'v1.0.1-RC.2',
         'v1.0.0',
       ],
-      { pre: includePre }
+      { pre: includePre },
     ).expect('v1.0.1-RC.2')
     given(
       [
@@ -66,7 +66,7 @@ describe('Version helpers', function () {
         'v1.0.1-RC.2',
         'v1.0.1',
       ],
-      { pre: includePre }
+      { pre: includePre },
     ).expect('v1.0.1')
     given(
       [
@@ -76,7 +76,7 @@ describe('Version helpers', function () {
         'v1.0.1-beta.1',
         'v1.0.1-RC.1',
       ],
-      { pre: includePre }
+      { pre: includePre },
     ).expect('v1.0.1-RC.1')
 
     // Exclude pre-releases
@@ -116,7 +116,7 @@ describe('Version helpers', function () {
 
     // Semver mixed with non semver versions
     given(['1.0.0', '1.0.2', '1.1', '1.0', 'notaversion2', '12bcde4']).expect(
-      '1.1'
+      '1.1',
     )
 
     // build qualifiers - https://github.com/badges/shields/issues/4172

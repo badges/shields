@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schemaInstallations = Joi.object()
   .keys({
@@ -29,25 +29,32 @@ export default class JenkinsPluginInstalls extends BaseJsonService {
     pattern: ':plugin/:version?',
   }
 
-  static examples = [
-    {
-      title: 'Jenkins Plugin installs',
-      pattern: ':plugin',
-      namedParams: {
-        plugin: 'view-job-filters',
+  static openApi = {
+    '/jenkins/plugin/i/{plugin}': {
+      get: {
+        summary: 'Jenkins Plugin installs',
+        parameters: pathParams({
+          name: 'plugin',
+          example: 'view-job-filters',
+        }),
       },
-      staticPreview: this.render({ installs: 10247 }),
     },
-    {
-      title: 'Jenkins Plugin installs (version)',
-      pattern: ':plugin/:version',
-      namedParams: {
-        plugin: 'view-job-filters',
-        version: '1.26',
+    '/jenkins/plugin/i/{plugin}/{version}': {
+      get: {
+        summary: 'Jenkins Plugin installs (version)',
+        parameters: pathParams(
+          {
+            name: 'plugin',
+            example: 'view-job-filters',
+          },
+          {
+            name: 'version',
+            example: '1.26',
+          },
+        ),
       },
-      staticPreview: this.render({ installs: 955 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'installs' }
 
@@ -63,7 +70,7 @@ export default class JenkinsPluginInstalls extends BaseJsonService {
     return this._requestJson({
       url: `https://stats.jenkins.io/plugin-installation-trend/${plugin}.stats.json`,
       schema: version ? schemaInstallationsPerVersion : schemaInstallations,
-      errorMessages: {
+      httpErrors: {
         404: 'plugin not found',
       },
     })

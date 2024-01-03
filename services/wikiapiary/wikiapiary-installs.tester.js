@@ -38,6 +38,6 @@ t.create('Malformed API Response')
             'Extension:Malformed': { printouts: { 'Has website count': [0] } },
           },
         },
-      })
+      }),
   )
   .expectBadge({ label: 'installs', message: 'not found' })

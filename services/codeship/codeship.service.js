@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
     .try(
       isBuildStatus,
-      Joi.equal('project not found', 'branch not found', 'ignored', 'blocked')
+      Joi.equal('project not found', 'branch not found', 'ignored', 'blocked'),
     )
     .required(),
 }).required()
@@ -28,25 +28,32 @@ export default class Codeship extends BaseSvgScrapingService {
   static category = 'build'
   static route = { base: 'codeship', pattern: ':projectId/:branch*' }
 
-  static examples = [
-    {
-      title: 'Codeship',
-      pattern: ':projectId',
-      namedParams: {
-        projectId: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+  static openApi = {
+    '/codeship/{projectId}': {
+      get: {
+        summary: 'Codeship',
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'd6c1ddd0-16a3-0132-5f85-2e35c05e22b1',
+        }),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-    {
-      title: 'Codeship (branch)',
-      pattern: ':projectId/:branch',
-      namedParams: {
-        projectId: '0bdb0440-3af5-0133-00ea-0ebda3a33bf6',
-        branch: 'master',
+    '/codeship/{projectId}/{branch}': {
+      get: {
+        summary: 'Codeship (branch)',
+        parameters: pathParams(
+          {
+            name: 'projectId',
+            example: '0bdb0440-3af5-0133-00ea-0ebda3a33bf6',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 

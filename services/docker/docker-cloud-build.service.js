@@ -1,10 +1,18 @@
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, NotFound } from '../index.js'
 import { dockerBlue, buildDockerUrl } from './docker-helpers.js'
 import { fetchBuild } from './docker-cloud-common-fetch.js'
 
 export default class DockerCloudBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('cloud/build')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com', 'https://cloud.docker.com'],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Cloud Build Status',
@@ -31,6 +39,12 @@ export default class DockerCloudBuild extends BaseJsonService {
 
   async handle({ user, repo }) {
     const data = await fetchBuild(this, { user, repo })
+
+    if (data.objects.length === 0) {
+      throw new NotFound({
+        prettyMessage: 'automated builds not set up',
+      })
+    }
     return this.constructor.render({ state: data.objects[0].state })
   }
 }

@@ -1,7 +1,7 @@
 import { formatRelativeDate } from '../text-formatters.js'
-import { BaseService } from '../index.js'
+import { BaseService, pathParams } from '../index.js'
 
-const documentation = `
+const description = `
 <p>
   Supply a unix timestamp in seconds to display the relative time from/to now
 </p>
@@ -9,18 +9,20 @@ const documentation = `
 
 export default class Date extends BaseService {
   static category = 'other'
-  static route = { base: 'date', pattern: ':timestamp([0-9]+)' }
+  static route = { base: 'date', pattern: ':timestamp(-?[0-9]+)' }
 
-  static examples = [
-    {
-      title: 'Relative date',
-      pattern: ':timestamp',
-      namedParams: { timestamp: '1540814400' },
-      staticPreview: this.render({ relativeDateString: '2 days ago' }),
-      keywords: ['time', 'countdown', 'countup', 'moment'],
-      documentation,
+  static openApi = {
+    '/date/{timestamp}': {
+      get: {
+        summary: 'Relative date',
+        description,
+        parameters: pathParams({
+          name: 'timestamp',
+          example: '1540814400',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'date' }
 

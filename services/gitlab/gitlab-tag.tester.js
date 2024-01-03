@@ -28,7 +28,7 @@ t.create('Tag (custom instance)')
 
 t.create('Tag (repo not found)')
   .get('/fdroid/nonexistant.json')
-  .expectBadge({ label: 'tag', message: 'repo not found' })
+  .expectBadge({ label: 'tag', message: 'project not found' })
 
 t.create('Tag (no tags)')
   .get('/fdroid/fdroiddata.json')

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
@@ -15,7 +15,8 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
-const keywords = ['node', 'npm score']
+const description =
+  '[npms.io](https://npms.io) holds statistics for javascript packages.'
 
 export default class NpmsIOScore extends BaseJsonService {
   static category = 'analysis'
@@ -23,36 +24,49 @@ export default class NpmsIOScore extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final|maintenance|popularity|quality)-score/:scope(@.+)?/:packageName',
+      ':type(final-score|maintenance-score|popularity-score|quality-score)/:scope(@.+)?/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'npms.io (final)',
-      namedParams: { type: 'final', packageName: 'egg' },
-      staticPreview: this.render({ score: 0.9711 }),
-      keywords,
+  static openApi = {
+    '/npms-io/{type}/{packageName}': {
+      get: {
+        summary: 'npms.io',
+        description,
+        parameters: pathParams(
+          {
+            name: 'type',
+            schema: { type: 'string', enum: this.getEnum('type') },
+            example: 'maintenance-score',
+          },
+          {
+            name: 'packageName',
+            example: 'command',
+          },
+        ),
+      },
     },
-    {
-      title: 'npms.io (popularity)',
-      pattern: ':type/:scope/:packageName',
-      namedParams: { type: 'popularity', scope: '@vue', packageName: 'cli' },
-      staticPreview: this.render({ type: 'popularity', score: 0.89 }),
-      keywords,
+    '/npms-io/{type}/{scope}/{packageName}': {
+      get: {
+        summary: 'npms.io (scoped package)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'type',
+            schema: { type: 'string', enum: this.getEnum('type') },
+            example: 'maintenance-score',
+          },
+          {
+            name: 'scope',
+            example: '@vue',
+          },
+          {
+            name: 'packageName',
+            example: 'cli',
+          },
+        ),
+      },
     },
-    {
-      title: 'npms.io (quality)',
-      namedParams: { type: 'quality', packageName: 'egg' },
-      staticPreview: this.render({ type: 'quality', score: 0.98 }),
-      keywords,
-    },
-    {
-      title: 'npms.io (maintenance)',
-      namedParams: { type: 'maintenance', packageName: 'command' },
-      staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'score',
@@ -73,11 +87,13 @@ export default class NpmsIOScore extends BaseJsonService {
     const json = await this._requestJson({
       schema: responseSchema,
       url,
-      errorMessages: { 404: 'package not found or too new' },
+      httpErrors: { 404: 'package not found or too new' },
     })
 
-    const score = type === 'final' ? json.score.final : json.score.detail[type]
+    const scoreType = type.slice(0, -6)
+    const score =
+      scoreType === 'final' ? json.score.final : json.score.detail[scoreType]
 
-    return this.constructor.render({ type, score })
+    return this.constructor.render({ type: scoreType, score })
   }
 }

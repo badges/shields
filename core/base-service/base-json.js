@@ -14,7 +14,7 @@ class BaseJsonService extends BaseService {
   /**
    * Parse data from JSON endpoint
    *
-   * @param {string} buffer JSON repsonse from upstream API
+   * @param {string} buffer JSON response from upstream API
    * @returns {object} Parsed response
    */
   _parseJson(buffer) {
@@ -30,14 +30,29 @@ class BaseJsonService extends BaseService {
    * @param {string} attrs.url URL to request
    * @param {object} [attrs.options={}] Options to pass to got. See
    *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
+   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
-  async _requestJson({ schema, url, options = {}, errorMessages = {} }) {
+  async _requestJson({
+    schema,
+    url,
+    options = {},
+    httpErrors = {},
+    systemErrors = {},
+    logErrors = [429],
+  }) {
     const mergedOptions = {
       ...{ headers: { Accept: 'application/json' } },
       ...options,
@@ -45,7 +60,9 @@ class BaseJsonService extends BaseService {
     const { buffer } = await this._request({
       url,
       options: mergedOptions,
-      errorMessages,
+      httpErrors,
+      systemErrors,
+      logErrors,
     })
     const json = this._parseJson(buffer)
     return this.constructor._validate(json, schema)

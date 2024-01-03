@@ -73,7 +73,7 @@ t.create('Plugin Tested WP Version - current')
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
-      .reply(200, mockedCoreResponseData)
+      .reply(200, mockedCoreResponseData),
   )
   .expectBadge({
     label: 'wordpress',
@@ -99,7 +99,7 @@ t.create('Plugin Tested WP Version - old')
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
-      .reply(200, mockedCoreResponseData)
+      .reply(200, mockedCoreResponseData),
   )
   .expectBadge({
     label: 'wordpress',
@@ -125,7 +125,7 @@ t.create('Plugin Tested WP Version - non-exsistant or unsupported')
         requires_php: '5.5',
       })
       .get('/core/version-check/1.7/')
-      .reply(200, mockedCoreResponseData)
+      .reply(200, mockedCoreResponseData),
   )
   .expectBadge({
     label: 'wordpress',
@@ -149,7 +149,7 @@ t.create('Plugin Required WP Version | Missing')
         tested: '4.0.0',
         last_updated: '2020-01-01 7:21am GMT',
         requires_php: '5.5',
-      })
+      }),
   )
   .expectBadge({
     label: 'wordpress',
@@ -190,6 +190,22 @@ t.create('Plugin Required PHP Version')
 
 t.create('Plugin Required PHP Version (Not Set)')
   .get('/plugin/required-php/akismet.json')
+  .intercept(nock =>
+    nock('https://api.wordpress.org')
+      .get('/plugins/info/1.2/')
+      .query(mockedQuerySelector)
+      .reply(200, {
+        version: '1.2',
+        rating: 80,
+        num_ratings: 100,
+        downloaded: 100,
+        active_installs: 100,
+        requires: false,
+        tested: '4.0.0',
+        last_updated: '2020-01-01 7:21am GMT',
+        requires_php: false,
+      }),
+  )
   .expectBadge({
     label: 'php',
     message: 'not set for this plugin',
@@ -224,7 +240,7 @@ t.create('Theme Required PHP Version (Not Set)')
         tested: '4.0.0',
         requires_php: false,
         last_updated: '2020-01-01',
-      })
+      }),
   )
   .expectBadge({
     label: 'php',

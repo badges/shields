@@ -4,7 +4,7 @@ import {
   optionalNonNegativeInteger,
 } from '../validators.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.object({
   scores: Joi.object({
@@ -24,19 +24,35 @@ export default class ClearlyDefinedService extends BaseJsonService {
     pattern: 'score/:type/:provider/:namespace/:name/:revision',
   }
 
-  static examples = [
-    {
-      title: 'ClearlyDefined Score',
-      namedParams: {
-        type: 'npm',
-        provider: 'npmjs',
-        namespace: '-',
-        name: 'jquery',
-        revision: '3.4.1',
+  static openApi = {
+    '/clearlydefined/score/{type}/{provider}/{namespace}/{name}/{revision}': {
+      get: {
+        summary: 'ClearlyDefined Score',
+        parameters: pathParams(
+          {
+            name: 'type',
+            example: 'npm',
+          },
+          {
+            name: 'provider',
+            example: 'npmjs',
+          },
+          {
+            name: 'namespace',
+            example: '-',
+          },
+          {
+            name: 'name',
+            example: 'jquery',
+          },
+          {
+            name: 'revision',
+            example: '3.4.1',
+          },
+        ),
       },
-      staticPreview: this.render({ score: 88 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'score' }
 
@@ -53,7 +69,7 @@ export default class ClearlyDefinedService extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
-      errorMessages: {
+      httpErrors: {
         500: 'unknown type, provider, or upstream issue',
       },
     })

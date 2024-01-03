@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
   followers: nonNegativeInteger,
@@ -29,6 +29,7 @@ export default class GithubFollowers extends GithubAuthV3Service {
   static render({ followers }) {
     return {
       message: metric(followers),
+      style: 'social',
       color: 'blue',
     }
   }
@@ -37,7 +38,7 @@ export default class GithubFollowers extends GithubAuthV3Service {
     const { followers } = await this._requestJson({
       url: `/users/${user}`,
       schema,
-      errorMessages: errorMessagesFor('user not found'),
+      httpErrors: httpErrorsFor('user not found'),
     })
     return this.constructor.render({ followers })
   }

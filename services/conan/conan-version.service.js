@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
 import { fetchRepoContent } from '../github/github-common-fetch.js'
@@ -8,14 +9,18 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
 
   static route = { base: 'conan/v', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'Conan Center',
-      namedParams: { packageName: 'boost' },
-      staticPreview: renderVersionBadge({ version: '1.78.0' }),
-      keywords: ['c++'],
+  static openApi = {
+    '/conan/v/{packageName}': {
+      get: {
+        summary: 'Conan Center',
+        description: '[Conan](https://conan.io/) is a package manager for C++',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'boost',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'conan' }
 

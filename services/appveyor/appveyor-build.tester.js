@@ -25,7 +25,7 @@ t.create('CI status on project that does exist but has no builds yet')
   .intercept(nock =>
     nock('https://ci.appveyor.com/api/projects/')
       .get('/gruntjs/grunt')
-      .reply(200, {})
+      .reply(200, {}),
   )
   .expectBadge({
     label: 'build',

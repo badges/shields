@@ -53,10 +53,18 @@ class BaseSvgScrapingService extends BaseService {
    * @param {string} attrs.url URL to request
    * @param {object} [attrs.options={}] Options to pass to got. See
    *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.errorMessages={}] Key-value map of status codes
+   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
    *    and custom error messages e.g: `{ 404: 'package not found' }`.
    *    This can be used to extend or override the
    *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
+   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
+   *    and an object of params to pass when we construct an Inaccessible exception object
+   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
+   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
+   *    for allowed keys
+   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
@@ -65,7 +73,9 @@ class BaseSvgScrapingService extends BaseService {
     valueMatcher,
     url,
     options = {},
-    errorMessages = {},
+    httpErrors = {},
+    systemErrors = {},
+    logErrors = [429],
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
@@ -75,7 +85,9 @@ class BaseSvgScrapingService extends BaseService {
     const { buffer } = await this._request({
       url,
       options: mergedOptions,
-      errorMessages,
+      httpErrors,
+      systemErrors,
+      logErrors,
     })
     logTrace(emojic.dart, 'Response SVG', buffer)
     const data = {

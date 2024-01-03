@@ -4,13 +4,13 @@ This document describes how to host your own shields server either from source o
 
 ## Installing from Source
 
-You will need Node 16 or later, which you can install using a
+You will need Node 20 or later, which you can install using a
 [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
@@ -71,16 +71,28 @@ vercel
 
 ## Docker
 
-### DockerHub
+### Public Images
 
-We publish images to DockerHub at https://registry.hub.docker.com/r/shieldsio/shields
+We publish images to:
 
-The `next` tag is the latest build from `master`, or tagged releases are available
-https://registry.hub.docker.com/r/shieldsio/shields/tags
+- DockerHub at https://registry.hub.docker.com/r/shieldsio/shields and
+- GitHub Container Registry at https://github.com/badges/shields/pkgs/container/shields
 
-```console
+The `next` tag is the latest build from `master`, or tagged snapshot releases are available:
+
+- https://registry.hub.docker.com/r/shieldsio/shields/tags
+- https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+
+```sh
+# DockerHub
 $ docker pull shieldsio/shields:next
 $ docker run shieldsio/shields:next
+```
+
+```sh
+# GHCR
+$ docker pull ghcr.io/badges/shields:next
+$ docker pull ghcr.io/badges/shields:next
 ```
 
 ### Building Docker Image Locally
@@ -143,24 +155,15 @@ These are documented in [server-secrets.md](./server-secrets.md)
 If you want to host the frontend on a separate server, such as cloud storage
 or a CDN, you can do that.
 
-First, build the frontend, pointing `GATSBY_BASE_URL` to your server.
+First, build the frontend, pointing `BASE_URL` to your server.
 
 ```sh
-GATSBY_BASE_URL=https://your-server.example.com npm run build
+BASE_URL=https://your-server.example.com npm run build
 ```
 
-Then copy the contents of the `build/` folder to your static hosting / CDN.
+Then copy the contents of the `public/` folder to your static hosting / CDN.
 
 There are also a couple settings you should configure on the server.
-
-If you want to use server suggestions, you should also set `ALLOWED_ORIGIN`:
-
-```sh
-ALLOWED_ORIGIN=http://my-custom-shields.s3.amazonaws.com,https://my-custom-shields.s3.amazonaws.com
-```
-
-This should be a comma-separated list of allowed origin headers. They should
-not have paths or trailing slashes.
 
 To help out users, you can make the Shields server redirect the server root.
 Set the `REDIRECT_URI` environment variable:

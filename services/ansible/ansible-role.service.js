@@ -1,73 +1,83 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import {
+  BaseJsonService,
+  deprecatedService,
+  NotFound,
+  pathParams,
+} from '../index.js'
 
 const ansibleRoleSchema = Joi.object({
-  download_count: nonNegativeInteger,
-  name: Joi.string().required(),
-  summary_fields: Joi.object({
-    namespace: Joi.object({
-      name: Joi.string().required(),
-    }),
-  }),
+  results: Joi.array()
+    .items(
+      Joi.object({
+        download_count: nonNegativeInteger,
+      }),
+    )
+    .required(),
 }).required()
 
-class AnsibleGalaxyRole extends BaseJsonService {
-  async fetch({ roleId }) {
-    const url = `https://galaxy.ansible.com/api/v1/roles/${roleId}/`
-    return this._requestJson({
-      url,
-      schema: ansibleRoleSchema,
-    })
-  }
-}
+const AnsibleGalaxyRoleName = deprecatedService({
+  name: 'DeprecatedAnsibleGalaxyRoleName',
+  category: 'other',
+  route: {
+    base: 'ansible/role',
+    pattern: ':roleId',
+  },
+  label: 'role',
+  dateAdded: new Date('2023-10-10'),
+})
 
-class AnsibleGalaxyRoleDownloads extends AnsibleGalaxyRole {
+const AnsibleGalaxyRoleLegacyDownloads = deprecatedService({
+  name: 'DeprecatedAnsibleGalaxyRoleDownloads',
+  category: 'downloads',
+  route: {
+    base: 'ansible/role/d',
+    pattern: ':roleId',
+  },
+  label: 'role downloads',
+  dateAdded: new Date('2023-10-10'),
+})
+
+class AnsibleGalaxyRoleDownloads extends BaseJsonService {
   static category = 'downloads'
-  static route = { base: 'ansible/role/d', pattern: ':roleId' }
+  static route = { base: 'ansible/role/d', pattern: ':namespace/:name' }
 
-  static examples = [
-    {
-      title: 'Ansible Role',
-      namedParams: { roleId: '3078' },
-      staticPreview: renderDownloadsBadge({ downloads: 76 }),
+  static openApi = {
+    '/ansible/role/d/{namespace}/{name}': {
+      get: {
+        summary: 'Ansible Role',
+        parameters: pathParams(
+          { name: 'namespace', example: 'openwisp' },
+          { name: 'name', example: 'openwisp2' },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'role downloads' }
 
-  async handle({ roleId }) {
-    const json = await this.fetch({ roleId })
-    return renderDownloadsBadge({ downloads: json.download_count })
+  async fetch({ namespace, name }) {
+    const url = 'https://galaxy.ansible.com/api/v1/roles/'
+    return this._requestJson({
+      url,
+      schema: ansibleRoleSchema,
+      options: { searchParams: { namespace, name, limit: 1 } },
+    })
+  }
+
+  async handle({ namespace, name }) {
+    const json = await this.fetch({ namespace, name })
+    if (json.results.length === 0) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+    return renderDownloadsBadge({ downloads: json.results[0].download_count })
   }
 }
 
-class AnsibleGalaxyRoleName extends AnsibleGalaxyRole {
-  static category = 'other'
-  static route = { base: 'ansible/role', pattern: ':roleId' }
-
-  static examples = [
-    {
-      title: 'Ansible Role',
-      namedParams: { roleId: '3078' },
-      staticPreview: this.render({
-        name: 'ansible-roles.sublimetext3_packagecontrol',
-      }),
-    },
-  ]
-
-  static defaultBadgeData = { label: 'role' }
-
-  static render({ name }) {
-    return { message: name, color: 'blue' }
-  }
-
-  async handle({ roleId }) {
-    const json = await this.fetch({ roleId })
-    const name = `${json.summary_fields.namespace.name}.${json.name}`
-    return this.constructor.render({ name })
-  }
+export {
+  AnsibleGalaxyRoleDownloads,
+  AnsibleGalaxyRoleName,
+  AnsibleGalaxyRoleLegacyDownloads,
 }
-
-export { AnsibleGalaxyRoleDownloads, AnsibleGalaxyRoleName }

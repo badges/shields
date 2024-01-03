@@ -22,7 +22,7 @@ function noToken(serviceClass) {
       (passKey && !runnerConfig.private[passKey])
     if (noToken && !hasLogged) {
       console.warn(
-        `${serviceClass.name}: no credentials configured, tests for this service will be skipped. Add credentials in local.yml to run them.`
+        `${serviceClass.name}: no credentials configured, tests for this service will be skipped. Add credentials in local.yml to run them.`,
       )
       hasLogged = true
     }

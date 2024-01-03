@@ -1,28 +1,27 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { redirector } from '../index.js'
-import { BaseAmoService, keywords } from './amo-base.js'
+import { redirector, pathParams } from '../index.js'
+import { BaseAmoService, description as baseDescription } from './amo-base.js'
 
-const documentation = `
-<p>
-  Previously <code>amo/d</code> provided a &ldquo;total downloads&rdquo; badge. However,
-  <a href="https://github.com/badges/shields/issues/3079">updates to the v3 API</a> only
-  give us weekly downloads. The route <code>amo/d</code> redirects to <code>amo/dw</code>.
-</p>
+const description = `${baseDescription}
+
+Previously \`amo/d\` provided a &ldquo;total downloads&rdquo; badge. However,
+[updates to the v3 API](https://github.com/badges/shields/issues/3079)
+only give us weekly downloads. The route \`amo/d\` redirects to \`amo/dw\`.
 `
 
 class AmoWeeklyDownloads extends BaseAmoService {
   static category = 'downloads'
   static route = { base: 'amo/dw', pattern: ':addonId' }
 
-  static examples = [
-    {
-      title: 'Mozilla Add-on',
-      namedParams: { addonId: 'dustman' },
-      staticPreview: this.render({ downloads: 120 }),
-      keywords,
-      documentation,
+  static openApi = {
+    '/amo/dw/{addonId}': {
+      get: {
+        summary: 'Mozilla Add-on Downloads',
+        description,
+        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 21600
 

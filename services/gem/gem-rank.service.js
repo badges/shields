@@ -1,15 +1,14 @@
 import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
 import { ordinalNumber } from '../text-formatters.js'
-import { BaseJsonService, InvalidResponse } from '../index.js'
-
-const keywords = ['ruby']
+import { BaseJsonService, InvalidResponse, pathParams } from '../index.js'
+import { description } from './gem-helpers.js'
 
 const totalSchema = Joi.array()
   .items(
     Joi.object({
       total_ranking: Joi.number().integer().min(0).allow(null),
-    })
+    }),
   )
   .min(1)
   .required()
@@ -17,7 +16,7 @@ const dailySchema = Joi.array()
   .items(
     Joi.object({
       daily_ranking: Joi.number().integer().min(0).allow(null),
-    })
+    }),
   )
   .min(1)
   .required()
@@ -25,26 +24,26 @@ const dailySchema = Joi.array()
 export default class GemRank extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'gem', pattern: ':period(rt|rd)/:gem' }
-  static examples = [
-    {
-      title: 'Gem download rank',
-      pattern: 'rt/:gem',
-      namedParams: {
-        gem: 'puppet',
+  static openApi = {
+    '/gem/{period}/{gem}': {
+      get: {
+        summary: 'Gem download rank',
+        description,
+        parameters: pathParams(
+          {
+            name: 'period',
+            example: 'rt',
+            description: 'total or daily ranking',
+            schema: { type: 'string', enum: this.getEnum('period') },
+          },
+          {
+            name: 'gem',
+            example: 'puppet',
+          },
+        ),
       },
-      staticPreview: this.render({ period: 'rt', rank: 332 }),
-      keywords,
     },
-    {
-      title: 'Gem download rank (daily)',
-      pattern: 'rd/:gem',
-      namedParams: {
-        gem: 'facter',
-      },
-      staticPreview: this.render({ period: 'rd', rank: 656 }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'rank' }
 

@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
 function getSchema({ formula }) {
@@ -38,13 +38,25 @@ export default class HomebrewDownloads extends BaseJsonService {
     pattern: 'installs/:interval(dm|dq|dy)/:formula',
   }
 
-  static examples = [
-    {
-      title: 'homebrew downloads',
-      namedParams: { interval: 'dm', formula: 'cake' },
-      staticPreview: renderDownloadsBadge({ interval: 'month', downloads: 93 }),
+  static openApi = {
+    '/homebrew/installs/{interval}/{formula}': {
+      get: {
+        summary: 'homebrew downloads',
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dm',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Monthly, Quarterly or Yearly downloads',
+          },
+          {
+            name: 'formula',
+            example: 'cake',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 
@@ -53,7 +65,7 @@ export default class HomebrewDownloads extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://formulae.brew.sh/api/formula/${formula}.json`,
-      errorMessages: { 404: 'formula not found' },
+      httpErrors: { 404: 'formula not found' },
     })
   }
 

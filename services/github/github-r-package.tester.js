@@ -17,8 +17,8 @@ t.create('R package version (from branch)')
 t.create('R package version (monorepo)')
   .get(
     `/wch/r-source.json?filename=${encodeURIComponent(
-      'src/gnuwin32/windlgs/DESCRIPTION'
-    )}`
+      'src/gnuwin32/windlgs/DESCRIPTION',
+    )}`,
   )
   .expectBadge({
     label: 'R',

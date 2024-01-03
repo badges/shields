@@ -1,4 +1,4 @@
-import { BaseService } from '../index.js'
+import { BaseService, pathParams } from '../index.js'
 
 export default class HackageDeps extends BaseService {
   static category = 'dependencies'
@@ -8,13 +8,17 @@ export default class HackageDeps extends BaseService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Hackage-Deps',
-      namedParams: { packageName: 'lens' },
-      staticPreview: this.render({ isOutdated: false }),
+  static openApi = {
+    '/hackage-deps/v/{packageName}': {
+      get: {
+        summary: 'Hackage Dependencies',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'lens',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'dependencies' }
 

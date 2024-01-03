@@ -1,17 +1,19 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { coveragePercentage } from '../color-formatters.js'
-import { BaseJsonService, InvalidResponse } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  pathParam,
+  queryParam,
+} from '../index.js'
 
-const documentation = `
-  <p>
-    You must specify the read-only API token from the POEditor account to which the project belongs.
-  </p>
-  <p>
-    As per <a href="https://poeditor.com/docs/api">the POEditor API documentation</a>,
-    <q>all requests to the API must contain the parameter api_token. You can get a read-only key from your POEditor account.
-    You'll find it in <a href="https://poeditor.com/account/api">My Account > API Access</a>.</q>
-  </p>
+const description = `
+POEditor is an web-based tool for translation and internationalization
+
+All requests to must contain the parameter \`token\`.
+You can get a read-only token from your POEditor account in [My Account > API Access](https://poeditor.com/account/api).
+This token will be exposed as part of the badge URL so be sure to generate a read-only token.
 `
 
 const schema = Joi.object({
@@ -43,20 +45,25 @@ export default class POEditor extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'POEditor',
-      namedParams: { projectId: '323337', languageCode: 'fr' },
-      queryParams: { token: 'abc123def456' },
-      staticPreview: this.render({
-        code: 200,
-        message: 'OK',
-        language: { percentage: 93, code: 'fr', name: 'French' },
-      }),
-      keywords: ['l10n'],
-      documentation,
+  static openApi = {
+    '/poeditor/progress/{projectId}/{languageCode}': {
+      get: {
+        summary: 'POEditor',
+        description,
+        parameters: [
+          pathParam({ name: 'projectId', example: '323337' }),
+          pathParam({ name: 'languageCode', example: 'fr' }),
+          queryParam({
+            name: 'token',
+            example: 'abc123def456',
+            description:
+              'A read-only token from your POEditor account from [My Account > API Access](https://poeditor.com/account/api)',
+            required: true,
+          }),
+        ],
+      },
     },
-  ]
+  }
 
   static render({ code, message, language }) {
     if (code !== 200) {

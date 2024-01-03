@@ -5,6 +5,14 @@ import { fetchBuild } from './docker-cloud-common-fetch.js'
 export default class DockerCloudAutomatedBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('cloud/automated')
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com', 'https://cloud.docker.com'],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Cloud Automated build',
@@ -17,6 +25,8 @@ export default class DockerCloudAutomatedBuild extends BaseJsonService {
     },
   ]
 
+  static _cacheLength = 14400
+
   static defaultBadgeData = { label: 'docker build' }
 
   static render({ buildSettings }) {
@@ -28,6 +38,12 @@ export default class DockerCloudAutomatedBuild extends BaseJsonService {
 
   async handle({ user, repo }) {
     const data = await fetchBuild(this, { user, repo })
+
+    if (data.objects.length === 0) {
+      return this.constructor.render({
+        buildSettings: [],
+      })
+    }
     return this.constructor.render({
       buildSettings: data.objects[0].build_settings,
     })

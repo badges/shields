@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { optionalNonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -17,18 +17,19 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     pattern: ':subreddit',
   }
 
-  static examples = [
-    {
-      title: 'Subreddit subscribers',
-      namedParams: { subreddit: 'drums' },
-      staticPreview: {
-        label: 'follow r/drums',
-        message: '77k',
-        color: 'red',
-        style: 'social',
+  static openApi = {
+    '/reddit/subreddit-subscribers/{subreddit}': {
+      get: {
+        summary: 'Subreddit subscribers',
+        parameters: pathParams({
+          name: 'subreddit',
+          example: 'drums',
+        }),
       },
     },
-  ]
+  }
+
+  static _cacheLength = 7200
 
   static defaultBadgeData = {
     label: 'reddit',
@@ -39,6 +40,7 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     return {
       label: `follow r/${subreddit}`,
       message: metric(subscribers),
+      style: 'social',
       color: 'red',
       link: [`https://www.reddit.com/r/${subreddit}`],
     }
@@ -48,7 +50,7 @@ export default class RedditSubredditSubscribers extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://www.reddit.com/r/${subreddit}/about.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'subreddit not found',
         403: 'subreddit is private',
       },

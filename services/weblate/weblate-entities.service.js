@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import WeblateBase from './weblate-base.js'
+import WeblateBase, { defaultServer, description } from './weblate-base.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger,
@@ -16,15 +17,24 @@ export default class WeblateEntities extends WeblateBase {
     queryParamSchema: this.queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: `Weblate entities`,
-      namedParams: { type: 'projects' },
-      queryParams: { server: 'https://hosted.weblate.org' },
-      staticPreview: this.render({ type: 'projects', count: 533 }),
-      keywords: ['i18n', 'internationalization'],
+  static openApi = {
+    '/weblate/{type}': {
+      get: {
+        summary: 'Weblate entities',
+        description,
+        parameters: [
+          pathParam({
+            name: 'type',
+            example: 'projects',
+            schema: { type: 'string', enum: this.getEnum('type') },
+          }),
+          queryParam({ name: 'server', example: defaultServer }),
+        ],
+      },
     },
-  ]
+  }
+
+  static _cacheLength = 600
 
   static defaultBadgeData = { color: 'informational' }
 
@@ -32,14 +42,14 @@ export default class WeblateEntities extends WeblateBase {
     return { label: type, message: metric(count) }
   }
 
-  async fetch({ type, server = 'https://hosted.weblate.org' }) {
+  async fetch({ type, server = defaultServer }) {
     return super.fetch({
       schema,
       url: `${server}/api/${type}/`,
-      errorMessages: {
+      httpErrors: {
         403: 'access denied by remote server',
-        429: 'rate limited by remote server',
       },
+      logErrors: server === defaultServer ? [429] : [],
     })
   }
 

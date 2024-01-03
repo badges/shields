@@ -1,0 +1,24 @@
+name: Cleanup Review Apps
+on:
+  schedule:
+    - cron: '0 7 * * *'
+    # At 07:00, daily
+  workflow_dispatch:
+
+jobs:
+  cleanup-review-apps:
+    runs-on: ubuntu-latest
+    environment: 'Review Apps'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: install jq
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get install -y jq
+
+      - run: .github/scripts/cleanup-review-apps.sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

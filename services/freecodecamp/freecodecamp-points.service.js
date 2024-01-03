@@ -1,12 +1,18 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  NotFound,
+  pathParams,
+} from '../index.js'
 
 /**
  * Validates that the schema response is what we're expecting.
- * The username pattern should match the freeCodeCamp repository.
+ * The username pattern should match the requirements in the freeCodeCamp
+ * repository.
  *
- * @see https://github.com/freeCodeCamp/freeCodeCamp/blob/main/utils/validate.js#L14
+ * @see https://github.com/freeCodeCamp/freeCodeCamp/blob/main/utils/validate.js
  */
 const schema = Joi.object({
   entities: Joi.object({
@@ -29,13 +35,17 @@ export default class FreeCodeCampPoints extends BaseJsonService {
     pattern: ':username',
   }
 
-  static examples = [
-    {
-      title: 'freeCodeCamp points',
-      namedParams: { username: 'sethi' },
-      staticPreview: this.render({ points: 934 }),
+  static openApi = {
+    '/freecodecamp/points/{username}': {
+      get: {
+        summary: 'freeCodeCamp points',
+        parameters: pathParams({
+          name: 'username',
+          example: 'raisedadead',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'points', color: 'info' }
 
@@ -46,7 +56,7 @@ export default class FreeCodeCampPoints extends BaseJsonService {
   async fetch({ username }) {
     return this._requestJson({
       schema,
-      url: `https://api.freecodecamp.org/api/users/get-public-profile`,
+      url: 'https://api.freecodecamp.org/api/users/get-public-profile',
       options: {
         searchParams: {
           username,

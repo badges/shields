@@ -1,32 +1,24 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-const isPipeSeparatedDjangoVersions = Joi.string().regex(
-  /^([1-9]\.[0-9]+(?: \| )?)+$/
+t.create(
+  'redirect supported django versions (valid, package version in request)',
 )
-
-t.create('supported django versions (valid, package version in request)')
   .get('/djangorestframework/3.7.3.json')
-  .expectBadge({
-    label: 'django versions',
-    message: isPipeSeparatedDjangoVersions,
-  })
+  .expectRedirect(
+    '/pypi/frameworkversions/django/djangorestframework/3.7.3.json',
+  )
 
-t.create('supported django versions (valid, no package version specified)')
+t.create(
+  'redirect supported django versions (valid, no package version specified)',
+)
   .get('/djangorestframework.json')
-  .expectBadge({
-    label: 'django versions',
-    message: isPipeSeparatedDjangoVersions,
-  })
+  .expectRedirect('/pypi/frameworkversions/django/djangorestframework.json')
 
-t.create('supported django versions (no versions specified)')
+t.create('redirect supported django versions (no versions specified)')
   .get('/django/1.11.json')
-  .expectBadge({ label: 'django versions', message: 'missing' })
+  .expectRedirect('/pypi/frameworkversions/django/django/1.11.json')
 
-t.create('supported django versions (invalid)')
+t.create('redirect supported django versions (invalid)')
   .get('/not-a-package.json')
-  .expectBadge({
-    label: 'django versions',
-    message: 'package or version not found',
-  })
+  .expectRedirect('/pypi/frameworkversions/django/not-a-package.json')

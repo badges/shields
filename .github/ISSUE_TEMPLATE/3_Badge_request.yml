@@ -1,0 +1,62 @@
+name: '💡 Badge Request'
+description: Ideas for new badges
+labels: ['service-badge']
+body:
+  - type: markdown
+    attributes:
+      value: >
+        ## Ideas for new badges
+
+
+        This issue template is for suggesting new badges which
+        **fetch and display data from an upstream service**.
+        If your suggestion is for a static badge
+        (which shows the same information every time it is requested), it is
+        [already possible to make these](https://shields.io/docs/static-badges).
+        We don't add specific routes for badges which only show static information.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: '📋 Description'
+      description: |
+        A clear and concise description of the new badge.
+
+        - Which service is this badge for e.g: GitHub, Travis CI
+        - What sort of information should this badge show?
+          Provide an example in plain text e.g: "version | v1.01" or as a static badge
+          (static badge generator can be found at https://shields.io/badges/static-badge )
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: '🔗 Data'
+      description: |
+        Where can we get the data from?
+
+        Please consider and cover details like:
+        - Is there a public API?
+        - Does the API require authentication or an API key?
+          If so, please review our documentation on [Badges Requiring Authentication](https://github.com/badges/shields/blob/master/doc/authentication.md)
+        - Link to the API documentation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: '🎤 Motivation'
+      description: |
+        Please explain why this feature should be implemented and how it would be used.
+
+        - What is the specific use case?
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## :heart: Love Shields?
+        Please consider donating $10 to sustain our activities: [https://opencollective.com/shields](https://opencollective.com/shields)

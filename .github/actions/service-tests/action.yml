@@ -1,0 +1,91 @@
+name: 'Service tests'
+description: 'Run tests for selected services'
+inputs:
+  github-token:
+    description: 'The GITHUB_TOKEN secret'
+    required: true
+  librariesio-tokens:
+    description: 'The SERVICETESTS_LIBRARIESIO_TOKENS secret'
+    required: false
+    default: ''
+  obs-user:
+    description: 'The SERVICETESTS_OBS_USER secret'
+    required: false
+    default: ''
+  obs-pass:
+    description: 'The SERVICETESTS_OBS_PASS secret'
+    required: false
+    default: ''
+  pepy-key:
+    description: 'The SERVICETESTS_PEPY_KEY secret'
+    required: false
+    default: ''
+  sl-insight-user-uuid:
+    description: 'The SERVICETESTS_SL_INSIGHT_USER_UUID secret'
+    required: false
+    default: ''
+  sl-insight-api-token:
+    description: 'The SERVICETESTS_SL_INSIGHT_API_TOKEN secret'
+    required: false
+    default: ''
+  twitch-client-id:
+    description: 'The SERVICETESTS_TWITCH_CLIENT_ID secret'
+    required: false
+    default: ''
+  twitch-client-secret:
+    description: 'The SERVICETESTS_TWITCH_CLIENT_SECRET secret'
+    required: false
+    default: ''
+  wheelmap-token:
+    description: 'The SERVICETESTS_WHEELMAP_TOKEN secret'
+    required: false
+    default: ''
+  youtube-api-key:
+    description: 'The SERVICETESTS_YOUTUBE_API_KEY secret'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Derive list of service tests to run
+      # Note: In this step we are using an intermediate env var instead of
+      # passing github.event.pull_request.title as an argument
+      # to prevent a shell injection attack. Further reading:
+      # https://securitylab.github.com/research/github-actions-untrusted-input/#exploitability-and-impact
+      # https://securitylab.github.com/research/github-actions-untrusted-input/#remediation
+      if: always()
+      env:
+        TITLE: ${{ github.event.pull_request.title }}
+      run: npm run test:services:pr:prepare "$TITLE"
+      shell: bash
+
+    - name: Run service tests
+      if: always()
+      run: npm run test:services:pr:run -- --reporter json --reporter-option 'output=reports/service-tests.json'
+      shell: bash
+      env:
+        RETRY_COUNT: 3
+        GH_TOKEN: '${{ inputs.github-token }}'
+        LIBRARIESIO_TOKENS: '${{ inputs.librariesio-tokens }}'
+        OBS_USER: '${{ inputs.obs-user }}'
+        OBS_PASS: '${{ inputs.obs-pass }}'
+        PEPY_KEY: '${{ inputs.pepy-key }}'
+        SL_INSIGHT_USER_UUID: '${{ inputs.sl-insight-user-uuid }}'
+        SL_INSIGHT_API_TOKEN: '${{ inputs.sl-insight-api-token }}'
+        TWITCH_CLIENT_ID: '${{ inputs.twitch-client-id }}'
+        TWITCH_CLIENT_SECRET: '${{ inputs.twitch-client-secret }}'
+        WHEELMAP_TOKEN: '${{ inputs.wheelmap-token }}'
+        YOUTUBE_API_KEY: '${{ inputs.youtube-api-key }}'
+
+    - name: Write Markdown Summary
+      if: always()
+      run: |
+        if test -f 'reports/service-tests.json'; then
+          echo '# Services' >> $GITHUB_STEP_SUMMARY
+          sed -e 's/^/- /' pull-request-services.log >> $GITHUB_STEP_SUMMARY
+          node scripts/mocha2md.js Report reports/service-tests.json >> $GITHUB_STEP_SUMMARY
+        else
+          echo 'No services found. Nothing to do.' >> $GITHUB_STEP_SUMMARY
+        fi
+      shell: bash

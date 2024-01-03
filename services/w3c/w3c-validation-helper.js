@@ -8,7 +8,7 @@ const svgExpression =
   '^SVG\\s?1\\.1\\s?,\\s?URL\\s?,\\s?XHTML\\s?,\\s?MathML\\s?3\\.0$'
 const presetRegex = new RegExp(
   `(${html5Expression})|(${html4Expression})|(${xhtmlExpression})|(${svgExpression})`,
-  'i'
+  'i',
 )
 
 const getMessage = messageTypes => {
@@ -20,7 +20,7 @@ const getMessage = messageTypes => {
   }
 
   const messages = messageTypeKeys.map(
-    key => `${messageTypes[key]} ${key}${messageTypes[key] > 1 ? 's' : ''}`
+    key => `${messageTypes[key]} ${key}${messageTypes[key] > 1 ? 's' : ''}`,
   )
   return messages.join(', ')
 }
@@ -77,73 +77,20 @@ const getSchema = preset => {
   return schema.map(url => encodeURI(url)).join(' ')
 }
 
-const documentation = `
-  <style>
-    .box {
-      display: flex;
-      justify-content: space-between;
-    }
-    .note {
-      font-size: smaller;
-      text-align: left;
-    }
-  </style>
-  <p>
-    The W3C validation badge performs validation of the HTML, SVG, MathML, ITS, RDFa Lite, XHTML documents.
-    The badge uses the type property of each message found in the messages from the validation results to determine to be an error or warning.
-    The rules are as follows:
-    <ul class="note">
-      <li>info:  These messages are counted as warnings</li>
-      <li>error:  These messages are counted as errors</li>
-      <li>non-document-error: These messages are counted as errors</li>
-    </ul>
-  </p>
-  <p>
-    This badge relies on the <a target="_blank" href="https://validator.nu/">https://validator.nu/</a> service to perform the validation.
-    Please refer to <a target="_blank" href="https://about.validator.nu/">https://about.validator.nu/</a> for the full documentation and Terms of service.
-    The following are required from the consumer for the badge to function.
-
-    <ul class="note">
-      <li>
-        Path:
-        <ul>  
-          <li>
-            parser: The parser that is used for validation. This is a passthru value to the service
-            <ul>
-              <li>default <i>(This will not pass a parser to the API and make the API choose the parser based on the validated content)</i></li>
-              <li>html <i>(HTML)</i></li>
-              <li>xml <i>(XML; don’t load external entities)</i></li>
-              <li>xmldtd <i>(XML; load external entities)</i></li>
-            </ul>
-          </li>  
-        </ul>        
-      </li>
-      <li>
-        Query string:
-        <ul>
-          <li>
-            targetUrl (Required): This is the path for the document to be validated
-          </li>
-          <li>
-            preset (Optional can be left as blank): This is used to determine the schema for the document to be valdiated against.
-            The following are the allowed values
-            <ul>
-              <li>HTML, SVG 1.1, MathML 3.0</li>
-              <li>HTML, SVG 1.1, MathML 3.0, ITS 2.0</li>
-              <li>HTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1</li>
-              <li>HTML 4.01 Strict, URL / XHTML 1.0 Strict, URL</li>
-              <li>HTML 4.01 Transitional, URL / XHTML 1.0 Transitional, URL</li>
-              <li>HTML 4.01 Frameset, URL / XHTML 1.0 Frameset, URL</li>
-              <li>XHTML, SVG 1.1, MathML 3.0</li>
-              <li>XHTML, SVG 1.1, MathML 3.0, RDFa Lite 1.1</li>
-              <li>XHTML 1.0 Strict, URL, Ruby, SVG 1.1, MathML 3.0</li>
-              <li>SVG 1.1, URL, XHTML, MathML 3.0</li>        
-            </ul>
-          </li>
-        </ul>      
-      </li>
-    </ul>
-  </p>
+const description = `<p>
+  The W3C validation badge performs validation of the HTML, SVG, MathML, ITS, RDFa Lite, XHTML documents.
+  The badge uses the type property of each message found in the messages from the validation results to determine to be an error or warning.
+  The rules are as follows:
+  <ul>
+    <li>info:  These messages are counted as warnings</li>
+    <li>error:  These messages are counted as errors</li>
+    <li>non-document-error: These messages are counted as errors</li>
+  </ul>
+</p>
+<p>
+  This badge relies on the <a target="_blank" href="https://validator.nu/">https://validator.nu/</a> service to perform the validation.
+  Please refer to <a target="_blank" href="https://about.validator.nu/">https://about.validator.nu/</a> for the full documentation and Terms of service.
+</p>
 `
 
-export { documentation, presetRegex, getColor, getMessage, getSchema }
+export { description, presetRegex, getColor, getMessage, getSchema }

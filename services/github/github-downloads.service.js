@@ -4,7 +4,7 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { NotFound } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchLatestRelease } from './github-common-release.js'
-import { documentation, errorMessagesFor } from './github-helpers.js'
+import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
@@ -21,7 +21,7 @@ const releaseSchema = Joi.object({
 
 const releaseArraySchema = Joi.alternatives().try(
   Joi.array().items(releaseSchema),
-  Joi.array().length(0)
+  Joi.array().length(0),
 )
 
 export default class GithubDownloads extends GithubAuthV3Service {
@@ -206,13 +206,13 @@ export default class GithubDownloads extends GithubAuthV3Service {
         assetName === 'total'
           ? assets
           : assets.filter(
-              ({ name }) => name.toLowerCase() === assetName.toLowerCase()
+              ({ name }) => name.toLowerCase() === assetName.toLowerCase(),
             )
       return (
         accum1 +
         filteredAssets.reduce(
           (accum2, { download_count: downloads }) => accum2 + downloads,
-          0
+          0,
         )
       )
     }, 0)
@@ -226,14 +226,14 @@ export default class GithubDownloads extends GithubAuthV3Service {
       const latestRelease = await fetchLatestRelease(
         this,
         { user, repo },
-        { sort, include_prereleases: includePre }
+        { sort, include_prereleases: includePre },
       )
       releases = [latestRelease]
     } else if (tag) {
       const wantedRelease = await this._requestJson({
         schema: releaseSchema,
         url: `/repos/${user}/${repo}/releases/tags/${tag}`,
-        errorMessages: errorMessagesFor('repo or release not found'),
+        httpErrors: httpErrorsFor('repo or release not found'),
       })
       releases = [wantedRelease]
     } else {
@@ -241,13 +241,13 @@ export default class GithubDownloads extends GithubAuthV3Service {
         schema: releaseArraySchema,
         url: `/repos/${user}/${repo}/releases`,
         options: { searchParams: { per_page: 500 } },
-        errorMessages: errorMessagesFor('repo not found'),
+        httpErrors: httpErrorsFor('repo not found'),
       })
       releases = allReleases
     }
 
     if (releases.length === 0) {
-      throw new NotFound({ prettyMessage: 'no releases' })
+      throw new NotFound({ prettyMessage: 'no releases found' })
     }
 
     const { downloads } = this.constructor.transform({

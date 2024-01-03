@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -15,16 +15,24 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
     pattern: ':project/:type(bugs|feature-requests)',
   }
 
-  static examples = [
-    {
-      title: 'Sourceforge Open Tickets',
-      namedParams: {
-        type: 'bugs',
-        project: 'sevenzip',
+  static openApi = {
+    '/sourceforge/open-tickets/{project}/{type}': {
+      get: {
+        summary: 'Sourceforge Open Tickets',
+        parameters: pathParams(
+          {
+            name: 'project',
+            example: 'sevenzip',
+          },
+          {
+            name: 'type',
+            example: 'bugs',
+            schema: { type: 'string', enum: this.getEnum('type') },
+          },
+        ),
       },
-      staticPreview: this.render({ count: 1338 }),
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'open tickets',
@@ -43,7 +51,7 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
     return this._requestJson({
       schema,
       url,
-      errorMessages: {
+      httpErrors: {
         404: 'project not found',
       },
     })

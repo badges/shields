@@ -2,7 +2,13 @@ import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
 import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
 import { fetchJsonFromRepo } from '../github/github-common-fetch.js'
-import { InvalidParameter, InvalidResponse, NotFound } from '../index.js'
+import {
+  InvalidParameter,
+  InvalidResponse,
+  NotFound,
+  pathParam,
+  queryParam,
+} from '../index.js'
 
 const nycrcSchema = Joi.object({
   branches: Joi.number().min(0).max(100),
@@ -23,11 +29,11 @@ const pkgJSONSchema = Joi.object({
   }).optional(),
 }).required()
 
-const documentation = `<p>
-  Create a code coverage badge, based on thresholds stored in a
-  <a href="https://github.com/istanbuljs/nyc#common-configuration-options">.nycrc config file</a>
-  on GitHub.
-</p>`
+const description = `
+Create a code coverage badge, based on thresholds stored in a
+[.nycrc config file](https://github.com/istanbuljs/nyc#common-configuration-options)
+on GitHub.
+`
 
 const validThresholds = ['branches', 'lines', 'functions']
 
@@ -50,15 +56,24 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
     }).required(),
   }
 
-  static examples = [
-    {
-      title: 'nycrc config on GitHub',
-      namedParams: { user: 'yargs', repo: 'yargs' },
-      queryParams: { config: '.nycrc', preferredThreshold: 'lines' },
-      staticPreview: this.render({ coverage: 92 }),
-      documentation,
+  static openApi = {
+    '/nycrc/{user}/{repo}': {
+      get: {
+        summary: 'nycrc config on GitHub',
+        description,
+        parameters: [
+          pathParam({ name: 'user', example: 'yargs' }),
+          pathParam({ name: 'repo', example: 'yargs' }),
+          queryParam({ name: 'config', example: '.nycrc' }),
+          queryParam({
+            name: 'preferredThreshold',
+            example: 'lines',
+            schema: { type: 'string', enum: validThresholds },
+          }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'min coverage' }
 
@@ -74,7 +89,8 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
     if (preferredThreshold) {
       if (!validThresholds.includes(preferredThreshold)) {
         throw new InvalidParameter({
-          prettyMessage: `threshold must be "branches", "lines", or "functions"`,
+          prettyMessage:
+            'threshold must be "branches", "lines", or "functions"',
         })
       }
       if (!config[preferredThreshold]) {
@@ -122,7 +138,7 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
           branch: 'HEAD',
           filename: config,
         }),
-        preferredThreshold
+        preferredThreshold,
       )
     }
     return this.constructor.render({ coverage })

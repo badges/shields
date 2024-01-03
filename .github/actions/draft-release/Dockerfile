@@ -1,4 +1,4 @@
-FROM node:12-buster
+FROM node:20-bullseye
 
 RUN apt-get update
 RUN apt-get install -y jq

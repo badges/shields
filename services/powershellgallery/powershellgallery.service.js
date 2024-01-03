@@ -1,5 +1,5 @@
 import { fetch, createServiceFamily } from '../nuget/nuget-v2-service-family.js'
-import { BaseXmlService } from '../index.js'
+import { BaseXmlService, pathParams } from '../index.js'
 
 const WINDOWS_TAG_NAME = 'windows'
 const MACOS_TAG_NAME = 'macos'
@@ -32,15 +32,17 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'PowerShell Gallery',
-      namedParams: { packageName: 'DNS.1.1.1.1' },
-      staticPreview: this.render({
-        platforms: ['windows', 'macos', 'linux'],
-      }),
+  static openApi = {
+    '/powershellgallery/p/{packageName}': {
+      get: {
+        summary: 'PowerShell Gallery Platform Support',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'PackageManagement',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'platform',

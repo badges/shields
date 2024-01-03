@@ -18,7 +18,7 @@ t.create('invalid extension id')
 
 t.create('non existent extension')
   .get(
-    '/visual-studio-marketplace/release-date/yasht.terminal-all-in-one-fake.json'
+    '/visual-studio-marketplace/release-date/yasht.terminal-all-in-one-fake.json',
   )
   .expectBadge({
     label: 'release date',

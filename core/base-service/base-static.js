@@ -33,14 +33,14 @@ export default class BaseStaticService extends BaseService {
         {},
         serviceConfig,
         namedParams,
-        queryParams
+        queryParams,
       )
 
       const badgeData = coalesceBadge(
         queryParams,
         serviceData,
         this.defaultBadgeData,
-        this
+        this,
       )
 
       // The final capture group is the extension.

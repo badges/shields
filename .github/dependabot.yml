@@ -8,6 +8,7 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
     ignore:
       # https://github.com/badges/shields/issues/7324
       # https://github.com/badges/shields/issues/7447
@@ -15,9 +16,6 @@ updates:
       # https://caniuse.com/js-regexp-lookbehind
       - dependency-name: 'decamelize'
       - dependency-name: 'humanize-string'
-
-      # https://github.com/badges/shields/pull/7288#issuecomment-974699240
-      - dependency-name: '@types/node'
 
   # badge-maker package dependencies
   - package-ecosystem: npm
@@ -27,17 +25,22 @@ updates:
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
 
-  # close-bot package dependencies
-  - package-ecosystem: npm
-    directory: '/.github/actions/close-bot'
-    schedule:
-      interval: weekly
-      day: friday
-      time: '12:00'
-    open-pull-requests-limit: 99
+  # GH actions
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: weekly
     open-pull-requests-limit: 99
+    rebase-strategy: disabled
+
+    # docusaurus-swizzled-warning package dependencies
+  - package-ecosystem: npm
+    directory: '/.github/actions/docusaurus-swizzled-warning'
+    schedule:
+      interval: weekly
+      day: friday
+      time: '12:00'
+    open-pull-requests-limit: 99
+    rebase-strategy: disabled

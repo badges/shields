@@ -27,8 +27,8 @@ describe('TeamCityBuild', function () {
           verbosity: 'e',
           buildId: 'bt678',
         },
-        { server: `https://${host}` }
-      )
+        { server: `https://${host}` },
+      ),
     ).to.deep.equal({
       message: 'tests failed: 1 (1 new), passed: 50246, ignored: 1, muted: 12',
       color: 'red',

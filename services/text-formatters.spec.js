@@ -39,7 +39,6 @@ describe('Text formatters', function () {
 
   test(metric, () => {
     /* eslint-disable no-loss-of-precision */
-    /* eslint-disable @typescript-eslint/no-loss-of-precision */
     given(0).expect('0')
     given(999).expect('999')
     given(1000).expect('1k')
@@ -152,6 +151,12 @@ describe('Text formatters', function () {
       given(new Date(2018, 9, 1).getTime() / 1000)
         .describe('when given the beginning of october')
         .expect('a month ago')
+    })
+
+    test(formatRelativeDate, () => {
+      given(9999999999999)
+        .describe('when given invalid date')
+        .expect('invalid date')
     })
   })
 })

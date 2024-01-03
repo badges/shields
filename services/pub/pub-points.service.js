@@ -1,33 +1,34 @@
 import Joi from 'joi'
 import { floorCount } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
+import { baseDescription } from './pub-common.js'
 
-const documentation = `<p>A measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>`
-
-const keywords = ['dart', 'flutter']
+const description = `${baseDescription}
+  <p>This badge shows a measure of quality. This includes several dimensions of quality such as code style, platform support, and maintainability.</p>`
 
 const schema = Joi.object({
   grantedPoints: nonNegativeInteger,
   maxPoints: nonNegativeInteger,
 }).required()
 
-const title = 'Pub Points'
-
 export default class PubPoints extends BaseJsonService {
   static category = 'rating'
 
   static route = { base: 'pub/points', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title,
-      keywords,
-      documentation,
-      namedParams: { packageName: 'analysis_options' },
-      staticPreview: this.render({ grantedPoints: 120, maxPoints: 130 }),
+  static openApi = {
+    '/pub/points/{packageName}': {
+      get: {
+        summary: 'Pub Points',
+        description,
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'analysis_options',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'points' }
 

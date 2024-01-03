@@ -9,16 +9,16 @@ const templates = {
   packageJsonVersionsTemplate: fs.readFileSync(
     path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      `packageJsonVersionsTemplate.json`
+      'packageJsonVersionsTemplate.json',
     ),
-    'utf-8'
+    'utf-8',
   ),
   packageJsonTemplate: fs.readFileSync(
     path.join(
       path.dirname(fileURLToPath(import.meta.url)),
-      `packageJsonTemplate.json`
+      'packageJsonTemplate.json',
     ),
-    'utf-8'
+    'utf-8',
   ),
 }
 
@@ -51,7 +51,7 @@ const mockPackageData =
 const mockCurrentSha = latestVersion => nock => {
   const latestSha = `node-v${latestVersion}.12.0-aix-ppc64.tar.gz`
   return nock('https://nodejs.org/dist/')
-    .get(`/latest/SHASUMS256.txt`)
+    .get('/latest/SHASUMS256.txt')
     .reply(200, latestSha)
 }
 
@@ -146,7 +146,7 @@ const mockReleaseSchedule = () => nock => {
     },
   }
   return nock('https://raw.githubusercontent.com/')
-    .get(`/nodejs/Release/master/schedule.json`)
+    .get('/nodejs/Release/master/schedule.json')
     .reply(200, schedule)
 }
 

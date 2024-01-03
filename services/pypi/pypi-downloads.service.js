@@ -1,9 +1,7 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-
-const keywords = ['python']
 
 const schema = Joi.object({
   data: Joi.object({
@@ -38,20 +36,26 @@ export default class PypiDownloads extends BaseJsonService {
     pattern: ':period(dd|dw|dm)/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'PyPI - Downloads',
-      namedParams: {
-        period: 'dd',
-        packageName: 'Django',
+  static openApi = {
+    '/pypi/{period}/{packageName}': {
+      get: {
+        summary: 'PyPI - Downloads',
+        description:
+          'Python package downloads from [pypistats](https://pypistats.org/)',
+        parameters: pathParams(
+          {
+            name: 'period',
+            example: 'dd',
+            schema: { type: 'string', enum: this.getEnum('period') },
+            description: 'Daily, Weekly, or Monthly downloads',
+          },
+          { name: 'packageName', example: 'Django' },
+        ),
       },
-      staticPreview: renderDownloadsBadge({
-        interval: 'day',
-        downloads: 14000,
-      }),
-      keywords,
     },
-  ]
+  }
+
+  static _cacheLength = 28800
 
   static defaultBadgeData = { label: 'downloads' }
 
@@ -59,7 +63,7 @@ export default class PypiDownloads extends BaseJsonService {
     return this._requestJson({
       url: `https://pypistats.org/api/packages/${packageName.toLowerCase()}/recent`,
       schema,
-      errorMessages: { 404: 'package not found' },
+      httpErrors: { 404: 'package not found' },
     })
   }
 

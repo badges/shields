@@ -12,7 +12,7 @@ function validate(
     allowAndStripUnknownKeys = true,
   },
   data,
-  schema
+  schema,
 ) {
   if (!schema || !Joi.isSchema(schema)) {
     throw Error('A Joi schema is required')
@@ -28,7 +28,7 @@ function validate(
       'validate',
       emojic.womanShrugging,
       traceErrorMessage,
-      error.message
+      error.message,
     )
 
     let prettyMessage = prettyErrorMessage

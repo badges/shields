@@ -9,16 +9,11 @@ const schema = Joi.object({
     license: Joi.string().allow('').allow(null),
     classifiers: Joi.array().items(Joi.string()).required(),
   }).required(),
-  releases: Joi.object()
-    .pattern(
-      Joi.string(),
-      Joi.array()
-        .items(
-          Joi.object({
-            packagetype: Joi.string().required(),
-          })
-        )
-        .required()
+  urls: Joi.array()
+    .items(
+      Joi.object({
+        packagetype: Joi.string().required(),
+      }),
     )
     .required(),
 }).required()
@@ -27,7 +22,7 @@ export default class PypiBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
-      pattern: ':egg*',
+      pattern: ':egg+',
     }
   }
 
@@ -35,7 +30,7 @@ export default class PypiBase extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://pypi.org/pypi/${egg}/json`,
-      errorMessages: { 404: 'package or version not found' },
+      httpErrors: { 404: 'package or version not found' },
     })
   }
 }

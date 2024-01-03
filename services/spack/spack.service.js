@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '..//version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 const schema = Joi.object({
   latest_version: Joi.string().required(),
 }).required()
@@ -13,14 +13,17 @@ export default class SpackVersion extends BaseJsonService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Spack',
-      namedParams: { packageName: 'adios2' },
-      staticPreview: this.render({ version: '2.8.0' }),
-      keywords: ['hpc'],
+  static openApi = {
+    '/spack/v/{packageName}': {
+      get: {
+        summary: 'Spack',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'adios2',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'spack' }
 
@@ -32,7 +35,7 @@ export default class SpackVersion extends BaseJsonService {
     return this._requestJson({
       schema,
       url: `https://packages.spack.io/data/packages/${packageName}.json`,
-      errorMessages: {
+      httpErrors: {
         404: 'package not found',
       },
     })

@@ -3,40 +3,99 @@ import DockerSize from './docker-size.service.js'
 import { sizeDataNoTagSemVerSort } from './docker-fixtures.js'
 
 describe('DockerSize', function () {
-  test(DockerSize.prototype.transform, () => {
-    given({
-      tag: '',
-      sort: 'date',
-      data: { results: [{ name: 'next', full_size: 219939484 }] },
-    }).expect({
+  test(DockerSize.prototype.getSizeFromImageByLatestDate, () => {
+    given(
+      {
+        count: 0,
+        results: [],
+      },
+      'amd64',
+    ).expectError('Not Found: repository not found')
+    given(
+      {
+        count: 1,
+        results: [
+          {
+            full_size: 300000000,
+            name: 'next',
+            images: [{ architecture: 'amd64', size: 219939484 }],
+          },
+        ],
+      },
+      'amd64',
+    ).expect({
       size: 219939484,
     })
     given({
-      tag: '',
-      sort: 'date',
-      data: {
+      count: 1,
+      results: [
+        {
+          full_size: 300000000,
+          name: 'next',
+          images: [
+            { architecture: 'amd64', size: 219939484 },
+            { architecture: 'arm64', size: 200000000 },
+          ],
+        },
+      ],
+    }).expect({
+      size: 300000000,
+    })
+    given(
+      {
+        count: 1,
         results: [
-          { name: 'latest', full_size: 74661264 },
-          { name: 'arm64v8-latest', full_size: 76310416 },
-          { name: 'arm32v7-latest', full_size: 68001970 },
-          { name: 'amd64-latest', full_size: 74661264 },
+          {
+            full_size: 300000000,
+            name: 'next',
+            images: [
+              { architecture: 'amd64', size: 219939484 },
+              { architecture: 'arm64', size: 200000000 },
+            ],
+          },
         ],
       },
-    }).expect({
-      size: 74661264,
+      'arm64777',
+    ).expectError('Not Found: architecture not found')
+  })
+
+  test(DockerSize.prototype.getSizeFromTag, () => {
+    given(
+      {
+        full_size: 300000000,
+        name: 'next',
+        images: [{ architecture: 'amd64', size: 219939484 }],
+      },
+      'amd64',
+    ).expect({
+      size: 219939484,
     })
     given({
-      tag: '',
-      sort: 'semver',
-      data: sizeDataNoTagSemVerSort,
+      full_size: 300000000,
+      name: 'next',
+      images: [{ architecture: 'amd64', size: 219939484 }],
     }).expect({
-      size: 13448411,
+      size: 300000000,
     })
-    given({
-      tag: 'latest',
-      data: { name: 'latest', full_size: 13448411 },
-    }).expect({
-      size: 13448411,
+    given(
+      {
+        full_size: 300000000,
+        name: 'next',
+        images: [{ architecture: 'amd64', size: 219939484 }],
+      },
+      'arm64777',
+    ).expectError('Not Found: architecture not found')
+  })
+
+  test(DockerSize.prototype.getSizeFromImageByLatestSemver, () => {
+    given(sizeDataNoTagSemVerSort, 'amd64').expect({
+      size: 220000000,
     })
+    given(sizeDataNoTagSemVerSort).expect({
+      size: 400000000,
+    })
+    given(sizeDataNoTagSemVerSort, 'nonexistentArch').expectError(
+      'Not Found: architecture not found',
+    )
   })
 })

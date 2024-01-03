@@ -55,7 +55,7 @@ describe('LibrariesIoApiProvider', function () {
       } catch (e) {
         expect(e).to.be.an.instanceof(ImproperlyConfigured)
         expect(e.prettyMessage).to.equal(
-          'Unable to select next Libraries.io token from pool'
+          'Unable to select next Libraries.io token from pool',
         )
       }
     })
@@ -80,7 +80,7 @@ describe('LibrariesIoApiProvider', function () {
 
       expect(token.update).to.have.been.calledWith(
         remaining,
-        nextReset * 1000 + tickTime
+        nextReset * 1000 + tickTime,
       )
       expect(token.invalidate).not.to.have.been.called
     })
@@ -121,7 +121,7 @@ describe('LibrariesIoApiProvider', function () {
 
     it('should throw an exception', async function () {
       return expect(
-        provider.fetch(mockRequest, '/npm/badge-maker', {})
+        provider.fetch(mockRequest, '/npm/badge-maker', {}),
       ).to.be.rejectedWith(Error, 'connection timeout')
     })
   })

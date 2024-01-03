@@ -1,12 +1,12 @@
 import BaseJsonService from '../base-json.js'
 
-class GoodServiceOne extends BaseJsonService {
+class GoodServiceArrayOne extends BaseJsonService {
   static category = 'build'
   static route = { base: 'good', pattern: 'one' }
 }
-class GoodServiceTwo extends BaseJsonService {
+class GoodServiceArrayTwo extends BaseJsonService {
   static category = 'build'
   static route = { base: 'good', pattern: 'two' }
 }
 
-export default [GoodServiceOne, GoodServiceTwo]
+export default [GoodServiceArrayOne, GoodServiceArrayTwo]

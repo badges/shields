@@ -56,7 +56,7 @@ t.create('renders correctly')
           role: 'BACKER',
           tier: 'monthly backer',
         },
-      ])
+      ]),
   )
   .expectBadge({
     label: 'monthly backers',
@@ -70,7 +70,7 @@ t.create('shows 0 when given a non existent tier')
   .intercept(nock =>
     nock('https://opencollective.com/')
       .get('/shields/members/all.json?TierId=1234567890')
-      .reply(200, [])
+      .reply(200, []),
   )
   .expectBadge({
     label: 'new tier',

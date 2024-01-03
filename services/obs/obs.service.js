@@ -58,13 +58,13 @@ export default class ObsService extends BaseXmlService {
         parserOptions: {
           ignoreAttributes: false,
         },
-      })
+      }),
     )
   }
 
   async handle(
     { project, packageName, repository, arch },
-    { instance = 'https://api.opensuse.org' }
+    { instance = 'https://api.opensuse.org' },
   ) {
     const resp = await this.fetch({
       instance,
