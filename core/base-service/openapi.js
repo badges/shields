@@ -241,7 +241,7 @@ function category2openapi(category, services) {
           name: 'style',
           in: 'query',
           required: false,
-          description: `If not specified, the default style is "${
+          description: `If not specified, the default style for this badge is "${
             category.name.toLowerCase() === 'social' ? 'social' : 'flat'
           }".`,
           schema: {
