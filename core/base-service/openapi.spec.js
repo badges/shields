@@ -88,7 +88,8 @@ const expected = {
         name: 'style',
         in: 'query',
         required: false,
-        description: 'If not specified, the default style is "flat".',
+        description:
+          'If not specified, the default style for this badge is "flat".',
         schema: {
           enum: ['flat', 'flat-square', 'plastic', 'for-the-badge', 'social'],
           type: 'string',
