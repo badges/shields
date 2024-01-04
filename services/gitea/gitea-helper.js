@@ -1,5 +1,6 @@
 const documentation = `
-Note that the gitea_url parameter is required because there is canonical hosted gitea service provided by Gitea.
+Note that only internet-accessible Gitea/Forgejo based instances are supported, for example https://gitea.com, https://codeberg.org.
+For self-hosted instances, the gitea_url parameter is required.
 `
 
 function httpErrorsFor() {

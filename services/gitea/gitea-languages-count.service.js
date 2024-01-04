@@ -12,7 +12,7 @@ The keys could be anything and {} is a valid response (e.g: for an empty repo)
 const schema = Joi.object().pattern(/./, nonNegativeInteger)
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl.required(),
+  gitea_url: optionalUrl,
 }).required()
 
 export default class GiteaLanguageCount extends GiteaBase {
@@ -32,15 +32,15 @@ export default class GiteaLanguageCount extends GiteaBase {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'forgejo',
+            example: 'gitea',
           }),
           pathParam({
             name: 'repo',
-            example: 'forgejo',
+            example: 'tea',
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://codeberg.org',
+            example: 'https://gitea.com',
             required: true,
           }),
         ],
@@ -66,7 +66,7 @@ export default class GiteaLanguageCount extends GiteaBase {
     })
   }
 
-  async handle({ user, repo }, { gitea_url: baseUrl }) {
+  async handle({ user, repo }, { gitea_url: baseUrl = 'https://gitea.com' }) {
     const data = await this.fetch({
       user,
       repo,

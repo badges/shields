@@ -18,7 +18,7 @@ const displayNameEnum = ['tag', 'release']
 const dateOrderByEnum = ['created_at', 'published_at']
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl.required(),
+  gitea_url: optionalUrl,
   include_prereleases: Joi.equal(''),
   sort: Joi.string()
     .valid(...sortEnum)
@@ -48,15 +48,15 @@ export default class GiteaRelease extends GiteaBase {
         parameters: [
           pathParam({
             name: 'user',
-            example: 'forgejo',
+            example: 'gitea',
           }),
           pathParam({
             name: 'repo',
-            example: 'forgejo',
+            example: 'tea',
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://codeberg.org',
+            example: 'https://gitea.com',
             required: true,
           }),
           queryParam({
@@ -122,7 +122,7 @@ export default class GiteaRelease extends GiteaBase {
   async handle(
     { user, repo },
     {
-      gitea_url: baseUrl,
+      gitea_url: baseUrl = 'https://gitea.com',
       include_prereleases: pre,
       sort,
       display_name: displayName,
