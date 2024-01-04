@@ -1,4 +1,4 @@
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import GalaxyToolshedService from './galaxytoolshed-base.js'
 
@@ -9,59 +9,81 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
     pattern: ':repository/:owner/:tool?/:requirement?',
   }
 
-  static examples = [
-    {
-      title: 'Galaxy Toolshed (repository)',
-      pattern: ':repository/:owner',
-      namedParams: {
-        repository: 'sra_tools',
-        owner: 'iuc',
+  static openApi = {
+    '/galaxytoolshed/v/{repository}/{owner}': {
+      get: {
+        summary: 'Galaxy Toolshed - Repository',
+        parameters: pathParams(
+          {
+            name: 'repository',
+            example: 'sra_tools',
+          },
+          {
+            name: 'owner',
+            example: 'iuc',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '83c7d564b128' }),
     },
-    {
-      title: 'Galaxy Toolshed (tool)',
-      pattern: ':repository/:owner/:tool',
-      namedParams: {
-        repository: 'sra_tools',
-        owner: 'iuc',
-        tool: 'fastq_dump',
+    '/galaxytoolshed/v/{repository}/{owner}/{tool}': {
+      get: {
+        summary: 'Galaxy Toolshed - Tool',
+        parameters: pathParams(
+          {
+            name: 'repository',
+            example: 'sra_tools',
+          },
+          {
+            name: 'owner',
+            example: 'iuc',
+          },
+          {
+            name: 'tool',
+            example: 'fastq_dump',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '1.2.5' }),
     },
-    {
-      title: 'Galaxy Toolshed (requirement)',
-      pattern: ':repository/:owner/:tool/:requirement',
-      namedParams: {
-        repository: 'sra_tools',
-        owner: 'iuc',
-        tool: 'fastq_dump',
-        requirement: 'perl',
+    '/galaxytoolshed/v/{repository}/{owner}/{tool}/{requirement}': {
+      get: {
+        summary: 'Galaxy Toolshed - Requirement',
+        parameters: pathParams(
+          {
+            name: 'repository',
+            example: 'sra_tools',
+          },
+          {
+            name: 'owner',
+            example: 'iuc',
+          },
+          {
+            name: 'tool',
+            example: 'fastq_dump',
+          },
+          {
+            name: 'requirement',
+            example: 'perl',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '5.18.1' }),
     },
-  ]
+  }
 
   static transform({ response, tool, requirement }) {
     if (tool !== undefined) {
-      const dataTool = response[1].valid_tools.filter(function (x) {
-        return x.id === tool
-      })[0]
-      if (typeof dataTool === 'undefined') {
+      const dataTool = response[1].valid_tools.find(x => x.id === tool)
+      if (dataTool === undefined) {
         throw new NotFound({ prettyMessage: 'tool not found' })
       }
       // Requirement version
       if (requirement !== undefined) {
-        const versions = dataTool.requirements.reduce(function (prev, curr) {
-          if (requirement === curr.name) {
-            return [...prev, curr.version]
-          }
-          return [...prev]
-        }, [])
-        if (typeof versions === 'undefined' || !versions.length) {
+        const dataRequirement = dataTool.requirements.find(
+          x => x.name === requirement,
+        )
+        if (dataRequirement === undefined) {
           throw new NotFound({ prettyMessage: 'requirement not found' })
         }
-        return versions[0]
+        return dataRequirement.version
       }
       // Tool version
       return dataTool.version
