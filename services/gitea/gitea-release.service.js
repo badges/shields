@@ -57,7 +57,6 @@ export default class GiteaRelease extends GiteaBase {
           queryParam({
             name: 'gitea_url',
             example: 'https://gitea.com',
-            required: true,
           }),
           queryParam({
             name: 'include_prereleases',
