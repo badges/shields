@@ -10,7 +10,7 @@ const mockLatestRelease = release => nock =>
 
 const mockReleases = releases => nock =>
   nock('https://api.github.com')
-    .get('/repos/photonstorm/phaser/releases')
+    .get('/repos/photonstorm/phaser/releases?per_page=100')
     .reply(200, releases)
 
 t.create('Downloads all releases')
