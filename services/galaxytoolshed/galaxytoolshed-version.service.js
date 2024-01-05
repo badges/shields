@@ -12,7 +12,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
   static openApi = {
     '/galaxytoolshed/v/{repository}/{owner}': {
       get: {
-        summary: 'Galaxy Toolshed - Repository',
+        summary: 'Galaxy Toolshed - Repository Version',
         parameters: pathParams(
           {
             name: 'repository',
@@ -27,7 +27,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
     },
     '/galaxytoolshed/v/{repository}/{owner}/{tool}': {
       get: {
-        summary: 'Galaxy Toolshed - Tool',
+        summary: 'Galaxy Toolshed - Tool Version',
         parameters: pathParams(
           {
             name: 'repository',
@@ -46,7 +46,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
     },
     '/galaxytoolshed/v/{repository}/{owner}/{tool}/{requirement}': {
       get: {
-        summary: 'Galaxy Toolshed - Requirement',
+        summary: 'Galaxy Toolshed - Tool Requirement Version',
         parameters: pathParams(
           {
             name: 'repository',
