@@ -24,7 +24,7 @@ describe('GiteaBase', function () {
       public: {
         services: {
           gitea: {
-            authorizedOrigins: ['try.gitea.io'],
+            authorizedOrigins: ['https://try.gitea.io'],
           },
         },
       },
@@ -34,7 +34,7 @@ describe('GiteaBase', function () {
     }
 
     it('sends the auth information as configured', async function () {
-      const scope = nock('try.gitea.io')
+      const scope = nock('https://try.gitea.io')
         .get('/api/v1/repos/CanisHelix/shields-badge-test/releases')
         .matchHeader('Authorization', 'Bearer fake-key')
         .reply(200, { message: 'fake message' })
