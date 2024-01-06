@@ -1,4 +1,4 @@
-name: Services@node 20
+name: Services@node 21
 on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
@@ -7,7 +7,7 @@ on:
       - 'gh-readonly-queue/**'
 
 jobs:
-  test-services-20:
+  test-services-21:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 20
+          node-version: 21
         env:
           NPM_CONFIG_ENGINE_STRICT: 'false'
 
@@ -29,6 +29,7 @@ jobs:
           librariesio-tokens: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
           obs-user: '${{ secrets.SERVICETESTS_OBS_USER }}'
           obs-pass: '${{ secrets.SERVICETESTS_OBS_PASS }}'
+          pepy-key: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
           sl-insight-user-uuid: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
           sl-insight-api-token: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           twitch-client-id: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'

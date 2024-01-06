@@ -30,12 +30,13 @@ export default class Lemmy extends BaseJsonService {
     },
   }
 
-  static defaultBadgeData = { label: 'community' }
+  static defaultBadgeData = { label: 'community', namedLogo: 'lemmy' }
 
   static render({ community, members }) {
     return {
       label: `subscribe to ${community}`,
       message: metric(members),
+      style: 'social',
       color: 'brightgreen',
     }
   }

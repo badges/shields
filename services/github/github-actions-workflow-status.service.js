@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParam, queryParam } from '../index.js'
 import { documentation } from './github-helpers.js'
 
 const schema = Joi.object({
@@ -14,8 +14,6 @@ const queryParamSchema = Joi.object({
   branch: Joi.alternatives().try(Joi.string(), Joi.number().cast('string')),
 }).required()
 
-const keywords = ['action', 'actions']
-
 export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService {
   static category = 'build'
 
@@ -25,53 +23,28 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub Workflow Status',
-      namedParams: {
-        user: 'actions',
-        repo: 'toolkit',
-        workflow: 'unit-tests.yml',
+  static openApi = {
+    '/github/actions/workflow/status/{user}/{repo}/{workflow}': {
+      get: {
+        summary: 'GitHub Actions Workflow Status',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'actions' }),
+          pathParam({ name: 'repo', example: 'toolkit' }),
+          pathParam({ name: 'workflow', example: 'unit-tests.yml' }),
+          queryParam({ name: 'branch', example: 'main' }),
+          queryParam({
+            name: 'event',
+            example: 'push',
+            description:
+              'See GitHub Actions [Events that trigger workflows](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows) for allowed values.',
+          }),
+        ],
       },
-      staticPreview: renderBuildStatusBadge({
-        status: 'passing',
-      }),
-      documentation,
-      keywords,
     },
-    {
-      title: 'GitHub Workflow Status (with branch)',
-      namedParams: {
-        user: 'actions',
-        repo: 'toolkit',
-        workflow: 'unit-tests.yml',
-      },
-      queryParams: {
-        branch: 'main',
-      },
-      staticPreview: renderBuildStatusBadge({
-        status: 'passing',
-      }),
-      documentation,
-      keywords,
-    },
-    {
-      title: 'GitHub Workflow Status (with event)',
-      namedParams: {
-        user: 'actions',
-        repo: 'toolkit',
-        workflow: 'unit-tests.yml',
-      },
-      queryParams: {
-        event: 'push',
-      },
-      staticPreview: renderBuildStatusBadge({
-        status: 'passing',
-      }),
-      documentation,
-      keywords,
-    },
-  ]
+  }
+
+  static _cacheLength = 60
 
   static defaultBadgeData = {
     label: 'build',

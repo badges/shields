@@ -112,12 +112,24 @@ generated API key.
 
 ### Discord
 
-Using a token for Dicsord is optional but will allow higher API rates.
+Using a token for Discord is optional but will allow higher API rates.
 
 - `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
 
 Register an application in the [Discord developer console](https://discord.com/developers).
 To obtain a token, simply create a bot for your application.
+
+### DockerHub
+
+Using authentication for DockerHub is optional but can be used to allow
+higher API rates or access to private repos.
+
+- `DOCKERHUB_USER` (yml: `private.dockerhub_username`)
+- `DOCKERHUB_PAT` (yml: `private.dockerhub_pat`)
+
+`DOCKERHUB_PAT` is a Personal Access Token. Generate a token in your
+[account security settings](https://hub.docker.com/settings/security) with
+"Read-Only" or "Public Repo Read-Only", depending on your needs.
 
 ### Drone
 
@@ -166,6 +178,15 @@ token, though it's not required.
 These settings are used by shields.io for GitHub OAuth app authorization
 but will not be necessary for most self-hosted installations. See
 [production-hosting.md](./production-hosting.md).
+
+### Gitea
+
+- `GITEA_ORIGINS` (yml: `public.services.gitea.authorizedOrigins`)
+- `GITEA_TOKEN` (yml: `private.gitea_token`)
+
+A Gitea [Personal Access Token][gitea-pat] is required for accessing private content. If you need a Gitea token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
+
+[gitea-pat]: https://docs.gitea.com/development/api-usage#generating-and-listing-api-tokens
 
 ### GitLab
 
@@ -253,6 +274,14 @@ of a package.
 OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
 An [API token](https://graphql-docs-v2.opencollective.com/access)
 can be provided to access a higher rate limit of 100 reqs/minute.
+
+### Pepy
+
+- `PEPY_KEY` (yml: `pepy_key`)
+
+The Pepy API requires authentication. To obtain a key,
+Create an account, sign in and obtain generate a key on your
+[account page](https://www.pepy.tech/user).
 
 ### SymfonyInsight (formerly Sensiolabs)
 

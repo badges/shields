@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { matcher } from 'matcher'
 import { nonNegativeInteger } from '../validators.js'
 import { latest } from '../version.js'
-import { NotFound } from '../index.js'
+import { NotFound, queryParams } from '../index.js'
 import { httpErrorsFor } from './github-helpers.js'
 
 const releaseInfoSchema = Joi.object({
@@ -43,6 +43,7 @@ async function fetchReleases(serviceInstance, { user, repo }) {
     url: `/repos/${user}/${repo}/releases`,
     schema: releaseInfoArraySchema,
     ...commonAttrs,
+    options: { searchParams: { per_page: 100 } },
   })
   return releases
 }
@@ -66,21 +67,37 @@ function getLatestRelease({ releases, sort, includePrereleases }) {
   return releases[0]
 }
 
+const sortEnum = ['date', 'semver']
+
 const queryParamSchema = Joi.object({
   include_prereleases: Joi.equal(''),
-  sort: Joi.string().valid('date', 'semver').default('date'),
+  sort: Joi.string()
+    .valid(...sortEnum)
+    .default('date'),
   filter: Joi.string(),
 }).required()
 
-const filterDocs = `<div>
-  <p>
+const filterDocs = `<p>
   The <code>filter</code> param can be used to apply a filter to the
   project's tag or release names before selecting the latest from the list.
   Two constructs are available: <code>*</code> is a wildcard matching zero
   or more characters, and if the pattern starts with a <code>!</code>,
   the whole pattern is negated.
-  </p>
-</div>`
+</p>`
+
+const openApiQueryParams = queryParams(
+  {
+    name: 'include_prereleases',
+    example: null,
+    schema: { type: 'boolean' },
+  },
+  {
+    name: 'sort',
+    example: 'semver',
+    schema: { type: 'string', enum: sortEnum },
+  },
+  { name: 'filter', example: '*beta*', description: filterDocs },
+)
 
 function applyFilter({ releases, filter, displayName }) {
   if (!filter) {
@@ -136,7 +153,7 @@ async function fetchLatestRelease(
   return latestRelease
 }
 
-export { fetchLatestRelease, filterDocs, queryParamSchema }
+export { fetchLatestRelease, queryParamSchema, openApiQueryParams }
 
 // currently only used for tests
 export const _getLatestRelease = getLatestRelease

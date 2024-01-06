@@ -34,6 +34,8 @@ class BaseXmlService extends BaseService {
    *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
    *    for allowed keys
    *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @param {object} [attrs.parserOptions={}] Options to pass to fast-xml-parser. See
    *    [documentation](https://github.com/NaturalIntelligence/fast-xml-parser#xml-to-json)
    * @returns {object} Parsed response
@@ -46,6 +48,7 @@ class BaseXmlService extends BaseService {
     options = {},
     httpErrors = {},
     systemErrors = {},
+    logErrors = [429],
     parserOptions = {},
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
@@ -58,6 +61,7 @@ class BaseXmlService extends BaseService {
       options: mergedOptions,
       httpErrors,
       systemErrors,
+      logErrors,
     })
     const validateResult = XMLValidator.validate(buffer)
     if (validateResult !== true) {

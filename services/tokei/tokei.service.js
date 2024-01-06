@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   lines: nonNegativeInteger,
 }).required()
 
-const documentation = `
+const description = `
 The \`provider\` is the domain name of git host.
 If no TLD is provided, \`.com\` will be added.
 For example, setting \`gitlab\` or \`bitbucket.org\` as the
@@ -26,19 +26,28 @@ export default class Tokei extends BaseJsonService {
 
   static route = { base: 'tokei/lines', pattern: ':provider/:user/:repo' }
 
-  static examples = [
-    {
-      title: 'Lines of code',
-      namedParams: {
-        provider: 'github',
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/tokei/lines/{provider}/{user}/{repo}': {
+      get: {
+        summary: 'Lines of code',
+        description,
+        parameters: pathParams(
+          {
+            name: 'provider',
+            example: 'github',
+          },
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+        ),
       },
-      staticPreview: this.render({ lines: 119500 }),
-      keywords: ['loc', 'tokei'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'total lines',

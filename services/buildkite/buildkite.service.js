@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 // unknown is a valid 'other' status for Buildkite
 const schema = Joi.object({
@@ -11,25 +11,32 @@ export default class Buildkite extends BaseJsonService {
   static category = 'build'
   static route = { base: 'buildkite', pattern: ':identifier/:branch*' }
 
-  static examples = [
-    {
-      title: 'Buildkite',
-      pattern: ':identifier',
-      namedParams: {
-        identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+  static openApi = {
+    '/buildkite/{identifier}': {
+      get: {
+        summary: 'Buildkite',
+        parameters: pathParams({
+          name: 'identifier',
+          example: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+        }),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-    {
-      title: 'Buildkite (branch)',
-      pattern: ':identifier/:branch',
-      namedParams: {
-        identifier: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
-        branch: 'master',
+    '/buildkite/{identifier}/{branch}': {
+      get: {
+        summary: 'Buildkite (branch)',
+        parameters: pathParams(
+          {
+            name: 'identifier',
+            example: '3826789cf8890b426057e6fe1c4e683bdf04fa24d498885489',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 

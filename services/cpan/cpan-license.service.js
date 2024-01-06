@@ -1,5 +1,5 @@
 import { pathParams } from '../index.js'
-import BaseCpanService from './cpan.js'
+import { BaseCpanService, description } from './cpan.js'
 
 export default class CpanLicense extends BaseCpanService {
   static category = 'license'
@@ -9,6 +9,7 @@ export default class CpanLicense extends BaseCpanService {
     '/cpan/l/{packageName}': {
       get: {
         summary: 'CPAN License',
+        description,
         parameters: pathParams({
           name: 'packageName',
           example: 'Config-Augeas',

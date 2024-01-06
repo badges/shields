@@ -14,7 +14,7 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
-const documentation = `
+const description = `
 <p>
   The CurseForge badge requires the <code>Project ID</code> in order access the
   <a href="https://docs.curseforge.com/#get-mod" target="_blank">CurseForge API</a>.
@@ -58,4 +58,4 @@ export default class BaseCurseForgeService extends BaseJsonService {
   }
 }
 
-export { BaseCurseForgeService, documentation }
+export { BaseCurseForgeService, description }

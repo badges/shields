@@ -178,6 +178,7 @@ export default class GithubTotalStarService extends GithubAuthV4Service {
   static render({ totalStars, user }) {
     return {
       message: metric(totalStars),
+      style: 'social',
       color: 'blue',
       link: [`https://github.com/${user}`],
     }

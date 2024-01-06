@@ -1,8 +1,14 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { optionalUrl } from '../validators.js'
-import { BaseSvgScrapingService, NotFound, redirector } from '../index.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import {
+  BaseSvgScrapingService,
+  NotFound,
+  redirector,
+  pathParam,
+  queryParam,
+} from '../index.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 
 const badgeSchema = Joi.object({
   message: Joi.alternatives()
@@ -46,22 +52,28 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Gitlab pipeline status',
-      namedParams: { project: 'gitlab-org/gitlab' },
-      queryParams: { branch: 'master' },
-      staticPreview: this.render({ status: 'passed' }),
-      documentation: documentation + moreDocs,
+  static openApi = {
+    '/gitlab/pipeline-status/{project}': {
+      get: {
+        summary: 'Gitlab Pipeline Status',
+        description: description + moreDocs,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+          queryParam({
+            name: 'branch',
+            example: 'master',
+          }),
+        ],
+      },
     },
-    {
-      title: 'Gitlab pipeline status (self-managed)',
-      namedParams: { project: 'GNOME/pango' },
-      queryParams: { gitlab_url: 'https://gitlab.gnome.org', branch: 'master' },
-      staticPreview: this.render({ status: 'passed' }),
-      documentation: documentation + moreDocs,
-    },
-  ]
+  }
 
   static render({ status }) {
     return renderBuildStatusBadge({ status })

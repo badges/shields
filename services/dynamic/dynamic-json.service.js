@@ -49,6 +49,7 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
       schema,
       url,
       httpErrors,
+      logErrors: [],
     })
   }
 }

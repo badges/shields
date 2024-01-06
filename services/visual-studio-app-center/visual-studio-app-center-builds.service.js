@@ -1,10 +1,9 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import {
   BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
+  description,
 } from './visual-studio-app-center-base.js'
 
 const schema = Joi.array().items({
@@ -19,20 +18,32 @@ export default class VisualStudioAppCenterBuilds extends BaseVisualStudioAppCent
     pattern: ':owner/:app/:branch/:token',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio App Center Builds',
-      namedParams: {
-        owner: 'jct',
-        app: 'my-amazing-app',
-        branch: 'master',
-        token: 'ac70cv...',
+  static openApi = {
+    '/visual-studio-app-center/builds/{owner}/{app}/{branch}/{token}': {
+      get: {
+        summary: 'Visual Studio App Center Builds',
+        description,
+        parameters: pathParams(
+          {
+            name: 'owner',
+            example: 'jct',
+          },
+          {
+            name: 'app',
+            example: 'my-amazing-app',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+          {
+            name: 'token',
+            example: 'ac70cv...',
+          },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'build',

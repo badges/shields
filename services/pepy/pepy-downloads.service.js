@@ -20,6 +20,12 @@ export default class PepyDownloads extends BaseJsonService {
     pattern: 'dt/:packageName',
   }
 
+  static auth = {
+    passKey: 'pepy_key',
+    authorizedOrigins: ['https://api.pepy.tech'],
+    isRequired: true,
+  }
+
   static openApi = {
     '/pepy/dt/{packageName}': {
       get: {
@@ -38,10 +44,12 @@ export default class PepyDownloads extends BaseJsonService {
   static defaultBadgeData = { label: 'downloads' }
 
   async fetch({ packageName }) {
-    return this._requestJson({
-      url: `https://api.pepy.tech/api/v2/projects/${packageName}`,
-      schema,
-    })
+    return this._requestJson(
+      this.authHelper.withApiKeyHeader({
+        url: `https://api.pepy.tech/api/v2/projects/${packageName}`,
+        schema,
+      }),
+    )
   }
 
   async handle({ packageName }) {

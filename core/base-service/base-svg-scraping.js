@@ -63,6 +63,8 @@ class BaseSvgScrapingService extends BaseService {
    *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
    *    for allowed keys
    *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
+   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
+   *    that will be logged (to sentry, if configured).
    * @returns {object} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
@@ -73,6 +75,7 @@ class BaseSvgScrapingService extends BaseService {
     options = {},
     httpErrors = {},
     systemErrors = {},
+    logErrors = [429],
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
@@ -84,6 +87,7 @@ class BaseSvgScrapingService extends BaseService {
       options: mergedOptions,
       httpErrors,
       systemErrors,
+      logErrors,
     })
     logTrace(emojic.dart, 'Response SVG', buffer)
     const data = {

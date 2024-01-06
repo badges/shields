@@ -93,10 +93,6 @@ const config = {
                 href: 'https://discord.gg/HjJCwm5',
               },
               {
-                label: 'Twitter',
-                href: 'https://twitter.com/shields_io',
-              },
-              {
                 label: 'Awesome Badges',
                 href: 'https://github.com/badges/awesome-badges',
               },

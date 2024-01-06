@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
 import { BaseJsonService, pathParams } from '../index.js'
+import { description } from './gem-helpers.js'
 
 const ownerSchema = Joi.array().required()
 
@@ -12,6 +13,7 @@ export default class GemOwner extends BaseJsonService {
     '/gem/u/{user}': {
       get: {
         summary: 'Gem Owner',
+        description,
         parameters: pathParams({
           name: 'user',
           example: 'raphink',

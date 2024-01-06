@@ -1,6 +1,6 @@
-import { BaseService, InvalidResponse } from '../index.js'
+import { BaseService, InvalidResponse, pathParams } from '../index.js'
 
-const documentation = `
+const description = `
 OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
 and clearly identify which projects are active and which ones are retired. To enable this badge,
 simply create an OSSMETADATA tagging file at the root of your GitHub repository containing a
@@ -17,28 +17,44 @@ export default class OssTracker extends BaseService {
     pattern: ':user/:repo/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'OSS Lifecycle',
-      pattern: ':user/:repo',
-      namedParams: { user: 'Teevity', repo: 'ice' },
-      staticPreview: this.render({ status: 'active' }),
-      keywords: ['Netflix'],
-      documentation,
-    },
-    {
-      title: 'OSS Lifecycle (branch)',
-      pattern: ':user/:repo/:branch',
-      namedParams: {
-        user: 'Netflix',
-        repo: 'osstracker',
-        branch: 'documentation',
+  static openApi = {
+    '/osslifecycle/{user}/{repo}': {
+      get: {
+        summary: 'OSS Lifecycle',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'Teevity',
+          },
+          {
+            name: 'repo',
+            example: 'ice',
+          },
+        ),
       },
-      staticPreview: this.render({ status: 'active' }),
-      keywords: ['Netflix'],
-      documentation,
     },
-  ]
+    '/osslifecycle/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'OSS Lifecycle (branch)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'Netflix',
+          },
+          {
+            name: 'repo',
+            example: 'osstracker',
+          },
+          {
+            name: 'branch',
+            example: 'documentation',
+          },
+        ),
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'oss lifecycle' }
 
