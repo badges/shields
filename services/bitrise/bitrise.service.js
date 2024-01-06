@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 // https://devcenter.bitrise.io/api/app-status-badge/
 const schema = Joi.object({
@@ -18,14 +18,43 @@ export default class Bitrise extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Bitrise',
-      namedParams: { appId: '3ff11fe8457bd304', branch: 'master' },
-      queryParams: { token: 'lESRN9rEFFfDq92JtXs_jw' },
-      staticPreview: this.render({ status: 'success' }),
+  static openApi = {
+    '/bitrise/{appId}': {
+      get: {
+        summary: 'Bitrise',
+        parameters: [
+          pathParam({
+            name: 'appId',
+            example: '3ff11fe8457bd304',
+          }),
+          queryParam({
+            name: 'token',
+            example: 'lESRN9rEFFfDq92JtXs_jw',
+          }),
+        ],
+      },
     },
-  ]
+    '/bitrise/{appId}/{branch}': {
+      get: {
+        summary: 'Bitrise (branch)',
+        parameters: [
+          pathParam({
+            name: 'appId',
+            example: '3ff11fe8457bd304',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'master',
+          }),
+          queryParam({
+            name: 'token',
+            example: 'lESRN9rEFFfDq92JtXs_jw',
+            required: true,
+          }),
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'bitrise' }
 

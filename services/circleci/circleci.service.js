@@ -1,11 +1,16 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, redirector } from '../index.js'
+import {
+  BaseSvgScrapingService,
+  redirector,
+  pathParam,
+  queryParam,
+} from '../index.js'
 
 const circleSchema = Joi.object({ message: isBuildStatus }).required()
 const queryParamSchema = Joi.object({ token: Joi.string() }).required()
 
-const documentation = `
+const tokenDescription = `
   <p>
     You may specify an optional token to get the status for a private repository.
     <br />
@@ -25,22 +30,62 @@ class CircleCi extends BaseSvgScrapingService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'CircleCI',
-      namedParams: {
-        vcsType: 'github',
-        user: 'RedSparr0w',
-        repo: 'node-csgo-parser',
-        branch: 'master',
+  static openApi = {
+    '/circleci/build/{vcsType}/{user}/{repo}': {
+      get: {
+        summary: 'CircleCI',
+        parameters: [
+          pathParam({
+            name: 'vcsType',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
+            example: 'github',
+          }),
+          pathParam({
+            name: 'user',
+            example: 'RedSparr0w',
+          }),
+          pathParam({
+            name: 'repo',
+            example: 'node-csgo-parser',
+          }),
+          queryParam({
+            name: 'token',
+            example: 'abc123def456',
+            description: tokenDescription,
+          }),
+        ],
       },
-      queryParams: {
-        token: 'abc123def456',
-      },
-      staticPreview: this.render({ status: 'success' }),
-      documentation,
     },
-  ]
+    '/circleci/build/{vcsType}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'CircleCI (branch)',
+        parameters: [
+          pathParam({
+            name: 'vcsType',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
+            example: 'github',
+          }),
+          pathParam({
+            name: 'user',
+            example: 'RedSparr0w',
+          }),
+          pathParam({
+            name: 'repo',
+            example: 'node-csgo-parser',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'master',
+          }),
+          queryParam({
+            name: 'token',
+            example: 'abc123def456',
+            description: tokenDescription,
+          }),
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'build' }
 

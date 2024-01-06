@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { AuthHelper } from '../../core/base-service/auth-helper.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -21,6 +21,7 @@ const httpErrors = {
 function pullRequestClassGenerator(raw) {
   const routePrefix = raw ? 'pr-raw' : 'pr'
   const badgeSuffix = raw ? '' : ' open'
+  const titleSuffix = raw ? ' (raw)' : ''
 
   return class BitbucketPullRequest extends BaseJsonService {
     static name = `BitbucketPullRequest${raw ? 'Raw' : ''}`
@@ -31,25 +32,32 @@ function pullRequestClassGenerator(raw) {
       queryParamSchema,
     }
 
-    static examples = [
-      {
-        title: 'Bitbucket open pull requests',
-        namedParams: {
-          user: 'atlassian',
-          repo: 'python-bitbucket',
+    static get openApi() {
+      const key = `/bitbucket/${routePrefix}/{user}/{repo}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `Bitbucket open pull requests ${titleSuffix}`,
+          parameters: [
+            pathParam({
+              name: 'user',
+              example: 'atlassian',
+            }),
+            pathParam({
+              name: 'repo',
+              example: 'python-bitbucket',
+            }),
+            queryParam({
+              name: 'server',
+              example: 'https://bitbucket.mydomain.net',
+              description:
+                'When not specified, this will default to `https://bitbucket.org`.',
+            }),
+          ],
         },
-        staticPreview: this.render({ prs: 22 }),
-      },
-      {
-        title: 'Bitbucket Server open pull requests',
-        namedParams: {
-          user: 'foo',
-          repo: 'bar',
-        },
-        queryParams: { server: 'https://bitbucket.mydomain.net' },
-        staticPreview: this.render({ prs: 42 }),
-      },
-    ]
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'pull requests' }
 
