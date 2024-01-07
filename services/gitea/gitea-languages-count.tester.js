@@ -10,7 +10,7 @@ t.create('language count').get('/gitea/tea.json').expectBadge({
 
 t.create('language count (empty repo) (self-managed)')
   .get(
-    '/CanisHelix/shields-badge-test-empty.json?gitea_url=https://try.gitea.io',
+    '/CanisHelix/shields-badge-test-empty.json?gitea_url=https://codeberg.org',
   )
   .expectBadge({
     label: 'languages',
@@ -18,14 +18,14 @@ t.create('language count (empty repo) (self-managed)')
   })
 
 t.create('language count (self-managed)')
-  .get('/CanisHelix/shields-badge-test.json?gitea_url=https://try.gitea.io')
+  .get('/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'languages',
     message: Joi.number().integer().positive(),
   })
 
 t.create('language count (user or repo not found) (self-managed)')
-  .get('/CanisHelix/does-not-exist.json?gitea_url=https://try.gitea.io')
+  .get('/CanisHelix/does-not-exist.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'languages',
     message: 'user or repo not found',

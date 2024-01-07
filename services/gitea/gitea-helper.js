@@ -1,6 +1,6 @@
-const documentation = `
-Note that only internet-accessible Gitea/Forgejo based instances are supported, for example https://gitea.com, https://codeberg.org.
-For self-hosted instances, the gitea_url parameter is required.
+const description = `
+By default this badge looks for repositories on [gitea.com](https://gitea.com).
+To specify another instance like [codeberg](https://codeberg.org/), [forgejo](https://forgejo.org/) or a self-hosted instance, use the \`gitea_url\` query param.
 `
 
 function httpErrorsFor() {
@@ -10,4 +10,4 @@ function httpErrorsFor() {
   }
 }
 
-export { documentation, httpErrorsFor }
+export { description, httpErrorsFor }

@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { pathParam, queryParam } from '../index.js'
-import { documentation, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 /*
@@ -28,7 +28,7 @@ export default class GiteaLanguageCount extends GiteaBase {
     '/gitea/languages/count/{user}/{repo}': {
       get: {
         summary: 'Gitea language count',
-        description: documentation,
+        description,
         parameters: [
           pathParam({
             name: 'user',
@@ -57,7 +57,7 @@ export default class GiteaLanguageCount extends GiteaBase {
   }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetLanguages
+    // https://codeberg.org/api/swagger#/repository/repoGetLanguages
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,

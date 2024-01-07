@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
-import { documentation, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 const schema = Joi.array().items(
@@ -44,7 +44,7 @@ export default class GiteaRelease extends GiteaBase {
     '/gitea/v/release/{user}/{repo}': {
       get: {
         summary: 'Gitea Release',
-        description: documentation,
+        description,
         parameters: [
           pathParam({
             name: 'user',
@@ -86,7 +86,7 @@ export default class GiteaRelease extends GiteaBase {
   static defaultBadgeData = { label: 'release' }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetRelease
+    // https://codeberg.org/api/swagger#/repository/repoGetRelease
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
