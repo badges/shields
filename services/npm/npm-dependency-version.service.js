@@ -1,8 +1,9 @@
+import { pathParam, queryParam } from '../index.js'
 import { getDependencyVersion } from '../package-json-helpers.js'
-import NpmBase from './npm-base.js'
-
-const { queryParamSchema } = NpmBase
-const keywords = ['node']
+import NpmBase, {
+  queryParamSchema,
+  packageNameDescription,
+} from './npm-base.js'
 
 export default class NpmDependencyVersion extends NpmBase {
   static category = 'platform-support'
@@ -14,89 +15,55 @@ export default class NpmDependencyVersion extends NpmBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'npm peer dependency version',
-      pattern: ':packageName/peer/:dependency',
-      namedParams: {
-        packageName: 'react-boxplot',
-        dependency: 'prop-types',
+  static openApi = {
+    '/npm/dependency-version/{packageName}/{dependency}': {
+      get: {
+        summary: 'NPM (prod) Dependency Version',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'react-boxplot',
+            description: packageNameDescription,
+          }),
+          pathParam({
+            name: 'dependency',
+            example: 'simple-statistics',
+            description: packageNameDescription,
+          }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
+        ],
       },
-      staticPreview: this.render({
-        dependency: 'prop-types',
-        range: '^15.5.4',
-      }),
-      keywords,
     },
-    {
-      title: 'npm peer dependency version (scoped)',
-      pattern: ':scope?/:packageName/peer/:dependencyScope?/:dependency',
-      namedParams: {
-        scope: '@swellaby',
-        packageName: 'eslint-config',
-        dependency: 'eslint',
+    '/npm/dependency-version/{packageName}/{kind}/{dependency}': {
+      get: {
+        summary: 'NPM dev or peer Dependency Version',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'react-boxplot',
+            description: packageNameDescription,
+          }),
+          pathParam({
+            name: 'kind',
+            example: 'dev',
+            schema: { type: 'string', enum: this.getEnum('kind') },
+          }),
+          pathParam({
+            name: 'dependency',
+            example: 'prop-types',
+            description: packageNameDescription,
+          }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
+        ],
       },
-      staticPreview: this.render({
-        dependency: 'eslint',
-        range: '^3.0.0',
-      }),
-      keywords,
     },
-    {
-      title: 'npm dev dependency version',
-      pattern: ':packageName/dev/:dependency',
-      namedParams: {
-        packageName: 'react-boxplot',
-        dependency: 'eslint-config-standard',
-      },
-      staticPreview: this.render({
-        dependency: 'eslint-config-standard',
-        range: '^12.0.0',
-      }),
-      keywords,
-    },
-    {
-      title: 'npm dev dependency version (scoped)',
-      pattern: ':scope?/:packageName/dev/:dependencyScope?/:dependency',
-      namedParams: {
-        packageName: 'mocha',
-        dependencyScope: '@mocha',
-        dependency: 'contributors',
-      },
-      staticPreview: this.render({
-        dependency: '@mocha/contributors',
-        range: '^1.0.3',
-      }),
-      keywords,
-    },
-    {
-      title: 'npm (prod) dependency version',
-      pattern: ':packageName/:dependency',
-      namedParams: {
-        packageName: 'react-boxplot',
-        dependency: 'simple-statistics',
-      },
-      staticPreview: this.render({
-        dependency: 'simple-statistics',
-        range: '^6.1.1',
-      }),
-      keywords,
-    },
-    {
-      title: 'npm (prod) dependency version (scoped)',
-      pattern: ':scope?/:packageName/:dependencyScope?/:dependency',
-      namedParams: {
-        packageName: 'got',
-        dependencyScope: '@sindresorhus',
-        dependency: 'is',
-      },
-      staticPreview: this.render({
-        dependency: '@sindresorhus/is',
-        range: '^0.15.0',
-      }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'dependency',
