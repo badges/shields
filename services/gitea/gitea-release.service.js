@@ -86,7 +86,7 @@ export default class GiteaRelease extends GiteaBase {
   static defaultBadgeData = { label: 'release' }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://codeberg.org/api/swagger#/repository/repoGetRelease
+    // https://gitea.com/api/swagger#/repository/repoGetRelease
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,

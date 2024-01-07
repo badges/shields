@@ -57,7 +57,7 @@ export default class GiteaLanguageCount extends GiteaBase {
   }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://codeberg.org/api/swagger#/repository/repoGetLanguages
+    // https://gitea.com/api/swagger#/repository/repoGetLanguages
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,
