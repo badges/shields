@@ -41,11 +41,11 @@ function pullRequestClassGenerator(raw) {
           parameters: [
             pathParam({
               name: 'user',
-              example: 'atlassian',
+              example: 'shields-io',
             }),
             pathParam({
               name: 'repo',
-              example: 'python-bitbucket',
+              example: 'test-repo',
             }),
             queryParam({
               name: 'server',

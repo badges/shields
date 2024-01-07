@@ -37,15 +37,15 @@ class BitbucketPipelines extends BaseJsonService {
         parameters: pathParams(
           {
             name: 'user',
-            example: 'atlassian',
+            example: 'shields-io',
           },
           {
             name: 'repo',
-            example: 'adf-builder-javascript',
+            example: 'test-repo',
           },
           {
             name: 'branch',
-            example: 'task/SECO-2168',
+            example: 'main',
           },
         ),
       },

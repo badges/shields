@@ -26,11 +26,11 @@ function issueClassGenerator(raw) {
           parameters: pathParams(
             {
               name: 'user',
-              example: 'atlassian',
+              example: 'shields-io',
             },
             {
               name: 'repo',
-              example: 'python-bitbucket',
+              example: 'test-repo',
             },
           ),
         },
