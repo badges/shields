@@ -41,7 +41,7 @@ export default class Nostr extends BaseJsonService {
     const data = await this._requestJson({
       url: `https://api.nostr.band/v0/stats/profile/${npub}`,
       schema: mainSchema,
-      errorMessages: {
+      httpErrors: {
         400: 'invalid pubkey',
       },
     })
