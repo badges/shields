@@ -25,11 +25,12 @@ export default class Bitrise extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'appId',
-            example: '3ff11fe8457bd304',
+            example: '4a2b10a819d12b67',
           }),
           queryParam({
             name: 'token',
-            example: 'lESRN9rEFFfDq92JtXs_jw',
+            example: '859FMDR8QHwabCzwvZK6vQ',
+            required: true,
           }),
         ],
       },
@@ -40,7 +41,7 @@ export default class Bitrise extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'appId',
-            example: '3ff11fe8457bd304',
+            example: '4a2b10a819d12b67',
           }),
           pathParam({
             name: 'branch',
@@ -48,7 +49,7 @@ export default class Bitrise extends BaseJsonService {
           }),
           queryParam({
             name: 'token',
-            example: 'lESRN9rEFFfDq92JtXs_jw',
+            example: '859FMDR8QHwabCzwvZK6vQ',
             required: true,
           }),
         ],

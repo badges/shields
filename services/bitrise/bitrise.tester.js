@@ -3,14 +3,14 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('deploy status')
-  .get('/3ff11fe8457bd304.json?token=lESRN9rEFFfDq92JtXs_jw')
+  .get('/4a2b10a819d12b67.json?token=859FMDR8QHwabCzwvZK6vQ')
   .expectBadge({
     label: 'bitrise',
     message: isBuildStatus,
   })
 
 t.create('deploy status with branch')
-  .get('/3ff11fe8457bd304/master.json?token=lESRN9rEFFfDq92JtXs_jw')
+  .get('/4a2b10a819d12b67/master.json?token=859FMDR8QHwabCzwvZK6vQ')
   .expectBadge({
     label: 'bitrise',
     message: isBuildStatus,
