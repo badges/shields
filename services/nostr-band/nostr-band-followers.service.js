@@ -10,17 +10,17 @@ const mainSchema = Joi.object({
   stats: Joi.object().pattern(Joi.string(), npubSchema).required(),
 }).required()
 
-export default class Nostr extends BaseJsonService {
+export default class NostrBandFollowers extends BaseJsonService {
   static category = 'social'
 
   static route = {
-    base: 'nostr/followers',
+    base: 'nostr-band/followers',
     pattern: ':npub',
   }
 
   static examples = [
     {
-      title: 'Nostr Followers',
+      title: 'Nostr.band Followers',
       namedParams: {
         npub: 'npub18c556t7n8xa3df2q82rwxejfglw5przds7sqvefylzjh8tjne28qld0we7',
       },
