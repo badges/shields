@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
-import { documentation, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 const schema = Joi.array().items(
@@ -18,7 +18,7 @@ const displayNameEnum = ['tag', 'release']
 const dateOrderByEnum = ['created_at', 'published_at']
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl.required(),
+  gitea_url: optionalUrl,
   include_prereleases: Joi.equal(''),
   sort: Joi.string()
     .valid(...sortEnum)
@@ -44,20 +44,19 @@ export default class GiteaRelease extends GiteaBase {
     '/gitea/v/release/{user}/{repo}': {
       get: {
         summary: 'Gitea Release',
-        description: documentation,
+        description,
         parameters: [
           pathParam({
             name: 'user',
-            example: 'forgejo',
+            example: 'gitea',
           }),
           pathParam({
             name: 'repo',
-            example: 'forgejo',
+            example: 'tea',
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://codeberg.org',
-            required: true,
+            example: 'https://gitea.com',
           }),
           queryParam({
             name: 'include_prereleases',
@@ -87,7 +86,7 @@ export default class GiteaRelease extends GiteaBase {
   static defaultBadgeData = { label: 'release' }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetRelease
+    // https://gitea.com/api/swagger#/repository/repoGetRelease
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/releases`,
@@ -122,7 +121,7 @@ export default class GiteaRelease extends GiteaBase {
   async handle(
     { user, repo },
     {
-      gitea_url: baseUrl,
+      gitea_url: baseUrl = 'https://gitea.com',
       include_prereleases: pre,
       sort,
       display_name: displayName,
