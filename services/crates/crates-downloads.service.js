@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { InvalidParameter, NotFound, pathParams } from '../index.js'
+import { InvalidParameter, pathParams } from '../index.js'
 import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesDownloads extends BaseCratesService {
@@ -92,15 +92,6 @@ export default class CratesDownloads extends BaseCratesService {
     }
 
     const json = await this.fetch({ crate, version })
-
-    if (json.errors) {
-      /* a call like
-         https://crates.io/api/v1/crates/libc/0.1
-         or
-         https://crates.io/api/v1/crates/libc/0.1.76
-         returns a 200 OK with an errors object */
-      throw new NotFound({ prettyMessage: json.errors[0].detail })
-    }
 
     const downloads = this.transform({ variant, json })
 
