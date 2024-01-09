@@ -377,10 +377,13 @@ describe('category2openapi', function () {
   it('generates an Open API spec', function () {
     expect(
       clean(
-        category2openapi({ name: 'build' }, [
-          OpenApiService.getDefinition(),
-          LegacyService.getDefinition(),
-        ]),
+        category2openapi({
+          category: { name: 'build' },
+          services: [
+            OpenApiService.getDefinition(),
+            LegacyService.getDefinition(),
+          ],
+        }),
       ),
     ).to.deep.equal(expected)
   })
