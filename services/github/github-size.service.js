@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import { nonNegativeInteger } from '../validators.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
@@ -25,33 +25,24 @@ export default class GithubSize extends GithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub file size in bytes',
-      namedParams: {
-        user: 'webcaetano',
-        repo: 'craft',
-        path: 'build/phaser-craft.min.js',
-      },
-      staticPreview: this.render({ size: 9170 }),
-      keywords: ['repo'],
-      documentation,
-    },
-    {
-      title: 'GitHub file size in bytes on a specified ref (branch/commit/tag)',
-      namedParams: {
-        user: 'webcaetano',
-        repo: 'craft',
-        path: 'build/phaser-craft.min.js',
-      },
-      staticPreview: this.render({ size: 9170 }),
-      keywords: ['repo'],
-      documentation,
-      queryParams: {
-        branch: 'master',
+  static openApi = {
+    '/github/size/{user}/{repo}/{path}': {
+      get: {
+        summary: 'GitHub file size in bytes',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'webcaetano' }),
+          pathParam({ name: 'repo', example: 'craft' }),
+          pathParam({ name: 'path', example: 'build/phaser-craft.min.js' }),
+          queryParam({
+            name: 'branch',
+            example: 'master',
+            description: 'can be a branch, a tag or a commit hash',
+          }),
+        ],
       },
     },
-  ]
+  }
 
   static render({ size }) {
     return {
