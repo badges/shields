@@ -32,7 +32,7 @@ export default class NostrBandFollowers extends BaseJsonService {
     },
   ]
 
-  static defaultBadgeData = { label: 'followers', namedLogo: 'nostr' }
+  static defaultBadgeData = { label: 'followers' }
 
   static render({ followers }) {
     return {
