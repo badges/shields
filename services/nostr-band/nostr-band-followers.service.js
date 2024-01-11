@@ -7,7 +7,11 @@ const npubSchema = Joi.object({
 }).required()
 
 const mainSchema = Joi.object({
-  stats: Joi.object().pattern(Joi.string(), npubSchema).required(),
+  stats: Joi.object()
+    .pattern(Joi.string(), npubSchema)
+    .min(1)
+    .max(1)
+    .required(),
 }).required()
 
 export default class NostrBandFollowers extends BaseJsonService {
