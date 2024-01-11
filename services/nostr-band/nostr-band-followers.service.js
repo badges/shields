@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const npubSchema = Joi.object({
   followers_pubkey_count: Joi.number().required(),
@@ -22,15 +22,21 @@ export default class NostrBandFollowers extends BaseJsonService {
     pattern: ':npub',
   }
 
-  static examples = [
-    {
-      title: 'Nostr.band Followers',
-      namedParams: {
-        npub: 'npub18c556t7n8xa3df2q82rwxejfglw5przds7sqvefylzjh8tjne28qld0we7',
+  static openApi = {
+    '/nostr-band/followers/{npub}': {
+      get: {
+        summary: 'Nostr.band Followers',
+        description:
+          'Returns the number of followers for a Nostr pubkey using the Nostr.band API.',
+        parameters: pathParams({
+          name: 'npub',
+          description: 'Nostr pubkey in (npub1...) format or hex.',
+          example:
+            'npub18c556t7n8xa3df2q82rwxejfglw5przds7sqvefylzjh8tjne28qld0we7',
+        }),
       },
-      staticPreview: this.render({ followers: 720 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'followers' }
 
