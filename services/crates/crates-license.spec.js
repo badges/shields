@@ -6,11 +6,13 @@ import CratesLicense from './crates-license.service.js'
 describe('CratesLicense', function () {
   test(CratesLicense.transform, () => {
     given({
+      crate: { max_stable_version: '1.0.0', max_version: '1.0.0' },
       version: { num: '1.0.0', license: 'MIT' },
-      versions: [{ license: 'MIT/Apache 2.0' }],
+      versions: [{ num: '1.0.0', license: 'MIT/Apache 2.0' }],
     }).expect({ license: 'MIT' })
     given({
-      versions: [{ license: 'MIT/Apache 2.0' }],
+      crate: { max_stable_version: '1.0.0', max_version: '1.0.0' },
+      versions: [{ num: '1.0.0', license: 'MIT/Apache 2.0' }],
     }).expect({ license: 'MIT/Apache 2.0' })
   })
 
@@ -31,7 +33,12 @@ describe('CratesLicense', function () {
   })
 
   it('throws InvalidResponse on null license with latest version', function () {
-    expect(() => CratesLicense.transform({ versions: [{ license: null }] }))
+    expect(() =>
+      CratesLicense.transform({
+        crate: { max_stable_version: '1.0.0', max_version: '1.0.0' },
+        versions: [{ num: '1.0.0', license: null }],
+      }),
+    )
       .to.throw(InvalidResponse)
       .with.property('prettyMessage', 'invalid null license')
   })

@@ -40,14 +40,17 @@ export default class CratesLicense extends BaseCratesService {
     return { message }
   }
 
-  static transform({ errors, version, versions }) {
+  static transform({ errors, version, crate, versions }) {
     // crates.io returns a 200 response with an errors object in
     // error scenarios, e.g. https://crates.io/api/v1/crates/libc/0.1
     if (errors) {
       throw new InvalidResponse({ prettyMessage: errors[0].detail })
     }
 
-    const license = version ? version.license : versions[0].license
+    const license = version
+      ? version.license
+      : BaseCratesService.defaultVersionObject(crate, versions).license
+
     if (!license) {
       throw new InvalidResponse({ prettyMessage: 'invalid null license' })
     }
