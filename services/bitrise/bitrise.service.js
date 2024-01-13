@@ -29,7 +29,7 @@ export default class Bitrise extends BaseJsonService {
           }),
           queryParam({
             name: 'token',
-            example: '859FMDR8QHwabCzwvZK6vQ',
+            example: 'abc123def456',
             required: true,
           }),
         ],
@@ -49,7 +49,7 @@ export default class Bitrise extends BaseJsonService {
           }),
           queryParam({
             name: 'token',
-            example: '859FMDR8QHwabCzwvZK6vQ',
+            example: 'abc123def456',
             required: true,
           }),
         ],
