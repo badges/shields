@@ -29,14 +29,7 @@ const versionSchema = Joi.object({
   }).required(),
 }).required()
 
-const errorSchema = Joi.object({
-  errors: Joi.array()
-    .items(Joi.object({ detail: Joi.string().required() }))
-    .min(1)
-    .required(),
-}).required()
-
-const schema = Joi.alternatives(crateSchema, versionSchema, errorSchema)
+const schema = Joi.alternatives(crateSchema, versionSchema)
 
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }

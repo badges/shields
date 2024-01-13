@@ -55,7 +55,7 @@ t.create('recent downloads (with version)')
 
 t.create('downloads (invalid version)')
   .get('/d/libc/7.json')
-  .expectBadge({ label: 'crates.io', message: 'invalid semver: 7' })
+  .expectBadge({ label: 'crates.io', message: 'not found' })
 
 t.create('downloads (not found)')
   .get('/d/not-a-real-package.json')

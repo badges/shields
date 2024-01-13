@@ -51,13 +51,7 @@ export default class CratesMSRV extends BaseCratesService {
 
   static defaultBadgeData = { label: 'msrv', color: 'blue' }
 
-  static transform({ errors, version, versions }) {
-    // crates.io returns a 200 response with an errors object in
-    // error scenarios, e.g. https://crates.io/api/v1/crates/libc/0.1
-    if (errors) {
-      throw new NotFound({ prettyMessage: errors[0].detail })
-    }
-
+  static transform({ version, versions }) {
     const msrv = version ? version.rust_version : versions[0].rust_version
     if (!msrv) {
       throw new NotFound({ prettyMessage: 'unknown' })
