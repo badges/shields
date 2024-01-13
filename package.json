@@ -167,7 +167,7 @@
     "eslint-config-standard": "17.1.0",
     "eslint-config-standard-jsx": "11.0.0",
     "eslint-config-standard-react": "13.0.0",
-    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-chai-friendly": "^0.7.4",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-icedfrisby": "^0.1.0",
     "eslint-plugin-import": "^2.29.1",
