@@ -37,7 +37,7 @@ export default class GithubSize extends GithubAuthV3Service {
           queryParam({
             name: 'branch',
             example: 'master',
-            description: 'can be a branch, a tag or a commit hash',
+            description: 'Can be a branch, a tag or a commit hash.',
           }),
         ],
       },
