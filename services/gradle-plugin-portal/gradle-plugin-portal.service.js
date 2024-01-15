@@ -1,5 +1,5 @@
-import { redirector } from '../index.js'
-import { documentation } from '../maven-metadata/maven-metadata.js'
+import { redirector, pathParam, queryParam } from '../index.js'
+import { description } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
@@ -8,24 +8,27 @@ export default redirector({
     base: 'gradle-plugin-portal/v',
     pattern: ':pluginId',
   },
-  examples: [
-    {
-      title: 'Gradle Plugin Portal',
-      queryParams: {
-        versionSuffix: '.1',
-        versionPrefix: '0.10',
+  openApi: {
+    '/gradle-plugin-portal/v/{pluginId}': {
+      get: {
+        summary: 'Gradle Plugin Portal Version',
+        description,
+        parameters: [
+          pathParam({ name: 'pluginId', example: 'com.gradle.plugin-publish' }),
+          queryParam({
+            name: 'versionPrefix',
+            example: '0.10',
+            description: 'filter only versions with this prefix',
+          }),
+          queryParam({
+            name: 'versionSuffix',
+            example: '.1',
+            description: 'filter only versions with this suffix',
+          }),
+        ],
       },
-      namedParams: {
-        pluginId: 'com.gradle.plugin-publish',
-      },
-      staticPreview: {
-        label: 'plugin portal',
-        message: 'v0.10.1',
-        color: 'blue',
-      },
-      documentation,
     },
-  ],
+  },
   transformPath: () => '/maven-metadata/v',
   transformQueryParams: ({ pluginId }) => {
     const groupPath = pluginId.replace(/\./g, '/')

@@ -1,8 +1,8 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseXmlService, NotFound } from '../index.js'
-import { documentation } from './maven-metadata.js'
+import { BaseXmlService, NotFound, queryParams } from '../index.js'
+import { description } from './maven-metadata.js'
 
 const queryParamSchema = Joi.object({
   metadataUrl: optionalUrl.required(),
@@ -29,20 +29,32 @@ export default class MavenMetadata extends BaseXmlService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Maven metadata URL',
-      namedParams: {},
-      queryParams: {
-        metadataUrl:
-          'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
-        versionPrefix: '29.',
-        versionSuffix: '-android',
+  static openApi = {
+    '/maven-metadata/v': {
+      get: {
+        summary: 'Maven metadata URL',
+        description,
+        parameters: queryParams(
+          {
+            name: 'metadataUrl',
+            example:
+              'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
+            required: true,
+          },
+          {
+            name: 'versionPrefix',
+            example: '29',
+            description: 'filter only versions with this prefix',
+          },
+          {
+            name: 'versionSuffix',
+            example: '-android',
+            description: 'filter only versions with this suffix',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '29.0-android' }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'maven',
