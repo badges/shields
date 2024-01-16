@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 
 const description = `
-<p><a href="https://hangar.minecraft.tools/">Hangar</a> is a plugin repository for the Paper, Waterfall and Folia platforms.</p>`
+<p><a href="https://hangar.papermc.io/">Hangar</a> is a plugin repository for the Paper, Waterfall and Folia platforms.</p>`
 
 const resourceSchema = Joi.object({
   stats: Joi.object({
