@@ -16,6 +16,8 @@ const resourceSchema = Joi.object({
 }).required()
 
 class BaseHangarService extends BaseJsonService {
+  static _cacheLength = 3600
+
   async fetch({
     slug,
     schema = resourceSchema,

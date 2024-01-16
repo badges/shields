@@ -1,4 +1,5 @@
 import { pathParams } from '../index.js'
+import { metric } from '../text-formatters.js'
 import { BaseHangarService, description } from './hangar-base.js'
 
 export default class HangarWatchers extends BaseHangarService {
@@ -29,7 +30,7 @@ export default class HangarWatchers extends BaseHangarService {
 
   static render({ watchers }) {
     return {
-      message: `${watchers}`,
+      message: metric(watchers),
     }
   }
 

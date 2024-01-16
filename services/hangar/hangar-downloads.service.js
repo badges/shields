@@ -6,7 +6,7 @@ export default class HangarDownloads extends BaseHangarService {
   static category = 'downloads'
 
   static route = {
-    base: 'hangar/downloads',
+    base: 'hangar/dt',
     pattern: ':slug',
   }
 
