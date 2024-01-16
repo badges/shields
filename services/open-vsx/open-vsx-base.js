@@ -16,13 +16,6 @@ const extensionQuerySchema = Joi.object({
 }).required()
 
 export default class OpenVSXBase extends BaseJsonService {
-  static keywords = [
-    'ovsx',
-    'open-vsx',
-    'ovsx-marketplace',
-    'open-vsx-marketplace',
-  ]
-
   static defaultBadgeData = {
     label: 'open vsx',
     color: 'blue',
@@ -41,3 +34,8 @@ export default class OpenVSXBase extends BaseJsonService {
     })
   }
 }
+
+const description =
+  '[Open VSX](https://open-vsx.org/) (OVSX) is a registry of extensions for VS Code compatible editors.'
+
+export { OpenVSXBase, description }

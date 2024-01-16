@@ -48,11 +48,13 @@ export default class KeybaseZEC extends KeybaseProfile {
   static defaultBadgeData = {
     label: 'zec',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ address }) {
     return {
       message: address,
+      style: 'social',
     }
   }
 

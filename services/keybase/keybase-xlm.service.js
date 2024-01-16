@@ -46,11 +46,13 @@ export default class KeybaseXLM extends KeybaseProfile {
   static defaultBadgeData = {
     label: 'xlm',
     color: 'informational',
+    namedLogo: 'keybase',
   }
 
   static render({ address }) {
     return {
       message: address,
+      style: 'social',
     }
   }
 

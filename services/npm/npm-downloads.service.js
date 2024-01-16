@@ -1,7 +1,8 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
+import { packageNameDescription } from './npm-base.js'
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
 const pointResponseSchema = Joi.object({
@@ -50,14 +51,26 @@ export default class NpmDownloads extends BaseJsonService {
     pattern: ':interval(dw|dm|dy|dt)/:scope(@.+)?/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'npm',
-      namedParams: { interval: 'dw', packageName: 'localeval' },
-      staticPreview: this.render({ interval: 'dw', downloadCount: 30000 }),
-      keywords: ['node'],
+  static openApi = {
+    '/npm/{interval}/{packageName}': {
+      get: {
+        summary: 'NPM Downloads',
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dw',
+            description: 'Weekly, Monthly, Yearly, or Total downloads',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+          },
+          {
+            name: 'packageName',
+            example: 'localeval',
+            description: packageNameDescription,
+          },
+        ),
+      },
     },
-  ]
+  }
 
   // For testing.
   static _intervalMap = intervalMap

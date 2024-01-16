@@ -1,7 +1,8 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 /*
@@ -23,20 +24,24 @@ export default class GitlabLanguageCount extends GitLabBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitLab language count',
-      namedParams: {
-        project: 'gitlab-org/gitlab',
+  static openApi = {
+    '/gitlab/languages/count/{project}': {
+      get: {
+        summary: 'GitLab Language Count',
+        description,
+        parameters: [
+          pathParam({
+            name: 'project',
+            example: 'gitlab-org/gitlab',
+          }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
+        ],
       },
-      queryParams: { gitlab_url: 'https://gitlab.com' },
-      staticPreview: {
-        label: 'languages',
-        message: '5',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'languages' }
 

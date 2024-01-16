@@ -13,7 +13,11 @@ const versionResponseSchema = Joi.object({
 
 export default class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
   static category = 'version'
-  static route = this.buildRoute('eclipse-marketplace/v')
+  static route = {
+    base: 'eclipse-marketplace/v',
+    pattern: ':name',
+  }
+
   static openApi = {
     '/eclipse-marketplace/v/{name}': {
       get: {

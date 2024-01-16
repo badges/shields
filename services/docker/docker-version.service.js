@@ -9,6 +9,7 @@ import {
   getMultiPageData,
   getDigestSemVerMatches,
 } from './docker-helpers.js'
+import { fetch } from './docker-hub-common-fetch.js'
 
 const buildSchema = Joi.object({
   count: nonNegativeInteger.required(),
@@ -33,6 +34,17 @@ const queryParamSchema = Joi.object({
 export default class DockerVersion extends BaseJsonService {
   static category = 'version'
   static route = { ...buildDockerUrl('v', true), queryParamSchema }
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: [
+      'https://hub.docker.com',
+      'https://registry.hub.docker.com',
+    ],
+    isRequired: false,
+  }
+
   static examples = [
     {
       title: 'Docker Image Version (latest by date)',
@@ -64,7 +76,7 @@ export default class DockerVersion extends BaseJsonService {
 
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
-    return this._requestJson({
+    return await fetch(this, {
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user,

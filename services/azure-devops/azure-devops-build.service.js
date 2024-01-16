@@ -1,14 +1,21 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, NotFound } from '../index.js'
-import { keywords, fetch } from './azure-devops-helpers.js'
+import {
+  BaseSvgScrapingService,
+  NotFound,
+  queryParam,
+  pathParam,
+} from '../index.js'
+import { fetch } from './azure-devops-helpers.js'
 
 const queryParamSchema = Joi.object({
   stage: Joi.string(),
   job: Joi.string(),
 })
 
-const documentation = `
+const description = `
+[Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
+
 A badge requires three pieces of information:
 \`ORGANIZATION\`, \`PROJECT_ID\` and \`DEFINITION_ID\`.
 
@@ -37,62 +44,68 @@ export default class AzureDevOpsBuild extends BaseSvgScrapingService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Azure DevOps builds',
-      pattern: ':organization/:projectId/:definitionId',
-      namedParams: {
-        organization: 'totodem',
-        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-        definitionId: '2',
+  static openApi = {
+    '/azure-devops/build/{organization}/{projectId}/{definitionId}': {
+      get: {
+        summary: 'Azure DevOps builds',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'totodem',
+          }),
+          pathParam({
+            name: 'projectId',
+            example: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '2',
+          }),
+          queryParam({
+            name: 'stage',
+            example: 'Successful Stage',
+          }),
+          queryParam({
+            name: 'job',
+            example: 'Successful Job',
+          }),
+        ],
       },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Azure DevOps builds (branch)',
-      pattern: ':organization/:projectId/:definitionId/:branch',
-      namedParams: {
-        organization: 'totodem',
-        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-        definitionId: '2',
-        branch: 'master',
+    '/azure-devops/build/{organization}/{projectId}/{definitionId}/{branch}': {
+      get: {
+        summary: 'Azure DevOps builds (branch)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'organization',
+            example: 'totodem',
+          }),
+          pathParam({
+            name: 'projectId',
+            example: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+          }),
+          pathParam({
+            name: 'definitionId',
+            example: '2',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'master',
+          }),
+          queryParam({
+            name: 'stage',
+            example: 'Successful Stage',
+          }),
+          queryParam({
+            name: 'job',
+            example: 'Successful Job',
+          }),
+        ],
       },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Azure DevOps builds (stage)',
-      namedParams: {
-        organization: 'totodem',
-        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-        definitionId: '5',
-      },
-      queryParams: {
-        stage: 'Successful Stage',
-      },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
-    },
-    {
-      title: 'Azure DevOps builds (job)',
-      namedParams: {
-        organization: 'totodem',
-        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-        definitionId: '5',
-      },
-      queryParams: {
-        stage: 'Successful Stage',
-        job: 'Successful Job',
-      },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
-    },
-  ]
+  }
 
   async handle(
     { organization, projectId, definitionId, branch },

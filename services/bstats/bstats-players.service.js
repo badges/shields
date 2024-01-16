@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.array()
   .items(Joi.array().items(Joi.number().required(), Joi.number().required()))
@@ -10,15 +10,17 @@ export default class BStatsPlayers extends BaseJsonService {
   static category = 'other'
   static route = { base: 'bstats/players', pattern: ':pluginid' }
 
-  static examples = [
-    {
-      title: 'bStats Players',
-      namedParams: {
-        pluginid: '1',
+  static openApi = {
+    '/bstats/players/{pluginid}': {
+      get: {
+        summary: 'bStats Players',
+        parameters: pathParams({
+          name: 'pluginid',
+          example: '1',
+        }),
       },
-      staticPreview: this.render({ players: 74299 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'players', color: 'blue' }
 

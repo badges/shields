@@ -27,7 +27,7 @@ function writeSpec(filename, spec) {
 
     writeSpec(
       path.join(specsPath, `${category.id}.yaml`),
-      category2openapi(category, services),
+      category2openapi({ category, services, sort: true }),
     )
   }
 
@@ -44,6 +44,10 @@ function writeSpec(filename, spec) {
   )
   writeSpec(
     path.join(specsPath, '1core.yaml'),
-    category2openapi({ name: 'Core' }, coreServices),
+    category2openapi({
+      category: { name: 'Core' },
+      services: coreServices,
+      sort: false,
+    }),
   )
 })()

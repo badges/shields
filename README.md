@@ -98,8 +98,8 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
-1. Install Node 18 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 18 and 20.
+1. Install Node 20 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 20 and 21.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -109,7 +109,7 @@ When server source files change, the badge server should automatically restart
 itself (using [nodemon][]). When the frontend files change, the frontend dev
 server (`docusaurus start`) should also automatically reload. However the badge
 definitions are built only before the server first starts. To regenerate those,
-either run `npm run defs` or manually restart the server.
+either run `npm run prestart` or manually restart the server.
 
 To debug a badge from the command line, run `npm run badge -- /npm/v/nock`.
 It also works with full URLs like

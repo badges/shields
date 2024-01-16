@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
-import { documentation, httpErrorsFor } from './gitlab-helper.js'
+import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
 
 const schema = Joi.array().items(
@@ -43,7 +43,7 @@ export default class GitLabRelease extends GitLabBase {
     '/gitlab/v/release/{project}': {
       get: {
         summary: 'GitLab Release',
-        description: documentation,
+        description,
         parameters: [
           pathParam({
             name: 'project',

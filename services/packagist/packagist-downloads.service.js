@@ -1,11 +1,12 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { optionalUrl } from '../validators.js'
+import { pathParam, queryParam } from '../index.js'
 import {
-  keywords,
   BasePackagistService,
   customServerDocumentationFragment,
   cacheDocumentationFragment,
+  description,
 } from './packagist-base.js'
 
 const periodMap = {
@@ -41,42 +42,39 @@ export default class PackagistDownloads extends BasePackagistService {
 
   static route = {
     base: 'packagist',
-    pattern: ':interval(dm|dd|dt)/:user/:repo',
+    pattern: ':interval(dd|dm|dt)/:user/:repo',
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Packagist Downloads',
-      namedParams: {
-        interval: 'dm',
-        user: 'doctrine',
-        repo: 'orm',
+  static openApi = {
+    '/packagist/{interval}/{user}/{repo}': {
+      get: {
+        summary: 'Packagist Downloads',
+        description: description + cacheDocumentationFragment,
+        parameters: [
+          pathParam({
+            name: 'interval',
+            example: 'dm',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Monthly, or Total downloads',
+          }),
+          pathParam({
+            name: 'user',
+            example: 'guzzlehttp',
+          }),
+          pathParam({
+            name: 'repo',
+            example: 'guzzle',
+          }),
+          queryParam({
+            name: 'server',
+            description: customServerDocumentationFragment,
+            example: 'https://packagist.org',
+          }),
+        ],
       },
-      staticPreview: renderDownloadsBadge({
-        downloads: 1000000,
-        interval: 'month',
-      }),
-      keywords,
-      documentation: cacheDocumentationFragment,
     },
-    {
-      title: 'Packagist Downloads (custom server)',
-      namedParams: {
-        interval: 'dm',
-        user: 'doctrine',
-        repo: 'orm',
-      },
-      staticPreview: renderDownloadsBadge({
-        downloads: 1000000,
-        interval: 'month',
-      }),
-      queryParams: { server: 'https://packagist.org' },
-      keywords,
-      documentation:
-        customServerDocumentationFragment + cacheDocumentationFragment,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

@@ -198,7 +198,13 @@ function addGlobalProperties(endpoints) {
   return paths
 }
 
-function services2openapi(services) {
+function sortPaths(obj) {
+  const entries = Object.entries(obj)
+  entries.sort((a, b) => a[1].get.summary.localeCompare(b[1].get.summary))
+  return Object.fromEntries(entries)
+}
+
+function services2openapi(services, sort) {
   const paths = {}
   for (const service of services) {
     if (service.openApi) {
@@ -221,10 +227,10 @@ function services2openapi(services) {
       }
     }
   }
-  return paths
+  return sort ? sortPaths(paths) : paths
 }
 
-function category2openapi(category, services) {
+function category2openapi({ category, services, sort = false }) {
   const spec = {
     openapi: '3.0.0',
     info: {
@@ -241,10 +247,12 @@ function category2openapi(category, services) {
           name: 'style',
           in: 'query',
           required: false,
-          description:
-            'One of: flat (default), flat-square, plastic, for-the-badge, social',
+          description: `If not specified, the default style for this badge is "${
+            category.name.toLowerCase() === 'social' ? 'social' : 'flat'
+          }".`,
           schema: {
             type: 'string',
+            enum: ['flat', 'flat-square', 'plastic', 'for-the-badge', 'social'],
           },
           example: 'flat',
         },
@@ -332,7 +340,7 @@ function category2openapi(category, services) {
         },
       },
     },
-    paths: services2openapi(services),
+    paths: services2openapi(services, sort),
   }
 
   return spec
@@ -413,7 +421,7 @@ function queryParam({
  * ```
  * const params = [
  *   queryParam({ name: 'name1', example: 'example1' }),
- *   queryParams({ name: 'name2', example: 'example2' }),
+ *   queryParam({ name: 'name2', example: 'example2' }),
  * ]
  * ```
  *
