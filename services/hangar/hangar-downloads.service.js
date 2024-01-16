@@ -11,7 +11,7 @@ export default class HangarDownloads extends BaseHangarService {
   }
 
   static openApi = {
-    '/hangar/downloads/{slug}': {
+    '/hangar/dt/{slug}': {
       get: {
         summary: 'Hangar Downloads',
         description,
