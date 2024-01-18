@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -19,23 +20,20 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub commits difference between two branches/tags/commits',
-      namedParams: {
-        user: 'microsoft',
-        repo: 'vscode',
+  static openApi = {
+    '/github/commits-difference/{user}/{repo}': {
+      get: {
+        summary: 'GitHub commits difference between two branches/tags/commits',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'microsoft' }),
+          pathParam({ name: 'repo', example: 'vscode' }),
+          queryParam({ name: 'base', example: '1.60.0', required: true }),
+          queryParam({ name: 'head', example: '82f2db7', required: true }),
+        ],
       },
-      queryParams: {
-        base: '1.60.0',
-        head: '82f2db7',
-      },
-      staticPreview: this.render({
-        commitCount: 9227,
-      }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'commits difference', namedLogo: 'github' }
 
