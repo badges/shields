@@ -53,18 +53,19 @@ function getBadgeExampleCall(serviceClass) {
     )
   }
 
-  const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
-  if (!firstOpenapiPath) {
+  if (!serviceClass.openApi) {
     throw new TypeError(
-      `Missing OpenAPI in service class ${serviceClass.constructor.name}.`,
+      `Missing OpenAPI in service class ${serviceClass.name}.`,
     )
   }
+
+  const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
 
   const firstOpenapiExampleParams =
     serviceClass.openApi[firstOpenapiPath].get.parameters
   if (!Array.isArray(firstOpenapiExampleParams)) {
     throw new TypeError(
-      `Missing or invalid OpenAPI examples in ${serviceClass.constructor.name}.`,
+      `Missing or invalid OpenAPI examples in ${serviceClass.name}.`,
     )
   }
 
