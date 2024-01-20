@@ -1,10 +1,4 @@
-import { expect } from 'chai'
-import nock from 'nock'
-import {
-  cleanUpNockAfterEach,
-  defaultContext,
-  getBadgeExampleCall,
-} from '../test-helpers.js'
+import { testAuth } from '../test-helpers.js'
 import StackExchangeMonthlyQuestions from './stackexchange-monthlyquestions.service.js'
 import StackExchangeReputation from './stackexchange-reputation.service.js'
 import StackExchangeQuestions from './stackexchange-taginfo.service.js'
@@ -17,31 +11,10 @@ const testClasses = [
 ]
 
 for (const [serviceClass, dummyResponse] of testClasses) {
-  testAuth(serviceClass, dummyResponse)
-}
-
-function testAuth(serviceClass, dummyResponse) {
-  describe(serviceClass.name, function () {
+  describe(`${serviceClass.name}`, function () {
     describe('auth', function () {
-      cleanUpNockAfterEach()
-
-      const config = { private: { stackapps_api_key: 'fake-key' } }
-      const exampleInvokeParams = getBadgeExampleCall(serviceClass)
-
       it('sends the auth information as configured', async function () {
-        const scope = nock('https://api.stackexchange.com')
-          .get(/.*/)
-          .query(queryObject => queryObject.key === 'fake-key')
-          .reply(200, dummyResponse)
-        expect(
-          await serviceClass.invoke(
-            defaultContext,
-            config,
-            exampleInvokeParams,
-          ),
-        ).to.not.have.property('isError')
-
-        scope.done()
+        return testAuth(serviceClass, dummyResponse)
       })
     })
   })
