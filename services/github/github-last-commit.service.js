@@ -1,12 +1,9 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
-const commonExampleAttrs = {
-  keywords: ['latest'],
-  documentation,
-}
 
 const schema = Joi.array()
   .items(
@@ -24,9 +21,11 @@ const schema = Joi.array()
   .required()
   .min(1)
 
+const displayEnum = ['author', 'committer']
+
 const queryParamSchema = Joi.object({
   display_timestamp: Joi.string()
-    .valid('author', 'committer')
+    .valid(...displayEnum)
     .default('author'),
 }).required()
 
@@ -38,40 +37,41 @@ export default class GithubLastCommit extends GithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub last commit',
-      pattern: ':user/:repo',
-      namedParams: {
-        user: 'google',
-        repo: 'skia',
+  static openApi = {
+    '/github/last-commit/{user}/{repo}': {
+      get: {
+        summary: 'GitHub last commit',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'google' }),
+          pathParam({ name: 'repo', example: 'skia' }),
+          queryParam({
+            name: 'display_timestamp',
+            example: 'committer',
+            schema: { type: 'string', enum: displayEnum },
+            description: 'Defaults to `author` if not specified',
+          }),
+        ],
       },
-      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
-      ...commonExampleAttrs,
     },
-    {
-      title: 'GitHub last commit (branch)',
-      pattern: ':user/:repo/:branch',
-      namedParams: {
-        user: 'google',
-        repo: 'skia',
-        branch: 'infra/config',
+    '/github/last-commit/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub last commit (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'google' }),
+          pathParam({ name: 'repo', example: 'skia' }),
+          pathParam({ name: 'branch', example: 'infra/config' }),
+          queryParam({
+            name: 'display_timestamp',
+            example: 'committer',
+            schema: { type: 'string', enum: displayEnum },
+            description: 'Defaults to `author` if not specified',
+          }),
+        ],
       },
-      staticPreview: this.render({ commitDate: '2013-07-31T20:01:41Z' }),
-      ...commonExampleAttrs,
     },
-    {
-      title: 'GitHub last commit (by committer)',
-      pattern: ':user/:repo',
-      namedParams: {
-        user: 'google',
-        repo: 'skia',
-      },
-      queryParams: { display_timestamp: 'committer' },
-      staticPreview: this.render({ commitDate: '2022-10-15T20:01:41Z' }),
-      ...commonExampleAttrs,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last commit' }
 
