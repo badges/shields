@@ -4,15 +4,15 @@ const { fromString } = require('css-color-converter')
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
 const namedColors = {
-  brightgreen: '#4c1',
-  green: '#97ca00',
-  yellow: '#dfb317',
-  yellowgreen: '#a4a61d',
-  orange: '#fe7d37',
-  red: '#e05d44',
+  brightgreen: '#10b73d',
+  green: '#67ac09',
+  yellow: '#c89615',
+  yellowgreen: '#95991a',
+  orange: '#ea7233',
+  red: '#dd4343',
   blue: '#007ec6',
   grey: '#555',
-  lightgrey: '#9f9f9f',
+  lightgrey: '#939393',
 }
 
 const aliases = {
