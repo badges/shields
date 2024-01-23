@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
@@ -50,13 +50,17 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
     pattern: ':modName',
   }
 
-  static examples = [
-    {
-      title: 'Factorio Mod Portal mod version',
-      namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({ version: '6.2.20' }),
+  static openApi = {
+    '/factorio-mod-portal/v/{modName}': {
+      get: {
+        summary: 'Factorio Mod Portal mod version',
+        parameters: pathParams({
+          name: 'modName',
+          example: 'rso-mod',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'latest version' }
 
@@ -79,13 +83,17 @@ class FactorioModPortalFactorioVersion extends BaseFactorioModPortalService {
     pattern: ':modName',
   }
 
-  static examples = [
-    {
-      title: 'Factorio Mod Portal factorio versions',
-      namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({ version: '1.1' }),
+  static openApi = {
+    '/factorio-mod-portal/factorio-version/{modName}': {
+      get: {
+        summary: 'Factorio Mod Portal factorio versions',
+        parameters: pathParams({
+          name: 'modName',
+          example: 'rso-mod',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'factorio version' }
 
@@ -109,15 +117,17 @@ class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
     pattern: ':modName',
   }
 
-  static examples = [
-    {
-      title: 'Factorio Mod Portal mod',
-      namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({
-        lastUpdated: new Date(),
-      }),
+  static openApi = {
+    '/factorio-mod-portal/last-updated/{modName}': {
+      get: {
+        summary: 'Factorio Mod Portal last updated',
+        parameters: pathParams({
+          name: 'modName',
+          example: 'rso-mod',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last updated' }
 
@@ -145,15 +155,17 @@ class FactorioModPortalDownloads extends BaseFactorioModPortalService {
     pattern: ':modName',
   }
 
-  static examples = [
-    {
-      title: 'Factorio Mod Portal mod downloads',
-      namedParams: { modName: 'rso-mod' },
-      staticPreview: this.render({
-        downloads: 1694763,
-      }),
+  static openApi = {
+    '/factorio-mod-portal/dt/{modName}': {
+      get: {
+        summary: 'Factorio Mod Portal downloads',
+        parameters: pathParams({
+          name: 'modName',
+          example: 'rso-mod',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -11,18 +12,24 @@ const schema = Joi.object({
 export default class GithubLicense extends GithubAuthV3Service {
   static category = 'license'
   static route = { base: 'github/license', pattern: ':user/:repo' }
-  static examples = [
-    {
-      title: 'GitHub',
-      namedParams: { user: 'mashape', repo: 'apistatus' },
-      staticPreview: {
-        label: 'license',
-        message: 'MIT',
-        color: 'green',
+  static openApi = {
+    '/github/license/{user}/{repo}': {
+      get: {
+        summary: 'GitHub License',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'mashape',
+          },
+          {
+            name: 'repo',
+            example: 'apistatus',
+          },
+        ),
       },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 

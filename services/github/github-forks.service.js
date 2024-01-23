@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
@@ -16,35 +17,25 @@ const schema = Joi.object({
 export default class GithubForks extends GithubAuthV4Service {
   static category = 'social'
   static route = { base: 'github/forks', pattern: ':user/:repo' }
-  static examples = [
-    {
-      title: 'GitHub forks',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/forks/{user}/{repo}': {
+      get: {
+        summary: 'GitHub forks',
+        description: documentation,
+        parameters: pathParams(
+          { name: 'user', example: 'badges' },
+          { name: 'repo', example: 'shields' },
+        ),
       },
-      // TODO: This is currently a literal, as `staticPreview` doesn't
-      // support `link`.
-      staticPreview: {
-        label: 'Fork',
-        message: '150',
-        style: 'social',
-      },
-      // staticPreview: {
-      //   ...this.render({ user: 'badges', repo: 'shields', forkCount: 150 }),
-      //   label: 'fork',
-      //   style: 'social',
-      // },
-      queryParams: { label: 'Fork' },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'forks', namedLogo: 'github' }
 
   static render({ user, repo, forkCount }) {
     return {
       message: metric(forkCount),
+      style: 'social',
       color: 'blue',
       link: [
         `https://github.com/${user}/${repo}/fork`,

@@ -1,29 +1,31 @@
+import { pathParam, queryParam } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import toArray from '../../core/base-service/to-array.js'
-import NpmBase from './npm-base.js'
+import NpmBase, { packageNameDescription } from './npm-base.js'
 
 export default class NpmLicense extends NpmBase {
   static category = 'license'
 
   static route = this.buildRoute('npm/l', { withTag: false })
 
-  static examples = [
-    {
-      title: 'NPM',
-      pattern: ':packageName',
-      namedParams: { packageName: 'express' },
-      staticPreview: this.render({ licenses: ['MIT'] }),
-      keywords: ['node'],
+  static openApi = {
+    '/npm/l/{packageName}': {
+      get: {
+        summary: 'NPM License',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'express',
+            description: packageNameDescription,
+          }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
+        ],
+      },
     },
-    {
-      title: 'NPM',
-      pattern: ':packageName',
-      namedParams: { packageName: 'express' },
-      queryParams: { registry_uri: 'https://registry.npmjs.com' },
-      staticPreview: this.render({ licenses: ['MIT'] }),
-      keywords: ['node'],
-    },
-  ]
+  }
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })

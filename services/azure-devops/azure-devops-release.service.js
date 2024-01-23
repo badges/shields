@@ -1,8 +1,8 @@
 import { renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService } from '../index.js'
-import { keywords, fetch } from './azure-devops-helpers.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
+import { fetch } from './azure-devops-helpers.js'
 
-const documentation = `
+const description = `
 To obtain your own badge, you need to get 4 pieces of information:
 \`ORGANIZATION\`, \`PROJECT_ID\`, \`DEFINITION_ID\` and \`ENVIRONMENT_ID\`.
 
@@ -25,20 +25,33 @@ export default class AzureDevOpsRelease extends BaseSvgScrapingService {
     pattern: ':organization/:projectId/:definitionId/:environmentId',
   }
 
-  static examples = [
-    {
-      title: 'Azure DevOps releases',
-      namedParams: {
-        organization: 'totodem',
-        projectId: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
-        definitionId: '1',
-        environmentId: '1',
+  static openApi = {
+    '/azure-devops/release/{organization}/{projectId}/{definitionId}/{environmentId}':
+      {
+        get: {
+          summary: 'Azure DevOps releases',
+          description,
+          parameters: pathParams(
+            {
+              name: 'organization',
+              example: 'totodem',
+            },
+            {
+              name: 'projectId',
+              example: '8cf3ec0e-d0c2-4fcd-8206-ad204f254a96',
+            },
+            {
+              name: 'definitionId',
+              example: '1',
+            },
+            {
+              name: 'environmentId',
+              example: '1',
+            },
+          ),
+        },
       },
-      staticPreview: renderBuildStatusBadge({ status: 'succeeded' }),
-      keywords,
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'deployment' }
 

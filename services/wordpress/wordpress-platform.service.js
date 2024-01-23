@@ -1,7 +1,7 @@
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import { addv } from '../text-formatters.js'
 import { version as versionColor } from '../color-formatters.js'
-import { documentation, BaseWordpress } from './wordpress-base.js'
+import { description, BaseWordpress } from './wordpress-base.js'
 import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
 const extensionData = {
@@ -28,14 +28,21 @@ function WordpressRequiresVersion(extensionType) {
       pattern: ':slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt}: Required WP Version`,
-        namedParams: { slug: exampleSlug },
-        staticPreview: this.render({ wordpressVersion: '4.8' }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/wp-version/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt}: Required WP Version`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'wordpress' }
 
@@ -71,16 +78,18 @@ class WordpressPluginTestedVersion extends BaseWordpress {
     pattern: ':slug',
   }
 
-  static examples = [
-    {
-      title: 'WordPress Plugin: Tested WP Version',
-      namedParams: { slug: 'bbpress' },
-      staticPreview: this.renderStaticPreview({
-        testedVersion: '4.9.8',
-      }),
-      documentation,
+  static openApi = {
+    '/wordpress/plugin/tested/{slug}': {
+      get: {
+        summary: 'WordPress Plugin: Tested WP Version',
+        description,
+        parameters: pathParams({
+          name: 'slug',
+          example: 'bbpress',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'wordpress' }
 
@@ -125,14 +134,21 @@ function RequiresPHPVersionForType(extensionType) {
       pattern: ':slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Required PHP Version`,
-        namedParams: { slug: exampleSlug },
-        staticPreview: this.render({ version: '5.5' }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/required-php/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Required PHP Version`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'php' }
 

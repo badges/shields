@@ -1,6 +1,7 @@
+import { pathParams } from '../index.js'
 import { NotFound } from '../../core/base-service/errors.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BasePolymartService, documentation } from './polymart-base.js'
+import { BasePolymartService, description } from './polymart-base.js'
 
 export default class PolymartDownloads extends BasePolymartService {
   static category = 'downloads'
@@ -10,16 +11,18 @@ export default class PolymartDownloads extends BasePolymartService {
     pattern: ':resourceId',
   }
 
-  static examples = [
-    {
-      title: 'Polymart Downloads',
-      namedParams: {
-        resourceId: '323',
+  static openApi = {
+    '/polymart/downloads/{resourceId}': {
+      get: {
+        summary: 'Polymart Downloads',
+        description,
+        parameters: pathParams({
+          name: 'resourceId',
+          example: '323',
+        }),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 655 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'downloads',

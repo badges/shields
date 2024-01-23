@@ -6,7 +6,7 @@
  */
 
 import dayjs from 'dayjs'
-import pep440 from '@renovate/pep440'
+import pep440 from '@renovatebot/pep440'
 
 /**
  * Determines the color used for a badge based on version.

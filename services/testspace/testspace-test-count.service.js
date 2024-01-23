@@ -12,7 +12,7 @@ export default class TestspaceTestCount extends TestspaceBase {
   static openApi = {
     '/testspace/{metric}/{org}/{project}/{space}': {
       get: {
-        summary: 'Testspace tests',
+        summary: 'Testspace tests count',
         parameters: pathParams(
           {
             name: 'metric',

@@ -1,4 +1,5 @@
-import { SymfonyInsightBase, keywords } from './symfony-insight-base.js'
+import { pathParams } from '../index.js'
+import { SymfonyInsightBase, description } from './symfony-insight-base.js'
 
 export default class SymfonyInsightViolations extends SymfonyInsightBase {
   static route = {
@@ -6,19 +7,18 @@ export default class SymfonyInsightViolations extends SymfonyInsightBase {
     pattern: ':projectUuid',
   }
 
-  static examples = [
-    {
-      title: 'SymfonyInsight Violations',
-      namedParams: {
-        projectUuid: '825be328-29f8-44f7-a750-f82818ae9111',
+  static openApi = {
+    '/symfony/i/violations/{projectUuid}': {
+      get: {
+        summary: 'SymfonyInsight Violations',
+        description,
+        parameters: pathParams({
+          name: 'projectUuid',
+          example: '825be328-29f8-44f7-a750-f82818ae9111',
+        }),
       },
-      staticPreview: this.render({
-        numViolations: 0,
-        status: 'finished',
-      }),
-      keywords,
     },
-  ]
+  }
 
   static render({
     status,

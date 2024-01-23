@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -14,47 +15,28 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
     pattern: ':user/:repo/:ref',
   }
 
-  static examples = [
-    {
-      title: 'GitHub branch checks state',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: 'master',
+  static openApi = {
+    '/github/checks-status/{user}/{repo}/{ref}': {
+      get: {
+        summary: 'GitHub tag checks state',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+          {
+            name: 'ref',
+            example: '3.3.0',
+          },
+        ),
       },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
     },
-    {
-      title: 'GitHub commit checks state',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
-      },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
-    },
-    {
-      title: 'GitHub tag checks state',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
-        ref: '3.3.0',
-      },
-      staticPreview: renderBuildStatusBadge({
-        status: 'success',
-      }),
-      keywords: ['status'],
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'checks' }
 

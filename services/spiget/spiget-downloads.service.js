@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseSpigetService, documentation, keywords } from './spiget-base.js'
+import { BaseSpigetService, description } from './spiget-base.js'
 
 export default class SpigetDownloads extends BaseSpigetService {
   static category = 'downloads'
@@ -9,17 +10,18 @@ export default class SpigetDownloads extends BaseSpigetService {
     pattern: ':resourceId',
   }
 
-  static examples = [
-    {
-      title: 'Spiget Downloads',
-      namedParams: {
-        resourceId: '9089',
+  static openApi = {
+    '/spiget/downloads/{resourceId}': {
+      get: {
+        summary: 'Spiget Downloads',
+        description,
+        parameters: pathParams({
+          name: 'resourceId',
+          example: '9089',
+        }),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 560891 }),
-      documentation,
-      keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

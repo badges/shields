@@ -25,7 +25,7 @@ describe('Frontend', function () {
     cy.contains('Build')
     cy.contains('Chat').click()
 
-    cy.contains('Discourse status')
+    cy.contains('Discourse Status')
     cy.contains('Stack Exchange questions')
   })
 

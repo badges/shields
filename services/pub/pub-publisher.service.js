@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
+import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
   publisherId: Joi.string().allow(null).required(),
@@ -17,6 +18,7 @@ export class PubPublisher extends BaseJsonService {
     '/pub/publisher/{packageName}': {
       get: {
         summary: 'Pub Publisher',
+        description: baseDescription,
         parameters: pathParams({
           name: 'packageName',
           example: 'path',

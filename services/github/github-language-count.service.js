@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { BaseGithubLanguage } from './github-languages-base.js'
 import { documentation } from './github-helpers.js'
@@ -5,17 +6,24 @@ import { documentation } from './github-helpers.js'
 export default class GithubLanguageCount extends BaseGithubLanguage {
   static category = 'analysis'
   static route = { base: 'github/languages/count', pattern: ':user/:repo' }
-  static examples = [
-    {
-      title: 'GitHub language count',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/languages/count/{user}/{repo}': {
+      get: {
+        summary: 'GitHub language count',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'badges',
+          },
+          {
+            name: 'repo',
+            example: 'shields',
+          },
+        ),
       },
-      staticPreview: this.render({ count: 5 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'languages' }
 

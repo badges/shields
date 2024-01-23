@@ -1,18 +1,22 @@
 import { renderVersionBadge } from '../version.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import BaseBowerService from './bower-base.js'
 
 export default class BowerVersion extends BaseBowerService {
   static category = 'version'
   static route = { base: 'bower/v', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'Bower Version',
-      namedParams: { packageName: 'bootstrap' },
-      staticPreview: renderVersionBadge({ version: '4.2.1' }),
+  static openApi = {
+    '/bower/v/{packageName}': {
+      get: {
+        summary: 'Bower Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'bootstrap',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'bower' }
 

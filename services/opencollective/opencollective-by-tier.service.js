@@ -1,9 +1,9 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 
-const documentation = `<h3>How to get the tierId</h3>
+const description = `<h3>How to get the tierId</h3>
 <p>According to <a target="_blank" href="https://developer.opencollective.com/#/api/collectives?id=get-members-per-tier">open collectives documentation</a>, you can find the tierId by looking at the URL after clicking on a Tier Card on the collective page. (e.g. tierId for https://opencollective.com/shields/order/2988 is 2988)</p>`
 
 // https://developer.opencollective.com/#/api/collectives?id=get-info
@@ -58,8 +58,8 @@ class OpencollectiveBaseJson extends BaseJsonService {
         userType === 'users'
           ? 'USER'
           : userType === 'organizations'
-          ? 'ORGANIZATION'
-          : undefined,
+            ? 'ORGANIZATION'
+            : undefined,
       tierRequired: tierId,
     })
     const members = await this._requestJson({
@@ -88,15 +88,24 @@ class OpencollectiveBaseJson extends BaseJsonService {
 export default class OpencollectiveByTier extends OpencollectiveBaseJson {
   static route = this.buildRoute('tier', true)
 
-  static examples = [
-    {
-      title: 'Open Collective members by tier',
-      namedParams: { collective: 'shields', tierId: '2988' },
-      staticPreview: this.render(8, 'monthly backers'),
-      keywords: ['opencollective'],
-      documentation,
+  static openApi = {
+    '/opencollective/tier/{collective}/{tierId}': {
+      get: {
+        summary: 'Open Collective members by tier',
+        description,
+        parameters: pathParams(
+          {
+            name: 'collective',
+            example: 'shields',
+          },
+          {
+            name: 'tierId',
+            example: '2988',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'open collective',

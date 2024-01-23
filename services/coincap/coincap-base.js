@@ -1,5 +1,8 @@
 import { BaseJsonService } from '../index.js'
 
+const description =
+  '[Coincap](https://coincap.io/) is a cryptocurrency exchange'
+
 export default class BaseCoincapService extends BaseJsonService {
   static category = 'other'
 
@@ -19,4 +22,4 @@ export default class BaseCoincapService extends BaseJsonService {
   }
 }
 
-export { BaseCoincapService }
+export { BaseCoincapService, description }

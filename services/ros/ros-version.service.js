@@ -3,7 +3,7 @@ import Joi from 'joi'
 import yaml from 'js-yaml'
 import { renderVersionBadge } from '../version.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
-import { NotFound, InvalidResponse } from '../index.js'
+import { NotFound, InvalidResponse, pathParams } from '../index.js'
 
 const tagsSchema = Joi.object({
   data: Joi.object({
@@ -40,7 +40,7 @@ const repoSchema = Joi.object({
   }).required(),
 })
 
-const documentation = `
+const description = `
 <p>
   To use this badge, specify the ROS <a href="http://docs.ros.org">distribution</a>
   (e.g. <code>noetic</code> or <code>humble</code>) and the package repository name
@@ -56,17 +56,24 @@ export default class RosVersion extends GithubAuthV4Service {
 
   static route = { base: 'ros/v', pattern: ':distro/:repoName' }
 
-  static examples = [
-    {
-      title: 'ROS Package Index',
-      namedParams: { distro: 'humble', repoName: 'vision_msgs' },
-      staticPreview: {
-        ...renderVersionBadge({ version: '4.0.0' }),
-        label: 'ros | humble',
+  static openApi = {
+    '/ros/v/{distro}/{repoName}': {
+      get: {
+        summary: 'ROS Package Index',
+        description,
+        parameters: pathParams(
+          {
+            name: 'distro',
+            example: 'humble',
+          },
+          {
+            name: 'repoName',
+            example: 'vision_msgs',
+          },
+        ),
       },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'ros' }
 

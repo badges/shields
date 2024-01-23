@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
 import parseLinkHeader from 'parse-link-header'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParam, queryParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
@@ -35,33 +35,51 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub commit activity',
-      // Override the pattern to omit the deprecated interval "4w".
-      pattern: ':interval(t|y|m|w)/:user/:repo',
-      namedParams: { interval: 'm', user: 'eslint', repo: 'eslint' },
-      queryParams: { authorFilter: 'nzakas' },
-      staticPreview: this.render({ interval: 'm', commitCount: 457 }),
-      keywords: ['commits'],
-      documentation,
-    },
-    {
-      title: 'GitHub commit activity (branch)',
-      // Override the pattern to omit the deprecated interval "4w".
-      pattern: ':interval(t|y|m|w)/:user/:repo/:branch*',
-      namedParams: {
-        interval: 'm',
-        user: 'badges',
-        repo: 'squint',
-        branch: 'main',
+  static openApi = {
+    '/github/commit-activity/{interval}/{user}/{repo}': {
+      get: {
+        summary: 'GitHub commit activity',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'interval',
+            example: 'm',
+            description: 'Commits in the last Week, Month, Year, or Total',
+            schema: {
+              type: 'string',
+              // Override the enum to omit the deprecated interval "4w".
+              enum: ['w', 'm', 'y', 't'],
+            },
+          }),
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'squint' }),
+          queryParam({ name: 'authorFilter', example: 'calebcartwright' }),
+        ],
       },
-      queryParams: { authorFilter: 'calebcartwright' },
-      staticPreview: this.render({ interval: 'm', commitCount: 5 }),
-      keywords: ['commits'],
-      documentation,
     },
-  ]
+    '/github/commit-activity/{interval}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub commit activity (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'interval',
+            example: 'm',
+            description: 'Commits in the last Week, Month, Year, or Total',
+            schema: {
+              type: 'string',
+              // Override the enum to omit the deprecated interval "4w".
+              enum: ['w', 'm', 'y', 't'],
+            },
+          }),
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'squint' }),
+          pathParam({ name: 'branch', example: 'main' }),
+          queryParam({ name: 'authorFilter', example: 'calebcartwright' }),
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'commit activity', color: 'blue' }
 

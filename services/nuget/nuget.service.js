@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { createServiceFamily } from './nuget-v3-service-family.js'
 
 const { NugetVersionService: Version, NugetDownloadService: Downloads } =
@@ -10,31 +11,37 @@ const { NugetVersionService: Version, NugetDownloadService: Downloads } =
   })
 
 class NugetVersionService extends Version {
-  static examples = [
-    {
-      title: 'Nuget',
-      pattern: 'v/:packageName',
-      namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-      staticPreview: this.render({ version: '5.2.4' }),
+  static openApi = {
+    '/nuget/{variant}/{packageName}': {
+      get: {
+        summary: 'NuGet Version',
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'v',
+            schema: { type: 'variant', enum: ['v', 'vpre'] },
+            description:
+              'Latest stable version (`v`) or Latest version including prereleases (`vpre`).',
+          },
+          { name: 'packageName', example: 'Microsoft.AspNet.Mvc' },
+        ),
+      },
     },
-    {
-      title: 'Nuget (with prereleases)',
-      pattern: 'vpre/:packageName',
-      namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-      staticPreview: this.render({ version: '5.2.5-preview1' }),
-    },
-  ]
+  }
 }
 
 class NugetDownloadService extends Downloads {
-  static examples = [
-    {
-      title: 'Nuget',
-      pattern: 'dt/:packageName',
-      namedParams: { packageName: 'Microsoft.AspNet.Mvc' },
-      staticPreview: this.render({ downloads: 49e6 }),
+  static openApi = {
+    '/nuget/dt/{packageName}': {
+      get: {
+        summary: 'NuGet Downloads',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'Microsoft.AspNet.Mvc',
+        }),
+      },
     },
-  ]
+  }
 }
 
 export { NugetVersionService, NugetDownloadService }

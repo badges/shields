@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   size: Joi.object({
@@ -11,8 +11,6 @@ const queryParamSchema = Joi.object({
   exports: Joi.string(),
 }).required()
 
-const keywords = ['node', 'bundlejs']
-
 const esbuild =
   '<a href="https://github.com/evanw/esbuild" target="_blank" rel="noopener">esbuild</a>'
 const denoflate =
@@ -20,9 +18,9 @@ const denoflate =
 const bundlejs =
   '<a href="https://bundlejs.com/" target="_blank" rel="noopener">bundlejs</a>'
 
-const documentation = `
+const description = `
 <p>
- View ${esbuild} minified and ${denoflate} gzipped size of a package or selected exports, via ${bundlejs}.
+ View ${esbuild} minified and ${denoflate} gzipped size of a javascript package or selected exports, via ${bundlejs}.
 </p>
 `
 
@@ -35,67 +33,48 @@ export default class BundlejsPackage extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'npm package minimized gzipped size',
-      pattern: ':packageName',
-      namedParams: {
-        packageName: 'react',
+  static openApi = {
+    '/bundlejs/size/{packageName}': {
+      get: {
+        summary: 'npm package minimized gzipped size',
+        description,
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'value-enhancer@3.1.2',
+            description:
+              'This can either be a package name e.g: `value-enhancer`, or a package name and version e.g: `value-enhancer@3.1.2`',
+          }),
+          queryParam({
+            name: 'exports',
+            example: 'isVal,val',
+          }),
+        ],
       },
-      staticPreview: this.render({ size: '2.94 kB' }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'npm package minimized gzipped size (version)',
-      pattern: ':packageName',
-      namedParams: {
-        packageName: 'react@18.2.0',
+    '/bundlejs/size/{scope}/{packageName}': {
+      get: {
+        summary: 'npm package minimized gzipped size (scoped)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'scope',
+            example: '@ngneat',
+          }),
+          pathParam({
+            name: 'packageName',
+            example: 'falso@6.4.0',
+            description:
+              'This can either be a package name e.g: `falso`, or a package name and version e.g: `falso@6.4.0`',
+          }),
+          queryParam({
+            name: 'exports',
+            example: 'randEmail,randFullName',
+          }),
+        ],
       },
-      staticPreview: this.render({ size: '2.94 kB' }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'npm package minimized gzipped size (scoped)',
-      pattern: ':scope/:packageName',
-      namedParams: {
-        scope: '@cycle',
-        packageName: 'rx-run',
-      },
-      staticPreview: this.render({ size: '32.3 kB' }),
-      keywords,
-      documentation,
-    },
-    {
-      title: 'npm package minimized gzipped size (select exports)',
-      pattern: ':packageName',
-      namedParams: {
-        packageName: 'value-enhancer',
-      },
-      queryParams: {
-        exports: 'isVal,val',
-      },
-      staticPreview: this.render({ size: '823 B' }),
-      keywords,
-      documentation,
-    },
-    {
-      title:
-        'npm package minimized gzipped size (scoped version select exports)',
-      pattern: ':scope/:packageName',
-      namedParams: {
-        scope: '@ngneat',
-        packageName: 'falso@6.4.0',
-      },
-      queryParams: {
-        exports: 'randEmail,randFullName',
-      },
-      staticPreview: this.render({ size: '17.8 kB' }),
-      keywords,
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'bundlejs', color: 'informational' }
 

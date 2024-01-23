@@ -19,4 +19,7 @@ class BaseClojarsService extends BaseJsonService {
   }
 }
 
-export { BaseClojarsService }
+const description =
+  '[Clojars](https://clojars.org/) is a repository for Clojure libraries'
+
+export { BaseClojarsService, description }

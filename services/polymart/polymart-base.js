@@ -31,7 +31,7 @@ const resourceFoundOrNotSchema = Joi.alternatives(
   notFoundResourceSchema,
 )
 
-const documentation = `
+const description = `
 <p>You can find your resource ID in the url for your resource page.</p>
 <p>Example: <code>https://polymart.org/resource/polymart-plugin.323</code> - Here the Resource ID is 323.</p>`
 
@@ -48,4 +48,4 @@ class BasePolymartService extends BaseJsonService {
   }
 }
 
-export { documentation, BasePolymartService }
+export { description, BasePolymartService }

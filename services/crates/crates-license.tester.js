@@ -16,7 +16,7 @@ t.create('license (not found)')
 // https://github.com/badges/shields/issues/7073
 t.create('license (null licenses in history)')
   .get('/stun.json')
-  .expectBadge({ label: 'license', message: 'MIT/Apache-2.0' })
+  .expectBadge({ label: 'license', message: 'MIT OR Apache-2.0' })
 
 t.create('license (version with null license)')
   .get('/stun/0.0.1.json')

@@ -1,9 +1,9 @@
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import { documentation, BaseWordpress } from './wordpress-base.js'
+import { description, BaseWordpress } from './wordpress-base.js'
 dayjs.extend(customParseFormat)
 
 const extensionData = {
@@ -32,14 +32,21 @@ function LastUpdateForType(extensionType) {
       pattern: ':slug',
     }
 
-    static examples = [
-      {
-        title: `WordPress ${capt} Last Updated`,
-        namedParams: { slug: exampleSlug },
-        staticPreview: this.render({ lastUpdated: '2020-08-11' }),
-        documentation,
-      },
-    ]
+    static get openApi() {
+      const key = `/wordpress/${extensionType}/last-updated/{slug}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `WordPress ${capt} Last Updated`,
+          description,
+          parameters: pathParams({
+            name: 'slug',
+            example: exampleSlug,
+          }),
+        },
+      }
+      return route
+    }
 
     static defaultBadgeData = { label: 'last updated' }
 

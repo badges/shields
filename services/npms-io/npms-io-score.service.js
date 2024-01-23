@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
@@ -15,7 +15,8 @@ const responseSchema = Joi.object({
   }),
 }).required()
 
-const keywords = ['node', 'npm score']
+const description =
+  '[npms.io](https://npms.io) holds statistics for javascript packages.'
 
 export default class NpmsIOScore extends BaseJsonService {
   static category = 'analysis'
@@ -26,37 +27,46 @@ export default class NpmsIOScore extends BaseJsonService {
       ':type(final-score|maintenance-score|popularity-score|quality-score)/:scope(@.+)?/:packageName',
   }
 
-  static examples = [
-    {
-      title: 'npms.io (final)',
-      namedParams: { type: 'final-score', packageName: 'egg' },
-      staticPreview: this.render({ score: 0.9711 }),
-      keywords,
-    },
-    {
-      title: 'npms.io (popularity)',
-      pattern: ':type/:scope/:packageName',
-      namedParams: {
-        type: 'popularity-score',
-        scope: '@vue',
-        packageName: 'cli',
+  static openApi = {
+    '/npms-io/{type}/{packageName}': {
+      get: {
+        summary: 'npms.io',
+        description,
+        parameters: pathParams(
+          {
+            name: 'type',
+            schema: { type: 'string', enum: this.getEnum('type') },
+            example: 'maintenance-score',
+          },
+          {
+            name: 'packageName',
+            example: 'command',
+          },
+        ),
       },
-      staticPreview: this.render({ type: 'popularity', score: 0.89 }),
-      keywords,
     },
-    {
-      title: 'npms.io (quality)',
-      namedParams: { type: 'quality-score', packageName: 'egg' },
-      staticPreview: this.render({ type: 'quality', score: 0.98 }),
-      keywords,
+    '/npms-io/{type}/{scope}/{packageName}': {
+      get: {
+        summary: 'npms.io (scoped package)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'type',
+            schema: { type: 'string', enum: this.getEnum('type') },
+            example: 'maintenance-score',
+          },
+          {
+            name: 'scope',
+            example: '@vue',
+          },
+          {
+            name: 'packageName',
+            example: 'cli',
+          },
+        ),
+      },
     },
-    {
-      title: 'npms.io (maintenance)',
-      namedParams: { type: 'maintenance-score', packageName: 'command' },
-      staticPreview: this.render({ type: 'maintenance', score: 0.222 }),
-      keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'score',
