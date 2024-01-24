@@ -19,7 +19,7 @@ export default redirector({
           queryParam({
             name: 'versionPrefix',
             example: '29',
-            description: 'filter only versions with this prefix',
+            description: 'Filter only versions with this prefix.',
           }),
           queryParam({
             name: 'versionSuffix',
