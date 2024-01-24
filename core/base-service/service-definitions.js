@@ -6,6 +6,33 @@ const objectOfKeyValues = Joi.object()
   .pattern(/./, Joi.string().allow(null))
   .required()
 
+const openApiSchema = Joi.object().pattern(
+  /./,
+  Joi.object({
+    get: Joi.object({
+      summary: Joi.string().required(),
+      description: Joi.string(),
+      parameters: Joi.array()
+        .items(
+          Joi.object({
+            name: Joi.string().required(),
+            description: Joi.string(),
+            in: Joi.string().valid('query', 'path').required(),
+            required: Joi.boolean().required(),
+            schema: Joi.object({
+              type: Joi.string().required(),
+              enum: Joi.array(),
+            }).required(),
+            allowEmptyValue: Joi.boolean(),
+            example: Joi.string().allow(null),
+          }),
+        )
+        .min(1)
+        .required(),
+    }).required(),
+  }).required(),
+)
+
 const serviceDefinition = Joi.object({
   category: Joi.string().required(),
   name: Joi.string().required(),
@@ -43,32 +70,7 @@ const serviceDefinition = Joi.object({
       }),
     )
     .default([]),
-  openApi: Joi.object().pattern(
-    /./,
-    Joi.object({
-      get: Joi.object({
-        summary: Joi.string().required(),
-        description: Joi.string(),
-        parameters: Joi.array()
-          .items(
-            Joi.object({
-              name: Joi.string().required(),
-              description: Joi.string(),
-              in: Joi.string().valid('query', 'path').required(),
-              required: Joi.boolean().required(),
-              schema: Joi.object({
-                type: Joi.string().required(),
-                enum: Joi.array(),
-              }).required(),
-              allowEmptyValue: Joi.boolean(),
-              example: Joi.string().allow(null),
-            }),
-          )
-          .min(1)
-          .required(),
-      }).required(),
-    }).required(),
-  ),
+  openApi: openApiSchema,
 }).required()
 
 function assertValidServiceDefinition(service, message = undefined) {
@@ -93,4 +95,8 @@ function assertValidServiceDefinitionExport(examples, message = undefined) {
   Joi.assert(examples, serviceDefinitionExport, message)
 }
 
-export { assertValidServiceDefinition, assertValidServiceDefinitionExport }
+export {
+  assertValidServiceDefinition,
+  assertValidServiceDefinitionExport,
+  openApiSchema,
+}
