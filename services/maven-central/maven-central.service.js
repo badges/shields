@@ -24,7 +24,7 @@ export default redirector({
           queryParam({
             name: 'versionSuffix',
             example: '-android',
-            description: 'filter only versions with this suffix',
+            description: 'Filter only versions with this suffix.',
           }),
         ],
       },
