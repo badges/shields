@@ -49,7 +49,7 @@ export default class MavenMetadata extends BaseXmlService {
           {
             name: 'versionSuffix',
             example: '-android',
-            description: 'filter only versions with this suffix',
+            description: 'Filter only versions with this suffix.',
           },
         ),
       },
