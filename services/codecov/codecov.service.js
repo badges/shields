@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
-import { BaseSvgScrapingService } from '../index.js'
+import { BaseSvgScrapingService, pathParam, queryParam } from '../index.js'
 import { parseJson } from '../../core/base-service/json.js'
 
 // https://docs.codecov.io/reference#totals
@@ -35,12 +35,12 @@ const svgValueMatcher = />(\d{1,3}%|unknown)<\/text><\/g>/
 
 const badgeTokenPattern = /^\w{10}$/
 
-const documentation = `
+const description = `
   <p>
     You may specify a Codecov badge token to get coverage for a private repository.
   </p>
   <p>
-  You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/{vcsName}/{user}/{repo}/settings/badge</code>.
+  You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/&#60;vcsName&#62;/&#60;user&#62;/&#60;repo&#62;/settings/badge</code>.
   </p>
 `
 
@@ -54,39 +54,43 @@ export default class Codecov extends BaseSvgScrapingService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Codecov',
-      pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo',
-      namedParams: {
-        vcsName: 'github',
-        user: 'codecov',
-        repo: 'example-node',
+  static openApi = {
+    '/codecov/c/{vcsName}/{user}/{repo}': {
+      get: {
+        summary: 'Codecov',
+        description,
+        parameters: [
+          pathParam({
+            name: 'vcsName',
+            example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsName') },
+          }),
+          pathParam({ name: 'user', example: 'codecov' }),
+          pathParam({ name: 'repo', example: 'example-node' }),
+          queryParam({ name: 'token', example: 'a1b2c3d4e5' }),
+          queryParam({ name: 'flag', example: 'flag_name' }),
+        ],
       },
-      queryParams: {
-        token: 'a1b2c3d4e5',
-        flag: 'flag_name',
-      },
-      staticPreview: this.render({ coverage: 90 }),
-      documentation,
     },
-    {
-      title: 'Codecov branch',
-      pattern: ':vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch',
-      namedParams: {
-        vcsName: 'github',
-        user: 'codecov',
-        repo: 'example-node',
-        branch: 'master',
+    '/codecov/c/{vcsName}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Codecov (with branch)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'vcsName',
+            example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsName') },
+          }),
+          pathParam({ name: 'user', example: 'codecov' }),
+          pathParam({ name: 'repo', example: 'example-node' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          queryParam({ name: 'token', example: 'a1b2c3d4e5' }),
+          queryParam({ name: 'flag', example: 'flag_name' }),
+        ],
       },
-      queryParams: {
-        token: 'a1b2c3d4e5',
-        flag: 'flag_name',
-      },
-      staticPreview: this.render({ coverage: 90 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 
