@@ -44,7 +44,7 @@ export default class MavenMetadata extends BaseXmlService {
           {
             name: 'versionPrefix',
             example: '29',
-            description: 'filter only versions with this prefix',
+            description: 'Filter only versions with this prefix.',
           },
           {
             name: 'versionSuffix',
