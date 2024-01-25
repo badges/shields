@@ -108,7 +108,7 @@ export default class GiteaIssues extends GiteaBase {
       }),
     )
     const data = this.constructor._validate(res.headers, schema)
-    // The total number of contributors is in the `x-total-count` field in the headers.
+    // The total number of issues is in the `x-total-count` field in the headers.
     // https://gitea.com/api/swagger#/issue
     const issueCount = data['x-total-count']
     return this.constructor.render({

@@ -108,7 +108,8 @@ export default class GiteaPullRequests extends GiteaBase {
       }),
     )
     const data = this.constructor._validate(res.headers, schema)
-    // The total number of contributors is in the `x-total-count` field in the headers.
+    // The total number of issues is in the `x-total-count` field in the headers.
+    // Pull requests are an issue of type pulls
     // https://gitea.com/api/swagger#/issue
     const pullsCount = data['x-total-count']
     return this.constructor.render({
