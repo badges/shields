@@ -1,10 +1,11 @@
+import { pathParam } from '../index.js'
 import SonarBase from './sonar-base.js'
 import {
   negativeMetricColorScale,
   getLabel,
   documentation,
-  keywords,
   queryParamSchema,
+  openApiQueryParams,
 } from './sonar-helpers.js'
 
 export default class SonarTechDebt extends SonarBase {
@@ -16,26 +17,29 @@ export default class SonarTechDebt extends SonarBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Tech Debt',
-      namedParams: {
-        component: 'org.ow2.petals:petals-se-ase',
-        metric: 'tech_debt',
-        branch: 'master',
+  static openApi = {
+    '/sonar/tech_debt/{component}': {
+      get: {
+        summary: 'Sonar Tech Debt',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({
-        debt: 1,
-        metric: 'tech_debt',
-      }),
-      keywords,
-      documentation,
     },
-  ]
+    '/sonar/tech_debt/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Tech Debt (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'tech debt' }
 

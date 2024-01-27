@@ -1,5 +1,10 @@
+import { pathParam } from '../index.js'
 import SonarBase from './sonar-base.js'
-import { documentation, keywords, queryParamSchema } from './sonar-helpers.js'
+import {
+  documentation,
+  queryParamSchema,
+  openApiQueryParams,
+} from './sonar-helpers.js'
 
 export default class SonarQualityGate extends SonarBase {
   static category = 'analysis'
@@ -10,23 +15,29 @@ export default class SonarQualityGate extends SonarBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Quality Gate',
-      namedParams: {
-        component: 'swellaby:azdo-shellcheck',
-        metric: 'quality_gate',
-        branch: 'master',
+  static openApi = {
+    '/sonar/quality_gate/{component}': {
+      get: {
+        summary: 'Sonar Quality Gate',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:azdo-shellcheck' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'https://sonarcloud.io',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({ qualityState: 'OK' }),
-      keywords,
-      documentation,
     },
-  ]
+    '/sonar/quality_gate/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Quality Gate (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:azdo-shellcheck' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'quality gate' }
 
