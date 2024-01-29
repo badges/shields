@@ -1,8 +1,6 @@
 import Joi from 'joi'
 import { NotFound } from '../index.js'
 
-const keywords = ['codeclimate']
-
 const isLetterGrade = Joi.equal('A', 'B', 'C', 'D', 'E', 'F').required()
 
 const repoSchema = Joi.object({
@@ -39,4 +37,4 @@ async function fetchRepo(serviceInstance, { user, repo }) {
   return repoInfos
 }
 
-export { keywords, isLetterGrade, fetchRepo }
+export { isLetterGrade, fetchRepo }
