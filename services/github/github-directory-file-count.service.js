@@ -1,26 +1,9 @@
 import Joi from 'joi'
 import gql from 'graphql-tag'
 import { metric } from '../text-formatters.js'
-import { InvalidParameter } from '../index.js'
+import { InvalidParameter, pathParam, queryParam } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
-import {
-  documentation as commonDocumentation,
-  transformErrors,
-} from './github-helpers.js'
-
-const documentation = `${commonDocumentation}
-<p>
-  <b>Note:</b><br>
-  1. Parameter <code>type</code> accepts either <code>file</code> or <code>dir</code> value. Passing any other value will result in an error.<br>
-  2. Parameter <code>extension</code> accepts file extension without a leading dot.
-     For instance for <code>.js</code> extension pass <code>js</code>.
-     Only single <code>extension</code> value can be specified.
-     <code>extension</code> is applicable for <code>type</code> <code>file</code> only.
-     Passing it either without <code>type</code> or along with <code>type</code> <code>dir</code> will result in an error.<br>
-  3. GitHub API has an upper limit of 1,000 files for a directory.
-     In case a directory contains files above the limit, a badge might present inaccurate information.<br>
-</p>
-`
+import { documentation, transformErrors } from './github-helpers.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -39,10 +22,17 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const typeEnum = ['dir', 'file']
+
 const queryParamSchema = Joi.object({
-  type: Joi.any().valid('dir', 'file'),
+  type: Joi.any().valid(...typeEnum),
   extension: Joi.string(),
 })
+
+const typeDocs =
+  'Entity to count: directories or files. If not specified, both files and directories are counted. GitHub API has an upper limit of 1,000 files for a directory. If a directory contains files above the limit, the badge will show an inaccurate count.'
+const extensionDocs =
+  'Filter to files of type. Specify the extension without a leading dot. For instance for `.js` extension pass `js`. This param is only applicable if type is `file`'
 
 export default class GithubDirectoryFileCount extends GithubAuthV4Service {
   static category = 'size'
@@ -53,62 +43,51 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub repo file count',
-      pattern: ':user/:repo',
-      namedParams: { user: 'badges', repo: 'shields' },
-      staticPreview: this.render({ count: 20 }),
-      documentation,
+  static openApi = {
+    '/github/directory-file-count/{user}/{repo}': {
+      get: {
+        summary: 'GitHub repo file or directory count',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          queryParam({
+            name: 'type',
+            example: 'file',
+            schema: { type: 'string', enum: typeEnum },
+            description: typeDocs,
+          }),
+          queryParam({
+            name: 'extension',
+            example: 'js',
+            description: extensionDocs,
+          }),
+        ],
+      },
     },
-    {
-      title: 'GitHub repo file count (custom path)',
-      pattern: ':user/:repo/:path',
-      namedParams: { user: 'badges', repo: 'shields', path: 'services' },
-      staticPreview: this.render({ count: 10 }),
-      documentation,
+    '/github/directory-file-count/{user}/{repo}/{path}': {
+      get: {
+        summary: 'GitHub repo file or directory count (in path)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          pathParam({ name: 'path', example: 'services' }),
+          queryParam({
+            name: 'type',
+            example: 'file',
+            schema: { type: 'string', enum: typeEnum },
+            description: typeDocs,
+          }),
+          queryParam({
+            name: 'extension',
+            example: 'js',
+            description: extensionDocs,
+          }),
+        ],
+      },
     },
-    {
-      title: 'GitHub repo directory count',
-      pattern: ':user/:repo',
-      namedParams: { user: 'badges', repo: 'shields' },
-      queryParams: { type: 'dir' },
-      staticPreview: this.render({ count: 8 }),
-      documentation,
-    },
-    {
-      title: 'GitHub repo directory count (custom path)',
-      pattern: ':user/:repo/:path',
-      namedParams: { user: 'badges', repo: 'shields', path: 'services' },
-      queryParams: { type: 'dir' },
-      staticPreview: this.render({ count: 8 }),
-      documentation,
-    },
-    {
-      title: 'GitHub repo file count (file type)',
-      pattern: ':user/:repo',
-      namedParams: { user: 'badges', repo: 'shields' },
-      queryParams: { type: 'file' },
-      staticPreview: this.render({ count: 2 }),
-      documentation,
-    },
-    {
-      title: 'GitHub repo file count (custom path & file type)',
-      pattern: ':user/:repo/:path',
-      namedParams: { user: 'badges', repo: 'shields', path: 'services' },
-      queryParams: { type: 'file' },
-      staticPreview: this.render({ count: 2 }),
-      documentation,
-    },
-    {
-      title: 'GitHub repo file count (file extension)',
-      pattern: ':user/:repo/:path',
-      namedParams: { user: 'badges', repo: 'shields', path: 'services' },
-      queryParams: { type: 'file', extension: 'js' },
-      staticPreview: this.render({ count: 1 }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { color: 'blue', label: 'files' }
 

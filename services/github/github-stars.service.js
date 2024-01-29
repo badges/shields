@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -16,24 +17,18 @@ export default class GithubStars extends GithubAuthV3Service {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'GitHub Repo stars',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/stars/{user}/{repo}': {
+      get: {
+        summary: 'GitHub Repo stars',
+        description: documentation,
+        parameters: pathParams(
+          { name: 'user', example: 'badges' },
+          { name: 'repo', example: 'shields' },
+        ),
       },
-      queryParams: { style: 'social' },
-      // TODO: This is currently a literal, as `staticPreview` doesn't
-      // support `link`.
-      staticPreview: {
-        label: 'Stars',
-        message: '7k',
-        style: 'social',
-      },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'stars',
