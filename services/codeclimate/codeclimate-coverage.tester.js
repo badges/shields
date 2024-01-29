@@ -46,7 +46,7 @@ t.create('test coverage when outer user repos query returns multiple items')
               },
               latest_default_branch_test_report: {
                 data: {
-                  id: '6463c8a3e3bc340001004bce',
+                  id: '6598295abd91ec00013d485e',
                   type: 'test_reports',
                 },
               },
