@@ -1,9 +1,9 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import {
   isMetric,
   isMetricOpenIssues,
   isMetricClosedIssues,
+  isMetricWithPattern,
 } from '../test-validators.js'
 
 export const t = await createServiceTester()
@@ -102,7 +102,7 @@ t.create('Closed pulls by label is > zero')
     message: isMetricClosedIssues,
   })
 
-t.create('Closed pulls by  multi-word label is > zero')
+t.create('Closed pulls by multi-word label is > zero')
   .get(
     '/closed/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&labels=bug,good%20first%20issue',
   )
@@ -127,9 +127,7 @@ t.create('All pulls')
   .get('/all/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All pulls raw')
@@ -147,20 +145,16 @@ t.create('All pulls by label is > zero')
   )
   .expectBadge({
     label: 'upstream pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All pulls by multi-word label is > zero')
   .get(
-    '/all/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&labels=question,enhancement',
+    '/all/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&labels=upstream,enhancement',
   )
   .expectBadge({
-    label: 'question,enhancement pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    label: 'upstream,enhancement pull requests',
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All pulls by label (raw)')

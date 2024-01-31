@@ -1,8 +1,7 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
-import { metric } from '../text-formatters.js'
-import { description, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor, renderIssue } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 const schema = Joi.object({ 'x-total-count': nonNegativeInteger }).required()
@@ -58,52 +57,26 @@ export default class GiteaPullRequests extends GiteaBase {
 
   static defaultBadgeData = { label: 'pull requests', color: 'informational' }
 
-  static render({ variant, raw, labels, pullsCount }) {
-    const state = variant
-    const isMultiLabel = labels && labels.includes(',')
-    const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
-
-    let labelPrefix = ''
-    let messageSuffix = ''
-    if (raw) {
-      labelPrefix = `${state} `
-    } else {
-      messageSuffix = state
-    }
-    return {
-      label: `${labelPrefix}${labelText}pull requests`,
-      message: `${metric(pullsCount)}${
-        messageSuffix ? ' ' : ''
-      }${messageSuffix}`,
-      color: pullsCount > 0 ? 'yellow' : 'brightgreen',
-    }
-  }
-
   async handle(
     { variant, user, repo },
     { gitea_url: baseUrl = 'https://gitea.com', labels },
   ) {
+    const options = {
+      searchParams: {
+        page: '1',
+        limit: '1',
+        type: 'pulls',
+        state: variant.replace('-raw', ''),
+      },
+    }
+    if (labels) {
+      options.searchParams.labels = labels
+    }
+
     const { res } = await this._request(
       this.authHelper.withBearerAuthHeader({
         url: `${baseUrl}/api/v1/repos/${user}/${repo}/issues`,
-        options: labels
-          ? {
-              searchParams: {
-                page: '1',
-                limit: '1',
-                type: 'pulls',
-                state: variant.replace('-raw', ''),
-                labels,
-              },
-            }
-          : {
-              searchParams: {
-                page: '1',
-                limit: '1',
-                type: 'pulls',
-                state: variant.replace('-raw', ''),
-              },
-            },
+        options,
         httpErrors: httpErrorsFor(),
       }),
     )
@@ -111,12 +84,13 @@ export default class GiteaPullRequests extends GiteaBase {
     // The total number of issues is in the `x-total-count` field in the headers.
     // Pull requests are an issue of type pulls
     // https://gitea.com/api/swagger#/issue
-    const pullsCount = data['x-total-count']
-    return this.constructor.render({
+    const count = data['x-total-count']
+    return renderIssue({
       variant: variant.split('-')[0],
       raw: variant.endsWith('-raw'),
       labels,
-      pullsCount,
+      defaultBadgeData: this.constructor.defaultBadgeData,
+      count,
     })
   }
 }

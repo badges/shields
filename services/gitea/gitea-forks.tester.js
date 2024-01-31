@@ -1,5 +1,4 @@
-import Joi from 'joi'
-import { isMetric } from '../test-validators.js'
+import { isMetric, isMetricAllowNegative } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -17,7 +16,7 @@ t.create('Forks (self-managed)')
   .get('/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'forks',
-    message: Joi.number().integer(),
+    message: isMetricAllowNegative,
     color: 'blue',
     link: [
       'https://codeberg.org/CanisHelix/shields-badge-test',

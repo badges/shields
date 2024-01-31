@@ -1,8 +1,7 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
-import { metric } from '../text-formatters.js'
-import { description, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor, renderIssue } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 const schema = Joi.object({ 'x-total-count': nonNegativeInteger }).required()
@@ -58,64 +57,40 @@ export default class GiteaIssues extends GiteaBase {
 
   static defaultBadgeData = { label: 'issues', color: 'informational' }
 
-  static render({ variant, raw, labels, issueCount }) {
-    const state = variant
-    const isMultiLabel = labels && labels.includes(',')
-    const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
-
-    let labelPrefix = ''
-    let messageSuffix = ''
-    if (raw) {
-      labelPrefix = `${state} `
-    } else {
-      messageSuffix = state
-    }
-    return {
-      label: `${labelPrefix}${labelText}issues`,
-      message: `${metric(issueCount)}${
-        messageSuffix ? ' ' : ''
-      }${messageSuffix}`,
-      color: issueCount > 0 ? 'yellow' : 'brightgreen',
-    }
-  }
-
   async handle(
     { variant, user, repo },
     { gitea_url: baseUrl = 'https://gitea.com', labels },
   ) {
+    const options = {
+      searchParams: {
+        page: '1',
+        limit: '1',
+        type: 'issues',
+        state: variant.replace('-raw', ''),
+      },
+    }
+    if (labels) {
+      options.searchParams.labels = labels
+    }
+
     const { res } = await this._request(
       this.authHelper.withBearerAuthHeader({
         url: `${baseUrl}/api/v1/repos/${user}/${repo}/issues`,
-        options: labels
-          ? {
-              searchParams: {
-                page: '1',
-                limit: '1',
-                type: 'issues',
-                state: variant.replace('-raw', ''),
-                labels,
-              },
-            }
-          : {
-              searchParams: {
-                page: '1',
-                limit: '1',
-                type: 'issues',
-                state: variant.replace('-raw', ''),
-              },
-            },
+        options,
         httpErrors: httpErrorsFor(),
       }),
     )
     const data = this.constructor._validate(res.headers, schema)
     // The total number of issues is in the `x-total-count` field in the headers.
+    // Pull requests are an issue of type pulls
     // https://gitea.com/api/swagger#/issue
-    const issueCount = data['x-total-count']
-    return this.constructor.render({
+    const count = data['x-total-count']
+    return renderIssue({
       variant: variant.split('-')[0],
       raw: variant.endsWith('-raw'),
       labels,
-      issueCount,
+      defaultBadgeData: this.constructor.defaultBadgeData,
+      count,
     })
   }
 }

@@ -61,7 +61,7 @@ export default class GiteaStars extends GiteaBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}`,
-      httpErrors: httpErrorsFor('user or repo not found'),
+      httpErrors: httpErrorsFor(),
     })
   }
 

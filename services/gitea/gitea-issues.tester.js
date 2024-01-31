@@ -1,9 +1,9 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import {
   isMetric,
   isMetricOpenIssues,
   isMetricClosedIssues,
+  isMetricWithPattern,
 } from '../test-validators.js'
 
 export const t = await createServiceTester()
@@ -102,7 +102,7 @@ t.create('Closed issues by label is > zero')
     message: isMetricClosedIssues,
   })
 
-t.create('Closed issues by  multi-word label is > zero')
+t.create('Closed issues by multi-word label is > zero')
   .get(
     '/closed/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&labels=bug,good%20first%20issue',
   )
@@ -127,9 +127,7 @@ t.create('All issues')
   .get('/all/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'issues',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All issues raw')
@@ -147,9 +145,7 @@ t.create('All issues by label is > zero')
   )
   .expectBadge({
     label: 'question issues',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All issues by multi-word label is > zero')
@@ -158,9 +154,7 @@ t.create('All issues by multi-word label is > zero')
   )
   .expectBadge({
     label: 'question,enhancement issues',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) all$/,
-    ),
+    message: isMetricWithPattern(/ all/),
   })
 
 t.create('All issues by label (raw)')
