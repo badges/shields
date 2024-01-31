@@ -13,6 +13,7 @@ const crateSchema = Joi.object({
       Joi.object({
         downloads: nonNegativeInteger,
         license: Joi.string().required().allow(null),
+        rust_version: Joi.string().allow(null),
       }),
     )
     .min(1)
@@ -24,17 +25,11 @@ const versionSchema = Joi.object({
     downloads: nonNegativeInteger,
     num: Joi.string().required(),
     license: Joi.string().required().allow(null),
+    rust_version: Joi.string().allow(null),
   }).required(),
 }).required()
 
-const errorSchema = Joi.object({
-  errors: Joi.array()
-    .items(Joi.object({ detail: Joi.string().required() }))
-    .min(1)
-    .required(),
-}).required()
-
-const schema = Joi.alternatives(crateSchema, versionSchema, errorSchema)
+const schema = Joi.alternatives(crateSchema, versionSchema)
 
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }

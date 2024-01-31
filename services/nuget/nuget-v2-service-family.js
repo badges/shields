@@ -5,6 +5,9 @@ import {
   BaseXmlService,
   NotFound,
   redirector,
+  pathParams,
+  pathParam,
+  queryParam,
 } from '../index.js'
 import {
   renderVersionBadge,
@@ -138,22 +141,25 @@ function createServiceFamily({
       queryParamSchema,
     }
 
-    static get examples() {
-      if (!title) return []
+    static get openApi() {
+      if (!title) return {}
 
-      return [
-        {
-          title: `${title} Version`,
-          namedParams: { packageName: examplePackageName },
-          staticPreview: this.render({ version: exampleVersion }),
+      const key = `/${serviceBaseUrl}/v/{packageName}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `${title} Version`,
+          parameters: [
+            pathParam({ name: 'packageName', example: examplePackageName }),
+            queryParam({
+              name: 'include_prereleases',
+              schema: { type: 'boolean' },
+              example: null,
+            }),
+          ],
         },
-        {
-          title: `${title} Version (including pre-releases)`,
-          namedParams: { packageName: examplePackageName },
-          queryParams: { include_prereleases: null },
-          staticPreview: this.render({ version: examplePrereleaseVersion }),
-        },
-      ]
+      }
+      return route
     }
 
     static defaultBadgeData = {
@@ -199,16 +205,21 @@ function createServiceFamily({
       pattern: 'dt/:packageName',
     }
 
-    static get examples() {
-      if (!title) return []
+    static get openApi() {
+      if (!title) return {}
 
-      return [
-        {
-          title,
-          namedParams: { packageName: examplePackageName },
-          staticPreview: this.render({ downloads: exampleDownloadCount }),
+      const key = `/${serviceBaseUrl}/dt/{packageName}`
+      const route = {}
+      route[key] = {
+        get: {
+          summary: `${title} Downloads`,
+          parameters: pathParams({
+            name: 'packageName',
+            example: examplePackageName,
+          }),
         },
-      ]
+      }
+      return route
     }
 
     static render(props) {

@@ -109,7 +109,7 @@ When server source files change, the badge server should automatically restart
 itself (using [nodemon][]). When the frontend files change, the frontend dev
 server (`docusaurus start`) should also automatically reload. However the badge
 definitions are built only before the server first starts. To regenerate those,
-either run `npm run defs` or manually restart the server.
+either run `npm run prestart` or manually restart the server.
 
 To debug a badge from the command line, run `npm run badge -- /npm/v/nock`.
 It also works with full URLs like

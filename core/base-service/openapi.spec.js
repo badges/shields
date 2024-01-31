@@ -88,7 +88,8 @@ const expected = {
         name: 'style',
         in: 'query',
         required: false,
-        description: 'If not specified, the defautl style is "flat".',
+        description:
+          'If not specified, the default style for this badge is "flat".',
         schema: {
           enum: ['flat', 'flat-square', 'plastic', 'for-the-badge', 'social'],
           type: 'string',
@@ -376,10 +377,13 @@ describe('category2openapi', function () {
   it('generates an Open API spec', function () {
     expect(
       clean(
-        category2openapi({ name: 'build' }, [
-          OpenApiService.getDefinition(),
-          LegacyService.getDefinition(),
-        ]),
+        category2openapi({
+          category: { name: 'build' },
+          services: [
+            OpenApiService.getDefinition(),
+            LegacyService.getDefinition(),
+          ],
+        }),
       ),
     ).to.deep.equal(expected)
   })

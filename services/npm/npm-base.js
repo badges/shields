@@ -34,6 +34,9 @@ export const queryParamSchema = Joi.object({
   registry_uri: optionalUrl,
 }).required()
 
+export const packageNameDescription =
+  'This may be the name of an unscoped package like `package-name` or a [scoped package](https://docs.npmjs.com/about-scopes) like `@author/package-name`'
+
 // Abstract class for NPM badges which display data about the latest version
 // of a package.
 export default class NpmBase extends BaseJsonService {

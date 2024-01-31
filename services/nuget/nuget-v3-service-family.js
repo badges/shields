@@ -121,7 +121,7 @@ function createServiceFamily({
       .push('(.+?)', 'packageName')
       .toObject()
 
-    static examples = []
+    static openApi = {}
 
     static defaultBadgeData = {
       label: defaultLabel,
@@ -170,7 +170,7 @@ function createServiceFamily({
       .push('(.+?)', 'packageName')
       .toObject()
 
-    static examples = []
+    static openApi = {}
 
     static render(props) {
       return renderDownloadBadge(props)

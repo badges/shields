@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { pathParam, queryParam } from '../index.js'
-import { documentation, httpErrorsFor } from './gitea-helper.js'
+import { description, httpErrorsFor } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
 /*
@@ -12,7 +12,7 @@ The keys could be anything and {} is a valid response (e.g: for an empty repo)
 const schema = Joi.object().pattern(/./, nonNegativeInteger)
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl.required(),
+  gitea_url: optionalUrl,
 }).required()
 
 export default class GiteaLanguageCount extends GiteaBase {
@@ -28,20 +28,19 @@ export default class GiteaLanguageCount extends GiteaBase {
     '/gitea/languages/count/{user}/{repo}': {
       get: {
         summary: 'Gitea language count',
-        description: documentation,
+        description,
         parameters: [
           pathParam({
             name: 'user',
-            example: 'forgejo',
+            example: 'gitea',
           }),
           pathParam({
             name: 'repo',
-            example: 'forgejo',
+            example: 'tea',
           }),
           queryParam({
             name: 'gitea_url',
-            example: 'https://codeberg.org',
-            required: true,
+            example: 'https://gitea.com',
           }),
         ],
       },
@@ -58,7 +57,7 @@ export default class GiteaLanguageCount extends GiteaBase {
   }
 
   async fetch({ user, repo, baseUrl }) {
-    // https://try.gitea.io/api/swagger#/repository/repoGetLanguages
+    // https://gitea.com/api/swagger#/repository/repoGetLanguages
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,
@@ -66,7 +65,7 @@ export default class GiteaLanguageCount extends GiteaBase {
     })
   }
 
-  async handle({ user, repo }, { gitea_url: baseUrl }) {
+  async handle({ user, repo }, { gitea_url: baseUrl = 'https://gitea.com' }) {
     const data = await this.fetch({
       user,
       repo,

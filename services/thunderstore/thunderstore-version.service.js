@@ -34,9 +34,10 @@ export default class ThunderstoreVersion extends BaseThunderstoreService {
    * @returns {Promise<object>} - Promise containing the rendered badge payload
    */
   async handle({ namespace, packageName }) {
-    const {
-      latest: { version_number: version },
-    } = await this.fetchPackage({ namespace, packageName })
+    const { latest_version: version } = await this.fetchPackageMetrics({
+      namespace,
+      packageName,
+    })
     return renderVersionBadge({ version })
   }
 }
