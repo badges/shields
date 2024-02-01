@@ -6,29 +6,15 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2024-02-01
 
-- migrate some services from examples to openApi [#9904](https://github.com/badges/shields/issues/9904)
-- migrate some services from examples to openApi [#9915](https://github.com/badges/shields/issues/9915)
-- migrate some services from examples to openApi part 39; affects [maven gradle] [#9902](https://github.com/badges/shields/issues/9902)
-- migrate some services from examples to openApi [#9903](https://github.com/badges/shields/issues/9903)
 - feat: added up_message and down_message to [uptimerobotstatus] [#9662](https://github.com/badges/shields/issues/9662)
 - Add [Hangar] Badges [#9800](https://github.com/badges/shields/issues/9800)
-- migrate examples to openApi part 38; affects [github] [#9889](https://github.com/badges/shields/issues/9889)
-- [crates] tidyup [#9883](https://github.com/badges/shields/issues/9883)
-- small docs fix: defs --> prestart [#9887](https://github.com/badges/shields/issues/9887)
 - sort categories by title (except core) [#9888](https://github.com/badges/shields/issues/9888)
 - Add Support for [Nostr] Followers [#9870](https://github.com/badges/shields/issues/9870)
-- replace experimental API usage with newly available v1 API [#9886](https://github.com/badges/shields/issues/9886)
+- [thunderstore] replace experimental API usage with newly available v1 API [#9886](https://github.com/badges/shields/issues/9886)
 - Update [Gitea] defaults to gitea.com [#9872](https://github.com/badges/shields/issues/9872)
 - [crates] MSRV Badge [#9871](https://github.com/badges/shields/issues/9871)
-- migrate examples to openApi part 35; affects [npm] [#9866](https://github.com/badges/shields/issues/9866)
-- migrate examples to openApi part 36; affects [myget nuget resharper chocolatey powershellgallery] [#9873](https://github.com/badges/shields/issues/9873)
 - Add [galaxytoolshed] Version [#8249](https://github.com/badges/shields/issues/8249)
 - fix default style docs for social badges [#9869](https://github.com/badges/shields/issues/9869)
-- migrate examples to openApi part 34; affects [github] [#9865](https://github.com/badges/shields/issues/9865)
-- Fix typo in OpenAPI service documentation [#9868](https://github.com/badges/shields/issues/9868)
-- migrate examples to openApi part 33; affects [bower drone localizely mozillaobservatory pythonversionfromtoml] [#9864](https://github.com/badges/shields/issues/9864)
-- migrate some services from examples to openApi part 31; affects [packagecontrol discourse] [#9858](https://github.com/badges/shields/issues/9858)
-- migrate some services from examples to openApi [#9857](https://github.com/badges/shields/issues/9857)
 - Dependency updates
 
 ## server-2024-01-01
