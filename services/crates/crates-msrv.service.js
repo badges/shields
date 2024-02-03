@@ -51,13 +51,18 @@ export default class CratesMSRV extends BaseCratesService {
 
   static defaultBadgeData = { label: 'msrv', color: 'blue' }
 
-  static transform({ version, versions }) {
-    const msrv = version ? version.rust_version : versions[0].rust_version
+  static transform({ version, versions, newest_version }) {
+    const msrv = version ? version.rust_version : findNewestCrateVersion()?.rust_version
+
     if (!msrv) {
       throw new NotFound({ prettyMessage: 'unknown' })
     }
 
     return { msrv }
+
+    function findNewestCrateVersion(){
+      return versions.find(version => version.num === newest_version)
+    }
   }
 
   async handle({ crate, version }) {
