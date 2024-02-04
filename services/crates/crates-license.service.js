@@ -1,5 +1,9 @@
 import { InvalidResponse, pathParams } from '../index.js'
-import { BaseCratesService, description } from './crates-base.js'
+import {
+  BaseCratesService,
+  description,
+  getVersionInfoOrUndefined,
+} from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
   static category = 'license'
@@ -36,8 +40,9 @@ export default class CratesLicense extends BaseCratesService {
 
   static defaultBadgeData = { label: 'license', color: 'blue' }
 
-  static transform({ version, versions }) {
-    const license = version ? version.license : versions[0].license
+  static transform(response) {
+    const license = getVersionInfoOrUndefined(response)?.license
+
     if (!license) {
       throw new InvalidResponse({ prettyMessage: 'invalid null license' })
     }
