@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService } from '../index.js'
 
 const versionSchema = Joi.object({
   downloads: nonNegativeInteger,
