@@ -23,7 +23,7 @@ const versionResponseSchema = Joi.object({
   version: versionSchema,
 }).required()
 
-const scresponseSema = Joi.alternatives(
+const responseSema = Joi.alternatives(
   crateResponseSchema,
   versionResponseSchema,
 )
@@ -35,7 +35,7 @@ class BaseCratesService extends BaseJsonService {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
       : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
-    return this._requestJson({ schema: scresponseSema, url })
+    return this._requestJson({ schema: responseSema, url })
   }
 }
 
