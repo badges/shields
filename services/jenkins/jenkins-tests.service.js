@@ -1,11 +1,12 @@
 import Joi from 'joi'
 import {
-  documentation,
+  documentation as description,
   testResultQueryParamSchema,
+  testResultOpenApiQueryParams,
   renderTestResultBadge,
 } from '../test-results.js'
 import { optionalNonNegativeInteger } from '../validators.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, queryParam } from '../index.js'
 import JenkinsBase from './jenkins-base.js'
 import {
   buildTreeParamQueryString,
@@ -41,27 +42,22 @@ export default class JenkinsTests extends JenkinsBase {
     queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
   }
 
-  static examples = [
-    {
-      title: 'Jenkins tests',
-      namedParams: {},
-      queryParams: {
-        compact_message: null,
-        passed_label: 'passed',
-        failed_label: 'failed',
-        skipped_label: 'skipped',
-        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_gerrit',
+  static openApi = {
+    '/jenkins/tests': {
+      get: {
+        summary: 'Jenkins Tests',
+        description,
+        parameters: [
+          queryParam({
+            name: 'jobUrl',
+            example: 'https://jenkins.sqlalchemy.org/job/alembic_gerrit',
+            required: true,
+          }),
+          ...testResultOpenApiQueryParams,
+        ],
       },
-      staticPreview: this.render({
-        passed: 477,
-        failed: 2,
-        skipped: 0,
-        total: 479,
-        isCompact: false,
-      }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'tests' }
 

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 import JenkinsBase from './jenkins-base.js'
 import {
@@ -87,7 +88,7 @@ const formatMap = {
   },
 }
 
-const documentation = `
+const description = `
 <p>
   We support coverage metrics from a variety of Jenkins plugins:
   <ul>
@@ -107,20 +108,26 @@ export default class JenkinsCoverage extends JenkinsBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Jenkins Coverage',
-      namedParams: {
-        format: 'cobertura',
+  static openApi = {
+    '/jenkins/coverage/{format}': {
+      get: {
+        summary: 'Jenkins Coverage',
+        description,
+        parameters: [
+          pathParam({
+            name: 'format',
+            example: 'cobertura',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          }),
+          queryParam({
+            name: 'jobUrl',
+            example: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
-      },
-      keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
-      staticPreview: this.render({ coverage: 95 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 
