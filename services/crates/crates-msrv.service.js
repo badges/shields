@@ -2,7 +2,6 @@ import { NotFound, pathParams } from '../index.js'
 import {
   BaseCratesService,
   description as cratesIoDescription,
-  getVersionInfoOrUndefined,
 } from './crates-base.js'
 
 const description = `
@@ -53,8 +52,7 @@ export default class CratesMSRV extends BaseCratesService {
   static defaultBadgeData = { label: 'msrv', color: 'blue' }
 
   static transform(response) {
-    const msrv = getVersionInfoOrUndefined(response)?.rust_version
-
+    const msrv = this.getVersionObj(response).rust_version
     if (!msrv) {
       throw new NotFound({ prettyMessage: 'unknown' })
     }
