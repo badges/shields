@@ -1,4 +1,4 @@
-import { describe, test, given } from 'sazerac'
+import { test, given } from 'sazerac'
 import { createServiceTester } from '../tester.js'
 import CratesMSRV from './crates-msrv.service.js'
 
