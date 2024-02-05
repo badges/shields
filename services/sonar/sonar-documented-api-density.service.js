@@ -1,9 +1,10 @@
+import { pathParam } from '../index.js'
 import SonarBase from './sonar-base.js'
 import {
   queryParamSchema,
+  openApiQueryParams,
   getLabel,
   positiveMetricColorScale,
-  keywords,
   documentation,
 } from './sonar-helpers.js'
 
@@ -18,22 +19,31 @@ export default class SonarDocumentedApiDensity extends SonarBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Documented API Density',
-      namedParams: {
-        component: 'org.ow2.petals:petals-se-ase',
-        branch: 'master',
+  static get openApi() {
+    const routes = {}
+    routes[`/sonar/${metric}/{component}`] = {
+      get: {
+        summary: 'Sonar Documented API Density',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        sonarVersion: '4.2',
+    }
+    routes[`/sonar/${metric}/{component}/{branch}`] = {
+      get: {
+        summary: 'Sonar Documented API Density (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
       },
-      staticPreview: this.render({ density: 82 }),
-      keywords,
-      documentation,
-    },
-  ]
+    }
+    return routes
+  }
 
   static defaultBadgeData = { label: getLabel({ metric }) }
 
