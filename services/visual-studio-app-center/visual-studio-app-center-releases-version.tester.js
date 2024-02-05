@@ -29,6 +29,21 @@ t.create('Invalid user, invalid project, valid API token')
     message: 'project not found',
   })
 
+t.create('Missing Short Version')
+  .get('/nock/nock/nock.json')
+  .intercept(nock =>
+    nock('https://api.appcenter.ms/v0.1/apps/')
+      .get('/nock/nock/releases/latest')
+      .reply(200, {
+        version: '1.0',
+        short_version: '',
+      }),
+  )
+  .expectBadge({
+    label: 'release',
+    message: 'v1.0',
+  })
+
 t.create('Invalid API Token').get('/invalid/invalid/invalid.json').expectBadge({
   label: 'release',
   message: 'invalid token',

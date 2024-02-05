@@ -8,7 +8,7 @@ import {
 
 const schema = Joi.object({
   version: Joi.string().required(),
-  short_version: Joi.string().required(),
+  short_version: Joi.string().required().allow(''),
 }).required()
 
 export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStudioAppCenterService {
@@ -53,6 +53,9 @@ export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStud
       token,
       schema,
     })
+    if (!shortVersion) {
+      return renderVersionBadge({ version })
+    }
     return renderVersionBadge({
       version: `${shortVersion} (${version})`,
     })
