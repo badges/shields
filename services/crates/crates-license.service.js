@@ -36,8 +36,8 @@ export default class CratesLicense extends BaseCratesService {
 
   static defaultBadgeData = { label: 'license', color: 'blue' }
 
-  static transform({ version, versions }) {
-    const license = version ? version.license : versions[0].license
+  static transform(response) {
+    const license = this.getVersionObj(response).license
     if (!license) {
       throw new InvalidResponse({ prettyMessage: 'invalid null license' })
     }
