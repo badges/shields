@@ -1,12 +1,45 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam } from '../index.js'
+import { packageNameDescription } from './npm-base.js'
 
 export default class NpmUnpackedSize extends BaseJsonService {
   static category = 'size'
+
   static route = {
     base: 'npm/unpacked-size',
     pattern: ':packageName/:version*',
+  }
+
+  static openApi = {
+    '/npm/unpacked-size/{packageName}': {
+      get: {
+        summary: 'NPM Unpacked Size',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'npm',
+            description: packageNameDescription,
+          }),
+        ],
+      },
+    },
+    '/npm/unpacked-size/{packageName}/{version}': {
+      get: {
+        summary: 'NPM Unpacked Size (with version)',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'npm',
+            description: packageNameDescription,
+          }),
+          pathParam({
+            name: 'version',
+            example: '4.18.2',
+          }),
+        ],
+      },
+    },
   }
 
   async fetch({ packageName, version }) {
