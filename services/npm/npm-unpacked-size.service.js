@@ -26,7 +26,7 @@ export default class NpmUnpackedSize extends BaseJsonService {
     return {
       label: 'unpacked size',
       message: unpackedSize ? prettyBytes(unpackedSize) : 'unknown',
-      color: 'blue',
+      color: unpackedSize ? 'blue' : 'lightgray',
     }
   }
 }
