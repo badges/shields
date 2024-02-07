@@ -4,17 +4,23 @@ import { BaseJsonService } from '../index.js'
 
 export default class NpmUnpackedSize extends BaseJsonService {
   static category = 'size'
-  static route = { base: 'npm/unpacked-size', pattern: ':packageName' }
+  static route = {
+    base: 'npm/unpacked-size',
+    pattern: ':packageName/:version*',
+  }
 
-  async fetch({ packageName }) {
+  async fetch({ packageName, version }) {
     return this._requestJson({
       schema: Joi.any(),
-      url: `https://registry.npmjs.org/${packageName}/latest`,
+      url: `https://registry.npmjs.org/${packageName}/${version}`,
     })
   }
 
-  async handle({ packageName }) {
-    const { dist } = await this.fetch({ packageName })
+  async handle({ packageName, version }) {
+    const { dist } = await this.fetch({
+      packageName,
+      version: version ?? 'latest',
+    })
     const { unpackedSize } = dist
 
     return {
