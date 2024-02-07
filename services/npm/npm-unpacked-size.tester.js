@@ -9,3 +9,7 @@ t.create('Latest unpacked size')
 t.create('Nonexistent unpacked size with version')
   .get('/express/4.16.0.json')
   .expectBadge({ label: 'unpacked size', message: 'unknown' })
+
+t.create('Unpacked size with version')
+  .get('/prettier/3.2.0.json')
+  .expectBadge({ label: 'unpacked size', message: '8.38 MB' })
