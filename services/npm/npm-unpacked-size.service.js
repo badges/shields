@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import prettyBytes from 'pretty-bytes'
 import { BaseJsonService } from '../index.js'
 
 export default class NpmUnpackedSize extends BaseJsonService {
@@ -18,7 +19,7 @@ export default class NpmUnpackedSize extends BaseJsonService {
 
     return {
       label: 'unpacked size',
-      message: unpackedSize,
+      message: prettyBytes(unpackedSize),
       color: 'blue',
     }
   }
