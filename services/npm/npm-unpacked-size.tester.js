@@ -1,4 +1,4 @@
-import { createServiceTester } from '../tester'
+import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
