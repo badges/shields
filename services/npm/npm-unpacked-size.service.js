@@ -1,9 +1,9 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
-import { BaseJsonService, pathParam } from '../index.js'
-import { packageNameDescription } from './npm-base.js'
+import { pathParam } from '../index.js'
+import NpmBase, { packageNameDescription } from './npm-base.js'
 
-export default class NpmUnpackedSize extends BaseJsonService {
+export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
 
   static route = {
