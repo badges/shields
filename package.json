@@ -61,7 +61,7 @@
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^15.1.0",
     "qs": "^6.11.2",
-    "query-string": "^8.1.0",
+    "query-string": "^8.2.0",
     "semver": "~7.5.4",
     "simple-icons": "11.3.0",
     "smol-toml": "1.1.4",
