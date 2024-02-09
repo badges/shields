@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { queryParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
 
@@ -40,6 +41,11 @@ const queryParamSchema = Joi.object({
   server: optionalUrl.required(),
 }).required()
 
+const openApiQueryParams = queryParams(
+  { name: 'server', example: 'https://sonarcloud.io', required: true },
+  { name: 'sonarVersion', example: '4.2' },
+)
+
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
   server: optionalUrl.required(),
@@ -61,6 +67,7 @@ export {
   getLabel,
   isLegacyVersion,
   queryParamSchema,
+  openApiQueryParams,
   queryParamWithFormatSchema,
   negativeMetricColorScale,
   positiveMetricColorScale,

@@ -73,7 +73,7 @@ export default class CratesDownloads extends BaseCratesService {
   transform({ variant, json }) {
     switch (variant) {
       case 'dv':
-        return json.crate ? json.versions[0].downloads : json.version.downloads
+        return this.constructor.getVersionObj(json).downloads
       case 'dr':
         return json.crate.recent_downloads || 0
       default:

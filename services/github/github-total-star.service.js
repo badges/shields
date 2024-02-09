@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import gql from 'graphql-tag'
+import { pathParam, queryParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
@@ -10,21 +11,14 @@ import {
 
 const MAX_REPO_LIMIT = 200
 
-const customDocumentation = `This badge takes into account up to <code>${MAX_REPO_LIMIT}</code> of the most starred repositories of given user / org.`
-
-const userDocumentation = `${commonDocumentation}
+const description = `${commonDocumentation}
 <p>
-  <b>Note:</b><br>
-  1. ${customDocumentation}<br>
-  2. <code>affiliations</code> query param accepts three values (must be UPPER case) <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
-  One can pass comma separated combinations of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.
-  Default value is <code>OWNER</code>. See the explanation of these values <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.
-</p>
-`
-const orgDocumentation = `${commonDocumentation}
-<p>
-  <b>Note:</b> ${customDocumentation}
+  <b>Note:</b> This badge takes into account up to <code>${MAX_REPO_LIMIT}</code> of the most starred repositories of given user / org.
 </p>`
+
+const affiliationsDescription = `This param accepts three values (must be UPPER case) <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
+One can pass comma separated combinations of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.
+Default value is <code>OWNER</code>. See the explanation of these values <a href="https://docs.github.com/en/graphql/reference/enums#repositoryaffiliation">here</a>.`
 
 const pageInfoSchema = Joi.object({
   hasNextPage: Joi.boolean().required(),
@@ -141,34 +135,29 @@ export default class GithubTotalStarService extends GithubAuthV4Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: "GitHub User's stars",
-      namedParams: {
-        user: 'chris48s',
+  static openApi = {
+    '/github/stars/{user}': {
+      get: {
+        summary: "GitHub User's stars",
+        description,
+        parameters: [
+          pathParam({ name: 'user', example: 'chris48s' }),
+          queryParam({
+            name: 'affiliations',
+            example: 'OWNER,COLLABORATOR',
+            description: affiliationsDescription,
+          }),
+        ],
       },
-      queryParams: { affiliations: 'OWNER,COLLABORATOR' },
-      staticPreview: {
-        label: this.defaultLabel,
-        message: 54,
-        style: 'social',
-      },
-      documentation: userDocumentation,
     },
-    {
-      title: "GitHub Org's stars",
-      pattern: ':org',
-      namedParams: {
-        org: 'badges',
+    '/github/stars/{org}': {
+      get: {
+        summary: "GitHub Org's stars",
+        description,
+        parameters: [pathParam({ name: 'org', example: 'badges' })],
       },
-      staticPreview: {
-        label: this.defaultLabel,
-        message: metric(7000),
-        style: 'social',
-      },
-      documentation: orgDocumentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: this.defaultLabel,

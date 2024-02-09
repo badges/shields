@@ -43,7 +43,7 @@ t.create('TOML from url | caching with new query params')
 
 t.create('TOML from url | with prefix & suffix & label')
   .get(
-    '.json?url=https://raw.githubusercontent.com/squirrelchat/smol-toml/mistress/bench/testfiles/toml-spec-example.toml&query=$.database.temp_targets.cpu&prefix=%2B&suffix=°C&label=CPU Temp Target',
+    '.json?url=https://raw.githubusercontent.com/squirrelchat/smol-toml/mistress/bench/testfiles/toml-spec-example.toml&query=$.database.temp_targets.cpu&prefix=%2B&suffix=%C2%B0C&label=CPU Temp Target',
   )
   .expectBadge({ label: 'CPU Temp Target', message: '+79.5°C' })
 

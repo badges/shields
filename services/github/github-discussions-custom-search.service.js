@@ -1,15 +1,15 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
 const discussionsSearchDocs = `
-For a full list of available filters and allowed values that can be used in the <code>query</code>,
+For a full list of available filters and allowed values,
 see GitHub's documentation on
 [Searching discussions](https://docs.github.com/en/search-github/searching-on-github/searching-discussions).
-${documentation}
 `
 
 const discussionCountSchema = Joi.object({
@@ -56,21 +56,22 @@ class GithubDiscussionsSearch extends BaseGithubDiscussionsSearch {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub discussions custom search',
-      namedParams: {},
-      queryParams: {
-        query: 'repo:badges/shields is:answered answered-by:chris48s',
+  static openApi = {
+    '/github/discussions-search': {
+      get: {
+        summary: 'GitHub discussions custom search',
+        description: documentation,
+        parameters: [
+          queryParam({
+            name: 'query',
+            description: discussionsSearchDocs,
+            example: 'repo:badges/shields is:answered answered-by:chris48s',
+            required: true,
+          }),
+        ],
       },
-      staticPreview: {
-        label: 'query',
-        message: '2',
-        color: 'blue',
-      },
-      documentation: discussionsSearchDocs,
     },
-  ]
+  }
 
   async handle(namedParams, { query }) {
     const discussionCount = await this.fetch({ query })
@@ -85,24 +86,24 @@ class GithubRepoDiscussionsSearch extends BaseGithubDiscussionsSearch {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub discussions custom search in repo',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/discussions-search/{user}/{repo}': {
+      get: {
+        summary: 'GitHub discussions custom search in repo',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          queryParam({
+            name: 'query',
+            description: discussionsSearchDocs,
+            example: 'is:answered answered-by:chris48s',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        query: 'is:answered answered-by:chris48s',
-      },
-      staticPreview: {
-        label: 'query',
-        message: '2',
-        color: 'blue',
-      },
-      documentation: discussionsSearchDocs,
     },
-  ]
+  }
 
   async handle({ user, repo }, { query }) {
     query = `repo:${user}/${repo} ${query}`

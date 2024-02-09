@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { queryParam } from '../index.js'
 import { renderBuildStatusBadge } from '../build-status.js'
 import JenkinsBase from './jenkins-base.js'
 import {
@@ -40,16 +41,20 @@ export default class JenkinsBuild extends JenkinsBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Jenkins',
-      namedParams: {},
-      queryParams: {
-        jobUrl: 'https://wso2.org/jenkins/view/All%20Builds/job/archetypes',
+  static openApi = {
+    '/jenkins/build': {
+      get: {
+        summary: 'Jenkins Build',
+        parameters: [
+          queryParam({
+            name: 'jobUrl',
+            example: 'https://ci.eclipse.org/jgit/job/jgit',
+            required: true,
+          }),
+        ],
       },
-      staticPreview: renderBuildStatusBadge({ status: 'passing' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 
