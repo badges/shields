@@ -16,14 +16,4 @@ export default class GiteaBase extends BaseJsonService {
       }),
     )
   }
-
-  async fetchRequest({ url, options, httpErrors }) {
-    return this._request(
-      this.authHelper.withBearerAuthHeader({
-        url,
-        options,
-        httpErrors,
-      }),
-    )
-  }
 }
