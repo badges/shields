@@ -12,8 +12,9 @@ function httpErrorsFor() {
   }
 }
 
-function renderIssue({ variant, raw, labels, defaultBadgeData, count }) {
-  const state = variant
+function renderIssue({ variant, labels, defaultBadgeData, count }) {
+  const state = variant.split('-')[0]
+  const raw = variant.endsWith('-raw')
   const isMultiLabel = labels && labels.includes(',')
   const labelText = labels ? `${isMultiLabel ? `${labels}` : labels} ` : ''
 

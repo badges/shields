@@ -13,14 +13,14 @@ t.create('Forks')
   })
 
 t.create('Forks (self-managed)')
-  .get('/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
+  .get('/Codeberg/forgejo.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'forks',
     message: isMetricAllowNegative,
     color: 'blue',
     link: [
-      'https://codeberg.org/CanisHelix/shields-badge-test',
-      'https://codeberg.org/CanisHelix/shields-badge-test/forks',
+      'https://codeberg.org/Codeberg/forgejo',
+      'https://codeberg.org/Codeberg/forgejo/forks',
     ],
   })
 

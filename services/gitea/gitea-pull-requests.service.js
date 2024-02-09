@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { optionalUrl, nonNegativeInteger } from '../validators.js'
+import { fetchIssue } from './gitea-common-fetch.js'
 import { description, httpErrorsFor, renderIssue } from './gitea-helper.js'
 import GiteaBase from './gitea-base.js'
 
@@ -73,21 +74,21 @@ export default class GiteaPullRequests extends GiteaBase {
       options.searchParams.labels = labels
     }
 
-    const { res } = await this._request(
-      this.authHelper.withBearerAuthHeader({
-        url: `${baseUrl}/api/v1/repos/${user}/${repo}/issues`,
-        options,
-        httpErrors: httpErrorsFor(),
-      }),
-    )
+    const { res } = await fetchIssue(this, {
+      user,
+      repo,
+      baseUrl,
+      options,
+      httpErrors: httpErrorsFor(),
+    })
+
     const data = this.constructor._validate(res.headers, schema)
     // The total number of issues is in the `x-total-count` field in the headers.
     // Pull requests are an issue of type pulls
     // https://gitea.com/api/swagger#/issue
     const count = data['x-total-count']
     return renderIssue({
-      variant: variant.split('-')[0],
-      raw: variant.endsWith('-raw'),
+      variant,
       labels,
       defaultBadgeData: this.constructor.defaultBadgeData,
       count,
