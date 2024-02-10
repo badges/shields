@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { expect } from 'chai'
 import nock from 'nock'
 import config from 'config'
@@ -80,6 +81,110 @@ function getBadgeExampleCall(serviceClass) {
 }
 
 /**
+ * Generates a configuration object with a fake key based on the provided class.
+ * For use in auth tests where a config with a test key is required.
+ *
+ * @param {BaseService} serviceClass - The class to generate configuration for.
+ * @param {string} fakeKey - The fake key to be used in the configuration.
+ * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
+ * @returns {object} - The configuration object.
+ * @throws {TypeError} - Throws an error if the input is not a class.
+ */
+function generateFakeConfig(serviceClass, fakeKey, fakeUser) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      'Invalid serviceClass: Must be an instance of BaseService.',
+    )
+  }
+  if (!fakeKey || typeof fakeKey !== 'string') {
+    throw new TypeError('Invalid fakeKey: Must be a String.')
+  }
+
+  if (!serviceClass.auth) {
+    throw new Error(`Missing auth for ${serviceClass.name}.`)
+  }
+  if (!serviceClass.auth.passKey) {
+    throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
+  }
+  // Extract the passKey property from auth, or use a default if not present
+  const passKeyProperty = serviceClass.auth.passKey
+  let passUserProperty = 'placeholder'
+  if (fakeUser) {
+    if (typeof fakeKey !== 'string') {
+      throw new TypeError('Invalid fakeUser: Must be a String.')
+    }
+    if (!serviceClass.auth.userKey) {
+      throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
+    }
+    passUserProperty = serviceClass.auth.userKey
+  }
+
+  // Build and return the configuration object with the fake key
+  return {
+    private: {
+      [passKeyProperty]: fakeKey,
+      [passUserProperty]: fakeUser,
+    },
+  }
+}
+
+/**
+ * Returns the name of the auth method of the service class provided
+ *
+ * @param {BaseService} serviceClass The service class to extract auth method from.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService
+ *  or if the authHelper function is missing in fetch.
+ * @returns {string} The auth method of the service class provided.
+ *  May return on of the following strings: BasicAuth, ApiKeyHeader, BearerAuthHeader, QueryStringAuth, JwtAuth.
+ *
+ * @example
+ * // Example usage:
+ * getAuthMethod(SonarCoverage)
+ * // outputs "BasicAuth"
+ */
+function getAuthMethod(serviceClass) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
+    )
+  }
+  const fetchFunctionString = serviceClass.prototype.fetch.toString()
+  const result = fetchFunctionString.match(
+    /this\.authHelper\.with([A-Z][a-zA-Z0-9_]+)\(/,
+  )
+  if (result) {
+    return result[1]
+  } else {
+    throw new TypeError(
+      'Invalid serviceClass: Missing authHelper function in fetch.',
+    )
+  }
+}
+
+/**
+ * Generate a fake JWT Token valid for 1 hour for use in testing.
+ *
+ * @returns {string} Fake JWT Token valid for 1 hour.
+ */
+function fakeJwtToken() {
+  const fakeJwtPayload = { exp: dayjs().add(1, 'hours').unix() }
+  const fakeJwtPayloadJsonString = JSON.stringify(fakeJwtPayload)
+  const fakeJwtPayloadBase64 = Buffer.from(fakeJwtPayloadJsonString).toString(
+    'base64',
+  )
+  const jwtToken = `FakeHeader.${fakeJwtPayloadBase64}.fakeSignature`
+  return jwtToken
+}
+
+/**
  * Test authentication of a badge for it's first OpenAPI example using a provided dummyResponse
  *
  * @param {BaseService} serviceClass The service class tested.
@@ -100,7 +205,10 @@ async function testAuth(serviceClass, dummyResponse) {
 
   cleanUpNockAfterEach()
 
-  const config = { private: { stackapps_api_key: 'fake-key' } }
+  const fakeUser = 'fake-user'
+  const fakeSecret = 'fake-secret'
+  const authMethod = getAuthMethod(serviceClass)
+  const config = generateFakeConfig(serviceClass, fakeSecret)
   const exampleInvokeParams = getBadgeExampleCall(serviceClass)
   const authOrigin = serviceClass.auth.authorizedOrigins[0]
 
@@ -109,9 +217,48 @@ async function testAuth(serviceClass, dummyResponse) {
   }
 
   const scope = nock(authOrigin)
-    .get(/.*/)
-    .query(queryObject => queryObject.key === 'fake-key')
-    .reply(200, dummyResponse)
+  switch (authMethod) {
+    case 'BasicAuth':
+      scope
+        .get(/.*/)
+        .basicAuth({ fakeUser, fakeSecret })
+        .reply(200, dummyResponse)
+      break
+    case 'ApiKeyHeader':
+      // TODO may fail if header is not default (see auth-helper.js - withApiKeyHeader)
+      scope
+        .get(/.*/)
+        .matchHeader('x-api-key', fakeSecret)
+        .reply(200, dummyResponse)
+      break
+    case 'BearerAuthHeader':
+      scope
+        .get(/.*/)
+        .matchHeader('Authorization', `Bearer ${fakeSecret}`)
+        .reply(200, dummyResponse)
+      break
+    case 'QueryStringAuth':
+      scope
+        .get(/.*/)
+        .query(queryObject => queryObject.key === fakeSecret)
+        .reply(200, dummyResponse)
+      break
+    case 'JwtAuth': {
+      const fakeToken = fakeJwtToken()
+      scope
+        .post(/.*/, { username: fakeUser, password: fakeSecret })
+        .reply(200, fakeToken)
+      scope
+        .get(/.*/)
+        .matchHeader('Authorization', `Bearer ${fakeToken}`)
+        .reply(200, dummyResponse)
+      break
+    }
+
+    default:
+      throw new TypeError(`Unkown auth method for ${serviceClass.name}.`)
+  }
+
   expect(
     await serviceClass.invoke(defaultContext, config, exampleInvokeParams),
   ).to.not.have.property('isError')
