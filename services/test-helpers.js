@@ -170,6 +170,72 @@ function getAuthMethod(serviceClass) {
 }
 
 /**
+ * Returns the prefix of the bearer token for a service class.
+ *
+ * @param {BaseService} serviceClass The service class to extract auth method from.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
+ * @returns {string} Bearer token prefix.
+ *
+ * @example
+ * // Example usage:
+ * getBearerPrefixOfService(Discord)
+ * // outputs 'Bot'
+ */
+function getBearerPrefixOfService(serviceClass) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
+    )
+  }
+  const fetchFunctionString = serviceClass.prototype.fetch.toString()
+  const result = fetchFunctionString.match(
+    /withBearerAuthHeader\([\s\S]*,\s+['"`]([\s\S]*)['"`],?\s*\)/,
+  )
+  if (result) {
+    return result[1]
+  } else {
+    return 'Bearer'
+  }
+}
+
+/**
+ * Returns the prefix of the bearer token for a service class.
+ *
+ * @param {BaseService} serviceClass The service class to extract auth method from.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
+ * @returns {string} Bearer token prefix.
+ *
+ * @example
+ * // Example usage:
+ * getApiHeaderKeyOfService(CurseForgeDownloads)
+ * // outputs 'x-api-key'
+ */
+function getApiHeaderKeyOfService(serviceClass) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
+    )
+  }
+  const fetchFunctionString = serviceClass.prototype.fetch.toString()
+  const result = fetchFunctionString.match(
+    /withApiKeyHeader\([\s\S]*,\s+['"`]([\s\S]*)['"`],?\s*\)/,
+  )
+  if (result) {
+    return result[1]
+  } else {
+    return 'x-api-key'
+  }
+}
+
+/**
  * Generate a fake JWT Token valid for 1 hour for use in testing.
  *
  * @returns {string} Fake JWT Token valid for 1 hour.
@@ -228,13 +294,16 @@ async function testAuth(serviceClass, dummyResponse) {
       // TODO may fail if header is not default (see auth-helper.js - withApiKeyHeader)
       scope
         .get(/.*/)
-        .matchHeader('x-api-key', fakeSecret)
+        .matchHeader(getApiHeaderKeyOfService(serviceClass), fakeSecret)
         .reply(200, dummyResponse)
       break
     case 'BearerAuthHeader':
       scope
         .get(/.*/)
-        .matchHeader('Authorization', `Bearer ${fakeSecret}`)
+        .matchHeader(
+          'Authorization',
+          `${getBearerPrefixOfService(serviceClass)} ${fakeSecret}`,
+        )
         .reply(200, dummyResponse)
       break
     case 'QueryStringAuth':
