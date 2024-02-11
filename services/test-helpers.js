@@ -302,13 +302,14 @@ function fakeJwtToken() {
  * @param {BaseService} serviceClass The service class tested.
  * @param {object} dummyResponse An object containing the dummy response by the server.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
+ * @param {nock.ReplyHeaders} headers - Header for the response.
  *   or if `serviceClass` is missing authorizedOrigins.
  *
  * @example
  * // Example usage:
  * testAuth(StackExchangeReputation, { items: [{ reputation: 8 }] })
  */
-async function testAuth(serviceClass, dummyResponse) {
+async function testAuth(serviceClass, dummyResponse, headers) {
   if (!(serviceClass.prototype instanceof BaseService)) {
     throw new TypeError(
       'Invalid serviceClass: Must be an instance of BaseService.',
@@ -339,14 +340,14 @@ async function testAuth(serviceClass, dummyResponse) {
       scope
         .get(/.*/)
         .basicAuth({ user: fakeUser, pass: fakeSecret })
-        .reply(200, dummyResponse)
+        .reply(200, dummyResponse, headers)
       break
     case 'ApiKeyHeader':
       // TODO may fail if header is not default (see auth-helper.js - withApiKeyHeader)
       scope
         .get(/.*/)
         .matchHeader(getApiHeaderKeyOfService(serviceClass), fakeSecret)
-        .reply(200, dummyResponse)
+        .reply(200, dummyResponse, headers)
       break
     case 'BearerAuthHeader':
       scope
@@ -355,23 +356,23 @@ async function testAuth(serviceClass, dummyResponse) {
           'Authorization',
           `${getBearerPrefixOfService(serviceClass)} ${fakeSecret}`,
         )
-        .reply(200, dummyResponse)
+        .reply(200, dummyResponse, headers)
       break
     case 'QueryStringAuth':
       scope
         .get(/.*/)
         .query(queryObject => queryObject.key === fakeSecret)
-        .reply(200, dummyResponse)
+        .reply(200, dummyResponse, headers)
       break
     case 'JwtAuth': {
       const fakeToken = fakeJwtToken()
       scope
         .post(/.*/, { username: fakeUser, password: fakeSecret })
-        .reply(200, fakeToken)
+        .reply(200, fakeToken, headers)
       scope
         .get(/.*/)
         .matchHeader('Authorization', `Bearer ${fakeToken}`)
-        .reply(200, dummyResponse)
+        .reply(200, dummyResponse, headers)
       break
     }
 
