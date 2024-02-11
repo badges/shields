@@ -271,10 +271,10 @@ async function testAuth(serviceClass, dummyResponse) {
 
   cleanUpNockAfterEach()
 
-  const fakeUser = 'fake-user'
+  const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
   const fakeSecret = 'fake-secret'
   const authMethod = getAuthMethod(serviceClass)
-  const config = generateFakeConfig(serviceClass, fakeSecret)
+  const config = generateFakeConfig(serviceClass, fakeSecret, fakeUser)
   const exampleInvokeParams = getBadgeExampleCall(serviceClass)
   const authOrigin = serviceClass.auth.authorizedOrigins[0]
 
@@ -287,7 +287,7 @@ async function testAuth(serviceClass, dummyResponse) {
     case 'BasicAuth':
       scope
         .get(/.*/)
-        .basicAuth({ fakeUser, fakeSecret })
+        .basicAuth({ user: fakeUser, pass: fakeSecret })
         .reply(200, dummyResponse)
       break
     case 'ApiKeyHeader':
