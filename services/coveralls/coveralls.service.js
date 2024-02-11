@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { coveragePercentage } from '../color-formatters.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
   covered_percent: Joi.number().min(0).max(100).required(),
@@ -18,23 +18,23 @@ export default class Coveralls extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Coveralls',
-      namedParams: { vcsType: 'github', user: 'jekyll', repo: 'jekyll' },
-      staticPreview: this.render({ coverage: 86 }),
-    },
-    {
-      title: 'Coveralls branch',
-      namedParams: {
-        vcsType: 'bitbucket',
-        user: 'pyKLIP',
-        repo: 'pyklip',
+  static openApi = {
+    '/coverallsCoverage/{vcsType}/{user}/{repo}': {
+      get: {
+        summary: 'Coveralls',
+        parameters: [
+          pathParam({
+            name: 'vcsType',
+            example: 'github',
+            schema: { type: 'string', enum: this.getEnum('vcsType') },
+          }),
+          pathParam({ name: 'user', example: 'jekyll' }),
+          pathParam({ name: 'repo', example: 'jekyll' }),
+          queryParam({ name: 'branch', example: 'master' }),
+        ],
       },
-      queryParams: { branch: 'master' },
-      staticPreview: this.render({ coverage: 96 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 
