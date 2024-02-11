@@ -36,18 +36,8 @@ export default class CratesLicense extends BaseCratesService {
 
   static defaultBadgeData = { label: 'license', color: 'blue' }
 
-  static render({ license: message }) {
-    return { message }
-  }
-
-  static transform({ errors, version, versions }) {
-    // crates.io returns a 200 response with an errors object in
-    // error scenarios, e.g. https://crates.io/api/v1/crates/libc/0.1
-    if (errors) {
-      throw new InvalidResponse({ prettyMessage: errors[0].detail })
-    }
-
-    const license = version ? version.license : versions[0].license
+  static transform(response) {
+    const license = this.getVersionObj(response).license
     if (!license) {
       throw new InvalidResponse({ prettyMessage: 'invalid null license' })
     }
@@ -58,6 +48,6 @@ export default class CratesLicense extends BaseCratesService {
   async handle({ crate, version }) {
     const json = await this.fetch({ crate, version })
     const { license } = this.constructor.transform(json)
-    return this.constructor.render({ license })
+    return { message: license }
   }
 }

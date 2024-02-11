@@ -1,5 +1,5 @@
 import { renderVersionBadge } from '../version.js'
-import { InvalidResponse, pathParams } from '../index.js'
+import { pathParams } from '../index.js'
 import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesVersion extends BaseCratesService {
@@ -19,18 +19,9 @@ export default class CratesVersion extends BaseCratesService {
     },
   }
 
-  transform(json) {
-    if (json.errors) {
-      throw new InvalidResponse({ prettyMessage: json.errors[0].detail })
-    }
-    return json.crate.max_stable_version
-      ? json.crate.max_stable_version
-      : json.crate.max_version
-  }
-
   async handle({ crate }) {
     const json = await this.fetch({ crate })
-    const version = this.transform(json)
+    const version = this.constructor.getLatestVersion(json)
     return renderVersionBadge({ version })
   }
 }

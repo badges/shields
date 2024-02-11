@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { colorScale } from '../color-formatters.js'
+import { pathParams } from '../index.js'
 import ScrutinizerBase from './scrutinizer-base.js'
 
 const schema = Joi.object({
@@ -58,19 +59,39 @@ class ScrutinizerQuality extends ScrutinizerQualityBase {
     pattern: ':vcs(g|b)/:user/:repo/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'Scrutinizer code quality (GitHub/Bitbucket)',
-      pattern: ':vcs(g|b)/:user/:repo/:branch?',
-      namedParams: {
-        vcs: 'g',
-        user: 'filp',
-        repo: 'whoops',
-        branch: 'master',
+  static openApi = {
+    '/scrutinizer/quality/{vcs}/{user}/{repo}': {
+      get: {
+        summary: 'Scrutinizer quality (GitHub/Bitbucket)',
+        parameters: pathParams(
+          {
+            name: 'vcs',
+            example: 'g',
+            description: 'Platform: Either Github or Bitbucket',
+            schema: { type: 'string', enum: this.getEnum('vcs') },
+          },
+          { name: 'user', example: 'filp' },
+          { name: 'repo', example: 'whoops' },
+        ),
       },
-      staticPreview: this.render({ score: 8.26 }),
     },
-  ]
+    '/scrutinizer/quality/{vcs}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Scrutinizer quality (GitHub/Bitbucket) with branch',
+        parameters: pathParams(
+          {
+            name: 'vcs',
+            example: 'g',
+            description: 'Platform: Either Github or Bitbucket',
+            schema: { type: 'string', enum: this.getEnum('vcs') },
+          },
+          { name: 'user', example: 'filp' },
+          { name: 'repo', example: 'whoops' },
+          { name: 'branch', example: 'master' },
+        ),
+      },
+    },
+  }
 
   async handle({ vcs, user, repo, branch }) {
     return this.makeBadge({
@@ -91,19 +112,29 @@ class ScrutinizerQualityGitLab extends ScrutinizerQualityBase {
   // The example used is valid, but the project will not be accessible if Shields users try to use it.
   // https://gitlab.propertywindow.nl/propertywindow/client
   // https://scrutinizer-ci.com/gl/propertywindow/propertywindow/client/badges/quality-score.png?b=master&s=dfae6992a48184cc2333b4c349cec0447f0d67c2
-  static examples = [
-    {
-      title: 'Scrutinizer coverage (GitLab)',
-      pattern: ':instance/:user/:repo/:branch?',
-      namedParams: {
-        instance: 'propertywindow',
-        user: 'propertywindow',
-        repo: 'client',
-        branch: 'master',
+  static openApi = {
+    '/scrutinizer/quality/gl/{instance}/{user}/{repo}': {
+      get: {
+        summary: 'Scrutinizer quality (GitLab)',
+        parameters: pathParams(
+          { name: 'instance', example: 'propertywindow' },
+          { name: 'user', example: 'propertywindow' },
+          { name: 'repo', example: 'client' },
+        ),
       },
-      staticPreview: this.render({ score: 10.0 }),
     },
-  ]
+    '/scrutinizer/quality/gl/{instance}/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Scrutinizer quality (GitLab) with branch',
+        parameters: pathParams(
+          { name: 'instance', example: 'propertywindow' },
+          { name: 'user', example: 'propertywindow' },
+          { name: 'repo', example: 'client' },
+          { name: 'branch', example: 'master' },
+        ),
+      },
+    },
+  }
 
   async handle({ instance, user, repo, branch }) {
     return this.makeBadge({

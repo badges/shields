@@ -10,7 +10,7 @@ class DummyGiteaService extends GiteaBase {
   async handle() {
     const data = await this.fetch({
       schema: Joi.any(),
-      url: 'https://codeberg.org/api/v1/repos/CanisHelix/shields-badge-test/releases',
+      url: 'https://gitea.com/api/v1/repos/CanisHelix/shields-badge-test/releases',
     })
     return { message: data.message }
   }
@@ -24,7 +24,7 @@ describe('GiteaBase', function () {
       public: {
         services: {
           gitea: {
-            authorizedOrigins: ['https://codeberg.org'],
+            authorizedOrigins: ['https://gitea.com'],
           },
         },
       },
@@ -34,7 +34,7 @@ describe('GiteaBase', function () {
     }
 
     it('sends the auth information as configured', async function () {
-      const scope = nock('https://codeberg.org')
+      const scope = nock('https://gitea.com')
         .get('/api/v1/repos/CanisHelix/shields-badge-test/releases')
         .matchHeader('Authorization', 'Bearer fake-key')
         .reply(200, { message: 'fake message' })

@@ -2,15 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
-const packageSchema = Joi.object({
-  latest: Joi.object({
-    version_number: Joi.string().required(),
-  }).required(),
-}).required()
-
 const packageMetricsSchema = Joi.object({
   downloads: nonNegativeInteger,
   rating_score: nonNegativeInteger,
+  latest_version: Joi.string().required(),
 })
 
 const description = `
@@ -58,22 +53,6 @@ const description = `
  */
 class BaseThunderstoreService extends BaseJsonService {
   static thunderstoreGreen = '23FFB0'
-
-  /**
-   * Fetches package metadata from the Thunderstore API.
-   *
-   * @param {object} pkg - Package specifier
-   * @param {string} pkg.namespace - the package namespace
-   * @param {string} pkg.packageName - the package name
-   * @returns {Promise<object>} - Promise containing validated package information
-   */
-  async fetchPackage({ namespace, packageName }) {
-    return this._requestJson({
-      schema: packageSchema,
-      url: `https://thunderstore.io/api/experimental/package/${namespace}/${packageName}`,
-    })
-  }
-
   /**
    * Fetches package metrics from the Thunderstore API.
    *

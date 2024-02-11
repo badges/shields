@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseXmlService } from '../index.js'
+import { BaseXmlService, pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import { isBuildStatus, renderBuildStatusBadge } from './obs-build-status.js'
 
@@ -26,23 +26,22 @@ export default class ObsService extends BaseXmlService {
     isRequired: true,
   }
 
-  static examples = [
-    {
-      title: 'OBS package build status',
-      namedParams: {
-        project: 'openSUSE:Tools',
-        packageName: 'osc',
-        repository: 'Debian_11',
-        arch: 'x86_64',
+  static openApi = {
+    '/obs/{project}/{packageName}/{repository}/{arch}': {
+      get: {
+        summary: 'OBS package build status',
+        description:
+          '[Open Build Service](https://openbuildservice.org/) (OBS) is a generic system to build and distribute binary packages',
+        parameters: [
+          pathParam({ name: 'project', example: 'openSUSE:Tools' }),
+          pathParam({ name: 'packageName', example: 'osc' }),
+          pathParam({ name: 'repository', example: 'Debian_11' }),
+          pathParam({ name: 'arch', example: 'x86_64' }),
+          queryParam({ name: 'instance', example: 'https://api.opensuse.org' }),
+        ],
       },
-      queryParams: { instance: 'https://api.opensuse.org' },
-      staticPreview: this.render({
-        repository: 'Debian_11',
-        status: 'succeeded',
-      }),
-      keywords: ['open build service'],
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'build' }
 

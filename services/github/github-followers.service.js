@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -11,18 +12,15 @@ const schema = Joi.object({
 export default class GithubFollowers extends GithubAuthV3Service {
   static category = 'social'
   static route = { base: 'github/followers', pattern: ':user' }
-  static examples = [
-    {
-      title: 'GitHub followers',
-      namedParams: { user: 'espadrine' },
-      staticPreview: Object.assign(this.render({ followers: 150 }), {
-        label: 'Follow',
-        style: 'social',
-      }),
-      queryParams: { label: 'Follow' },
-      documentation,
+  static openApi = {
+    '/github/followers/{user}': {
+      get: {
+        summary: 'GitHub followers',
+        description: documentation,
+        parameters: pathParams({ name: 'user', example: 'espadrine' }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'followers', namedLogo: 'github' }
 

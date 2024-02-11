@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-02-01
+
+- feat: added up_message and down_message to [uptimerobotstatus] [#9662](https://github.com/badges/shields/issues/9662)
+- Add [Hangar] Badges [#9800](https://github.com/badges/shields/issues/9800)
+- sort categories by title (except core) [#9888](https://github.com/badges/shields/issues/9888)
+- Add Support for [Nostr] Followers [#9870](https://github.com/badges/shields/issues/9870)
+- [thunderstore] replace experimental API usage with newly available v1 API [#9886](https://github.com/badges/shields/issues/9886)
+- Update [Gitea] defaults to gitea.com [#9872](https://github.com/badges/shields/issues/9872)
+- [crates] MSRV Badge [#9871](https://github.com/badges/shields/issues/9871)
+- Add [galaxytoolshed] Version [#8249](https://github.com/badges/shields/issues/8249)
+- fix default style docs for social badges [#9869](https://github.com/badges/shields/issues/9869)
+- Dependency updates
+
 ## server-2024-01-01
 
 The most important changes in this release for users hosting their own instance are:
