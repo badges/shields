@@ -87,10 +87,16 @@ function getBadgeExampleCall(serviceClass) {
  * @param {BaseService} serviceClass - The class to generate configuration for.
  * @param {string} fakeKey - The fake key to be used in the configuration.
  * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
+ * @param {string} fakeauthorizedOrigins - authorizedOrigins to add to config.
  * @returns {object} - The configuration object.
  * @throws {TypeError} - Throws an error if the input is not a class.
  */
-function generateFakeConfig(serviceClass, fakeKey, fakeUser) {
+function generateFakeConfig(
+  serviceClass,
+  fakeKey,
+  fakeUser,
+  fakeauthorizedOrigins,
+) {
   if (
     !serviceClass ||
     !serviceClass.prototype ||
@@ -102,6 +108,9 @@ function generateFakeConfig(serviceClass, fakeKey, fakeUser) {
   }
   if (!fakeKey || typeof fakeKey !== 'string') {
     throw new TypeError('Invalid fakeKey: Must be a String.')
+  }
+  if (!fakeauthorizedOrigins || typeof fakeauthorizedOrigins !== 'string') {
+    throw new TypeError('Invalid fakeauthorizedOrigins: Must be a String.')
   }
 
   if (!serviceClass.auth) {
@@ -125,6 +134,13 @@ function generateFakeConfig(serviceClass, fakeKey, fakeUser) {
 
   // Build and return the configuration object with the fake key
   return {
+    public: {
+      services: {
+        [serviceClass.auth.serviceKey]: {
+          authorizedOrigins: [fakeauthorizedOrigins],
+        },
+      },
+    },
     private: {
       [passKeyProperty]: fakeKey,
       [passUserProperty]: fakeUser,
@@ -236,6 +252,36 @@ function getApiHeaderKeyOfService(serviceClass) {
 }
 
 /**
+ * Returns the first auth origin found for a provided service class.
+ *
+ * @param {BaseService} serviceClass The service class to find the authorized origins.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
+ * @returns {string} First auth origin found.
+ *
+ * @example
+ * // Example usage:
+ * getServiceClassAuthOrigin(Obs)
+ * // outputs 'https://api.opensuse.org'
+ */
+function getServiceClassAuthOrigin(serviceClass) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
+    )
+  }
+  if (serviceClass.auth.authorizedOrigins) {
+    return serviceClass.auth.authorizedOrigins[0]
+  } else {
+    return config.public.services[serviceClass.auth.serviceKey]
+      .authorizedOrigins
+  }
+}
+
+/**
  * Generate a fake JWT Token valid for 1 hour for use in testing.
  *
  * @returns {string} Fake JWT Token valid for 1 hour.
@@ -274,9 +320,14 @@ async function testAuth(serviceClass, dummyResponse) {
   const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
   const fakeSecret = 'fake-secret'
   const authMethod = getAuthMethod(serviceClass)
-  const config = generateFakeConfig(serviceClass, fakeSecret, fakeUser)
+  const authOrigin = getServiceClassAuthOrigin(serviceClass)
+  const config = generateFakeConfig(
+    serviceClass,
+    fakeSecret,
+    fakeUser,
+    authOrigin,
+  )
   const exampleInvokeParams = getBadgeExampleCall(serviceClass)
-  const authOrigin = serviceClass.auth.authorizedOrigins[0]
 
   if (!authOrigin) {
     throw new TypeError(`Missing authorizedOrigins for ${serviceClass.name}.`)
