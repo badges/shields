@@ -1,4 +1,4 @@
-import { isMetric, isMetricAllowNegative } from '../test-validators.js'
+import { isMetric } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -16,7 +16,7 @@ t.create('Forks (self-managed)')
   .get('/Codeberg/forgejo.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'forks',
-    message: isMetricAllowNegative,
+    message: isMetric,
     color: 'blue',
     link: [
       'https://codeberg.org/Codeberg/forgejo',
