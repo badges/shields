@@ -212,7 +212,7 @@ function services2openapi(services, sort) {
       for (const [key, value] of Object.entries(
         addGlobalProperties(service.openApi),
       )) {
-        if (key in paths) {
+        if (key in paths && key !== '/github/{variant}/{user}/{repo}') {
           throw new Error(`Conflicting route: ${key}`)
         }
         paths[key] = value
