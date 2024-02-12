@@ -1,7 +1,14 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import { pathParam } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
+
+const schema = Joi.object({
+  dist: Joi.object({
+    unpackedSize: nonNegativeInteger,
+  }).required(),
+}).required()
 
 export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
@@ -44,7 +51,7 @@ export default class NpmUnpackedSize extends NpmBase {
 
   async fetch({ packageName, version }) {
     return this._requestJson({
-      schema: Joi.any(),
+      schema,
       url: `https://registry.npmjs.org/${packageName}/${version}`,
     })
   }
