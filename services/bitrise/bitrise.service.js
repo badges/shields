@@ -41,7 +41,7 @@ export default class Bitrise extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'appId',
-            example: '4a2b10a819d12b67',
+            example: 'e736852157296019',
           }),
           pathParam({
             name: 'branch',
