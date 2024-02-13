@@ -149,109 +149,6 @@ function generateFakeConfig(
 }
 
 /**
- * Returns the name of the auth method of the service class provided
- *
- * @param {BaseService} serviceClass The service class to extract auth method from.
- * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService
- *  or if the authHelper function is missing in fetch.
- * @returns {string} The auth method of the service class provided.
- *  May return on of the following strings: BasicAuth, ApiKeyHeader, BearerAuthHeader, QueryStringAuth, JwtAuth.
- *
- * @example
- * // Example usage:
- * getAuthMethod(SonarCoverage)
- * // outputs "BasicAuth"
- */
-function getAuthMethod(serviceClass) {
-  if (
-    !serviceClass ||
-    !serviceClass.prototype ||
-    !(serviceClass.prototype instanceof BaseService)
-  ) {
-    throw new TypeError(
-      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
-    )
-  }
-  const fetchFunctionString = serviceClass.prototype.fetch.toString()
-  const result = fetchFunctionString.match(
-    /this\.authHelper\.with([A-Z][a-zA-Z0-9_]+)\(/,
-  )
-  if (result) {
-    return result[1]
-  } else {
-    throw new TypeError(
-      'Invalid serviceClass: Missing authHelper function in fetch.',
-    )
-  }
-}
-
-/**
- * Returns the prefix of the bearer token for a service class.
- *
- * @param {BaseService} serviceClass The service class to extract auth method from.
- * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
- * @returns {string} Bearer token prefix.
- *
- * @example
- * // Example usage:
- * getBearerPrefixOfService(Discord)
- * // outputs 'Bot'
- */
-function getBearerPrefixOfService(serviceClass) {
-  if (
-    !serviceClass ||
-    !serviceClass.prototype ||
-    !(serviceClass.prototype instanceof BaseService)
-  ) {
-    throw new TypeError(
-      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
-    )
-  }
-  const fetchFunctionString = serviceClass.prototype.fetch.toString()
-  const result = fetchFunctionString.match(
-    /withBearerAuthHeader\([\s\S]*,\s+['"`]([\s\S]*)['"`],?\s*\)/,
-  )
-  if (result) {
-    return result[1]
-  } else {
-    return 'Bearer'
-  }
-}
-
-/**
- * Returns the prefix of the bearer token for a service class.
- *
- * @param {BaseService} serviceClass The service class to extract auth method from.
- * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
- * @returns {string} Bearer token prefix.
- *
- * @example
- * // Example usage:
- * getApiHeaderKeyOfService(CurseForgeDownloads)
- * // outputs 'x-api-key'
- */
-function getApiHeaderKeyOfService(serviceClass) {
-  if (
-    !serviceClass ||
-    !serviceClass.prototype ||
-    !(serviceClass.prototype instanceof BaseService)
-  ) {
-    throw new TypeError(
-      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
-    )
-  }
-  const fetchFunctionString = serviceClass.prototype.fetch.toString()
-  const result = fetchFunctionString.match(
-    /withApiKeyHeader\([\s\S]*,\s+['"`]([\s\S]*)['"`],?\s*\)/,
-  )
-  if (result) {
-    return result[1]
-  } else {
-    return 'x-api-key'
-  }
-}
-
-/**
  * Returns the first auth origin found for a provided service class.
  *
  * @param {BaseService} serviceClass The service class to find the authorized origins.
@@ -297,19 +194,23 @@ function fakeJwtToken() {
 }
 
 /**
- * Test authentication of a badge for it's first OpenAPI example using a provided dummyResponse
+ * Test authentication of a badge for it's first OpenAPI example using a provided dummyResponse and authentication method.
  *
  * @param {BaseService} serviceClass The service class tested.
+ * @param {'BasicAuth'|'ApiKeyHeader'|'BearerAuthHeader'|'QueryStringAuth'|'JwtAuth'} authMethod The auth method of the tested service class.
  * @param {object} dummyResponse An object containing the dummy response by the server.
+ * @param {object} options - Additional options for non default keys and content-type of the dummy response.
+ * @param {'application/xml'|'application/json'} options.contentType - Header for the response, may contain any string.
+ * @param {string} options.apiHeaderKey - Non default header for ApiKeyHeader auth.
+ * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
- * @param {nock.ReplyHeaders} headers - Header for the response.
  *   or if `serviceClass` is missing authorizedOrigins.
  *
  * @example
  * // Example usage:
- * testAuth(StackExchangeReputation, { items: [{ reputation: 8 }] })
+ * testAuth(StackExchangeReputation, QueryStringAuth, { items: [{ reputation: 8 }] })
  */
-async function testAuth(serviceClass, dummyResponse, headers) {
+async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   if (!(serviceClass.prototype instanceof BaseService)) {
     throw new TypeError(
       'Invalid serviceClass: Must be an instance of BaseService.',
@@ -320,7 +221,6 @@ async function testAuth(serviceClass, dummyResponse, headers) {
 
   const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
   const fakeSecret = 'fake-secret'
-  const authMethod = getAuthMethod(serviceClass)
   const authOrigin = getServiceClassAuthOrigin(serviceClass)
   const config = generateFakeConfig(
     serviceClass,
@@ -329,6 +229,24 @@ async function testAuth(serviceClass, dummyResponse, headers) {
     authOrigin,
   )
   const exampleInvokeParams = getBadgeExampleCall(serviceClass)
+  if (options && typeof options !== 'object') {
+    throw new TypeError('Invalid options: Must be an object.')
+  }
+  const {
+    contentType,
+    apiHeaderKey = 'x-api-key',
+    bearerHeaderKey = 'Bearer',
+  } = options
+  if (contentType && typeof contentType !== 'string') {
+    throw new TypeError('Invalid contentType: Must be a String.')
+  }
+  const header = contentType ? { 'Content-Type': contentType } : undefined
+  if (!apiHeaderKey || typeof apiHeaderKey !== 'string') {
+    throw new TypeError('Invalid apiHeaderKey: Must be a String.')
+  }
+  if (!bearerHeaderKey || typeof bearerHeaderKey !== 'string') {
+    throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
+  }
 
   if (!authOrigin) {
     throw new TypeError(`Missing authorizedOrigins for ${serviceClass.name}.`)
@@ -340,39 +258,36 @@ async function testAuth(serviceClass, dummyResponse, headers) {
       scope
         .get(/.*/)
         .basicAuth({ user: fakeUser, pass: fakeSecret })
-        .reply(200, dummyResponse, headers)
+        .reply(200, dummyResponse, header)
       break
     case 'ApiKeyHeader':
       // TODO may fail if header is not default (see auth-helper.js - withApiKeyHeader)
       scope
         .get(/.*/)
-        .matchHeader(getApiHeaderKeyOfService(serviceClass), fakeSecret)
-        .reply(200, dummyResponse, headers)
+        .matchHeader(apiHeaderKey, fakeSecret)
+        .reply(200, dummyResponse, header)
       break
     case 'BearerAuthHeader':
       scope
         .get(/.*/)
-        .matchHeader(
-          'Authorization',
-          `${getBearerPrefixOfService(serviceClass)} ${fakeSecret}`,
-        )
-        .reply(200, dummyResponse, headers)
+        .matchHeader('Authorization', `${bearerHeaderKey} ${fakeSecret}`)
+        .reply(200, dummyResponse, header)
       break
     case 'QueryStringAuth':
       scope
         .get(/.*/)
         .query(queryObject => queryObject.key === fakeSecret)
-        .reply(200, dummyResponse, headers)
+        .reply(200, dummyResponse, header)
       break
     case 'JwtAuth': {
       const fakeToken = fakeJwtToken()
       scope
         .post(/.*/, { username: fakeUser, password: fakeSecret })
-        .reply(200, fakeToken, headers)
+        .reply(200, fakeToken, header)
       scope
         .get(/.*/)
         .matchHeader('Authorization', `Bearer ${fakeToken}`)
-        .reply(200, dummyResponse, headers)
+        .reply(200, dummyResponse, header)
       break
     }
 

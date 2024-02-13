@@ -4,7 +4,9 @@ import StackExchangeMonthlyQuestions from './stackexchange-monthlyquestions.serv
 describe('StackExchangeMonthlyQuestions', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      return testAuth(StackExchangeMonthlyQuestions, { total: 8 })
+      return testAuth(StackExchangeMonthlyQuestions, 'QueryStringAuth', {
+        total: 8,
+      })
     })
   })
 })

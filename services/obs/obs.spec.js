@@ -6,9 +6,10 @@ describe('ObsService', function () {
     it('sends the auth information as configured', async function () {
       return testAuth(
         ObsService,
+        'BasicAuth',
         `<?xml version="1.0" encoding="UTF-8"?>
         <status package="example" code="passed"></status>`,
-        { 'Content-Type': 'application/xml' },
+        { contentType: 'application/xml' },
       )
     })
   })
