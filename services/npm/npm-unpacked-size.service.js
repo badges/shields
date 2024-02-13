@@ -54,6 +54,8 @@ export default class NpmUnpackedSize extends NpmBase {
     },
   }
 
+  static defaultBadgeData = { label: 'unpacked size' }
+
   async fetch({ registryUrl, packageName, version }) {
     return this._requestJson({
       schema,
