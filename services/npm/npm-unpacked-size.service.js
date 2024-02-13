@@ -13,10 +13,7 @@ const schema = Joi.object({
 export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
 
-  static route = {
-    base: 'npm/unpacked-size',
-    pattern: ':packageName/:version*',
-  }
+  static route = this.buildRoute('npm/unpacked-size', { withTag: true })
 
   static openApi = {
     '/npm/unpacked-size/{packageName}': {
@@ -56,9 +53,10 @@ export default class NpmUnpackedSize extends NpmBase {
     })
   }
 
-  async handle({ packageName, version }) {
+  async handle({ scope, packageName, version }) {
+    const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
-      packageName,
+      packageName: packageNameWithScope,
       version: version ?? 'latest',
     })
     const { unpackedSize } = dist
