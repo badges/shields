@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
-import { pathParam } from '../index.js'
+import { pathParam, queryParam } from '../index.js'
 import { optionalNonNegativeInteger } from '../validators.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
 
@@ -25,6 +25,10 @@ export default class NpmUnpackedSize extends NpmBase {
             example: 'npm',
             description: packageNameDescription,
           }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
         ],
       },
     },
@@ -41,21 +45,28 @@ export default class NpmUnpackedSize extends NpmBase {
             name: 'version',
             example: '4.18.2',
           }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
         ],
       },
     },
   }
 
-  async fetch({ packageName, version }) {
+  async fetch({ registryUrl, packageName, version }) {
     return this._requestJson({
       schema,
-      url: `https://registry.npmjs.org/${packageName}/${version}`,
+      url: `${registryUrl}/${packageName}/${version}`,
     })
   }
 
-  async handle({ scope, packageName, version }) {
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, version, registryUrl } =
+      this.constructor.unpackParams(namedParams, queryParams)
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
+      registryUrl,
       packageName: packageNameWithScope,
       version: version ?? 'latest',
     })
