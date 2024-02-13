@@ -4,7 +4,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Latest unpacked size')
-  .get('/express.json')
+  .get('/firereact.json')
   .expectBadge({ label: 'unpacked size', message: isFileSize })
 
 t.create('Nonexistent unpacked size with version')
@@ -12,5 +12,17 @@ t.create('Nonexistent unpacked size with version')
   .expectBadge({ label: 'unpacked size', message: 'unknown' })
 
 t.create('Unpacked size with version')
-  .get('/prettier/3.2.0.json')
-  .expectBadge({ label: 'unpacked size', message: '8.38 MB' })
+  .get('/firereact/0.7.0.json')
+  .expectBadge({ label: 'unpacked size', message: '147 kB' })
+
+t.create('Unpacked size for scoped package')
+  .get('/@testing-library/react.json')
+  .expectBadge({ label: 'unpacked size', message: isFileSize })
+
+t.create('Unpacked size for scoped package with version')
+  .get('/@testing-library/react/14.2.1.json')
+  .expectBadge({ label: 'unpacked size', message: '5.41 MB' })
+
+t.create('Nonexistent unpacked size for scoped package with version')
+  .get('/@cycle/rx-run/7.2.0.json')
+  .expectBadge({ label: 'unpacked size', message: 'unknown' })
