@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { BaseService, NotFound } from '../index.js'
+import { BaseService, NotFound, queryParams } from '../index.js'
 
 const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
   ignoreRedirects: Joi.equal(''),
 }).required()
 
-const documentation = `
+const description = `
 The [Security Headers](https://securityheaders.com/)
 provide an easy mechanism to analyze HTTP response headers and
 give information on how to deploy missing headers.
@@ -24,26 +24,22 @@ export default class SecurityHeaders extends BaseService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Security Headers',
-      namedParams: {},
-      queryParams: { url: 'https://shields.io' },
-      staticPreview: this.render({
-        grade: 'A+',
-      }),
-      documentation,
+  static openApi = {
+    '/security-headers': {
+      get: {
+        summary: 'Security Headers',
+        description,
+        parameters: queryParams(
+          { name: 'url', example: 'https://shields.io', required: true },
+          {
+            name: 'ignoreRedirects',
+            schema: { type: 'boolean' },
+            example: null,
+          },
+        ),
+      },
     },
-    {
-      title: "Security Headers (Don't follow redirects)",
-      namedParams: {},
-      queryParams: { url: 'https://www.shields.io', ignoreRedirects: null },
-      staticPreview: this.render({
-        grade: 'R',
-      }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'security headers',
