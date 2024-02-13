@@ -1,12 +1,12 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import { pathParam } from '../index.js'
-import { nonNegativeInteger } from '../validators.js'
+import { optionalNonNegativeInteger } from '../validators.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
 
 const schema = Joi.object({
   dist: Joi.object({
-    unpackedSize: nonNegativeInteger,
+    unpackedSize: optionalNonNegativeInteger,
   }).required(),
 }).required()
 
