@@ -64,13 +64,13 @@ export default class NpmUnpackedSize extends NpmBase {
   }
 
   async handle(namedParams, queryParams) {
-    const { scope, packageName, version, registryUrl } =
+    const { scope, packageName, tag, registryUrl } =
       this.constructor.unpackParams(namedParams, queryParams)
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
       registryUrl,
       packageName: packageNameWithScope,
-      version: version ?? 'latest',
+      version: tag ?? 'latest',
     })
     const { unpackedSize } = dist
 
