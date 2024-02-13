@@ -261,7 +261,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
         .reply(200, dummyResponse, header)
       break
     case 'ApiKeyHeader':
-      // TODO may fail if header is not default (see auth-helper.js - withApiKeyHeader)
       scope
         .get(/.*/)
         .matchHeader(apiHeaderKey, fakeSecret)
