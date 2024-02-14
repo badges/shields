@@ -1,13 +1,13 @@
-import Joi from 'joi'
 import emojic from 'emojic'
+import Joi from 'joi'
+import trace from '../../core/base-service/trace.js'
+import { BaseService, queryParams } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import {
   queryParamSchema,
-  queryParams as websiteQueryParams,
   renderWebsiteStatus,
+  queryParams as websiteQueryParams,
 } from '../website-status.js'
-import { BaseService, queryParams } from '../index.js'
-import trace from '../../core/base-service/trace.js'
 
 const description = `
 The existence of a specific path on the server can be checked by appending
@@ -67,22 +67,27 @@ export default class Website extends BaseService {
       url,
     },
   ) {
-    let isUp
-    try {
-      const {
-        res: { statusCode },
-      } = await this._request({
-        url,
-        options: {
-          method: 'HEAD',
-        },
-      })
-      // We consider all HTTP status codes below 310 as success.
-      isUp = statusCode < 310
-    } catch (e) {
-      // Catch all errors thrown by the request.
-      isUp = false
-    }
+    let isUp = false
+    // eslint-disable-next-line no-async-promise-executor
+    await new Promise(async (resolve, reject) => {
+      setTimeout(resolve, 3500)
+      try {
+        const {
+          res: { statusCode },
+        } = await this._request({
+          url,
+          options: {
+            method: 'HEAD',
+          },
+        })
+        // We consider all HTTP status codes below 310 as success.
+        isUp = statusCode < 310
+      } catch (e) {
+        // Catch all errors thrown by the request.
+        isUp = false
+      }
+      resolve()
+    })
 
     return renderWebsiteStatus({
       isUp,
