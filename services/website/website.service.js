@@ -67,27 +67,25 @@ export default class Website extends BaseService {
       url,
     },
   ) {
-    let isUp = false
-    // eslint-disable-next-line no-async-promise-executor
-    await new Promise(async (resolve, reject) => {
-      setTimeout(resolve, 3500)
-      try {
-        const {
-          res: { statusCode },
-        } = await this._request({
-          url,
-          options: {
-            method: 'HEAD',
+    let isUp
+    try {
+      const {
+        res: { statusCode },
+      } = await this._request({
+        url,
+        options: {
+          method: 'HEAD',
+          timeout: {
+            response: 3500,
           },
-        })
-        // We consider all HTTP status codes below 310 as success.
-        isUp = statusCode < 310
-      } catch (e) {
-        // Catch all errors thrown by the request.
-        isUp = false
-      }
-      resolve()
-    })
+        },
+      })
+      // We consider all HTTP status codes below 310 as success.
+      isUp = statusCode < 310
+    } catch (e) {
+      // Catch all errors thrown by the request.
+      isUp = false
+    }
 
     return renderWebsiteStatus({
       isUp,
