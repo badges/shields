@@ -33,7 +33,7 @@ t.create('circle ci (not found)')
 
 t.create('circle ci (valid, with token)')
   .get(
-    '/build/gh/RedSparr0w/node-csgo-parser/master.json?token=b90b5c49e59a4c67ba3a92f7992587ac7a0408c2',
+    '/build/gh/justkd/uidmanager/main.json?token=2edcfec5c13eaf6d951a8f2939b220cdca74644c',
   )
   .expectBadge({
     label: 'build',

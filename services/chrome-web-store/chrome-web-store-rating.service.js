@@ -1,6 +1,6 @@
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric, starRating } from '../text-formatters.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
@@ -15,13 +15,17 @@ class ChromeWebStoreRating extends BaseChromeWebStoreRating {
     pattern: ':storeId',
   }
 
-  static examples = [
-    {
-      title: 'Chrome Web Store',
-      namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
-      staticPreview: this.render({ rating: '3.67' }),
+  static openApi = {
+    '/chrome-web-store/rating/{storeId}': {
+      get: {
+        summary: 'Chrome Web Store Rating',
+        parameters: pathParams({
+          name: 'storeId',
+          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ rating }) {
     rating = Math.round(rating * 100) / 100
@@ -47,13 +51,17 @@ class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
     pattern: ':storeId',
   }
 
-  static examples = [
-    {
-      title: 'Chrome Web Store',
-      namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
-      staticPreview: this.render({ ratingCount: 12 }),
+  static openApi = {
+    '/chrome-web-store/rating-count/{storeId}': {
+      get: {
+        summary: 'Chrome Web Store Rating Count',
+        parameters: pathParams({
+          name: 'storeId',
+          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ ratingCount }) {
     return {
@@ -81,13 +89,17 @@ class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
     pattern: ':storeId',
   }
 
-  static examples = [
-    {
-      title: 'Chrome Web Store',
-      namedParams: { storeId: 'ogffaloegjglncjfehdfplabnoondfjo' },
-      staticPreview: this.render({ rating: '3.75' }),
+  static openApi = {
+    '/chrome-web-store/stars/{storeId}': {
+      get: {
+        summary: 'Chrome Web Store Stars',
+        parameters: pathParams({
+          name: 'storeId',
+          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ rating }) {
     return {
