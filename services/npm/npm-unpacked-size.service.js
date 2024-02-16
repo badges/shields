@@ -13,7 +13,10 @@ const schema = Joi.object({
 export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
 
-  static route = this.buildRoute('npm/unpacked-size', { withTag: true })
+  static route = {
+    base: 'npm/unpacked-size',
+    pattern: ':scope(@[^/]+)?/:packageName/:version*',
+  }
 
   static openApi = {
     '/npm/unpacked-size/{packageName}': {
@@ -63,14 +66,15 @@ export default class NpmUnpackedSize extends NpmBase {
     })
   }
 
-  async handle(namedParams, queryParams) {
-    const { scope, packageName, tag, registryUrl } =
-      this.constructor.unpackParams(namedParams, queryParams)
+  async handle(
+    { scope, packageName, version },
+    { registry_uri: registryUrl = 'https://registry.npmjs.org' },
+  ) {
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
       registryUrl,
       packageName: packageNameWithScope,
-      version: tag ?? 'latest',
+      version: version ?? 'latest',
     })
     const { unpackedSize } = dist
 
