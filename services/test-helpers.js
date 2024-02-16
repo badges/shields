@@ -109,8 +109,8 @@ function generateFakeConfig(
   if (!fakeKey || typeof fakeKey !== 'string') {
     throw new TypeError('Invalid fakeKey: Must be a String.')
   }
-  if (!fakeauthorizedOrigins || typeof fakeauthorizedOrigins !== 'string') {
-    throw new TypeError('Invalid fakeauthorizedOrigins: Must be a String.')
+  if (!fakeauthorizedOrigins || typeof fakeauthorizedOrigins !== 'object') {
+    throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
   }
 
   if (!serviceClass.auth) {
@@ -137,7 +137,7 @@ function generateFakeConfig(
     public: {
       services: {
         [serviceClass.auth.serviceKey]: {
-          authorizedOrigins: [fakeauthorizedOrigins],
+          authorizedOrigins: fakeauthorizedOrigins,
         },
       },
     },
@@ -171,10 +171,11 @@ function getServiceClassAuthOrigin(serviceClass) {
     )
   }
   if (serviceClass.auth.authorizedOrigins) {
-    return serviceClass.auth.authorizedOrigins[0]
+    return serviceClass.auth.authorizedOrigins
   } else {
-    return config.public.services[serviceClass.auth.serviceKey]
-      .authorizedOrigins
+    return [
+      config.public.services[serviceClass.auth.serviceKey].authorizedOrigins,
+    ]
   }
 }
 
@@ -223,12 +224,12 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
 
   const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
   const fakeSecret = 'fake-secret'
-  const authOrigin = getServiceClassAuthOrigin(serviceClass)
+  const authOrigins = getServiceClassAuthOrigin(serviceClass)
   const config = generateFakeConfig(
     serviceClass,
     fakeSecret,
     fakeUser,
-    authOrigin,
+    authOrigins,
   )
   const exampleInvokeParams = getBadgeExampleCall(serviceClass)
   if (options && typeof options !== 'object') {
@@ -252,73 +253,78 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
   }
 
-  if (!authOrigin) {
+  if (!authOrigins) {
     throw new TypeError(`Missing authorizedOrigins for ${serviceClass.name}.`)
   }
 
-  const scope = nock(authOrigin)
-  switch (authMethod) {
-    case 'BasicAuth':
-      scope
-        .get(/.*/)
-        .basicAuth({ user: fakeUser, pass: fakeSecret })
-        .reply(200, dummyResponse, header)
-      break
-    case 'ApiKeyHeader':
-      scope
-        .get(/.*/)
-        .matchHeader(apiHeaderKey, fakeSecret)
-        .reply(200, dummyResponse, header)
-      break
-    case 'BearerAuthHeader':
-      scope
-        .get(/.*/)
-        .matchHeader('Authorization', `${bearerHeaderKey} ${fakeSecret}`)
-        .reply(200, dummyResponse, header)
-      break
-    case 'QueryStringAuth':
-      if (!queryPassKey || typeof queryPassKey !== 'string') {
-        throw new TypeError('Invalid queryPassKey: Must be a String.')
-      }
-      scope
-        .get(/.*/)
-        .query(queryObject => {
-          if (queryObject[queryPassKey] !== fakeSecret) {
-            return false
-          }
-          if (queryUserKey) {
-            if (typeof queryUserKey !== 'string') {
-              throw new TypeError('Invalid queryUserKey: Must be a String.')
-            }
-            if (queryObject[queryUserKey] !== fakeUser) {
+  const scopeArr = []
+  authOrigins.forEach(authOrigin => {
+    const scope = nock(authOrigin)
+    scopeArr.push(scope)
+    switch (authMethod) {
+      case 'BasicAuth':
+        scope
+          .get(/.*/)
+          .basicAuth({ user: fakeUser, pass: fakeSecret })
+          .reply(200, dummyResponse, header)
+        break
+      case 'ApiKeyHeader':
+        scope
+          .get(/.*/)
+          .matchHeader(apiHeaderKey, fakeSecret)
+          .reply(200, dummyResponse, header)
+        break
+      case 'BearerAuthHeader':
+        scope
+          .get(/.*/)
+          .matchHeader('Authorization', `${bearerHeaderKey} ${fakeSecret}`)
+          .reply(200, dummyResponse, header)
+        break
+      case 'QueryStringAuth':
+        if (!queryPassKey || typeof queryPassKey !== 'string') {
+          throw new TypeError('Invalid queryPassKey: Must be a String.')
+        }
+        scope
+          .get(/.*/)
+          .query(queryObject => {
+            if (queryObject[queryPassKey] !== fakeSecret) {
               return false
             }
-          }
-          return true
-        })
-        .reply(200, dummyResponse, header)
-      break
-    case 'JwtAuth': {
-      const fakeToken = fakeJwtToken()
-      scope
-        .post(/.*/, { username: fakeUser, password: fakeSecret })
-        .reply(200, { token: fakeToken })
-      scope
-        .get(/.*/)
-        .matchHeader('Authorization', `Bearer ${fakeToken}`)
-        .reply(200, dummyResponse, header)
-      break
-    }
+            if (queryUserKey) {
+              if (typeof queryUserKey !== 'string') {
+                throw new TypeError('Invalid queryUserKey: Must be a String.')
+              }
+              if (queryObject[queryUserKey] !== fakeUser) {
+                return false
+              }
+            }
+            return true
+          })
+          .reply(200, dummyResponse, header)
+        break
+      case 'JwtAuth': {
+        const fakeToken = fakeJwtToken()
+        scope
+          .post(/.*/, { username: fakeUser, password: fakeSecret })
+          .reply(200, { token: fakeToken })
+        scope
+          .get(/.*/)
+          .matchHeader('Authorization', `Bearer ${fakeToken}`)
+          .reply(200, dummyResponse, header)
+        break
+      }
 
-    default:
-      throw new TypeError(`Unkown auth method for ${serviceClass.name}.`)
-  }
+      default:
+        throw new TypeError(`Unkown auth method for ${serviceClass.name}.`)
+    }
+  })
 
   expect(
     await serviceClass.invoke(defaultContext, config, exampleInvokeParams),
   ).to.not.have.property('isError')
 
-  scope.done()
+  // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
+  scopeArr.forEach(scope => scope.done())
 }
 
 const defaultContext = { requestFetcher: fetch }
