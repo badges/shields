@@ -1,35 +1,26 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, InvalidResponse } from '../index.js'
 
-const crateSchema = Joi.object({
+const versionSchema = Joi.object({
+  downloads: nonNegativeInteger,
+  num: Joi.string().required(),
+  license: Joi.string().required().allow(null),
+  rust_version: Joi.string().allow(null),
+})
+
+const crateResponseSchema = Joi.object({
   crate: Joi.object({
     downloads: nonNegativeInteger,
     recent_downloads: nonNegativeInteger.allow(null),
     max_version: Joi.string().required(),
   }).required(),
-  versions: Joi.array()
-    .items(
-      Joi.object({
-        downloads: nonNegativeInteger,
-        license: Joi.string().required().allow(null),
-        rust_version: Joi.string().allow(null),
-      }),
-    )
-    .min(1)
-    .required(),
+  versions: Joi.array().items(versionSchema).min(1).required(),
 }).required()
 
-const versionSchema = Joi.object({
-  version: Joi.object({
-    downloads: nonNegativeInteger,
-    num: Joi.string().required(),
-    license: Joi.string().required().allow(null),
-    rust_version: Joi.string().allow(null),
-  }).required(),
+const versionResponseSchema = Joi.object({
+  version: versionSchema.required(),
 }).required()
-
-const schema = Joi.alternatives(crateSchema, versionSchema)
 
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }
@@ -38,7 +29,26 @@ class BaseCratesService extends BaseJsonService {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
       : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
+    const schema = version ? versionResponseSchema : crateResponseSchema
     return this._requestJson({ schema, url })
+  }
+
+  static getLatestVersion(response) {
+    return response.crate.max_stable_version
+      ? response.crate.max_stable_version
+      : response.crate.max_version
+  }
+
+  static getVersionObj(response) {
+    if (response.crate) {
+      const version = this.getLatestVersion(response)
+      const versionObj = response.versions.find(v => v.num === version)
+      if (versionObj === undefined) {
+        throw new InvalidResponse({ prettyMessage: 'version not found' })
+      }
+      return versionObj
+    }
+    return response.version
   }
 }
 

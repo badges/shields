@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
@@ -15,23 +16,21 @@ export default class VisualStudioMarketplaceVersion extends VisualStudioMarketpl
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio Marketplace Version',
-      pattern: 'visual-studio-marketplace/v/:extensionId',
-      namedParams: { extensionId: 'swellaby.rust-pack' },
-      staticPreview: this.render({ version: '0.2.7' }),
-      keywords: this.keywords,
+  static openApi = {
+    '/visual-studio-marketplace/v/{extensionId}': {
+      get: {
+        summary: 'Visual Studio Marketplace Version',
+        parameters: [
+          pathParam({ name: 'extensionId', example: 'swellaby.rust-pack' }),
+          queryParam({
+            name: 'include_prereleases',
+            schema: { type: 'boolean' },
+            example: null,
+          }),
+        ],
+      },
     },
-    {
-      title: 'Visual Studio Marketplace Version (including pre-releases)',
-      pattern: 'visual-studio-marketplace/v/:extensionId',
-      namedParams: { extensionId: 'swellaby.rust-pack' },
-      queryParams: { include_prereleases: null },
-      staticPreview: this.render({ version: '0.2.9-dev' }),
-      keywords: this.keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'version',

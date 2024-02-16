@@ -55,7 +55,7 @@ t.create('issues when outer user repos query returns multiple items')
             relationships: {
               latest_default_branch_snapshot: {
                 data: {
-                  id: '64786eee4fedea000101580d',
+                  id: '65ae115f34117d0001055101',
                   type: 'snapshots',
                 },
               },

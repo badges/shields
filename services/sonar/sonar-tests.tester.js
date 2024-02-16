@@ -26,9 +26,7 @@ const isMetricAllowZero = Joi.alternatives(
 
 t.create('Tests')
   .timeout(10000)
-  .get(
-    '/tests/swellaby:azure-pipelines-templates.json?server=https://sonarcloud.io',
-  )
+  .get('/tests/WebExtensions.Net.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'tests',
     message: isDefaultTestTotals,
@@ -36,9 +34,7 @@ t.create('Tests')
 
 t.create('Tests (branch)')
   .timeout(10000)
-  .get(
-    '/tests/swellaby:azure-pipelines-templates/master.json?server=https://sonarcloud.io',
-  )
+  .get('/tests/WebExtensions.Net/main.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'tests',
     message: isDefaultTestTotals,
@@ -83,7 +79,7 @@ t.create('Tests (legacy API supported)')
 
 t.create('Tests with compact message')
   .timeout(10000)
-  .get('/tests/swellaby:azure-pipelines-templates.json', {
+  .get('/tests/WebExtensions.Net.json', {
     qs: {
       compact_message: null,
       server: 'https://sonarcloud.io',
@@ -93,7 +89,7 @@ t.create('Tests with compact message')
 
 t.create('Tests with custom labels')
   .timeout(10000)
-  .get('/tests/swellaby:azure-pipelines-templates.json', {
+  .get('/tests/WebExtensions.Net.json', {
     qs: {
       server: 'https://sonarcloud.io',
       passed_label: 'good',
@@ -105,7 +101,7 @@ t.create('Tests with custom labels')
 
 t.create('Tests with compact message and custom labels')
   .timeout(10000)
-  .get('/tests/swellaby:azure-pipelines-templates.json', {
+  .get('/tests/WebExtensions.Net.json', {
     qs: {
       server: 'https://sonarcloud.io',
       compact_message: null,

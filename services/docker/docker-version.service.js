@@ -1,8 +1,15 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
-import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
 import {
+  BaseJsonService,
+  NotFound,
+  InvalidResponse,
+  pathParams,
+  queryParams,
+} from '../index.js'
+import {
+  archEnum,
   archSchema,
   buildDockerUrl,
   getDockerHubUser,
@@ -26,10 +33,27 @@ const buildSchema = Joi.object({
   ),
 }).required()
 
+const sortEnum = ['date', 'semver']
+
 const queryParamSchema = Joi.object({
   sort: Joi.string().valid('date', 'semver').default('date'),
   arch: archSchema.default('amd64'),
 }).required()
+
+const openApiQueryParams = queryParams(
+  {
+    name: 'sort',
+    example: 'semver',
+    schema: { type: 'string', enum: sortEnum },
+    description: 'If not specified, the default is `date`',
+  },
+  {
+    name: 'arch',
+    example: 'amd64',
+    schema: { type: 'string', enum: archEnum },
+    description: 'If not specified, the default is `amd64`',
+  },
+)
 
 export default class DockerVersion extends BaseJsonService {
   static category = 'version'
@@ -45,28 +69,33 @@ export default class DockerVersion extends BaseJsonService {
     isRequired: false,
   }
 
-  static examples = [
-    {
-      title: 'Docker Image Version (latest by date)',
-      pattern: ':user/:repo',
-      namedParams: { user: '_', repo: 'alpine' },
-      queryParams: { sort: 'date', arch: 'amd64' },
-      staticPreview: this.render({ version: '3.9.5' }),
+  static openApi = {
+    '/docker/v/{user}/{repo}': {
+      get: {
+        summary: 'Docker Image Version',
+        parameters: [
+          ...pathParams(
+            { name: 'user', example: '_' },
+            { name: 'repo', example: 'alpine' },
+          ),
+          ...openApiQueryParams,
+        ],
+      },
     },
-    {
-      title: 'Docker Image Version (latest semver)',
-      pattern: ':user/:repo',
-      namedParams: { user: '_', repo: 'alpine' },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({ version: '3.11.3' }),
+    '/docker/v/{user}/{repo}/{tag}': {
+      get: {
+        summary: 'Docker Image Version (tag)',
+        parameters: [
+          ...pathParams(
+            { name: 'user', example: '_' },
+            { name: 'repo', example: 'alpine' },
+            { name: 'tag', example: '3.6' },
+          ),
+          ...openApiQueryParams,
+        ],
+      },
     },
-    {
-      title: 'Docker Image Version (tag latest semver)',
-      pattern: ':user/:repo/:tag',
-      namedParams: { user: '_', repo: 'alpine', tag: '3.6' },
-      staticPreview: this.render({ version: '3.6.5' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'version', color: 'blue' }
 
