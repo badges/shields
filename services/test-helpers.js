@@ -203,6 +203,8 @@ function fakeJwtToken() {
  * @param {'application/xml'|'application/json'} options.contentType - Header for the response, may contain any string.
  * @param {string} options.apiHeaderKey - Non default header for ApiKeyHeader auth.
  * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
+ * @param {string} options.queryUserKey - QueryStringAuth user key.
+ * @param {string} options.queryPassKey - QueryStringAuth pass key.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -236,6 +238,8 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     contentType,
     apiHeaderKey = 'x-api-key',
     bearerHeaderKey = 'Bearer',
+    queryUserKey,
+    queryPassKey,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -273,9 +277,25 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
         .reply(200, dummyResponse, header)
       break
     case 'QueryStringAuth':
+      if (!queryPassKey || typeof queryPassKey !== 'string') {
+        throw new TypeError('Invalid queryPassKey: Must be a String.')
+      }
       scope
         .get(/.*/)
-        .query(queryObject => queryObject.key === fakeSecret)
+        .query(queryObject => {
+          if (queryObject[queryPassKey] !== fakeSecret) {
+            return false
+          }
+          if (queryUserKey) {
+            if (typeof queryUserKey !== 'string') {
+              throw new TypeError('Invalid queryUserKey: Must be a String.')
+            }
+            if (queryObject[queryUserKey] !== fakeUser) {
+              return false
+            }
+          }
+          return true
+        })
         .reply(200, dummyResponse, header)
       break
     case 'JwtAuth': {
