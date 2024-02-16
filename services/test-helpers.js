@@ -302,7 +302,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
       const fakeToken = fakeJwtToken()
       scope
         .post(/.*/, { username: fakeUser, password: fakeSecret })
-        .reply(200, fakeToken, header)
+        .reply(200, { token: fakeToken })
       scope
         .get(/.*/)
         .matchHeader('Authorization', `Bearer ${fakeToken}`)
