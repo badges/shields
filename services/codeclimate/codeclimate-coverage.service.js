@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { coveragePercentage, letterScore } from '../color-formatters.js'
-import { BaseJsonService, NotFound } from '../index.js'
-import { keywords, isLetterGrade, fetchRepo } from './codeclimate-common.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { isLetterGrade, fetchRepo } from './codeclimate-common.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -21,22 +21,22 @@ export default class CodeclimateCoverage extends BaseJsonService {
     pattern: ':format(coverage|coverage-letter)/:user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'Code Climate coverage',
-      namedParams: {
-        format: 'coverage',
-        user: 'codeclimate',
-        repo: 'codeclimate',
+  static openApi = {
+    '/codeclimate/{format}/{user}/{repo}': {
+      get: {
+        summary: 'Code Climate coverage',
+        parameters: pathParams(
+          {
+            name: 'format',
+            example: 'coverage',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          },
+          { name: 'user', example: 'codeclimate' },
+          { name: 'repo', example: 'codeclimate' },
+        ),
       },
-      staticPreview: this.render({
-        format: 'coverage',
-        percentage: 95.123,
-        letter: 'A',
-      }),
-      keywords,
     },
-  ]
+  }
 
   static render({ wantLetter, percentage, letter }) {
     if (wantLetter) {

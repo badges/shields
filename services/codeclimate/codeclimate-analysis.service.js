@@ -1,8 +1,8 @@
 import Joi from 'joi'
 import { colorScale, letterScore } from '../color-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound } from '../index.js'
-import { keywords, isLetterGrade, fetchRepo } from './codeclimate-common.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { isLetterGrade, fetchRepo } from './codeclimate-common.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -93,43 +93,43 @@ export default class CodeclimateAnalysis extends BaseJsonService {
       ':variant(maintainability|maintainability-percentage|tech-debt|issues)/:user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'Code Climate maintainability',
-      pattern:
-        ':format(maintainability|maintainability-percentage)/:user/:repo',
-      namedParams: {
-        format: 'maintainability',
-        user: 'tensorflow',
-        repo: 'models',
+  static openApi = {
+    '/codeclimate/{variant}/{user}/{repo}': {
+      get: {
+        summary: 'Code Climate maintainability',
+        parameters: pathParams(
+          {
+            name: 'variant',
+            example: 'maintainability',
+            schema: {
+              type: 'string',
+              enum: ['maintainability', 'maintainability-percentage'],
+            },
+          },
+          { name: 'user', example: 'tensorflow' },
+          { name: 'repo', example: 'models' },
+        ),
       },
-      staticPreview: this.render({
-        variant: 'maintainability',
-        maintainabilityLetter: 'F',
-      }),
-      keywords,
     },
-    {
-      title: 'Code Climate issues',
-      pattern: 'issues/:user/:repo',
-      namedParams: { user: 'twbs', repo: 'bootstrap' },
-      staticPreview: this.render({
-        variant: 'issues',
-        issueCount: '89',
-      }),
-      keywords,
+    '/codeclimate/tech-debt/{user}/{repo}': {
+      get: {
+        summary: 'Code Climate issues',
+        parameters: pathParams(
+          { name: 'user', example: 'tensorflow' },
+          { name: 'repo', example: 'models' },
+        ),
+      },
     },
-    {
-      title: 'Code Climate technical debt',
-      pattern: 'tech-debt/:user/:repo',
-      namedParams: { user: 'tensorflow', repo: 'models' },
-      staticPreview: this.render({
-        variant: 'tech-debt',
-        techDebtPercentage: 3.0,
-      }),
-      keywords,
+    '/codeclimate/issues/{user}/{repo}': {
+      get: {
+        summary: 'Code Climate technical debt',
+        parameters: pathParams(
+          { name: 'user', example: 'tensorflow' },
+          { name: 'repo', example: 'models' },
+        ),
+      },
     },
-  ]
+  }
 
   static render({ variant, ...props }) {
     const { render } = variantMap[variant]
