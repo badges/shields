@@ -206,6 +206,7 @@ function fakeJwtToken() {
  * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
  * @param {string} options.queryUserKey - QueryStringAuth user key.
  * @param {string} options.queryPassKey - QueryStringAuth pass key.
+ * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -241,6 +242,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     bearerHeaderKey = 'Bearer',
     queryUserKey,
     queryPassKey,
+    jwtLoginEndpoint,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -256,6 +258,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   if (!authOrigins) {
     throw new TypeError(`Missing authorizedOrigins for ${serviceClass.name}.`)
   }
+  const jwtToken = authMethod === 'JwtAuth' ? fakeJwtToken() : undefined
 
   const scopeArr = []
   authOrigins.forEach(authOrigin => {
@@ -303,14 +306,19 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
           .reply(200, dummyResponse, header)
         break
       case 'JwtAuth': {
-        const fakeToken = fakeJwtToken()
-        scope
-          .post(/.*/, { username: fakeUser, password: fakeSecret })
-          .reply(200, { token: fakeToken })
-        scope
-          .get(/.*/)
-          .matchHeader('Authorization', `Bearer ${fakeToken}`)
-          .reply(200, dummyResponse, header)
+        if (!jwtLoginEndpoint || typeof jwtLoginEndpoint !== 'string') {
+          throw new TypeError('Invalid jwtLoginEndpoint: Must be a String.')
+        }
+        if (jwtLoginEndpoint.startsWith(authOrigin)) {
+          scope
+            .post(/.*/, { username: fakeUser, password: fakeSecret })
+            .reply(200, { token: jwtToken })
+        } else {
+          scope
+            .get(/.*/)
+            .matchHeader('Authorization', `Bearer ${jwtToken}`)
+            .reply(200, dummyResponse, header)
+        }
         break
       }
 
