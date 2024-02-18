@@ -52,7 +52,6 @@ const queryParamWithFormatSchema = Joi.object({
   format: Joi.string().allow('short', 'long').optional(),
 }).required()
 
-const keywords = ['sonarcloud', 'sonarqube']
 const documentation = `<p>
     The Sonar badges will work with both SonarCloud.io and self-hosted SonarQube instances.
     Just enter the correct protocol and path for your target Sonar deployment.
@@ -71,6 +70,5 @@ export {
   queryParamWithFormatSchema,
   negativeMetricColorScale,
   positiveMetricColorScale,
-  keywords,
   documentation,
 }
