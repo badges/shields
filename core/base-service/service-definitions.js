@@ -1,7 +1,15 @@
+/**
+ * @module
+ */
 import Joi from 'joi'
 
 const arrayOfStrings = Joi.array().items(Joi.string()).min(0).required()
 
+/**
+ * Joi schema describing the subset of OpenAPI paths we use in this application
+ *
+ * @see https://swagger.io/specification/#paths-object
+ */
 const openApiSchema = Joi.object()
   .pattern(
     /./,

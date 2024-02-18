@@ -146,8 +146,9 @@ class BaseService {
    * An OpenAPI Paths Object describing this service's
    * route or routes in OpenAPI format.
    *
-   * @see https://swagger.io/specification/#paths-object
    * @abstract
+   * @see https://swagger.io/specification/#paths-object
+   * @type {module:core/base-service/service-definitions~openApiSchema}
    */
   static openApi = {}
 
