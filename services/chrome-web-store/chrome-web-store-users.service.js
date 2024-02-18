@@ -26,7 +26,9 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     if (downloads == null) {
       throw new NotFound({ prettyMessage: 'not found' })
     }
-    return renderDownloadsBadge({ downloads })
+    return renderDownloadsBadge({
+      downloads: String(downloads.replace(',', '')),
+    })
   }
 }
 
