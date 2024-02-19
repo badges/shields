@@ -15,6 +15,8 @@ a path after the domain name, e.g.
 \`https://img.shields.io/website?url=http%3A//www.website.com/path/to/page.html\`.
 
 The messages and colors for the up and down states can also be customized.
+
+A site will be classified as "down" if it fails to respond within 3.5 seconds.
 `
 
 const urlQueryParamSchema = Joi.object({
