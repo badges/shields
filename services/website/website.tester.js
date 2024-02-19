@@ -49,7 +49,7 @@ t.create('status is down if response code is 401')
 t.create('status is down if it is unresponsive for more than 3500 ms')
   .get('/website.json?url=http://offline.com')
   .intercept(nock =>
-    nock('http://offline.com').head('/').delay(4000).reply(401),
+    nock('http://offline.com').head('/').delay(4000).reply(200),
   )
   .expectBadge({ label: 'website', message: 'down' })
 
