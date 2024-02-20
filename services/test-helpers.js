@@ -109,7 +109,7 @@ function generateFakeConfig(
   if (!fakeKey || typeof fakeKey !== 'string') {
     throw new TypeError('Invalid fakeKey: Must be a String.')
   }
-  if (!fakeauthorizedOrigins || typeof fakeauthorizedOrigins !== 'object') {
+  if (!fakeauthorizedOrigins || !Array.isArray(fakeauthorizedOrigins)) {
     throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
   }
 
