@@ -43,6 +43,9 @@ export default class SnapstoreVersion extends SnapstoreBase {
         headers: { 'Snap-Device-Series': 16 },
       },
       url: `https://api.snapcraft.io/v2/snaps/info/${packageName}`,
+      httpErrors: {
+        404: 'package not found',
+      },
     })
 
     const version = parsedData['channel-map'][0].version
