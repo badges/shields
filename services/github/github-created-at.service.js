@@ -1,10 +1,12 @@
+import dayjs from 'dayjs'
 import Joi from 'joi'
 import { pathParams } from '../index.js'
+import { formatDate } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({
-  created_at: Joi.string().required(),
+  created_at: Joi.date().required(),
 }).required()
 
 export default class GithubCreatedAt extends GithubAuthV3Service {
@@ -13,7 +15,7 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
   static openApi = {
     '/github/created-at/{user}/{repo}': {
       get: {
-        summary: 'GitHub Created At',
+        summary: 'Github Created At',
         description: documentation,
         parameters: pathParams(
           {
@@ -32,8 +34,9 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
   static defaultBadgeData = { label: 'created at' }
 
   static render({ createdAt }) {
+    const date = dayjs(createdAt)
     return {
-      message: createdAt,
+      message: formatDate(date),
     }
   }
 
