@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/test-helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/test-helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import dayjs from 'dayjs'
+import { expect } from 'chai'
+import nock from 'nock'
+import config from 'config'
+import { fetch } from '../core/base-service/got.js'
+import BaseService from '../core/base-service/base.js'
+const runnerConfig = config.util.toObject()
+
+function cleanUpNockAfterEach() {
+  afterEach(function () {
+    nock.restore()
+    nock.cleanAll()
+    nock.enableNetConnect()
+    nock.activate()
+  })
+}
+
+function noToken(serviceClass) {
+  let hasLogged = false
+  return () => {
+    const userKey = serviceClass.auth.userKey
+    const passKey = serviceClass.auth.passKey
+    const noToken =
+      (userKey &amp;&amp; !runnerConfig.private[userKey]) ||
+      (passKey &amp;&amp; !runnerConfig.private[passKey])
+    if (noToken &amp;&amp; !hasLogged) {
+      console.warn(
+        `${serviceClass.name}: no credentials configured, tests for this service will be skipped. Add credentials in local.yml to run them.`,
+      )
+      hasLogged = true
+    }
+    return noToken
+  }
+}
+
+/**
+ * Retrieves an example set of parameters for invoking a service class using OpenAPI example of that class.
+ *
+ * @param {BaseService} serviceClass The service class containing OpenAPI specifications.
+ * @returns {object} An object with call params to use with a service invoke of the first OpenAPI example.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
+ *   or if it lacks the expected structure.
+ *
+ * @example
+ * // Example usage:
+ * const example = getBadgeExampleCall(StackExchangeReputation)
+ * console.log(example)
+ * // Output: { stackexchangesite: 'stackoverflow', query: '123' }
+ * StackExchangeReputation.invoke(defaultContext, config, example)
+ */
+function getBadgeExampleCall(serviceClass) {
+  if (!(serviceClass.prototype instanceof BaseService)) {
+    throw new TypeError(
+      'Invalid serviceClass: Must be an instance of BaseService.',
+    )
+  }
+
+  if (!serviceClass.openApi) {
+    throw new TypeError(
+      `Missing OpenAPI in service class ${serviceClass.name}.`,
+    )
+  }
+
+  const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
+
+  const firstOpenapiExampleParams =
+    serviceClass.openApi[firstOpenapiPath].get.parameters
+  if (!Array.isArray(firstOpenapiExampleParams)) {
+    throw new TypeError(
+      `Missing or invalid OpenAPI examples in ${serviceClass.name}.`,
+    )
+  }
+
+  // reformat structure for serviceClass.invoke
+  const exampleInvokeParams = firstOpenapiExampleParams.reduce((acc, obj) => {
+    acc[obj.name] = obj.example
+    return acc
+  }, {})
+
+  return exampleInvokeParams
+}
+
+/**
+ * Generates a configuration object with a fake key based on the provided class.
+ * For use in auth tests where a config with a test key is required.
+ *
+ * @param {BaseService} serviceClass - The class to generate configuration for.
+ * @param {string} fakeKey - The fake key to be used in the configuration.
+ * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
+ * @param {string} fakeauthorizedOrigins - authorizedOrigins to add to config.
+ * @returns {object} - The configuration object.
+ * @throws {TypeError} - Throws an error if the input is not a class.
+ */
+function generateFakeConfig(
+  serviceClass,
+  fakeKey,
+  fakeUser,
+  fakeauthorizedOrigins,
+) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      'Invalid serviceClass: Must be an instance of BaseService.',
+    )
+  }
+  if (!fakeKey || typeof fakeKey !== 'string') {
+    throw new TypeError('Invalid fakeKey: Must be a String.')
+  }
+  if (!fakeauthorizedOrigins || !Array.isArray(fakeauthorizedOrigins)) {
+    throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
+  }
+
+  if (!serviceClass.auth) {
+    throw new Error(`Missing auth for ${serviceClass.name}.`)
+  }
+  if (!serviceClass.auth.passKey) {
+    throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
+  }
+  // Extract the passKey property from auth, or use a default if not present
+  const passKeyProperty = serviceClass.auth.passKey
+  let passUserProperty = 'placeholder'
+  if (fakeUser) {
+    if (typeof fakeKey !== 'string') {
+      throw new TypeError('Invalid fakeUser: Must be a String.')
+    }
+    if (!serviceClass.auth.userKey) {
+      throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
+    }
+    passUserProperty = serviceClass.auth.userKey
+  }
+
+  // Build and return the configuration object with the fake key
+  return {
+    public: {
+      services: {
+        [serviceClass.auth.serviceKey]: {
+          authorizedOrigins: fakeauthorizedOrigins,
+        },
+      },
+    },
+    private: {
+      [passKeyProperty]: fakeKey,
+      [passUserProperty]: fakeUser,
+    },
+  }
+}
+
+/**
+ * Returns the first auth origin found for a provided service class.
+ *
+ * @param {BaseService} serviceClass The service class to find the authorized origins.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
+ * @returns {string} First auth origin found.
+ *
+ * @example
+ * // Example usage:
+ * getServiceClassAuthOrigin(Obs)
+ * // outputs 'https://api.opensuse.org'
+ */
+function getServiceClassAuthOrigin(serviceClass) {
+  if (
+    !serviceClass ||
+    !serviceClass.prototype ||
+    !(serviceClass.prototype instanceof BaseService)
+  ) {
+    throw new TypeError(
+      `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
+    )
+  }
+  if (serviceClass.auth.authorizedOrigins) {
+    return serviceClass.auth.authorizedOrigins
+  } else {
+    return [
+      config.public.services[serviceClass.auth.serviceKey].authorizedOrigins,
+    ]
+  }
+}
+
+/**
+ * Generate a fake JWT Token valid for 1 hour for use in testing.
+ *
+ * @returns {string} Fake JWT Token valid for 1 hour.
+ */
+function fakeJwtToken() {
+  const fakeJwtPayload = { exp: dayjs().add(1, 'hours').unix() }
+  const fakeJwtPayloadJsonString = JSON.stringify(fakeJwtPayload)
+  const fakeJwtPayloadBase64 = Buffer.from(fakeJwtPayloadJsonString).toString(
+    'base64',
+  )
+  const jwtToken = `FakeHeader.${fakeJwtPayloadBase64}.fakeSignature`
+  return jwtToken
+}
+
+/**
+ * Test authentication of a badge for it's first OpenAPI example using a provided dummyResponse and authentication method.
+ *
+ * @param {BaseService} serviceClass The service class tested.
+ * @param {'BasicAuth'|'ApiKeyHeader'|'BearerAuthHeader'|'QueryStringAuth'|'JwtAuth'} authMethod The auth method of the tested service class.
+ * @param {object} dummyResponse An object containing the dummy response by the server.
+ * @param {object} options - Additional options for non default keys and content-type of the dummy response.
+ * @param {'application/xml'|'application/json'} options.contentType - Header for the response, may contain any string.
+ * @param {string} options.apiHeaderKey - Non default header for ApiKeyHeader auth.
+ * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
+ * @param {string} options.queryUserKey - QueryStringAuth user key.
+ * @param {string} options.queryPassKey - QueryStringAuth pass key.
+ * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
+ * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
+ *   or if `serviceClass` is missing authorizedOrigins.
+ *
+ * @example
+ * // Example usage:
+ * testAuth(StackExchangeReputation, QueryStringAuth, { items: [{ reputation: 8 }] })
+ */
+async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
+  if (!(serviceClass.prototype instanceof BaseService)) {
+    throw new TypeError(
+      'Invalid serviceClass: Must be an instance of BaseService.',
+    )
+  }
+
+  cleanUpNockAfterEach()
+
+  const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
+  const fakeSecret = 'fake-secret'
+  const authOrigins = getServiceClassAuthOrigin(serviceClass)
+  const config = generateFakeConfig(
+    serviceClass,
+    fakeSecret,
+    fakeUser,
+    authOrigins,
+  )
+  const exampleInvokeParams = getBadgeExampleCall(serviceClass)
+  if (options &amp;&amp; typeof options !== 'object') {
+    throw new TypeError('Invalid options: Must be an object.')
+  }
+  const {
+    contentType,
+    apiHeaderKey = 'x-api-key',
+    bearerHeaderKey = 'Bearer',
+    queryUserKey,
+    queryPassKey,
+    jwtLoginEndpoint,
+  } = options
+  if (contentType &amp;&amp; typeof contentType !== 'string') {
+    throw new TypeError('Invalid contentType: Must be a String.')
+  }
+  const header = contentType ? { 'Content-Type': contentType } : undefined
+  if (!apiHeaderKey || typeof apiHeaderKey !== 'string') {
+    throw new TypeError('Invalid apiHeaderKey: Must be a String.')
+  }
+  if (!bearerHeaderKey || typeof bearerHeaderKey !== 'string') {
+    throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
+  }
+
+  if (!authOrigins) {
+    throw new TypeError(`Missing authorizedOrigins for ${serviceClass.name}.`)
+  }
+  const jwtToken = authMethod === 'JwtAuth' ? fakeJwtToken() : undefined
+
+  const scopeArr = []
+  authOrigins.forEach(authOrigin => {
+    const scope = nock(authOrigin)
+    scopeArr.push(scope)
+    switch (authMethod) {
+      case 'BasicAuth':
+        scope
+          .get(/.*/)
+          .basicAuth({ user: fakeUser, pass: fakeSecret })
+          .reply(200, dummyResponse, header)
+        break
+      case 'ApiKeyHeader':
+        scope
+          .get(/.*/)
+          .matchHeader(apiHeaderKey, fakeSecret)
+          .reply(200, dummyResponse, header)
+        break
+      case 'BearerAuthHeader':
+        scope
+          .get(/.*/)
+          .matchHeader('Authorization', `${bearerHeaderKey} ${fakeSecret}`)
+          .reply(200, dummyResponse, header)
+        break
+      case 'QueryStringAuth':
+        if (!queryPassKey || typeof queryPassKey !== 'string') {
+          throw new TypeError('Invalid queryPassKey: Must be a String.')
+        }
+        scope
+          .get(/.*/)
+          .query(queryObject => {
+            if (queryObject[queryPassKey] !== fakeSecret) {
+              return false
+            }
+            if (queryUserKey) {
+              if (typeof queryUserKey !== 'string') {
+                throw new TypeError('Invalid queryUserKey: Must be a String.')
+              }
+              if (queryObject[queryUserKey] !== fakeUser) {
+                return false
+              }
+            }
+            return true
+          })
+          .reply(200, dummyResponse, header)
+        break
+      case 'JwtAuth': {
+        if (!jwtLoginEndpoint || typeof jwtLoginEndpoint !== 'string') {
+          throw new TypeError('Invalid jwtLoginEndpoint: Must be a String.')
+        }
+        if (jwtLoginEndpoint.startsWith(authOrigin)) {
+          scope
+            .post(/.*/, { username: fakeUser, password: fakeSecret })
+            .reply(200, { token: jwtToken })
+        } else {
+          scope
+            .get(/.*/)
+            .matchHeader('Authorization', `Bearer ${jwtToken}`)
+            .reply(200, dummyResponse, header)
+        }
+        break
+      }
+
+      default:
+        throw new TypeError(`Unkown auth method for ${serviceClass.name}.`)
+    }
+  })
+
+  expect(
+    await serviceClass.invoke(defaultContext, config, exampleInvokeParams),
+  ).to.not.have.property('isError')
+
+  // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
+  scopeArr.forEach(scope => scope.done())
+}
+
+const defaultContext = { requestFetcher: fetch }
+
+export {
+  cleanUpNockAfterEach,
+  noToken,
+  getBadgeExampleCall,
+  testAuth,
+  defaultContext,
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-badge-maker.html">badge-maker</a></li><li><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a></li><li><a href="module-core_base-service_base.html">core/base-service/base</a></li><li><a href="module-core_base-service_base-graphql.html">core/base-service/base-graphql</a></li><li><a href="module-core_base-service_base-json.html">core/base-service/base-json</a></li><li><a href="module-core_base-service_base-svg-scraping.html">core/base-service/base-svg-scraping</a></li><li><a href="module-core_base-service_base-toml.html">core/base-service/base-toml</a></li><li><a href="module-core_base-service_base-xml.html">core/base-service/base-xml</a></li><li><a href="module-core_base-service_base-yaml.html">core/base-service/base-yaml</a></li><li><a href="module-core_base-service_errors.html">core/base-service/errors</a></li><li><a href="module-core_base-service_graphql.html">core/base-service/graphql</a></li><li><a href="module-core_base-service_openapi.html">core/base-service/openapi</a></li><li><a href="module-core_base-service_resource-cache.html">core/base-service/resource-cache</a></li><li><a href="module-core_server_server.html">core/server/server</a></li><li><a href="module-core_service-test-runner_create-service-tester.html">core/service-test-runner/create-service-tester</a></li><li><a href="module-core_service-test-runner_icedfrisby-shields.html">core/service-test-runner/icedfrisby-shields</a></li><li><a href="module-core_service-test-runner_runner.html">core/service-test-runner/runner</a></li><li><a href="module-core_service-test-runner_service-tester.html">core/service-test-runner/service-tester</a></li><li><a href="module-core_service-test-runner_services-for-title.html">core/service-test-runner/services-for-title</a></li><li><a href="module-core_token-pooling_token-pool.html">core/token-pooling/token-pool</a></li><li><a href="module-services_build-status.html">services/build-status</a></li><li><a href="module-services_color-formatters.html">services/color-formatters</a></li><li><a href="module-services_contributor-count.html">services/contributor-count</a></li><li><a href="module-services_downloads.html">services/downloads</a></li><li><a href="module-services_dynamic-common.html">services/dynamic-common</a></li><li><a href="module-services_dynamic_json-path.html">services/dynamic/json-path</a></li><li><a href="module-services_endpoint-common.html">services/endpoint-common</a></li><li><a href="module-services_licenses.html">services/licenses</a></li><li><a href="module-services_package-json-helpers.html">services/package-json-helpers</a></li><li><a href="module-services_php-version.html">services/php-version</a></li><li><a href="module-services_pipenv-helpers.html">services/pipenv-helpers</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base.html">services/steam/steam-base</a></li><li><a href="module-services_text-formatters.html">services/text-formatters</a></li><li><a href="module-services_validators.html">services/validators</a></li><li><a href="module-services_version.html">services/version</a></li><li><a href="module-services_website-status.html">services/website-status</a></li></ul><h3>Classes</h3><ul><li><a href="BaseThunderstoreService.html">BaseThunderstoreService</a></li><li><a href="module-badge-maker_lib_xml-ElementList.html">ElementList</a></li><li><a href="module-badge-maker_lib_xml-XmlElement.html">XmlElement</a></li><li><a href="module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a></li><li><a href="module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a></li><li><a href="module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a></li><li><a href="module-core_base-service_base-toml-BaseTomlService.html">BaseTomlService</a></li><li><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></li><li><a href="module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a></li><li><a href="module-core_base-service_base-BaseService.html">BaseService</a></li><li><a href="module-core_base-service_errors-Deprecated.html">Deprecated</a></li><li><a href="module-core_base-service_errors-ImproperlyConfigured.html">ImproperlyConfigured</a></li><li><a href="module-core_base-service_errors-Inaccessible.html">Inaccessible</a></li><li><a href="module-core_base-service_errors-InvalidParameter.html">InvalidParameter</a></li><li><a href="module-core_base-service_errors-InvalidResponse.html">InvalidResponse</a></li><li><a href="module-core_base-service_errors-NotFound.html">NotFound</a></li><li><a href="module-core_base-service_errors-ShieldsRuntimeError.html">ShieldsRuntimeError</a></li><li><a href="module-core_server_server-Server.html">Server</a></li><li><a href="module-core_service-test-runner_runner-Runner.html">Runner</a></li><li><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></li><li><a href="module-core_token-pooling_token-pool-Token.html">Token</a></li><li><a href="module-core_token-pooling_token-pool-TokenPool.html">TokenPool</a></li><li><a href="module-services_route-builder.html">services/route-builder</a></li><li><a href="module-services_steam_steam-base-BaseSteamAPI.html">BaseSteamAPI</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-TUTORIAL.html">TUTORIAL</a></li><li><a href="tutorial-adding-new-config-values.html">adding-new-config-values</a></li><li><a href="tutorial-authentication.html">authentication</a></li><li><a href="tutorial-badge-urls.html">badge-urls</a></li><li><a href="tutorial-code-walkthrough.html">code-walkthrough</a></li><li><a href="tutorial-deprecating-badges.html">deprecating-badges</a></li><li><a href="tutorial-input-validation.html">input-validation</a></li><li><a href="tutorial-json-format.html">json-format</a></li><li><a href="tutorial-logos.html">logos</a></li><li><a href="tutorial-performance-testing.html">performance-testing</a></li><li><a href="tutorial-production-hosting.html">production-hosting</a></li><li><a href="tutorial-releases.html">releases</a></li><li><a href="tutorial-self-hosting.html">self-hosting</a></li><li><a href="tutorial-server-secrets.html">server-secrets</a></li><li><a href="tutorial-service-tests.html">service-tests</a></li><li><a href="tutorial-static-badges.html">static-badges</a></li></ul><h3>Global</h3><ul><li><a href="global.html#createNumRequestCounter">createNumRequestCounter</a></li><li><a href="global.html#fakeJwtToken">fakeJwtToken</a></li><li><a href="global.html#generateFakeConfig">generateFakeConfig</a></li><li><a href="global.html#getBadgeExampleCall">getBadgeExampleCall</a></li><li><a href="global.html#getServiceClassAuthOrigin">getServiceClassAuthOrigin</a></li><li><a href="global.html#isMetricWithPattern">isMetricWithPattern</a></li><li><a href="global.html#testAuth">testAuth</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Wed Feb 21 2024 18:42:01 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
