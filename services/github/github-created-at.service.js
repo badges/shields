@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Joi from 'joi'
+import { age } from '../color-formatters.js'
 import { pathParams } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -37,6 +38,7 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
     const date = dayjs(createdAt)
     return {
       message: formatDate(date),
+      color: age(date),
     }
   }
 
