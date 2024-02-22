@@ -207,6 +207,7 @@ function fakeJwtToken() {
  * @param {string} options.queryUserKey - QueryStringAuth user key.
  * @param {string} options.queryPassKey - QueryStringAuth pass key.
  * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
+ * @param {object} options.exampleOverride - Override example params in test.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -243,6 +244,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     queryUserKey,
     queryPassKey,
     jwtLoginEndpoint,
+    exampleOverride = {},
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -253,6 +255,9 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
   if (!bearerHeaderKey || typeof bearerHeaderKey !== 'string') {
     throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
+  }
+  if (!exampleOverride || typeof exampleOverride !== 'object') {
+    throw new TypeError('Invalid exampleOverride: Must be an Object.')
   }
 
   if (!authOrigins) {
@@ -328,7 +333,10 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   })
 
   expect(
-    await serviceClass.invoke(defaultContext, config, exampleInvokeParams),
+    await serviceClass.invoke(defaultContext, config, {
+      ...exampleInvokeParams,
+      ...exampleOverride,
+    }),
   ).to.not.have.property('isError')
 
   // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
