@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import dayjs from 'dayjs'
 import { expect } from 'chai'
 import nock from 'nock'
@@ -156,6 +157,7 @@ function generateFakeConfig(
  *
  * @param {BaseService} serviceClass The service class to find the authorized origins.
  * @param {object} authOverride Return result with overrid params.
+ * @param {object} configOverride - Override the config.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
  * @returns {string} First auth origin found.
  *
@@ -164,7 +166,7 @@ function generateFakeConfig(
  * getServiceClassAuthOrigin(Obs)
  * // outputs 'https://api.opensuse.org'
  */
-function getServiceClassAuthOrigin(serviceClass, authOverride) {
+function getServiceClassAuthOrigin(serviceClass, authOverride, configOverride) {
   if (
     !serviceClass ||
     !serviceClass.prototype ||
@@ -178,7 +180,8 @@ function getServiceClassAuthOrigin(serviceClass, authOverride) {
   if (auth.authorizedOrigins) {
     return serviceClass.auth.authorizedOrigins
   } else {
-    return [config.public.services[auth.serviceKey].authorizedOrigins]
+    const mergedConfig = _.merge(runnerConfig, configOverride)
+    return [mergedConfig.public.services[auth.serviceKey].authorizedOrigins]
   }
 }
 
@@ -212,6 +215,7 @@ function fakeJwtToken() {
  * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
  * @param {object} options.exampleOverride - Override example params in test.
  * @param {object} options.authOverride - Override class auth params.
+ * @param {object} options.configOverride - Override the config for this test.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -237,6 +241,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     jwtLoginEndpoint,
     exampleOverride = {},
     authOverride,
+    configOverride,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -254,11 +259,18 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   if (authOverride && typeof authOverride !== 'object') {
     throw new TypeError('Invalid authOverride: Must be an Object.')
   }
+  if (configOverride && typeof configOverride !== 'object') {
+    throw new TypeError('Invalid configOverride: Must be an Object.')
+  }
 
   const auth = { ...serviceClass.auth, ...authOverride }
   const fakeUser = auth.userKey ? 'fake-user' : undefined
   const fakeSecret = 'fake-secret'
-  const authOrigins = getServiceClassAuthOrigin(serviceClass, authOverride)
+  const authOrigins = getServiceClassAuthOrigin(
+    serviceClass,
+    authOverride,
+    configOverride,
+  )
   const config = generateFakeConfig(
     serviceClass,
     fakeSecret,
@@ -344,10 +356,14 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   })
 
   expect(
-    await serviceClass.invoke(defaultContext, config, {
-      ...exampleInvokeParams,
-      ...exampleOverride,
-    }),
+    await serviceClass.invoke(
+      defaultContext,
+      _.merge(config, configOverride),
+      {
+        ...exampleInvokeParams,
+        ...exampleOverride,
+      },
+    ),
   ).to.not.have.property('isError')
 
   // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
