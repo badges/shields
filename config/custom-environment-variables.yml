@@ -31,6 +31,8 @@ public:
       __format: 'json'
 
   services:
+    bitbucket:
+      authorizedOrigins: 'BITBUCKET_ORIGINS'
     bitbucketServer:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
     drone:
