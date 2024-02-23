@@ -88,6 +88,7 @@ function getBadgeExampleCall(serviceClass) {
  * @param {string} fakeKey - The fake key to be used in the configuration.
  * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
  * @param {string} fakeauthorizedOrigins - authorizedOrigins to add to config.
+ * @param {object} authOverride Return result with overrid params.
  * @returns {object} - The configuration object.
  * @throws {TypeError} - Throws an error if the input is not a class.
  */
@@ -96,6 +97,7 @@ function generateFakeConfig(
   fakeKey,
   fakeUser,
   fakeauthorizedOrigins,
+  authOverride,
 ) {
   if (
     !serviceClass ||
@@ -113,30 +115,31 @@ function generateFakeConfig(
     throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
   }
 
-  if (!serviceClass.auth) {
-    throw new Error(`Missing auth for ${serviceClass.name}.`)
+  const auth = { ...serviceClass.auth, ...authOverride }
+  if (Object.keys(auth).length === 0) {
+    throw new Error(`Auth empty for ${serviceClass.name}.`)
   }
-  if (!serviceClass.auth.passKey) {
+  if (!auth.passKey) {
     throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
   }
   // Extract the passKey property from auth, or use a default if not present
-  const passKeyProperty = serviceClass.auth.passKey
+  const passKeyProperty = auth.passKey
   let passUserProperty = 'placeholder'
   if (fakeUser) {
     if (typeof fakeKey !== 'string') {
       throw new TypeError('Invalid fakeUser: Must be a String.')
     }
-    if (!serviceClass.auth.userKey) {
+    if (!auth.userKey) {
       throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
     }
-    passUserProperty = serviceClass.auth.userKey
+    passUserProperty = auth.userKey
   }
 
   // Build and return the configuration object with the fake key
   return {
     public: {
       services: {
-        [serviceClass.auth.serviceKey]: {
+        [auth.serviceKey]: {
           authorizedOrigins: fakeauthorizedOrigins,
         },
       },
@@ -152,6 +155,7 @@ function generateFakeConfig(
  * Returns the first auth origin found for a provided service class.
  *
  * @param {BaseService} serviceClass The service class to find the authorized origins.
+ * @param {object} authOverride Return result with overrid params.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
  * @returns {string} First auth origin found.
  *
@@ -160,7 +164,7 @@ function generateFakeConfig(
  * getServiceClassAuthOrigin(Obs)
  * // outputs 'https://api.opensuse.org'
  */
-function getServiceClassAuthOrigin(serviceClass) {
+function getServiceClassAuthOrigin(serviceClass, authOverride) {
   if (
     !serviceClass ||
     !serviceClass.prototype ||
@@ -170,12 +174,11 @@ function getServiceClassAuthOrigin(serviceClass) {
       `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
     )
   }
-  if (serviceClass.auth.authorizedOrigins) {
+  const auth = { ...serviceClass.auth, ...authOverride }
+  if (auth.authorizedOrigins) {
     return serviceClass.auth.authorizedOrigins
   } else {
-    return [
-      config.public.services[serviceClass.auth.serviceKey].authorizedOrigins,
-    ]
+    return [config.public.services[auth.serviceKey].authorizedOrigins]
   }
 }
 
@@ -208,6 +211,7 @@ function fakeJwtToken() {
  * @param {string} options.queryPassKey - QueryStringAuth pass key.
  * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
  * @param {object} options.exampleOverride - Override example params in test.
+ * @param {object} options.authOverride - Override class auth params.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -224,19 +228,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
 
   cleanUpNockAfterEach()
 
-  const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
-  const fakeSecret = 'fake-secret'
-  const authOrigins = getServiceClassAuthOrigin(serviceClass)
-  const config = generateFakeConfig(
-    serviceClass,
-    fakeSecret,
-    fakeUser,
-    authOrigins,
-  )
-  const exampleInvokeParams = getBadgeExampleCall(serviceClass)
-  if (options && typeof options !== 'object') {
-    throw new TypeError('Invalid options: Must be an object.')
-  }
   const {
     contentType,
     apiHeaderKey = 'x-api-key',
@@ -245,6 +236,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     queryPassKey,
     jwtLoginEndpoint,
     exampleOverride = {},
+    authOverride,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -256,8 +248,27 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   if (!bearerHeaderKey || typeof bearerHeaderKey !== 'string') {
     throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
   }
-  if (!exampleOverride || typeof exampleOverride !== 'object') {
+  if (typeof exampleOverride !== 'object') {
     throw new TypeError('Invalid exampleOverride: Must be an Object.')
+  }
+  if (authOverride && typeof authOverride !== 'object') {
+    throw new TypeError('Invalid authOverride: Must be an Object.')
+  }
+
+  const auth = { ...serviceClass.auth, ...authOverride }
+  const fakeUser = auth.userKey ? 'fake-user' : undefined
+  const fakeSecret = 'fake-secret'
+  const authOrigins = getServiceClassAuthOrigin(serviceClass, authOverride)
+  const config = generateFakeConfig(
+    serviceClass,
+    fakeSecret,
+    fakeUser,
+    authOrigins,
+    authOverride,
+  )
+  const exampleInvokeParams = getBadgeExampleCall(serviceClass)
+  if (options && typeof options !== 'object') {
+    throw new TypeError('Invalid options: Must be an object.')
   }
 
   if (!authOrigins) {
