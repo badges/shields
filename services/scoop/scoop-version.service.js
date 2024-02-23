@@ -1,3 +1,4 @@
+import { URL } from 'url'
 import Joi from 'joi'
 import { NotFound, pathParam, queryParam } from '../index.js'
 import { ConditionalGithubAuthV3Service } from '../github/github-auth-service.js'
@@ -60,9 +61,31 @@ export default class ScoopVersion extends ConditionalGithubAuthV3Service {
       })
     }
     const bucket = queryParams.bucket || 'main'
-    const bucketUrl = this.buckets[bucket]
+    let bucketUrl = this.buckets[bucket]
     if (!bucketUrl) {
-      throw new NotFound({ prettyMessage: `bucket "${bucket}" not found` })
+      // Parsing URL here will throw an error if the url is invalid
+      try {
+        const url = new URL(decodeURIComponent(bucket))
+
+        // Throw errors to go to jump to catch statement
+        // The error messages here are purely for code readability, and will never reach the user.
+        if (url.hostname !== 'github.com') {
+          throw new Error('Not a GitHub URL')
+        }
+        const path = url.pathname.split('/')
+        // Remove the empty string at the beginning
+        path.shift()
+        if (path.length !== 2) {
+          throw new Error('Not a valid GitHub Repo')
+        }
+
+        const [user, repo] = path
+
+        // Reconstructing the url here ensures that the url will match the regex
+        bucketUrl = `https://github.com/${user}/${repo}`
+      } catch (e) {
+        throw new NotFound({ prettyMessage: `bucket "${bucket}" not found` })
+      }
     }
     const {
       groups: { user, repo },
