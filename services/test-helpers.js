@@ -38,6 +38,7 @@ function noToken(serviceClass) {
  * Retrieves an example set of parameters for invoking a service class using OpenAPI example of that class.
  *
  * @param {BaseService} serviceClass The service class containing OpenAPI specifications.
+ * @param {'path'|'query'} paramType The type of params to extract, may be path params or query params.
  * @returns {object} An object with call params to use with a service invoke of the first OpenAPI example.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if it lacks the expected structure.
@@ -49,7 +50,7 @@ function noToken(serviceClass) {
  * // Output: { stackexchangesite: 'stackoverflow', query: '123' }
  * StackExchangeReputation.invoke(defaultContext, config, example)
  */
-function getBadgeExampleCall(serviceClass) {
+function getBadgeExampleCall(serviceClass, paramType) {
   if (!(serviceClass.prototype instanceof BaseService)) {
     throw new TypeError(
       'Invalid serviceClass: Must be an instance of BaseService.',
@@ -60,6 +61,9 @@ function getBadgeExampleCall(serviceClass) {
     throw new TypeError(
       `Missing OpenAPI in service class ${serviceClass.name}.`,
     )
+  }
+  if (!['path', 'query'].includes(paramType)) {
+    throw new TypeError('Invalid paramType: Must be path or query.')
   }
 
   const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
@@ -74,7 +78,9 @@ function getBadgeExampleCall(serviceClass) {
 
   // reformat structure for serviceClass.invoke
   const exampleInvokeParams = firstOpenapiExampleParams.reduce((acc, obj) => {
-    acc[obj.name] = obj.example
+    if (obj.in === paramType) {
+      acc[obj.name] = obj.example
+    }
     return acc
   }, {})
 
@@ -278,7 +284,8 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     authOrigins,
     authOverride,
   )
-  const exampleInvokeParams = getBadgeExampleCall(serviceClass)
+  const exampleInvokePathParams = getBadgeExampleCall(serviceClass, 'path')
+  const exampleInvokeQueryParams = getBadgeExampleCall(serviceClass, 'query')
   if (options && typeof options !== 'object') {
     throw new TypeError('Invalid options: Must be an object.')
   }
@@ -360,7 +367,11 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
       defaultContext,
       _.merge(config, configOverride),
       {
-        ...exampleInvokeParams,
+        ...exampleInvokePathParams,
+        ...exampleOverride,
+      },
+      {
+        ...exampleInvokeQueryParams,
         ...exampleOverride,
       },
     ),
