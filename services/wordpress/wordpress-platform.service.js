@@ -93,16 +93,6 @@ class WordpressPluginTestedVersion extends BaseWordpress {
 
   static defaultBadgeData = { label: 'wordpress' }
 
-  static renderStaticPreview({ testedVersion }) {
-    // Since this badge has an async `render()` function, but `get examples()` has to
-    // be synchronous, this method exists. It should return the same value as the
-    // real `render()`.
-    return {
-      message: `${addv(testedVersion)} tested`,
-      color: 'brightgreen',
-    }
-  }
-
   static async render({ testedVersion }) {
     // Atypically, the `render()` function of this badge is `async` because it needs to pull
     // data from the server.

@@ -36,16 +36,6 @@ describe('DeprecatedService', function () {
     expect(service.category).to.equal(category)
   })
 
-  it('sets specified examples', function () {
-    const examples = [
-      {
-        title: 'Not sure we would have examples',
-      },
-    ]
-    const service = deprecatedService({ ...commonAttrs, examples })
-    expect(service.examples).to.deep.equal(examples)
-  })
-
   it('uses default deprecation message when no message specified', async function () {
     const service = deprecatedService({ ...commonAttrs })
     expect(await service.invoke()).to.deep.equal({
