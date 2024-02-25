@@ -53,6 +53,17 @@ t.create('version (valid bucket url)')
     message: isVPlusDottedVersionNClauses,
   })
 
+const validBucketUrlTrailingSlash = encodeURIComponent(
+  'https://github.com/jewlexx/personal-scoop/',
+)
+
+t.create('version (valid bucket url)')
+  .get(`/v/sfsu.json?bucket=${validBucketUrlTrailingSlash}`)
+  .expectBadge({
+    label: 'scoop',
+    message: isVPlusDottedVersionNClauses,
+  })
+
 t.create('version (not found in custom bucket)')
   .get(`/v/not-a-real-app.json?bucket=${validBucketUrl}`)
   .expectBadge({

@@ -72,9 +72,8 @@ export default class ScoopVersion extends ConditionalGithubAuthV3Service {
         if (url.hostname !== 'github.com') {
           throw new Error('Not a GitHub URL')
         }
-        const path = url.pathname.split('/')
-        // Remove the empty string at the beginning
-        path.shift()
+        const path = url.pathname.split('/').filter(value => value !== '')
+
         if (path.length !== 2) {
           throw new Error('Not a valid GitHub Repo')
         }
