@@ -1,6 +1,5 @@
 import Joi from 'joi'
-import { pathParams } from '../index.js'
-import { SnapstoreBase } from './snapstore-base.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const versionSchema = Joi.object({
   'channel-map': Joi.array().items(
@@ -10,7 +9,7 @@ const versionSchema = Joi.object({
   ),
 }).required()
 
-export default class SnapstoreVersion extends SnapstoreBase {
+export default class SnapstoreVersion extends BaseJsonService {
   static category = 'version'
 
   static route = {
@@ -37,7 +36,7 @@ export default class SnapstoreVersion extends SnapstoreBase {
   }
 
   async handle({ package: packageName }) {
-    const parsedData = await this.fetch({
+    const parsedData = await this._requestJson({
       schema: versionSchema,
       options: {
         headers: { 'Snap-Device-Series': 16 },
