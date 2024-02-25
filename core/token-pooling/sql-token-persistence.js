@@ -15,7 +15,9 @@ export default class SqlTokenPersistence {
     } else {
       this.pool = new pg.Pool({ connectionString: this.url })
     }
-    const result = await this.pool.query(`SELECT token FROM ${this.table};`)
+    const result = await this.pool.query(
+      `SELECT token FROM ${this.table} ORDER BY RANDOM();`,
+    )
     return result.rows.map(row => row.token)
   }
 

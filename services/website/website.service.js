@@ -1,13 +1,13 @@
-import Joi from 'joi'
 import emojic from 'emojic'
+import Joi from 'joi'
+import trace from '../../core/base-service/trace.js'
+import { BaseService, queryParams } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import {
   queryParamSchema,
-  queryParams as websiteQueryParams,
   renderWebsiteStatus,
+  queryParams as websiteQueryParams,
 } from '../website-status.js'
-import { BaseService, queryParams } from '../index.js'
-import trace from '../../core/base-service/trace.js'
 
 const description = `
 The existence of a specific path on the server can be checked by appending
@@ -15,6 +15,8 @@ a path after the domain name, e.g.
 \`https://img.shields.io/website?url=http%3A//www.website.com/path/to/page.html\`.
 
 The messages and colors for the up and down states can also be customized.
+
+A site will be classified as "down" if it fails to respond within 3.5 seconds.
 `
 
 const urlQueryParamSchema = Joi.object({
@@ -75,6 +77,9 @@ export default class Website extends BaseService {
         url,
         options: {
           method: 'HEAD',
+          timeout: {
+            response: 3500,
+          },
         },
       })
       // We consider all HTTP status codes below 310 as success.
