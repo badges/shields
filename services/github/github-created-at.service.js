@@ -38,7 +38,7 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
     const date = dayjs(createdAt)
     return {
       message: formatDate(date),
-      color: age(date),
+      color: age(date, true),
     }
   }
 
