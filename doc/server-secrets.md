@@ -364,6 +364,15 @@ and create an API key for the YouTube Data API v3.
 
 [youtube credentials]: https://console.developers.google.com/apis/credentials
 
+### YouTrack
+
+- `YOUTRACK_ORIGINS` (yml: `public.services.youtrack.authorizedOrigins`)
+- `YOUTRACK_TOKEN` (yml: `private.youtrack_token`)
+
+A Youtrack [Permanent Access Token][youtrack-pat] is required for accessing private content. If you need a Youtrack token for your self-hosted Shields server then we recommend limiting the scopes to the minimal set necessary for the badges you are using.
+
+[youtrack-pat]: https://www.jetbrains.com/help/youtrack/devportal/Manage-Permanent-Token.html
+
 ## Error reporting
 
 - `SENTRY_DSN` (yml: `private.sentry_dsn`)
