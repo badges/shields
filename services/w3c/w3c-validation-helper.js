@@ -77,20 +77,19 @@ const getSchema = preset => {
   return schema.map(url => encodeURI(url)).join(' ')
 }
 
-const description = `<p>
-  The W3C validation badge performs validation of the HTML, SVG, MathML, ITS, RDFa Lite, XHTML documents.
-  The badge uses the type property of each message found in the messages from the validation results to determine to be an error or warning.
-  The rules are as follows:
-  <ul>
-    <li>info:  These messages are counted as warnings</li>
-    <li>error:  These messages are counted as errors</li>
-    <li>non-document-error: These messages are counted as errors</li>
-  </ul>
-</p>
-<p>
-  This badge relies on the <a target="_blank" href="https://validator.nu/">https://validator.nu/</a> service to perform the validation.
-  Please refer to <a target="_blank" href="https://about.validator.nu/">https://about.validator.nu/</a> for the full documentation and Terms of service.
-</p>
+const description = `
+The W3C validation badge performs validation of the HTML, SVG, MathML, ITS, RDFa Lite, XHTML documents.
+The badge uses the type property of each message found in the messages from the validation results to determine to be an error or warning.
+The rules are as follows:
+
+<ul>
+  <li>info:  These messages are counted as warnings</li>
+  <li>error:  These messages are counted as errors</li>
+  <li>non-document-error: These messages are counted as errors</li>
+</ul>
+
+This badge relies on the https://validator.nu/ service to perform the validation.
+Please refer to https://about.validator.nu/ for the full documentation and Terms of service.
 `
 
 export { description, presetRegex, getColor, getMessage, getSchema }

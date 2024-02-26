@@ -7,15 +7,11 @@ import { NotFound, pathParams } from '../index.js'
 import BaseSteamAPI from './steam-base.js'
 
 const description = `
-<p>
-  Using a web browser, you can find the ID in the url here:
-</p>
+Using a web browser, you can find the ID in the url here:
 <img
   src="https://user-images.githubusercontent.com/6497721/46358801-1bcb3200-c668-11e8-9963-931397853945.PNG"
   alt="The ID is the number found right after ?id= in the URI" />
-<p>
-  In the steam client you can simply just Right-Click and 'Copy Page URL' and follow the above step
-</p>
+In the steam client you can simply just Right-Click and 'Copy Page URL' and follow the above step
 <img
   src="https://user-images.githubusercontent.com/7288322/46567027-27c83400-c987-11e8-9850-ab67d987202f.png"
   alt="Right-Click and 'Copy Page URL'" />

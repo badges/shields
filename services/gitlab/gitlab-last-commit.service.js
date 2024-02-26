@@ -21,9 +21,7 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const refText = `
-<p>
-  ref can be filled with the name of a branch, tag or revision range of the repository.
-</p>
+ref can be filled with the name of a branch, tag or revision range of the repository.
 `
 
 const lastCommitDescription = description + refText

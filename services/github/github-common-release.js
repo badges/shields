@@ -77,13 +77,13 @@ const queryParamSchema = Joi.object({
   filter: Joi.string(),
 }).required()
 
-const filterDocs = `<p>
-  The <code>filter</code> param can be used to apply a filter to the
-  project's tag or release names before selecting the latest from the list.
-  Two constructs are available: <code>*</code> is a wildcard matching zero
-  or more characters, and if the pattern starts with a <code>!</code>,
-  the whole pattern is negated.
-</p>`
+const filterDocs = `
+The <code>filter</code> param can be used to apply a filter to the
+project's tag or release names before selecting the latest from the list.
+Two constructs are available: <code>*</code> is a wildcard matching zero
+or more characters, and if the pattern starts with a <code>!</code>,
+the whole pattern is negated.
+`
 
 const openApiQueryParams = queryParams(
   {
