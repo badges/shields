@@ -1,12 +1,12 @@
-import { test, given, forCases } from 'sazerac'
 import { expect } from 'chai'
+import { forCases, given, test } from 'sazerac'
 import {
-  coveragePercentage,
-  colorScale,
-  letterScore,
   age,
-  version,
+  colorScale,
+  coveragePercentage,
+  letterScore,
   pep440VersionColor,
+  version,
 } from './color-formatters.js'
 
 describe('Color formatters', function () {
@@ -75,6 +75,22 @@ describe('Color formatters', function () {
     given(monthsAgo(15))
       .describe('when given a Date 15 months ago')
       .expect('orange')
+    // --- reversed --- //
+    given(Date.now(), true)
+      .describe('when given the current timestamp and reversed')
+      .expect('red')
+    given(new Date(), true)
+      .describe('when given the current Date and reversed')
+      .expect('red')
+    given(new Date(2001, 1, 1), true)
+      .describe('when given a Date many years ago and reversed')
+      .expect('brightgreen')
+    given(monthsAgo(2), true)
+      .describe('when given a Date two months ago and reversed')
+      .expect('yellow')
+    given(monthsAgo(15), true)
+      .describe('when given a Date 15 months ago and reversed')
+      .expect('green')
   })
 
   test(version, () => {
