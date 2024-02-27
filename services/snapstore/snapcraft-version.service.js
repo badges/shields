@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
+import { renderVersionBadge } from '../version.js'
 
 const versionSchema = Joi.object({
   'channel-map': Joi.array()
@@ -34,10 +35,6 @@ export default class SnapcraftVersion extends BaseJsonService {
     },
   }
 
-  static render({ version }) {
-    return { message: version, color: 'blue' }
-  }
-
   async handle({ package: packageName }) {
     const parsedData = await this._requestJson({
       schema: versionSchema,
@@ -52,6 +49,6 @@ export default class SnapcraftVersion extends BaseJsonService {
 
     const version = parsedData['channel-map'][0].version
 
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version })
   }
 }
