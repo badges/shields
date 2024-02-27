@@ -2,11 +2,14 @@ import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
 
 const versionSchema = Joi.object({
-  'channel-map': Joi.array().items(
-    Joi.object({
-      version: Joi.string().required(),
-    }),
-  ),
+  'channel-map': Joi.array()
+    .items(
+      Joi.object({
+        version: Joi.string().required(),
+      }).required(),
+    )
+    .min(1)
+    .required(),
 }).required()
 
 export default class SnapcraftVersion extends BaseJsonService {
