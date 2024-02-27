@@ -17,7 +17,7 @@ export default class SnapstoreVersion extends BaseJsonService {
     pattern: ':package',
   }
 
-  static defaultBadgeData = { label: 'snapcraft', namedLogo: 'snapcraft' }
+  static defaultBadgeData = { label: 'snapcraft' }
 
   static openApi = {
     '/snapstore/v/{package}': {
@@ -32,7 +32,7 @@ export default class SnapstoreVersion extends BaseJsonService {
   }
 
   static render({ version }) {
-    return { message: version, color: 'blue', namedLogo: 'snapcraft' }
+    return { message: version, color: 'blue' }
   }
 
   async handle({ package: packageName }) {
