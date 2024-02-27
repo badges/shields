@@ -9,18 +9,18 @@ const versionSchema = Joi.object({
   ),
 }).required()
 
-export default class SnapstoreVersion extends BaseJsonService {
+export default class SnapcraftVersion extends BaseJsonService {
   static category = 'version'
 
   static route = {
-    base: 'snapstore/v',
+    base: 'snapcraft/v',
     pattern: ':package',
   }
 
   static defaultBadgeData = { label: 'snapcraft' }
 
   static openApi = {
-    '/snapstore/v/{package}': {
+    '/snapcraft/v/{package}': {
       get: {
         summary: 'Snapcraft version',
         parameters: pathParams({
