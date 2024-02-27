@@ -7,15 +7,12 @@ export default class YoutrackBase extends BaseJsonService {
   }
 
   async fetch({ url, options, schema, httpErrors }) {
-    console.log(url)
-    console.log(options)
-
     return this._requestJson(
       this.authHelper.withBearerAuthHeader({
         schema,
         url,
         options,
-        httpErrors: { 500: 'invalid query' },
+        httpErrors: { 500: 'invalid query', ...httpErrors },
       }),
     )
   }

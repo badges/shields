@@ -5,12 +5,10 @@ import { metric } from '../text-formatters.js'
 import { description } from './youtrack-helper.js'
 import YoutrackBase from './youtrack-base.js'
 
-const schema = Joi.array().items(
-  Joi.object({
-    count: Joi.number().required(),
-    type: Joi.string().required(),
-  }),
-)
+const schema = Joi.object({
+  count: Joi.number().required(),
+  $type: Joi.equal('IssueCountResponse'),
+})
 
 const queryParamSchema = Joi.object({
   query: Joi.string(),
@@ -66,9 +64,7 @@ export default class YoutrackIssues extends YoutrackBase {
       schema,
       options: {
         method: 'POST',
-        searchParams: {
-          query,
-        },
+        json: { query },
       },
       url: `${baseUrl}/api/issuesGetter/count?fields=count`,
     })
@@ -78,16 +74,11 @@ export default class YoutrackIssues extends YoutrackBase {
     { project },
     { youtrack_url: baseUrl = 'https://youtrack.jetbrains.com', query },
   ) {
-    const { res } = await this.fetch({
+    const data = await this.fetch({
       baseUrl,
       query: `project: ${project} ${query}`,
     })
 
-    console.log(res)
-
-    const data = this.constructor._validate(res.headers, schema)
-
-    const count = data.count()
-    return this.constructor.render({ count })
+    return this.constructor.render({ count: data.count })
   }
 }

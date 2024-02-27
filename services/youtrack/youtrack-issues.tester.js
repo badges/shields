@@ -1,9 +1,23 @@
 import { createServiceTester } from '../tester.js'
-import { isMetric } from '../test-validators.js'
+import { isMetricAllowNegative } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
-t.create('Issues (RIDER)').get('/RIDER?query=%23Unresolved').expectBadge({
+t.create('Issues (IDEA)').get('/IDEA.json?query=%23Unresolved').expectBadge({
   label: 'issues',
-  message: isMetric,
+  message: isMetricAllowNegative,
 })
+
+t.create('Issues (IDEA) (Invalid State)')
+  .get('/IDEA.json?query=%23ABCDEFG')
+  .expectBadge({
+    label: 'issues',
+    message: 'invalid',
+  })
+
+t.create('Issues (DOESNOTEXIST) (Invalid Project)')
+  .get('/DOESNOTEXIST.json?query=%23Unresolved')
+  .expectBadge({
+    label: 'issues',
+    message: 'invalid',
+  })
