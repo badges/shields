@@ -73,16 +73,17 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'Libraries.io dependency status for GitHub repo',
-      namedParams: {
-        user: 'phoenixframework',
-        repo: 'phoenix',
+  static openApi = {
+    '/librariesio/github/{user}/{repo}': {
+      get: {
+        summary: 'Libraries.io dependency status for GitHub repo',
+        parameters: pathParams(
+          { name: 'user', example: 'phoenixframework' },
+          { name: 'repo', example: 'phoenix' },
+        ),
       },
-      staticPreview: renderDependenciesBadge({ outdatedCount: 325 }),
     },
-  ]
+  }
 
   static _cacheLength = 900
 

@@ -58,27 +58,6 @@ class OpenApiService extends BaseJsonService {
   }
 }
 
-class LegacyService extends BaseJsonService {
-  static category = 'build'
-  static route = { base: 'legacy/service', pattern: ':packageName/:distTag*' }
-
-  // this service defines an Examples Array
-  static examples = [
-    {
-      title: 'LegacyService Title',
-      namedParams: { packageName: 'badge-maker' },
-      staticPreview: { label: 'build', message: 'passing' },
-      documentation: 'LegacyService Description',
-    },
-    {
-      title: 'LegacyService Title (with Tag)',
-      namedParams: { packageName: 'badge-maker', distTag: 'latest' },
-      staticPreview: { label: 'build', message: 'passing' },
-      documentation: 'LegacyService Description (with Tag)',
-    },
-  ]
-}
-
 const expected = {
   openapi: '3.0.0',
   info: { version: '1.0.0', title: 'build', license: { name: 'CC0' } },
@@ -266,105 +245,6 @@ const expected = {
         ],
       },
     },
-    '/legacy/service/{packageName}/{distTag}': {
-      get: {
-        summary: 'LegacyService Title (with Tag)',
-        description: 'LegacyService Description (with Tag)',
-        parameters: [
-          {
-            name: 'packageName',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'badge-maker',
-          },
-          {
-            name: 'distTag',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'latest',
-          },
-          { $ref: '#/components/parameters/style' },
-          { $ref: '#/components/parameters/logo' },
-          { $ref: '#/components/parameters/logoColor' },
-          { $ref: '#/components/parameters/label' },
-          { $ref: '#/components/parameters/labelColor' },
-          { $ref: '#/components/parameters/color' },
-          { $ref: '#/components/parameters/cacheSeconds' },
-          { $ref: '#/components/parameters/link' },
-        ],
-        'x-code-samples': [
-          { lang: 'URL', label: 'URL', source: '$url' },
-          {
-            lang: 'Markdown',
-            label: 'Markdown',
-            source: '![LegacyService Title (with Tag)]($url)',
-          },
-          {
-            lang: 'reStructuredText',
-            label: 'rSt',
-            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
-          },
-          {
-            lang: 'AsciiDoc',
-            label: 'AsciiDoc',
-            source: 'image:$url[LegacyService Title (with Tag)]',
-          },
-          {
-            lang: 'HTML',
-            label: 'HTML',
-            source: '<img alt="LegacyService Title (with Tag)" src="$url">',
-          },
-        ],
-      },
-    },
-    '/legacy/service/{packageName}': {
-      get: {
-        summary: 'LegacyService Title (with Tag)',
-        description: 'LegacyService Description (with Tag)',
-        parameters: [
-          {
-            name: 'packageName',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'badge-maker',
-          },
-          { $ref: '#/components/parameters/style' },
-          { $ref: '#/components/parameters/logo' },
-          { $ref: '#/components/parameters/logoColor' },
-          { $ref: '#/components/parameters/label' },
-          { $ref: '#/components/parameters/labelColor' },
-          { $ref: '#/components/parameters/color' },
-          { $ref: '#/components/parameters/cacheSeconds' },
-          { $ref: '#/components/parameters/link' },
-        ],
-        'x-code-samples': [
-          { lang: 'URL', label: 'URL', source: '$url' },
-          {
-            lang: 'Markdown',
-            label: 'Markdown',
-            source: '![LegacyService Title (with Tag)]($url)',
-          },
-          {
-            lang: 'reStructuredText',
-            label: 'rSt',
-            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
-          },
-          {
-            lang: 'AsciiDoc',
-            label: 'AsciiDoc',
-            source: 'image:$url[LegacyService Title (with Tag)]',
-          },
-          {
-            lang: 'HTML',
-            label: 'HTML',
-            source: '<img alt="LegacyService Title (with Tag)" src="$url">',
-          },
-        ],
-      },
-    },
   },
 }
 
@@ -379,10 +259,7 @@ describe('category2openapi', function () {
       clean(
         category2openapi({
           category: { name: 'build' },
-          services: [
-            OpenApiService.getDefinition(),
-            LegacyService.getDefinition(),
-          ],
+          services: [OpenApiService.getDefinition()],
         }),
       ),
     ).to.deep.equal(expected)
