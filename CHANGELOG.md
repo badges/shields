@@ -9,22 +9,12 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 - feat(gitea): add last commit badge [#9995](https://github.com/badges/shields/issues/9995)
 - [GithubCreatedAt] Add Created At Badge for Github [#9981](https://github.com/badges/shields/issues/9981)
 - Added custom bucket url support for [Scoop] [#9984](https://github.com/badges/shields/issues/9984)
-- randomize tokens on token pool init [#9980](https://github.com/badges/shields/issues/9980)
-- Complete the examples --> openApi migration; affects [node sonar travis wordpress visualstudio librariesio] [#9977](https://github.com/badges/shields/issues/9977)
-- Improve our approach for testing auth (part 1) [#9681](https://github.com/badges/shields/issues/9681)
 - [NpmUnpackedSize] Unpacked Size Badge [#9954](https://github.com/badges/shields/issues/9954)
 - [Website] Render `status: down` badge if website is unresponsive [#9966](https://github.com/badges/shields/issues/9966)
 - deprecate TAS [#9932](https://github.com/badges/shields/issues/9932)
-- migrate examples to openApi part 37; affects [bitbucket bitrise chromewebstore circleci] [#9881](https://github.com/badges/shields/issues/9881)
-- migrate some services from examples to openApi part 46; affects [codeclimate librariesio nexus] and securityheaders [#9933](https://github.com/badges/shields/issues/9933)
 - [GITEA] add forks, stars, issues and pr badges [#9923](https://github.com/badges/shields/issues/9923)
-- migrate some services from examples to openApi part 45; affects [github coveralls visualstudiomarketplace] [#9930](https://github.com/badges/shields/issues/9930)
-- migrate some services from examples to openApi part 47; affects [docker] [#9934](https://github.com/badges/shields/issues/9934)
 - tolerate missing short_version in [visualstudioappcenter] [#9951](https://github.com/badges/shields/issues/9951)
 - [Crates] Only use non-yanked crate versions (ready for merge) [#9949](https://github.com/badges/shields/issues/9949)
-- migrate some services from examples to openApi part 44; affects [sonar] [#9919](https://github.com/badges/shields/issues/9919)
-- migrate some services from examples to openApi part 43; affects [jenkins] [#9918](https://github.com/badges/shields/issues/9918)
-- use brightgreen for build passing in package docs [#9917](https://github.com/badges/shields/issues/9917)
 - Dependency updates
 
 ## server-2024-02-01
