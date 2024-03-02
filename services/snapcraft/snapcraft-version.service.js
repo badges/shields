@@ -1,12 +1,17 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { BaseJsonService, NotFound, pathParams, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
+
+const queryParamSchema = Joi.object({
+  arch: Joi.string(),
+})
 
 const versionSchema = Joi.object({
   'channel-map': Joi.array()
     .items(
       Joi.object({
         channel: Joi.object({
+          architecture: Joi.string().required(),
           risk: Joi.string().required(),
           track: Joi.string().required(),
         }),
@@ -23,6 +28,7 @@ export default class SnapcraftVersion extends BaseJsonService {
   static route = {
     base: 'snapcraft/v',
     pattern: ':package/:track/:risk',
+    queryParamSchema,
   }
 
   static defaultBadgeData = { label: 'snapcraft' }
@@ -31,16 +37,24 @@ export default class SnapcraftVersion extends BaseJsonService {
     '/snapcraft/v/{package}/{track}/{risk}': {
       get: {
         summary: 'Snapcraft version',
-        parameters: pathParams(
-          { name: 'package', example: 'chromium' },
-          { name: 'track', example: 'latest' },
-          { name: 'risk', example: 'stable' },
-        ),
+        parameters: [
+          ...pathParams(
+            { name: 'package', example: 'chromium' },
+            { name: 'track', example: 'latest' },
+            { name: 'risk', example: 'stable' },
+          ),
+          queryParam({
+            name: 'arch',
+            example: 'amd64',
+            description:
+              'Architecture, When not specified, this will default to `amd64`.',
+          }),
+        ],
       },
     },
   }
 
-  async handle({ package: packageName, track, risk }) {
+  async handle({ package: packageName, track, risk }, { arch = 'amd64' }) {
     const parsedData = await this._requestJson({
       schema: versionSchema,
       options: {
@@ -54,6 +68,12 @@ export default class SnapcraftVersion extends BaseJsonService {
 
     const channelMap = parsedData['channel-map']
     let filteredChannelMap = channelMap.filter(
+      ({ channel }) => channel.architecture === arch,
+    )
+    if (filteredChannelMap.length === 0) {
+      throw new NotFound({ prettyMessage: 'arch not found' })
+    }
+    filteredChannelMap = channelMap.filter(
       ({ channel }) => channel.track === track,
     )
     if (filteredChannelMap.length === 0) {
