@@ -5,18 +5,14 @@ const sprintQueryString = {
   maxResults: 500,
 }
 
-const user = 'admin'
-const pass = 'password'
-const host = 'myprivatejira.test'
 const config = {
   public: {
     services: {
       jira: {
-        authorizedOrigins: [`https://${host}`],
+        authorizedOrigins: ['https://issues.apache.org'],
       },
     },
   },
-  private: { jira_user: user, jira_pass: pass },
 }
 
-export { sprintId, sprintQueryString, user, pass, host, config }
+export { sprintId, sprintQueryString, config }
