@@ -1,11 +1,15 @@
 import Joi from 'joi'
-import { BaseJsonService, pathParams } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 
 const versionSchema = Joi.object({
   'channel-map': Joi.array()
     .items(
       Joi.object({
+        channel: Joi.object({
+          risk: Joi.string().required(),
+          track: Joi.string().required(),
+        }),
         version: Joi.string().required(),
       }).required(),
     )
@@ -18,24 +22,25 @@ export default class SnapcraftVersion extends BaseJsonService {
 
   static route = {
     base: 'snapcraft/v',
-    pattern: ':package',
+    pattern: ':package/:track/:risk',
   }
 
   static defaultBadgeData = { label: 'snapcraft' }
 
   static openApi = {
-    '/snapcraft/v/{package}': {
+    '/snapcraft/v/{package}/{track}/{risk}': {
       get: {
         summary: 'Snapcraft version',
-        parameters: pathParams({
-          name: 'package',
-          example: 'vim-editor',
-        }),
+        parameters: pathParams(
+          { name: 'package', example: 'chromium' },
+          { name: 'track', example: 'latest' },
+          { name: 'risk', example: 'stable' },
+        ),
       },
     },
   }
 
-  async handle({ package: packageName }) {
+  async handle({ package: packageName, track, risk }) {
     const parsedData = await this._requestJson({
       schema: versionSchema,
       options: {
@@ -47,8 +52,20 @@ export default class SnapcraftVersion extends BaseJsonService {
       },
     })
 
-    const version = parsedData['channel-map'][0].version
+    const channelMap = parsedData['channel-map']
+    let filteredChannelMap = channelMap.filter(
+      ({ channel }) => channel.track === track,
+    )
+    if (filteredChannelMap.length === 0) {
+      throw new NotFound({ prettyMessage: 'track not found' })
+    }
+    filteredChannelMap = channelMap.filter(
+      ({ channel }) => channel.risk === risk,
+    )
+    if (filteredChannelMap.length === 0) {
+      throw new NotFound({ prettyMessage: 'risk not found' })
+    }
 
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version: filteredChannelMap[0].version })
   }
 }
