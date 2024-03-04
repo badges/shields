@@ -1,6 +1,7 @@
 const description = `
-By default this badge looks for projects on [youtrack.jetbrains.com](https://youtrack.jetbrains.com).
-To specify a self-hosted instance, use the \`youtrack_url\` query param.
+Returns the number of issues for the specified project based on the \`query\` parameter defined.
+
+NOTE: The \`youtrack_url\` query param is required.
 `
 
 export { description }

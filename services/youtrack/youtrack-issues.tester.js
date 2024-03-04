@@ -10,6 +10,13 @@ t.create('Issues (DEMO) (Cloud)')
     message: isMetricAllowNegative,
   })
 
+t.create('Issues (DEMO) (Empty Query) (Cloud)')
+  .get('/DEMO.json?youtrack_url=https://shields.youtrack.cloud')
+  .expectBadge({
+    label: 'issues',
+    message: isMetricAllowNegative,
+  })
+
 t.create('Issues (DEMO) (Invalid State) (Cloud Hosted)')
   .get('/DEMO.json?https://shields.youtrack.cloud&query=%23ABCDEFG')
   .expectBadge({

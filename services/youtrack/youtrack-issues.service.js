@@ -36,7 +36,8 @@ export default class YoutrackIssues extends YoutrackBase {
           }),
           queryParam({
             name: 'youtrack_url',
-            example: 'https://youtrack.jetbrains.com',
+            example: 'https://shields.youtrack.cloud',
+            required: true,
           }),
           queryParam({
             name: 'query',
@@ -54,7 +55,7 @@ export default class YoutrackIssues extends YoutrackBase {
     return {
       label: 'issues',
       message: metric(count),
-      color: count > 0 ? 'yellow' : 'brightgreen',
+      color: count < 0 ? 'red' : count > 0 ? 'yellow' : 'brightgreen',
     }
   }
 
