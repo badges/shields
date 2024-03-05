@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import LibrariesIoBase from './librariesio-base.js'
 import {
   transform,
@@ -24,62 +25,27 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
     pattern: ':platform/:scope(@[^/]+)?/:packageName/:version?',
   }
 
-  static examples = [
-    {
-      title: 'Libraries.io dependency status for latest release',
-      pattern: ':platform/:packageName',
-      namedParams: {
-        platform: 'hex',
-        packageName: 'phoenix',
+  static openApi = {
+    '/librariesio/release/{platform}/{packageName}': {
+      get: {
+        summary: 'Libraries.io dependency status for latest release',
+        parameters: pathParams(
+          { name: 'platform', example: 'npm' },
+          { name: 'packageName', example: '@babel/core' },
+        ),
       },
-      staticPreview: renderDependenciesBadge({
-        deprecatedCount: 0,
-        outdatedCount: 1,
-      }),
     },
-    {
-      title: 'Libraries.io dependency status for specific release',
-      pattern: ':platform/:packageName/:version',
-      namedParams: {
-        platform: 'hex',
-        packageName: 'phoenix',
-        version: '1.0.3',
+    '/librariesio/release/{platform}/{packageName}/{version}': {
+      get: {
+        summary: 'Libraries.io dependency status for specific release',
+        parameters: pathParams(
+          { name: 'platform', example: 'npm' },
+          { name: 'packageName', example: '@babel/core' },
+          { name: 'version', example: '7.0.0' },
+        ),
       },
-      staticPreview: renderDependenciesBadge({
-        deprecatedCount: 0,
-        outdatedCount: 3,
-      }),
     },
-    {
-      title:
-        'Libraries.io dependency status for latest release, scoped npm package',
-      pattern: ':platform/:scope/:packageName',
-      namedParams: {
-        platform: 'npm',
-        scope: '@babel',
-        packageName: 'core',
-      },
-      staticPreview: renderDependenciesBadge({
-        deprecatedCount: 8,
-        outdatedCount: 0,
-      }),
-    },
-    {
-      title:
-        'Libraries.io dependency status for specific release, scoped npm package',
-      pattern: ':platform/:scope/:packageName/:version',
-      namedParams: {
-        platform: 'npm',
-        scope: '@babel',
-        packageName: 'core',
-        version: '7.0.0',
-      },
-      staticPreview: renderDependenciesBadge({
-        deprecatedCount: 12,
-        outdatedCount: 0,
-      }),
-    },
-  ]
+  }
 
   static _cacheLength = 900
 
@@ -107,16 +73,17 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'Libraries.io dependency status for GitHub repo',
-      namedParams: {
-        user: 'phoenixframework',
-        repo: 'phoenix',
+  static openApi = {
+    '/librariesio/github/{user}/{repo}': {
+      get: {
+        summary: 'Libraries.io dependency status for GitHub repo',
+        parameters: pathParams(
+          { name: 'user', example: 'phoenixframework' },
+          { name: 'repo', example: 'phoenix' },
+        ),
       },
-      staticPreview: renderDependenciesBadge({ outdatedCount: 325 }),
     },
-  ]
+  }
 
   static _cacheLength = 900
 

@@ -46,6 +46,13 @@ t.create('status is down if response code is 401')
   .intercept(nock => nock('http://offline.com').head('/').reply(401))
   .expectBadge({ label: 'website', message: 'down' })
 
+t.create('status is down if it is unresponsive for more than 3500 ms')
+  .get('/website.json?url=http://offline.com')
+  .intercept(nock =>
+    nock('http://offline.com').head('/').delay(4000).reply(200),
+  )
+  .expectBadge({ label: 'website', message: 'down' })
+
 t.create('custom online label, online message and online color')
   .get(
     '/website.json?url=http://online.com&up_message=up&down_message=down&up_color=green&down_color=grey',

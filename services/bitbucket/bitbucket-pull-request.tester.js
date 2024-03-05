@@ -8,27 +8,27 @@ export const t = new ServiceTester({
 })
 
 t.create('pr-raw (valid)')
-  .get('/pr-raw/atlassian/python-bitbucket.json')
+  .get('/pr-raw/shields-io/test-repo.json')
   .expectBadge({
     label: 'pull requests',
     message: isMetric,
   })
 
 t.create('pr-raw (not found)')
-  .get('/pr-raw/atlassian/not-a-repo.json')
+  .get('/pr-raw/shields-io/not-a-repo.json')
   .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr-raw (private repo)')
   .get('/pr-raw/chris48s/example-private-repo.json')
   .expectBadge({ label: 'pull requests', message: 'not found' })
 
-t.create('pr (valid)').get('/pr/atlassian/python-bitbucket.json').expectBadge({
+t.create('pr (valid)').get('/pr/shields-io/test-repo.json').expectBadge({
   label: 'pull requests',
   message: isMetricOpenIssues,
 })
 
 t.create('pr (not found)')
-  .get('/pr/atlassian/not-a-repo.json')
+  .get('/pr/shields-io/not-a-repo.json')
   .expectBadge({ label: 'pull requests', message: 'not found' })
 
 t.create('pr (private repo)')

@@ -58,11 +58,6 @@ export class TravisComBuild extends BaseSvgScrapingService {
     },
   }
 
-  static staticPreview = {
-    message: 'passing',
-    color: 'brightgreen',
-  }
-
   static defaultBadgeData = {
     label: 'build',
   }
