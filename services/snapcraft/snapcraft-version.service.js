@@ -62,13 +62,13 @@ export default class SnapcraftVersion extends BaseJsonService {
     if (filteredChannelMap.length === 0) {
       throw new NotFound({ prettyMessage: 'arch not found' })
     }
-    filteredChannelMap = channelMap.filter(
+    filteredChannelMap = filteredChannelMap.filter(
       ({ channel }) => channel.track === track,
     )
     if (filteredChannelMap.length === 0) {
       throw new NotFound({ prettyMessage: 'track not found' })
     }
-    filteredChannelMap = channelMap.filter(
+    filteredChannelMap = filteredChannelMap.filter(
       ({ channel }) => channel.risk === risk,
     )
     if (filteredChannelMap.length === 0) {
