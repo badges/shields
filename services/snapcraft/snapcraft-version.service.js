@@ -54,19 +54,8 @@ export default class SnapcraftVersion extends BaseJsonService {
     },
   }
 
-  async handle({ package: packageName, track, risk }, { arch = 'amd64' }) {
-    const parsedData = await this._requestJson({
-      schema: versionSchema,
-      options: {
-        headers: { 'Snap-Device-Series': 16 },
-      },
-      url: `https://api.snapcraft.io/v2/snaps/info/${packageName}`,
-      httpErrors: {
-        404: 'package not found',
-      },
-    })
-
-    const channelMap = parsedData['channel-map']
+  transform(apiData, track, risk, arch) {
+    const channelMap = apiData['channel-map']
     let filteredChannelMap = channelMap.filter(
       ({ channel }) => channel.architecture === arch,
     )
@@ -86,6 +75,24 @@ export default class SnapcraftVersion extends BaseJsonService {
       throw new NotFound({ prettyMessage: 'risk not found' })
     }
 
-    return renderVersionBadge({ version: filteredChannelMap[0].version })
+    return filteredChannelMap[0]
+  }
+
+  async handle({ package: packageName, track, risk }, { arch = 'amd64' }) {
+    const parsedData = await this._requestJson({
+      schema: versionSchema,
+      options: {
+        headers: { 'Snap-Device-Series': 16 },
+      },
+      url: `https://api.snapcraft.io/v2/snaps/info/${packageName}`,
+      httpErrors: {
+        404: 'package not found',
+      },
+    })
+
+    // filter results by track, risk and arch
+    const { version } = this.transform(parsedData, track, risk, arch)
+
+    return renderVersionBadge({ version })
   }
 }
