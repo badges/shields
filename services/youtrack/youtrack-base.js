@@ -13,6 +13,9 @@ export default class YoutrackBase extends BaseJsonService {
         url,
         options,
         httpErrors: { 500: 'invalid query', ...httpErrors },
+        systemErrors: {
+          ETIMEOUT: { prettyMessage: 'timeout', cacheSeconds: 10 },
+        },
       }),
     )
   }

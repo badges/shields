@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
+import { InvalidResponse, pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { description } from './youtrack-helper.js'
@@ -55,7 +55,7 @@ export default class YoutrackIssues extends YoutrackBase {
     return {
       label: 'issues',
       message: metric(count),
-      color: count < 0 ? 'red' : count > 0 ? 'yellow' : 'brightgreen',
+      color: count > 0 ? 'yellow' : 'brightgreen',
     }
   }
 
@@ -80,6 +80,12 @@ export default class YoutrackIssues extends YoutrackBase {
       query: `project: ${project} ${query}`,
     })
 
+    if (data.count === -1) {
+      throw new InvalidResponse({
+        prettyMessage: 'processing',
+        cacheSeconds: 10,
+      })
+    }
     return this.constructor.render({ count: data.count })
   }
 }
