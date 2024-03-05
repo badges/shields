@@ -10,7 +10,7 @@ class DummyYoutrackService extends YoutrackBase {
   async handle() {
     const data = await this.fetch({
       schema: Joi.any(),
-      url: 'https://youtrack.jetbrains.com//api/issuesGetter/count?fields=count',
+      url: 'https://shields.youtrack.cloud/api/issuesGetter/count?fields=count',
     })
     return { message: data.message }
   }
@@ -24,7 +24,7 @@ describe('YoutrackBase', function () {
       public: {
         services: {
           youtrack: {
-            authorizedOrigins: ['https://youtrack.jetbrains.com'],
+            authorizedOrigins: ['https://shields.youtrack.cloud'],
           },
         },
       },
@@ -34,7 +34,7 @@ describe('YoutrackBase', function () {
     }
 
     it('sends the auth information as configured', async function () {
-      const scope = nock('https://youtrack.jetbrains.com')
+      const scope = nock('https://shields.youtrack.cloud')
         .get('/api/issuesGetter/count?fields=count')
         .matchHeader('Authorization', 'Bearer fake-key')
         .reply(200, { message: 'fake message' })

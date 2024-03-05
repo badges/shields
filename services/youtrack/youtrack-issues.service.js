@@ -71,10 +71,7 @@ export default class YoutrackIssues extends YoutrackBase {
     })
   }
 
-  async handle(
-    { project },
-    { youtrack_url: baseUrl = 'https://youtrack.jetbrains.com', query },
-  ) {
+  async handle({ project }, { youtrack_url: baseUrl, query }) {
     const data = await this.fetch({
       baseUrl,
       query: `project: ${project} ${query}`,

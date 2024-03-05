@@ -19,14 +19,18 @@ t.create('Issues (DEMO) (Empty Query) (Cloud)')
   })
 
 t.create('Issues (DEMO) (Invalid State) (Cloud Hosted)')
-  .get('/DEMO.json?https://shields.youtrack.cloud&query=%23ABCDEFG')
+  .get(
+    '/DEMO.json?youtrack_url=https://shields.youtrack.cloud&query=%23ABCDEFG',
+  )
   .expectBadge({
     label: 'issues',
     message: 'invalid',
   })
 
 t.create('Issues (DOESNOTEXIST) (Invalid Project) (Cloud Hosted)')
-  .get('/DOESNOTEXIST.json?https://shields.youtrack.cloud&query=%23Unresolved')
+  .get(
+    '/DOESNOTEXIST.json?youtrack_url=https://shields.youtrack.cloud&query=%23Unresolved',
+  )
   .expectBadge({
     label: 'issues',
     message: 'invalid',
