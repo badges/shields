@@ -25,17 +25,17 @@ t.create('Certificate Expiration: good, green')
   })
 
 t.create('Certificate Expiration: good, yellow')
-  .get('/github.com.json?warningDays=365&dangerDays=0')
+  .get('/shields.io.json?warningDays=365&dangerDays=0')
   .expectBadge({
-    label: 'github.com',
+    label: 'shields.io',
     color: 'yellow',
     message: Joi.string().regex(/\d{4}-\d{2}-\d{2}/),
   })
 
 t.create('Certificate Expiration: good, red')
-  .get('/github.io.json?dangerDays=365')
+  .get('/shields.io.json?dangerDays=365')
   .expectBadge({
-    label: 'github.io',
+    label: 'shields.io',
     color: 'red',
     message: Joi.string().regex(/\d{4}-\d{2}-\d{2}/),
   })

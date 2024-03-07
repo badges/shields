@@ -1,4 +1,3 @@
-import tls from 'tls'
 import emojic from 'emojic'
 import Joi from 'joi'
 import { BaseService, pathParam, queryParam } from '../index.js'
@@ -46,56 +45,39 @@ export default class CertificateExpiration extends BaseService {
   static _cacheLength = 0
 
   async fetch({ hostname }) {
-    let expires = null
     trace.logTrace('outbound', emojic.womanCook, 'trying', hostname)
+    let resp
     try {
-      await this._request({
-        cache: false,
-        method: 'GET',
+      resp = await this._request({
         url: `https://${hostname}/`,
         options: {
-          // explicitly set followRedirect to false to avoid getting the post-redirect certificate
           followRedirect: false,
-          headers: {
-            'cache-control': 'no-cache',
-          },
-          https: {
-            checkServerIdentity: (innerhost, certificate) => {
-              const mismatchErr = tls.checkServerIdentity(hostname, certificate)
-              if (mismatchErr) {
-                return mismatchErr
-              }
-              trace.logTrace('validate', emojic.dart, 'cert found', certificate)
-              if (certificate?.valid_to != null) {
-                expires = new Date()
-                expires.setTime(Date.parse(certificate?.valid_to))
-              }
-              return undefined
-            },
-          },
-          // we don't actually care about 4xx/5xx HTTP errors, we just want the expiration date
-          throwHttpErrors: false,
         },
       })
+      return { expiresStr: resp.res.req.socket.getPeerCertificate().valid_to }
     } catch (err) {
       // since got will throw on a redirect, we need to catch it here and possibly return the expiration date we found
+      const expiresStr = resp?.res?.req?.socket?.getPeerCertificate()?.valid_to
       trace.logTrace(
         'outbound',
         emojic.noGoodWoman,
         'fetch error',
         hostname,
-        expires,
+        expiresStr,
         err,
       )
-      return { expires }
+      if (!expiresStr) {
+        throw err
+      }
+      return { expiresStr }
     }
-    trace.logTrace('outbound', emojic.womanCook, 'success', hostname, expires)
-    return { expires }
   }
 
   async handle({ hostname }, { warningDays = 30, dangerDays = 7 }) {
     try {
-      const { expires } = await this.fetch({ hostname })
+      const { expiresStr } = await this.fetch({ hostname })
+      const expires = new Date()
+      expires.setTime(Date.parse(expiresStr))
       const warningThreshold =
         new Date().getTime() + warningDays * 24 * 60 * 60 * 1000
       const dangerThreshold =
@@ -113,6 +95,7 @@ export default class CertificateExpiration extends BaseService {
         message,
       }
     } catch (err) {
+      console.log('handle err', err)
       trace.logTrace(
         'unhandledError',
         emojic.noGoodWoman,
