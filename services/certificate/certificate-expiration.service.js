@@ -57,11 +57,12 @@ export default class CertificateExpiration extends BaseService {
       return { expiresStr: resp.res.req.socket.getPeerCertificate().valid_to }
     } catch (err) {
       // since got will throw on a redirect, we need to catch it here and possibly return the expiration date we found
-      const expiresStr = resp?.res?.req?.socket?.getPeerCertificate()?.valid_to
+      const expiresStr =
+        err.response?.req?.socket?.getPeerCertificate()?.valid_to
       trace.logTrace(
         'outbound',
         emojic.noGoodWoman,
-        'fetch error',
+        'cert fetch error',
         hostname,
         expiresStr,
         err,
