@@ -1,5 +1,10 @@
 import { test, given } from 'sazerac'
+import { testAuth } from '../test-helpers.js'
 import { SonarTests } from './sonar-tests.service.js'
+import {
+  legacySonarResponse,
+  testAuthConfigOverride,
+} from './sonar-spec-helpers.js'
 
 describe('SonarTests', function () {
   test(SonarTests.render, () => {
@@ -32,6 +37,17 @@ describe('SonarTests', function () {
       label: 'tests',
       message: '93%',
       color: 'red',
+    })
+  })
+
+  describe('auth', function () {
+    it('sends the auth information as configured', async function () {
+      return testAuth(
+        SonarTests,
+        'BasicAuth',
+        legacySonarResponse('tests', 95),
+        { configOverride: testAuthConfigOverride },
+      )
     })
   })
 })

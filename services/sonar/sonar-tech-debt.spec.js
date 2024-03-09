@@ -1,5 +1,10 @@
 import { test, given } from 'sazerac'
+import { testAuth } from '../test-helpers.js'
 import SonarTechDebt from './sonar-tech-debt.service.js'
+import {
+  legacySonarResponse,
+  testAuthConfigOverride,
+} from './sonar-spec-helpers.js'
 
 describe('SonarTechDebt', function () {
   test(SonarTechDebt.render, () => {
@@ -27,6 +32,17 @@ describe('SonarTechDebt', function () {
       label: 'sqale debt ratio',
       message: '100%',
       color: 'red',
+    })
+  })
+
+  describe('auth', function () {
+    it('sends the auth information as configured', async function () {
+      return testAuth(
+        SonarTechDebt,
+        'BasicAuth',
+        legacySonarResponse('sqale_debt_ratio', 95),
+        { configOverride: testAuthConfigOverride },
+      )
     })
   })
 })
