@@ -115,8 +115,8 @@ function generateFakeConfig(
       'Invalid serviceClass: Must be an instance of BaseService.',
     )
   }
-  if (!fakeKey || typeof fakeKey !== 'string') {
-    throw new TypeError('Invalid fakeKey: Must be a String.')
+  if (!fakeKey && !fakeUser) {
+    throw new TypeError('Must provide at least one: fakeKey or fakeUser.')
   }
   if (!fakeauthorizedOrigins || !Array.isArray(fakeauthorizedOrigins)) {
     throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
@@ -126,21 +126,21 @@ function generateFakeConfig(
   if (Object.keys(auth).length === 0) {
     throw new Error(`Auth empty for ${serviceClass.name}.`)
   }
-  if (!auth.passKey) {
+  if (fakeKey && !auth.passKey) {
+    throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
+  }
+  if (fakeKey && typeof fakeKey !== 'string') {
     throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
   }
   // Extract the passKey property from auth, or use a default if not present
-  const passKeyProperty = auth.passKey
-  let passUserProperty = 'placeholder'
-  if (fakeUser) {
-    if (typeof fakeKey !== 'string') {
-      throw new TypeError('Invalid fakeUser: Must be a String.')
-    }
-    if (!auth.userKey) {
-      throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
-    }
-    passUserProperty = auth.userKey
+  const passKeyProperty = auth.passKey ? auth.passKey : undefined
+  if (fakeUser && typeof fakeUser !== 'string') {
+    throw new TypeError('Invalid fakeUser: Must be a String.')
   }
+  if (fakeUser && !auth.userKey) {
+    throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
+  }
+  const passUserProperty = auth.userKey ? auth.userKey : undefined
 
   // Build and return the configuration object with the fake key
   return {
@@ -276,7 +276,12 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
 
   const auth = { ...serviceClass.auth, ...authOverride }
   const fakeUser = auth.userKey ? 'fake-user' : undefined
-  const fakeSecret = 'fake-secret'
+  const fakeSecret = auth.passKey ? 'fake-secret' : undefined
+  if (!fakeUser && !fakeSecret) {
+    throw new TypeError(
+      `Missing auth pass/user for ${serviceClass.name}. At least one is required.`,
+    )
+  }
   const authOrigins = getServiceClassAuthOrigin(
     serviceClass,
     authOverride,
