@@ -227,6 +227,7 @@ function fakeJwtToken() {
  * @param {object} options.exampleOverride - Override example params in test.
  * @param {object} options.authOverride - Override class auth params.
  * @param {object} options.configOverride - Override the config for this test.
+ * @param {boolean} options.ignoreOpenApiExample - For classes without OpenApi example ignore for usage of override examples only
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -253,6 +254,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     exampleOverride = {},
     authOverride,
     configOverride,
+    ignoreOpenApiExample = false,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -272,6 +274,9 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
   if (configOverride && typeof configOverride !== 'object') {
     throw new TypeError('Invalid configOverride: Must be an Object.')
+  }
+  if (ignoreOpenApiExample && typeof ignoreOpenApiExample !== 'boolean') {
+    throw new TypeError('Invalid ignoreOpenApiExample: Must be an Object.')
   }
 
   const auth = { ...serviceClass.auth, ...authOverride }
@@ -294,8 +299,12 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     authOrigins,
     authOverride,
   )
-  const exampleInvokePathParams = getBadgeExampleCall(serviceClass, 'path')
-  const exampleInvokeQueryParams = getBadgeExampleCall(serviceClass, 'query')
+  const exampleInvokePathParams = ignoreOpenApiExample
+    ? undefined
+    : getBadgeExampleCall(serviceClass, 'path')
+  const exampleInvokeQueryParams = ignoreOpenApiExample
+    ? undefined
+    : getBadgeExampleCall(serviceClass, 'query')
   if (options && typeof options !== 'object') {
     throw new TypeError('Invalid options: Must be an object.')
   }
