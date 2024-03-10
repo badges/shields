@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-03-01
+
+- feat(gitea): add last commit badge [#9995](https://github.com/badges/shields/issues/9995)
+- [GithubCreatedAt] Add Created At Badge for Github [#9981](https://github.com/badges/shields/issues/9981)
+- Added custom bucket url support for [Scoop] [#9984](https://github.com/badges/shields/issues/9984)
+- [NpmUnpackedSize] Unpacked Size Badge [#9954](https://github.com/badges/shields/issues/9954)
+- [Website] Render `status: down` badge if website is unresponsive [#9966](https://github.com/badges/shields/issues/9966)
+- deprecate TAS [#9932](https://github.com/badges/shields/issues/9932)
+- [GITEA] add forks, stars, issues and pr badges [#9923](https://github.com/badges/shields/issues/9923)
+- tolerate missing short_version in [visualstudioappcenter] [#9951](https://github.com/badges/shields/issues/9951)
+- [Crates] Only use non-yanked crate versions (ready for merge) [#9949](https://github.com/badges/shields/issues/9949)
+- Dependency updates
+
 ## server-2024-02-01
 
 - feat: added up_message and down_message to [uptimerobotstatus] [#9662](https://github.com/badges/shields/issues/9662)
