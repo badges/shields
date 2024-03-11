@@ -32,7 +32,7 @@ export default class YoutrackIssues extends YoutrackBase {
         parameters: [
           pathParam({
             name: 'project',
-            example: 'RIDER',
+            example: 'DEMO',
           }),
           queryParam({
             name: 'youtrack_url',
@@ -41,7 +41,7 @@ export default class YoutrackIssues extends YoutrackBase {
           }),
           queryParam({
             name: 'query',
-            example: 'bug #Unresolved',
+            example: 'manage state: Unresolved',
             description: 'A valid YouTrack search query.',
           }),
         ],
