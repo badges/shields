@@ -146,7 +146,7 @@
   "devDependencies": {
     "@docusaurus/core": "^2.4.3",
     "@easyops-cn/docusaurus-search-local": "^0.40.1",
-    "@mdx-js/react": "^1.6.21",
+    "@mdx-js/react": "^3.0.1",
     "@typescript-eslint/parser": "^7.0.2",
     "c8": "^9.1.0",
     "caller": "^1.1.0",
