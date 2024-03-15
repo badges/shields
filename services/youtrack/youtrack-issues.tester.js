@@ -1,4 +1,3 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
 
@@ -10,14 +9,14 @@ t.create('Issues (DEMO) (Cloud)')
   )
   .expectBadge({
     label: 'issues',
-    message: Joi.alternatives().try(isMetric, 'processing', 'timeout'),
+    message: isMetric,
   })
 
 t.create('Issues (DEMO) (Empty Query) (Cloud)')
   .get('/DEMO.json?youtrack_url=https://shields.youtrack.cloud')
   .expectBadge({
     label: 'issues',
-    message: Joi.alternatives().try(isMetric, 'processing', 'timeout'),
+    message: isMetric,
   })
 
 t.create('Issues (DEMO) (Invalid State) (Cloud Hosted)')

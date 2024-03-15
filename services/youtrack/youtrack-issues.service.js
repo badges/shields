@@ -5,6 +5,10 @@ import { metric } from '../text-formatters.js'
 import { description } from './youtrack-helper.js'
 import YoutrackBase from './youtrack-base.js'
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const schema = Joi.object({
   count: Joi.number().required(),
   $type: Joi.equal('IssueCountResponse'),
@@ -71,18 +75,25 @@ export default class YoutrackIssues extends YoutrackBase {
     })
   }
 
-  async handle({ project }, { youtrack_url: baseUrl, query }) {
-    const data = await this.fetch({
-      baseUrl,
-      query: `project: ${project} ${query}`,
-    })
-
-    if (data.count === -1) {
-      throw new InvalidResponse({
-        prettyMessage: 'processing',
-        cacheSeconds: 10,
+  async handle({ project }, { youtrack_url: baseUrl, query = '' }) {
+    for (let i = 0; i < 6; i++) {
+      // 6 trials
+      const data = await this.fetch({
+        baseUrl,
+        query: `project: ${project} ${query}`,
       })
+
+      if (data.count === -1) {
+        await sleep(500)
+        continue
+      }
+
+      return this.constructor.render({ count: data.count })
     }
-    return this.constructor.render({ count: data.count })
+
+    throw new InvalidResponse({
+      prettyMessage: 'invalid',
+      cacheSeconds: 10,
+    })
   }
 }
