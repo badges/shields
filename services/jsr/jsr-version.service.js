@@ -35,7 +35,7 @@ export default class JsrVersion extends BaseJsonService {
   }
 
   static defaultBadgeData = {
-    label: 'JSR',
+    label: 'jsr',
   }
 
   static render({ version }) {
