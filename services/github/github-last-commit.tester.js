@@ -14,6 +14,14 @@ t.create('last commit (on branch)')
   .get('/badges/badgr.co/shielded.json')
   .expectBadge({ label: 'last commit', message: 'july 2013' })
 
+t.create('last commit (by path)')
+  .get('/badges/badgr.co.json?path=README.md')
+  .expectBadge({ label: 'last commit', message: 'september 2013' })
+
+t.create('last commit (on branch by path)')
+  .get('/badges/badgr.co/shielded.json?path=README.md')
+  .expectBadge({ label: 'last commit', message: 'june 2013' })
+
 t.create('last commit (by committer)')
   .get('/badges/badgr.co/shielded.json?display_timestamp=committer')
   .expectBadge({ label: 'last commit', message: 'july 2013' })
