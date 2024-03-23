@@ -1,21 +1,22 @@
 import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
 import { BaseStaticService } from '../index.js'
 
-const description = `<p>
-  The static badge accepts a single required path parameter which encodes either:
-</p>
+const description = `
+The static badge accepts a single required path parameter which encodes either:
+
 <ul>
   <li>
     Label, message and color separated by a dash <code>-</code>. For example:<br />
     <img alt="any text: you like" src="https://img.shields.io/badge/any_text-you_like-blue" /> -
-    <a href="https://img.shields.io/badge/any_text-you_like-blue">https://img.shields.io/badge/any_text-you_like-blue</a>
+    https://img.shields.io/badge/any_text-you_like-blue
   </li>
   <li>
     Message and color only, separated by a dash <code>-</code>. For example:<br />
     <img alt="just the message" src="https://img.shields.io/badge/just%20the%20message-8A2BE2" /> -
-    <a href="https://img.shields.io/badge/just%20the%20message-8A2BE2">https://img.shields.io/badge/just%20the%20message-8A2BE2</a>
+    https://img.shields.io/badge/just%20the%20message-8A2BE2
   </li>
 </ul>
+
 <table>
   <tbody>
     <tr>
@@ -36,9 +37,9 @@ const description = `<p>
     </tr>
   </tbody>
 </table>
-<p>
-  Hex, rgb, rgba, hsl, hsla and css named colors may be used.
-</p>`
+
+Hex, rgb, rgba, hsl, hsla and css named colors may be used.
+`
 
 export default class StaticBadge extends BaseStaticService {
   static category = 'static'

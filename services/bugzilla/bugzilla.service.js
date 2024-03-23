@@ -19,10 +19,8 @@ const schema = Joi.object({
 }).required()
 
 const description = `
-<p>
-  Use the <code>baseUrl</code> query parameter to target different Bugzilla deployments.
-  If your Bugzilla badge errors, it might be because you are trying to load a private bug.
-</p>
+Use the <code>baseUrl</code> query parameter to target different Bugzilla deployments.
+If your Bugzilla badge errors, it might be because you are trying to load a private bug.
 `
 
 export default class Bugzilla extends BaseJsonService {

@@ -12,9 +12,9 @@ import {
 const MAX_REPO_LIMIT = 200
 
 const description = `${commonDocumentation}
-<p>
-  <b>Note:</b> This badge takes into account up to <code>${MAX_REPO_LIMIT}</code> of the most starred repositories of given user / org.
-</p>`
+
+<b>Note:</b> This badge takes into account up to <code>${MAX_REPO_LIMIT}</code> of the most starred repositories of given user / org.
+`
 
 const affiliationsDescription = `This param accepts three values (must be UPPER case) <code>OWNER</code>, <code>COLLABORATOR</code>, <code>ORGANIZATION_MEMBER</code>.
 One can pass comma separated combinations of these values (no spaces) e.g. <code>OWNER,COLLABORATOR</code> or <code>OWNER,COLLABORATOR,ORGANIZATION_MEMBER</code>.

@@ -21,8 +21,8 @@ const schema = Joi.object({
 }).required()
 
 const description = `${commonDocumentation}
-<p>This badge shows the number of stargazers for a gist. Gist id is accepted as input and 'gist not found' is returned if the gist is not found for the given gist id.
-</p>`
+
+This badge shows the number of stargazers for a gist. Gist id is accepted as input and 'gist not found' is returned if the gist is not found for the given gist id.`
 
 export default class GistStars extends GithubAuthV4Service {
   static category = 'social'

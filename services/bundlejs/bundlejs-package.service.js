@@ -19,9 +19,7 @@ const bundlejs =
   '<a href="https://bundlejs.com/" target="_blank" rel="noopener">bundlejs</a>'
 
 const description = `
-<p>
- View ${esbuild} minified and ${denoflate} gzipped size of a javascript package or selected exports, via ${bundlejs}.
-</p>
+View ${esbuild} minified and ${denoflate} gzipped size of a javascript package or selected exports, via ${bundlejs}.
 `
 
 export default class BundlejsPackage extends BaseJsonService {

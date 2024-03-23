@@ -52,14 +52,12 @@ const queryParamWithFormatSchema = Joi.object({
   format: Joi.string().allow('short', 'long').optional(),
 }).required()
 
-const documentation = `<p>
-    The Sonar badges will work with both SonarCloud.io and self-hosted SonarQube instances.
-    Just enter the correct protocol and path for your target Sonar deployment.
-  </p>
-  <p>
-    If you are targeting a legacy SonarQube instance that is version 5.3 or earlier, then be sure
-    to include the version query parameter with the value of your SonarQube version.
-  </p>
+const documentation = `
+The Sonar badges will work with both SonarCloud.io and self-hosted SonarQube instances.
+Just enter the correct protocol and path for your target Sonar deployment.
+
+If you are targeting a legacy SonarQube instance that is version 5.3 or earlier, then be sure
+to include the version query parameter with the value of your SonarQube version.
 `
 
 export {

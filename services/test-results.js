@@ -95,25 +95,17 @@ function renderTestResultBadge({
 }
 
 const documentation = `
-<p>
-  You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters <code>&passed_label=</code>, <code>&failed_label=</code> and <code>&skipped_label=</code> respectively.
-</p>
+You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters <code>&passed_label=</code>, <code>&failed_label=</code> and <code>&skipped_label=</code> respectively.
 
-<p>
-  For example, if you want to use a different terminology:
-  <br />
-  <code>?passed_label=good&failed_label=bad&skipped_label=n%2Fa</code>
-</p>
+For example, if you want to use a different terminology:
 
-<p>
-  Or symbols:
-  <br />
-  <code>?compact_message&passed_label=💃&failed_label=🤦‍♀️&skipped_label=🤷</code>
-</p>
+\`?passed_label=good&failed_label=bad&skipped_label=n%2Fa\`
 
-<p>
-  There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
-</p>
+Or symbols:
+
+\`?compact_message&passed_label=💃&failed_label=🤦‍♀️&skipped_label=🤷\`
+
+There is also a <code>&compact_message</code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
 `
 
 export {

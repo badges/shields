@@ -3,6 +3,11 @@ import { BaseTomlService, queryParams } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 import jsonPath from './json-path.js'
 
+const description = `
+The Dynamic TOML Badge allows you to extract an arbitrary value from any
+TOML Document using a JSONPath selector and show it on a badge.
+`
+
 export default class DynamicToml extends jsonPath(BaseTomlService) {
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('toml')
@@ -10,10 +15,7 @@ export default class DynamicToml extends jsonPath(BaseTomlService) {
     '/badge/dynamic/toml': {
       get: {
         summary: 'Dynamic TOML Badge',
-        description: `<p>
-          The Dynamic TOML Badge allows you to extract an arbitrary value from any
-          TOML Document using a JSONPath selector and show it on a badge.
-        </p>`,
+        description,
         parameters: queryParams(
           {
             name: 'url',

@@ -86,10 +86,8 @@ export class BaseWordpress extends BaseJsonService {
 }
 
 export const description = `
-<p>
-  These badges rely on an API that is no longer supported by Wordpress. You are
-  still free to use them, simply bear in mind that Shields.io cannot guarantee
-  that they'll keep on working in the future. Please also double-check the
-  provided slug, as an incorrect value may lead to unexpected results.
-</p>
+These badges rely on an API that is no longer supported by Wordpress. You are
+still free to use them, simply bear in mind that Shields.io cannot guarantee
+that they'll keep on working in the future. Please also double-check the
+provided slug, as an incorrect value may lead to unexpected results.
 `

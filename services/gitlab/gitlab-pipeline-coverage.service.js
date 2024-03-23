@@ -22,25 +22,20 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const moreDocs = `
-<p>
-  Important: If your project is publicly visible, but the badge is like this:
-  <img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="coverage not set up"/>
-</p>
-<p>
-  Check if your pipelines are publicly visible as well.<br />
-  Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
-  Then tick the setting Public pipelines.
-</p>
-<p>
-  Now your settings should look like this:
-</p>
+Important: If your project is publicly visible, but the badge is like this:
+<img src="https://img.shields.io/badge/coverage-not&nbsp;set&nbsp;up-red" alt="coverage not set up"/>
+
+Check if your pipelines are publicly visible as well.<br />
+Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
+Then tick the setting Public pipelines.
+
+Now your settings should look like this:
+
 <img src="https://user-images.githubusercontent.com/12065866/67156911-e225a180-f324-11e9-93ad-10aafbb3e69e.png" alt="Setting Public pipelines set"/>
-<p>
+
 Also make sure you have set up code covrage parsing as described <a href="https://docs.gitlab.com/ee/ci/pipelines/settings.html#test-coverage-parsing">here</a>
-</p>
-<p>
-  Your badge should be working fine now.
-</p>
+
+Your badge should be working fine now.
 `
 
 export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
