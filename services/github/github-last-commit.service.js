@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
+import { relativeUri } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
@@ -24,7 +25,7 @@ const schema = Joi.array()
 const displayEnum = ['author', 'committer']
 
 const queryParamSchema = Joi.object({
-  path: Joi.string().uri({ relativeOnly: true }),
+  path: relativeUri,
   display_timestamp: Joi.string()
     .valid(...displayEnum)
     .default('author'),

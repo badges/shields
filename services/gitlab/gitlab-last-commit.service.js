@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
-import { optionalUrl } from '../validators.js'
+import { optionalUrl, relativeUri } from '../validators.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
@@ -18,7 +18,7 @@ const schema = Joi.array()
 const queryParamSchema = Joi.object({
   ref: Joi.string(),
   gitlab_url: optionalUrl,
-  path: Joi.string().uri({ relativeOnly: true }),
+  path: relativeUri,
 }).required()
 
 const refText = `
