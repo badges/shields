@@ -8,6 +8,34 @@ t.create('Last Commit (recent)').get('/gitea/tea.json').expectBadge({
   message: isFormattedDate,
 })
 
+t.create('Last Commit (recent) (top-level file path)')
+  .get('/gitea/tea.json?path=README.md')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })
+
+t.create('Last Commit (recent) (top-level dir path)')
+  .get('/gitea/tea.json?path=docs')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })
+
+t.create('Last Commit (recent) (top-level dir path with trailing slash)')
+  .get('/gitea/tea.json?path=docs/')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })
+
+t.create('Last Commit (recent) (nested dir path)')
+  .get('/gitea/tea.json?path=docs/CLI.md')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })
+
 t.create('Last Commit (recent) {path)')
   .get('/gitea/tea.json?path=README.md')
   .expectBadge({
