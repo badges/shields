@@ -15,6 +15,13 @@ t.create('last commit (on ref and ancient)')
     message: 'march 2021',
   })
 
+t.create('last commit (on ref, ancient and by path)')
+  .get('/gitlab-org/gitlab.json?ref=v13.8.6-ee&path=README.md')
+  .expectBadge({
+    label: 'last commit',
+    message: 'december 2020',
+  })
+
 t.create('last commit (self-managed)')
   .get('/gitlab-cn/gitlab.json?gitlab_url=https://jihulab.com')
   .expectBadge({

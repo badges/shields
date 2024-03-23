@@ -18,6 +18,7 @@ const schema = Joi.array()
 const queryParamSchema = Joi.object({
   ref: Joi.string(),
   gitlab_url: optionalUrl,
+  path: Joi.string().uri({ relativeOnly: true }),
 }).required()
 
 const refText = `
@@ -55,6 +56,12 @@ export default class GitlabLastCommit extends GitLabBase {
             name: 'ref',
             example: 'master',
           }),
+          queryParam({
+            name: 'path',
+            example: 'README.md',
+            schema: { type: 'string' },
+            description: 'File path to resolve the last commit for.',
+          }),
         ],
       },
     },
@@ -69,13 +76,13 @@ export default class GitlabLastCommit extends GitLabBase {
     }
   }
 
-  async fetch({ project, baseUrl, ref }) {
+  async fetch({ project, baseUrl, ref, path }) {
     // https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
     return super.fetch({
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
         project,
       )}/repository/commits`,
-      options: { searchParams: { ref_name: ref } },
+      options: { searchParams: { ref_name: ref, path } },
       schema,
       httpErrors: httpErrorsFor('project not found'),
     })
@@ -83,9 +90,9 @@ export default class GitlabLastCommit extends GitLabBase {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', ref },
+    { gitlab_url: baseUrl = 'https://gitlab.com', ref, path },
   ) {
-    const data = await this.fetch({ project, baseUrl, ref })
+    const data = await this.fetch({ project, baseUrl, ref, path })
     return this.constructor.render({ commitDate: data[0].committed_date })
   }
 }
