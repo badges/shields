@@ -15,10 +15,10 @@ const colorMap = {
   5: 'brightgreen',
 }
 
-const description = `<p>
+const description = `
 Note that the Fortify Security Rating badge will only work on Sonar instances that have the <a href='https://marketplace.microfocus.com/fortify/content/fortify-sonarqube-plugin'>Fortify SonarQube Plugin</a> installed.
 The badge is not available for projects analyzed on SonarCloud.io
-</p>
+
 ${documentation}
 `
 

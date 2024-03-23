@@ -3,10 +3,8 @@ import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const description = `
-  <p>
-    This badge can show total installs, installs for Azure DevOps Services,
-    or on-premises installs for Azure DevOps Server.
-  </p>
+This badge can show total installs, installs for Azure DevOps Services,
+or on-premises installs for Azure DevOps Server.
 `
 
 // This service exists separately from the other Marketplace downloads badges (in ./visual-studio-marketplace-downloads.js)

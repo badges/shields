@@ -234,6 +234,7 @@ function Curl({ postman, codeSamples }) {
             )}
             key={lang.tabName || lang.label}
             onClick={() => setLanguage(lang)}
+            type="button"
           >
             {lang.tabName || lang.label}
           </button>

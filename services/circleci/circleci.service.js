@@ -11,14 +11,12 @@ const circleSchema = Joi.object({ message: isBuildStatus }).required()
 const queryParamSchema = Joi.object({ token: Joi.string() }).required()
 
 const tokenDescription = `
-  <p>
-    You may specify an optional token to get the status for a private repository.
-    <br />
-    If you need to use a token, please use a <b>Project Token</b> and only assign your token the 'Status' permission. Never use a <b>Personal Token</b> as they grant full read write permissions to your projects.
-    <br />
-    For more information about managing Circle CI tokens, please read this <a target="_blank" href="https://circleci.com/docs/2.0/managing-api-tokens">article</a>.
-  </p>
-  `
+You may specify an optional token to get the status for a private repository.
+
+If you need to use a token, please use a <b>Project Token</b> and only assign your token the 'Status' permission. Never use a <b>Personal Token</b> as they grant full read write permissions to your projects.
+
+For more information about managing Circle CI tokens, please read this <a target="_blank" href="https://circleci.com/docs/2.0/managing-api-tokens">article</a>.
+`
 
 const vcsTypeMap = { gh: 'gh', github: 'gh', bb: 'bb', bitbucket: 'bb' }
 

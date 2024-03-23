@@ -3,26 +3,24 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const description = `
-  <p>
-    <a href="https://wikiapiary.com">WikiApiary</a> holds information about MediaWiki websites.
-  </p>
-  <p>
-    The name of an extension is case-sensitive excluding the first character.
-  </p>
-  <p>
-    For example, in the case of <code>ParserFunctions</code>, the following are
-    valid:
-    <ul>
-      <li><code>ParserFunctions</code></li>
-      <li><code>parserFunctions</code></li>
-    </ul>
-    However, the following are invalid:
-    <ul>
-      <li><code>parserfunctions</code></li>
-      <li><code>Parserfunctions</code></li>
-      <li><code>pARSERfUNCTIONS</code></li>
-    </ul>
-  </p>
+<a href="https://wikiapiary.com">WikiApiary</a> holds information about MediaWiki websites.
+
+The name of an extension is case-sensitive excluding the first character.
+
+For example, in the case of <code>ParserFunctions</code>, the following are valid:
+
+<ul>
+  <li><code>ParserFunctions</code></li>
+  <li><code>parserFunctions</code></li>
+</ul>
+
+However, the following are invalid:
+
+<ul>
+  <li><code>parserfunctions</code></li>
+  <li><code>Parserfunctions</code></li>
+  <li><code>pARSERfUNCTIONS</code></li>
+</ul>
 `
 
 const schema = Joi.object({

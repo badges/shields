@@ -3,12 +3,9 @@ import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 const description = `
-<p>
-  This is for Visual Studio and Visual Studio Code Extensions.
-</p>
-<p>
-  For correct results on Azure DevOps Extensions, use the Azure DevOps Installs badge instead.
-</p>
+This is for Visual Studio and Visual Studio Code Extensions.
+
+For correct results on Azure DevOps Extensions, use the Azure DevOps Installs badge instead.
 `
 
 export default class VisualStudioMarketplaceDownloads extends VisualStudioMarketplaceBase {
