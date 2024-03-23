@@ -56,7 +56,7 @@ export default class BitbucketLastCommit extends BaseJsonService {
       options: {
         searchParams: {
           path,
-          // pagelen: 1,
+          pagelen: 1,
           fields: 'values.date',
         },
       },
