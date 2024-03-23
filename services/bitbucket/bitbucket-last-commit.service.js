@@ -4,14 +4,13 @@ import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 
 const schema = Joi.object({
-  values: Joi.array(),
+  values: Joi.array().items({
+    date: Joi.string().isoDate().required(),
+  }),
 }).required()
 
 const queryParamSchema = Joi.object({
   path: Joi.string().uri({ relativeOnly: true }),
-  // display_timestamp: Joi.string()
-  //   .valid(...displayEnum)
-  //   .default('author'),
 }).required()
 
 export default class BitbucketLastCommit extends BaseJsonService {
