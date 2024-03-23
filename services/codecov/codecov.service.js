@@ -36,12 +36,9 @@ const svgValueMatcher = />(\d{1,3}%|unknown)<\/text><\/g>/
 const badgeTokenPattern = /^\w{10}$/
 
 const description = `
-  <p>
-    You may specify a Codecov badge token to get coverage for a private repository.
-  </p>
-  <p>
-  You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/&#60;vcsName&#62;/&#60;user&#62;/&#60;repo&#62;/settings/badge</code>.
-  </p>
+You may specify a Codecov badge token to get coverage for a private repository.
+
+You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/[vcsName]/[user]/[repo]/settings/badge</code>.
 `
 
 export default class Codecov extends BaseSvgScrapingService {

@@ -15,14 +15,12 @@ const schema = Joi.object({
 }).required()
 
 const description = `
-<p>
-  The CurseForge badge requires the <code>Project ID</code> in order access the
-  <a href="https://docs.curseforge.com/#get-mod" target="_blank">CurseForge API</a>.
-</p>
-<p>
-  The <code>Project ID</code> is different from the URL slug and can be found in the 'About Project' section of your
-  CurseForge mod page.
-</p>
+The CurseForge badge requires the <code>Project ID</code> in order access the
+<a href="https://docs.curseforge.com/#get-mod" target="_blank">CurseForge API</a>.
+
+The <code>Project ID</code> is different from the URL slug and can be found in the 'About Project' section of your
+CurseForge mod page.
+
 <img src="https://github.com/badges/shields/assets/1098773/0d45b5fa-2cde-415d-8152-b84c535a1535"
   alt="The Project ID in the 'About Projection' section on CurseForge." />
 `

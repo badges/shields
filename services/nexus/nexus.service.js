@@ -69,20 +69,17 @@ const openApiQueryParams = queryParams(
   {
     name: 'queryOpt',
     example: ':c=agent-apple-osx:p=tar.gz',
-    description: `<p>
-  Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository).
-</p>
-<p>
-  Query options should be provided as key=value pairs separated by a colon.
-</p>
-<p>
-  Possible values:
-  <ul>
-    <li><a href="https://nexus.pentaho.org/swagger-ui/#/search/search">All Nexus 3 badges</a></li>
-    <li><a href="https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_resolve.html">Nexus 2 Releases and Snapshots badges</a></li>
-    <li><a href="https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
-  </ul>
-</p>
+    description: `
+Note that you can use query options with any Nexus badge type (Releases, Snapshots, or Repository).
+
+Query options should be provided as key=value pairs separated by a colon.
+
+Possible values:
+<ul>
+  <li><a href="https://nexus.pentaho.org/swagger-ui/#/search/search">All Nexus 3 badges</a></li>
+  <li><a href="https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_resolve.html">Nexus 2 Releases and Snapshots badges</a></li>
+  <li><a href="https://repository.sonatype.org/nexus-indexer-lucene-plugin/default/docs/path__lucene_search.html">Nexus 2 Repository badges</a></li>
+</ul>
 `,
   },
 )

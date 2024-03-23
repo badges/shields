@@ -18,9 +18,7 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const more = `
-<p>
-  <a href="https://docs.gitlab.com/ee/user/gitlab_com/index.html#pagination-response-headers">GitLab's API </a> only reports up to 10k Merge Requests, so badges for projects that have more than 10k will not have an exact count.
-</p>
+<a href="https://docs.gitlab.com/ee/user/gitlab_com/index.html#pagination-response-headers">GitLab's API </a> only reports up to 10k Merge Requests, so badges for projects that have more than 10k will not have an exact count.
 `
 
 const mergeRequestsDescription = description + more

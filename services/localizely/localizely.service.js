@@ -8,23 +8,17 @@ import {
 import { coveragePercentage } from '../color-formatters.js'
 
 const description = `
-  <p>
-    <a href="https://localizely.com/" target="_blank">Localizely</a> is a management system for translation, localization, and internationalization of your projects.
-    <br/>
-    The <b>read-only</b> API token from the Localizely account is required to fetch necessary data.
-    <br/>
-    <br/>
-    <b>
-      Note: Do not use the default API token as it grants full read-write permissions to your projects. You will expose your project and allow malicious users to modify the translations at will.
-      <br/>
-      Instead, create a new one with only read permission.
-    </b>
-    <br/>
-    <br/>
-    You can find more details regarding API tokens under <a href="https://app.localizely.com/account" target="_blank">My profile</a> page.
-    <br/>
-  </p>
-  `
+<a href="https://localizely.com/" target="_blank">Localizely</a> is a management system for translation, localization, and internationalization of your projects.
+
+The <b>read-only</b> API token from the Localizely account is required to fetch necessary data.
+
+<b>
+  Note: Do not use the default API token as it grants full read-write permissions to your projects. You will expose your project and allow malicious users to modify the translations at will.
+  Instead, create a new one with only read permission.
+</b>
+
+You can find more details regarding API tokens under <a href="https://app.localizely.com/account" target="_blank">My profile</a> page.
+`
 
 const schema = Joi.object({
   strings: Joi.number().required(),
