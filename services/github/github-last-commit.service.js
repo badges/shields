@@ -1,7 +1,7 @@
 import Joi from 'joi'
+import { age as ageColor } from '../color-formatters.js'
 import { pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
 import { relativeUri } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'

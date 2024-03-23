@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
-import { optionalUrl, relativeUri } from '../validators.js'
-import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
+import { pathParam, queryParam } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { optionalUrl, relativeUri } from '../validators.js'
 import GiteaBase from './gitea-base.js'
 import { description, httpErrorsFor } from './gitea-helper.js'
 
