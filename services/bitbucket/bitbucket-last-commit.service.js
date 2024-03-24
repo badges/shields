@@ -17,7 +17,7 @@ export default class BitbucketLastCommit extends BaseJsonService {
   static category = 'activity'
   static route = {
     base: 'bitbucket/last-commit',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo/:branch+',
     queryParamSchema,
   }
 
