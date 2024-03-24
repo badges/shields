@@ -228,6 +228,7 @@ function fakeJwtToken() {
  * @param {object} options.authOverride - Override class auth params.
  * @param {object} options.configOverride - Override the config for this test.
  * @param {boolean} options.ignoreOpenApiExample - For classes without OpenApi example ignore for usage of override examples only
+ * @param {boolean} options.multipleRequests - For classes that require multiple requests to complete the test.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -242,8 +243,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     )
   }
 
-  cleanUpNockAfterEach()
-
   const {
     contentType,
     apiHeaderKey = 'x-api-key',
@@ -255,6 +254,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     authOverride,
     configOverride,
     ignoreOpenApiExample = false,
+    multipleRequests = false,
   } = options
   if (contentType && typeof contentType !== 'string') {
     throw new TypeError('Invalid contentType: Must be a String.')
@@ -277,6 +277,13 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
   if (ignoreOpenApiExample && typeof ignoreOpenApiExample !== 'boolean') {
     throw new TypeError('Invalid ignoreOpenApiExample: Must be an Object.')
+  }
+  if (multipleRequests && typeof multipleRequests !== 'boolean') {
+    throw new TypeError('Invalid multipleRequests: Must be an Object.')
+  }
+
+  if (!multipleRequests) {
+    cleanUpNockAfterEach()
   }
 
   const auth = { ...serviceClass.auth, ...authOverride }
@@ -321,6 +328,9 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   const scopeArr = []
   authOrigins.forEach(authOrigin => {
     const scope = nock(authOrigin)
+    if (multipleRequests) {
+      scope.persist()
+    }
     scopeArr.push(scope)
     switch (authMethod) {
       case 'BasicAuth':
@@ -399,6 +409,15 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
       },
     ),
   ).to.not.have.property('isError')
+
+  // cleapup persistance if we have multiple requests
+  if (multipleRequests) {
+    scopeArr.forEach(scope => scope.persist(false))
+    nock.restore()
+    nock.cleanAll()
+    nock.enableNetConnect()
+    nock.activate()
+  }
 
   // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
   scopeArr.forEach(scope => scope.done())
