@@ -36,7 +36,7 @@ t.create('Last Commit (recent) (nested dir path)')
     message: isFormattedDate,
   })
 
-t.create('Last Commit (recent) {path)')
+t.create('Last Commit (recent) (path)')
   .get('/gitea/tea.json?path=README.md')
   .expectBadge({
     label: 'last commit',
