@@ -27,9 +27,10 @@ export default class PypiBase extends BaseJsonService {
   }
 
   async fetch({ egg }) {
+    const pypiBaseUrl = process.env.PYPI_URL || 'https://pypi.org'
     return this._requestJson({
       schema,
-      url: `https://pypi.org/pypi/${egg}/json`,
+      url: `${pypiBaseUrl}/pypi/${egg}/json`,
       httpErrors: { 404: 'package or version not found' },
     })
   }
