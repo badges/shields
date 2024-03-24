@@ -58,3 +58,10 @@ t.create('last commit (project not found)')
     label: 'last commit',
     message: 'project not found',
   })
+
+t.create('last commit (no commits found)')
+  .get('/gitlab-org/gitlab.json?path=not/a/dir')
+  .expectBadge({
+    label: 'last commit',
+    message: 'no commits found',
+  })

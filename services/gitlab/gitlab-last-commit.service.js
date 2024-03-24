@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { age as ageColor } from '../color-formatters.js'
-import { pathParam, queryParam } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { optionalUrl, relativeUri } from '../validators.js'
 import GitLabBase from './gitlab-base.js'
@@ -10,10 +10,9 @@ const schema = Joi.array()
   .items(
     Joi.object({
       committed_date: Joi.string().required(),
-    }).required(),
+    }),
   )
   .required()
-  .min(1)
 
 const queryParamSchema = Joi.object({
   ref: Joi.string(),
@@ -91,6 +90,10 @@ export default class GitlabLastCommit extends GitLabBase {
     { gitlab_url: baseUrl = 'https://gitlab.com', ref, path },
   ) {
     const data = await this.fetch({ project, baseUrl, ref, path })
-    return this.constructor.render({ commitDate: data[0].committed_date })
+    const [commit] = data
+
+    if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
+
+    return this.constructor.render({ commitDate: commit.committed_date })
   }
 }

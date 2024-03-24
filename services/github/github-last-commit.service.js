@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { age as ageColor } from '../color-formatters.js'
-import { pathParam, queryParam } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { relativeUri } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -17,10 +17,9 @@ const schema = Joi.array()
           date: Joi.string().required(),
         }).required(),
       }).required(),
-    }).required(),
+    }),
   )
   .required()
-  .min(1)
 
 const displayEnum = ['author', 'committer']
 
@@ -108,9 +107,12 @@ export default class GithubLastCommit extends GithubAuthV3Service {
   async handle({ user, repo, branch }, queryParams) {
     const { path, display_timestamp: displayTimestamp } = queryParams
     const body = await this.fetch({ user, repo, branch, path })
+    const [commit] = body.map(obj => obj.commit)
+
+    if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
     return this.constructor.render({
-      commitDate: body[0].commit[displayTimestamp].date,
+      commitDate: commit[displayTimestamp].date,
     })
   }
 }
