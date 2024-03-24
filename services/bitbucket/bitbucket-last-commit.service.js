@@ -61,7 +61,10 @@ export default class BitbucketLastCommit extends BaseJsonService {
         },
       },
       schema,
-      httpErrors: { 403: 'private repo' },
+      httpErrors: {
+        403: 'private repo',
+        404: 'user, repo or branch not found',
+      },
     })
   }
 
