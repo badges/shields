@@ -280,7 +280,11 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
 
   const auth = { ...serviceClass.auth, ...authOverride }
-  const fakeUser = auth.userKey ? 'fake-user' : undefined
+  const fakeUser = auth.userKey
+    ? 'fake-user'
+    : auth.defaultToEmptyStringForUser
+      ? ''
+      : undefined
   const fakeSecret = auth.passKey ? 'fake-secret' : undefined
   if (!fakeUser && !fakeSecret) {
     throw new TypeError(
