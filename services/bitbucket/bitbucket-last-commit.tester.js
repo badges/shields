@@ -25,4 +25,4 @@ t.create('last commit (branch not found)')
 
 t.create('last commit (path not found)')
   .get('/shields-io/test-repo/main.json?path=not/a/dir')
-  .expectBadge({ label: 'last commit', message: 'not found' })
+  .expectBadge({ label: 'last commit', message: 'no commits found' })

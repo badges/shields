@@ -70,7 +70,7 @@ export default class BitbucketLastCommit extends BaseJsonService {
     const data = await this.fetch({ user, repo, branch, path })
     const [commit] = data.values
 
-    if (!commit) throw new NotFound()
+    if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
     return this.constructor.render({ commitDate: commit.date })
   }
