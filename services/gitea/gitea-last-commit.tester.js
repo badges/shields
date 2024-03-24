@@ -59,9 +59,23 @@ t.create('Last Commit (on-branch) (self-managed)')
     message: isFormattedDate,
   })
 
-t.create('Last Commit (project not found)')
+t.create('Last Commit (user not found)')
   .get('/CanisHelix/does-not-exist.json?gitea_url=https://codeberg.org')
   .expectBadge({
     label: 'last commit',
-    message: 'user or repo not found',
+    message: 'user, repo or path not found',
+  })
+
+t.create('Last Commit (repo not found)')
+  .get('/gitea/not-a-repo.json')
+  .expectBadge({
+    label: 'last commit',
+    message: 'user, repo or path not found',
+  })
+
+t.create('Last Commit (path not found)')
+  .get('/gitea/tea.json?path=not/a/dir')
+  .expectBadge({
+    label: 'last commit',
+    message: 'user, repo or path not found',
   })
