@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import nock from 'nock'
-import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
+import { testAuth } from '../test-helpers.js'
 import { InvalidResponse, NotFound } from '../index.js'
 import Nexus from './nexus.service.js'
 
@@ -113,52 +112,27 @@ describe('Nexus', function () {
   })
 
   describe('auth', function () {
-    cleanUpNockAfterEach()
-
-    const user = 'admin'
-    const pass = 'password'
     const config = {
       public: {
         services: {
           nexus: {
-            authorizedOrigins: ['https://repository.jboss.org'],
+            authorizedOrigins: ['https://oss.sonatype.org'],
           },
         },
       },
-      private: {
-        nexus_user: user,
-        nexus_pass: pass,
-      },
     }
-
     it('sends the auth information as configured', async function () {
-      const scope = nock('https://repository.jboss.org')
-        .get('/nexus/service/local/lucene/search')
-        .query({ g: 'jboss', a: 'jboss-client' })
-        // This ensures that the expected credentials are actually being sent with the HTTP request.
-        // Without this the request wouldn't match and the test would fail.
-        .basicAuth({ user, pass })
-        .reply(200, { data: [{ latestRelease: '2.3.4' }] })
-
-      expect(
-        await Nexus.invoke(
-          defaultContext,
-          config,
-          {
-            repo: 'r',
-            groupId: 'jboss',
-            artifactId: 'jboss-client',
+      testAuth(
+        Nexus,
+        'BasicAuth',
+        {
+          data: {
+            baseVersion: '9.3.95',
+            version: '9.3.95',
           },
-          {
-            server: 'https://repository.jboss.org/nexus',
-          },
-        ),
-      ).to.deep.equal({
-        message: 'v2.3.4',
-        color: 'blue',
-      })
-
-      scope.done()
+        },
+        { configOverride: config },
+      )
     })
   })
 })

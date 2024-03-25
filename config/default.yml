@@ -14,6 +14,8 @@ public:
   cors:
     allowedOrigin: []
   services:
+    bitbucket:
+      authorizedOrigins: 'https://bitbucket.org'
     github:
       baseUri: 'https://api.github.com'
       debug:
