@@ -8,7 +8,7 @@ To specify another instance like [codeberg](https://codeberg.org/), [forgejo](ht
 function httpErrorsFor() {
   return {
     403: 'private repo',
-    404: 'user or repo not found',
+    404: 'user, repo or path not found',
   }
 }
 

@@ -1,7 +1,8 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { relativeUri } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
@@ -16,14 +17,14 @@ const schema = Joi.array()
           date: Joi.string().required(),
         }).required(),
       }).required(),
-    }).required(),
+    }),
   )
   .required()
-  .min(1)
 
 const displayEnum = ['author', 'committer']
 
 const queryParamSchema = Joi.object({
+  path: relativeUri,
   display_timestamp: Joi.string()
     .valid(...displayEnum)
     .default('author'),
@@ -46,6 +47,12 @@ export default class GithubLastCommit extends GithubAuthV3Service {
           pathParam({ name: 'user', example: 'google' }),
           pathParam({ name: 'repo', example: 'skia' }),
           queryParam({
+            name: 'path',
+            example: 'README.md',
+            schema: { type: 'string' },
+            description: 'File path to resolve the last commit for.',
+          }),
+          queryParam({
             name: 'display_timestamp',
             example: 'committer',
             schema: { type: 'string', enum: displayEnum },
@@ -62,6 +69,12 @@ export default class GithubLastCommit extends GithubAuthV3Service {
           pathParam({ name: 'user', example: 'google' }),
           pathParam({ name: 'repo', example: 'skia' }),
           pathParam({ name: 'branch', example: 'infra/config' }),
+          queryParam({
+            name: 'path',
+            example: 'README.md',
+            schema: { type: 'string' },
+            description: 'File path to resolve the last commit for.',
+          }),
           queryParam({
             name: 'display_timestamp',
             example: 'committer',
@@ -82,20 +95,24 @@ export default class GithubLastCommit extends GithubAuthV3Service {
     }
   }
 
-  async fetch({ user, repo, branch }) {
+  async fetch({ user, repo, branch, path }) {
     return this._requestJson({
       url: `/repos/${user}/${repo}/commits`,
-      options: { searchParams: { sha: branch } },
+      options: { searchParams: { sha: branch, path } },
       schema,
       httpErrors: httpErrorsFor(),
     })
   }
 
   async handle({ user, repo, branch }, queryParams) {
-    const body = await this.fetch({ user, repo, branch })
+    const { path, display_timestamp: displayTimestamp } = queryParams
+    const body = await this.fetch({ user, repo, branch, path })
+    const [commit] = body.map(obj => obj.commit)
+
+    if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
     return this.constructor.render({
-      commitDate: body[0].commit[queryParams.display_timestamp].date,
+      commitDate: commit[displayTimestamp].date,
     })
   }
 }
