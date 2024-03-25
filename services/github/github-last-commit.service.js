@@ -106,7 +106,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
 
   async handle({ user, repo, branch }, queryParams) {
     const { path, display_timestamp: displayTimestamp } = queryParams
-    const body = await this.fetch({ user, repo, branch, path })
+    const body = await this.fetch({ user, repo, branch, path, per_page: 1 })
     const [commit] = body.map(obj => obj.commit)
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })

@@ -79,7 +79,7 @@ export default class GitlabLastCommit extends GitLabBase {
       url: `${baseUrl}/api/v4/projects/${encodeURIComponent(
         project,
       )}/repository/commits`,
-      options: { searchParams: { ref_name: ref, path } },
+      options: { searchParams: { ref_name: ref, path, per_page: 1 } },
       schema,
       httpErrors: httpErrorsFor('project not found'),
     })
