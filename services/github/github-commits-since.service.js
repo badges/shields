@@ -12,8 +12,9 @@ import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const schema = Joi.object({ ahead_by: nonNegativeInteger }).required()
 
-const latestDocs =
-  '<p>The <code>include_prereleases</code>, <code>sort</code> and <code>filter</code> params can be used to configure how we determine the latest version.</p>'
+const latestDocs = `
+The <code>include_prereleases</code>, <code>sort</code> and <code>filter</code> params can be used to configure how we determine the latest version.
+`
 
 export default class GithubCommitsSince extends GithubAuthV3Service {
   static category = 'activity'

@@ -3,6 +3,11 @@ import { BaseJsonService, queryParams } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 import jsonPath from './json-path.js'
 
+const description = `
+The Dynamic JSON Badge allows you to extract an arbitrary value from any
+JSON Document using a JSONPath selector and show it on a badge.
+`
+
 export default class DynamicJson extends jsonPath(BaseJsonService) {
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('json')
@@ -10,10 +15,7 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
     '/badge/dynamic/json': {
       get: {
         summary: 'Dynamic JSON Badge',
-        description: `<p>
-          The Dynamic JSON Badge allows you to extract an arbitrary value from any
-          JSON Document using a JSONPath selector and show it on a badge.
-        </p>`,
+        description,
         parameters: queryParams(
           {
             name: 'url',

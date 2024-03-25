@@ -9,41 +9,29 @@ const packageMetricsSchema = Joi.object({
 })
 
 const description = `
-<p>
-  The Thunderstore badges require a package's <code>namespace</code> and <code>name</code>.
-</p>
-<p>
-  Everything can be discerned from your package's URL. Thunderstore package URLs have a mostly consistent
-  format:
-</p>
-<p>
-    <code>https://thunderstore.io/c/[community]/p/[namespace]/[packageName]</code>
-</p>
-<p>
-  For example: <code>https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/</code>.
-  <ul>
-    <li><code>namespace = "notnotnotswipez"</code></li>
-    <li><code>packageName = "MoreCompany"</code></li>
-  </ul>
-</p>
-<details>
-  <summary>Risk Of Rain 2</summary>
-  <p>
-    The 'default community', Risk of Rain 2, has an alternative URL:
-  </p>
-  <p>
-    <code>https://thunderstore.io/package/[namespace]/[packageName]</code>
-  </p>
-</details>
-<details>
-  <summary>Subdomain Communities</summary>
-  <p>
-    Some communities use a 'subdomain' alternative URL, for example, Valheim:
-  </p>
-  <p>
-    <code>https://valheim.thunderstore.io/package/[namespace]/[packageName]</code>
-  </p>
-</details>
+The Thunderstore badges require a package's <code>namespace</code> and <code>name</code>.
+
+Everything can be discerned from your package's URL. Thunderstore package URLs have a mostly consistent format:
+
+<code>https://thunderstore.io/c/[community]/p/[namespace]/[packageName]</code>
+
+For example: <code>https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/</code>.
+<ul>
+  <li><code>namespace = "notnotnotswipez"</code></li>
+  <li><code>packageName = "MoreCompany"</code></li>
+</ul>
+
+:::info[Risk Of Rain 2]
+The 'default community', Risk of Rain 2, has an alternative URL:
+
+<code>https://thunderstore.io/package/[namespace]/[packageName]</code>
+:::
+
+:::info[Subdomain Communities]
+Some communities use a 'subdomain' alternative URL, for example, Valheim:
+
+<code>https://valheim.thunderstore.io/package/[namespace]/[packageName]</code>
+:::
 `
 
 /**
