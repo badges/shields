@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { age as ageColor } from '../color-formatters.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
+import { relativeUri } from '../validators.js'
 
 const schema = Joi.object({
   values: Joi.array().items({
@@ -10,7 +11,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  path: Joi.string().uri({ relativeOnly: true }),
+  path: relativeUri,
 }).required()
 
 export default class BitbucketLastCommit extends BaseJsonService {
