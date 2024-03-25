@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
-import { optionalUrl } from '../validators.js'
-import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
+import { pathParam, queryParam } from '../index.js'
+import { formatDate } from '../text-formatters.js'
+import { optionalUrl, relativeUri } from '../validators.js'
 import GiteaBase from './gitea-base.js'
 import { description, httpErrorsFor } from './gitea-helper.js'
 
@@ -25,10 +25,11 @@ const schema = Joi.array()
 const displayEnum = ['author', 'committer']
 
 const queryParamSchema = Joi.object({
-  gitea_url: optionalUrl,
+  path: relativeUri,
   display_timestamp: Joi.string()
     .valid(...displayEnum)
     .default('author'),
+  gitea_url: optionalUrl,
 }).required()
 
 export default class GiteaLastCommit extends GiteaBase {
@@ -53,6 +54,12 @@ export default class GiteaLastCommit extends GiteaBase {
           pathParam({
             name: 'repo',
             example: 'tea',
+          }),
+          queryParam({
+            name: 'path',
+            example: 'README.md',
+            schema: { type: 'string' },
+            description: 'File path to resolve the last commit for.',
           }),
           queryParam({
             name: 'display_timestamp',
@@ -85,6 +92,12 @@ export default class GiteaLastCommit extends GiteaBase {
             example: 'main',
           }),
           queryParam({
+            name: 'path',
+            example: 'README.md',
+            schema: { type: 'string' },
+            description: 'File path to resolve the last commit for.',
+          }),
+          queryParam({
             name: 'display_timestamp',
             example: 'committer',
             schema: { type: 'string', enum: displayEnum },
@@ -108,12 +121,12 @@ export default class GiteaLastCommit extends GiteaBase {
     }
   }
 
-  async fetch({ user, repo, branch, baseUrl }) {
+  async fetch({ user, repo, branch, baseUrl, path }) {
     // https://gitea.com/api/swagger#/repository
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/commits`,
-      options: { searchParams: { sha: branch } },
+      options: { searchParams: { sha: branch, path } },
       httpErrors: httpErrorsFor(),
     })
   }
@@ -123,6 +136,7 @@ export default class GiteaLastCommit extends GiteaBase {
     {
       gitea_url: baseUrl = 'https://gitea.com',
       display_timestamp: displayTimestamp,
+      path,
     },
   ) {
     const body = await this.fetch({
@@ -130,6 +144,7 @@ export default class GiteaLastCommit extends GiteaBase {
       repo,
       branch,
       baseUrl,
+      path,
     })
     return this.constructor.render({
       commitDate: body[0].commit[displayTimestamp].date,
