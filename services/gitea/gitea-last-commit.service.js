@@ -126,7 +126,7 @@ export default class GiteaLastCommit extends GiteaBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/commits`,
-      options: { searchParams: { sha: branch, path } },
+      options: { searchParams: { sha: branch, path, limit: 1 } },
       httpErrors: httpErrorsFor(),
     })
   }

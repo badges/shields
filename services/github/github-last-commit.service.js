@@ -98,7 +98,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
   async fetch({ user, repo, branch, path }) {
     return this._requestJson({
       url: `/repos/${user}/${repo}/commits`,
-      options: { searchParams: { sha: branch, path } },
+      options: { searchParams: { sha: branch, path, per_page: 1 } },
       schema,
       httpErrors: httpErrorsFor(),
     })
