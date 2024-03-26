@@ -66,7 +66,7 @@ test(normalizeColor, () => {
 })
 
 test(toSvgColor, () => {
-  given('red').expect('#e05d44')
+  given('red').expect('#dd4343')
   given('blue').expect('#007ec6')
   given('4c1').expect('#4c1')
   given('f00f00').expect('#f00f00')
@@ -77,7 +77,7 @@ test(toSvgColor, () => {
   forCases([given(''), given(undefined), given('not-a-color')]).expect(
     undefined,
   )
-  given('lightgray').expect('#9f9f9f')
+  given('lightgray').expect('#939393')
   given('informational').expect('#007ec6')
 })
 
