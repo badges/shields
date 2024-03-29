@@ -204,7 +204,7 @@
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^5.0.5",
     "sazerac": "^2.0.0",
-    "simple-git-hooks": "^2.11.0",
+    "simple-git-hooks": "^2.11.1",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.10",
