@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-04-01
+
+- improve performance of [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] [#10046](https://github.com/badges/shields/issues/10046)
+- [BitbucketLastCommit] Add Bitbucket last commit [#10043](https://github.com/badges/shields/issues/10043)
+- [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] Support file path for last commit [#10041](https://github.com/badges/shields/issues/10041)
+- upgrade to docusaurus 3 [#9820](https://github.com/badges/shields/issues/9820)
+- redirect [npm] /dt to /d18m [#10033](https://github.com/badges/shields/issues/10033)
+- Add [JSR] version service [#10030](https://github.com/badges/shields/issues/10030)
+- Add [snapcraft] version badge [#9976](https://github.com/badges/shields/issues/9976)
+- Dependency updates
+
 ## server-2024-03-01
 
 - feat(gitea): add last commit badge [#9995](https://github.com/badges/shields/issues/9995)
