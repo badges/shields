@@ -170,7 +170,7 @@ Other changes in this release:
 
 ## server-2023-05-01
 
-** Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
+**Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
 
 - fail to start server if there are duplicate service names [#9099](https://github.com/badges/shields/issues/9099)
 - [SourceForge] Added badges for SourceForge [#9078](https://github.com/badges/shields/issues/9078) [#9102](https://github.com/badges/shields/issues/9102)
