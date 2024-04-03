@@ -93,6 +93,17 @@ const expected = {
         schema: { type: 'string' },
         example: 'violet',
       },
+      logoSize: {
+        name: 'logoSize',
+        in: 'query',
+        required: false,
+        description:
+          'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for simple-icons logos only.',
+        schema: {
+          type: 'string',
+        },
+        example: 'auto',
+      },
       label: {
         name: 'label',
         in: 'query',
@@ -158,6 +169,7 @@ const expected = {
           { $ref: '#/components/parameters/style' },
           { $ref: '#/components/parameters/logo' },
           { $ref: '#/components/parameters/logoColor' },
+          { $ref: '#/components/parameters/logoSize' },
           { $ref: '#/components/parameters/label' },
           { $ref: '#/components/parameters/labelColor' },
           { $ref: '#/components/parameters/color' },
@@ -213,6 +225,7 @@ const expected = {
           { $ref: '#/components/parameters/style' },
           { $ref: '#/components/parameters/logo' },
           { $ref: '#/components/parameters/logoColor' },
+          { $ref: '#/components/parameters/logoSize' },
           { $ref: '#/components/parameters/label' },
           { $ref: '#/components/parameters/labelColor' },
           { $ref: '#/components/parameters/color' },
