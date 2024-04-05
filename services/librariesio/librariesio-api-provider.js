@@ -17,7 +17,7 @@ export default class LibrariesIoApiProvider {
     })
 
     if (this.withPooling) {
-      this.standardTokens = new TokenPool({ batchSize: 45 })
+      this.standardTokens = new TokenPool({ batchSize: 10 })
       tokens.forEach(t => this.standardTokens.add(t, {}, defaultRateLimit))
     }
   }
