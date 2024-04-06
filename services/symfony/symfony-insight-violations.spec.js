@@ -4,7 +4,7 @@ import SymfonyInsightViolations from './symfony-insight-violations.service.js'
 describe('SymfonyInsightViolations', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         SymfonyInsightViolations,
         'BasicAuth',
         `<project><last-analysis>

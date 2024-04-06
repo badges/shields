@@ -4,7 +4,7 @@ import AzureDevOpsCoverage from './azure-devops-coverage.service.js'
 describe('AzureDevOpsCoverage', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         AzureDevOpsCoverage,
         'BasicAuth',
         {

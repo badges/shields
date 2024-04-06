@@ -122,7 +122,7 @@ describe('Nexus', function () {
       },
     }
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         Nexus,
         'BasicAuth',
         {

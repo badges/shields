@@ -8,7 +8,7 @@ import {
 describe('SonarFortifyRating', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         SonarFortifyRating,
         'BasicAuth',
         legacySonarResponse('fortify-security-rating', 4),

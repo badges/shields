@@ -5,7 +5,7 @@ import { config } from './jira-test-helpers.js'
 describe('JiraIssue', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         JiraIssue,
         'BasicAuth',
         {

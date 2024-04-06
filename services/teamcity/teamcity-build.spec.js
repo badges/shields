@@ -5,7 +5,7 @@ import { config } from './teamcity-test-helpers.js'
 describe('TeamCityBuild', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         TeamCityBuild,
         'BasicAuth',
         { status: 'SUCCESS', statusText: 'Success' },

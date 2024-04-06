@@ -8,18 +8,23 @@ import {
 describe('SonarGeneric', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(SonarGeneric, 'BasicAuth', legacySonarResponse('test', 903), {
-        configOverride: testAuthConfigOverride,
-        exampleOverride: {
-          component: 'test',
-          metricName: 'test',
-          branch: 'home',
-          server:
-            testAuthConfigOverride.public.services.sonar.authorizedOrigins[0],
-          sonarVersion: '4.2',
+      return testAuth(
+        SonarGeneric,
+        'BasicAuth',
+        legacySonarResponse('test', 903),
+        {
+          configOverride: testAuthConfigOverride,
+          exampleOverride: {
+            component: 'test',
+            metricName: 'test',
+            branch: 'home',
+            server:
+              testAuthConfigOverride.public.services.sonar.authorizedOrigins[0],
+            sonarVersion: '4.2',
+          },
+          ignoreOpenApiExample: true,
         },
-        ignoreOpenApiExample: true,
-      })
+      )
     })
   })
 })

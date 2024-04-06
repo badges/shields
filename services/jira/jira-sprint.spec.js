@@ -5,7 +5,7 @@ import { config } from './jira-test-helpers.js'
 describe('JiraSprint', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         JiraSprint,
         'BasicAuth',
         {

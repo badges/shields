@@ -4,7 +4,7 @@ import SymfonyInsightStars from './symfony-insight-stars.service.js'
 describe('SymfonyInsightStars', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         SymfonyInsightStars,
         'BasicAuth',
         `<project><last-analysis>

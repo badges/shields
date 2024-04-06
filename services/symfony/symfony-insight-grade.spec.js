@@ -4,7 +4,7 @@ import SymfonyInsightGrade from './symfony-insight-grade.service.js'
 describe('SymfonyInsightGrade', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
-      testAuth(
+      return testAuth(
         SymfonyInsightGrade,
         'BasicAuth',
         `<project><last-analysis>
