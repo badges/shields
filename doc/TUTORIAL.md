@@ -350,8 +350,6 @@ Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
 If you update `openApi`, you don't have to restart the server. Run `npm run prestart` in another terminal window and the frontend will update.
 
-Note: Some services define this information in an array property called `examples`. This is deprecated and we're in the process of converting them. New services should declare an `openApi` object.
-
 ### (4.5) Write Tests<!-- Change the link below when you change the heading -->
 
 [write tests]: #45-write-tests

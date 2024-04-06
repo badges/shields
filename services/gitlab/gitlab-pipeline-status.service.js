@@ -22,25 +22,20 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const moreDocs = `
-<p>
-  Important: You must use the Project Path, not the Project Id. Additionally, if your project is publicly visible, but the badge is like this:
-  <img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
-</p>
-<p>
-  Check if your pipelines are publicly visible as well.<br />
-  Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
-  Then tick the setting Public pipelines.
-</p>
-<p>
-  Now your settings should look like this:
-</p>
+Important: You must use the Project Path, not the Project Id. Additionally, if your project is publicly visible, but the badge is like this:
+<img src="https://img.shields.io/badge/build-not&nbsp;found-red" alt="build not found"/>
+
+Check if your pipelines are publicly visible as well.<br />
+Navigate to your project settings on GitLab and choose General Pipelines under CI/CD.<br />
+Then tick the setting Public pipelines.
+
+Now your settings should look like this:
+
 <img src="https://user-images.githubusercontent.com/12065866/67156911-e225a180-f324-11e9-93ad-10aafbb3e69e.png" alt="Setting Public pipelines set"/>
-<p>
-  Your badge should be working fine now.
-</p>
-<p>
-  NB - The badge will display 'inaccessible' if the specified repo was not found on the target Gitlab instance.
-</p>
+
+Your badge should be working fine now.
+
+NB - The badge will display 'inaccessible' if the specified repo was not found on the target Gitlab instance.
 `
 
 class GitlabPipelineStatus extends BaseSvgScrapingService {

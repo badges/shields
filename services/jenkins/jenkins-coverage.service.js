@@ -89,14 +89,13 @@ const formatMap = {
 }
 
 const description = `
-<p>
-  We support coverage metrics from a variety of Jenkins plugins:
-  <ul>
-    <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
-    <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
-    <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
-  </ul>
-</p>
+We support coverage metrics from a variety of Jenkins plugins:
+
+<ul>
+  <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
+  <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
+  <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
+</ul>
 `
 
 export default class JenkinsCoverage extends JenkinsBase {

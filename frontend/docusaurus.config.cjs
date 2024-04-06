@@ -1,5 +1,6 @@
 const lightCodeTheme = require('prism-react-renderer').themes.github
 const darkCodeTheme = require('prism-react-renderer').themes.dracula
+const stripCodeBlockLinks = require('./src/plugins/strip-code-block-links')
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -24,6 +25,14 @@ const config = {
     ],
   ],
 
+  markdown: {
+    mdx1Compat: {
+      comments: true,
+      admonitions: true,
+      headingIds: true,
+    },
+  },
+
   presets: [
     [
       'docusaurus-preset-openapi',
@@ -43,6 +52,7 @@ const config = {
         api: {
           path: 'categories',
           routeBasePath: 'badges',
+          rehypePlugins: [stripCodeBlockLinks],
         },
       }),
     ],

@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-04-01
+
+- improve performance of [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] [#10046](https://github.com/badges/shields/issues/10046)
+- [BitbucketLastCommit] Add Bitbucket last commit [#10043](https://github.com/badges/shields/issues/10043)
+- [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] Support file path for last commit [#10041](https://github.com/badges/shields/issues/10041)
+- upgrade to docusaurus 3 [#9820](https://github.com/badges/shields/issues/9820)
+- redirect [npm] /dt to /d18m [#10033](https://github.com/badges/shields/issues/10033)
+- Add [JSR] version service [#10030](https://github.com/badges/shields/issues/10030)
+- Add [snapcraft] version badge [#9976](https://github.com/badges/shields/issues/9976)
+- Dependency updates
+
+## server-2024-03-01
+
+- feat(gitea): add last commit badge [#9995](https://github.com/badges/shields/issues/9995)
+- [GithubCreatedAt] Add Created At Badge for Github [#9981](https://github.com/badges/shields/issues/9981)
+- Added custom bucket url support for [Scoop] [#9984](https://github.com/badges/shields/issues/9984)
+- [NpmUnpackedSize] Unpacked Size Badge [#9954](https://github.com/badges/shields/issues/9954)
+- [Website] Render `status: down` badge if website is unresponsive [#9966](https://github.com/badges/shields/issues/9966)
+- deprecate TAS [#9932](https://github.com/badges/shields/issues/9932)
+- [GITEA] add forks, stars, issues and pr badges [#9923](https://github.com/badges/shields/issues/9923)
+- tolerate missing short_version in [visualstudioappcenter] [#9951](https://github.com/badges/shields/issues/9951)
+- [Crates] Only use non-yanked crate versions (ready for merge) [#9949](https://github.com/badges/shields/issues/9949)
+- Dependency updates
+
 ## server-2024-02-01
 
 - feat: added up_message and down_message to [uptimerobotstatus] [#9662](https://github.com/badges/shields/issues/9662)
@@ -146,7 +170,7 @@ Other changes in this release:
 
 ## server-2023-05-01
 
-** Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
+**Removal:** For users who need to maintain a Github Token pool, storage has been provided via the `RedisTokenPersistence` and `REDIS_URL` settings. This feature was deprecated in `server-2023-03-01`. As of this release, the `RedisTokenPersistence` backend is now removed. If you are using this feature, you will need to migrate to using the `SQLTokenPersistence` backend for storage and provide a postgres connection string via the `POSTGRES_URL` setting. [#8922](https://github.com/badges/shields/issues/8922)
 
 - fail to start server if there are duplicate service names [#9099](https://github.com/badges/shields/issues/9099)
 - [SourceForge] Added badges for SourceForge [#9078](https://github.com/badges/shields/issues/9078) [#9102](https://github.com/badges/shields/issues/9102)

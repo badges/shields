@@ -28,7 +28,7 @@ const intervalMap = {
     transform: json => json.downloads,
     interval: 'year',
   },
-  dt: {
+  d18m: {
     query: 'range/1000-01-01:3000-01-01',
     // https://github.com/npm/registry/blob/master/docs/download-counts.md#output-1
     schema: Joi.object({
@@ -48,7 +48,7 @@ export default class NpmDownloads extends BaseJsonService {
 
   static route = {
     base: 'npm',
-    pattern: ':interval(dw|dm|dy|dt)/:scope(@.+)?/:packageName',
+    pattern: ':interval(dw|dm|dy|d18m)/:scope(@.+)?/:packageName',
   }
 
   static openApi = {
@@ -59,7 +59,8 @@ export default class NpmDownloads extends BaseJsonService {
           {
             name: 'interval',
             example: 'dw',
-            description: 'Weekly, Monthly, Yearly, or Total downloads',
+            description:
+              'Downloads in the last Week, Month, Year, or 18 Months',
             schema: { type: 'string', enum: this.getEnum('interval') },
           },
           {

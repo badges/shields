@@ -3,6 +3,11 @@ import { BaseYamlService, queryParams } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
 import jsonPath from './json-path.js'
 
+const description = `
+The Dynamic YAML Badge allows you to extract an arbitrary value from any
+YAML Document using a JSONPath selector and show it on a badge.
+`
+
 export default class DynamicYaml extends jsonPath(BaseYamlService) {
   static enabledMetrics = [MetricNames.SERVICE_RESPONSE_SIZE]
   static route = createRoute('yaml')
@@ -10,10 +15,7 @@ export default class DynamicYaml extends jsonPath(BaseYamlService) {
     '/badge/dynamic/yaml': {
       get: {
         summary: 'Dynamic YAML Badge',
-        description: `<p>
-          The Dynamic YAML Badge allows you to extract an arbitrary value from any
-          YAML Document using a JSONPath selector and show it on a badge.
-        </p>`,
+        description,
         parameters: queryParams(
           {
             name: 'url',

@@ -45,24 +45,6 @@ describe('Redirector', function () {
     ).to.throw('"dateAdded" is required')
   })
 
-  it('sets specified example', function () {
-    const examples = [
-      {
-        title: 'very old service',
-        pattern: ':namedParamA',
-        namedParams: {
-          namedParamA: 'namedParamAValue',
-        },
-        staticPreview: {
-          label: 'service',
-          message: 'v0.14.0',
-          color: 'blue',
-        },
-      },
-    ]
-    expect(redirector({ ...attrs, examples }).examples).to.equal(examples)
-  })
-
   describe('ScoutCamp integration', function () {
     let port, baseUrl
     beforeEach(async function () {
