@@ -14,7 +14,7 @@ Supply package name to display the latest package update time
 `
 
 /*
- * TODO: Add `version` parameter to get version-specific data.
+ * TODO: Add `version` parameter to get version-specific data
  */
 export default class NpmLatestPackageUpdate extends BaseService {
   static category = 'version'
