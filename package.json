@@ -65,7 +65,7 @@
     "semver": "~7.6.0",
     "simple-icons": "11.10.0",
     "smol-toml": "1.1.4",
-    "webextension-store-meta": "^1.1.0",
+    "webextension-store-meta": "^1.2.0",
     "xpath": "~0.0.34"
   },
   "scripts": {
