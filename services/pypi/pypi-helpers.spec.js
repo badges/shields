@@ -167,6 +167,12 @@ describe('PyPI helpers', function () {
         ],
       },
     }).expect(['AGPL-3.0'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: OSI Approved :: Zero-Clause BSD (0BSD)'],
+      },
+    }).expect(['0BSD'])
   })
 
   test(getPackageFormats, () => {
