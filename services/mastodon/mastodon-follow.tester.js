@@ -8,7 +8,7 @@ t.create('Followers - default domain')
     label: 'follow @wilkie',
     message: isMetric,
     link: [
-      'https://mastodon.social/users/wilkie/remote_follow',
+      'https://mastodon.social/users/wilkie',
       'https://mastodon.social/users/wilkie/followers',
     ],
   })
@@ -33,7 +33,7 @@ t.create('Followers - alternate domain')
     label: 'follow @PhotonQyv',
     message: isMetric,
     link: [
-      'https://mastodon.xyz/users/PhotonQyv/remote_follow',
+      'https://mastodon.xyz/users/PhotonQyv',
       'https://mastodon.xyz/users/PhotonQyv/followers',
     ],
   })
