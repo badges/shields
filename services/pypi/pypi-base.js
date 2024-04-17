@@ -26,7 +26,7 @@ export const queryParamSchema = Joi.object({
 
 export const pypiPackageParam = pathParam({
   name: 'packageName',
-  example: 'nine',
+  example: 'Django',
 })
 
 export const pypiBaseUrlParam = queryParam({
