@@ -6,7 +6,7 @@ import coalesce from './coalesce.js'
 // https://github.com/royriojas/coalescy for these tests!
 
 describe('coalesce', function () {
-  test(coalesce, function () {
+  test(coalesce, () => {
     given().expect(undefined)
     given(null, []).expect([])
     given(null, [], {}).expect([])
