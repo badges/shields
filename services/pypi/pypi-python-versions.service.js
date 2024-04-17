@@ -1,6 +1,5 @@
 import semver from 'semver'
-import { pathParams } from '../index.js'
-import PypiBase from './pypi-base.js'
+import PypiBase, { pypiGeneralParams } from './pypi-base.js'
 import { parseClassifiers } from './pypi-helpers.js'
 
 export default class PypiPythonVersions extends PypiBase {
@@ -12,10 +11,7 @@ export default class PypiPythonVersions extends PypiBase {
     '/pypi/pyversions/{packageName}': {
       get: {
         summary: 'PyPI - Python Version',
-        parameters: pathParams({
-          name: 'packageName',
-          example: 'Django',
-        }),
+        parameters: pypiGeneralParams,
       },
     },
   }

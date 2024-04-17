@@ -22,6 +22,8 @@ public:
       restApiVersion: '2022-11-28'
     obs:
       authorizedOrigins: 'https://api.opensuse.org'
+    pypi:
+      baseUri: 'https://pypi.org'
     weblate:
       authorizedOrigins: 'https://hosted.weblate.org'
     trace: false
