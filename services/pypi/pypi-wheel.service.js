@@ -31,8 +31,8 @@ export default class PypiWheel extends PypiBase {
     }
   }
 
-  async handle({ egg }) {
-    const packageData = await this.fetch({ egg })
+  async handle({ egg }, { pypiBaseUrl }) {
+    const packageData = await this.fetch({ egg, pypiBaseUrl })
     const { hasWheel } = getPackageFormats(packageData)
     return this.constructor.render({ hasWheel })
   }

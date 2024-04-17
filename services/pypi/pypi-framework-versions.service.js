@@ -80,7 +80,7 @@ export default class PypiFrameworkVersion extends PypiBase {
     }
   }
 
-  async handle({ frameworkName, packageName }) {
+  async handle({ frameworkName, packageName }, { pypiBaseUrl }) {
     const classifier = frameworkNameMap[frameworkName]
       ? frameworkNameMap[frameworkName].classifier
       : frameworkName
@@ -88,7 +88,7 @@ export default class PypiFrameworkVersion extends PypiBase {
       ? frameworkNameMap[frameworkName].name
       : frameworkName
     const regex = new RegExp(`^Framework :: ${classifier} :: ([\\d.]+)$`)
-    const packageData = await this.fetch({ egg: packageName })
+    const packageData = await this.fetch({ egg: packageName, pypiBaseUrl })
     const versions = parseClassifiers(packageData, regex)
 
     if (versions.length === 0) {
