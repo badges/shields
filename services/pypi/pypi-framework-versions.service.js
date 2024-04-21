@@ -1,5 +1,5 @@
 import { InvalidResponse, pathParams } from '../index.js'
-import PypiBase from './pypi-base.js'
+import PypiBase, { pypiGeneralParams } from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
 const frameworkNameMap = {
@@ -56,14 +56,12 @@ export default class PypiFrameworkVersion extends PypiBase {
       get: {
         summary: 'PyPI - Versions from Framework Classifiers',
         description,
-        parameters: pathParams(
-          {
+        parameters:
+          pathParams({
             name: 'frameworkName',
             example: 'plone',
             schema: { type: 'string', enum: Object.keys(frameworkNameMap) },
-          },
-          { name: 'packageName', example: 'plone.volto' },
-        ),
+          }) + pypiGeneralParams,
       },
     },
   }
