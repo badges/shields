@@ -144,7 +144,7 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/core": "^3.1.1",
+    "@docusaurus/core": "^3.2.1",
     "@easyops-cn/docusaurus-search-local": "^0.40.1",
     "@mdx-js/react": "^3.0.1",
     "@typescript-eslint/parser": "^7.7.0",
@@ -161,7 +161,7 @@
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^12.1.0",
     "deepmerge": "^4.3.1",
-    "docusaurus-preset-openapi": "0.7.3",
+    "docusaurus-preset-openapi": "0.7.4",
     "eslint": "8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "17.1.0",
