@@ -283,11 +283,11 @@ The Pepy API requires authentication. To obtain a key,
 Create an account, sign in and obtain generate a key on your
 [account page](https://www.pepy.tech/user).
 
-### Pypi
+### PyPI
 
 - `PYPI_URL` (yml: `public.pypi.baseUri`)
 
-`PYPI_URL` can be used to optionally send all the Pypi requests to a Self-hosted Pypi registry,
+`PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry,
 users can also override this by query parameter `pypiBaseUrl`.
 
 ### SymfonyInsight (formerly Sensiolabs)
