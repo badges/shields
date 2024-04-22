@@ -69,6 +69,7 @@ function getLicenses(packageData) {
       'OSI Approved :: Apache Software License': 'Apache-2.0',
       'CC0 1.0 Universal (CC0 1.0) Public Domain Dedication': 'CC0-1.0',
       'OSI Approved :: GNU Affero General Public License v3': 'AGPL-3.0',
+      'OSI Approved :: Zero-Clause BSD (0BSD)': '0BSD',
     }
     let licenses = parseClassifiers(packageData, /^License :: (.+)$/, true)
       .map(classifier =>

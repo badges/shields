@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { nonNegativeInteger } from '../validators.js'
 import { pathParams } from '../index.js'
 import LibrariesIoBase from './librariesio-base.js'
 import {
@@ -6,7 +7,7 @@ import {
   renderDependenciesBadge,
 } from './librariesio-dependencies-helpers.js'
 
-const schema = Joi.object({
+const projectDependenciesSchema = Joi.object({
   dependencies: Joi.array()
     .items(
       Joi.object({
@@ -15,6 +16,11 @@ const schema = Joi.object({
       }),
     )
     .default([]),
+}).required()
+
+const repoDependenciesSchema = Joi.object({
+  deprecated_count: nonNegativeInteger,
+  outdated_count: nonNegativeInteger,
 }).required()
 
 class LibrariesIoProjectDependencies extends LibrariesIoBase {
@@ -57,7 +63,7 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
     )}/dependencies`
     const json = await this._requestJson({
       url,
-      schema,
+      schema: projectDependenciesSchema,
       httpErrors: { 404: 'package or version not found' },
     })
     const { deprecatedCount, outdatedCount } = transform(json)
@@ -90,15 +96,16 @@ class LibrariesIoRepoDependencies extends LibrariesIoBase {
   async handle({ user, repo }) {
     const url = `/github/${encodeURIComponent(user)}/${encodeURIComponent(
       repo,
-    )}/dependencies`
-    const json = await this._requestJson({
-      url,
-      schema,
-      httpErrors: {
-        404: 'repo not found',
-      },
-    })
-    const { deprecatedCount, outdatedCount } = transform(json)
+    )}/shields_dependencies`
+
+    const { deprecated_count: deprecatedCount, outdated_count: outdatedCount } =
+      await this._requestJson({
+        url,
+        schema: repoDependenciesSchema,
+        httpErrors: {
+          404: 'repo not found',
+        },
+      })
     return renderDependenciesBadge({ deprecatedCount, outdatedCount })
   }
 }
