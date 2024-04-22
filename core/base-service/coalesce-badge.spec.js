@@ -260,6 +260,20 @@ describe('coalesceBadge', function () {
     })
   })
 
+  describe('Logo size', function () {
+    it('overrides the logoSize', function () {
+      expect(coalesceBadge({ logoSize: 'auto' }, {}, {})).to.include({
+        logoSize: 'auto',
+      })
+    })
+
+    it('applies the logo size', function () {
+      expect(
+        coalesceBadge({}, { namedLogo: 'npm', logoSize: 'auto' }, {}),
+      ).to.include({ logoSize: 'auto' })
+    })
+  })
+
   describe('Logo width', function () {
     it('overrides the logoWidth', function () {
       expect(coalesceBadge({ logoWidth: 20 }, {}, {})).to.include({
