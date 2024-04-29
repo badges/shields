@@ -1,5 +1,4 @@
-import { pathParams } from '../index.js'
-import PypiBase from './pypi-base.js'
+import PypiBase, { pypiGeneralParams } from './pypi-base.js'
 import { parseClassifiers } from './pypi-helpers.js'
 
 export default class PypiStatus extends PypiBase {
@@ -11,10 +10,7 @@ export default class PypiStatus extends PypiBase {
     '/pypi/status/{packageName}': {
       get: {
         summary: 'PyPI - Status',
-        parameters: pathParams({
-          name: 'packageName',
-          example: 'Django',
-        }),
+        parameters: pypiGeneralParams,
       },
     },
   }
@@ -40,8 +36,8 @@ export default class PypiStatus extends PypiBase {
     }
   }
 
-  async handle({ egg }) {
-    const packageData = await this.fetch({ egg })
+  async handle({ egg }, { pypiBaseUrl }) {
+    const packageData = await this.fetch({ egg, pypiBaseUrl })
 
     // Possible statuses:
     // - Development Status :: 1 - Planning

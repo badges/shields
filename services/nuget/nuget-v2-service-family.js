@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import queryString from 'query-string'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseJsonService,
@@ -61,25 +62,26 @@ async function fetch(
   { odataFormat, baseUrl, packageName, includePrereleases = false },
 ) {
   const url = `${baseUrl}/Packages()`
-  const searchParams = {
-    $filter: createFilter({ packageName, includePrereleases }),
-  }
+  const searchParams = queryString.stringify(
+    {
+      $filter: createFilter({ packageName, includePrereleases }),
+    },
+    { encode: false },
+  )
 
   let packageData
   if (odataFormat === 'xml') {
     const data = await serviceInstance._requestXml({
       schema: xmlSchema,
-      url,
-      options: { searchParams },
+      url: `${url}?${searchParams}`,
     })
     packageData = odataToObject(data.feed.entry)
   } else if (odataFormat === 'json') {
     const data = await serviceInstance._requestJson({
       schema: jsonSchema,
-      url,
+      url: `${url}?${searchParams}`,
       options: {
         headers: { Accept: 'application/atom+json,application/json' },
-        searchParams,
       },
     })
     packageData = data.d.results[0]

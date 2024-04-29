@@ -1,5 +1,5 @@
 import { InvalidResponse, pathParams } from '../index.js'
-import PypiBase from './pypi-base.js'
+import PypiBase, { pypiBaseUrlParam } from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
 const frameworkNameMap = {
@@ -63,7 +63,7 @@ export default class PypiFrameworkVersion extends PypiBase {
             schema: { type: 'string', enum: Object.keys(frameworkNameMap) },
           },
           { name: 'packageName', example: 'plone.volto' },
-        ),
+        ).concat(pypiBaseUrlParam),
       },
     },
   }
@@ -80,7 +80,7 @@ export default class PypiFrameworkVersion extends PypiBase {
     }
   }
 
-  async handle({ frameworkName, packageName }) {
+  async handle({ frameworkName, packageName }, { pypiBaseUrl }) {
     const classifier = frameworkNameMap[frameworkName]
       ? frameworkNameMap[frameworkName].classifier
       : frameworkName
@@ -88,7 +88,7 @@ export default class PypiFrameworkVersion extends PypiBase {
       ? frameworkNameMap[frameworkName].name
       : frameworkName
     const regex = new RegExp(`^Framework :: ${classifier} :: ([\\d.]+)$`)
-    const packageData = await this.fetch({ egg: packageName })
+    const packageData = await this.fetch({ egg: packageName, pypiBaseUrl })
     const versions = parseClassifiers(packageData, regex)
 
     if (versions.length === 0) {

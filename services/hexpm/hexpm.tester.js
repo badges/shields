@@ -50,6 +50,7 @@ t.create('version (no stable version)')
       .get('/api/packages/prima_opentelemetry_ex')
       .reply(200, {
         downloads: { all: 100 },
+        latest_stable_version: null,
         latest_version: '1.0.0-rc.3',
         meta: { licenses: ['MIT'] },
       }),
