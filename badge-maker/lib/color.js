@@ -49,7 +49,7 @@ function normalizeColor(color) {
   } else if (color in aliases) {
     return aliases[color]
   } else if (isHexColor(color)) {
-    return `#${color.toLowerCase()}`
+    return `#${color.toString().toLowerCase()}`
   } else if (isCSSColor(color)) {
     return color.toLowerCase()
   } else {
