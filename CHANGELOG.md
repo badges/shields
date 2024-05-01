@@ -6,16 +6,12 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2024-05-01
 
-- improve performance of getIconSize() [#10125](https://github.com/badges/shields/issues/10125)
 - [Hexpm] Fix badges for pre-release only versions [#10112](https://github.com/badges/shields/issues/10112)
-- add logoSize to globalQueryParams [#10110](https://github.com/badges/shields/issues/10110)
-- feat(logos): support auto-sizing mode [#9191](https://github.com/badges/shields/issues/9191)
+- feat(logos): support auto-sizing mode [#9191](https://github.com/badges/shields/issues/9191) [#10110](https://github.com/badges/shields/issues/10110) [#10125](https://github.com/badges/shields/issues/10125)
 - support setting pypiBaseUrl by environment variables and queryParameters; affects [pypi] [#10044](https://github.com/badges/shields/issues/10044)
-- upgrade @docusaurus/core and docusaurus-openapi [#10108](https://github.com/badges/shields/issues/10108)
 - Add 0BSD license to licenseTypes and [PypiLicense] [#10092](https://github.com/badges/shields/issues/10092)
 - Update Mastodon profile URL [#10082](https://github.com/badges/shields/issues/10082)
 - [GitHubGoMod] Ignore comment after version (fixes #10079) [#10080](https://github.com/badges/shields/issues/10080)
-- Revert "chore(deps): bump simple-icons from 11.10.0 to 11.11.0 (#10068)" [#10075](https://github.com/badges/shields/issues/10075)
 - Perf: Librariesio repo dependencies [#10062](https://github.com/badges/shields/issues/10062)
 - [Chocolatey Nuget] Fix "not found" error for chocolatey badge [#10060](https://github.com/badges/shields/issues/10060)
 - Dependency updates
