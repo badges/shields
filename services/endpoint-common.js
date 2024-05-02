@@ -35,6 +35,7 @@ const endpointSchema = Joi.object({
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
   logoColor: optionalStringWhenNamedLogoPresent,
+  logoSize: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
   logoPosition: optionalNumberWhenAnyLogoPresent,
   style: Joi.string(),
