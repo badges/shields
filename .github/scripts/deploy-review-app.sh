@@ -23,7 +23,7 @@ if ! flyctl status --app "$app"; then
 fi
 
 # Deploy
-flyctl deploy --app "$app" --region "$region"
+flyctl deploy --app "$app" --regions "$region"
 flyctl scale count 1 --app "$app" --yes
 
 # Post a comment on the PR
