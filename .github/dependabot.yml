@@ -29,7 +29,15 @@ updates:
 
   # GH actions
   - package-ecosystem: 'github-actions'
-    directory: '/'
+    # all composite actions must be individually listed here
+    # https://github.com/dependabot/dependabot-core/issues/6704
+    directories:
+      - '/'
+      - '/.github/actions/core-tests'
+      - '/.github/actions/integration-tests'
+      - '/.github/actions/package-tests'
+      - '/.github/actions/service-tests'
+      - '/.github/actions/setup'
     schedule:
       interval: weekly
     open-pull-requests-limit: 99
