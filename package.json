@@ -62,7 +62,7 @@
     "prom-client": "^15.1.2",
     "qs": "^6.12.1",
     "query-string": "^9.0.0",
-    "semver": "~7.6.0",
+    "semver": "~7.6.1",
     "simple-icons": "11.13.0",
     "smol-toml": "1.1.4",
     "svg-path-commander": "^2.0.9",
