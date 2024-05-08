@@ -81,7 +81,7 @@ class BitbucketPipelines extends BaseJsonService {
     const values = data.values.filter(
       value => value.state && value.state.name === 'COMPLETED',
     )
-    if (values.length > 0) {
+    if (values.length > 0 && values[0].state.result?.name) {
       return values[0].state.result.name
     }
     return 'never built'
