@@ -80,7 +80,7 @@ describe('LibrariesIoApiProvider', function () {
 
       expect(token.update).to.have.been.calledWith(
         remaining,
-        nextReset * 1000 + tickTime,
+        ((nextReset * 1000 + tickTime) / 1000) >>> 0,
       )
       expect(token.invalidate).not.to.have.been.called
     })
@@ -98,7 +98,10 @@ describe('LibrariesIoApiProvider', function () {
       const mockRequest = sinon.stub().resolves(response)
       await provider.fetch(mockRequest, '/npm/badge-maker')
 
-      expect(token.update).to.have.been.calledWith(remaining, tickTime)
+      expect(token.update).to.have.been.calledWith(
+        remaining,
+        (tickTime / 1000) >>> 0,
+      )
       expect(token.invalidate).not.to.have.been.called
     })
 
@@ -109,7 +112,10 @@ describe('LibrariesIoApiProvider', function () {
       const mockRequest = sinon.stub().resolves(response)
       await provider.fetch(mockRequest, '/npm/badge-maker')
 
-      expect(token.update).to.have.been.calledWith(remaining - 1, tickTime)
+      expect(token.update).to.have.been.calledWith(
+        remaining - 1,
+        (tickTime / 1000) >>> 0,
+      )
       expect(token.invalidate).not.to.have.been.called
     })
   })

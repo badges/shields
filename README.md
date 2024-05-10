@@ -99,7 +99,7 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 ## Development
 
 1. Install Node 20 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 20 and 21.
+   Tests need to pass in Node 20 and 22.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.

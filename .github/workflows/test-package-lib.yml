@@ -22,6 +22,9 @@ jobs:
           - node: '20'
             npm: '^10'
             engine-strict: 'true'
+          - node: '22'
+            npm: '^10'
+            engine-strict: 'false'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
