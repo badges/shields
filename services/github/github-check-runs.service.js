@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import countBy from 'lodash.countby'
-import { pathParams } from '../index.js'
+import { pathParam, queryParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -20,6 +20,7 @@ const schema = Joi.object({
   check_runs: Joi.array()
     .items(
       Joi.object({
+        name: Joi.string().required(),
         status: Joi.equal('completed', 'in_progress', 'queued').required(),
         conclusion: Joi.equal(
           'action_required',
@@ -36,83 +37,87 @@ const schema = Joi.object({
     .default([]),
 }).required()
 
+const queryParamSchema = Joi.object({
+  nameFilter: Joi.string(),
+})
+
 export default class GithubCheckRuns extends GithubAuthV3Service {
   static category = 'build'
   static route = {
-    base: 'github/checks-runs',
+    base: 'github/check-runs',
     pattern: ':user/:repo/:ref+',
+    queryParamSchema,
   }
 
   static openApi = {
-    '/github/checks-runs/{user}/{repo}/{branch}': {
+    '/github/check-runs/{user}/{repo}/{branch}': {
       get: {
-        summary: 'GitHub branch checks runs',
+        summary: 'GitHub branch check runs',
         description,
-        parameters: pathParams(
-          {
-            name: 'user',
-            example: 'badges',
-          },
-          {
-            name: 'repo',
-            example: 'shields',
-          },
-          {
-            name: 'branch',
-            example: 'master',
-          },
-        ),
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          queryParam({
+            name: 'nameFilter',
+            description: 'Name of a check run',
+            example: 'test-lint',
+          }),
+        ],
       },
     },
-    '/github/checks-runs/{user}/{repo}/{commit}': {
+    '/github/check-runs/{user}/{repo}/{commit}': {
       get: {
-        summary: 'GitHub commit checks runs',
+        summary: 'GitHub commit check runs',
         description,
-        parameters: pathParams(
-          {
-            name: 'user',
-            example: 'badges',
-          },
-          {
-            name: 'repo',
-            example: 'shields',
-          },
-          {
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          pathParam({
             name: 'commit',
             example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
-          },
-        ),
+          }),
+          queryParam({
+            name: 'nameFilter',
+            description: 'Name of a check run',
+            example: '',
+          }),
+        ],
       },
     },
-    '/github/checks-runs/{user}/{repo}/{tag}': {
+    '/github/check-runs/{user}/{repo}/{tag}': {
       get: {
-        summary: 'GitHub tag checks runs',
+        summary: 'GitHub tag check runs',
         description,
-        parameters: pathParams(
-          {
-            name: 'user',
-            example: 'badges',
-          },
-          {
-            name: 'repo',
-            example: 'shields',
-          },
-          {
-            name: 'tag',
-            example: '3.3.0',
-          },
-        ),
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          pathParam({ name: 'tag', example: '3.3.0' }),
+          queryParam({
+            name: 'nameFilter',
+            description: 'Name of a check run',
+            example: '',
+          }),
+        ],
       },
     },
   }
 
   static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
 
-  static transform({ total_count: totalCount, check_runs: checkRuns }) {
+  static transform(
+    { total_count: totalCount, check_runs: checkRuns },
+    nameFilter,
+  ) {
+    const filteredCheckRuns =
+      nameFilter && nameFilter.length > 0
+        ? checkRuns.filter(checkRun => checkRun.name === nameFilter)
+        : checkRuns
+
     return {
       total: totalCount,
-      statusCounts: countBy(checkRuns, 'status'),
-      conclusionCounts: countBy(checkRuns, 'conclusion'),
+      statusCounts: countBy(filteredCheckRuns, 'status'),
+      conclusionCounts: countBy(filteredCheckRuns, 'conclusion'),
     }
   }
 
@@ -147,7 +152,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     return state
   }
 
-  async handle({ user, repo, ref }) {
+  async handle({ user, repo, ref }, { nameFilter }) {
     // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
@@ -155,7 +160,9 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
       schema,
     })
 
-    const state = this.constructor.mapState(this.constructor.transform(json))
+    const state = this.constructor.mapState(
+      this.constructor.transform(json, nameFilter),
+    )
 
     return renderBuildStatusBadge({ status: state })
   }

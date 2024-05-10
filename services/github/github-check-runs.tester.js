@@ -9,6 +9,13 @@ t.create('check runs - for branch')
     message: isBuildStatus,
   })
 
+t.create('check runs - for branch with filter')
+  .get('/badges/shields/master.json?nameFilter=test-lint')
+  .expectBadge({
+    label: 'checks',
+    message: isBuildStatus,
+  })
+
 t.create('check runs - no tests')
   .get('/badges/shields/5d4ab86b1b5ddfb3c4a70a70bd19932c52603b8c.json')
   .expectBadge({
