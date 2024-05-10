@@ -80,7 +80,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
           queryParam({
             name: 'nameFilter',
             description: 'Name of a check run',
-            example: '',
+            example: 'test-lint',
           }),
         ],
       },
@@ -96,7 +96,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
           queryParam({
             name: 'nameFilter',
             description: 'Name of a check run',
-            example: '',
+            example: 'test-lint',
           }),
         ],
       },
