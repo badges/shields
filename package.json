@@ -66,7 +66,7 @@
     "simple-icons": "11.14.0",
     "smol-toml": "1.2.0",
     "svg-path-commander": "^2.0.9",
-    "webextension-store-meta": "^1.2.1",
+    "webextension-store-meta": "^1.2.2",
     "xpath": "~0.0.34"
   },
   "scripts": {
