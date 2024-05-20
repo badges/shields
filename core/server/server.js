@@ -139,6 +139,9 @@ const publicConfigSchema = Joi.object({
     nexus: defaultService,
     npm: defaultService,
     obs: defaultService,
+    pypi: {
+      baseUri: requiredUrl,
+    },
     sonar: defaultService,
     teamcity: defaultService,
     weblate: defaultService,

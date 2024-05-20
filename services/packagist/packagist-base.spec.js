@@ -56,8 +56,8 @@ const expandedSample = [
   },
 ]
 
-describe('BasePackagistService', function () {
-  describe('expandPackageVersions', function () {
+describe('BasePackagistService', () => {
+  describe('expandPackageVersions', () => {
     const expanded = BasePackagistService.expandPackageVersions(
       {
         packages: {
@@ -66,7 +66,7 @@ describe('BasePackagistService', function () {
       },
       'foobar/foobar',
     )
-    it('should expand the minified package array to match the expanded sample', function () {
+    it('should expand the minified package array to match the expanded sample', () => {
       assert.deepStrictEqual(
         expanded,
         expandedSample,

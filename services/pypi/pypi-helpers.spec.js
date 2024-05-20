@@ -35,7 +35,7 @@ const classifiersFixture = {
 }
 
 describe('PyPI helpers', function () {
-  test(parseClassifiers, function () {
+  test(parseClassifiers, () => {
     given(
       classifiersFixture,
       /^Programming Language :: Python :: ([\d.]+)$/,
@@ -60,7 +60,7 @@ describe('PyPI helpers', function () {
     given(classifiersFixture, /^(?!.*)*$/).expect([])
   })
 
-  test(parsePypiVersionString, function () {
+  test(parsePypiVersionString, () => {
     given('1').expect({ major: 1, minor: 0 })
     given('1.0').expect({ major: 1, minor: 0 })
     given('7.2').expect({ major: 7, minor: 2 })
@@ -69,7 +69,7 @@ describe('PyPI helpers', function () {
     given('foo').expect({ major: 0, minor: 0 })
   })
 
-  test(sortPypiVersions, function () {
+  test(sortPypiVersions, () => {
     // Each of these includes a different variant: 2.0, 2, and 2.0rc1.
     given(['2.0', '1.9', '10', '1.11', '2.1', '2.11']).expect([
       '1.9',
@@ -167,6 +167,12 @@ describe('PyPI helpers', function () {
         ],
       },
     }).expect(['AGPL-3.0'])
+    given({
+      info: {
+        license: '',
+        classifiers: ['License :: OSI Approved :: Zero-Clause BSD (0BSD)'],
+      },
+    }).expect(['0BSD'])
   })
 
   test(getPackageFormats, () => {

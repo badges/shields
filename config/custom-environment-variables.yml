@@ -52,6 +52,8 @@ public:
       authorizedOrigins: 'NPM_ORIGINS'
     obs:
       authorizedOrigins: 'OBS_ORIGINS'
+    pypi:
+      baseUri: 'PYPI_URL'
     sonar:
       authorizedOrigins: 'SONAR_ORIGINS'
     teamcity:

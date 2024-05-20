@@ -14,7 +14,7 @@ const hexSchema = Joi.object({
   meta: Joi.object({
     licenses: Joi.array().required(),
   }).required(),
-  latest_stable_version: Joi.string(),
+  latest_stable_version: Joi.string().allow(null),
   latest_version: Joi.string().required(),
 }).required()
 

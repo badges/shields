@@ -114,7 +114,7 @@ generated API key.
 
 Using a token for Discord is optional but will allow higher API rates.
 
-- `DISCORD_BOT_TOKEN` (yml: `discord_bot_token`)
+- `DISCORD_BOT_TOKEN` (yml: `private.discord_bot_token`)
 
 Register an application in the [Discord developer console](https://discord.com/developers).
 To obtain a token, simply create a bot for your application.
@@ -269,7 +269,7 @@ of a package.
 
 ### OpenCollective
 
-- `OPENCOLLECTIVE_TOKEN` (yml: `opencollective_token`)
+- `OPENCOLLECTIVE_TOKEN` (yml: `private.opencollective_token`)
 
 OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users.
 An [API token](https://graphql-docs-v2.opencollective.com/access)
@@ -277,11 +277,18 @@ can be provided to access a higher rate limit of 100 reqs/minute.
 
 ### Pepy
 
-- `PEPY_KEY` (yml: `pepy_key`)
+- `PEPY_KEY` (yml: `private.pepy_key`)
 
 The Pepy API requires authentication. To obtain a key,
 Create an account, sign in and obtain generate a key on your
 [account page](https://www.pepy.tech/user).
+
+### PyPI
+
+- `PYPI_URL` (yml: `public.pypi.baseUri`)
+
+`PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry,
+users can also override this by query parameter `pypiBaseUrl`.
 
 ### SymfonyInsight (formerly Sensiolabs)
 
@@ -323,8 +330,8 @@ access to your private nexus repositories.
 
 ### Twitch
 
-- `TWITCH_CLIENT_ID` (yml: `twitch_client_id`)
-- `TWITCH_CLIENT_SECRET` (yml: `twitch_client_secret`)
+- `TWITCH_CLIENT_ID` (yml: `private.twitch_client_id`)
+- `TWITCH_CLIENT_SECRET` (yml: `private.twitch_client_secret`)
 
 Register an application in the [Twitch developer console](https://dev.twitch.tv/console)
 in order to obtain a client id and a client secret for making Twitch API calls.
