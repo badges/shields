@@ -28,6 +28,7 @@ export default class PypiStatus extends PypiBase {
       stable: 'brightgreen',
       mature: 'brightgreen',
       inactive: 'red',
+      unknown: 'lightgrey',
     }[status]
 
     return {
@@ -48,7 +49,7 @@ export default class PypiStatus extends PypiBase {
     // - Development Status :: 6 - Mature
     // - Development Status :: 7 - Inactive
     // https://pypi.org/pypi?%3Aaction=list_classifiers
-    const status = parseClassifiers(
+    let status = parseClassifiers(
       packageData,
       /^Development Status :: (\d - \S+)$/,
     )
@@ -56,6 +57,10 @@ export default class PypiStatus extends PypiBase {
       .map(classifier => classifier.split(' - ').pop())
       .map(classifier => classifier.replace(/production\/stable/i, 'stable'))
       .pop()
+
+    if (!status) {
+      status = 'Unknown'
+    }
 
     return this.constructor.render({ status })
   }

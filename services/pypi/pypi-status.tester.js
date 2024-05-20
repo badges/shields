@@ -13,6 +13,10 @@ t.create('status (valid, beta)')
   .get('/django/2.0rc1.json')
   .expectBadge({ label: 'status', message: 'beta' })
 
+t.create('status (status not specified)')
+  .get('/arcgis2geojson/3.0.2.json')
+  .expectBadge({ label: 'status', message: 'unknown' })
+
 t.create('status (invalid)')
   .get('/not-a-package.json')
   .expectBadge({ label: 'status', message: 'package or version not found' })

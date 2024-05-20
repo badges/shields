@@ -4,6 +4,18 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-05-01
+
+- [Hexpm] Fix badges for pre-release only versions [#10112](https://github.com/badges/shields/issues/10112)
+- feat(logos): support auto-sizing mode [#9191](https://github.com/badges/shields/issues/9191) [#10110](https://github.com/badges/shields/issues/10110) [#10125](https://github.com/badges/shields/issues/10125)
+- support setting pypiBaseUrl by environment variables and queryParameters; affects [pypi] [#10044](https://github.com/badges/shields/issues/10044)
+- Add 0BSD license to licenseTypes and [PypiLicense] [#10092](https://github.com/badges/shields/issues/10092)
+- Update Mastodon profile URL [#10082](https://github.com/badges/shields/issues/10082)
+- [GitHubGoMod] Ignore comment after version (fixes #10079) [#10080](https://github.com/badges/shields/issues/10080)
+- Perf: Librariesio repo dependencies [#10062](https://github.com/badges/shields/issues/10062)
+- [Chocolatey Nuget] Fix "not found" error for chocolatey badge [#10060](https://github.com/badges/shields/issues/10060)
+- Dependency updates
+
 ## server-2024-04-01
 
 - improve performance of [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] [#10046](https://github.com/badges/shields/issues/10046)
