@@ -66,7 +66,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'checks' }
 
   static render({ variant, state, stateCounts }) {
     let message

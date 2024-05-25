@@ -42,10 +42,7 @@ function renderCurrencyBadge({ label, amount, currency }) {
 class LiberapayBase extends BaseJsonService {
   static category = 'funding'
 
-  static defaultBadgeData = {
-    label: 'liberapay',
-    namedLogo: 'liberapay',
-  }
+  static defaultBadgeData = { label: 'liberapay' }
 
   async fetch({ entity }) {
     return this._requestJson({
