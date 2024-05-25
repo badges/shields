@@ -103,7 +103,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'checks' }
 
   static transform(
     { total_count: totalCount, check_runs: checkRuns },
