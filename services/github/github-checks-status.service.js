@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { pathParams } from '../index.js'
+import { pathParam } from '../index.js'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
