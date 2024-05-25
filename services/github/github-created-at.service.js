@@ -16,7 +16,7 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
   static openApi = {
     '/github/created-at/{user}/{repo}': {
       get: {
-        summary: 'Github Created At',
+        summary: 'GitHub Created At',
         description: documentation,
         parameters: pathParams(
           {
