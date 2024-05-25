@@ -2,7 +2,6 @@ import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import {
   BaseSvgScrapingService,
-  deprecatedService,
   pathParams,
 } from '../index.js'
 
@@ -77,14 +76,3 @@ export class TravisComBuild extends BaseSvgScrapingService {
     return this.constructor.render({ status })
   }
 }
-
-export const TravisOrgBuild = deprecatedService({
-  category: 'build',
-  route: {
-    base: 'travis',
-    format: '(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
-    capture: ['userRepo', 'branch'],
-  },
-  label: 'build',
-  dateAdded: new Date('2023-05-13'),
-})
