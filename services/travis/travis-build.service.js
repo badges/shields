@@ -1,9 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import {
-  BaseSvgScrapingService,
-  pathParams,
-} from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
