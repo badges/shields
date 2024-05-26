@@ -8,7 +8,7 @@ import {
 } from './github-helpers.js'
 
 const description = `
-Displays the status of a (tag|commit|branch), as reported by the Commit Status API.
+Displays the status of a tag, commit, or branch, as reported by the Commit Status API.
 Nowadays, GitHub Actions and many third party integrations report state via the
 Checks API. If this badge does not show expected values, please try out our
 corresponding Check Runs badge instead. You can read more about status checks in
