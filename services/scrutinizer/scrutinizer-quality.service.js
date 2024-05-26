@@ -67,7 +67,7 @@ class ScrutinizerQuality extends ScrutinizerQualityBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },
@@ -82,7 +82,7 @@ class ScrutinizerQuality extends ScrutinizerQualityBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },

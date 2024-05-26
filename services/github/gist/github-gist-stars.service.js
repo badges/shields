@@ -35,7 +35,7 @@ export default class GistStars extends GithubAuthV4Service {
   static openApi = {
     '/github/gist/stars/{gistId}': {
       get: {
-        summary: 'Github Gist stars',
+        summary: 'GitHub Gist stars',
         description,
         parameters: pathParams({
           name: 'gistId',

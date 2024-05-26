@@ -78,7 +78,7 @@ class ScrutinizerCoverage extends ScrutinizerCoverageBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },
@@ -93,7 +93,7 @@ class ScrutinizerCoverage extends ScrutinizerCoverageBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },

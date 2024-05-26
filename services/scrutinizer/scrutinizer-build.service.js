@@ -47,7 +47,7 @@ class ScrutinizerBuild extends ScrutinizerBuildBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },
@@ -62,7 +62,7 @@ class ScrutinizerBuild extends ScrutinizerBuildBase {
           {
             name: 'vcs',
             example: 'g',
-            description: 'Platform: Either Github or Bitbucket',
+            description: 'Platform: Either GitHub or Bitbucket',
             schema: { type: 'string', enum: this.getEnum('vcs') },
           },
           { name: 'user', example: 'filp' },
