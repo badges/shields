@@ -17,7 +17,7 @@ t.create(
     nock =>
       nock('https://api.github.com', { allowUnmocked: true })
         .get('/repos/badges/shields/pulls/1110')
-        .reply(200, JSON.stringify({ head: { sha: 'abc123' } })), // Looks like a real ref, but isn't.
+        .reply(200, JSON.stringify({ head: { sha: 'abcde12356' } })), // Looks like a real ref, but isn't.
   )
   .networkOn()
   .expectBadge({
