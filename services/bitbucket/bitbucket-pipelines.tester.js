@@ -96,6 +96,39 @@ t.create('build result (unexpected status)')
   )
   .expectBadge({ label: 'build', message: 'invalid response data' })
 
+// regression test for https://github.com/badges/shields/issues/10137
+t.create('build result (with manual build steps)')
+  .get('/shields-io/test-repo/main.json')
+  .intercept(nock =>
+    nock('https://api.bitbucket.org')
+      .get(/^\/2.0\/.*/)
+      .reply(200, {
+        values: [
+          {
+            state: {
+              name: 'IN_PROGRESS',
+              type: 'pipeline_state_in_progress',
+              stage: {
+                name: 'PAUSED',
+                type: 'pipeline_state_in_progress_paused',
+              },
+            },
+          },
+          {
+            state: {
+              name: 'COMPLETED',
+              type: 'pipeline_state_completed',
+              result: {
+                name: 'SUCCESSFUL',
+                type: 'pipeline_state_completed_successful',
+              },
+            },
+          },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'build', message: 'passing' })
+
 t.create('build result no branch redirect')
   .get('/shields-io/test-repo.svg')
   .expectRedirect('/bitbucket/pipelines/shields-io/test-repo/master.svg')
