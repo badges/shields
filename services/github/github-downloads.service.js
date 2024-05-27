@@ -107,7 +107,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'downloads', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ tag: version, assetName, downloads }) {
     const messageSuffixOverride =

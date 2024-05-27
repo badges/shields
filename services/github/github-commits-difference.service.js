@@ -35,7 +35,7 @@ export default class GithubCommitsDifference extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'commits difference', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'commits difference' }
 
   static render({ commitCount }) {
     return {
