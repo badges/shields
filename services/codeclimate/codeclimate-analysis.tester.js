@@ -35,12 +35,12 @@ t.create('maintainability letter')
 t.create('issues when outer user repos query returns multiple items')
   .get('/issues/tensorflow/models.json')
   .intercept(nock =>
-    nock('https://api.codeclimate.com', { allowUnmocked: true })
+    nock('https://api.codeclimate.com')
       .get('/v1/repos?github_slug=tensorflow%2Fmodels')
       .reply(200, {
         data: [
           {
-            id: 'xxxxxxxxxxxx', // Fake repo id, which is expected to be ignored in favour of the one that does contain snapshot data.
+            id: 'xxxxxxxxxxxx', // Expected to be ignored in favour of the one that does contain snapshot data.
             relationships: {
               latest_default_branch_snapshot: {
                 data: null,
@@ -51,7 +51,7 @@ t.create('issues when outer user repos query returns multiple items')
             },
           },
           {
-            id: '57e2efacc718d40058000c9b', // Real repo id for tensorflow/models. The test retrieves live data using the real snapshot id below.
+            id: '57e2efacc718d40058000c9b',
             relationships: {
               latest_default_branch_snapshot: {
                 data: {
@@ -65,12 +65,31 @@ t.create('issues when outer user repos query returns multiple items')
             },
           },
         ],
+      })
+      .get(
+        '/v1/repos/57e2efacc718d40058000c9b/snapshots/65ae115f34117d0001055101',
+      )
+      .reply(200, {
+        data: {
+          attributes: {
+            ratings: [
+              {
+                letter: 'D',
+                measure: {
+                  value: 24.73668395092537,
+                },
+              },
+            ],
+          },
+          meta: {
+            issues_count: 11538,
+          },
+        },
       }),
   )
-  .networkOn() // Combined with allowUnmocked: true, this allows the inner snapshots query to go through.
   .expectBadge({
     label: 'issues',
-    message: Joi.number().integer().positive(),
+    message: '11538',
   })
 
 t.create('maintainability letter for non-existent repo')
