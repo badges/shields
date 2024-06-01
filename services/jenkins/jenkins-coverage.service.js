@@ -120,7 +120,7 @@ export default class JenkinsCoverage extends JenkinsBase {
           }),
           queryParam({
             name: 'jobUrl',
-            example: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
+            example: 'https://jenkins.sqlalchemy.org/job/dogpile_coverage',
             required: true,
           }),
         ],
