@@ -27,7 +27,7 @@ t.create('cobertura: job not found')
 
 t.create('cobertura: job found')
   .get(
-    '/cobertura.json?jobUrl=https://jenkins.sqlalchemy.org/job/alembic_coverage',
+    '/cobertura.json?jobUrl=https://jenkins.sqlalchemy.org/job/dogpile_coverage',
   )
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
