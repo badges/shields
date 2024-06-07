@@ -56,7 +56,7 @@
     "node-pg-migrate": "^7.4.0",
     "parse-link-header": "^2.0.0",
     "path-to-regexp": "^6.2.2",
-    "pg": "^8.11.5",
+    "pg": "^8.12.0",
     "pretty-bytes": "^6.1.1",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^15.1.2",
