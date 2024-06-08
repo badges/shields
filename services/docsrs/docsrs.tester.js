@@ -2,17 +2,34 @@ import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Passing docs')
-  .get('/tokio/0.3.0.json')
-  .expectBadge({ label: 'docs@0.3.0', message: 'passing' })
+t.create('Docs with no version specified')
+  .get('/tokio.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.allow('passing', 'failing'),
+  })
 
-t.create('Failing docs')
+t.create('Passing docs for version').get('/tokio/0.3.0.json').expectBadge({
+  label: 'docs@0.3.0',
+  message: 'passing',
+  color: 'brightgreen',
+})
+
+t.create('Failing docs for version')
   .get('/tensorflow/0.16.1.json')
-  .expectBadge({ label: 'docs@0.16.1', message: 'failing' })
+  .expectBadge({
+    label: 'docs@0.16.1',
+    message: 'failing',
+    color: 'red',
+  })
 
 t.create('Multiple builds, latest passing')
   .get('/bevy_tweening/0.3.1.json')
-  .expectBadge({ label: 'docs@0.3.1', message: 'passing' })
+  .expectBadge({
+    label: 'docs@0.3.1',
+    message: 'passing',
+    color: 'brightgreen',
+  })
 
 t.create('Getting latest version works')
   .get('/rand/latest.json')
@@ -26,5 +43,9 @@ t.create('Crate not found')
   .expectBadge({ label: 'docs', message: 'not found' })
 
 t.create('Version not found')
-  .get('/tokio/not-a-version.json')
+  .get('/tokio/0.8.json')
   .expectBadge({ label: 'docs', message: 'not found' })
+
+t.create('Malformed version')
+  .get('/tokio/not-a-version.json')
+  .expectBadge({ label: 'docs', message: 'malformed version' })

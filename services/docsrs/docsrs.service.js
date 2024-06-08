@@ -61,6 +61,7 @@ export default class DocsRs extends BaseJsonService {
     return await this._requestJson({
       schema,
       url: `https://docs.rs/crate/${crate}/${version}/status.json`,
+      httpErrors: version ? { 400: 'malformed version' } : {},
     })
   }
 

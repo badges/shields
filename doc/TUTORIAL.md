@@ -71,7 +71,7 @@ Each service has a directory for its files:
     `/services/example/example.service.js`.
     If you add a badge for a new API, create a new directory.
 
-    Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
+    Example: [Docs.rs](https://github.com/badges/shields/tree/master/services/docsrs)
 
   - For service families with multiple badges we usually store the code for each
     badge in its own file like this:
