@@ -22,7 +22,6 @@ describe('SonarGeneric', function () {
               testAuthConfigOverride.public.services.sonar.authorizedOrigins[0],
             sonarVersion: '4.2',
           },
-          ignoreOpenApiExample: true,
         },
       )
     })

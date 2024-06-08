@@ -57,10 +57,11 @@ function getBadgeExampleCall(serviceClass, paramType) {
     )
   }
 
-  if (!serviceClass.openApi) {
-    throw new TypeError(
-      `Missing OpenAPI in service class ${serviceClass.name}.`,
+  if (Object.keys(serviceClass.openApi).length === 0) {
+    console.warn(
+      `Missing OpenAPI in service class ${serviceClass.name}. Make sure to use exampleOverride in testAuth.`,
     )
+    return {}
   }
   if (!['path', 'query'].includes(paramType)) {
     throw new TypeError('Invalid paramType: Must be path or query.')
@@ -227,7 +228,6 @@ function fakeJwtToken() {
  * @param {object} options.exampleOverride - Override example params in test.
  * @param {object} options.authOverride - Override class auth params.
  * @param {object} options.configOverride - Override the config for this test.
- * @param {boolean} options.ignoreOpenApiExample - For classes without OpenApi example ignore for usage of override examples only
  * @param {boolean} options.multipleRequests - For classes that require multiple requests to complete the test.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
@@ -253,7 +253,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     exampleOverride = {},
     authOverride,
     configOverride,
-    ignoreOpenApiExample = false,
     multipleRequests = false,
   } = options
   if (contentType && typeof contentType !== 'string') {
@@ -274,9 +273,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
   if (configOverride && typeof configOverride !== 'object') {
     throw new TypeError('Invalid configOverride: Must be an Object.')
-  }
-  if (ignoreOpenApiExample && typeof ignoreOpenApiExample !== 'boolean') {
-    throw new TypeError('Invalid ignoreOpenApiExample: Must be an Object.')
   }
   if (multipleRequests && typeof multipleRequests !== 'boolean') {
     throw new TypeError('Invalid multipleRequests: Must be an Object.')
@@ -310,12 +306,8 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     authOrigins,
     authOverride,
   )
-  const exampleInvokePathParams = ignoreOpenApiExample
-    ? undefined
-    : getBadgeExampleCall(serviceClass, 'path')
-  const exampleInvokeQueryParams = ignoreOpenApiExample
-    ? undefined
-    : getBadgeExampleCall(serviceClass, 'query')
+  const exampleInvokePathParams = getBadgeExampleCall(serviceClass, 'path')
+  const exampleInvokeQueryParams = getBadgeExampleCall(serviceClass, 'query')
   if (options && typeof options !== 'object') {
     throw new TypeError('Invalid options: Must be an object.')
   }
