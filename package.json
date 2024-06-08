@@ -145,7 +145,7 @@
     ]
   },
   "devDependencies": {
-    "@docusaurus/core": "^3.3.2",
+    "@docusaurus/core": "^3.4.0",
     "@easyops-cn/docusaurus-search-local": "^0.44.0",
     "@mdx-js/react": "^3.0.1",
     "@typescript-eslint/parser": "^7.12.0",
