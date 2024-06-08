@@ -160,7 +160,7 @@
     "concurrently": "^8.2.2",
     "cypress": "^13.10.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
-    "danger": "^12.3.0",
+    "danger": "^12.3.1",
     "deepmerge": "^4.3.1",
     "docusaurus-preset-openapi": "0.7.5",
     "eslint": "8.57.0",
