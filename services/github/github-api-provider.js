@@ -169,7 +169,7 @@ class GithubApiProvider {
       } catch (e) {
         log.error(e)
         throw new ImproperlyConfigured({
-          prettyMessage: 'Unable to select next Github token from pool',
+          prettyMessage: 'Unable to select next GitHub token from pool',
         })
       }
       tokenString = token.id

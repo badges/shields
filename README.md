@@ -29,7 +29,7 @@ and legible badges in SVG and raster format, which can easily be included in
 GitHub readmes or any other web page. The service supports dozens of
 continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 870 million images and is used by some of the
+Every month it serves over 1.6 billion images and is used by some of the
 world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
 and [Bootstrap][bootstrap] to name a few.
 
@@ -99,7 +99,7 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 ## Development
 
 1. Install Node 20 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 20 and 21.
+   Tests need to pass in Node 20 and 22.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.

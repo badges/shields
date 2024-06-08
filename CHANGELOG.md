@@ -4,6 +4,37 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-06-01
+
+- Remove namedLogo from defaultBadgeData of non-social badges [#10195](https://github.com/badges/shields/issues/10195)
+- Update number of badges served each month [#10197](https://github.com/badges/shields/issues/10197)
+- Delete old deprecated services [#10196](https://github.com/badges/shields/issues/10196)
+- handle [BitbucketPipelines] responses with missing result key [#10163](https://github.com/badges/shields/issues/10163)
+- Update description of GitHub commit status badge [#10198](https://github.com/badges/shields/issues/10198)
+- chore: fix spelling of GitHub in badge descriptions [#10199](https://github.com/badges/shields/issues/10199)
+- Add [GithubCheckRuns] service [#7759](https://github.com/badges/shields/issues/7759)
+- feat: add Revolt badge [#10093](https://github.com/badges/shields/issues/10093)
+- ensure color is string before calling toLowerCase() [#10129](https://github.com/badges/shields/issues/10129)
+- instruct dependabot to monitor composite actions [#10139](https://github.com/badges/shields/issues/10139)
+- run tests on node 22 [#10127](https://github.com/badges/shields/issues/10127)
+- tweaks to libraries.io token pooling code [#10074](https://github.com/badges/shields/issues/10074)
+- fix [pypi] status badge when package has no 'Development Status' classifier [#10107](https://github.com/badges/shields/issues/10107)
+- clarify yml paths in server-secrets docs [#10106](https://github.com/badges/shields/issues/10106)
+- Update region flag name in flyctl deploy command [#10134](https://github.com/badges/shields/issues/10134)
+- Dependency updates
+
+## server-2024-05-01
+
+- [Hexpm] Fix badges for pre-release only versions [#10112](https://github.com/badges/shields/issues/10112)
+- feat(logos): support auto-sizing mode [#9191](https://github.com/badges/shields/issues/9191) [#10110](https://github.com/badges/shields/issues/10110) [#10125](https://github.com/badges/shields/issues/10125)
+- support setting pypiBaseUrl by environment variables and queryParameters; affects [pypi] [#10044](https://github.com/badges/shields/issues/10044)
+- Add 0BSD license to licenseTypes and [PypiLicense] [#10092](https://github.com/badges/shields/issues/10092)
+- Update Mastodon profile URL [#10082](https://github.com/badges/shields/issues/10082)
+- [GitHubGoMod] Ignore comment after version (fixes #10079) [#10080](https://github.com/badges/shields/issues/10080)
+- Perf: Librariesio repo dependencies [#10062](https://github.com/badges/shields/issues/10062)
+- [Chocolatey Nuget] Fix "not found" error for chocolatey badge [#10060](https://github.com/badges/shields/issues/10060)
+- Dependency updates
+
 ## server-2024-04-01
 
 - improve performance of [GithubLastCommit] [GitlabLastCommit] [GiteaLastCommit] [#10046](https://github.com/badges/shields/issues/10046)

@@ -3,7 +3,20 @@ import countBy from 'lodash.countby'
 import { pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchIssue } from './github-common-fetch.js'
-import { documentation, httpErrorsFor } from './github-helpers.js'
+import {
+  documentation as commonDocumentation,
+  httpErrorsFor,
+} from './github-helpers.js'
+
+const description = `
+Displays the status of a pull request, as reported by the Commit Status API.
+Nowadays, GitHub Actions and many third party integrations report state via the
+Checks API. If this badge does not show expected values, please try out our
+corresponding Check Runs badge instead. You can read more about status checks in
+the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
+
+${commonDocumentation}
+`
 
 const schema = Joi.object({
   state: Joi.equal('failure', 'pending', 'success').required(),
@@ -26,8 +39,8 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
   static openApi = {
     '/github/status/s/pulls/{user}/{repo}/{number}': {
       get: {
-        summary: 'GitHub pull request check state',
-        description: documentation,
+        summary: 'GitHub pull request status',
+        description,
         parameters: pathParams(
           {
             name: 'user',
@@ -47,7 +60,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
     '/github/status/contexts/pulls/{user}/{repo}/{number}': {
       get: {
         summary: 'GitHub pull request check contexts',
-        description: documentation,
+        description,
         parameters: pathParams(
           {
             name: 'user',
@@ -66,7 +79,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'checks', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'checks' }
 
   static render({ variant, state, stateCounts }) {
     let message

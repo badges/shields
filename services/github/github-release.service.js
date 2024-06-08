@@ -44,7 +44,7 @@ class GithubRelease extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'release', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'release' }
 
   static render({ version, sort, isPrerelease }) {
     let color = 'blue'

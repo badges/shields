@@ -3,24 +3,6 @@ import { isBuildStatus } from '../build-status.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-// Travis (.org) CI
-
-t.create('build status without branch, deprecated')
-  .get('/rust-lang/rust.json')
-  .expectBadge({
-    label: 'build',
-    message: 'no longer available',
-  })
-
-t.create('build status on named branch, deprecated')
-  .get('/rust-lang/rust/stable.json')
-  .expectBadge({
-    label: 'build',
-    message: 'no longer available',
-  })
-
-// Travis (.com) CI
-
 t.create('build status on default branch')
   .get('/com/ivandelabeldad/rackian-gateway.json')
   .expectBadge({

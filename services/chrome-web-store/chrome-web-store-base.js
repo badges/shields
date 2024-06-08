@@ -1,4 +1,4 @@
-import ChromeWebStore from 'webextension-store-meta/lib/chrome-web-store/index.js'
+import { ChromeWebStore } from 'webextension-store-meta/lib/chrome-web-store/index.js'
 import checkErrorResponse from '../../core/base-service/check-error-response.js'
 import { BaseService, Inaccessible } from '../index.js'
 

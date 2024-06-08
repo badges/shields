@@ -5,7 +5,7 @@ describe('license helpers', function () {
   test(licenseToColor, () => {
     forCases([given('MIT'), given('BSD')]).expect('green')
     forCases([given('MPL-2.0'), given('MPL')]).expect('orange')
-    forCases([given('Unlicense'), given('CC0')]).expect('7cd958')
+    forCases([given('Unlicense'), given('CC0'), given('0BSD')]).expect('7cd958')
     forCases([given('unknown-license'), given(null)]).expect('lightgrey')
 
     given(['CC0-1.0', 'MPL-2.0']).expect('7cd958')

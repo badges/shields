@@ -1,3 +1,4 @@
+import { Agent, MockAgent, setGlobalDispatcher } from 'undici'
 import { isMetric } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 
@@ -22,7 +23,16 @@ t.create('Users (not found)')
   .expectBadge({ label: 'users', message: 'not found' })
 
 // Keep this "inaccessible" test, since this service does not use BaseService#_request.
+const mockAgent = new MockAgent()
 t.create('Users (inaccessible)')
   .get('/users/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
-  .networkOff()
+  // webextension-store-meta uses undici internally, so we can't mock it with nock
+  .before(function () {
+    setGlobalDispatcher(mockAgent)
+    mockAgent.disableNetConnect()
+  })
+  .after(async function () {
+    await mockAgent.close()
+    setGlobalDispatcher(new Agent())
+  })
   .expectBadge({ label: 'users', message: 'inaccessible' })

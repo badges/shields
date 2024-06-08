@@ -58,7 +58,7 @@ export default class MastodonFollow extends BaseJsonService {
       message: metric(followers),
       style: 'social',
       link: [
-        `${domain}/users/${username}/remote_follow`,
+        `${domain}/users/${username}`,
         `${domain}/users/${username}/followers`,
       ],
     }

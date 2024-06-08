@@ -20,7 +20,7 @@ export default class GithubLernaJson extends ConditionalGithubAuthV3Service {
   static openApi = {
     '/github/lerna-json/v/{user}/{repo}': {
       get: {
-        summary: 'Github lerna version',
+        summary: 'GitHub lerna version',
         description: documentation,
         parameters: pathParams(
           {
@@ -36,7 +36,7 @@ export default class GithubLernaJson extends ConditionalGithubAuthV3Service {
     },
     '/github/lerna-json/v/{user}/{repo}/{branch}': {
       get: {
-        summary: 'Github lerna version (branch)',
+        summary: 'GitHub lerna version (branch)',
         description: documentation,
         parameters: pathParams(
           {
