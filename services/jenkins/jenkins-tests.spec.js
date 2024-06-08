@@ -20,7 +20,6 @@ describe('JenkinsTests', function () {
         { actions: [{ totalCount: 3, failCount: 2, skipCount: 1 }] },
         {
           configOverride: authConfigOverride,
-          exampleOverride: { compact_message: '' },
         },
       )
     })

@@ -80,7 +80,11 @@ function getBadgeExampleCall(serviceClass, paramType) {
   // reformat structure for serviceClass.invoke
   const exampleInvokeParams = firstOpenapiExampleParams.reduce((acc, obj) => {
     if (obj.in === paramType) {
-      acc[obj.name] = obj.example
+      let example = obj.example
+      if (obj?.schema?.type === 'boolean') {
+        example = example || ''
+      }
+      acc[obj.name] = example
     }
     return acc
   }, {})

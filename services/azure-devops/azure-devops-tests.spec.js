@@ -24,9 +24,6 @@ describe('AzureDevOpsTests', function () {
           ],
         },
         {
-          exampleOverride: {
-            compact_message: undefined,
-          },
           multipleRequests: true,
         },
       )
