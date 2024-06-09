@@ -17,6 +17,7 @@ const archEnum = [
   'mips64',
   'mips64le',
   'riscv64',
+  'loong64',
 ]
 
 // Valid architecture values: https://golang.org/doc/install/source#environment (GOARCH)
