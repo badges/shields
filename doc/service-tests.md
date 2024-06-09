@@ -158,7 +158,7 @@ npm run test:services -- --only="docsrs" --fgrep="Passing docs for version"
 
 We can also add a test for a unsuccessful documentation build:
 
-```j
+```js
 t.create('Failing docs for version')
   .get('/tensorflow/0.16.1.json')
   .expectBadge({
