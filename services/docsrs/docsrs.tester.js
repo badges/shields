@@ -9,19 +9,17 @@ t.create('Docs with no version specified')
     message: Joi.allow('passing', 'failing'),
   })
 
-t.create('Passing docs for version').get('/tokio/0.3.0.json').expectBadge({
-  label: 'docs@0.3.0',
+t.create('Passing docs for version').get('/tokio/1.37.0.json').expectBadge({
+  label: 'docs@1.37.0',
   message: 'passing',
   color: 'brightgreen',
 })
 
-t.create('Failing docs for version')
-  .get('/tensorflow/0.16.1.json')
-  .expectBadge({
-    label: 'docs@0.16.1',
-    message: 'failing',
-    color: 'red',
-  })
+t.create('Failing docs for version').get('/tokio/1.32.1.json').expectBadge({
+  label: 'docs@1.32.1',
+  message: 'failing',
+  color: 'red',
+})
 
 t.create('Multiple builds, latest passing')
   .get('/bevy_tweening/0.3.1.json')

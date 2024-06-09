@@ -129,8 +129,8 @@ to run the test with some additional debug output.
 We should write tests cases for valid paths through our code. The Docs.rs badge supports an optional version parameter so we'll add a second test for a branch build. In this case, we know for sure that the documentation for this older version was successfully built, we specify a string literal instead of a Joi schema for `message`. This narrows down the expectation and gives us a more helpful error message if the test fails.
 
 ```js
-t.create('Passing docs for version').get('/tokio/0.3.0.json').expectBadge({
-  label: 'docs@0.3.0',
+t.create('Passing docs for version').get('/tokio/1.37.0.json').expectBadge({
+  label: 'docs@1.37.0',
   message: 'passing',
   color: 'brightgreen',
 })
@@ -144,7 +144,7 @@ Server is starting up: http://localhost:1111/
         [ GET /tokio.json ] (408ms)
     [live] Passing docs for version
       √
-        [ GET /tokio/0.3.0.json ] (171ms)
+        [ GET /tokio/1.37.0.json ] (171ms)
 
 
   2 passing (2s)
@@ -156,16 +156,14 @@ Once we have multiple tests, sometimes it is useful to run only one test. We can
 npm run test:services -- --only="docsrs" --fgrep="Passing docs for version"
 ```
 
-We can also add a test for a unsuccessful documentation build:
+Documentation for tokio version 1.32.1 failed to build, we can also add a corresponding test:
 
 ```js
-t.create('Failing docs for version')
-  .get('/tensorflow/0.16.1.json')
-  .expectBadge({
-    label: 'docs@0.16.1',
-    message: 'failing',
-    color: 'red',
-  })
+t.create('Failing docs for version').get('/tokio/1.32.1.json').expectBadge({
+  label: 'docs@1.32.1',
+  message: 'failing',
+  color: 'red',
+})
 ```
 
 Note that in these tests, we have specified a `color` parameter in `expectBadge`. This is helpful in a case like this when we want to test custom color logic, but it is only necessary to explicitly test color values if our badge implements custom logic for setting the badge colors.
@@ -184,7 +182,7 @@ t.create('Crate not found')
   .expectBadge({ label: 'docs', message: 'not found' })
 
 t.create('Version not found')
-  .get('/tokio/0.8888.json')
+  .get('/tokio/0.8.json')
   .expectBadge({ label: 'docs', message: 'not found' })
 ```
 
@@ -202,14 +200,14 @@ If we didn't have a stable example of crate version with a failing documentation
 
 ```js
 t.create('Failing docs for version')
-  .get('/tensorflow/0.16.1.json')
+  .get('/tokio/1.32.1.json')
   .intercept(nock =>
     nock('https://docs.rs/crate')
-      .get('/tensorflow/0.16.1/status.json')
+      .get('/tokio/1.32.1/status.json')
       .reply(200, { doc_status: false }),
   )
   .expectBadge({
-    label: 'docs@0.16.1',
+    label: 'docs@1.32.1',
     message: 'failing',
     color: 'red',
   })
