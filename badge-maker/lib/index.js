@@ -34,6 +34,11 @@ function _validate(format) {
     if (!Array.isArray(format.links)) {
       throw new ValidationError('Field `links` must be an array of strings')
     } else {
+      if (format.links.length > 2) {
+        throw new ValidationError(
+          'Field `links` must not have more than 2 elements',
+        )
+      }
       format.links.forEach(function (field) {
         if (typeof field !== 'string') {
           throw new ValidationError('Field `links` must be an array of strings')

@@ -71,6 +71,12 @@ describe('makeBadge function', function () {
       makeBadge({ label: 'build', message: 'passed', links: [1] }),
     ).to.throw(ValidationError, 'Field `links` must be an array of strings')
     expect(() =>
+      makeBadge({ label: 'build', message: 'passed', links: ['1', '2', '3'] }),
+    ).to.throw(
+      ValidationError,
+      'Field `links` must not have more than 2 elements',
+    )
+    expect(() =>
       makeBadge({ label: 'build', message: 'passed', format: 'png' }),
     ).to.throw(ValidationError, "Unexpected field 'format'")
     expect(() =>
