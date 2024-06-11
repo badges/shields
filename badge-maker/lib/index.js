@@ -23,7 +23,7 @@ function _validate(format) {
     }
   })
 
-  const numberFields = ['logoWidth', 'logoPosition']
+  const numberFields = ['logoWidth']
   numberFields.forEach(function (field) {
     if (field in format && typeof format[field] !== 'number') {
       throw new ValidationError(`Field \`${field}\` must be of type number`)
@@ -64,7 +64,6 @@ function _clean(format) {
     'color',
     'style',
     'logoBase64',
-    'logoPosition',
     'logoWidth',
     'links',
   ]
@@ -96,8 +95,7 @@ function _clean(format) {
  * @param {string} format.color (Optional) Message color
  * @param {string} format.style (Optional) Visual style (e.g: 'flat')
  * @param {string} format.logoBase64 (Optional) Logo data URL
- * @param {number} format.logoPosition (Optional) Logo position (e.g: 40)
- * @param {number} format.logoWidth (Optional) Logo width (e.g: 40)
+ * @param {number} format.logoWidth (Optional) Logo width (e.g: 40). This property is deprecated. Do not use it.
  * @param {Array} format.links (Optional) Links array (e.g: ['https://example.com', 'https://example.com'])
  * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
