@@ -4,7 +4,7 @@ interface Format {
   labelColor?: string
   color?: string
   style?: 'plastic' | 'flat' | 'flat-square' | 'for-the-badge' | 'social'
-  logo?: string
+  logoBase64?: string
   logoPosition?: number
   logoWidth?: number
   links?: Array<string>

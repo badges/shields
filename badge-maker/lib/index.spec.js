@@ -32,7 +32,7 @@ describe('makeBadge function', function () {
         color: 'green',
         style: 'flat',
         labelColor: 'blue',
-        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        logoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
         logoWidth: 20,
         logoPosition: 10,
         links: ['https://example.com', 'https://example.com'],
@@ -60,8 +60,8 @@ describe('makeBadge function', function () {
       makeBadge({ label: 'build', message: 'passed', labelColor: 7 }),
     ).to.throw(ValidationError, 'Field `labelColor` must be of type string')
     expect(() =>
-      makeBadge({ label: 'build', message: 'passed', logo: 7 }),
-    ).to.throw(ValidationError, 'Field `logo` must be of type string')
+      makeBadge({ label: 'build', message: 'passed', logoBase64: 7 }),
+    ).to.throw(ValidationError, 'Field `logoBase64` must be of type string')
     expect(() =>
       makeBadge({ label: 'build', message: 'passed', logoPosition: '7' }),
     ).to.throw(ValidationError, 'Field `logoPosition` must be of type number')
