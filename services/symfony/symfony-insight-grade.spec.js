@@ -11,7 +11,6 @@ describe('SymfonyInsightGrade', function () {
           <grade>gold</grade>
           <status>finished</status>
         </last-analysis></project>`,
-        { contentType: 'application/vnd.com.sensiolabs.insight+xml' },
       )
     })
   })
