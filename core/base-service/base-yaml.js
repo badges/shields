@@ -14,6 +14,11 @@ import trace from './trace.js'
  * @abstract
  */
 class BaseYamlService extends BaseService {
+  static headers = {
+    Accept:
+      'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
+  }
+
   /**
    * Request data from an upstream API serving YAML,
    * parse it and validate against a schema
@@ -50,12 +55,7 @@ class BaseYamlService extends BaseService {
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
-      ...{
-        headers: {
-          Accept:
-            'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
-        },
-      },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     const { buffer } = await this._request({

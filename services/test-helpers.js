@@ -223,7 +223,6 @@ function fakeJwtToken() {
  * @param {'BasicAuth'|'ApiKeyHeader'|'BearerAuthHeader'|'QueryStringAuth'|'JwtAuth'} authMethod The auth method of the tested service class.
  * @param {object} dummyResponse An object containing the dummy response by the server.
  * @param {object} options - Additional options for non default keys and content-type of the dummy response.
- * @param {'application/xml'|'application/json'} options.contentType - Header for the response, may contain any string.
  * @param {string} options.apiHeaderKey - Non default header for ApiKeyHeader auth.
  * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
  * @param {string} options.queryUserKey - QueryStringAuth user key.
@@ -248,7 +247,6 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   }
 
   const {
-    contentType,
     apiHeaderKey = 'x-api-key',
     bearerHeaderKey = 'Bearer',
     queryUserKey,
@@ -259,10 +257,9 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     configOverride,
     multipleRequests = false,
   } = options
-  if (contentType && typeof contentType !== 'string') {
-    throw new TypeError('Invalid contentType: Must be a String.')
-  }
-  const header = contentType ? { 'Content-Type': contentType } : undefined
+  const header = serviceClass.headers
+    ? { 'Content-Type': serviceClass.headers.Accept.split(', ')[0] }
+    : undefined
   if (!apiHeaderKey || typeof apiHeaderKey !== 'string') {
     throw new TypeError('Invalid apiHeaderKey: Must be a String.')
   }

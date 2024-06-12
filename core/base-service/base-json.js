@@ -21,6 +21,8 @@ class BaseJsonService extends BaseService {
     return parseJson(buffer)
   }
 
+  static headers = { Accept: 'application/json' }
+
   /**
    * Request data from an upstream API serving JSON,
    * parse it and validate against a schema
@@ -54,7 +56,7 @@ class BaseJsonService extends BaseService {
     logErrors = [429],
   }) {
     const mergedOptions = {
-      ...{ headers: { Accept: 'application/json' } },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     const { buffer } = await this._request({
