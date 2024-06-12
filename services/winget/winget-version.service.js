@@ -27,22 +27,18 @@ export default class WingetVersion extends GithubAuthV4Service {
 
   static route = {
     base: 'winget/v',
-    pattern: ':owner/:name',
+    pattern: ':name',
   }
 
   static openApi = {
-    '/winget/v/{owner}/{name}': {
+    '/winget/v/{name}': {
       get: {
         summary: 'WinGet Package Version',
         description: 'WinGet Community Repository',
         parameters: [
           pathParam({
-            name: 'owner',
-            example: 'Microsoft',
-          }),
-          pathParam({
             name: 'name',
-            example: 'WSL',
+            example: 'Microsoft.WSL',
           }),
         ],
       },
@@ -53,9 +49,10 @@ export default class WingetVersion extends GithubAuthV4Service {
     label: 'winget',
   }
 
-  async fetch({ owner, name }) {
-    const ownerFirst = owner[0].toLowerCase()
-    const path = `manifests/${ownerFirst}/${owner}/${name}`
+  async fetch({ name }) {
+    const nameFirstLower = name[0].toLowerCase()
+    const nameSlashed = name.replaceAll('.', '/')
+    const path = `manifests/${nameFirstLower}/${nameSlashed}`
     const expression = `HEAD:${path}`
     return this._requestGraphql({
       query: gql`
@@ -78,9 +75,9 @@ export default class WingetVersion extends GithubAuthV4Service {
     })
   }
 
-  async handle({ owner, name }) {
+  async handle({ name }) {
     try {
-      const json = await this.fetch({ owner, name })
+      const json = await this.fetch({ name })
       if (json.data.repository.object === null) {
         throw new InvalidParameter({
           prettyMessage: 'package not found',
