@@ -152,7 +152,7 @@
     "c8": "^9.1.0",
     "caller": "^1.1.0",
     "chai": "^4.4.1",
-    "chai-as-promised": "^7.1.2",
+    "chai-as-promised": "^8.0.0",
     "chai-datetime": "^1.8.0",
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
