@@ -25,11 +25,11 @@ updates:
       docusaurus-version-updates:
         applies-to: version-updates
         patterns:
-          - '@docusaurus*'
+          - '@docusaurus/*'
       docusaurus-security-updates:
         applies-to: security-updates
         patterns:
-          - '@docusaurus*'
+          - '@docusaurus/*'
   # badge-maker package dependencies
   - package-ecosystem: npm
     directory: '/badge-maker'
