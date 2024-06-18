@@ -18,7 +18,6 @@ module.exports = function makeBadge({
   labelColor,
   logo,
   logoSize,
-  logoWidth,
   links = ['', ''],
 }) {
   // String coercion and whitespace removal.
@@ -30,7 +29,6 @@ module.exports = function makeBadge({
     return JSON.stringify({
       label,
       message,
-      logoWidth,
       // Only call normalizeColor for the JSON case: this is handled
       // internally by toSvgColor in the SVG case.
       color: normalizeColor(color),
@@ -46,15 +44,13 @@ module.exports = function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
-
   return stripXmlWhitespace(
     render({
       label,
       message,
       links,
       logo,
-      logoWidth,
+      logoWidth: logo ? DEFAULT_LOGO_HEIGHT : 0,
       logoSize,
       logoPadding: logo && label.length ? 3 : 0,
       color: toSvgColor(color),
