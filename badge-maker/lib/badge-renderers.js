@@ -3,6 +3,7 @@
 const anafanafo = require('anafanafo')
 const { brightness } = require('./color')
 const { XmlElement, ElementList } = require('./xml')
+const { DEFAULT_LOGO_HEIGHT } = require('./constants')
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
@@ -53,7 +54,7 @@ function shouldWrapBodyWithLink({ links }) {
 }
 
 function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
-  const logoHeight = 14
+  const logoHeight = DEFAULT_LOGO_HEIGHT
   if (!logo) return ''
   return new XmlElement({
     name: 'image',
