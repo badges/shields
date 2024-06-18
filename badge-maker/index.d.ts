@@ -5,10 +5,6 @@ interface Format {
   color?: string
   style?: 'plastic' | 'flat' | 'flat-square' | 'for-the-badge' | 'social'
   logoBase64?: string
-  /**
-   * @deprecated This property would be deprecated in the future.
-   */
-  logoWidth?: number
   links?: Array<string>
 }
 

@@ -33,7 +33,6 @@ describe('makeBadge function', function () {
         style: 'flat',
         labelColor: 'blue',
         logoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
-        logoWidth: 20,
         links: ['https://example.com', 'https://example.com'],
       }),
     ).to.satisfy(isSvg)
@@ -61,9 +60,6 @@ describe('makeBadge function', function () {
     expect(() =>
       makeBadge({ label: 'build', message: 'passed', logoBase64: 7 }),
     ).to.throw(ValidationError, 'Field `logoBase64` must be of type string')
-    expect(() =>
-      makeBadge({ label: 'build', message: 'passed', logoWidth: '7' }),
-    ).to.throw(ValidationError, 'Field `logoWidth` must be of type number')
     expect(() =>
       makeBadge({ label: 'build', message: 'passed', links: 'test' }),
     ).to.throw(ValidationError, 'Field `links` must be an array of strings')
