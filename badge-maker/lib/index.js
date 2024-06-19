@@ -67,7 +67,9 @@ function _clean(format) {
 
   const cleaned = {}
   Object.keys(format).forEach(key => {
-    if (format[key] != null && expectedKeys.includes(key)) {
+    if (format[key] != null && key === 'logoBase64') {
+      cleaned.logo = format[key]
+    } else if (format[key] != null && expectedKeys.includes(key)) {
       cleaned[key] = format[key]
     } else {
       throw new ValidationError(
