@@ -35,7 +35,11 @@ describe('makeBadge function', function () {
         logoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
         links: ['https://example.com', 'https://example.com'],
       }),
-    ).to.satisfy(isSvg)
+    )
+      .to.satisfy(isSvg)
+      // explicitly make an assertion about logoBase64
+      // this param is not a straight passthrough
+      .and.to.include('data:image/svg+xml;base64,PHN2ZyB4bWxu')
   })
 
   it('should throw a ValidationError with invalid inputs', function () {
