@@ -46,7 +46,6 @@ t.create('invalid magazine').get('/magazine.invalid.json').expectBadge({
 
 t.create('test on real mbin magazine for API compliance')
   .get('/teletext@fedia.io.json')
-  .timeout(10000)
   .expectBadge({
     label: 'subscribe to teletext@fedia.io',
     message: Joi.string().regex(/^[0-9]+$/),
