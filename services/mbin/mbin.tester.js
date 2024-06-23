@@ -21,17 +21,7 @@ t.create('get magazine subscribers')
   })
 
 t.create('unknown community')
-  .get('/magazine@instance.tld.json')
-  .intercept(nock =>
-    nock('https://instance.tld/')
-      .get('/api/magazine/name/magazine')
-      .reply(
-        404,
-        JSON.stringify({
-          error: 'couldnt_find_magazine',
-        }),
-      ),
-  )
+  .get('/01J12N2ETYG3W5B6G8Y11F5EXG@fedia.io.json')
   .expectBadge({
     label: 'magazine',
     message: 'magazine not found',
