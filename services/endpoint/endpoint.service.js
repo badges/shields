@@ -96,6 +96,14 @@ The endpoint badge takes a single required query param: <code>url</code>, which 
         </td>
       </tr>
       <tr>
+      <td><code>logoSize</code></td>
+      <td>
+        Default: none. Make icons adaptively resize by setting auto.
+        Useful for some wider logos like <code>amd</code> and <code>amg</code>.
+        Supported for simple-icons logos only.
+      </td>
+    </tr>
+      <tr>
         <td><code>logoWidth</code></td>
         <td>
           Default: none. Same meaning as the query string. Can be overridden by
@@ -156,6 +164,7 @@ export default class Endpoint extends BaseJsonService {
     namedLogo,
     logoSvg,
     logoColor,
+    logoSize,
     logoWidth,
     logoPosition,
     style,
@@ -170,6 +179,7 @@ export default class Endpoint extends BaseJsonService {
       namedLogo,
       logoSvg,
       logoColor,
+      logoSize,
       logoWidth,
       logoPosition,
       style,
