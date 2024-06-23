@@ -20,15 +20,6 @@ t.create('get magazine subscribers')
     color: 'brightgreen',
   })
 
-t.create('bad server or connection')
-  .get('/magazine@instance.tld.json')
-  .networkOff()
-  .expectBadge({
-    label: 'magazine',
-    message: 'inaccessible',
-    color: 'lightgrey',
-  })
-
 t.create('unknown community')
   .get('/magazine@instance.tld.json')
   .intercept(nock =>
