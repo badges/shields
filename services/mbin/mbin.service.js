@@ -22,7 +22,7 @@ export default class Mbin extends BaseJsonService {
           'Mbin is a fork of Kbin, a content aggregator for the Fediverse.',
         parameters: pathParams({
           name: 'magazine',
-          description: 'The magazine to query.  This is CASE SENSITIVE.',
+          description: 'The magazine to query. This is CASE SENSITIVE.',
           example: 'teletext@fedia.io',
         }),
       },
