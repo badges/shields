@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import { isMetric } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -38,6 +38,6 @@ t.create('test on real mbin magazine for API compliance')
   .get('/teletext@fedia.io.json')
   .expectBadge({
     label: 'subscribe to teletext@fedia.io',
-    message: Joi.string().regex(/^[0-9]+$/),
+    message: isMetric,
     color: 'brightgreen',
   })
