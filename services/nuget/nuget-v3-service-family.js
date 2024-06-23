@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import RouteBuilder from '../route-builder.js'
 import { BaseJsonService, NotFound } from '../index.js'
+import { optionalUrl } from '../validators.js'
 import {
   renderVersionBadge,
   renderDownloadBadge,
@@ -61,6 +62,7 @@ const schema = Joi.object({
           .default([]),
         totalDownloads: Joi.number().integer(),
         totaldownloads: Joi.number().integer(),
+        version: Joi.string().optional(), // Available in BaGet server
       }),
     )
     .max(1)
@@ -72,22 +74,28 @@ const schema = Joi.object({
  */
 async function fetch(
   serviceInstance,
-  { baseUrl, packageName, includePrereleases = false },
+  { baseUrl, packageName, includePrereleases = true, queryNamedParams },
 ) {
   return serviceInstance._requestJson({
     schema,
     url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
       searchParams: {
-        q: `packageid:${encodeURIComponent(packageName.toLowerCase())}`,
+        q: queryNamedParams
+          ? `packageid:${encodeURIComponent(packageName.toLowerCase())}`
+          : encodeURIComponent(packageName.toLowerCase()),
         // Include prerelease versions.
-        prerelease: 'true',
+        prerelease: includePrereleases,
         // Include packages with SemVer 2 version numbers.
         semVerLevel: '2',
       },
     },
   })
 }
+
+const queryParamSchema = Joi.object({
+  source: optionalUrl,
+}).required()
 
 /*
  * Create a version and download service for a NuGet v2 API. Return an object
@@ -112,14 +120,28 @@ function createServiceFamily({
   apiDomain,
   apiBaseUrl,
   withFeed = true,
+  withQueryNamedParams = true,
+  packageDataIncludesVersion = false,
 }) {
+  /**
+   * Extract source parameters
+   */
+
+  function unpackParams({ source = apiBaseUrl }) {
+    if (source.includes('v3')) return { source }
+    return { source: `${source}/v3` }
+  }
+
   class NugetVersionService extends BaseJsonService {
     static category = 'version'
 
-    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
-      .push('(v|vpre)', 'which')
-      .push('(.+?)', 'packageName')
-      .toObject()
+    static route = {
+      ...buildRoute({ serviceBaseUrl, withTenant, withFeed })
+        .push('(v|vpre)', 'which')
+        .push('(.+?)', 'packageName')
+        .toObject(),
+      queryParamSchema,
+    }
 
     static openApi = {}
 
@@ -135,28 +157,38 @@ function createServiceFamily({
      * Extract version information from the raw package info.
      */
     transform({ json, includePrereleases }) {
-      if (json.data.length === 1 && json.data[0].versions.length > 0) {
-        const { versions: packageVersions } = json.data[0]
-        const versions = packageVersions.map(item =>
-          stripBuildMetadata(item.version),
-        )
-        return selectVersion(versions, includePrereleases)
-      } else {
+      if (json.data.length !== 1 || json.data[0].versions.length <= 0)
         throw new NotFound({ prettyMessage: 'package not found' })
-      }
+
+      // Baget server includes latest package version in the data response
+      if (packageDataIncludesVersion) return json.data[0].version
+
+      const { versions: packageVersions } = json.data[0]
+      const versions = packageVersions.map(item =>
+        stripBuildMetadata(item.version),
+      )
+      return selectVersion(versions, includePrereleases)
     }
 
-    async handle({ tenant, feed, which, packageName }) {
+    async handle({ tenant, feed, which, packageName }, queryParams) {
       const includePrereleases = which === 'vpre'
+
+      const { source } = unpackParams(queryParams)
+
       const baseUrl = apiUrl({
         withTenant,
-        apiBaseUrl,
+        apiBaseUrl: source,
         apiDomain,
         tenant,
         withFeed,
         feed,
       })
-      const json = await fetch(this, { baseUrl, packageName })
+      const json = await fetch(this, {
+        baseUrl,
+        packageName,
+        includePrereleases,
+        queryNamedParams: withQueryNamedParams,
+      })
       const version = this.transform({ json, includePrereleases })
       return this.constructor.render({ version, feed })
     }
@@ -165,10 +197,13 @@ function createServiceFamily({
   class NugetDownloadService extends BaseJsonService {
     static category = 'downloads'
 
-    static route = buildRoute({ serviceBaseUrl, withTenant, withFeed })
-      .push('dt')
-      .push('(.+?)', 'packageName')
-      .toObject()
+    static route = {
+      ...buildRoute({ serviceBaseUrl, withTenant, withFeed })
+        .push('dt')
+        .push('(.+?)', 'packageName')
+        .toObject(),
+      queryParamSchema,
+    }
 
     static openApi = {}
 
@@ -180,26 +215,31 @@ function createServiceFamily({
      * Extract download count from the raw package.
      */
     transform({ json }) {
-      if (json.data.length === 1) {
-        const packageInfo = json.data[0]
-        // Official NuGet server uses "totalDownloads" whereas MyGet uses
-        // "totaldownloads" (lowercase D). Ugh.
-        return packageInfo.totalDownloads || packageInfo.totaldownloads || 0
-      } else {
+      if (json.data.length !== 1)
         throw new NotFound({ prettyMessage: 'package not found' })
-      }
+
+      const packageInfo = json.data[0]
+      // Official NuGet server uses "totalDownloads" whereas MyGet uses
+      // "totaldownloads" (lowercase D). Ugh.
+      return packageInfo.totalDownloads || packageInfo.totaldownloads || 0
     }
 
-    async handle({ tenant, feed, which, packageName }) {
+    async handle({ tenant, feed, which, packageName }, queryParams) {
+      const { source } = unpackParams(queryParams)
+
       const baseUrl = apiUrl({
         withTenant,
-        apiBaseUrl,
+        apiBaseUrl: source,
         apiDomain,
         tenant,
         withFeed,
         feed,
       })
-      const json = await fetch(this, { baseUrl, packageName })
+      const json = await fetch(this, {
+        baseUrl,
+        packageName,
+        queryNamedParams: withQueryNamedParams,
+      })
       const downloads = this.transform({ json })
       return this.constructor.render({ downloads })
     }
