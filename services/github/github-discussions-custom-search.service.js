@@ -26,7 +26,7 @@ const queryParamSchema = Joi.object({
 
 class BaseGithubDiscussionsSearch extends GithubAuthV4Service {
   static category = 'other'
-  static defaultBadgeData = { label: 'query', color: 'informational' }
+  static defaultBadgeData = { label: 'query', color: 'informational', namedLogo: 'githubdiscussion' }
 
   static render({ discussionCount }) {
     return { message: metric(discussionCount) }
