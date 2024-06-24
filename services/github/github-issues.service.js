@@ -82,7 +82,7 @@ export default class GithubIssues extends GithubAuthV4Service {
     },
   }
 
-  static defaultBadgeData = { label: 'issues', color: 'informational' }
+  static defaultBadgeData = { label: 'issues', color: 'informational', namedLogo: 'githubissue' }
 
   static render({ isPR, isClosed, issueCount, raw, label }) {
     const state = isClosed ? 'closed' : 'open'
