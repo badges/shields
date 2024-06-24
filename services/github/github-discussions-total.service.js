@@ -40,7 +40,7 @@ export default class GithubTotalDiscussions extends GithubAuthV4Service {
     },
   }
 
-  static defaultBadgeData = { label: 'discussions', color: 'blue' }
+  static defaultBadgeData = { label: 'discussions', color: 'blue', namedLogo: 'githubdiscussion'}
 
   static render({ discussions }) {
     return { message: discussions }
