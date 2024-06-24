@@ -79,7 +79,7 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'github' , namedLogo: 'githubcommit'}
+  static defaultBadgeData = { label: 'github', namedLogo: 'githubcommit' }
 
   static render({ version, commitCount }) {
     return {
