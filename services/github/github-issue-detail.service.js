@@ -215,6 +215,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
   static defaultBadgeData = {
     label: 'issue/pull request',
     color: 'informational',
+    namedLogo: 'githubissue' 
   }
 
   static render({ property, value, isPR, number }) {
