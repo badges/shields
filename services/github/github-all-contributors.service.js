@@ -64,7 +64,7 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
     },
   }
 
-  static defaultBadgeData = { label: 'all contributors' }
+  static defaultBadgeData = { label: 'all contributors', namedLogo: 'allcontributors'}
 
   static render({ contributorCount }) {
     return renderContributorBadge({ contributorCount })
