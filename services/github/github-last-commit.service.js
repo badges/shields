@@ -86,7 +86,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'last commit' }
+  static defaultBadgeData = { label: 'last commit', namedLogo: 'githubcommit' }
 
   static render({ commitDate }) {
     return {
