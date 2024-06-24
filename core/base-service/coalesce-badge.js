@@ -23,9 +23,8 @@ import toArray from './to-array.js'
 //    base64-encoded logos). Otherwise the default color is used. If the color
 //    is specified for a multicolor Shield logo, the named logo will be used and
 //    colored. The appearance of the logo can be customized using `logoWidth`,
-//    and in the case of the popout badge, `logoPosition`. When `?logo=` is
-//    specified, any logo-related parameters specified dynamically by the
-//    service, or by default in the service, are ignored.
+//    When `?logo=` is specified, any logo-related parameters specified
+//    dynamically by the service, or by default in the service, are ignored.
 // 2. The second precedence is the dynamic logo returned by a service. This is
 //    used only by the Endpoint badge. The `logoColor` can be overridden by the
 //    query string.
@@ -56,7 +55,6 @@ export default function coalesceBadge(
   } = overrides
   let {
     logoWidth: overrideLogoWidth,
-    logoPosition: overrideLogoPosition,
     logoSize: overrideLogoSize,
     color: overrideColor,
     labelColor: overrideLabelColor,
@@ -78,7 +76,6 @@ export default function coalesceBadge(
     overrideLabelColor = `${overrideLabelColor}`
   }
   overrideLogoWidth = +overrideLogoWidth || undefined
-  overrideLogoPosition = +overrideLogoPosition || undefined
 
   const {
     isError,
@@ -91,7 +88,6 @@ export default function coalesceBadge(
     logoColor: serviceLogoColor,
     logoSize: serviceLogoSize,
     logoWidth: serviceLogoWidth,
-    logoPosition: serviceLogoPosition,
     link: serviceLink,
     cacheSeconds: serviceCacheSeconds,
     style: serviceStyle,
@@ -122,12 +118,7 @@ export default function coalesceBadge(
     style = 'flat'
   }
 
-  let namedLogo,
-    namedLogoColor,
-    logoSize,
-    logoWidth,
-    logoPosition,
-    logoSvgBase64
+  let namedLogo, namedLogoColor, logoSize, logoWidth, logoSvgBase64
   if (overrideLogo) {
     // `?logo=` could be a named logo or encoded svg.
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
@@ -143,7 +134,6 @@ export default function coalesceBadge(
     // original width or position.
     logoSize = overrideLogoSize
     logoWidth = overrideLogoWidth
-    logoPosition = overrideLogoPosition
   } else {
     if (serviceLogoSvg) {
       logoSvgBase64 = svg2base64(serviceLogoSvg)
@@ -156,7 +146,6 @@ export default function coalesceBadge(
     }
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
     logoWidth = coalesce(overrideLogoWidth, serviceLogoWidth)
-    logoPosition = coalesce(overrideLogoPosition, serviceLogoPosition)
   }
   if (namedLogo) {
     const iconSize = getIconSize(String(namedLogo).toLowerCase())
@@ -195,7 +184,6 @@ export default function coalesceBadge(
     namedLogo,
     logo: logoSvgBase64,
     logoWidth,
-    logoPosition,
     logoSize,
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),

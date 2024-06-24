@@ -195,14 +195,13 @@ describe('coalesceBadge', function () {
       ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.be.empty
     })
 
-    it("when the logo is overridden, it ignores the service's logo color, position, and width", function () {
+    it("when the logo is overridden, it ignores the service's logo color and width", function () {
       expect(
         coalesceBadge(
           { logo: 'npm' },
           {
             namedLogo: 'appveyor',
             logoColor: 'red',
-            logoPosition: -3,
             logoWidth: 100,
           },
           {},
@@ -285,20 +284,6 @@ describe('coalesceBadge', function () {
       expect(
         coalesceBadge({}, { namedLogo: 'npm', logoWidth: 275 }, {}),
       ).to.include({ logoWidth: 275 })
-    })
-  })
-
-  describe('Logo position', function () {
-    it('overrides the logoPosition', function () {
-      expect(coalesceBadge({ logoPosition: -10 }, {}, {})).to.include({
-        logoPosition: -10,
-      })
-    })
-
-    it('applies the logo position', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'npm', logoPosition: -10 }, {}),
-      ).to.include({ logoPosition: -10 })
     })
   })
 
