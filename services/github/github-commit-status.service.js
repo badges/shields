@@ -42,7 +42,7 @@ export default class GithubCommitStatus extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'commit status' }
+  static defaultBadgeData = { label: 'commit status' , namedLogo: 'githubcommit'}
 
   static render({ isInBranch, branch }) {
     if (isInBranch) {
