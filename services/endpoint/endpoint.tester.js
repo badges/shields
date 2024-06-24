@@ -119,6 +119,24 @@ t.create('logoWidth')
     logoWidth: 30,
   })
 
+// The logoPosition param was removed, but passing it should not
+// throw a validation error. It should just do nothing.
+t.create('logoPosition')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      logoSvg,
+      logoPosition: 30,
+    }),
+  )
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
+  })
+
 t.create('Invalid schema')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>

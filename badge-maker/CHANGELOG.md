@@ -1,8 +1,14 @@
 # Changelog
 
-## 4.0.0 [WIP]
+## 4.0.0
+
+### Breaking Changes
 
 - Drop compatibility with Node < 16
+
+### Features
+
+- Add `links` and `logoBase64` params
 
 ## 3.3.1
 
