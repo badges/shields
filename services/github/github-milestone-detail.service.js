@@ -47,7 +47,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'milestones', color: 'informational', namedLogo: 'githubmilestone'  }
+  static defaultBadgeData = { label: 'milestones', color: 'informational', namedLogo: 'githubmilestone' }
 
   static render({ user, repo, variant, number, milestone }) {
     let milestoneMetric
