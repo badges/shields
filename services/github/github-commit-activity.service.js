@@ -81,7 +81,7 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
     },
   }
 
-  static defaultBadgeData = { label: 'commit activity', color: 'blue' , namedLogo: 'githubactivity'}
+  static defaultBadgeData = { label: 'commit activity', color: 'blue', namedLogo: 'githubactivity' }
 
   static render({ interval, commitCount, authorFilter }) {
     // If total commits selected change label from commit activity to commits
