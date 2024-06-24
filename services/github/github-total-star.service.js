@@ -161,7 +161,7 @@ export default class GithubTotalStarService extends GithubAuthV4Service {
 
   static defaultBadgeData = {
     label: this.defaultLabel,
-    namedLogo: 'github',
+    namedLogo: 'githubstar',
   }
 
   static render({ totalStars, user }) {
