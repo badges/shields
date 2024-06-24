@@ -31,7 +31,7 @@ export default class GithubLicense extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'license' }
+  static defaultBadgeData = { label: 'license', namedLogo: 'githublicense'}
 
   static render({ license }) {
     if (license === 'NOASSERTION') {
