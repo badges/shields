@@ -32,7 +32,7 @@ export default class GithubStars extends GithubAuthV3Service {
 
   static defaultBadgeData = {
     label: 'stars',
-    namedLogo: 'github',
+    namedLogo: 'githubstar',
   }
 
   static render({ stars, user, repo }) {
