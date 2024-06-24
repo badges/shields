@@ -32,7 +32,7 @@ export default class GithubWatchers extends GithubAuthV3Service {
 
   static defaultBadgeData = {
     label: 'watchers',
-    namedLogo: 'github',
+    namedLogo: 'githubwatch',
   }
 
   static render({ watchers, user, repo }) {
