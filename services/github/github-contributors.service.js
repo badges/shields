@@ -39,7 +39,7 @@ export default class GithubContributors extends GithubAuthV3Service {
     },
   }
 
-  static defaultBadgeData = { label: 'contributors', namedLogo: 'allcontributors'}
+  static defaultBadgeData = { label: 'contributors', namedLogo: 'allcontributors' }
 
   static render({ contributorCount }) {
     return renderContributorBadge({ contributorCount })
