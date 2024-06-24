@@ -180,7 +180,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
       },
   }
 
-  static defaultBadgeData = { label: 'dependency', namedLogo: 'githubpackage'}
+  static defaultBadgeData = { label: 'dependency', namedLogo: 'githubpackage' }
 
   static render({ dependency, range }) {
     return {
