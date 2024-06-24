@@ -30,7 +30,7 @@ export default class GithubForks extends GithubAuthV4Service {
     },
   }
 
-  static defaultBadgeData = { label: 'forks', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'forks', namedLogo: 'githubfork' }
 
   static render({ user, repo, forkCount }) {
     return {
