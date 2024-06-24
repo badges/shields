@@ -26,7 +26,7 @@ const queryParamSchema = Joi.object({
 
 class BaseGithubIssuesSearch extends GithubAuthV4Service {
   static category = 'issue-tracking'
-  static defaultBadgeData = { label: 'query', color: 'informational' }
+  static defaultBadgeData = { label: 'query', color: 'informational', namedLogo: 'githubissue' }
 
   static render({ issueCount }) {
     return { message: metric(issueCount) }
