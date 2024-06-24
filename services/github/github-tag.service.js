@@ -53,6 +53,7 @@ class GithubTag extends GithubAuthV4Service {
 
   static defaultBadgeData = {
     label: 'tag',
+    namedLogo: 'githubtag'
   }
 
   static render({ version, sort }) {
