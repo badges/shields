@@ -21,7 +21,7 @@ const packageDataSchema = Joi.object({
   maintainers: Joi.array()
     // We don't need the keys here, just the length.
     .items(Joi.object({}))
-    .required(),
+    .default([]),
   types: Joi.string(),
   // `typings` is an alias for `types` and often used
   // https://www.typescriptlang.org/docs/handbook/declaration-files/publishing.html#including-declarations-in-your-npm-package
