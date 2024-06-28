@@ -255,4 +255,11 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-export { AurLicense, AurVersion, AurVotes, AurPopularity, AurMaintainer, AurLastModified }
+export {
+  AurLicense,
+  AurVersion,
+  AurVotes,
+  AurPopularity,
+  AurMaintainer,
+  AurLastModified,
+}

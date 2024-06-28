@@ -35,13 +35,14 @@ t.create('votes (not found)')
   .get('/votes/not-a-package.json')
   .expectBadge({ label: 'votes', message: 'package not found' })
 
-
 // popularity tests
 
-t.create('popularity (valid)').get('/popularity/google-chrome.json').expectBadge({
-  label: 'popularity',
-  message: isMetric,
-})
+t.create('popularity (valid)')
+  .get('/popularity/google-chrome.json')
+  .expectBadge({
+    label: 'popularity',
+    message: isMetric,
+  })
 
 t.create('popularity (not found)')
   .get('/popularity/not-a-package.json')
