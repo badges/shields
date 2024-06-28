@@ -64,7 +64,7 @@
     "query-string": "^9.0.0",
     "semver": "~7.6.2",
     "simple-icons": "12.3.0",
-    "smol-toml": "1.2.1",
+    "smol-toml": "1.2.2",
     "svg-path-commander": "^2.0.9",
     "webextension-store-meta": "^1.2.3",
     "xpath": "~0.0.34"
