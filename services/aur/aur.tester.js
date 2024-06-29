@@ -29,7 +29,7 @@ t.create('version (not found)')
 
 t.create('votes (valid)').get('/votes/google-chrome.json').expectBadge({
   label: 'votes',
-  message: Joi.number().precision(2),
+  message: isMetric,
 })
 
 t.create('votes (not found)')
@@ -42,7 +42,7 @@ t.create('popularity (valid)')
   .get('/popularity/google-chrome.json')
   .expectBadge({
     label: 'popularity',
-    message: isMetric,
+    message: Joi.number().precision(2),
   })
 
 t.create('popularity (not found)')
