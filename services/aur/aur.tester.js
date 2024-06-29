@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
 import {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
