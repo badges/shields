@@ -28,7 +28,7 @@ t.create('version (not found)')
 
 t.create('votes (valid)').get('/votes/google-chrome.json').expectBadge({
   label: 'votes',
-  message: isMetric,
+  message: Joi.number().precision(2),
 })
 
 t.create('votes (not found)')
