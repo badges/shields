@@ -138,14 +138,14 @@ class AurPopularity extends BaseAurService {
 
   static render({ popularity }) {
     return {
-      message: metric(popularity),
+      message: popularity,
       color: floorCountColor(popularity, 0.5, 2.5, 5),
     }
   }
 
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
-    return this.constructor.render({ votes: json.results[0].Popularity })
+    return this.constructor.render({ popularity: json.results[0].Popularity })
   }
 }
 
