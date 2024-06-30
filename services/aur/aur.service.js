@@ -20,7 +20,7 @@ const aurSchema = Joi.object({
       Joi.object({
         License: Joi.array().items(Joi.string().required()).allow(null),
         NumVotes: nonNegativeInteger,
-        Popularity: Joi.number().precision(2).min(0),
+        Popularity: Joi.number().precision(2).min(0).required(),
         Version: Joi.string().required(),
         OutOfDate: nonNegativeInteger.allow(null),
         Maintainer: Joi.string().required().allow(null),
