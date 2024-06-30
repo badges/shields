@@ -71,6 +71,7 @@ t.create('license (no license)')
           {
             License: null,
             NumVotes: 1,
+            Popularity: 0,
             Version: '1',
             OutOfDate: null,
             Maintainer: null,
