@@ -42,7 +42,7 @@ t.create('popularity (valid)')
   .get('/popularity/google-chrome.json')
   .expectBadge({
     label: 'popularity',
-    message: Joi.number().precision(2),
+    message: Joi.number().precision(2).required(),
   })
 
 t.create('popularity (not found)')
