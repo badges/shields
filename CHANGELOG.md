@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-07-01
+
+- Add [AUR] Popularity Badge [#10304](https://github.com/badges/shields/issues/10304)
+- fix npm badges when `maintainers` not in response [#10286](https://github.com/badges/shields/issues/10286)
+- Expose `logoBase64` and `links` in badge-maker NPM package [#10283](https://github.com/badges/shields/issues/10283)
+- Remove `logoPosition` [#10284](https://github.com/badges/shields/issues/10284)
+- [MBIN] Add subscribers badge [#10270](https://github.com/badges/shields/issues/10270)
+- Add [Docker] support for loong64 arch [#10241](https://github.com/badges/shields/issues/10241)
+- Add puppetforge quality score badges [#10201](https://github.com/badges/shields/issues/10201)
+- Dependency updates
+
 ## server-2024-06-01
 
 - Remove namedLogo from defaultBadgeData of non-social badges [#10195](https://github.com/badges/shields/issues/10195)
