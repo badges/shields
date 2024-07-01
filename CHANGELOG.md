@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-07-01
+
+- Add [AUR] Popularity Badge [#10304](https://github.com/badges/shields/issues/10304)
+- fix npm badges when `maintainers` not in response [#10286](https://github.com/badges/shields/issues/10286)
+- Expose `logoBase64` and `links` in badge-maker NPM package [#10283](https://github.com/badges/shields/issues/10283)
+- Remove `logoPosition` [#10284](https://github.com/badges/shields/issues/10284)
+- [MBIN] Add subscribers badge [#10270](https://github.com/badges/shields/issues/10270)
+- Improve Docusaurus Dependabot setup [#10262](https://github.com/badges/shields/issues/10262)
+- Update documentation and tests to [docsrs] [#10240](https://github.com/badges/shields/issues/10240)
+- Add [Docker] support for loong64 arch [#10241](https://github.com/badges/shields/issues/10241)
+- simpleicons 12 blog [#10222](https://github.com/badges/shields/issues/10222)
+- Add puppetforge quality score badges [#10201](https://github.com/badges/shields/issues/10201)
+- Fix [GithubPullRequestCheckState] test [#10200](https://github.com/badges/shields/issues/10200)
+- Switch Cobertura job URL [#10217](https://github.com/badges/shields/issues/10217)
+- Fully mock flaky [CodeClimate] multi-step tests [#10218](https://github.com/badges/shields/issues/10218)
+- Dependency updates
+
 ## server-2024-06-01
 
 - Remove namedLogo from defaultBadgeData of non-social badges [#10195](https://github.com/badges/shields/issues/10195)
