@@ -63,7 +63,7 @@
     "qs": "^6.12.1",
     "query-string": "^9.0.0",
     "semver": "~7.6.2",
-    "simple-icons": "12.4.0",
+    "simple-icons": "13.0.0",
     "smol-toml": "1.2.2",
     "svg-path-commander": "^2.0.9",
     "webextension-store-meta": "^1.2.3",
