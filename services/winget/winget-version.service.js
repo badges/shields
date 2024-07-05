@@ -1,9 +1,10 @@
 import Joi from 'joi'
 import gql from 'graphql-tag'
-import { latest, renderVersionBadge } from '../version.js'
+import { renderVersionBadge } from '../version.js'
 import { InvalidParameter, pathParam } from '../index.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
 import { transformErrors } from '../github/github-helpers.js'
+import { latest } from './version.js'
 
 const schema = Joi.object({
   data: Joi.object({
