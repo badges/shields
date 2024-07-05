@@ -60,7 +60,7 @@
     "pretty-bytes": "^6.1.1",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^15.1.3",
-    "qs": "^6.12.1",
+    "qs": "^6.12.2",
     "query-string": "^9.0.0",
     "semver": "~7.6.2",
     "simple-icons": "12.4.0",
