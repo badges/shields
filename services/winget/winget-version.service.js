@@ -76,22 +76,17 @@ export default class WingetVersion extends GithubAuthV4Service {
   }
 
   async handle({ name }) {
-    try {
-      const json = await this.fetch({ name })
-      if (json.data.repository.object === null) {
-        throw new InvalidParameter({
-          prettyMessage: 'package not found',
-        })
-      }
-      const entries = json.data.repository.object.entries
-      const directories = entries.filter(file => file.type === 'tree')
-      const versions = directories.map(file => file.name)
-      const version = latest(versions)
-
-      return renderVersionBadge({ version })
-    } catch (e) {
-      console.log(e)
-      throw e
+    const json = await this.fetch({ name })
+    if (json.data.repository.object === null) {
+      throw new InvalidParameter({
+        prettyMessage: 'package not found',
+      })
     }
+    const entries = json.data.repository.object.entries
+    const directories = entries.filter(file => file.type === 'tree')
+    const versions = directories.map(file => file.name)
+    const version = latest(versions)
+
+    return renderVersionBadge({ version })
   }
 }
