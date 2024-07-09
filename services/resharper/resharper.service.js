@@ -5,7 +5,6 @@ export default createServiceFamily({
   defaultLabel: 'resharper',
   serviceBaseUrl: 'resharper',
   apiBaseUrl: 'https://resharper-plugins.jetbrains.com/api/v2',
-  odataFormat: 'xml',
   title: 'JetBrains ReSharper plugins',
   examplePackageName: 'StyleCop.StyleCop',
   exampleVersion: '2017.2.0',

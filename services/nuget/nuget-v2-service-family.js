@@ -2,7 +2,6 @@ import Joi from 'joi'
 import queryString from 'query-string'
 import { nonNegativeInteger } from '../validators.js'
 import {
-  BaseJsonService,
   BaseXmlService,
   NotFound,
   redirector,
@@ -20,25 +19,10 @@ function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases
     ? 'IsAbsoluteLatestVersion eq true'
     : 'IsLatestVersion eq true'
-  return `Id eq '${packageName}' and ${releaseTypeFilter}`
+  return `tolower(Id) eq '${packageName.toLowerCase()}' and ${releaseTypeFilter}`
 }
 
 const versionSchema = Joi.alternatives(Joi.string(), Joi.number())
-
-const jsonSchema = Joi.object({
-  d: Joi.object({
-    results: Joi.array()
-      .items(
-        Joi.object({
-          Version: versionSchema,
-          NormalizedVersion: Joi.string(),
-          DownloadCount: nonNegativeInteger,
-        }),
-      )
-      .max(1)
-      .default([]),
-  }).required(),
-}).required()
 
 const xmlSchema = Joi.object({
   feed: Joi.object({
@@ -59,7 +43,7 @@ const queryParamSchema = Joi.object({
 
 async function fetch(
   serviceInstance,
-  { odataFormat, baseUrl, packageName, includePrereleases = false },
+  { baseUrl, packageName, includePrereleases = false },
 ) {
   const url = `${baseUrl}/Packages()`
   const searchParams = queryString.stringify(
@@ -69,31 +53,19 @@ async function fetch(
     { encode: false },
   )
 
-  let packageData
-  if (odataFormat === 'xml') {
-    const data = await serviceInstance._requestXml({
-      schema: xmlSchema,
-      url: `${url}?${searchParams}`,
-    })
-    packageData = odataToObject(data.feed.entry)
-  } else if (odataFormat === 'json') {
-    const data = await serviceInstance._requestJson({
-      schema: jsonSchema,
-      url: `${url}?${searchParams}`,
-      options: {
-        headers: { Accept: 'application/atom+json,application/json' },
-      },
-    })
-    packageData = data.d.results[0]
-  } else {
-    throw Error(`Unsupported Atom OData format: ${odataFormat}`)
-  }
+  const data = await serviceInstance._requestXml({
+    schema: xmlSchema,
+    url: `${url}?${searchParams}`,
+    options: {
+      headers: { Accept: 'application/atom+xml,application/xml' },
+    },
+  })
+  const packageData = odataToObject(data.feed.entry)
 
   if (packageData) {
     return packageData
   } else if (!includePrereleases) {
     return fetch(serviceInstance, {
-      odataFormat,
       baseUrl,
       packageName,
       includePrereleases: true,
@@ -117,22 +89,12 @@ function createServiceFamily({
   defaultLabel,
   serviceBaseUrl,
   apiBaseUrl,
-  odataFormat,
   examplePackageName,
   exampleVersion,
   examplePrereleaseVersion,
   exampleDownloadCount,
 }) {
-  let Base
-  if (odataFormat === 'xml') {
-    Base = BaseXmlService
-  } else if (odataFormat === 'json') {
-    Base = BaseJsonService
-  } else {
-    throw Error(`Unsupported Atom OData format: ${odataFormat}`)
-  }
-
-  class NugetVersionService extends Base {
+  class NugetVersionService extends BaseXmlService {
     static name = `${name}Version`
 
     static category = 'version'
@@ -174,7 +136,6 @@ function createServiceFamily({
 
     async handle({ packageName }, queryParams) {
       const packageData = await fetch(this, {
-        odataFormat,
         baseUrl: apiBaseUrl,
         packageName,
         includePrereleases: queryParams.include_prereleases !== undefined,
@@ -197,7 +158,7 @@ function createServiceFamily({
     dateAdded: new Date('2019-12-15'),
   })
 
-  class NugetDownloadService extends Base {
+  class NugetDownloadService extends BaseXmlService {
     static name = `${name}Downloads`
 
     static category = 'downloads'
@@ -230,7 +191,6 @@ function createServiceFamily({
 
     async handle({ packageName }) {
       const packageData = await fetch(this, {
-        odataFormat,
         baseUrl: apiBaseUrl,
         packageName,
       })
