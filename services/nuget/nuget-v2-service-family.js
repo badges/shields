@@ -90,9 +90,6 @@ function createServiceFamily({
   serviceBaseUrl,
   apiBaseUrl,
   examplePackageName,
-  exampleVersion,
-  examplePrereleaseVersion,
-  exampleDownloadCount,
 }) {
   class NugetVersionService extends BaseXmlService {
     static name = `${name}Version`
