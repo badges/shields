@@ -1,8 +1,5 @@
 name: Coveralls Code Coverage
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
   coveralls-code-coverage:
