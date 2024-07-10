@@ -1,5 +1,9 @@
 name: Coveralls Code Coverage
-on: push
+on:
+  schedule:
+    - cron: '10 7 * * *'
+    # At 07:10, daily
+  workflow_dispatch:
 
 jobs:
   coveralls-code-coverage:
