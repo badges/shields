@@ -42,8 +42,15 @@ jobs:
           POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
         shell: bash
 
-      - name: Coverage Tests
-        run: npm run coverage:test coverage:test:services
+      - name: Coverage for Main Tests
+        run: npm run coverage:test
+        env:
+          GH_TOKEN: '${{ secrets.GH_PAT }}'
+          POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
+        shell: bash
+
+      - name: Coverage for Service Tests
+        run: npm run coverage:test:services
         continue-on-error: true
         env:
           RETRY_COUNT: 3
@@ -58,7 +65,6 @@ jobs:
           TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
           WHEELMAP_TOKEN: '${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}'
           YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
-          POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
         shell: bash
 
       - name: Coveralls GitHub Action
