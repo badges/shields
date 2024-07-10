@@ -1,6 +1,6 @@
 import zlib from 'zlib'
 import { expect } from 'chai'
-import { getShieldsIcon, getSimpleIcon } from '../../lib/logos.js'
+import { getSimpleIcon } from '../../lib/logos.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -63,7 +63,7 @@ t.create('named logo')
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
+    expect(body).to.include(getSimpleIcon({ name: 'npm' }))
   })
 
 t.create('named logo with color')
@@ -83,7 +83,7 @@ t.create('named logo with color')
   })
 
 const logoSvg = Buffer.from(
-  getShieldsIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
+  getSimpleIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
   'base64',
 ).toString('ascii')
 
@@ -99,7 +99,7 @@ t.create('custom svg logo')
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
+    expect(body).to.include(getSimpleIcon({ name: 'npm' }))
   })
 
 t.create('logoWidth')

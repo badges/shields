@@ -17,12 +17,10 @@ import toArray from './to-array.js'
 //
 // Logos are resolved in this manner:
 //
-// 1. When `?logo=` contains a named logo or the name of one of the Shields
-//    logos or contains base64-encoded SVG, that logo is used. When a
-//    `&logoColor=` is specified, that color is used (except for the
-//    base64-encoded logos). Otherwise the default color is used. If the color
-//    is specified for a multicolor Shield logo, the named logo will be used and
-//    colored. The appearance of the logo can be customized using `logoWidth`,
+// 1. When `?logo=` contains a simple-icons logo or contains a base64-encoded
+//    SVG, that logo is used. When a `&logoColor=` is specified, that color is
+//    used (except for the base64-encoded logos). Otherwise the default color
+//    is used. The appearance of the logo can be customized using `logoWidth`,
 //    When `?logo=` is specified, any logo-related parameters specified
 //    dynamically by the service, or by default in the service, are ignored.
 // 2. The second precedence is the dynamic logo returned by a service. This is

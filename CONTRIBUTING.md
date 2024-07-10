@@ -154,10 +154,6 @@ To run the integration tests:
 
 There is a [High-level code walkthrough](doc/code-walkthrough.md) describing the layout of the project.
 
-### Logos
-
-We have [documentation for logo usage](doc/logos.md) which includes [contribution guidance](doc/logos.md#contributing-logos)
-
 ## Pull Requests
 
 All code changes are incorporated via pull requests, and pull requests are always squashed into a single commit on merging. Therefore there's no requirement to squash commits within your PR, but feel free to squash or restructure the commits on your PR branch if you think it will be helpful. PRs with well structured commits are always easier to review!

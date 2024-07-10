@@ -22,7 +22,6 @@ const server = fileMatch('core/server/**.js', '!*.spec.js')
 const serverTests = fileMatch('core/server/**.spec.js')
 const legacyHelpers = fileMatch('lib/**/*.js', '!*.spec.js')
 const legacyHelperTests = fileMatch('lib/**/*.spec.js')
-const logos = fileMatch('logo/*.svg')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
 const secretsDocs = fileMatch('doc/server-secrets.md')
@@ -74,17 +73,6 @@ if (legacyHelpers.created) {
     [
       'This PR modified helper functions in `lib/` but not accompanying tests. <br>',
       "That's okay so long as it's refactoring existing code.",
-    ].join(''),
-  )
-}
-
-if (logos.created) {
-  message(
-    [
-      ':art: Thanks for submitting a logo. <br>',
-      'Please ensure your contribution follows our ',
-      '[guidance](https://github.com/badges/shields/blob/master/doc/logos.md#contributing-logos) ',
-      'for logo submissions.',
     ].join(''),
   )
 }
