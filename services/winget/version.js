@@ -17,8 +17,32 @@
  */
 function compareVersion(v1, v2) {
   // https://github.com/microsoft/winget-cli/blob/ae566c7bf21cfcc75be7ec30e4036a30eede8396/src/AppInstallerSharedLib/Versions.cpp#L109-L173
+  // This implementation does not parse s_Approximate_Greater_Than
+  // and s_Approximate_Less_Than since they won't appear in directory name (package version parsed by shields.io)
   const v1Trimmed = trimPrefix(v1)
   const v2Trimmed = trimPrefix(v2)
+
+  const v1Latest = v1Trimmed.trim().toLowerCase() === 'latest'
+  const v2Latest = v2Trimmed.trim().toLowerCase() === 'latest'
+
+  if (v1Latest && v2Latest) {
+    return 0
+  } else if (v1Latest) {
+    return 1
+  } else if (v2Latest) {
+    return -1
+  }
+
+  const v1Unknown = v1Trimmed.trim().toLowerCase() === 'unknown'
+  const v2Unknown = v2Trimmed.trim().toLowerCase() === 'unknown'
+
+  if (v1Unknown && v2Unknown) {
+    return 0
+  } else if (v1Unknown) {
+    return -1
+  } else if (v2Unknown) {
+    return 1
+  }
 
   const parts1 = v1Trimmed.split('.')
   const parts2 = v2Trimmed.split('.')
