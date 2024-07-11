@@ -131,7 +131,7 @@ snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
-Daily tests, including a full run of the service tests and overall code coverage, are run via [badges/daily-tests][daily-tests].
+Our [full test suite][full test suite] as well as [code coverage][code coverage] are run on a daily basis.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [gitpod]: https://www.gitpod.io/
@@ -140,10 +140,11 @@ Daily tests, including a full run of the service tests and overall code coverage
 [prometheus configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus
 [sentry]: https://sentry.io/
 [sentry configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry
-[daily-tests]: https://github.com/badges/daily-tests
 [nodemon]: https://nodemon.io/
 [nodemon debug]: https://github.com/Microsoft/vscode-recipes/tree/master/nodemon
 [vs code]: https://code.visualstudio.com/
+[full test suite]: https://github.com/badges/shields/actions/workflows/daily-tests.yml
+[code coverage]: https://coveralls.io/github/badges/shields
 
 ## Hosting your own server
 
