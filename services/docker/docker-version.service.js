@@ -175,7 +175,7 @@ export default class DockerVersion extends BaseJsonService {
       })
     }
 
-    const { version } = await this.transform({
+    const { version } = this.transform({
       tag,
       sort,
       data,
