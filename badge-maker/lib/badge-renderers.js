@@ -224,7 +224,24 @@ class Badge {
         textLength: FONT_SCALE_UP_FACTOR * textWidth,
       },
     })
-    const shadow = this.constructor.shadow ? shadowText : ''
+    const shadowBlur = new XmlElement({
+      name: 'text',
+      content: [content],
+      attrs: {
+        'aria-hidden': 'true',
+        x,
+        y: 150 + this.constructor.verticalMargin,
+        fill: shadowColor,
+        'fill-opacity': '.80',
+        filter: 'url(#blur)',
+        transform: FONT_SCALE_DOWN_VALUE,
+        textLength: FONT_SCALE_UP_FACTOR * textWidth,
+      },
+    })
+
+    const shadow = this.constructor.shadow
+      ? new ElementList({ content: [shadowBlur, shadowText] })
+      : ''
 
     if (!link) {
       return new ElementList({ content: [shadow, text] })
@@ -416,6 +433,17 @@ class Flat extends Badge {
   }
 
   render() {
+    const blur = new XmlElement({
+      name: 'filter',
+      content: [
+        new XmlElement({
+          name: 'feGaussianBlur',
+          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
+        }),
+      ],
+      attrs: { id: 'blur' },
+    })
+
     const gradient = new XmlElement({
       name: 'linearGradient',
       content: [
@@ -446,7 +474,7 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
