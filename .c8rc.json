@@ -9,10 +9,8 @@
     "**/test-helpers.js",
     "**/*-test-helpers.js",
     "**/*-fixtures.js",
-    "**/mocha-*.js",
     "**/*.test-d.ts",
     "dangerfile.js",
-    "gatsby-*.js",
     "core/service-test-runner",
     "core/got-test-client.js",
     "services/**/*.tester.js",
@@ -23,6 +21,9 @@
     "coverage",
     "build",
     ".github",
-    "**/public/"
+    "**/public/",
+    "cypress",
+    "frontend",
+    "migrations"
   ]
 }
