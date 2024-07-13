@@ -74,7 +74,7 @@ function LastUpdateForType(extensionType) {
         slug,
       })
 
-      const newDate = await this.transform(lastUpdated)
+      const newDate = this.transform(lastUpdated)
 
       return this.constructor.render({
         lastUpdated: newDate,

@@ -49,7 +49,7 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'milestones', color: 'informational' }
 
-  static render({ user, repo, variant, number, milestone }) {
+  static render({ variant, milestone }) {
     let milestoneMetric
     let color
     let label = ''
@@ -102,6 +102,6 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
 
   async handle({ user, repo, variant, number }) {
     const milestone = await this.fetch({ user, repo, number })
-    return this.constructor.render({ user, repo, variant, number, milestone })
+    return this.constructor.render({ variant, milestone })
   }
 }

@@ -19,7 +19,7 @@ const isBuildStatus = Joi.alternatives().try(
   Joi.equal(...Object.keys(localStatuses)),
 )
 
-function renderBuildStatusBadge({ repository, status }) {
+function renderBuildStatusBadge({ status }) {
   const color = localStatuses[status]
   if (color) {
     return {

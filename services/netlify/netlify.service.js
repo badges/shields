@@ -49,7 +49,7 @@ export default class Netlify extends BaseSvgScrapingService {
     return result
   }
 
-  async fetch({ projectId, branch }) {
+  async fetch({ projectId }) {
     const url = `https://api.netlify.com/api/v1/badges/${projectId}/deploy-status`
     const { buffer } = await this._request({
       url,
@@ -61,8 +61,8 @@ export default class Netlify extends BaseSvgScrapingService {
     return { message: 'unknown' }
   }
 
-  async handle({ projectId, branch }) {
-    const { message: status } = await this.fetch({ projectId, branch })
+  async handle({ projectId }) {
+    const { message: status } = await this.fetch({ projectId })
     return this.constructor.render({ status })
   }
 }
