@@ -77,6 +77,15 @@ don't see it, feel free to [open a new issue][open an issue].
 
 [open an issue]: https://github.com/badges/shields/issues/new/choose
 
+### Requesting new logos
+
+We consume logos via [the SimpleIcons project][simple-icons github], and
+encourage you to contribute logos there. Please review their
+[guidance][simple-icons contributing] before doing so.
+
+[simple-icons github]: https://github.com/simple-icons/simple-icons
+[simple-icons contributing]: https://github.com/simple-icons/simple-icons/blob/develop/CONTRIBUTING.md
+
 ### Spreading the word
 
 Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields!
@@ -153,10 +162,6 @@ To run the integration tests:
 ### Code organization
 
 There is a [High-level code walkthrough](doc/code-walkthrough.md) describing the layout of the project.
-
-### Logos
-
-We have [documentation for logo usage](doc/logos.md) which includes [contribution guidance](doc/logos.md#contributing-logos)
 
 ## Pull Requests
 

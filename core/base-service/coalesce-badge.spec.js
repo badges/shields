@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getShieldsIcon, getSimpleIcon } from '../../lib/logos.js'
+import { getSimpleIcon } from '../../lib/logos.js'
 import coalesceBadge from './coalesce-badge.js'
 
 describe('coalesceBadge', function () {
@@ -138,7 +138,7 @@ describe('coalesceBadge', function () {
     })
 
     it('when a social badge, uses the default named logo', function () {
-      // .not.be.empty for confidence that nothing has changed with `getShieldsIcon()`.
+      // .not.be.empty for confidence that nothing has changed with `getSimpleIcon()`.
       expect(
         coalesceBadge({ style: 'social' }, {}, { namedLogo: 'appveyor' }).logo,
       ).to.equal(getSimpleIcon({ name: 'appveyor' })).and.not.be.empty
@@ -149,50 +149,33 @@ describe('coalesceBadge', function () {
         namedLogo: 'npm',
       })
       expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).logo).to.equal(
-        getShieldsIcon({ name: 'npm' }),
+        getSimpleIcon({ name: 'npm' }),
       ).and.not.to.be.empty
     })
 
-    it('applies the named monochrome logo with color', function () {
+    it('applies the named logo with color', function () {
       expect(
         coalesceBadge({}, { namedLogo: 'dependabot', logoColor: 'blue' }, {})
           .logo,
-      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
         .to.be.empty
-    })
-
-    it('applies the named multicolored logo with color', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'npm', logoColor: 'blue' }, {}).logo,
-      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.to.be
-        .empty
     })
 
     it('overrides the logo', function () {
       expect(
         coalesceBadge({ logo: 'npm' }, { namedLogo: 'appveyor' }, {}).logo,
-      ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
+      ).to.equal(getSimpleIcon({ name: 'npm' })).and.not.be.empty
     })
 
-    it('overrides the monochrome logo with a color', function () {
+    it('overrides the logo with a color', function () {
       expect(
         coalesceBadge(
           { logo: 'dependabot', logoColor: 'blue' },
           { namedLogo: 'appveyor' },
           {},
         ).logo,
-      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
         .be.empty
-    })
-
-    it('overrides multicolored logo with a color', function () {
-      expect(
-        coalesceBadge(
-          { logo: 'npm', logoColor: 'blue' },
-          { namedLogo: 'appveyor' },
-          {},
-        ).logo,
-      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.be.empty
     })
 
     it("when the logo is overridden, it ignores the service's logo color and width", function () {
@@ -206,35 +189,25 @@ describe('coalesceBadge', function () {
           },
           {},
         ).logo,
-      ).to.equal(getShieldsIcon({ name: 'npm' })).and.not.be.empty
+      ).to.equal(getSimpleIcon({ name: 'npm' })).and.not.be.empty
     })
 
-    it("overrides the service monochome logo's color", function () {
+    it("overrides the service logo's color", function () {
       expect(
         coalesceBadge(
           { logoColor: 'blue' },
           { namedLogo: 'dependabot', logoColor: 'red' },
           {},
         ).logo,
-      ).to.equal(getShieldsIcon({ name: 'dependabot', color: 'blue' })).and.not
+      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
         .be.empty
-    })
-
-    it("overrides the service multicolored logo's color", function () {
-      expect(
-        coalesceBadge(
-          { logoColor: 'blue' },
-          { namedLogo: 'npm', logoColor: 'red' },
-          {},
-        ).logo,
-      ).to.equal(getSimpleIcon({ name: 'npm', color: 'blue' })).and.not.be.empty
     })
 
     // https://github.com/badges/shields/issues/2998
     it('overrides logoSvg', function () {
       const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
       expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {}).logo).to.equal(
-        getShieldsIcon({ name: 'npm' }),
+        getSimpleIcon({ name: 'npm' }),
       ).and.not.be.empty
     })
   })

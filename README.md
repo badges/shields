@@ -223,9 +223,6 @@ Alumni:
 All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
 domain unless specified otherwise.
 
-The assets in `logo/` are trademarks of their respective companies and are
-under their terms and license.
-
 ## Community
 
 Thanks to the people and companies who donate money, services or time to keep the project running. [https://shields.io/community](https://shields.io/community)
