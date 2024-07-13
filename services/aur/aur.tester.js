@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
 import {
   isVPlusDottedVersionNClausesWithOptionalSuffix,
@@ -35,6 +36,19 @@ t.create('votes (not found)')
   .get('/votes/not-a-package.json')
   .expectBadge({ label: 'votes', message: 'package not found' })
 
+// popularity tests
+
+t.create('popularity (valid)')
+  .get('/popularity/google-chrome.json')
+  .expectBadge({
+    label: 'popularity',
+    message: Joi.number().precision(2).required(),
+  })
+
+t.create('popularity (not found)')
+  .get('/popularity/not-a-package.json')
+  .expectBadge({ label: 'popularity', message: 'package not found' })
+
 // license tests
 
 t.create('license (valid)')
@@ -57,6 +71,7 @@ t.create('license (no license)')
           {
             License: null,
             NumVotes: 1,
+            Popularity: 0,
             Version: '1',
             OutOfDate: null,
             Maintainer: null,
@@ -75,7 +90,7 @@ t.create('license (package not found)')
 
 t.create('maintainer (valid)')
   .get('/maintainer/google-chrome.json')
-  .expectBadge({ label: 'maintainer', message: 'luzifer' })
+  .expectBadge({ label: 'maintainer', message: 'gromit' })
 
 t.create('maintainer (not found)')
   .get('/maintainer/not-a-package.json')

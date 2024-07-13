@@ -1,13 +1,6 @@
 import { BaseXmlService } from '../index.js'
 
 export default class EclipseMarketplaceBase extends BaseXmlService {
-  static buildRoute(base) {
-    return {
-      base,
-      pattern: ':name',
-    }
-  }
-
   async fetch({ name, schema }) {
     return this._requestXml({
       schema,

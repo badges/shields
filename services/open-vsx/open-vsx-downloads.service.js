@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import OpenVSXBase from './open-vsx-base.js'
+import { OpenVSXBase, description } from './open-vsx-base.js'
 
 export default class OpenVSXDownloads extends OpenVSXBase {
   static category = 'downloads'
@@ -9,32 +10,44 @@ export default class OpenVSXDownloads extends OpenVSXBase {
     pattern: ':interval(dt)/:namespace/:extension/:version*',
   }
 
-  static examples = [
-    {
-      title: 'Open VSX Downloads',
-      pattern: 'dt/:namespace/:extension',
-      namedParams: {
-        namespace: 'redhat',
-        extension: 'java',
+  static openApi = {
+    '/open-vsx/dt/{namespace}/{extension}': {
+      get: {
+        summary: 'Open VSX Downloads',
+        description,
+        parameters: pathParams(
+          {
+            name: 'namespace',
+            example: 'redhat',
+          },
+          {
+            name: 'extension',
+            example: 'java',
+          },
+        ),
       },
-      staticPreview: renderDownloadsBadge({ downloads: 29000 }),
-      keywords: this.keywords,
     },
-    {
-      title: 'Open VSX Downloads (version)',
-      pattern: 'dt/:namespace/:extension/:version',
-      namedParams: {
-        namespace: 'redhat',
-        extension: 'java',
-        version: '0.69.0',
+    '/open-vsx/dt/{namespace}/{extension}/{version}': {
+      get: {
+        summary: 'Open VSX Downloads (version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'namespace',
+            example: 'redhat',
+          },
+          {
+            name: 'extension',
+            example: 'java',
+          },
+          {
+            name: 'version',
+            example: '0.69.0',
+          },
+        ),
       },
-      staticPreview: renderDownloadsBadge({
-        version: '0.69.0',
-        downloads: 29000,
-      }),
-      keywords: this.keywords,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { maybePluralize } from '../text-formatters.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const hexSchema = Joi.object({
   downloads: Joi.object({
@@ -14,9 +14,11 @@ const hexSchema = Joi.object({
   meta: Joi.object({
     licenses: Joi.array().required(),
   }).required(),
-  latest_stable_version: Joi.string(),
+  latest_stable_version: Joi.string().allow(null),
   latest_version: Joi.string().required(),
 }).required()
+
+const description = '[Hex.pm](https://hex.pm/) is a package registry for Erlang'
 
 class BaseHexPmService extends BaseJsonService {
   static defaultBadgeData = { label: 'hex' }
@@ -37,13 +39,18 @@ class HexPmLicense extends BaseHexPmService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Hex.pm',
-      namedParams: { packageName: 'plug' },
-      staticPreview: this.render({ licenses: ['Apache 2'] }),
+  static openApi = {
+    '/hexpm/l/{packageName}': {
+      get: {
+        summary: 'Hex.pm License',
+        description,
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'plug',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 
@@ -76,13 +83,18 @@ class HexPmVersion extends BaseHexPmService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'Hex.pm',
-      namedParams: { packageName: 'plug' },
-      staticPreview: this.render({ version: '1.6.4' }),
+  static openApi = {
+    '/hexpm/v/{packageName}': {
+      get: {
+        summary: 'Hex.pm Version',
+        description,
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'plug',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ version }) {
     return renderVersionBadge({ version })
@@ -96,52 +108,59 @@ class HexPmVersion extends BaseHexPmService {
   }
 }
 
-function DownloadsForInterval(downloadInterval) {
-  const { base, interval, name } = {
-    day: {
-      base: 'hexpm/dd',
-      interval: 'day',
-      name: 'HexPmDownloadsDay',
-    },
-    week: {
-      base: 'hexpm/dw',
-      interval: 'week',
-      name: 'HexPmDownloadsWeek',
-    },
-    all: {
-      base: 'hexpm/dt',
-      name: 'HexPmDownloadsTotal',
-    },
-  }[downloadInterval]
+const periodMap = {
+  dd: {
+    field: 'day',
+    label: 'day',
+  },
+  dw: {
+    field: 'week',
+    label: 'week',
+  },
+  dt: {
+    field: 'all',
+  },
+}
 
-  return class HexPmDownloads extends BaseHexPmService {
-    static name = name
+class HexPmDownloads extends BaseHexPmService {
+  static category = 'downloads'
 
-    static category = 'downloads'
+  static route = {
+    base: 'hexpm',
+    pattern: ':interval(dd|dw|dt)/:packageName',
+  }
 
-    static route = {
-      base,
-      pattern: ':packageName',
-    }
-
-    static examples = [
-      {
-        title: 'Hex.pm',
-        namedParams: { packageName: 'plug' },
-        staticPreview: renderDownloadsBadge({ downloads: 85000 }),
+  static openApi = {
+    '/hexpm/{interval}/{packageName}': {
+      get: {
+        summary: 'Hex.pm Downloads',
+        description,
+        parameters: pathParams(
+          {
+            name: 'interval',
+            example: 'dw',
+            schema: { type: 'string', enum: this.getEnum('interval') },
+            description: 'Daily, Weekly, or Total downloads',
+          },
+          {
+            name: 'packageName',
+            example: 'plug',
+          },
+        ),
       },
-    ]
+    },
+  }
 
-    static defaultBadgeData = { label: 'downloads' }
+  static defaultBadgeData = { label: 'downloads' }
 
-    async handle({ packageName }) {
-      const json = await this.fetch({ packageName })
-      const downloads = json.downloads[downloadInterval]
-      return renderDownloadsBadge({ downloads, interval })
-    }
+  async handle({ interval, packageName }) {
+    const json = await this.fetch({ packageName })
+    const downloads = json.downloads[periodMap[interval].field]
+    return renderDownloadsBadge({
+      downloads,
+      interval: periodMap[interval].label,
+    })
   }
 }
 
-const downloadsServices = ['day', 'week', 'all'].map(DownloadsForInterval)
-
-export default [...downloadsServices, HexPmLicense, HexPmVersion]
+export default [HexPmDownloads, HexPmLicense, HexPmVersion]

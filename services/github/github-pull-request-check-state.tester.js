@@ -2,8 +2,8 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('github pull request check state')
-  .get('/s/pulls/badges/shields/8486.json')
-  .expectBadge({ label: 'checks', message: 'failure' })
+  .get('/s/pulls/badges/shields/9863.json')
+  .expectBadge({ label: 'checks', message: 'success' })
 
 t.create('github pull request check state (pull request not found)')
   .get('/s/pulls/badges/shields/5101.json')
@@ -17,7 +17,7 @@ t.create(
     nock =>
       nock('https://api.github.com', { allowUnmocked: true })
         .get('/repos/badges/shields/pulls/1110')
-        .reply(200, JSON.stringify({ head: { sha: 'abc123' } })), // Looks like a real ref, but isn't.
+        .reply(200, JSON.stringify({ head: { sha: 'abcde12356' } })), // Looks like a real ref, but isn't.
   )
   .networkOn()
   .expectBadge({
@@ -26,5 +26,5 @@ t.create(
   })
 
 t.create('github pull request check contexts')
-  .get('/contexts/pulls/badges/shields/8486.json')
-  .expectBadge({ label: 'checks', message: '2 success, 4 failure' })
+  .get('/contexts/pulls/badges/shields/9863.json')
+  .expectBadge({ label: 'checks', message: '1 success' })

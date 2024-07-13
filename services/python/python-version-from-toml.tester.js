@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import pep440 from '@renovate/pep440'
+import pep440 from '@renovatebot/pep440'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 

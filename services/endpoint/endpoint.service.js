@@ -11,18 +11,17 @@ const queryParamSchema = Joi.object({
   url: optionalUrl.required(),
 }).required()
 
-const description = `<p>
-  Using the endpoint badge, you can provide content for a badge through
-  a JSON endpoint. The content can be prerendered, or generated on the
-  fly. To strike a balance between responsiveness and bandwidth
-  utilization on one hand, and freshness on the other, cache behavior is
-  configurable, subject to the Shields minimum. The endpoint URL is
-  provided to Shields through the query string. Shields fetches it and
-  formats the badge.
-</p>
-<p>
-  The endpoint badge takes a single required query param: <code>url</code>, which is the URL to your JSON endpoint
-</p>
+const description = `
+Using the endpoint badge, you can provide content for a badge through
+a JSON endpoint. The content can be prerendered, or generated on the
+fly. To strike a balance between responsiveness and bandwidth
+utilization on one hand, and freshness on the other, cache behavior is
+configurable, subject to the Shields minimum. The endpoint URL is
+provided to Shields through the query string. Shields fetches it and
+formats the badge.
+
+The endpoint badge takes a single required query param: <code>url</code>, which is the URL to your JSON endpoint
+
 <div>
   <h2>Example JSON Endpoint Response</h2>
   <code>&#123; "schemaVersion": 1, "label": "hello", "message": "sweet world", "color": "orange" &#125;</code>
@@ -104,13 +103,6 @@ const description = `<p>
         </td>
       </tr>
       <tr>
-        <td><code>logoPosition</code></td>
-        <td>
-          Default: none. Same meaning as the query string. Can be overridden by
-          the query string.
-        </td>
-      </tr>
-      <tr>
         <td><code>style</code></td>
         <td>
           Default: <code>flat</code>. The default template to use. Can be
@@ -158,7 +150,6 @@ export default class Endpoint extends BaseJsonService {
     logoSvg,
     logoColor,
     logoWidth,
-    logoPosition,
     style,
     cacheSeconds,
   }) {
@@ -172,7 +163,6 @@ export default class Endpoint extends BaseJsonService {
       logoSvg,
       logoColor,
       logoWidth,
-      logoPosition,
       style,
       // don't allow the user to set cacheSeconds any shorter than this._cacheLength
       cacheSeconds: Math.max(

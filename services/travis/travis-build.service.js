@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, deprecatedService } from '../index.js'
+import { BaseSvgScrapingService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -17,34 +17,41 @@ export class TravisComBuild extends BaseSvgScrapingService {
     capture: ['userRepo', 'branch'],
   }
 
-  static examples = [
-    {
-      title: 'Travis (.com)',
-      pattern: 'com/:user/:repo',
-      namedParams: { user: 'ivandelabeldad', repo: 'rackian-gateway' },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+  static openApi = {
+    '/travis/com/{user}/{repo}': {
+      get: {
+        summary: 'Travis (.com)',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+        ),
       },
     },
-    {
-      title: 'Travis (.com) branch',
-      pattern: 'com/:user/:repo/:branch',
-      namedParams: {
-        user: 'ivandelabeldad',
-        repo: 'rackian-gateway',
-        branch: 'master',
-      },
-      staticPreview: {
-        message: 'passing',
-        color: 'brightgreen',
+    '/travis/com/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'Travis (.com) branch',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'ivandelabeldad',
+          },
+          {
+            name: 'repo',
+            example: 'rackian-gateway',
+          },
+          {
+            name: 'branch',
+            example: 'master',
+          },
+        ),
       },
     },
-  ]
-
-  static staticPreview = {
-    message: 'passing',
-    color: 'brightgreen',
   }
 
   static defaultBadgeData = {
@@ -66,14 +73,3 @@ export class TravisComBuild extends BaseSvgScrapingService {
     return this.constructor.render({ status })
   }
 }
-
-export const TravisOrgBuild = deprecatedService({
-  category: 'build',
-  route: {
-    base: 'travis',
-    format: '(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
-    capture: ['userRepo', 'branch'],
-  },
-  label: 'build',
-  dateAdded: new Date('2023-05-13'),
-})

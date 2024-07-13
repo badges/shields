@@ -1,49 +1,17 @@
+/**
+ * @module
+ */
 import Joi from 'joi'
 
 const arrayOfStrings = Joi.array().items(Joi.string()).min(0).required()
 
-const objectOfKeyValues = Joi.object()
-  .pattern(/./, Joi.string().allow(null))
-  .required()
-
-const serviceDefinition = Joi.object({
-  category: Joi.string().required(),
-  name: Joi.string().required(),
-  isDeprecated: Joi.boolean().required(),
-  route: Joi.alternatives().try(
-    Joi.object({
-      pattern: Joi.string().required(),
-      queryParams: arrayOfStrings,
-    }),
-    Joi.object({
-      format: Joi.string().required(),
-      queryParams: arrayOfStrings,
-    }),
-  ),
-  examples: Joi.array()
-    .items(
-      Joi.object({
-        title: Joi.string().required(),
-        example: Joi.object({
-          pattern: Joi.string(),
-          namedParams: objectOfKeyValues,
-          queryParams: objectOfKeyValues,
-        }).required(),
-        preview: Joi.object({
-          label: Joi.string(),
-          message: Joi.string().allow('').required(),
-          color: Joi.string().required(),
-          style: Joi.string(),
-          namedLogo: Joi.string(),
-        }).required(),
-        keywords: arrayOfStrings,
-        documentation: Joi.object({
-          __html: Joi.string().required(), // Valid HTML.
-        }),
-      }),
-    )
-    .default([]),
-  openApi: Joi.object().pattern(
+/**
+ * Joi schema describing the subset of OpenAPI paths we use in this application
+ *
+ * @see https://swagger.io/specification/#paths-object
+ */
+const openApiSchema = Joi.object()
+  .pattern(
     /./,
     Joi.object({
       get: Joi.object({
@@ -68,7 +36,24 @@ const serviceDefinition = Joi.object({
           .required(),
       }).required(),
     }).required(),
+  )
+  .default({})
+
+const serviceDefinition = Joi.object({
+  category: Joi.string().required(),
+  name: Joi.string().required(),
+  isDeprecated: Joi.boolean().required(),
+  route: Joi.alternatives().try(
+    Joi.object({
+      pattern: Joi.string().required(),
+      queryParams: arrayOfStrings,
+    }),
+    Joi.object({
+      format: Joi.string().required(),
+      queryParams: arrayOfStrings,
+    }),
   ),
+  openApi: openApiSchema,
 }).required()
 
 function assertValidServiceDefinition(service, message = undefined) {
@@ -82,15 +67,18 @@ const serviceDefinitionExport = Joi.object({
       Joi.object({
         id: Joi.string().required(),
         name: Joi.string().required(),
-        keywords: arrayOfStrings,
       }),
     )
     .required(),
   services: Joi.array().items(serviceDefinition).required(),
 }).required()
 
-function assertValidServiceDefinitionExport(examples, message = undefined) {
-  Joi.assert(examples, serviceDefinitionExport, message)
+function assertValidServiceDefinitionExport(openApiSpec, message = undefined) {
+  Joi.assert(openApiSpec, serviceDefinitionExport, message)
 }
 
-export { assertValidServiceDefinition, assertValidServiceDefinitionExport }
+export {
+  assertValidServiceDefinition,
+  assertValidServiceDefinitionExport,
+  openApiSchema,
+}

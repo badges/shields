@@ -4,6 +4,7 @@ import sinon from 'sinon'
 import prometheus from 'prom-client'
 import chaiAsPromised from 'chai-as-promised'
 import PrometheusMetrics from '../server/prometheus-metrics.js'
+import { pathParam, queryParam } from './openapi.js'
 import trace from './trace.js'
 import {
   NotFound,
@@ -31,14 +32,17 @@ class DummyService extends BaseService {
   static category = 'other'
   static route = { base: 'foo', pattern: ':namedParamA', queryParamSchema }
 
-  static examples = [
-    {
-      pattern: ':world',
-      namedParams: { world: 'World' },
-      staticPreview: this.render({ namedParamA: 'foo', queryParamA: 'bar' }),
-      keywords: ['hello'],
+  static openApi = {
+    '/foo/{namedParamA}': {
+      get: {
+        summary: 'Dummy Service',
+        parameters: [
+          pathParam({ name: 'namedParamA', example: 'foo' }),
+          queryParam({ name: 'queryParamA', example: 'bar' }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'cat', namedLogo: 'appveyor' }
 
@@ -322,7 +326,7 @@ describe('BaseService', function () {
   })
 
   describe('ScoutCamp integration', function () {
-    // TODO Strangly, without the useless escape the regexes do not match in Node 12.
+    // TODO Strangely, without the useless escape the regexes do not match in Node 12.
     // eslint-disable-next-line no-useless-escape
     const expectedRouteRegex = /^\/foo(?:\/([^\/#\?]+?))(|\.svg|\.json)$/
 
@@ -373,7 +377,7 @@ describe('BaseService', function () {
         namedLogo: undefined,
         logo: undefined,
         logoWidth: undefined,
-        logoPosition: undefined,
+        logoSize: undefined,
         links: [],
         labelColor: undefined,
         cacheLengthSeconds: undefined,
@@ -383,7 +387,7 @@ describe('BaseService', function () {
 
   describe('getDefinition', function () {
     it('returns the expected result', function () {
-      const { category, name, isDeprecated, route, examples } =
+      const { category, name, isDeprecated, route, openApi } =
         DummyService.getDefinition()
       expect({
         category,
@@ -400,7 +404,7 @@ describe('BaseService', function () {
         },
       })
       // The in-depth tests for examples reside in examples.spec.js
-      expect(examples).to.have.lengthOf(1)
+      expect(Object.keys(openApi)).to.have.lengthOf(1)
     })
   })
 

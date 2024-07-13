@@ -8,14 +8,10 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 
 <ul>
     <li>
-        <a href="https://nodeping.com/">
-        NodePing
-        </a>
+        <a href="https://nodeping.com/">NodePing</a>
     </li>
     <li>
-        <a href="https://sentry.io/">
-        Sentry
-        </a>
+        <a href="https://sentry.io/">Sentry</a>
     </li>
 </ul>
 
@@ -23,8 +19,8 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 
 <p>
     <object
-        data="https://opencollective.com/shields/sponsors.svg?avatarHeight=80&width=600"
-        class="opencollective-image"
+        data="https://opencollective.com/shields/tiers/sponsor.svg?avatarHeight=80&width=600"
+        className="opencollective-image"
     ></object>
 </p>
 
@@ -34,8 +30,8 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 
 <p>
     <object
-        data="https://opencollective.com/shields/backers.svg?width=600"
-        class="opencollective-image">
+        data="https://opencollective.com/shields/tiers/backer.svg?width=600"
+        className="opencollective-image">
     </object>
 </p>
 
@@ -46,7 +42,7 @@ Shields.io is possible thanks to the people and companies who donate money, serv
 <p>
     <object
         data="https://opencollective.com/shields/contributors.svg?width=600"
-        class="opencollective-image"
+        className="opencollective-image"
     ></object>
 </p>
 

@@ -1,6 +1,7 @@
+import { pathParams } from '../index.js'
 import { starRating } from '../text-formatters.js'
 import { floorCount } from '../color-formatters.js'
-import OpenVSXBase from './open-vsx-base.js'
+import { OpenVSXBase, description } from './open-vsx-base.js'
 
 export default class OpenVSXRating extends OpenVSXBase {
   static category = 'rating'
@@ -10,36 +11,29 @@ export default class OpenVSXRating extends OpenVSXBase {
     pattern: ':format(rating|stars)/:namespace/:extension',
   }
 
-  static examples = [
-    {
-      title: 'Open VSX Rating',
-      pattern: 'rating/:namespace/:extension',
-      namedParams: {
-        namespace: 'redhat',
-        extension: 'java',
+  static openApi = {
+    '/open-vsx/{format}/{namespace}/{extension}': {
+      get: {
+        summary: 'Open VSX Rating',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            example: 'rating',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          },
+          {
+            name: 'namespace',
+            example: 'redhat',
+          },
+          {
+            name: 'extension',
+            example: 'java',
+          },
+        ),
       },
-      staticPreview: this.render({
-        format: 'rating',
-        averageRating: 5,
-        ratingCount: 2,
-      }),
-      keywords: this.keywords,
     },
-    {
-      title: 'Open VSX Rating (Stars)',
-      pattern: 'stars/:namespace/:extension',
-      namedParams: {
-        namespace: 'redhat',
-        extension: 'java',
-      },
-      staticPreview: this.render({
-        format: 'stars',
-        averageRating: 5,
-        ratingCount: 2,
-      }),
-      keywords: this.keywords,
-    },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'rating',

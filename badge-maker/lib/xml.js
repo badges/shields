@@ -35,7 +35,7 @@ class XmlElement {
    *    Name of the XML tag
    * @param {Array.<string|module:badge-maker/lib/xml~XmlElement>} [attrs.content=[]]
    *    Array of objects to render inside the tag. content may contain a mix of
-   *    string and XmlElement objects. If content is `[]` or ommitted the
+   *    string and XmlElement objects. If content is `[]` or omitted the
    *    element will be rendered as a self-closing element.
    * @param {object} [attrs.attrs={}]
    *    Object representing the tag's attributes as name/value pairs

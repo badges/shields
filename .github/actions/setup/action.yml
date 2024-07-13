@@ -2,8 +2,12 @@ name: 'Set up project'
 description: 'Set up project'
 inputs:
   node-version:
-    description: 'Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.'
+    description: 'Version Spec of the node version to use. Examples: 12.x, 10.15.1, >=10.15.0.'
     required: true
+  npm-version:
+    description: 'Version Spec of the npm version to use. Examples: 9.x, 10.2.3, >=10.1.0.'
+    required: false
+    default: '^10'
   cypress:
     description: 'Install Cypress binary (boolean)'
     type: boolean
@@ -15,12 +19,12 @@ runs:
   using: 'composite'
   steps:
     - name: Install Node JS ${{ inputs.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
 
-    - name: Install NPM 9
-      run: npm install -g npm@^9.0.0
+    - name: Install NPM ${{ inputs.npm-version }}
+      run: npm install -g npm@${{ inputs.npm-version }}
       shell: bash
 
     - name: Install dependencies

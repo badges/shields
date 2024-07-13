@@ -4,9 +4,7 @@ export const t = await createServiceTester()
 
 t.create('Security Rating')
   .timeout(10000)
-  .get(
-    '/security_rating/com.luckybox:luckybox.json?server=https://sonarcloud.io',
-  )
+  .get('/security_rating/WebExtensions.Net.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'security rating',
     message: isMetric,
@@ -16,7 +14,7 @@ t.create('Security Rating')
 t.create('Security Rating (branch)')
   .timeout(10000)
   .get(
-    '/security_rating/com.luckybox:luckybox/master.json?server=https://sonarcloud.io',
+    '/security_rating/WebExtensions.Net/main.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'security rating',

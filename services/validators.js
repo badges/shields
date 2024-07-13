@@ -79,3 +79,10 @@ export const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 export const fileSize = Joi.string()
   .regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
   .required()
+
+/**
+ * Joi validator that checks if a value is a relative-only URI
+ *
+ * @type {Joi}
+ */
+export const relativeUri = Joi.string().uri({ relativeOnly: true })

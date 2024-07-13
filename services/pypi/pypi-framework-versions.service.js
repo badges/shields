@@ -1,5 +1,5 @@
-import { InvalidResponse } from '../index.js'
-import PypiBase from './pypi-base.js'
+import { InvalidResponse, pathParams } from '../index.js'
+import PypiBase, { pypiBaseUrlParam } from './pypi-base.js'
 import { sortPypiVersions, parseClassifiers } from './pypi-helpers.js'
 
 const frameworkNameMap = {
@@ -37,11 +37,9 @@ const frameworkNameMap = {
   },
 }
 
-const documentation = `
-<p>
-  This service currently support the following Frameworks: <br/>
-  ${Object.values(frameworkNameMap).map(obj => ` <strong>${obj.name}</strong>`)}
-</p>
+const description = `
+This service currently support the following Frameworks: <br/>
+${Object.values(frameworkNameMap).map(obj => ` <strong>${obj.name}</strong>`)}
 `
 export default class PypiFrameworkVersion extends PypiBase {
   static category = 'platform-support'
@@ -53,21 +51,22 @@ export default class PypiFrameworkVersion extends PypiBase {
     )})/:packageName+`,
   }
 
-  static examples = [
-    {
-      title: 'PyPI - Versions from Framework Classifiers',
-      namedParams: {
-        frameworkName: 'Plone',
-        packageName: 'plone.volto',
+  static openApi = {
+    '/pypi/frameworkversions/{frameworkName}/{packageName}': {
+      get: {
+        summary: 'PyPI - Versions from Framework Classifiers',
+        description,
+        parameters: pathParams(
+          {
+            name: 'frameworkName',
+            example: 'plone',
+            schema: { type: 'string', enum: Object.keys(frameworkNameMap) },
+          },
+          { name: 'packageName', example: 'plone.volto' },
+        ).concat(pypiBaseUrlParam),
       },
-      staticPreview: this.render({
-        name: 'Plone',
-        versions: ['5.2', '6.0'],
-      }),
-      keywords: ['python'],
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'versions' }
 
@@ -81,7 +80,7 @@ export default class PypiFrameworkVersion extends PypiBase {
     }
   }
 
-  async handle({ frameworkName, packageName }) {
+  async handle({ frameworkName, packageName }, { pypiBaseUrl }) {
     const classifier = frameworkNameMap[frameworkName]
       ? frameworkNameMap[frameworkName].classifier
       : frameworkName
@@ -89,7 +88,7 @@ export default class PypiFrameworkVersion extends PypiBase {
       ? frameworkNameMap[frameworkName].name
       : frameworkName
     const regex = new RegExp(`^Framework :: ${classifier} :: ([\\d.]+)$`)
-    const packageData = await this.fetch({ egg: packageName })
+    const packageData = await this.fetch({ egg: packageName, pypiBaseUrl })
     const versions = parseClassifiers(packageData, regex)
 
     if (versions.length === 0) {

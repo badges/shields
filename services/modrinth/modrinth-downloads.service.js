@@ -1,5 +1,6 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { BaseModrinthService, documentation } from './modrinth-base.js'
+import { BaseModrinthService, description } from './modrinth-base.js'
 
 export default class ModrinthDownloads extends BaseModrinthService {
   static category = 'downloads'
@@ -9,14 +10,18 @@ export default class ModrinthDownloads extends BaseModrinthService {
     pattern: ':projectId',
   }
 
-  static examples = [
-    {
-      title: 'Modrinth Downloads',
-      namedParams: { projectId: 'AANobbMI' },
-      staticPreview: renderDownloadsBadge({ downloads: 120000 }),
-      documentation,
+  static openApi = {
+    '/modrinth/dt/{projectId}': {
+      get: {
+        summary: 'Modrinth Downloads',
+        description,
+        parameters: pathParams({
+          name: 'projectId',
+          example: 'AANobbMI',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'downloads' }
 

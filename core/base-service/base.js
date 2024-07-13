@@ -19,7 +19,6 @@ import {
   InvalidParameter,
   Deprecated,
 } from './errors.js'
-import { validateExample, transformExample } from './examples.js'
 import { fetch } from './got.js'
 import { getEnum } from './openapi.js'
 import {
@@ -67,7 +66,6 @@ const serviceDataSchema = Joi.object({
   logoSvg: Joi.string(),
   logoColor: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
-  logoPosition: optionalNumberWhenAnyLogoPresent,
   cacheSeconds: Joi.number().integer().min(0),
   style: Joi.string(),
 })
@@ -144,31 +142,14 @@ class BaseService {
   static auth = undefined
 
   /**
-   * Array of Example objects describing example URLs for this service.
-   * These should use the format specified in `route`,
-   * and can be used to demonstrate how to use badges for this service.
-   *
-   * The preferred way to specify an example is with `namedParams` which are
-   * substituted into the service's compiled route pattern. The rendered badge
-   * is specified with `staticPreview`.
-   *
-   * For services which use a route `format`, the `pattern` can be specified as
-   * part of the example.
-   *
-   * @see {@link module:core/base-service/base~Example}
-   * @abstract
-   * @type {module:core/base-service/base~Example[]}
-   */
-  static examples = []
-
-  /**
-   * Optional: an OpenAPI Paths Object describing this service's
+   * An OpenAPI Paths Object describing this service's
    * route or routes in OpenAPI format.
    *
-   * @see https://swagger.io/specification/#paths-object
    * @abstract
+   * @see https://swagger.io/specification/#paths-object
+   * @type {module:core/base-service/service-definitions~openApiSchema}
    */
-  static openApi = undefined
+  static openApi = {}
 
   static get _cacheLength() {
     const cacheLengths = {
@@ -207,23 +188,17 @@ class BaseService {
       `Default badge data for ${this.name}`,
     )
 
-    this.examples.forEach((example, index) =>
-      validateExample(example, index, this),
-    )
-
     // ensure openApi spec matches route
-    if (this.openApi) {
-      const preparedRoute = prepareRoute(this.route)
-      for (const [key, value] of Object.entries(this.openApi)) {
-        let example = key
-        for (const param of value.get.parameters) {
-          example = example.replace(`{${param.name}}`, param.example)
-        }
-        if (!example.match(preparedRoute.regex)) {
-          throw new Error(
-            `Inconsistent Open Api spec and Route found for service ${this.name}`,
-          )
-        }
+    const preparedRoute = prepareRoute(this.route)
+    for (const [key, value] of Object.entries(this.openApi)) {
+      let example = key
+      for (const param of value.get.parameters) {
+        example = example.replace(`{${param.name}}`, param.example)
+      }
+      if (!example.match(preparedRoute.regex)) {
+        throw new Error(
+          `Inconsistent Open Api spec and Route found for service ${this.name}`,
+        )
       }
     }
   }
@@ -232,10 +207,6 @@ class BaseService {
     const { category, name, isDeprecated, openApi } = this
     const { base, format, pattern } = this.route
     const queryParams = getQueryParamNames(this.route)
-
-    const examples = this.examples.map((example, index) =>
-      transformExample(example, index, this),
-    )
 
     let route
     if (pattern) {
@@ -246,7 +217,7 @@ class BaseService {
       route = undefined
     }
 
-    const result = { category, name, isDeprecated, route, examples, openApi }
+    const result = { category, name, isDeprecated, route, openApi }
 
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 
@@ -263,7 +234,13 @@ class BaseService {
     this._metricHelper = metricHelper
   }
 
-  async _request({ url, options = {}, httpErrors = {}, systemErrors = {} }) {
+  async _request({
+    url,
+    options = {},
+    httpErrors = {},
+    systemErrors = {},
+    logErrors = [429],
+  }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     let logUrl = url
     const logOptions = Object.assign({}, options)
@@ -290,7 +267,7 @@ class BaseService {
     )
     await this._meterResponse(res, buffer)
     logTrace(emojic.dart, 'Response status code', res.statusCode)
-    return checkErrorResponse(httpErrors)({ buffer, res })
+    return checkErrorResponse(httpErrors, logErrors)({ buffer, res })
   }
 
   static enabledMetrics = []
@@ -591,9 +568,11 @@ class BaseService {
  *    receives numeric can use `Joi.string()`. A boolean
  *    parameter should use `Joi.equal('')` and will receive an
  *    empty string on e.g. `?compact_message` and undefined
- *    when the parameter is absent. (Note that in,
- *    `examples.queryParams` boolean query params should be given
- *    `null` values.)
+ *    when the parameter is absent. In the OpenApi definitions,
+ *    this type of param should be documented as
+ *    queryParam({
+ *      name: 'compact_message', schema: { type: 'boolean' }, example: null
+ *    })
  */
 
 /**
@@ -606,32 +585,6 @@ class BaseService {
  * @property {string} isRequired
  *    (Optional) If `true`, the service will return `NotFound` unless the
  *    configured credentials are present.
- */
-
-/**
- * @typedef {object} Example
- * @property {string} title
- *    Descriptive text that will be shown next to the badge. The default
- *    is to use the service class name, which probably is not what you want.
- * @property {object} namedParams
- *    An object containing the values of named parameters to
- *    substitute into the compiled route pattern.
- * @property {object} queryParams
- *    An object containing query parameters to include in the
- *    example URLs. For alphanumeric query parameters, specify a string value.
- *    For boolean query parameters, specify `null`.
- * @property {string} pattern
- *    The route pattern to compile. Defaults to `this.route.pattern`.
- * @property {object} staticPreview
- *    A rendered badge of the sort returned by `handle()` or
- *    `render()`: an object containing `message` and optional `label` and
- *    `color`. This is usually generated by invoking `this.render()` with some
- *    explicit props.
- * @property {string[]} keywords
- *    Additional keywords, other than words in the title. This helps
- *    users locate relevant badges.
- * @property {string} documentation
- *    An HTML string that is included in the badge popup.
  */
 
 export default BaseService

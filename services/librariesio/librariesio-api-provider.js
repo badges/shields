@@ -17,7 +17,7 @@ export default class LibrariesIoApiProvider {
     })
 
     if (this.withPooling) {
-      this.standardTokens = new TokenPool({ batchSize: 45 })
+      this.standardTokens = new TokenPool({ batchSize: 10 })
       tokens.forEach(t => this.standardTokens.add(t, {}, defaultRateLimit))
     }
   }
@@ -48,7 +48,8 @@ export default class LibrariesIoApiProvider {
     // If the header is absent, we just use the current timestamp to
     // advance the value to _something_
     const retryAfter = headers['retry-after']
-    const nextReset = Date.now() + (retryAfter ? +retryAfter * 1000 : 0)
+    const nextReset =
+      ((Date.now() + (retryAfter ? +retryAfter * 1000 : 0)) / 1000) >>> 0
 
     return {
       rateLimit,

@@ -1,4 +1,5 @@
-import { documentation, YouTubeVideoBase } from './youtube-base.js'
+import { pathParams } from '../index.js'
+import { description, YouTubeVideoBase } from './youtube-base.js'
 
 export default class YouTubeComments extends YouTubeVideoBase {
   static route = {
@@ -6,21 +7,17 @@ export default class YouTubeComments extends YouTubeVideoBase {
     pattern: ':videoId',
   }
 
-  static get examples() {
-    const preview = this.render({
-      statistics: { commentCount: 209 },
-      id: 'wGJHwc5ksMA',
-    })
-    // link[] is not allowed in examples
-    delete preview.link
-    return [
-      {
-        title: 'YouTube Video Comments',
-        namedParams: { videoId: 'wGJHwc5ksMA' },
-        staticPreview: preview,
-        documentation,
+  static openApi = {
+    '/youtube/comments/{videoId}': {
+      get: {
+        summary: 'YouTube Video Comments',
+        description,
+        parameters: pathParams({
+          name: 'videoId',
+          example: 'wGJHwc5ksMA',
+        }),
       },
-    ]
+    },
   }
 
   static render({ statistics, id }) {

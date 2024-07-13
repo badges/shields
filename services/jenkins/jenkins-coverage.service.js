@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 import JenkinsBase from './jenkins-base.js'
 import {
@@ -87,15 +88,14 @@ const formatMap = {
   },
 }
 
-const documentation = `
-<p>
-  We support coverage metrics from a variety of Jenkins plugins:
-  <ul>
-    <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
-    <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
-    <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
-  </ul>
-</p>
+const description = `
+We support coverage metrics from a variety of Jenkins plugins:
+
+<ul>
+  <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
+  <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
+  <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
+</ul>
 `
 
 export default class JenkinsCoverage extends JenkinsBase {
@@ -107,20 +107,26 @@ export default class JenkinsCoverage extends JenkinsBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Jenkins Coverage',
-      namedParams: {
-        format: 'cobertura',
+  static openApi = {
+    '/jenkins/coverage/{format}': {
+      get: {
+        summary: 'Jenkins Coverage',
+        description,
+        parameters: [
+          pathParam({
+            name: 'format',
+            example: 'cobertura',
+            schema: { type: 'string', enum: this.getEnum('format') },
+          }),
+          queryParam({
+            name: 'jobUrl',
+            example: 'https://jenkins.sqlalchemy.org/job/dogpile_coverage',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        jobUrl: 'https://jenkins.sqlalchemy.org/job/alembic_coverage',
-      },
-      keywords: ['jacoco', 'cobertura', 'llvm-cov', 'istanbul'],
-      staticPreview: this.render({ coverage: 95 }),
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 

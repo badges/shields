@@ -16,12 +16,8 @@ const {
   defaultLabel: 'powershell gallery',
   serviceBaseUrl: 'powershellgallery',
   apiBaseUrl,
-  odataFormat: 'xml',
   title: 'PowerShell Gallery',
   examplePackageName: 'Azure.Storage',
-  exampleVersion: '4.4.0',
-  examplePrereleaseVersion: '4.4.1-preview',
-  exampleDownloadCount: 1.2e7,
 })
 
 class PowershellGalleryPlatformSupport extends BaseXmlService {
@@ -57,7 +53,6 @@ class PowershellGalleryPlatformSupport extends BaseXmlService {
   async handle({ packageName }) {
     const { Tags: tagStr } = await fetch(this, {
       baseUrl: apiBaseUrl,
-      odataFormat: 'xml',
       packageName,
     })
 

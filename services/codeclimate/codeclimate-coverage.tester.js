@@ -23,12 +23,12 @@ t.create('test coverage letter')
 t.create('test coverage when outer user repos query returns multiple items')
   .get('/coverage/codeclimate/codeclimate.json')
   .intercept(nock =>
-    nock('https://api.codeclimate.com', { allowUnmocked: true })
+    nock('https://api.codeclimate.com')
       .get('/v1/repos?github_slug=codeclimate%2Fcodeclimate')
       .reply(200, {
         data: [
           {
-            id: 'xxxxxxxxxxxx', // Fake repo id, which is expected to be ignored in favour of the one that does contain snapshot data.
+            id: 'xxxxxxxxxxxx', // Expected to be ignored in favour of the one that does contain snapshot data.
             relationships: {
               latest_default_branch_snapshot: {
                 data: null,
@@ -39,26 +39,38 @@ t.create('test coverage when outer user repos query returns multiple items')
             },
           },
           {
-            id: '558479d6e30ba034120008a9', // Real repo id for codeclimate/codeclimate. The test retrieves live data using the real test report id below.
+            id: '558479d6e30ba034120008a9',
             relationships: {
               latest_default_branch_snapshot: {
                 data: null,
               },
               latest_default_branch_test_report: {
                 data: {
-                  id: '6463c8a3e3bc340001004bce',
+                  id: '65a1662cb0077b00013cb4de',
                   type: 'test_reports',
                 },
               },
             },
           },
         ],
+      })
+      .get(
+        '/v1/repos/558479d6e30ba034120008a9/test_reports/65a1662cb0077b00013cb4de',
+      )
+      .reply(200, {
+        data: {
+          attributes: {
+            covered_percent: 24,
+            rating: {
+              letter: 'B',
+            },
+          },
+        },
       }),
   )
-  .networkOn() // Combined with allowUnmocked: true, this allows the inner test reports query to go through.
   .expectBadge({
     label: 'coverage',
-    message: isIntegerPercentage,
+    message: '24%',
   })
 
 t.create('test coverage percentage for non-existent repo')

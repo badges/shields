@@ -1,4 +1,4 @@
-const documentation = `
+const description = `
 You may use your GitLab Project Id (e.g. 278964) or your Project Path (e.g.
 [gitlab-org/gitlab](https://gitlab.com/gitlab-org/gitlab) ).
 Note that only internet-accessible GitLab instances are supported, for example
@@ -14,4 +14,4 @@ function httpErrorsFor(notFoundMessage = 'project not found') {
   }
 }
 
-export { documentation, httpErrorsFor }
+export { description, httpErrorsFor }

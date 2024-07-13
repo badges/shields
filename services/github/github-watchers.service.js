@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -16,24 +17,18 @@ export default class GithubWatchers extends GithubAuthV3Service {
     pattern: ':user/:repo',
   }
 
-  static examples = [
-    {
-      title: 'GitHub watchers',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/watchers/{user}/{repo}': {
+      get: {
+        summary: 'GitHub watchers',
+        description: documentation,
+        parameters: pathParams(
+          { name: 'user', example: 'badges' },
+          { name: 'repo', example: 'shields' },
+        ),
       },
-      // TODO: This is currently a literal, as `staticPreview` doesn't
-      // support `link`.
-      staticPreview: {
-        label: 'Watch',
-        message: '96',
-        style: 'social',
-      },
-      queryParams: { label: 'Watch' },
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'watchers',
@@ -43,6 +38,7 @@ export default class GithubWatchers extends GithubAuthV3Service {
   static render({ watchers, user, repo }) {
     return {
       message: metric(watchers),
+      style: 'social',
       color: 'blue',
       link: [
         `https://github.com/${user}/${repo}`,

@@ -3,28 +3,23 @@
         height="130">
 </p>
 <p align="center">
-    <a href="https://github.com/badges/shields/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/badges/shields" /></a>
-    <a href="#backers" alt="Backers on Open Collective">
+    <a href="https://shields.io/community#backers" alt="Backers on Open Collective">
         <img src="https://img.shields.io/opencollective/backers/shields" /></a>
-    <a href="#sponsors" alt="Sponsors on Open Collective">
+    <a href="https://shields.io/community#sponsors" alt="Sponsors on Open Collective">
         <img src="https://img.shields.io/opencollective/sponsors/shields" /></a>
     <a href="https://github.com/badges/shields/pulse" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/m/badges/shields" /></a>
-    <a href="https://circleci.com/gh/badges/shields/tree/master">
-        <img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status"></a>
-    <a href="https://circleci.com/gh/badges/daily-tests">
-        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests?label=service%20tests"
-            alt="service-test status"></a>
+    <a href="https://github.com/badges/shields/discussions" alt="Discussions">
+        <img src="https://img.shields.io/github/discussions/badges/shields" /></a>
+    <a href="https://github.com/badges/shields/actions/workflows/daily-tests.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/badges/shields/daily-tests.yml?label=daily%20tests"
+            alt="Daily Tests Status"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields"
-            alt="coverage"></a>
+            alt="Code Coverage"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
-            alt="chat on Discord"></a>
-    <a href="https://twitter.com/intent/follow?screen_name=shields_io">
-        <img src="https://img.shields.io/twitter/follow/shields_io?style=social&logo=twitter"
-            alt="follow on Twitter"></a>
+        <img src="https://img.shields.io/discord/308323056592486420?logo=discord&logoColor=white"
+            alt="Chat on Discord"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
@@ -32,7 +27,7 @@ and legible badges in SVG and raster format, which can easily be included in
 GitHub readmes or any other web page. The service supports dozens of
 continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 870 million images and is used by some of the
+Every month it serves over 1.6 billion images and is used by some of the
 world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
 and [Bootstrap][bootstrap] to name a few.
 
@@ -101,8 +96,8 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
-1. Install Node 18 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 18 and 20.
+1. Install Node 20 or later. You can use the [package manager][] of your choice.
+   Tests need to pass in Node 20 and 22.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -112,7 +107,7 @@ When server source files change, the badge server should automatically restart
 itself (using [nodemon][]). When the frontend files change, the frontend dev
 server (`docusaurus start`) should also automatically reload. However the badge
 definitions are built only before the server first starts. To regenerate those,
-either run `npm run defs` or manually restart the server.
+either run `npm run prestart` or manually restart the server.
 
 To debug a badge from the command line, run `npm run badge -- /npm/v/nock`.
 It also works with full URLs like

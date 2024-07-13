@@ -10,6 +10,7 @@ import {
 import { isValidCategory } from './categories.js'
 import { MetricHelper } from './metric-helper.js'
 import { isValidRoute, prepareRoute, namedParamsForMatch } from './route.js'
+import { openApiSchema } from './service-definitions.js'
 import trace from './trace.js'
 
 const attrSchema = Joi.object({
@@ -17,7 +18,7 @@ const attrSchema = Joi.object({
   category: isValidCategory,
   isDeprecated: Joi.boolean().default(true),
   route: isValidRoute,
-  examples: Joi.array().has(Joi.object()).default([]),
+  openApi: openApiSchema,
   transformPath: Joi.func()
     .maxArity(1)
     .required()
@@ -36,7 +37,7 @@ export default function redirector(attrs) {
     category,
     isDeprecated,
     route,
-    examples,
+    openApi,
     transformPath,
     transformQueryParams,
     overrideTransformedQueryParams,
@@ -52,7 +53,7 @@ export default function redirector(attrs) {
     static category = category
     static isDeprecated = isDeprecated
     static route = route
-    static examples = examples
+    static openApi = openApi
 
     static register({ camp, metricInstance }, { rasterUrl }) {
       const { regex, captureNames } = prepareRoute({

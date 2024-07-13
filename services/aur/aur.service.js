@@ -6,7 +6,12 @@ import {
 import { renderLicenseBadge } from '../licenses.js'
 import { addv, metric, formatDate } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, NotFound, InvalidResponse } from '../index.js'
+import {
+  BaseJsonService,
+  NotFound,
+  InvalidResponse,
+  pathParams,
+} from '../index.js'
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -15,6 +20,7 @@ const aurSchema = Joi.object({
       Joi.object({
         License: Joi.array().items(Joi.string().required()).allow(null),
         NumVotes: nonNegativeInteger,
+        Popularity: Joi.number().precision(2).min(0).required(),
         Version: Joi.string().required(),
         OutOfDate: nonNegativeInteger.allow(null),
         Maintainer: Joi.string().required().allow(null),
@@ -52,13 +58,18 @@ class AurLicense extends BaseAurService {
   static category = 'license'
   static route = { base: 'aur/license', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'AUR license',
-      namedParams: { packageName: 'android-studio' },
-      staticPreview: renderLicenseBadge({ license: 'Apache', color: 'blue' }),
+  static openApi = {
+    '/aur/license/{packageName}': {
+      get: {
+        summary: 'AUR License',
+        description: 'Arch linux User Repository License',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'android-studio',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'license' }
 
@@ -83,13 +94,15 @@ class AurVotes extends BaseAurService {
 
   static route = { base: 'aur/votes', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'AUR votes',
-      namedParams: { packageName: 'dropbox' },
-      staticPreview: this.render({ votes: '2280' }),
+  static openApi = {
+    '/aur/votes/{packageName}': {
+      get: {
+        summary: 'AUR Votes',
+        description: 'Arch linux User Repository Votes',
+        parameters: pathParams({ name: 'packageName', example: 'dropbox' }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'votes' }
 
@@ -106,16 +119,52 @@ class AurVotes extends BaseAurService {
   }
 }
 
+class AurPopularity extends BaseAurService {
+  static category = 'rating'
+
+  static route = { base: 'aur/popularity', pattern: ':packageName' }
+
+  static openApi = {
+    '/aur/popularity/{packageName}': {
+      get: {
+        summary: 'AUR Popularity',
+        description: 'Arch linux User Repository Popularity',
+        parameters: pathParams({ name: 'packageName', example: 'dropbox' }),
+      },
+    },
+  }
+
+  static defaultBadgeData = { label: 'popularity' }
+
+  static render({ popularity }) {
+    return {
+      message: popularity,
+      color: floorCountColor(popularity, 0.5, 2.5, 5),
+    }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({ popularity: json.results[0].Popularity })
+  }
+}
+
 class AurVersion extends BaseAurService {
   static category = 'version'
   static route = { base: 'aur/version', pattern: ':packageName' }
-  static examples = [
-    {
-      title: 'AUR version',
-      namedParams: { packageName: 'visual-studio-code-bin' },
-      staticPreview: this.render({ version: '1.34.0-2', outOfDate: null }),
+
+  static openApi = {
+    '/aur/version/{packageName}': {
+      get: {
+        summary: 'AUR Version',
+        description: 'Arch linux User Repository Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'visual-studio-code-bin',
+        }),
+      },
     },
-  ]
+  }
 
   static _cacheLength = 3600
 
@@ -140,13 +189,18 @@ class AurMaintainer extends BaseAurService {
 
   static route = { base: 'aur/maintainer', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'AUR maintainer',
-      namedParams: { packageName: 'google-chrome' },
-      staticPreview: this.render({ maintainer: 'luzifer' }),
+  static openApi = {
+    '/aur/maintainer/{packageName}': {
+      get: {
+        summary: 'AUR Maintainer',
+        description: 'Arch linux User Repository Maintainer',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'google-chrome',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'maintainer', color: 'blue' }
 
@@ -173,13 +227,18 @@ class AurLastModified extends BaseAurService {
     pattern: ':packageName',
   }
 
-  static examples = [
-    {
-      title: 'AUR last modified',
-      namedParams: { packageName: 'google-chrome' },
-      staticPreview: this.render({ date: new Date().getTime() }),
+  static openApi = {
+    '/aur/last-modified/{packageName}': {
+      get: {
+        summary: 'AUR Last Modified',
+        description: 'Arch linux User Repository Last Modified',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'google-chrome',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'last modified' }
 
@@ -196,4 +255,11 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-export { AurLicense, AurVersion, AurVotes, AurMaintainer, AurLastModified }
+export {
+  AurLicense,
+  AurVersion,
+  AurVotes,
+  AurPopularity,
+  AurMaintainer,
+  AurLastModified,
+}

@@ -1,3 +1,4 @@
+import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { BasePuppetForgeUsersService } from './puppetforge-base.js'
@@ -10,15 +11,17 @@ export default class PuppetForgeModuleCountService extends BasePuppetForgeUsersS
     pattern: ':user',
   }
 
-  static examples = [
-    {
-      title: 'Puppet Forge modules by user',
-      namedParams: {
-        user: 'camptocamp',
+  static openApi = {
+    '/puppetforge/mc/{user}': {
+      get: {
+        summary: 'Puppet Forge modules by user',
+        parameters: pathParams({
+          name: 'user',
+          example: 'camptocamp',
+        }),
       },
-      staticPreview: this.render({ modules: 60 }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'modules' }
 

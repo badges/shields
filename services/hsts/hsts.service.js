@@ -1,11 +1,12 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
+
 const label = 'hsts preloaded'
 const schema = Joi.object({
   status: Joi.string().required(),
 }).required()
 
-const documentation = `
+const description = `
 [\`Strict-Transport-Security\` is an HTTP response header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security)
 that signals that browsers should only access the site using HTTPS.
 
@@ -24,15 +25,18 @@ export default class HSTS extends BaseJsonService {
     pattern: ':domain',
   }
 
-  static examples = [
-    {
-      title: 'Chromium HSTS preload',
-      namedParams: { domain: 'github.com' },
-      staticPreview: this.render({ status: 'preloaded' }),
-      keywords: ['security'],
-      documentation,
+  static openApi = {
+    '/hsts/preload/{domain}': {
+      get: {
+        summary: 'Chromium HSTS preload',
+        description,
+        parameters: pathParams({
+          name: 'domain',
+          example: 'github.com',
+        }),
+      },
     },
-  ]
+  }
 
   static render({ status }) {
     let color = 'red'

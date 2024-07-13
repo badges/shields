@@ -18,12 +18,13 @@ git checkout "pr-$PR_NUMBER"
 
 # If the app does not already exist, create it
 if ! flyctl status --app "$app"; then
-  flyctl launch --no-deploy --copy-config --name "$app" --region "$region" --org "$org"
+  flyctl launch --no-deploy --copy-config --name "$app" --region "$region" --org "$org" --dockerfile ./Dockerfile
   echo $SECRETS | tr " " "\n" | flyctl secrets import --app "$app"
 fi
 
 # Deploy
-flyctl deploy --app "$app" --region "$region"
+flyctl deploy --app "$app" --regions "$region"
+flyctl scale count 1 --app "$app" --yes
 
 # Post a comment on the PR
 app_url=$(flyctl status --app "$app" --json | jq -r .Hostname)

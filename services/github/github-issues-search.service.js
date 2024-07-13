@@ -1,16 +1,15 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import { documentation, transformErrors } from './github-helpers.js'
 
 const issuesSearchDocs = `
-For a full list of available filters and allowed values that can be used in the <code>query</code>,
+For a full list of available filters and allowed values,
 see GitHub's documentation on
 [Searching issues and pull requests](https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests)
-
-${documentation}
 `
 
 const issueCountSchema = Joi.object({
@@ -57,21 +56,23 @@ class GithubIssuesSearch extends BaseGithubIssuesSearch {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub issue custom search',
-      namedParams: {},
-      queryParams: {
-        query: 'repo:badges/shields is:closed label:bug author:app/sentry-io',
+  static openApi = {
+    '/github/issues-search': {
+      get: {
+        summary: 'GitHub issue custom search',
+        description: documentation,
+        parameters: [
+          queryParam({
+            name: 'query',
+            description: issuesSearchDocs,
+            example:
+              'repo:badges/shields is:closed label:bug author:app/sentry-io',
+            required: true,
+          }),
+        ],
       },
-      staticPreview: {
-        label: 'query',
-        message: '10',
-        color: 'blue',
-      },
-      documentation: issuesSearchDocs,
     },
-  ]
+  }
 
   async handle(namedParams, { query }) {
     const issueCount = await this.fetch({ query })
@@ -86,24 +87,24 @@ class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub issue custom search in repo',
-      namedParams: {
-        user: 'badges',
-        repo: 'shields',
+  static openApi = {
+    '/github/issues-search/{user}/{repo}': {
+      get: {
+        summary: 'GitHub issue custom search in repo',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'badges' }),
+          pathParam({ name: 'repo', example: 'shields' }),
+          queryParam({
+            name: 'query',
+            description: issuesSearchDocs,
+            example: 'is:closed label:bug author:app/sentry-io',
+            required: true,
+          }),
+        ],
       },
-      queryParams: {
-        query: 'is:closed label:bug author:app/sentry-io',
-      },
-      staticPreview: {
-        label: 'query',
-        message: '10',
-        color: 'blue',
-      },
-      documentation: issuesSearchDocs,
     },
-  ]
+  }
 
   async handle({ user, repo }, { query }) {
     query = `repo:${user}/${repo} ${query}`

@@ -25,7 +25,7 @@ and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=18 and NPM 9.x is required. If you don't already have them,
+Node >=20 and NPM 9.x or 10.x is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
@@ -71,7 +71,7 @@ Each service has a directory for its files:
     `/services/example/example.service.js`.
     If you add a badge for a new API, create a new directory.
 
-    Example: [wercker](https://github.com/badges/shields/tree/master/services/wercker)
+    Example: [Docs.rs](https://github.com/badges/shields/tree/master/services/docsrs)
 
   - For service families with multiple badges we usually store the code for each
     badge in its own file like this:
@@ -134,17 +134,17 @@ export default class Example extends BaseService {
 
 Description of the code:
 
-1. Our service badge class will extend `BaseService` so we need to require it. Variables are declared with `const` and `let` in preference to `var`.
+1. Our service badge class will extend `BaseService` so we need to import it.
 2. Our module must export a class which extends `BaseService`.
-3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
-4. `route()` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
+3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-documentation-to-the-frontend) for more details.
+4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
      number of named parameters. These are converted into
      regular expressions by [`path-to-regexp`][path-to-regexp].
      Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
    - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
-5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route()` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
+5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
    - `color`: the background color of the right side of the badge
@@ -223,11 +223,11 @@ Description of the code:
 2. Our badge will query a JSON API so we will extend `BaseJsonService` instead of `BaseService`. This contains some helpers to reduce the need for boilerplate when calling a JSON API.
 3. We perform input validation by defining a schema which we expect the JSON we receive to conform to. This is done using [Joi](https://github.com/hapijs/joi). Defining a schema means we can ensure the JSON we receive meets our expectations and throw an error if we receive unexpected input without having to explicitly code validation checks. The schema also acts as a filter on the JSON object. Any properties we're going to reference need to be validated, otherwise they will be filtered out. In this case our schema declares that we expect to receive an object which must have a property called 'version', which is a string. There is further documentation on [input validation](input-validation.md).
 4. Our module exports a class which extends `BaseJsonService`
-5. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-an-example-to-the-front-page) for more details on examples.
+5. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-documentation-to-the-frontend) for more details.
 6. As with our previous badge, we need to declare a route. This time we will capture a variable called `gem`.
 7. We can use `defaultBadgeData` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData` here to define it declaratively.
 8. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
-9. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 4 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
+9. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 3 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
 
    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
    - `_requestJson()` uses [got](https://github.com/sindresorhus/got) to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `got` docs for [supported options](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md).
@@ -269,42 +269,86 @@ import { NotFound } from '../index.js'
 throw new NotFound({ prettyMessage: 'package not found' })
 ```
 
-### (4.4) Adding an Example to the Front Page
+### (4.4) Adding Documentation to the Frontend
 
-Once we have implemented our badge, we can add it to the index so that users can discover it. We will do this by adding an additional method `examples()` to our class.
+To render the shields.io website, we produce an [OpenAPI 3 specification](https://swagger.io/specification/) which describes the available badge endpoints. Then we use that specification to render the frontend.
+
+Once we have implemented our badge, we want to add it to the index so that users can discover it. We will do this by adding an additional object `openApi` to our class. This object contains an [OpenAPI Paths Object](https://swagger.io/specification/#paths-object) describing the endpoint or endpoints exposed by this service class.
 
 ```js
+// (1)
+import { pathParams } from '../index.js'
+
 export default class GemVersion extends BaseJsonService {
   // ...
 
-  // (1)
+  // (2)
   static category = 'version'
 
-  // (2)
-  static examples = [
-    {
-      // (3)
-      title: 'Gem',
-      namedParams: { gem: 'formatador' },
-      staticPreview: this.render({ version: '2.1.0' }),
-      keywords: ['ruby'],
+  static openApi = {
+    // (3)
+    '/gem/v/{gem}': {
+      // (4)
+      get: {
+        // (5)
+        summary: 'Gem Version',
+        description:
+          '[Ruby Gems](https://rubygems.org/) is a registry for ruby libraries',
+        // (6)
+        parameters: pathParams({
+          name: 'gem',
+          description: 'Name of the Ruby Gem',
+          example: 'formatador',
+        }),
+      },
     },
-  ]
+  }
 }
 ```
 
-1. We defined category earlier in the tutorial. The `category()` property defines which heading in the index our example will appear under.
-2. The examples property defines an array of examples. In this case the array will contain a single object, but in some cases it is helpful to provide multiple usage examples.
-3. Our example object should contain the following properties:
-   - `title`: Descriptive text that will be shown next to the badge
-   - `namedParams`: Provide a valid example of params we can substitute into
-     the pattern. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador).
-   - `staticPreview`: On the index page we want to show an example badge, but for performance reasons we want that example to be generated without making an API call. `staticPreview` should be populated by calling our `render()` method with some valid data.
-   - `keywords`: If we want to provide additional keywords other than the title and the category, we can add them here. This helps users to search for relevant badges.
+1. There are four helper functions we can use to assemble [Open API Parameter objects](https://swagger.io/specification/#parameter-object). These are:
+
+   - `pathParam` - returns a single Parameter object describing a single path parameter
+   - `pathParams` - returns an array of path parameter objects
+   - `queryParam` - returns a single Parameter object describing a single query parameter
+   - `queryParams` - returns an array of query parameter objects
+
+   These four helper functions are documented in more detail at http://contributing.shields.io/module-core_base-service_openapi.html
+
+2. We defined category earlier in the tutorial. The `category` property defines which heading in the index our example will appear under.
+3. The keys of the `openApi` object are routes. In this case we only need to describe one route. In some cases, a service class can define more than one badge route. Open API doesn't have the concept of optional path parameters (more specifically, `in: 'path'` implies `required: true`) so if there are any optional path parameters in our route, our `openApi` object needs to describe two URLs: one without the optional parameter, and another with it.
+4. The HTTP method. Shields only allows GET requests, so this is always `get`.
+5. `summary` (required) is a short title or description of the badge. `description` is an optional longer description or additional documentation. We can use markdown or HTML syntax inside the `description` field.
+6. `parameters` is an array of [Open API Parameter objects](https://swagger.io/specification/#parameter-object) describing any parameters we can pass to this route. This array should include all path parameters included in the key that this value object describes and all relevant query parameters. As a minimum, we need to supply `name` and `example`. The example must be a valid example of a value we can provide for this parameter. In this case we need a valid ruby gem, so we've picked [formatador](https://rubygems.org/gems/formatador). There are also optional keys we can pass. The code
+
+   ```js
+   parameters: pathParams({
+     name: 'gem',
+     description: 'Name of the Ruby Gem',
+     example: 'formatador',
+   })
+   ```
+
+   is equivalent to
+
+   ```js
+   parameters: [
+     {
+       name: 'gem',
+       in: 'path',
+       required: true,
+       schema: { type: 'string' },
+       example: 'formatador',
+       description: 'Name of the Ruby Gem',
+     },
+   ]
+   ```
+
+   but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand.
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
-If you update `examples`, you don't have to restart the server. Run `npm run defs` in another terminal window and the frontend will update.
+If you update `openApi`, you don't have to restart the server. Run `npm run prestart` in another terminal window and the frontend will update.
 
 ### (4.5) Write Tests<!-- Change the link below when you change the heading -->
 

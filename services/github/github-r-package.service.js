@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParam, queryParam } from '../index.js'
 import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
 import { fetchRepoContent } from './github-common-fetch.js'
 import { documentation } from './github-helpers.js'
@@ -11,6 +11,9 @@ const queryParamSchema = Joi.object({
 
 const versionRegExp = /^Version:[\s]*(.+)$/m
 
+const filenameDescription =
+  'The `filename` param can be used to specify the path to `DESCRIPTION`. By default, we look for `DESCRIPTION` in the repo root'
+
 export default class GithubRPackageVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
 
@@ -20,38 +23,39 @@ export default class GithubRPackageVersion extends ConditionalGithubAuthV3Servic
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub R package version',
-      pattern: ':user/:repo',
-      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics' },
-      staticPreview: this.render({ version: '6.10.9' }),
-      documentation,
+  static openApi = {
+    '/github/r-package/v/{user}/{repo}': {
+      get: {
+        summary: 'GitHub R package version',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'mixOmicsTeam' }),
+          pathParam({ name: 'repo', example: 'mixOmics' }),
+          queryParam({
+            name: 'filename',
+            example: 'subdirectory/DESCRIPTION',
+            description: filenameDescription,
+          }),
+        ],
+      },
     },
-    {
-      title: 'GitHub R package version (branch)',
-      pattern: ':user/:repo/:branch',
-      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
-      staticPreview: this.render({ version: '6.10.9', branch: 'master' }),
-      documentation,
+    '/github/r-package/v/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub R package version (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'user', example: 'mixOmicsTeam' }),
+          pathParam({ name: 'repo', example: 'mixOmics' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          queryParam({
+            name: 'filename',
+            example: 'subdirectory/DESCRIPTION',
+            description: filenameDescription,
+          }),
+        ],
+      },
     },
-    {
-      title: 'GitHub R package version (subdirectory of monorepo)',
-      pattern: ':user/:repo',
-      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics' },
-      queryParams: { filename: 'subdirectory/DESCRIPTION' },
-      staticPreview: this.render({ version: '6.10.9' }),
-      documentation,
-    },
-    {
-      title: 'GitHub R package version (branch & subdirectory of monorepo)',
-      pattern: ':user/:repo/:branch',
-      namedParams: { user: 'mixOmicsTeam', repo: 'mixOmics', branch: 'master' },
-      queryParams: { filename: 'subdirectory/DESCRIPTION' },
-      staticPreview: this.render({ version: '6.10.9', branch: 'master' }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'R' }
 

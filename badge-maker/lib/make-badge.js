@@ -3,6 +3,7 @@
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
+const { DEFAULT_LOGO_HEIGHT } = require('./constants')
 
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
@@ -16,7 +17,7 @@ module.exports = function makeBadge({
   color,
   labelColor,
   logo,
-  logoPosition,
+  logoSize,
   logoWidth,
   links = ['', ''],
 }) {
@@ -45,7 +46,7 @@ module.exports = function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? 14 : 0)
+  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
 
   return stripXmlWhitespace(
     render({
@@ -53,8 +54,8 @@ module.exports = function makeBadge({
       message,
       links,
       logo,
-      logoPosition,
       logoWidth,
+      logoSize,
       logoPadding: logo && label.length ? 3 : 0,
       color: toSvgColor(color),
       labelColor: toSvgColor(labelColor),

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import Joi from 'joi'
+import { pathParam, queryParam } from '../index.js'
 import { age } from '../color-formatters.js'
 import { formatDate } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -20,9 +21,11 @@ const schema = Joi.alternatives(
     .min(1),
 )
 
+const displayDateEnum = ['created_at', 'published_at']
+
 const queryParamSchema = Joi.object({
   display_date: Joi.string()
-    .valid('created_at', 'published_at')
+    .valid(...displayDateEnum)
     .default('created_at'),
 }).required()
 
@@ -34,39 +37,29 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub Release Date',
-      pattern: 'release-date/:user/:repo',
-      namedParams: {
-        user: 'SubtitleEdit',
-        repo: 'subtitleedit',
+  static openApi = {
+    '/github/{variant}/{user}/{repo}': {
+      get: {
+        summary: 'GitHub Release Date',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'variant',
+            example: 'release-date',
+            schema: { type: 'string', enum: this.getEnum('variant') },
+          }),
+          pathParam({ name: 'user', example: 'SubtitleEdit' }),
+          pathParam({ name: 'repo', example: 'subtitleedit' }),
+          queryParam({
+            name: 'display_date',
+            example: 'published_at',
+            schema: { type: 'string', enum: displayDateEnum },
+            description: 'Default value is `created_at` if not specified',
+          }),
+        ],
       },
-      staticPreview: this.render({ date: '2017-04-13T07:50:27.000Z' }),
-      documentation,
     },
-    {
-      title: 'GitHub (Pre-)Release Date',
-      pattern: 'release-date-pre/:user/:repo',
-      namedParams: {
-        user: 'Cockatrice',
-        repo: 'Cockatrice',
-      },
-      staticPreview: this.render({ date: '2017-04-13T07:50:27.000Z' }),
-      documentation,
-    },
-    {
-      title: 'GitHub Release Date - Published_At',
-      pattern: 'release-date/:user/:repo',
-      namedParams: {
-        user: 'microsoft',
-        repo: 'vscode',
-      },
-      queryParams: { display_date: 'published_at' },
-      staticPreview: this.render({ date: '2022-10-17T07:50:27.000Z' }),
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'release date' }
 

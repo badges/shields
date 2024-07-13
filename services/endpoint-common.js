@@ -36,9 +36,14 @@ const endpointSchema = Joi.object({
   logoSvg: Joi.string(),
   logoColor: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
-  logoPosition: optionalNumberWhenAnyLogoPresent,
   style: Joi.string(),
   cacheSeconds: Joi.number().integer().min(0),
+  /*
+  Retained for legacy compatibility
+  Although this does nothing,
+  passing it should not throw an error
+  */
+  logoPosition: optionalNumberWhenAnyLogoPresent,
 })
   // `namedLogo` or `logoSvg`; not both.
   .oxor('namedLogo', 'logoSvg')
@@ -95,6 +100,7 @@ async function fetchEndpointData(
     schema: anySchema,
     url,
     httpErrors,
+    logErrors: [],
     options: { decompress: true },
   })
   return validateEndpointData(json, {

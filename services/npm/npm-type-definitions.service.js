@@ -1,4 +1,5 @@
-import NpmBase from './npm-base.js'
+import { pathParam, queryParam } from '../index.js'
+import NpmBase, { packageNameDescription } from './npm-base.js'
 
 // For this badge to correctly detect type definitions, either the relevant
 // dependencies must be declared, or the `types` key must be set in
@@ -8,17 +9,24 @@ export default class NpmTypeDefinitions extends NpmBase {
 
   static route = this.buildRoute('npm/types', { withTag: false })
 
-  static examples = [
-    {
-      title: 'npm type definitions',
-      pattern: ':packageName',
-      namedParams: { packageName: 'chalk' },
-      staticPreview: this.render({
-        supportedLanguages: ['TypeScript', 'Flow'],
-      }),
-      keywords: ['node', 'typescript', 'flow'],
+  static openApi = {
+    '/npm/types/{packageName}': {
+      get: {
+        summary: 'NPM Type Definitions',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'chalk',
+            description: packageNameDescription,
+          }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
+        ],
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'types',

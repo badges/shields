@@ -1,11 +1,10 @@
+import { pathParams } from '../index.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
-const documentation = `
-  <p>
-    This badge can show total installs, installs for Azure DevOps Services,
-    or on-premises installs for Azure DevOps Server.
-  </p>
+const description = `
+This badge can show total installs, installs for Azure DevOps Services,
+or on-premises installs for Azure DevOps Server.
 `
 
 // This service exists separately from the other Marketplace downloads badges (in ./visual-studio-marketplace-downloads.js)
@@ -19,18 +18,24 @@ export default class VisualStudioMarketplaceAzureDevOpsInstalls extends VisualSt
     pattern: ':measure(total|onprem|services)/:extensionId',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio Marketplace Installs - Azure DevOps Extension',
-      namedParams: {
-        measure: 'total',
-        extensionId: 'swellaby.mirror-git-repository',
+  static openApi = {
+    '/visual-studio-marketplace/azure-devops/installs/{measure}/{extensionId}':
+      {
+        get: {
+          summary:
+            'Visual Studio Marketplace Installs - Azure DevOps Extension',
+          description,
+          parameters: pathParams(
+            {
+              name: 'measure',
+              example: 'total',
+              schema: { type: 'string', enum: this.getEnum('measure') },
+            },
+            { name: 'extensionId', example: 'swellaby.mirror-git-repository' },
+          ),
+        },
       },
-      staticPreview: renderDownloadsBadge({ downloads: 651 }),
-      keywords: this.keywords,
-      documentation,
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'installs' }
 

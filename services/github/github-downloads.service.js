@@ -1,13 +1,17 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { NotFound } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { fetchLatestRelease } from './github-common-release.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
+const sortEnum = ['date', 'semver']
+
 const queryParamSchema = Joi.object({
-  sort: Joi.string().valid('date', 'semver').default('date'),
+  sort: Joi.string()
+    .valid(...sortEnum)
+    .default('date'),
 }).required()
 
 const releaseSchema = Joi.object({
@@ -24,175 +28,86 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().length(0),
 )
 
+const variantParam = pathParam({
+  name: 'variant',
+  example: 'downloads',
+  description: 'downloads including or excluding pre-releases',
+  schema: { type: 'string', enum: ['downloads', 'downloads-pre'] },
+})
+const userParam = pathParam({ name: 'user', example: 'atom' })
+const repoParam = pathParam({ name: 'repo', example: 'atom' })
+const tagParam = pathParam({ name: 'tag', example: 'v0.190.0' })
+const assetNameParam = pathParam({
+  name: 'assetName',
+  example: 'atom-amd64.deb',
+})
+const sortParam = queryParam({
+  name: 'sort',
+  example: 'semver',
+  schema: { type: 'string', enum: sortEnum },
+  description: 'Method used to determine latest release. Default: `date`',
+})
+
 export default class GithubDownloads extends GithubAuthV3Service {
   static category = 'downloads'
   static route = {
     base: 'github',
-    pattern: ':kind(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
+    pattern: ':variant(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'GitHub all releases',
-      pattern: 'downloads/:user/:repo/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
+  static openApi = {
+    '/github/downloads/{user}/{repo}/total': {
+      get: {
+        summary: 'GitHub Downloads (all assets, all releases)',
+        description: documentation,
+        parameters: [userParam, repoParam],
       },
-      staticPreview: this.render({
-        assetName: 'total',
-        downloads: 857000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (latest by date)',
-      pattern: 'downloads/:user/:repo/:tag/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
+    '/github/{variant}/{user}/{repo}/latest/total': {
+      get: {
+        summary: 'GitHub Downloads (all assets, latest release)',
+        description: documentation,
+        parameters: [variantParam, userParam, repoParam, sortParam],
       },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'total',
-        downloads: 27000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (latest by SemVer)',
-      pattern: 'downloads/:user/:repo/:tag/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
+    '/github/downloads/{user}/{repo}/{tag}/total': {
+      get: {
+        summary: 'GitHub Downloads (all assets, specific tag)',
+        description: documentation,
+        parameters: [userParam, repoParam, tagParam],
       },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'total',
-        downloads: 27000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (latest by date including pre-releases)',
-      pattern: 'downloads-pre/:user/:repo/:tag/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
+    '/github/downloads/{user}/{repo}/{assetName}': {
+      get: {
+        summary: 'GitHub Downloads (specific asset, all releases)',
+        description: documentation,
+        parameters: [userParam, repoParam, assetNameParam],
       },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'total',
-        downloads: 2000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (latest by SemVer including pre-releases)',
-      pattern: 'downloads-pre/:user/:repo/:tag/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
+    '/github/{variant}/{user}/{repo}/latest/{assetName}': {
+      get: {
+        summary: 'GitHub Downloads (specific asset, latest release)',
+        description: documentation,
+        parameters: [
+          variantParam,
+          userParam,
+          repoParam,
+          assetNameParam,
+          sortParam,
+        ],
       },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'total',
-        downloads: 2000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (by tag)',
-      pattern: 'downloads/:user/:repo/:tag/total',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'v0.190.0',
+    '/github/downloads/{user}/{repo}/{tag}/{assetName}': {
+      get: {
+        summary: 'GitHub Downloads (specific asset, specific tag)',
+        description: documentation,
+        parameters: [userParam, repoParam, tagParam, assetNameParam],
       },
-      staticPreview: this.render({
-        tag: 'v0.190.0',
-        assetName: 'total',
-        downloads: 490000,
-      }),
-      documentation,
     },
-    {
-      title: 'GitHub release (latest by date and asset)',
-      pattern: 'downloads/:user/:repo/:tag/:assetName',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-      },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-        downloads: 3000,
-      }),
-      documentation,
-    },
-    {
-      title: 'GitHub release (latest by SemVer and asset)',
-      pattern: 'downloads/:user/:repo/:tag/:assetName',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-      },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-        downloads: 3000,
-      }),
-      documentation,
-    },
-    {
-      title: 'GitHub release (latest by date and asset including pre-releases)',
-      pattern: 'downloads-pre/:user/:repo/:tag/:assetName',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-      },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-        downloads: 237,
-      }),
-      documentation,
-    },
-    {
-      title:
-        'GitHub release (latest by SemVer and asset including pre-releases)',
-      pattern: 'downloads-pre/:user/:repo/:tag/:assetName',
-      namedParams: {
-        user: 'atom',
-        repo: 'atom',
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-      },
-      queryParams: { sort: 'semver' },
-      staticPreview: this.render({
-        tag: 'latest',
-        assetName: 'atom-amd64.deb',
-        downloads: 237,
-      }),
-      documentation,
-    },
-  ]
+  }
 
-  static defaultBadgeData = { label: 'downloads', namedLogo: 'github' }
+  static defaultBadgeData = { label: 'downloads' }
 
   static render({ tag: version, assetName, downloads }) {
     const messageSuffixOverride =
@@ -219,10 +134,10 @@ export default class GithubDownloads extends GithubAuthV3Service {
     return { downloads }
   }
 
-  async handle({ kind, user, repo, tag, assetName }, { sort }) {
+  async handle({ variant, user, repo, tag, assetName }, { sort }) {
     let releases
     if (tag === 'latest') {
-      const includePre = kind === 'downloads-pre' || undefined
+      const includePre = variant === 'downloads-pre' || undefined
       const latestRelease = await fetchLatestRelease(
         this,
         { user, repo },

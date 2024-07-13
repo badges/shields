@@ -1,36 +1,27 @@
-import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { InvalidResponse } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import BaseBowerService from './bower-base.js'
-
-const queryParamSchema = Joi.object({
-  include_prereleases: Joi.equal(''),
-}).required()
 
 export default class BowerVersion extends BaseBowerService {
   static category = 'version'
-  static route = { base: 'bower/v', pattern: ':packageName', queryParamSchema }
+  static route = { base: 'bower/v', pattern: ':packageName' }
 
-  static examples = [
-    {
-      title: 'Bower Version',
-      namedParams: { packageName: 'bootstrap' },
-      staticPreview: renderVersionBadge({ version: '4.2.1' }),
+  static openApi = {
+    '/bower/v/{packageName}': {
+      get: {
+        summary: 'Bower Version',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'bootstrap',
+        }),
+      },
     },
-    {
-      title: 'Bower Version (including pre-releases)',
-      namedParams: { packageName: 'bootstrap' },
-      queryParams: { include_prereleases: null },
-      staticPreview: renderVersionBadge({ version: '4.2.1' }),
-    },
-  ]
+  }
 
   static defaultBadgeData = { label: 'bower' }
 
-  static transform(data, includePrereleases) {
-    const version = includePrereleases
-      ? data.latest_release_number
-      : data.latest_stable_release_number
+  static transform(data) {
+    const version = data.latest_release_number
 
     if (!version) {
       throw new InvalidResponse({ prettyMessage: 'no releases' })
@@ -39,10 +30,9 @@ export default class BowerVersion extends BaseBowerService {
     return version
   }
 
-  async handle({ packageName }, queryParams) {
+  async handle({ packageName }) {
     const data = await this.fetch({ packageName })
-    const includePrereleases = queryParams.include_prereleases !== undefined
-    const version = this.constructor.transform(data, includePrereleases)
+    const version = this.constructor.transform(data)
 
     return renderVersionBadge({ version })
   }

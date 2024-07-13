@@ -1,11 +1,12 @@
+import { pathParam, queryParam } from '../index.js'
 import { colorScale } from '../color-formatters.js'
 import { metric } from '../text-formatters.js'
 import SonarBase from './sonar-base.js'
 import {
   getLabel,
   documentation,
-  keywords,
   queryParamWithFormatSchema,
+  openApiQueryParams,
 } from './sonar-helpers.js'
 
 const violationsColorScale = colorScale(
@@ -31,50 +32,57 @@ export default class SonarViolations extends SonarBase {
     queryParamSchema: queryParamWithFormatSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Violations (short format)',
-      namedParams: {
-        component: 'swellaby:azdo-shellcheck',
-        metric: 'violations',
-        branch: 'master',
+  static openApi = {
+    '/sonar/{metric}/{component}': {
+      get: {
+        summary: 'Sonar Violations',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'metric',
+            example: 'violations',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          }),
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+          queryParam({
+            name: 'format',
+            example: 'long',
+            schema: {
+              type: 'string',
+              enum: ['short', 'long'],
+            },
+            description: 'If not specified, the default is `short`.',
+          }),
+        ],
       },
-      queryParams: {
-        server: 'https://sonarcloud.io',
-        format: 'short',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({
-        violations: 0,
-        metricName: 'violations',
-        format: 'short',
-      }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Sonar Violations (long format)',
-      namedParams: {
-        component: 'org.ow2.petals:petals-se-ase',
-        metric: 'violations',
-        branch: 'master',
+    '/sonar/{metric}/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Violations (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'metric',
+            example: 'violations',
+            schema: { type: 'string', enum: this.getEnum('metric') },
+          }),
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+          queryParam({
+            name: 'format',
+            example: 'long',
+            schema: {
+              type: 'string',
+              enum: ['short', 'long'],
+            },
+            description: 'If not specified, the default is `short`.',
+          }),
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        format: 'long',
-      },
-      staticPreview: this.render({
-        violations: {
-          info_violations: 2,
-          minor_violations: 1,
-        },
-        metricName: 'violations',
-        format: 'long',
-      }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'violations' }
 

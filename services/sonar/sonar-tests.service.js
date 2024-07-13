@@ -1,5 +1,7 @@
+import { pathParam } from '../index.js'
 import {
   testResultQueryParamSchema,
+  testResultOpenApiQueryParams,
   renderTestResultBadge,
   documentation as testResultsDocumentation,
 } from '../test-results.js'
@@ -7,8 +9,8 @@ import { metric as metricCount } from '../text-formatters.js'
 import SonarBase from './sonar-base.js'
 import {
   documentation,
-  keywords,
   queryParamSchema,
+  openApiQueryParams,
   getLabel,
 } from './sonar-helpers.js'
 
@@ -20,34 +22,35 @@ class SonarTestsSummary extends SonarBase {
     queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
   }
 
-  static examples = [
-    {
-      title: 'Sonar Tests',
-      namedParams: {
-        component: 'org.ow2.petals:petals-se-ase',
-        branch: 'master',
+  static openApi = {
+    '/sonar/tests/{component}': {
+      get: {
+        summary: 'Sonar Tests',
+        description: `${documentation}
+          ${testResultsDocumentation}
+        `,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+          ...testResultOpenApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        sonarVersion: '4.2',
-        compact_message: null,
-        passed_label: 'passed',
-        failed_label: 'failed',
-        skipped_label: 'skipped',
-      },
-      staticPreview: this.render({
-        passed: 5,
-        failed: 1,
-        skipped: 0,
-        total: 6,
-        isCompact: false,
-      }),
-      keywords,
-      documentation: `${documentation}
-        ${testResultsDocumentation}
-      `,
     },
-  ]
+    '/sonar/tests/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Tests (branch)',
+        description: `${documentation}
+          ${testResultsDocumentation}
+        `,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+          ...testResultOpenApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = {
     label: 'tests',
@@ -138,64 +141,97 @@ class SonarTests extends SonarBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Test Count',
-      pattern:
-        ':metric(total_tests|skipped_tests|test_failures|test_errors)/:component/:branch*',
-      namedParams: {
-        component: 'org.ow2.petals:petals-log',
-        metric: 'total_tests',
-        branch: 'master',
+  static openApi = {
+    '/sonar/{metric}/{component}': {
+      get: {
+        summary: 'Sonar Test Count',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'metric',
+            example: 'total_tests',
+            schema: {
+              type: 'string',
+              enum: [
+                'total_tests',
+                'skipped_tests',
+                'test_failures',
+                'test_errors',
+              ],
+            },
+          }),
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({
-        metric: 'total_tests',
-        value: 131,
-      }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Sonar Test Execution Time',
-      pattern: 'test_execution_time/:component/:branch*',
-      namedParams: {
-        component: 'swellaby:azure-pipelines-templates',
-        branch: 'master',
+    '/sonar/{metric}/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Test Count (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({
+            name: 'metric',
+            example: 'total_tests',
+            schema: {
+              type: 'string',
+              enum: [
+                'total_tests',
+                'skipped_tests',
+                'test_failures',
+                'test_errors',
+              ],
+            },
+          }),
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'https://sonarcloud.io',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({
-        metric: 'test_execution_time',
-        value: 2,
-      }),
-      keywords,
-      documentation,
     },
-    {
-      title: 'Sonar Test Success Rate',
-      pattern: 'test_success_density/:component/:branch*',
-      namedParams: {
-        component: 'swellaby:azure-pipelines-templates',
-        branch: 'master',
+    '/sonar/test_execution_time/{component}': {
+      get: {
+        summary: 'Sonar Test Execution Time',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'https://sonarcloud.io',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({
-        metric: 'test_success_density',
-        value: 100,
-      }),
-      keywords,
-      documentation,
     },
-  ]
+    '/sonar/test_execution_time/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Test Execution Time (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+    '/sonar/test_success_density/{component}': {
+      get: {
+        summary: 'Sonar Test Success Rate',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+    '/sonar/test_success_density/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Test Success Rate (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = {
     label: 'tests',

@@ -16,7 +16,20 @@ updates:
       # https://caniuse.com/js-regexp-lookbehind
       - dependency-name: 'decamelize'
       - dependency-name: 'humanize-string'
-
+    groups:
+      # All official @docusaurus/* packages should have the exact same version as @docusaurus/core.
+      # From https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups:
+      # "You cannot apply a single grouping set of rules to both version updates and security
+      # updates [...] you must define two, separately named, grouping sets of rules"
+      # See https://github.com/badges/shields/issues/10242 for more information.
+      docusaurus-version-updates:
+        applies-to: version-updates
+        patterns:
+          - '@docusaurus/*'
+      docusaurus-security-updates:
+        applies-to: security-updates
+        patterns:
+          - '@docusaurus/*'
   # badge-maker package dependencies
   - package-ecosystem: npm
     directory: '/badge-maker'
@@ -29,7 +42,15 @@ updates:
 
   # GH actions
   - package-ecosystem: 'github-actions'
-    directory: '/'
+    # all composite actions must be individually listed here
+    # https://github.com/dependabot/dependabot-core/issues/6704
+    directories:
+      - '/'
+      - '/.github/actions/core-tests'
+      - '/.github/actions/integration-tests'
+      - '/.github/actions/package-tests'
+      - '/.github/actions/service-tests'
+      - '/.github/actions/setup'
     schedule:
       interval: weekly
     open-pull-requests-limit: 99

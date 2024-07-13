@@ -1,32 +1,24 @@
 import Joi from 'joi'
-import { BaseJsonService, InvalidResponse } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  queryParam,
+  pathParam,
+} from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 
-const keywords = [
-  'l10n',
-  'i18n',
-  'localization',
-  'internationalization',
-  'translation',
-  'translations',
-]
+const description = `
+<a href="https://localizely.com/" target="_blank">Localizely</a> is a management system for translation, localization, and internationalization of your projects.
 
-const documentation = `
-  <p>
-    The <b>read-only</b> API token from the Localizely account is required to fetch necessary data.
-    <br/>
-    <br/>
-    <b>
-      Note: Do not use the default API token as it grants full read-write permissions to your projects. You will expose your project and allow malicious users to modify the translations at will.
-      <br/>
-      Instead, create a new one with only read permission.
-    </b>
-    <br/>
-    <br/>
-    You can find more details regarding API tokens under <a href="https://app.localizely.com/account" target="_blank">My profile</a> page.
-    <br/>
-  </p>
-  `
+The <b>read-only</b> API token from the Localizely account is required to fetch necessary data.
+
+<b>
+  Note: Do not use the default API token as it grants full read-write permissions to your projects. You will expose your project and allow malicious users to modify the translations at will.
+  Instead, create a new one with only read permission.
+</b>
+
+You can find more details regarding API tokens under <a href="https://app.localizely.com/account" target="_blank">My profile</a> page.
+`
 
 const schema = Joi.object({
   strings: Joi.number().required(),
@@ -58,40 +50,58 @@ export default class Localizely extends BaseJsonService {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Localizely overall progress',
-      keywords,
-      documentation,
-      namedParams: {
-        projectId: '5cc34208-0418-40b1-8353-acc70c95f802',
-        branch: 'main',
+  static openApi = {
+    '/localizely/progress/{projectId}': {
+      get: {
+        summary: 'Localizely progress',
+        description,
+        parameters: [
+          pathParam({
+            name: 'projectId',
+            example: '5cc34208-0418-40b1-8353-acc70c95f802',
+          }),
+          queryParam({
+            name: 'token',
+            example:
+              '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
+            required: true,
+          }),
+          queryParam({
+            name: 'languageCode',
+            example: 'en-US',
+            required: false,
+          }),
+        ],
       },
-      queryParams: {
-        token:
-          '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
-      },
-      staticPreview: this.render({ reviewedProgress: 93 }),
     },
-    {
-      title: 'Localizely language progress',
-      keywords,
-      documentation,
-      namedParams: {
-        projectId: '5cc34208-0418-40b1-8353-acc70c95f802',
-        branch: 'main',
+    '/localizely/progress/{projectId}/{branch}': {
+      get: {
+        summary: 'Localizely progress (branch)',
+        description,
+        parameters: [
+          pathParam({
+            name: 'projectId',
+            example: '5cc34208-0418-40b1-8353-acc70c95f802',
+          }),
+          pathParam({
+            name: 'branch',
+            example: 'main',
+          }),
+          queryParam({
+            name: 'token',
+            example:
+              '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
+            required: true,
+          }),
+          queryParam({
+            name: 'languageCode',
+            example: 'en-US',
+            required: false,
+          }),
+        ],
       },
-      queryParams: {
-        token:
-          '0f4d5e31a44f48dcbab966c52cfb0a67c5f1982186c14b85ab389a031dbc225a',
-        languageCode: 'en-US',
-      },
-      staticPreview: this.render({
-        langName: 'English (US)',
-        reviewedProgress: 97,
-      }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'localized' }
 

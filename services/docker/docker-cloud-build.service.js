@@ -1,21 +1,35 @@
-import { BaseJsonService, NotFound } from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import { dockerBlue, buildDockerUrl } from './docker-helpers.js'
 import { fetchBuild } from './docker-cloud-common-fetch.js'
 
 export default class DockerCloudBuild extends BaseJsonService {
   static category = 'build'
   static route = buildDockerUrl('cloud/build')
-  static examples = [
-    {
-      title: 'Docker Cloud Build Status',
-      documentation: '<p>For the new Docker Hub (https://cloud.docker.com)</p>',
-      namedParams: {
-        user: 'jrottenberg',
-        repo: 'ffmpeg',
+
+  static auth = {
+    userKey: 'dockerhub_username',
+    passKey: 'dockerhub_pat',
+    authorizedOrigins: ['https://hub.docker.com', 'https://cloud.docker.com'],
+    isRequired: false,
+  }
+
+  static openApi = {
+    '/docker/cloud/build/{user}/{repo}': {
+      get: {
+        summary: 'Docker Cloud Build Status',
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'jrottenberg',
+          },
+          {
+            name: 'repo',
+            example: 'ffmpeg',
+          },
+        ),
       },
-      staticPreview: this.render({ state: 'Success' }),
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'docker build' }
 

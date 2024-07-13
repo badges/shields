@@ -1,0 +1,25 @@
+name: Main@node 22
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  push:
+    branches-ignore:
+      - 'gh-pages'
+      - 'dependabot/**'
+
+jobs:
+  test-main-22:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+        env:
+          NPM_CONFIG_ENGINE_STRICT: 'false'
+
+      - name: Core tests
+        uses: ./.github/actions/core-tests

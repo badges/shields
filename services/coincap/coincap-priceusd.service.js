@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { pathParams } from '../index.js'
-import BaseCoincapService from './coincap-base.js'
+import { BaseCoincapService, description } from './coincap-base.js'
 
 const schema = Joi.object({
   data: Joi.object({
@@ -18,6 +18,7 @@ export default class CoincapPriceUsd extends BaseCoincapService {
     '/coincap/price-usd/{assetId}': {
       get: {
         summary: 'Coincap (Price USD)',
+        description,
         parameters: pathParams({
           name: 'assetId',
           example: 'bitcoin',

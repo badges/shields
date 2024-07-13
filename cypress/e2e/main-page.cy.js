@@ -25,7 +25,7 @@ describe('Frontend', function () {
     cy.contains('Build')
     cy.contains('Chat').click()
 
-    cy.contains('Discourse status')
+    cy.contains('Discourse Status')
     cy.contains('Stack Exchange questions')
   })
 
@@ -40,14 +40,14 @@ describe('Frontend', function () {
   })
 
   it('Build a badge', function () {
-    visitAndWait('/badges/git-hub-issues')
+    visitAndWait('/badges/git-hub-license')
 
-    cy.contains('/github/issues/:user/:repo')
+    cy.contains('/github/license/:user/:repo')
 
     cy.get('input[placeholder="user"]').type('badges')
     cy.get('input[placeholder="repo"]').type('shields')
 
-    cy.intercept('GET', `${backendUrl}/github/issues/badges/shields`).as('get')
+    cy.intercept('GET', `${backendUrl}/github/license/badges/shields`).as('get')
     cy.contains('Execute').click()
     cy.wait('@get').its('response.statusCode').should('eq', 200)
     cy.get('img[id="badge-preview"]')

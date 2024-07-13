@@ -1,6 +1,11 @@
+import { pathParam } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 import SonarBase from './sonar-base.js'
-import { documentation, keywords, queryParamSchema } from './sonar-helpers.js'
+import {
+  documentation,
+  queryParamSchema,
+  openApiQueryParams,
+} from './sonar-helpers.js'
 
 export default class SonarCoverage extends SonarBase {
   static category = 'coverage'
@@ -11,22 +16,29 @@ export default class SonarCoverage extends SonarBase {
     queryParamSchema,
   }
 
-  static examples = [
-    {
-      title: 'Sonar Coverage',
-      namedParams: {
-        component: 'org.ow2.petals:petals-se-ase',
-        branch: 'master',
+  static openApi = {
+    '/sonar/coverage/{component}': {
+      get: {
+        summary: 'Sonar Coverage',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          ...openApiQueryParams,
+        ],
       },
-      queryParams: {
-        server: 'http://sonar.petalslink.com',
-        sonarVersion: '4.2',
-      },
-      staticPreview: this.render({ coverage: 63 }),
-      keywords,
-      documentation,
     },
-  ]
+    '/sonar/coverage/{component}/{branch}': {
+      get: {
+        summary: 'Sonar Coverage (branch)',
+        description: documentation,
+        parameters: [
+          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'branch', example: 'master' }),
+          ...openApiQueryParams,
+        ],
+      },
+    },
+  }
 
   static defaultBadgeData = { label: 'coverage' }
 

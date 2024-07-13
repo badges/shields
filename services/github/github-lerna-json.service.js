@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { semver } from '../validators.js'
 import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
@@ -16,25 +17,44 @@ export default class GithubLernaJson extends ConditionalGithubAuthV3Service {
     pattern: ':user/:repo/:branch*',
   }
 
-  static examples = [
-    {
-      title: 'Github lerna version',
-      pattern: ':user/:repo',
-      namedParams: { user: 'babel', repo: 'babel' },
-      staticPreview: this.render({ version: '7.6.4' }),
-      documentation,
+  static openApi = {
+    '/github/lerna-json/v/{user}/{repo}': {
+      get: {
+        summary: 'GitHub lerna version',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'babel',
+          },
+          {
+            name: 'repo',
+            example: 'babel',
+          },
+        ),
+      },
     },
-    {
-      title: 'Github lerna version (branch)',
-      pattern: ':user/:repo/:branch',
-      namedParams: { user: 'jneander', repo: 'jneander', branch: 'colors' },
-      staticPreview: this.render({
-        version: 'independent',
-        branch: 'colors',
-      }),
-      documentation,
+    '/github/lerna-json/v/{user}/{repo}/{branch}': {
+      get: {
+        summary: 'GitHub lerna version (branch)',
+        description: documentation,
+        parameters: pathParams(
+          {
+            name: 'user',
+            example: 'jneander',
+          },
+          {
+            name: 'repo',
+            example: 'jneander',
+          },
+          {
+            name: 'branch',
+            example: 'colors',
+          },
+        ),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'lerna' }
 

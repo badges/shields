@@ -1,14 +1,15 @@
 import Joi from 'joi'
 import prettyBytes from 'pretty-bytes'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
   gzip: nonNegativeInteger,
 }).required()
 
-const keywords = ['node', 'bundlephobia']
+const description =
+  '[Bundlephobia](https://bundlephobia.com) lets you understand the size of a javascript package from NPM before it becomes a part of your bundle.'
 
 export default class Bundlephobia extends BaseJsonService {
   static category = 'size'
@@ -18,52 +19,94 @@ export default class Bundlephobia extends BaseJsonService {
     pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
   }
 
-  static examples = [
-    {
-      title: 'npm bundle size',
-      pattern: ':format(min|minzip)/:packageName',
-      namedParams: {
-        format: 'min',
-        packageName: 'react',
+  static openApi = {
+    '/bundlephobia/{format}/{packageName}': {
+      get: {
+        summary: 'npm bundle size',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            schema: { type: 'string', enum: this.getEnum('format') },
+            example: 'min',
+          },
+          {
+            name: 'packageName',
+            example: 'react',
+          },
+        ),
       },
-      staticPreview: this.render({ format: 'min', size: 6652 }),
-      keywords,
     },
-    {
-      title: 'npm bundle size (scoped)',
-      pattern: ':format(min|minzip)/:scope/:packageName',
-      namedParams: {
-        format: 'min',
-        scope: '@cycle',
-        packageName: 'core',
+    '/bundlephobia/{format}/{scope}/{packageName}': {
+      get: {
+        summary: 'npm bundle size (scoped)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            schema: { type: 'string', enum: this.getEnum('format') },
+            example: 'min',
+          },
+          {
+            name: 'scope',
+            example: '@cycle',
+          },
+          {
+            name: 'packageName',
+            example: 'core',
+          },
+        ),
       },
-      staticPreview: this.render({ format: 'min', size: 3562 }),
-      keywords,
     },
-    {
-      title: 'npm bundle size (version)',
-      pattern: ':format(min|minzip)/:packageName/:version',
-      namedParams: {
-        format: 'min',
-        packageName: 'react',
-        version: '15.0.0',
+    '/bundlephobia/{format}/{packageName}/{version}': {
+      get: {
+        summary: 'npm bundle size (version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            schema: { type: 'string', enum: this.getEnum('format') },
+            example: 'min',
+          },
+          {
+            name: 'packageName',
+            example: 'react',
+          },
+          {
+            name: 'version',
+            example: '15.0.0',
+          },
+        ),
       },
-      staticPreview: this.render({ format: 'min', size: 20535 }),
-      keywords,
     },
-    {
-      title: 'npm bundle size (scoped version)',
-      pattern: ':format(min|minzip)/:scope/:packageName/:version',
-      namedParams: {
-        format: 'min',
-        scope: '@cycle',
-        packageName: 'core',
-        version: '7.0.0',
+    '/bundlephobia/{format}/{scope}/{packageName}/{version}': {
+      get: {
+        summary: 'npm bundle size (scoped version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'format',
+            schema: { type: 'string', enum: this.getEnum('format') },
+            example: 'min',
+          },
+          {
+            name: 'scope',
+            example: '@cycle',
+          },
+          {
+            name: 'packageName',
+            example: 'core',
+          },
+          {
+            name: 'version',
+            example: '7.0.0',
+          },
+        ),
       },
-      staticPreview: this.render({ format: 'min', size: 3562 }),
-      keywords,
     },
-  ]
+  }
+
+  static _cacheLength = 900
 
   static defaultBadgeData = { label: 'bundlephobia', color: 'informational' }
 

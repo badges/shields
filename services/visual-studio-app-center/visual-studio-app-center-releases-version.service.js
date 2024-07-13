@@ -1,14 +1,14 @@
 import Joi from 'joi'
+import { pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import {
   BaseVisualStudioAppCenterService,
-  keywords,
-  documentation,
+  description,
 } from './visual-studio-app-center-base.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
-  short_version: Joi.string().required(),
+  short_version: Joi.string().required().allow(''),
 }).required()
 
 export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStudioAppCenterService {
@@ -19,19 +19,28 @@ export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStud
     pattern: ':owner/:app/:token',
   }
 
-  static examples = [
-    {
-      title: 'Visual Studio App Center Releases',
-      namedParams: {
-        owner: 'jct',
-        app: 'my-amazing-app',
-        token: 'ac70cv...',
+  static openApi = {
+    '/visual-studio-app-center/releases/version/{owner}/{app}/{token}': {
+      get: {
+        summary: 'Visual Studio App Center Releases',
+        description,
+        parameters: pathParams(
+          {
+            name: 'owner',
+            example: 'jct',
+          },
+          {
+            name: 'app',
+            example: 'my-amazing-app',
+          },
+          {
+            name: 'token',
+            example: 'ac70cv...',
+          },
+        ),
       },
-      staticPreview: renderVersionBadge({ version: '1.0 (4)' }),
-      keywords,
-      documentation,
     },
-  ]
+  }
 
   static defaultBadgeData = {
     label: 'release',
@@ -44,6 +53,9 @@ export default class VisualStudioAppCenterReleasesVersion extends BaseVisualStud
       token,
       schema,
     })
+    if (!shortVersion) {
+      return renderVersionBadge({ version })
+    }
     return renderVersionBadge({
       version: `${shortVersion} (${version})`,
     })

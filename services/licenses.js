@@ -87,7 +87,7 @@ const licenseTypes = {
   },
   // public domain licenses do not require 'License and copyright notice' (https://choosealicense.com/appendix/#include-copyright)
   'public-domain': {
-    spdxLicenseIds: ['CC0-1.0', 'Unlicense', 'WTFPL'],
+    spdxLicenseIds: ['CC0-1.0', 'Unlicense', 'WTFPL', '0BSD'],
     aliases: ['CC0'],
     color: '7cd958',
     priority: '3',

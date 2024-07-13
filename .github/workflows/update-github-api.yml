@@ -19,13 +19,13 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Check for new GitHub API version
         run: node scripts/update-github-api.js
 
       - name: Create Pull Request if config has changed
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           commit-message: Update GitHub API Version

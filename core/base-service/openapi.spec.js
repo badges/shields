@@ -58,27 +58,6 @@ class OpenApiService extends BaseJsonService {
   }
 }
 
-class LegacyService extends BaseJsonService {
-  static category = 'build'
-  static route = { base: 'legacy/service', pattern: ':packageName/:distTag*' }
-
-  // this service defines an Examples Array
-  static examples = [
-    {
-      title: 'LegacyService Title',
-      namedParams: { packageName: 'badge-maker' },
-      staticPreview: { label: 'build', message: 'passing' },
-      documentation: 'LegacyService Description',
-    },
-    {
-      title: 'LegacyService Title (with Tag)',
-      namedParams: { packageName: 'badge-maker', distTag: 'latest' },
-      staticPreview: { label: 'build', message: 'passing' },
-      documentation: 'LegacyService Description (with Tag)',
-    },
-  ]
-}
-
 const expected = {
   openapi: '3.0.0',
   info: { version: '1.0.0', title: 'build', license: { name: 'CC0' } },
@@ -89,8 +68,11 @@ const expected = {
         in: 'query',
         required: false,
         description:
-          'One of: flat (default), flat-square, plastic, for-the-badge, social',
-        schema: { type: 'string' },
+          'If not specified, the default style for this badge is "flat".',
+        schema: {
+          enum: ['flat', 'flat-square', 'plastic', 'for-the-badge', 'social'],
+          type: 'string',
+        },
         example: 'flat',
       },
       logo: {
@@ -110,6 +92,17 @@ const expected = {
           'The color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported). Supported for named logos and Shields logos but not for custom logos. For multicolor Shields logos, the corresponding named logo will be used and colored.',
         schema: { type: 'string' },
         example: 'violet',
+      },
+      logoSize: {
+        name: 'logoSize',
+        in: 'query',
+        required: false,
+        description:
+          'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for simple-icons logos only.',
+        schema: {
+          type: 'string',
+        },
+        example: 'auto',
       },
       label: {
         name: 'label',
@@ -176,6 +169,7 @@ const expected = {
           { $ref: '#/components/parameters/style' },
           { $ref: '#/components/parameters/logo' },
           { $ref: '#/components/parameters/logoColor' },
+          { $ref: '#/components/parameters/logoSize' },
           { $ref: '#/components/parameters/label' },
           { $ref: '#/components/parameters/labelColor' },
           { $ref: '#/components/parameters/color' },
@@ -231,6 +225,7 @@ const expected = {
           { $ref: '#/components/parameters/style' },
           { $ref: '#/components/parameters/logo' },
           { $ref: '#/components/parameters/logoColor' },
+          { $ref: '#/components/parameters/logoSize' },
           { $ref: '#/components/parameters/label' },
           { $ref: '#/components/parameters/labelColor' },
           { $ref: '#/components/parameters/color' },
@@ -263,105 +258,6 @@ const expected = {
         ],
       },
     },
-    '/legacy/service/{packageName}/{distTag}': {
-      get: {
-        summary: 'LegacyService Title (with Tag)',
-        description: 'LegacyService Description (with Tag)',
-        parameters: [
-          {
-            name: 'packageName',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'badge-maker',
-          },
-          {
-            name: 'distTag',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'latest',
-          },
-          { $ref: '#/components/parameters/style' },
-          { $ref: '#/components/parameters/logo' },
-          { $ref: '#/components/parameters/logoColor' },
-          { $ref: '#/components/parameters/label' },
-          { $ref: '#/components/parameters/labelColor' },
-          { $ref: '#/components/parameters/color' },
-          { $ref: '#/components/parameters/cacheSeconds' },
-          { $ref: '#/components/parameters/link' },
-        ],
-        'x-code-samples': [
-          { lang: 'URL', label: 'URL', source: '$url' },
-          {
-            lang: 'Markdown',
-            label: 'Markdown',
-            source: '![LegacyService Title (with Tag)]($url)',
-          },
-          {
-            lang: 'reStructuredText',
-            label: 'rSt',
-            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
-          },
-          {
-            lang: 'AsciiDoc',
-            label: 'AsciiDoc',
-            source: 'image:$url[LegacyService Title (with Tag)]',
-          },
-          {
-            lang: 'HTML',
-            label: 'HTML',
-            source: '<img alt="LegacyService Title (with Tag)" src="$url">',
-          },
-        ],
-      },
-    },
-    '/legacy/service/{packageName}': {
-      get: {
-        summary: 'LegacyService Title (with Tag)',
-        description: 'LegacyService Description (with Tag)',
-        parameters: [
-          {
-            name: 'packageName',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            example: 'badge-maker',
-          },
-          { $ref: '#/components/parameters/style' },
-          { $ref: '#/components/parameters/logo' },
-          { $ref: '#/components/parameters/logoColor' },
-          { $ref: '#/components/parameters/label' },
-          { $ref: '#/components/parameters/labelColor' },
-          { $ref: '#/components/parameters/color' },
-          { $ref: '#/components/parameters/cacheSeconds' },
-          { $ref: '#/components/parameters/link' },
-        ],
-        'x-code-samples': [
-          { lang: 'URL', label: 'URL', source: '$url' },
-          {
-            lang: 'Markdown',
-            label: 'Markdown',
-            source: '![LegacyService Title (with Tag)]($url)',
-          },
-          {
-            lang: 'reStructuredText',
-            label: 'rSt',
-            source: '.. image:: $url\n   :alt: LegacyService Title (with Tag)',
-          },
-          {
-            lang: 'AsciiDoc',
-            label: 'AsciiDoc',
-            source: 'image:$url[LegacyService Title (with Tag)]',
-          },
-          {
-            lang: 'HTML',
-            label: 'HTML',
-            source: '<img alt="LegacyService Title (with Tag)" src="$url">',
-          },
-        ],
-      },
-    },
   },
 }
 
@@ -374,10 +270,10 @@ describe('category2openapi', function () {
   it('generates an Open API spec', function () {
     expect(
       clean(
-        category2openapi({ name: 'build' }, [
-          OpenApiService.getDefinition(),
-          LegacyService.getDefinition(),
-        ]),
+        category2openapi({
+          category: { name: 'build' },
+          services: [OpenApiService.getDefinition()],
+        }),
       ),
     ).to.deep.equal(expected)
   })

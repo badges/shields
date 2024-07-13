@@ -1,14 +1,10 @@
 import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
-  id: 'AnsibleCollection',
-  title: 'AnsibleCollection',
+  id: 'AnsibleGalaxyCollectionName',
+  title: 'AnsibleGalaxyCollectionName',
   pathPrefix: '/ansible/collection',
 })
 
-t.create('collection name (valid)')
+t.create('collection name')
   .get('/278.json')
-  .expectBadge({ label: 'collection', message: 'community.general' })
-
-t.create('collection name (not found)')
-  .get('/000.json')
-  .expectBadge({ label: 'collection', message: 'not found' })
+  .expectBadge({ label: 'collection', message: 'no longer available' })
