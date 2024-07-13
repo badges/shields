@@ -75,7 +75,7 @@
     "coverage:test:entrypoint": "c8 npm run test:entrypoint",
     "coverage:test:integration": "c8 npm run test:integration",
     "coverage:test:services": "c8 npm run test:services",
-    "coverage:clean": "rimraf .nyc_output coverage",
+    "coverage:clean": "rimraf coverage",
     "precoverage:test": "cross-env BASE_URL=http://localhost:8080 run-s --silent coverage:clean defs",
     "coverage:test": "run-s --silent --continue-on-error coverage:test:core coverage:test:package coverage:test:entrypoint coverage:test:integration",
     "coverage:report:generate": "c8 report",
