@@ -32,7 +32,7 @@ export default class WeblateComponentLicense extends WeblateBase {
     },
   }
 
-  static defaultBadgeData = { label: 'license', color: 'informational' }
+  static defaultBadgeData = { label: 'license', color: 'informational', namedLogo: 'weblate' }
 
   static render({ license }) {
     return { message: `${license}` }
