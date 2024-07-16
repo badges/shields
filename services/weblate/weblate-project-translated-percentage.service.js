@@ -35,7 +35,7 @@ export default class WeblateProjectTranslatedPercentage extends WeblateBase {
 
   static _cacheLength = 600
 
-  static defaultBadgeData = { label: 'translated' }
+  static defaultBadgeData = { label: 'translated', namedLogo: 'weblate' }
 
   /**
    * Takes a percentage and maps it to a message and color.
