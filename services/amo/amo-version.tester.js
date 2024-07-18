@@ -2,7 +2,7 @@ import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Version').get('/IndieGala-Helper.json').expectBadge({
+t.create('Version').get('/night-video-tuner.json').expectBadge({
   label: 'mozilla add-on',
   message: isVPlusDottedVersionAtLeastOne,
 })
