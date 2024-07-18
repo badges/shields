@@ -127,7 +127,7 @@ export default class GiteaLastCommit extends GiteaBase {
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/commits`,
       options: { searchParams: { sha: branch, path, limit: 1 } },
-      httpErrors: httpErrorsFor(),
+      httpErrors: httpErrorsFor('user, repo or path not found'),
     })
   }
 
