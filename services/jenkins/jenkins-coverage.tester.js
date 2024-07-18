@@ -19,17 +19,35 @@ t.create('jacoco: job not found')
   .get('/jacoco.json?jobUrl=https://ci-maven.apache.org/job/does-not-exist')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
-t.create('cobertura: job not found')
-  .get(
-    '/cobertura.json?jobUrl=https://jenkins.sqlalchemy.org/job/does-not-exist',
-  )
-  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
+const coverageCoberturaResponse = {
+  _class: 'io.jenkins.plugins.coverage.targets.CoverageResult',
+  results: {
+    elements: [
+      { name: 'Classes', ratio: 52.0 },
+      { name: 'Lines', ratio: 40.66363 },
+    ],
+  },
+}
 
 t.create('cobertura: job found')
   .get(
     '/cobertura.json?jobUrl=https://jenkins.sqlalchemy.org/job/dogpile_coverage',
   )
-  .expectBadge({ label: 'coverage', message: isIntegerPercentage })
+  .intercept(nock =>
+    nock(
+      'https://jenkins.sqlalchemy.org/job/dogpile_coverage/lastCompletedBuild',
+    )
+      .get('/cobertura/api/json')
+      .query(true)
+      .reply(200, coverageCoberturaResponse),
+  )
+  .expectBadge({ label: 'coverage', message: '41%' })
+
+t.create('cobertura: job not found')
+  .get(
+    '/cobertura.json?jobUrl=https://jenkins.sqlalchemy.org/job/does-not-exist',
+  )
+  .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 const coverageApiV1Response = {
   _class: 'io.jenkins.plugins.coverage.targets.CoverageResult',
