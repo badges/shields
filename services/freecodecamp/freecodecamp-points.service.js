@@ -1,11 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import {
-  BaseJsonService,
-  InvalidResponse,
-  NotFound,
-  pathParams,
-} from '../index.js'
+import { BaseJsonService, InvalidResponse, pathParams } from '../index.js'
 
 /**
  * Validates that the schema response is what we're expecting.
@@ -62,18 +57,18 @@ export default class FreeCodeCampPoints extends BaseJsonService {
           username,
         },
       },
+      httpErrors: { 404: 'profile not found' },
     })
   }
 
   static transform(response, username) {
     const { entities } = response
 
-    if (entities === undefined)
-      throw new NotFound({ prettyMessage: 'profile not found' })
-
     const { points } = entities.user[username]
 
-    if (points === null) throw new InvalidResponse({ prettyMessage: 'private' })
+    if (points === null) {
+      throw new InvalidResponse({ prettyMessage: 'private' })
+    }
 
     return points
   }
