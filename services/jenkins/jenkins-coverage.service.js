@@ -115,12 +115,13 @@ export default class JenkinsCoverage extends JenkinsBase {
         parameters: [
           pathParam({
             name: 'format',
-            example: 'cobertura',
+            example: 'jacoco',
             schema: { type: 'string', enum: this.getEnum('format') },
           }),
           queryParam({
             name: 'jobUrl',
-            example: 'https://jenkins.sqlalchemy.org/job/dogpile_coverage',
+            example:
+              'https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-surefire/job/master',
             required: true,
           }),
         ],
