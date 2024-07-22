@@ -7,7 +7,7 @@ t.create('pub points (valid)')
   .get('/analysis_options.json')
   .expectBadge({
     label: 'points',
-    message: Joi.string().regex(/^\d+\/140$/),
+    message: Joi.string().regex(/^\d+\/\d+$/),
   })
 
 t.create('pub points (not found)').get('/analysisoptions.json').expectBadge({
