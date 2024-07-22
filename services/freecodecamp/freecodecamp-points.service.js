@@ -16,7 +16,7 @@ const schema = Joi.object({
       .pattern(/^[a-zA-Z0-9\-_+]*$/, {
         points: Joi.number().allow(null).required(),
       }),
-  }).optional(),
+  }).required(),
 }).required()
 
 /**
