@@ -22,6 +22,6 @@ t.create(
   'python versions - valid toml with missing python-requires field (invalid)',
 )
   .get(
-    '/python/required-version-toml.json?tomlFilePath=https://raw.githubusercontent.com/django/django/main/pyproject.toml',
+    '/python/required-version-toml.json?tomlFilePath=https://raw.githubusercontent.com/psf/requests/main/pyproject.toml',
   )
   .expectBadge({ label: 'python', message: 'invalid response data' })
