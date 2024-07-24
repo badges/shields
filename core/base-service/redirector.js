@@ -111,8 +111,12 @@ export default function redirector(attrs) {
         ask.res.statusCode = 301
         ask.res.setHeader('Location', redirectUrl)
 
-        // To avoid caching mistakes for a long time, and to make this simpler
-        // to reason about, use the same cache semantics as the static badge.
+        /* To avoid caching mistakes forever
+           (in the absence of cache control directives that specify otherwise,
+           301 redirects are cached without any expiry date)
+           and to make this simpler to reason about,
+           use the same cache semantics as the static badge.
+        */
         setCacheHeadersForStaticResource(ask.res)
 
         ask.res.end()
