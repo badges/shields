@@ -59,8 +59,17 @@ describe('The server', function () {
       expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
     })
 
-    it('should serve badges with custom maxAge', async function () {
+    it('should serve static badges without logo with maxAge=432000', async function () {
       const { headers } = await got(`${baseUrl}badge/foo-bar-blue`)
+      expect(headers['cache-control']).to.equal(
+        'max-age=432000, s-maxage=432000',
+      )
+    })
+
+    it('should serve badges with with logo with maxAge=86400', async function () {
+      const { headers } = await got(
+        `${baseUrl}badge/foo-bar-blue?logo=javascript`,
+      )
       expect(headers['cache-control']).to.equal('max-age=86400, s-maxage=86400')
     })
 
