@@ -1,12 +1,13 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isMetricWithPattern } from '../test-validators.js'
+
 export const t = await createServiceTester()
 
 t.create('gets status for Reactiflux')
   .get('/102860784329052160.json')
   .expectBadge({
     label: 'chat',
-    message: Joi.string().regex(/^[0-9]+ online$/),
+    message: isMetricWithPattern(/ online/),
     color: 'brightgreen',
   })
 
