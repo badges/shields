@@ -7,7 +7,6 @@ const isMessage = Joi.alternatives()
   .required()
 
 t.create('valid')
-  .timeout(10000)
   .get('/grade-score/observatory.mozilla.org.json')
   .expectBadge({
     label: 'observatory',
@@ -15,7 +14,6 @@ t.create('valid')
   })
 
 t.create('invalid')
-  .timeout(10000)
   .get('/grade-score/invalidsubdomain.shields.io.json')
   .expectBadge({
     label: 'observatory',
