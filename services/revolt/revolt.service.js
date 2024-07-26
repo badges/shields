@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
+import { metric } from '../text-formatters.js'
 import { nonNegativeInteger, optionalUrl } from '../validators.js'
 
 const schema = Joi.object({
@@ -52,7 +53,7 @@ export default class RevoltServerInvite extends BaseJsonService {
 
   static render({ memberCount }) {
     return {
-      message: `${memberCount} members`,
+      message: `${metric(memberCount)} members`,
       color: 'brightgreen',
     }
   }

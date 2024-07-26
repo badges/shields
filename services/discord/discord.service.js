@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
+import { metric } from '../text-formatters.js'
 import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
@@ -53,7 +54,7 @@ export default class Discord extends BaseJsonService {
 
   static render({ members }) {
     return {
-      message: `${members} online`,
+      message: `${metric(members)} online`,
       color: 'brightgreen',
     }
   }

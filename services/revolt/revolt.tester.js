@@ -1,5 +1,5 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isMetricWithPattern } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
@@ -7,7 +7,7 @@ t.create('get status of #revolt')
   .get('/01F7ZSBSFHQ8TA81725KQCSDDP.json')
   .expectBadge({
     label: 'chat',
-    message: Joi.string().regex(/^[0-9]+ members$/),
+    message: isMetricWithPattern(/ members/),
     color: 'brightgreen',
   })
 
@@ -17,7 +17,7 @@ t.create('custom api url')
   )
   .expectBadge({
     label: 'chat',
-    message: Joi.string().regex(/^[0-9]+ members$/),
+    message: isMetricWithPattern(/ members/),
     color: 'brightgreen',
   })
 
