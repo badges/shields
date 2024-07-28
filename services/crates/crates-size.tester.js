@@ -8,7 +8,7 @@ t.create('size')
 
 t.create('size (with version)')
   .get('/tokio/1.32.0.json')
-  .expectBadge({ label: 'size', message: '708 kB' })
+  .expectBadge({ label: 'size', message: '725 kB' })
 
 t.create('size (with version where version doesnt have size)')
   .get('/tokio/0.1.6.json')
