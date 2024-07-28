@@ -79,6 +79,7 @@ describe('The server', function () {
       )
       expect(statusCode).to.equal(200)
       expect(headers['access-control-allow-origin']).to.equal('*')
+      expect(headers['cross-origin-resource-policy']).to.equal('cross-origin')
     })
 
     it('should redirect colorscheme PNG badges as configured', async function () {
@@ -133,6 +134,7 @@ describe('The server', function () {
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('application/json')
       expect(headers['access-control-allow-origin']).to.equal('*')
+      expect(headers['cross-origin-resource-policy']).to.equal('cross-origin')
       expect(headers['content-length']).to.equal('92')
       expect(() => JSON.parse(body)).not.to.throw()
     })

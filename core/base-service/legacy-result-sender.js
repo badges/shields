@@ -17,7 +17,6 @@ function sendSVG(res, askres, end) {
 
 function sendJSON(res, askres, end) {
   askres.setHeader('Content-Type', 'application/json')
-  askres.setHeader('Access-Control-Allow-Origin', '*')
   askres.setHeader('Content-Length', Buffer.byteLength(res, 'utf8'))
   end(null, { template: streamFromString(res) })
 }
