@@ -4,6 +4,8 @@ import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const versionSchema = Joi.object({
   downloads: nonNegativeInteger,
+  // Crate size is not available for all versions.
+  crate_size: nonNegativeInteger.allow(null),
   num: Joi.string().required(),
   license: Joi.string().required().allow(null),
   rust_version: Joi.string().allow(null),
