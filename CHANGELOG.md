@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-08-01
+
+- send Cross-Origin-Resource-Policy header on all responses [#10420](https://github.com/badges/shields/issues/10420)
+- migrate [MozillaObservatory] to new API [#10402](https://github.com/badges/shields/issues/10402)
+- use metric() for [discord] and [revolt] badges [#10406](https://github.com/badges/shields/issues/10406)
+- Cache text only static badges for longer [#10403](https://github.com/badges/shields/issues/10403)
+- Fix [FreeCodeCampPoints] not found handling [#10377](https://github.com/badges/shields/issues/10377)
+- Fix [Gitea] not found message [#10373](https://github.com/badges/shields/issues/10373)
+- Deprecate [Bountysource] service [#10371](https://github.com/badges/shields/issues/10371)
+- Sunset Shields custom logos [#10347](https://github.com/badges/shields/issues/10347)
+- Use ellipsis when many versions returned for [ModrinthGameVersions] [#10350](https://github.com/badges/shields/issues/10350)
+- deprecate [tokei] service [#9581](https://github.com/badges/shields/issues/9581)
+- Add CF-Ray header value to Sentry errors if available [#10339](https://github.com/badges/shields/issues/10339)
+- Use XML for Chocolatey, affects [Chocolatey Resharper PowershellGallery] [#10344](https://github.com/badges/shields/issues/10344)
+- include github contributors badge in docs site [#10337](https://github.com/badges/shields/issues/10337)
+- Dependency updates
+
 ## server-2024-07-01
 
 - Add [AUR] Popularity Badge [#10304](https://github.com/badges/shields/issues/10304)
