@@ -210,7 +210,7 @@
     "sinon": "^18.0.0",
     "sinon-chai": "^3.7.0",
     "snap-shot-it": "^7.9.10",
-    "start-server-and-test": "2.0.4",
+    "start-server-and-test": "2.0.5",
     "tsd": "^0.31.1",
     "url": "^0.11.3"
   },
