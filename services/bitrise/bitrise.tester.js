@@ -10,7 +10,7 @@ t.create('deploy status')
   })
 
 t.create('deploy status with branch')
-  .get('/e736852157296019/master.json?token=vhgAmaiF3tWZoQyFLkKM7g')
+  .get('/e736852157296019/develop.json?token=vhgAmaiF3tWZoQyFLkKM7g')
   .expectBadge({
     label: 'bitrise',
     message: isBuildStatus,
@@ -25,5 +25,5 @@ t.create('invalid token')
   .expectBadge({ label: 'bitrise', message: 'app not found or invalid token' })
 
 t.create('invalid App ID')
-  .get('/invalid/master.json?token=vhgAmaiF3tWZoQyFLkKM7g')
+  .get('/invalid/develop.json?token=vhgAmaiF3tWZoQyFLkKM7g')
   .expectBadge({ label: 'bitrise', message: 'app not found or invalid token' })
