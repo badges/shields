@@ -12,7 +12,7 @@ t.create('size (with version)')
 
 t.create('size (with version where version doesnt have size)')
   .get('/tokio/0.1.6.json')
-  .expectBadge({ label: 'size', message: 'unknown' })
+  .expectBadge({ label: 'crates.io', message: 'unknown' })
 
 t.create('size (not found)')
   .get('/not-a-crate.json')
