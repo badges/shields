@@ -1,6 +1,8 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, NotFound, pathParams } from '../index.js'
+import { BaseSvgScrapingService, NotFound } from '../index.js'
+
+const keywords = ['documentation']
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -8,45 +10,30 @@ const schema = Joi.object({
     .required(),
 }).required()
 
-const description =
-  '[ReadTheDocs](https://readthedocs.com/) is a hosting service for documentation.'
-
 export default class ReadTheDocs extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
     base: 'readthedocs',
-    pattern: ':project/:version?',
+    pattern: ':service(readthedocs|readthedocscom)/:project/:version?',
   }
 
-  static openApi = {
-    '/readthedocs/{packageName}': {
-      get: {
-        summary: 'Read the Docs',
-        description,
-        parameters: pathParams({
-          name: 'packageName',
-          example: 'pip',
-        }),
-      },
+  static examples = [
+    {
+      title: 'Read the Docs',
+      pattern: ':service/:packageName',
+      namedParams: { service: 'readthedocs', packageName: 'pip' },
+      staticPreview: this.render({ status: 'passing' }),
+      keywords,
     },
-    '/readthedocs/{packageName}/{version}': {
-      get: {
-        summary: 'Read the Docs (version)',
-        description,
-        parameters: pathParams(
-          {
-            name: 'packageName',
-            example: 'pip',
-          },
-          {
-            name: 'version',
-            example: 'stable',
-          },
-        ),
-      },
+    {
+      title: 'Read the Docs (version)',
+      pattern: ':service/:packageName/:version',
+      namedParams: { service: 'readthedocs', packageName: 'pip', version: 'stable' },
+      staticPreview: this.render({ status: 'passing' }),
+      keywords,
     },
-  }
+  ]
 
   static defaultBadgeData = {
     label: 'docs',
@@ -56,14 +43,26 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ project, version }) {
+  async handle({ service, project, version }) {
+    const baseUrl = service === 'readthedocs' ? 'readthedocs.org' : 'readthedocs.com'
+    const options = { searchParams: { version } }
+
+    // Add token for private repositories if needed
+    if (service === 'readthedocscom' && this.authHelper) {
+      const token = await this.authHelper.getToken({ url: `https://${baseUrl}` })
+      if (token) {
+        options.headers = {
+          Authorization: `Token ${token}`
+        }
+      }
+    }
+
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://readthedocs.org/projects/${encodeURIComponent(
-        project,
-      )}/badge/`,
-      options: { searchParams: { version } },
+      url: `https://${baseUrl}/projects/${encodeURIComponent(project)}/badge/`,
+      options,
     })
+
     if (status === 'unknown') {
       throw new NotFound({
         prettyMessage: 'project or version not found',
