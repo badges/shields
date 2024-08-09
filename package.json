@@ -184,7 +184,7 @@
     "form-data": "^4.0.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
-    "is-svg": "^5.0.1",
+    "is-svg": "^5.1.0",
     "jsdoc": "^4.0.3",
     "lint-staged": "^15.2.7",
     "lodash.difference": "^4.5.0",
