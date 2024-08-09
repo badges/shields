@@ -15,7 +15,7 @@ const filenameDescription =
   'The `filename` param can be used to specify the path to `go.mod`. By default, we look for `go.mod` in the repo root'
 
 export default class GithubGoModGoVersion extends ConditionalGithubAuthV3Service {
-  static category = 'version'
+  static category = 'platform-support'
   static route = {
     base: 'github/go-mod/go-version',
     pattern: ':user/:repo/:branch*',
