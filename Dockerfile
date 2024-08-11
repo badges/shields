@@ -1,4 +1,4 @@
-FROM node:20-alpine AS Builder
+FROM node:20-alpine AS builder
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
@@ -30,7 +30,7 @@ LABEL fly.version=$version
 ENV NODE_ENV production
 
 WORKDIR /usr/src/app
-COPY --from=Builder --chown=0:0 /usr/src/app /usr/src/app
+COPY --from=builder --chown=0:0 /usr/src/app /usr/src/app
 
 CMD node server
 
