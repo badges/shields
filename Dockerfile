@@ -32,6 +32,6 @@ ENV NODE_ENV=production
 WORKDIR /usr/src/app
 COPY --from=builder --chown=0:0 /usr/src/app /usr/src/app
 
-CMD node server
+CMD ["node", "server"]
 
 EXPOSE 80 443
