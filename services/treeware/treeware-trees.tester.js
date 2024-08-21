@@ -12,7 +12,7 @@ t.create('request for existing package')
 t.create('request for existing package (mock)')
   .get('/stoplightio/spectral.json')
   .intercept(nock =>
-    nock('https://public.offset.earth')
+    nock('https://public.ecologi.com')
       .get('/users/treeware/trees?ref=65c6e3e942e7464b4591e0c8b70d11d5')
       .reply(200, { total: 50 }),
   )
