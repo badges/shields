@@ -45,6 +45,8 @@ const config = {
         blog: {
           showReadingTime: true,
           editUrl: 'https://github.com/badges/shields/tree/master/frontend',
+          onInlineAuthors: 'ignore',
+          onUntruncatedBlogPosts: 'ignore',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
