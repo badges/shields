@@ -67,6 +67,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/badges/shields:server-${{ steps.date.outputs.date }}
           build-args: |
             version=server-${{ steps.date.outputs.date }}
