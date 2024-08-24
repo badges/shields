@@ -78,10 +78,7 @@ We publish images to:
 - DockerHub at https://registry.hub.docker.com/r/shieldsio/shields and
 - GitHub Container Registry at https://github.com/badges/shields/pkgs/container/shields
 
-The `next` tag is the latest build from `master`, or tagged snapshot releases are available:
-
-- https://registry.hub.docker.com/r/shieldsio/shields/tags
-- https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+The `next` tag is the latest build from `master`. These are only available for linux/amd64
 
 ```sh
 # DockerHub
@@ -95,7 +92,12 @@ $ docker pull ghcr.io/badges/shields:next
 $ docker pull ghcr.io/badges/shields:next
 ```
 
-We push both linux/amd64 and linux/arm64 images. We use the linux/amd64 image ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing beyond ensuring the docker image builds without error.
+Tagged snapshot releases are also available:
+
+- https://registry.hub.docker.com/r/shieldsio/shields/tags
+- https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
+
+We push both linux/amd64 and linux/arm64 snapshot images. We use the linux/amd64 image ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing beyond ensuring the docker image builds without error.
 
 ### Building Docker Image Locally
 
