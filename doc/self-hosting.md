@@ -95,6 +95,8 @@ $ docker pull ghcr.io/badges/shields:next
 $ docker pull ghcr.io/badges/shields:next
 ```
 
+We push both linux/amd64 and linux/arm64 images. We use the linux/amd64 image ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing beyond ensuring the docker image builds without error.
+
 ### Building Docker Image Locally
 
 Alternatively, you can build and run the server locally using Docker. First build an image:
