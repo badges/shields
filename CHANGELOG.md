@@ -4,6 +4,18 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-09-02
+
+- Publish linux/amd64 docker images for snapshot builds [#10476](https://github.com/badges/shields/issues/10476)
+- Fix Gitea not having credentials/authorizedOrigins in Docker environments [#10486](https://github.com/badges/shields/issues/10486)
+- fix typo in pepy downloads [#10475](https://github.com/badges/shields/issues/10475)
+- ignore a couple of docusaurus warnings [#10469](https://github.com/badges/shields/issues/10469)
+- Use Ecologi API to power Treeware badges [#10467](https://github.com/badges/shields/issues/10467)
+- move go version badge to platform support category [#10444](https://github.com/badges/shields/issues/10444)
+- [Crates] Implement Dependents Badge [#10438](https://github.com/badges/shields/issues/10438)
+- [Crates] Added crate size badge [#10421](https://github.com/badges/shields/issues/10421)
+- Dependency updates
+
 ## server-2024-08-01
 
 - send Cross-Origin-Resource-Policy header on all responses [#10420](https://github.com/badges/shields/issues/10420)
