@@ -2,12 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService, pathParam } from '../index.js'
 
 const schema = Joi.object({
-  scan: Joi.object({
-    grade: Joi.string()
-      .regex(/^[ABCDEF][+-]?$/)
-      .required(),
-    score: Joi.number().integer().min(0).max(200).required(),
-  }).required(),
+  grade: Joi.string()
+    .regex(/^[ABCDEF][+-]?$/)
+    .required(),
+  score: Joi.number().integer().min(0).max(200).required(),
 }).required()
 
 const description = `
@@ -69,15 +67,16 @@ export default class MozillaObservatory extends BaseJsonService {
   async fetch({ host }) {
     return this._requestJson({
       schema,
-      url: 'https://observatory-api.mdn.mozilla.net/api/v2/analyze',
+      url: 'https://observatory-api.mdn.mozilla.net/api/v2/scan',
       options: {
+        method: 'POST',
         searchParams: { host },
       },
     })
   }
 
   async handle({ format, host }) {
-    const { scan } = await this.fetch({ host })
+    const scan = await this.fetch({ host })
     return this.constructor.render({
       format,
       grade: scan.grade,
