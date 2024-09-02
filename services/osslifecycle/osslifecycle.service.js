@@ -1,11 +1,6 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import {
-  BaseService,
-  InvalidResponse,
-  pathParams,
-  queryParam,
-} from '../index.js'
+import { BaseService, InvalidResponse, queryParam } from '../index.js'
 
 const description = `
 OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
@@ -17,7 +12,7 @@ can be viewed on the [OSS Tracker repository](https://github.com/Netflix/osstrac
 `
 
 const queryParamSchema = Joi.object({
-  file_url: optionalUrl,
+  file_url: optionalUrl.required(),
 }).required()
 
 export default class OssTracker extends BaseService {
@@ -25,14 +20,14 @@ export default class OssTracker extends BaseService {
 
   static route = {
     base: '',
-    pattern: 'osslifecycle/:user?/:repo?/:branch*',
+    pattern: 'osslifecycle',
     queryParamSchema,
   }
 
   static openApi = {
     '/osslifecycle': {
       get: {
-        summary: 'OSS Lifecycle (From URL)',
+        summary: 'OSS Lifecycle',
         description,
         parameters: [
           queryParam({
@@ -43,42 +38,6 @@ export default class OssTracker extends BaseService {
             description: 'URL for the `OSSMETADATA` file',
           }),
         ],
-      },
-    },
-    '/osslifecycle/{user}/{repo}': {
-      get: {
-        summary: 'OSS Lifecycle (GitHub)',
-        description,
-        parameters: pathParams(
-          {
-            name: 'user',
-            example: 'Teevity',
-          },
-          {
-            name: 'repo',
-            example: 'ice',
-          },
-        ),
-      },
-    },
-    '/osslifecycle/{user}/{repo}/{branch}': {
-      get: {
-        summary: 'OSS Lifecycle (GitHub branch)',
-        description,
-        parameters: pathParams(
-          {
-            name: 'user',
-            example: 'Netflix',
-          },
-          {
-            name: 'repo',
-            example: 'osstracker',
-          },
-          {
-            name: 'branch',
-            example: 'documentation',
-          },
-        ),
       },
     },
   }
@@ -114,23 +73,14 @@ export default class OssTracker extends BaseService {
     }
   }
 
-  async fetch({ user, repo, branch, fileUrl }) {
-    if (fileUrl) {
-      return this._request({
-        url: fileUrl,
-      })
-    } else {
-      return this._request({
-        url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
-      })
-    }
+  async fetch({ fileUrl }) {
+    return this._request({
+      url: fileUrl,
+    })
   }
 
   async handle({ user, repo, branch }, { file_url: fileUrl = '' }) {
     const { buffer } = await this.fetch({
-      user,
-      repo,
-      branch: branch || 'HEAD',
       fileUrl,
     })
     try {
