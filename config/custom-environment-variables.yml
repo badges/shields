@@ -35,6 +35,8 @@ public:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
     drone:
       authorizedOrigins: 'DRONE_ORIGINS'
+    gitea:
+      authorizedOrigins: 'GITEA_ORIGINS'
     github:
       baseUri: 'GITHUB_URL'
       debug:
@@ -84,6 +86,7 @@ private:
   dockerhub_username: 'DOCKERHUB_USER'
   dockerhub_pat: 'DOCKERHUB_PAT'
   drone_token: 'DRONE_TOKEN'
+  gitea_token: 'GITEA_TOKEN'
   gh_client_id: 'GH_CLIENT_ID'
   gh_client_secret: 'GH_CLIENT_SECRET'
   gh_token: 'GH_TOKEN'
