@@ -6,19 +6,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2024-09-02
 
-- Publish linux/amd64 docker images for snapshot builds only [#10476](https://github.com/badges/shields/issues/10476)
+- Publish linux/amd64 docker images for snapshot builds [#10476](https://github.com/badges/shields/issues/10476)
 - Fix Gitea not having credentials/authorizedOrigins in Docker environments [#10486](https://github.com/badges/shields/issues/10486)
-- Revert "Add Platform linux/arm64 to Docker Build (#10441)" [#10477](https://github.com/badges/shields/issues/10477)
 - fix typo in pepy downloads [#10475](https://github.com/badges/shields/issues/10475)
-- Add Platform linux/arm64 to Docker Build [#10441](https://github.com/badges/shields/issues/10441)
 - ignore a couple of docusaurus warnings [#10469](https://github.com/badges/shields/issues/10469)
 - Use Ecologi API to power Treeware badges [#10467](https://github.com/badges/shields/issues/10467)
-- un-pin buildx version [#10453](https://github.com/badges/shields/issues/10453)
 - move go version badge to platform support category [#10444](https://github.com/badges/shields/issues/10444)
-- remove libraries we don't need in docker build [#10443](https://github.com/badges/shields/issues/10443)
 - [Crates] Implement Dependents Badge [#10438](https://github.com/badges/shields/issues/10438)
 - [Crates] Added crate size badge [#10421](https://github.com/badges/shields/issues/10421)
-- Fix branch in [Bitrise] tests [#10439](https://github.com/badges/shields/issues/10439)
 - Dependency updates
 
 ## server-2024-08-01
