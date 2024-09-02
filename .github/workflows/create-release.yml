@@ -36,6 +36,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
@@ -48,6 +50,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: shieldsio/shields:server-${{ steps.date.outputs.date }}
           build-args: |
             version=server-${{ steps.date.outputs.date }}
@@ -64,6 +67,7 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: ghcr.io/badges/shields:server-${{ steps.date.outputs.date }}
           build-args: |
             version=server-${{ steps.date.outputs.date }}
