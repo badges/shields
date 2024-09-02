@@ -1,4 +1,11 @@
-import { BaseService, InvalidResponse, pathParams } from '../index.js'
+import Joi from 'joi'
+import { optionalUrl } from '../validators.js'
+import {
+  BaseService,
+  InvalidResponse,
+  pathParams,
+  queryParam,
+} from '../index.js'
 
 const description = `
 OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
@@ -9,18 +16,38 @@ single line similar to the following: \`osslifecycle=active\`. Other suggested v
 can be viewed on the [OSS Tracker repository](https://github.com/Netflix/osstracker).
 `
 
+const queryParamSchema = Joi.object({
+  file_url: optionalUrl,
+}).required()
+
 export default class OssTracker extends BaseService {
   static category = 'other'
 
   static route = {
-    base: 'osslifecycle',
-    pattern: ':user/:repo/:branch*',
+    base: '',
+    pattern: 'osslifecycle/:user?/:repo?/:branch*',
+    queryParamSchema,
   }
 
   static openApi = {
+    '/osslifecycle': {
+      get: {
+        summary: 'OSS Lifecycle (From URL)',
+        description,
+        parameters: [
+          queryParam({
+            name: 'file_url',
+            example:
+              'https://raw.githubusercontent.com/Netflix/aws-autoscaling/master/OSSMETADATA',
+            required: true,
+            description: 'URL for the `OSSMETADATA` file',
+          }),
+        ],
+      },
+    },
     '/osslifecycle/{user}/{repo}': {
       get: {
-        summary: 'OSS Lifecycle',
+        summary: 'OSS Lifecycle (GitHub)',
         description,
         parameters: pathParams(
           {
@@ -36,7 +63,7 @@ export default class OssTracker extends BaseService {
     },
     '/osslifecycle/{user}/{repo}/{branch}': {
       get: {
-        summary: 'OSS Lifecycle (branch)',
+        summary: 'OSS Lifecycle (GitHub branch)',
         description,
         parameters: pathParams(
           {
@@ -87,17 +114,24 @@ export default class OssTracker extends BaseService {
     }
   }
 
-  async fetch({ user, repo, branch }) {
-    return this._request({
-      url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
-    })
+  async fetch({ user, repo, branch, fileUrl }) {
+    if (fileUrl) {
+      return this._request({
+        url: fileUrl,
+      })
+    } else {
+      return this._request({
+        url: `https://raw.githubusercontent.com/${user}/${repo}/${branch}/OSSMETADATA`,
+      })
+    }
   }
 
-  async handle({ user, repo, branch }) {
+  async handle({ user, repo, branch }, { file_url: fileUrl = '' }) {
     const { buffer } = await this.fetch({
       user,
       repo,
       branch: branch || 'HEAD',
+      fileUrl,
     })
     try {
       const status = buffer.match(/osslifecycle=([a-z]+)/im)[1]
