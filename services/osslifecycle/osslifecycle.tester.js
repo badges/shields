@@ -60,3 +60,13 @@ t.create('oss metadata not found').get('/PyvesB/empty-repo.json').expectBadge({
   label: 'oss lifecycle',
   message: 'not found',
 })
+
+t.create('osslifecycle status (file)')
+  .get(
+    '.json?file_url=https://raw.githubusercontent.com/Netflix/osstracker/master/OSSMETADATA',
+  )
+  .expectBadge({
+    label: 'oss lifecycle',
+    message: 'active',
+    color: 'brightgreen',
+  })
