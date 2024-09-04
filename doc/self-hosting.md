@@ -75,10 +75,14 @@ vercel
 
 We publish images to:
 
-- DockerHub at https://registry.hub.docker.com/r/shieldsio/shields and
-- GitHub Container Registry at https://github.com/badges/shields/pkgs/container/shields
+- DockerHub: https://registry.hub.docker.com/r/shieldsio/shields
+- GitHub Container Registry: https://github.com/badges/shields/pkgs/container/shields
 
-The `next` tag is the latest build from `master`. These are only available for linux/amd64
+| Tag           | Architecture            | Description                                |
+|---------------|-------------------------|--------------------------------------------|
+| `next`        | linux/amd64             | Published on every commit to master.       |
+| `latest`      | linux/amd64,linux/arm64 | Published on every tagged release.         |
+| `server-xxxx` | linux/amd64,linux/arm64 | Tagged releases to pin a specific version. |
 
 ```sh
 # DockerHub
@@ -89,7 +93,7 @@ $ docker run shieldsio/shields:next
 ```sh
 # GHCR
 $ docker pull ghcr.io/badges/shields:next
-$ docker pull ghcr.io/badges/shields:next
+$ docker run ghcr.io/badges/shields:next
 ```
 
 Tagged snapshot releases are also available:
@@ -97,7 +101,9 @@ Tagged snapshot releases are also available:
 - https://registry.hub.docker.com/r/shieldsio/shields/tags
 - https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
 
-We push both linux/amd64 and linux/arm64 snapshot images. We use the linux/amd64 image ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing beyond ensuring the docker image builds without error.
+We push both linux/amd64 and linux/arm64 snapshot images as of `server-2024-08-01`. We use the linux/amd64 image
+ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing
+beyond ensuring the docker image builds without error.
 
 ### Building Docker Image Locally
 
