@@ -20,6 +20,8 @@ RUN npm cache clean --force
 # Use multi-stage build to reduce size
 FROM node:20-alpine
 
+LABEL org.opencontainers.image.source="https://github.com/badges/shields"
+
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version
 LABEL version=$version
