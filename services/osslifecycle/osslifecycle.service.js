@@ -5,7 +5,7 @@ import { BaseService, InvalidResponse, queryParam } from '../index.js'
 const description = `
 OSS Lifecycle is an initiative started by Netflix to classify open-source projects into lifecycles
 and clearly identify which projects are active and which ones are retired. To enable this badge,
-simply create an OSSMETADATA tagging file at the root of your GitHub repository containing a
+simply create an OSSMETADATA tagging file at the root of your repository containing a
 single line similar to the following: \`osslifecycle=active\`. Other suggested values are
 \`osslifecycle=maintenance\` and \`osslifecycle=archived\`. A working example
 can be viewed on the [OSS Tracker repository](https://github.com/Netflix/osstracker).
@@ -79,7 +79,7 @@ export default class OssTracker extends BaseService {
     })
   }
 
-  async handle({ user, repo, branch }, { file_url: fileUrl = '' }) {
+  async handle(pathParams, { file_url: fileUrl = '' }) {
     const { buffer } = await this.fetch({
       fileUrl,
     })
