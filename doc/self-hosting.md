@@ -101,7 +101,7 @@ Tagged snapshot releases are also available:
 - https://registry.hub.docker.com/r/shieldsio/shields/tags
 - https://github.com/badges/shields/pkgs/container/shields/versions?filters%5Bversion_type%5D=tagged
 
-We push both linux/amd64 and linux/arm64 snapshot images as of `server-2024-08-01`. We use the linux/amd64 image
+We push both linux/amd64 and linux/arm64 snapshot images as of `server-2024-09-02`. We use the linux/amd64 image
 ourselves to host shields.io. We push a linux/arm64 image, but we don't consume it ourselves and it receives no testing
 beyond ensuring the docker image builds without error.
 
