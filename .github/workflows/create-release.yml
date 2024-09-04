@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date --rfc-3339=date)"
+        run: echo "date=$(date --rfc-3339=date)" >> $GITHUB_OUTPUT
 
       - name: Checkout branch "master"
         uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: shieldsio/shields:server-${{ steps.date.outputs.date }}
+          tags: shieldsio/shields:server-${{ steps.date.outputs.date }},shieldsio/shields:latest
           build-args: |
             version=server-${{ steps.date.outputs.date }}
 
@@ -68,6 +68,6 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/badges/shields:server-${{ steps.date.outputs.date }}
+          tags: ghcr.io/badges/shields:server-${{ steps.date.outputs.date }},shieldsio/shields:latest
           build-args: |
             version=server-${{ steps.date.outputs.date }}
