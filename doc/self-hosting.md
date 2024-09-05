@@ -79,7 +79,7 @@ We publish images to:
 - GitHub Container Registry: https://github.com/badges/shields/pkgs/container/shields
 
 | Tag           | Architecture            | Description                                |
-|---------------|-------------------------|--------------------------------------------|
+| ------------- | ----------------------- | ------------------------------------------ |
 | `next`        | linux/amd64             | Published on every commit to master.       |
 | `latest`      | linux/amd64,linux/arm64 | Published on every tagged release.         |
 | `server-xxxx` | linux/amd64,linux/arm64 | Tagged releases to pin a specific version. |
