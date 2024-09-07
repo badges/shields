@@ -75,7 +75,7 @@ export default class DynamicXml extends BaseService {
     const pathIsAttr = (
       pathExpression.split('/').slice(-1)[0] || ''
     ).startsWith('@')
-    const parsed = new DOMParser().parseFromString(buffer)
+    const parsed = new DOMParser().parseFromString(buffer, 'text/xml')
 
     let values
     try {
