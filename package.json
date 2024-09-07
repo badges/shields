@@ -155,7 +155,7 @@
     "caller": "^1.1.0",
     "chai": "^4.5.0",
     "chai-as-promised": "^8.0.0",
-    "chai-datetime": "^1.8.0",
+    "chai-datetime": "^1.8.1",
     "chai-string": "^1.4.0",
     "child-process-promise": "^2.2.1",
     "clsx": "^2.1.1",
