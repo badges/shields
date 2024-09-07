@@ -42,7 +42,7 @@ export default class Discord extends BaseJsonService {
         description,
         parameters: pathParams({
           name: 'serverId',
-          example: '102860784329052160',
+          example: '308323056592486420',
         }),
       },
     },

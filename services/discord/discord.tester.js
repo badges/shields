@@ -3,8 +3,8 @@ import { isMetricWithPattern } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
-t.create('gets status for Reactiflux')
-  .get('/102860784329052160.json')
+t.create('gets status for shields')
+  .get('/308323056592486420.json')
   .expectBadge({
     label: 'chat',
     message: isMetricWithPattern(/ online/),
