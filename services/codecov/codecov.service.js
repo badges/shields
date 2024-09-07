@@ -38,7 +38,7 @@ const badgeTokenPattern = /^\w{10}$/
 const description = `
 You may specify a Codecov badge token to get coverage for a private repository.
 
-You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/[vcsName]/[user]/[repo]/settings/badge</code>.
+You can find the token under the badge section of your project settings page, in this url: <code>https://codecov.io/[vcsName]/[user]/[repo]/config/badge</code>.
 `
 
 export default class Codecov extends BaseSvgScrapingService {
