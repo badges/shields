@@ -8,7 +8,7 @@ describe('SnapcraftLicense', function () {
     },
   }
 
-  test(SnapcraftLicense.prototype.transform, () => {
+  test(SnapcraftLicense.transform, () => {
     given(testApiData).expect('BSD-3-Clause')
   })
 })

@@ -34,7 +34,7 @@ describe('SnapcraftVersion', function () {
     ],
   }
 
-  test(SnapcraftVersion.prototype.transform, () => {
+  test(SnapcraftVersion.transform, () => {
     given(
       testApiData,
       exampleChannel.channel.track,
@@ -66,7 +66,7 @@ describe('SnapcraftVersion', function () {
 
   it('throws NotFound error with missing arch', function () {
     expect(() => {
-      SnapcraftVersion.prototype.transform(
+      SnapcraftVersion.transform(
         testApiData,
         exampleChannel.channel.track,
         exampleChannel.channel.risk,
@@ -78,7 +78,7 @@ describe('SnapcraftVersion', function () {
   })
   it('throws NotFound error with missing track', function () {
     expect(() => {
-      SnapcraftVersion.prototype.transform(
+      SnapcraftVersion.transform(
         testApiData,
         'missing',
         exampleChannel.channel.risk,
@@ -90,7 +90,7 @@ describe('SnapcraftVersion', function () {
   })
   it('throws NotFound error with missing risk', function () {
     expect(() => {
-      SnapcraftVersion.prototype.transform(
+      SnapcraftVersion.transform(
         testApiData,
         exampleChannel.channel.track,
         'missing',
