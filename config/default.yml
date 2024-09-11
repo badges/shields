@@ -24,6 +24,8 @@ public:
       authorizedOrigins: 'https://api.opensuse.org'
     pypi:
       baseUri: 'https://pypi.org'
+    snapcraft:
+      baseUri: 'https://api.snapcraft.io/v2/snaps/info'
     weblate:
       authorizedOrigins: 'https://hosted.weblate.org'
     trace: false

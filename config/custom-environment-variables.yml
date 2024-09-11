@@ -56,6 +56,8 @@ public:
       authorizedOrigins: 'OBS_ORIGINS'
     pypi:
       baseUri: 'PYPI_URL'
+    snapcraft:
+      baseUri: 'SNAPCRAFT_URL'
     sonar:
       authorizedOrigins: 'SONAR_ORIGINS'
     teamcity:

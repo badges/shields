@@ -290,6 +290,12 @@ Create an account, sign in and obtain generate a key on your
 `PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry,
 users can also override this by query parameter `pypiBaseUrl`.
 
+### Snapcraft
+
+- `SNAPCRAFT_URL` (yml: `public.snapcraft.baseUri`)
+
+`SNAPCRAFT_URL` can be used to optionally send all the Snapcraft requests to a Self-hosted Snapcraft registry.
+
 ### SymfonyInsight (formerly Sensiolabs)
 
 - `SL_INSIGHT_USER_UUID` (yml: `private.sl_insight_userUuid`)
