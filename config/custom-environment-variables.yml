@@ -114,7 +114,6 @@ private:
   teamcity_pass: 'TEAMCITY_PASS'
   twitch_client_id: 'TWITCH_CLIENT_ID'
   twitch_client_secret: 'TWITCH_CLIENT_SECRET'
-  wheelmap_token: 'WHEELMAP_TOKEN'
   influx_username: 'INFLUX_USERNAME'
   influx_password: 'INFLUX_PASSWORD'
   weblate_api_key: 'WEBLATE_API_KEY'

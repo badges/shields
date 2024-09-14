@@ -16,10 +16,6 @@
       "value": "1",
       "required": false
     },
-    "WHEELMAP_TOKEN": {
-      "description": "Configure the token to be used for the Wheelmap service.",
-      "required": false
-    },
     "GH_TOKEN": {
       "description": "Configure the token to be used for the GitHub services.",
       "required": false

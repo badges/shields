@@ -61,7 +61,6 @@ jobs:
           SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
-          WHEELMAP_TOKEN: '${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}'
           YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Write Service Tests Markdown Summary
