@@ -1,4 +1,3 @@
-import config from 'config'
 import { BaseJsonService, pathParam } from '../index.js'
 
 export const snapcraftPackageParam = pathParam({
@@ -8,10 +7,10 @@ export const snapcraftPackageParam = pathParam({
 
 export const snapcraftBaseParams = [snapcraftPackageParam]
 
+const snapcraftBaseUrl = 'https://api.snapcraft.io/v2/snaps/info'
+
 export default class SnapcraftBase extends BaseJsonService {
   async fetch(schema, { packageName }) {
-    const snapcraftBaseUrl =
-      config.util.toObject().public.services.snapcraft.baseUri
     return await this._requestJson({
       schema,
       url: `${snapcraftBaseUrl}/${packageName}`,

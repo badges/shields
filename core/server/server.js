@@ -142,9 +142,6 @@ const publicConfigSchema = Joi.object({
     pypi: {
       baseUri: requiredUrl,
     },
-    snapcraft: {
-      baseUri: requiredUrl,
-    },
     sonar: defaultService,
     teamcity: defaultService,
     weblate: defaultService,
