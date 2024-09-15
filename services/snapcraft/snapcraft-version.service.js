@@ -1,6 +1,7 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound, pathParams, queryParam } from '../index.js'
+import { NotFound, pathParams, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
+import SnapcraftBase, { snapcraftPackageParam } from './snapcraft-base.js'
 
 const queryParamSchema = Joi.object({
   arch: Joi.string(),
@@ -22,7 +23,7 @@ const versionSchema = Joi.object({
     .required(),
 }).required()
 
-export default class SnapcraftVersion extends BaseJsonService {
+export default class SnapcraftVersion extends SnapcraftBase {
   static category = 'version'
 
   static route = {
@@ -36,10 +37,10 @@ export default class SnapcraftVersion extends BaseJsonService {
   static openApi = {
     '/snapcraft/v/{package}/{track}/{risk}': {
       get: {
-        summary: 'Snapcraft version',
+        summary: 'Snapcraft Version',
         parameters: [
+          snapcraftPackageParam,
           ...pathParams(
-            { name: 'package', example: 'chromium' },
             { name: 'track', example: 'latest' },
             { name: 'risk', example: 'stable' },
           ),
@@ -54,7 +55,11 @@ export default class SnapcraftVersion extends BaseJsonService {
     },
   }
 
-  transform(apiData, track, risk, arch) {
+  static render({ version }) {
+    return renderVersionBadge({ version })
+  }
+
+  static transform(apiData, track, risk, arch) {
     const channelMap = apiData['channel-map']
     let filteredChannelMap = channelMap.filter(
       ({ channel }) => channel.architecture === arch,
@@ -79,20 +84,15 @@ export default class SnapcraftVersion extends BaseJsonService {
   }
 
   async handle({ package: packageName, track, risk }, { arch = 'amd64' }) {
-    const parsedData = await this._requestJson({
-      schema: versionSchema,
-      options: {
-        headers: { 'Snap-Device-Series': 16 },
-      },
-      url: `https://api.snapcraft.io/v2/snaps/info/${packageName}`,
-      httpErrors: {
-        404: 'package not found',
-      },
-    })
+    const parsedData = await this.fetch(versionSchema, { packageName })
 
     // filter results by track, risk and arch
-    const { version } = this.transform(parsedData, track, risk, arch)
-
-    return renderVersionBadge({ version })
+    const { version } = this.constructor.transform(
+      parsedData,
+      track,
+      risk,
+      arch,
+    )
+    return this.constructor.render({ version })
   }
 }
