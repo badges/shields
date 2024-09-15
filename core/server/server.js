@@ -203,7 +203,6 @@ const privateConfigSchema = Joi.object({
   teamcity_pass: Joi.string(),
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
-  wheelmap_token: Joi.string(),
   influx_username: Joi.string(),
   influx_password: Joi.string(),
   weblate_api_key: Joi.string(),

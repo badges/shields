@@ -351,16 +351,6 @@ You can find your Weblate API key in your profile under
 [weblate authentication]: https://docs.weblate.org/en/latest/api.html#authentication-and-generic-parameters
 [weblate api key location]: https://hosted.weblate.org/accounts/profile/#api
 
-### Wheelmap
-
-- `WHEELMAP_TOKEN` (yml: `private.wheelmap_token`)
-
-The wheelmap API requires authentication. To obtain a token,
-Create an account, [sign in][wheelmap token] and use the _Authentication Token_
-displayed on your profile page.
-
-[wheelmap token]: http://classic.wheelmap.org/en/users/sign_in
-
 ### YouTube
 
 - `YOUTUBE_API_KEY` (yml: `private.youtube_api_key`)
