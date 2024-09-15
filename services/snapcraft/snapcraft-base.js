@@ -2,7 +2,7 @@ import { BaseJsonService, pathParam } from '../index.js'
 
 export const snapcraftPackageParam = pathParam({
   name: 'package',
-  example: 'Redis',
+  example: 'redis',
 })
 
 export const snapcraftBaseParams = [snapcraftPackageParam]
