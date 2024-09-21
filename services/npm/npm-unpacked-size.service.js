@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
 import { pathParam, queryParam } from '../index.js'
+import { renderSizeBadge } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
 
@@ -78,10 +78,13 @@ export default class NpmUnpackedSize extends NpmBase {
     })
     const { unpackedSize } = dist
 
+    if (unpackedSize) {
+      return renderSizeBadge(unpackedSize, 'metric', 'unpacked size')
+    }
     return {
       label: 'unpacked size',
-      message: unpackedSize ? prettyBytes(unpackedSize) : 'unknown',
-      color: unpackedSize ? 'blue' : 'lightgray',
+      message: 'unknown',
+      color: 'lightgray',
     }
   }
 }

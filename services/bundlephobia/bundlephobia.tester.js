@@ -1,4 +1,4 @@
-import { isFileSize } from '../test-validators.js'
+import { isIecFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -13,42 +13,42 @@ const data = [
   {
     format: formats.A,
     get: '/min/preact.json',
-    expect: { label: 'minified size', message: isFileSize },
+    expect: { label: 'minified size', message: isIecFileSize },
   },
   {
     format: formats.B,
     get: '/min/preact/8.0.0.json',
-    expect: { label: 'minified size', message: isFileSize },
+    expect: { label: 'minified size', message: isIecFileSize },
   },
   {
     format: formats.C,
     get: '/min/@cycle/core.json',
-    expect: { label: 'minified size', message: isFileSize },
+    expect: { label: 'minified size', message: isIecFileSize },
   },
   {
     format: formats.D,
     get: '/min/@cycle/core/7.0.0.json',
-    expect: { label: 'minified size', message: isFileSize },
+    expect: { label: 'minified size', message: isIecFileSize },
   },
   {
     format: formats.A,
     get: '/minzip/preact.json',
-    expect: { label: 'minzipped size', message: isFileSize },
+    expect: { label: 'minzipped size', message: isIecFileSize },
   },
   {
     format: formats.B,
     get: '/minzip/preact/8.0.0.json',
-    expect: { label: 'minzipped size', message: isFileSize },
+    expect: { label: 'minzipped size', message: isIecFileSize },
   },
   {
     format: formats.C,
     get: '/minzip/@cycle/core.json',
-    expect: { label: 'minzipped size', message: isFileSize },
+    expect: { label: 'minzipped size', message: isIecFileSize },
   },
   {
     format: formats.D,
     get: '/minzip/@cycle/core/7.0.0.json',
-    expect: { label: 'minzipped size', message: isFileSize },
+    expect: { label: 'minzipped size', message: isIecFileSize },
   },
   {
     format: formats.A,
