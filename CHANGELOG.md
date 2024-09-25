@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-09-25
+
+- [dynamicjson dynamicyaml dynamictoml] switch to jsonpath-plus [#10551](https://github.com/badges/shields/issues/10551)
+- [Snapcraft] license [#10520](https://github.com/badges/shields/issues/10520)
+- deprecate [wheelmap] service [#10538](https://github.com/badges/shields/issues/10538)
+- perf: limit logoSize precision to 3 [#10521](https://github.com/badges/shields/issues/10521)
+- Use old.stats.jenkins.io for JSON data [#10522](https://github.com/badges/shields/issues/10522)
+- catch xml ParseError [#10516](https://github.com/badges/shields/issues/10516)
+- Remove failing [Packagist] tests [#10512](https://github.com/badges/shields/issues/10512)
+- Switch to shields server ID in [Discord] example and test [#10513](https://github.com/badges/shields/issues/10513)
+- migrate [MozillaObservatory] to /scan endpoint [#10491](https://github.com/badges/shields/issues/10491)
+- fix incorrect codecov config link [#10511](https://github.com/badges/shields/issues/10511)
+- [OSSLifecycle OSSLifecycleRedirect] Add file_url param to pull from non-github sources [#10489](https://github.com/badges/shields/issues/10489)
+- perf: faster `resetIconPosition` avoiding to parse path twice [#10497](https://github.com/badges/shields/issues/10497)
+- remove docusaurus css hacks [#10495](https://github.com/badges/shields/issues/10495)
+- remove intermediate variable [#10496](https://github.com/badges/shields/issues/10496)
+- perf: improve logoSize performance [#10488](https://github.com/badges/shields/issues/10488)
+- Dependency updates
+
 ## server-2024-09-02
 
 - Publish linux/amd64 docker images for snapshot builds [#10476](https://github.com/badges/shields/issues/10476)
