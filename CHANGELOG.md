@@ -6,6 +6,13 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2024-09-25
 
+This release includes an important security fix. See
+
+- https://github.com/badges/shields/security/advisories/GHSA-rxvx-x284-4445
+- https://github.com/badges/shields/issues/10553
+
+for more details
+
 - [dynamicjson dynamicyaml dynamictoml] switch to jsonpath-plus [#10551](https://github.com/badges/shields/issues/10551)
 - [Snapcraft] license [#10520](https://github.com/badges/shields/issues/10520)
 - deprecate [wheelmap] service [#10538](https://github.com/badges/shields/issues/10538)
