@@ -160,12 +160,25 @@ t.create('query with parse error')
   })
 
 // Example from https://stackoverflow.com/q/11670384/893113
-const badQuery =
+const invalidTokenQuery =
   "$[?(en|**|(@.object.property.one=='other') && (@.object.property.two=='something(abc/def)'))]"
 t.create('query with invalid token')
   .get(
     `.json?url=https://github.com/badges/shields/raw/master/package.json&query=${encodeURIComponent(
-      badQuery,
+      invalidTokenQuery,
+    )}`,
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'query not supported',
+    color: 'red',
+  })
+
+const invalidEscapequery = "$.definitions.common.properties.['@id'].format"
+t.create('query with invalid escape')
+  .get(
+    `.json?url=https://raw.githubusercontent.com/json-ld/json-ld.org/refs/heads/main/schemas/jsonld-schema.json&query=${encodeURIComponent(
+      invalidEscapequery,
     )}`,
   )
   .expectBadge({
