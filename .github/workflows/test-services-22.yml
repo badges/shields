@@ -34,7 +34,6 @@ jobs:
           sl-insight-api-token: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           twitch-client-id: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           twitch-client-secret: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
-          wheelmap-token: '${{ secrets.SERVICETESTS_WHEELMAP_TOKEN }}'
           youtube-api-key: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Service tests (triggered from fork)

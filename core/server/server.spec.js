@@ -494,7 +494,7 @@ describe('The server', function () {
           influx_password: 'influx-password',
         },
       })
-      clock = sinon.useFakeTimers()
+      clock = sinon.useFakeTimers({ toFake: ['setInterval'] })
       baseUrl = server.baseUrl
       await server.start()
     })
