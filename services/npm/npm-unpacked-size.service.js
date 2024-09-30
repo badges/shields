@@ -2,7 +2,10 @@ import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { renderSizeBadge } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
-import NpmBase, { packageNameDescription } from './npm-base.js'
+import NpmBase, {
+  packageNameDescription,
+  queryParamSchema,
+} from './npm-base.js'
 
 const schema = Joi.object({
   dist: Joi.object({
@@ -16,6 +19,7 @@ export default class NpmUnpackedSize extends NpmBase {
   static route = {
     base: 'npm/unpacked-size',
     pattern: ':scope(@[^/]+)?/:packageName/:version*',
+    queryParamSchema,
   }
 
   static openApi = {
