@@ -48,7 +48,10 @@ export default superclass =>
         values = jp({ json: data, path: pathExpression, eval: false })
       } catch (e) {
         const { message } = e
-        if (message.includes('prevented in JSONPath expression')) {
+        if (
+          message.includes('prevented in JSONPath expression') ||
+          e instanceof TypeError
+        ) {
           throw new InvalidParameter({
             prettyMessage: 'query not supported',
           })
