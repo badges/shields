@@ -1,14 +1,20 @@
 import Joi from 'joi'
-import { pathParams } from '../index.js'
-import { renderSizeBadge } from '../size.js'
+import { pathParam } from '../index.js'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseVisualStudioAppCenterService,
   description,
 } from './visual-studio-app-center-base.js'
 
+const defaultUnits = 'metric'
+
 const schema = Joi.object({
   size: nonNegativeInteger,
+}).required()
+
+const queryParamSchema = Joi.object({
+  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
 export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
@@ -17,6 +23,7 @@ export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioA
   static route = {
     base: 'visual-studio-app-center/releases/size',
     pattern: ':owner/:app/:token',
+    queryParamSchema,
   }
 
   static openApi = {
@@ -24,20 +31,21 @@ export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioA
       get: {
         summary: 'Visual Studio App Center Size',
         description,
-        parameters: pathParams(
-          {
+        parameters: [
+          pathParam({
             name: 'owner',
             example: 'jct',
-          },
-          {
+          }),
+          pathParam({
             name: 'app',
             example: 'my-amazing-app',
-          },
-          {
+          }),
+          pathParam({
             name: 'token',
             example: 'ac70cv...',
-          },
-        ),
+          }),
+          unitsOpenApiParam(defaultUnits),
+        ],
       },
     },
   }
@@ -47,8 +55,8 @@ export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioA
     color: 'blue',
   }
 
-  async handle({ owner, app, token }) {
+  async handle({ owner, app, token }, { units }) {
     const { size } = await this.fetch({ owner, app, token, schema })
-    return renderSizeBadge(size, 'metric')
+    return renderSizeBadge(size, units)
   }
 }

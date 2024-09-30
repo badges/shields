@@ -1,4 +1,4 @@
-import { isIecFileSize } from '../test-validators.js'
+import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -7,6 +7,13 @@ t.create('code size in bytes for all languages')
   .expectBadge({
     label: 'code size',
     message: isIecFileSize,
+  })
+
+t.create('code size (metric bytes)')
+  .get('/badges/shields.json?units=metric')
+  .expectBadge({
+    label: 'code size',
+    message: isMetricFileSize,
   })
 
 t.create('code size in bytes for all languages (empty repo)')

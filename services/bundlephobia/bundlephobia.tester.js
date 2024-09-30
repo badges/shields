@@ -1,4 +1,4 @@
-import { isIecFileSize } from '../test-validators.js'
+import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -59,6 +59,11 @@ const data = [
     format: formats.C,
     get: '/min/@some-no-exist/some-no-exist.json',
     expect: { label: 'bundlephobia', message: 'package or version not found' },
+  },
+  {
+    format: formats.A,
+    get: '/min/preact.json?units=metric',
+    expect: { label: 'minified size', message: isMetricFileSize },
   },
 ]
 

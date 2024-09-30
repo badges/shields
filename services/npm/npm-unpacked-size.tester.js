@@ -1,4 +1,4 @@
-import { isMetricFileSize } from '../test-validators.js'
+import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -26,3 +26,7 @@ t.create('Unpacked size for scoped package with version')
 t.create('Nonexistent unpacked size for scoped package with version')
   .get('/@cycle/rx-run/7.2.0.json')
   .expectBadge({ label: 'unpacked size', message: 'unknown' })
+
+t.create('Latest unpacked size')
+  .get('/firereact.json?units=IEC')
+  .expectBadge({ label: 'unpacked size', message: isIecFileSize })

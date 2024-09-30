@@ -1,7 +1,9 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
-import { renderSizeBadge } from '../size.js'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
+
+const defaultUnits = 'metric'
 
 const schema = Joi.object({
   size: Joi.object({
@@ -11,6 +13,7 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   exports: Joi.string(),
+  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
 const esbuild =
@@ -49,6 +52,7 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'isVal,val',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -71,6 +75,7 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'randEmail,randFullName',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -103,9 +108,9 @@ export default class BundlejsPackage extends BaseJsonService {
     })
   }
 
-  async handle({ scope, packageName }, { exports }) {
+  async handle({ scope, packageName }, { exports, units }) {
     const json = await this.fetch({ scope, packageName, exports })
     const size = json.size.rawCompressedSize
-    return renderSizeBadge(size, 'metric', 'minified size (gzip)')
+    return renderSizeBadge(size, units, 'minified size (gzip)')
   }
 }

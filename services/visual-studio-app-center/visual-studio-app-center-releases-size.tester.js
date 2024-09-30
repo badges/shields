@@ -1,5 +1,5 @@
 import { createServiceTester } from '../tester.js'
-import { isMetricFileSize } from '../test-validators.js'
+import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('8368844 bytes to 8.37 megabytes')
@@ -23,6 +23,15 @@ t.create('Valid Release')
   .expectBadge({
     label: 'size',
     message: isMetricFileSize,
+  })
+
+t.create('Valid Release (IEC bytes)')
+  .get(
+    '/jct/test-fixed-android-react/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json?units=IEC',
+  )
+  .expectBadge({
+    label: 'size',
+    message: isIecFileSize,
   })
 
 t.create('Valid user, invalid project, valid API token')

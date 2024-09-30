@@ -1,10 +1,14 @@
 import { createServiceTester } from '../tester.js'
-import { isIecFileSize } from '../test-validators.js'
+import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('size')
   .get('/tokio.json')
   .expectBadge({ label: 'size', message: isIecFileSize })
+
+t.create('size (metric bytes)')
+  .get('/tokio.json?units=metric')
+  .expectBadge({ label: 'size', message: isMetricFileSize })
 
 t.create('size (with version)')
   .get('/tokio/1.32.0.json')
