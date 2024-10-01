@@ -4,6 +4,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-10-01
+
+- Revert "Use old.stats.jenkins.io for JSON data (#10522)" [#10537](https://github.com/badges/shields/issues/10537)
+- catch queries that cause TypeError [#10556](https://github.com/badges/shields/issues/10556)
+- publish blog about security vuln [#10555](https://github.com/badges/shields/issues/10555)
+- call out security advisory in changelog [#10554](https://github.com/badges/shields/issues/10554)
+- Dependency updates
+
 ## server-2024-09-25
 
 This release includes an important security fix. See
