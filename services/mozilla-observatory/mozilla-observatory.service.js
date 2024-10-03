@@ -1,44 +1,17 @@
 import Joi from 'joi'
-import { BaseJsonService, queryParam, pathParam } from '../index.js'
+import { BaseJsonService, pathParam } from '../index.js'
 
 const schema = Joi.object({
-  state: Joi.string()
-    .valid('ABORTED', 'FAILED', 'FINISHED', 'PENDING', 'STARTING', 'RUNNING')
+  grade: Joi.string()
+    .regex(/^[ABCDEF][+-]?$/)
     .required(),
-  grade: Joi.alternatives()
-    .conditional('state', {
-      is: 'FINISHED',
-      then: Joi.string().regex(/^[ABCDEF][+-]?$/),
-      otherwise: Joi.valid(null),
-    })
-    .required(),
-  score: Joi.alternatives()
-    .conditional('state', {
-      is: 'FINISHED',
-      then: Joi.number().integer().min(0).max(200),
-      otherwise: Joi.valid(null),
-    })
-    .required(),
-}).required()
-
-const queryParamSchema = Joi.object({
-  publish: Joi.equal(''),
+  score: Joi.number().integer().min(0).max(200).required(),
 }).required()
 
 const description = `
-The [Mozilla HTTP Observatory](https://observatory.mozilla.org)
+The [Mozilla HTTP Observatory](https://developer.mozilla.org/en-US/observatory)
 is a set of security tools to analyze your website
 and inform you if you are utilizing the many available methods to secure it.
-`
-
-const publishDescription = `
-By default the scan result is hidden from the public result list.
-You can activate the publication of the scan result
-by setting the \`publish\` parameter.
-
-The badge returns a cached site result if the site has been scanned anytime in the previous 24 hours.
-If you need to force invalidating the cache,
-you can to do it manually through the [Mozilla Observatory Website](https://observatory.mozilla.org)
 `
 
 export default class MozillaObservatory extends BaseJsonService {
@@ -49,7 +22,6 @@ export default class MozillaObservatory extends BaseJsonService {
   static route = {
     base: 'mozilla-observatory',
     pattern: ':format(grade|grade-score)/:host',
-    queryParamSchema,
   }
 
   static openApi = {
@@ -67,12 +39,6 @@ export default class MozillaObservatory extends BaseJsonService {
             name: 'host',
             example: 'github.com',
           }),
-          queryParam({
-            name: 'publish',
-            schema: { type: 'boolean' },
-            example: null,
-            description: publishDescription,
-          }),
         ],
       },
     },
@@ -82,13 +48,7 @@ export default class MozillaObservatory extends BaseJsonService {
     label: 'observatory',
   }
 
-  static render({ format, state, grade, score }) {
-    if (state !== 'FINISHED') {
-      return {
-        message: state.toLowerCase(),
-        color: 'lightgrey',
-      }
-    }
+  static render({ format, grade, score }) {
     const letter = grade[0].toLowerCase()
     const colorMap = {
       a: 'brightgreen',
@@ -104,20 +64,23 @@ export default class MozillaObservatory extends BaseJsonService {
     }
   }
 
-  async fetch({ host, publish }) {
+  async fetch({ host }) {
     return this._requestJson({
       schema,
-      url: 'https://http-observatory.security.mozilla.org/api/v1/analyze',
+      url: 'https://observatory-api.mdn.mozilla.net/api/v2/scan',
       options: {
         method: 'POST',
         searchParams: { host },
-        form: { hidden: !publish },
       },
     })
   }
 
-  async handle({ format, host }, { publish }) {
-    const { state, grade, score } = await this.fetch({ host, publish })
-    return this.constructor.render({ format, state, grade, score })
+  async handle({ format, host }) {
+    const scan = await this.fetch({ host })
+    return this.constructor.render({
+      format,
+      grade: scan.grade,
+      score: scan.score,
+    })
   }
 }

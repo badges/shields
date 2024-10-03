@@ -20,6 +20,7 @@ const aurSchema = Joi.object({
       Joi.object({
         License: Joi.array().items(Joi.string().required()).allow(null),
         NumVotes: nonNegativeInteger,
+        Popularity: Joi.number().precision(2).min(0).required(),
         Version: Joi.string().required(),
         OutOfDate: nonNegativeInteger.allow(null),
         Maintainer: Joi.string().required().allow(null),
@@ -115,6 +116,36 @@ class AurVotes extends BaseAurService {
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
     return this.constructor.render({ votes: json.results[0].NumVotes })
+  }
+}
+
+class AurPopularity extends BaseAurService {
+  static category = 'rating'
+
+  static route = { base: 'aur/popularity', pattern: ':packageName' }
+
+  static openApi = {
+    '/aur/popularity/{packageName}': {
+      get: {
+        summary: 'AUR Popularity',
+        description: 'Arch linux User Repository Popularity',
+        parameters: pathParams({ name: 'packageName', example: 'dropbox' }),
+      },
+    },
+  }
+
+  static defaultBadgeData = { label: 'popularity' }
+
+  static render({ popularity }) {
+    return {
+      message: popularity,
+      color: floorCountColor(popularity, 0.5, 2.5, 5),
+    }
+  }
+
+  async handle({ packageName }) {
+    const json = await this.fetch({ packageName })
+    return this.constructor.render({ popularity: json.results[0].Popularity })
   }
 }
 
@@ -224,4 +255,11 @@ class AurLastModified extends BaseAurService {
   }
 }
 
-export { AurLicense, AurVersion, AurVotes, AurMaintainer, AurLastModified }
+export {
+  AurLicense,
+  AurVersion,
+  AurVotes,
+  AurPopularity,
+  AurMaintainer,
+  AurLastModified,
+}

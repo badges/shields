@@ -204,7 +204,6 @@ const privateConfigSchema = Joi.object({
   teamcity_pass: Joi.string(),
   twitch_client_id: Joi.string(),
   twitch_client_secret: Joi.string(),
-  wheelmap_token: Joi.string(),
   influx_username: Joi.string(),
   influx_password: Joi.string(),
   weblate_api_key: Joi.string(),
@@ -542,9 +541,12 @@ class Server {
       }
     }
 
-    // https://github.com/badges/shields/issues/3273
     camp.handle((req, res, next) => {
+      // https://github.com/badges/shields/issues/3273
       res.setHeader('Access-Control-Allow-Origin', '*')
+      // https://github.com/badges/shields/issues/10419
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+
       next()
     })
 

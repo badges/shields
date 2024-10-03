@@ -7,7 +7,7 @@ t.create('license (valid, package version in request)')
 
 t.create('license (valid, no package version specified)')
   .get('/requests.json')
-  .expectBadge({ label: 'license', message: 'Apache 2.0', color: 'green' })
+  .expectBadge({ label: 'license', message: 'Apache-2.0', color: 'green' })
 
 t.create('license (invalid)')
   .get('/not-a-package.json')

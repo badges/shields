@@ -3,7 +3,7 @@
  */
 
 import Joi from 'joi'
-import jp from 'jsonpath'
+import { JSONPath as jp } from 'jsonpath-plus'
 import { renderDynamicBadge, httpErrors } from '../dynamic-common.js'
 import { InvalidParameter, InvalidResponse } from '../index.js'
 
@@ -43,26 +43,17 @@ export default superclass =>
         httpErrors,
       })
 
-      // JSONPath only works on objects and arrays.
-      // https://github.com/badges/shields/issues/4018
-      if (typeof data !== 'object') {
-        throw new InvalidResponse({
-          prettyMessage: 'resource must contain an object or array',
-        })
-      }
-
       let values
       try {
-        values = jp.query(data, pathExpression)
+        values = jp({ json: data, path: pathExpression, eval: false })
       } catch (e) {
         const { message } = e
         if (
-          message.startsWith('Lexical error') ||
-          message.startsWith('Parse error') ||
-          message.includes('Unexpected token')
+          message.includes('prevented in JSONPath expression') ||
+          e instanceof TypeError
         ) {
           throw new InvalidParameter({
-            prettyMessage: 'unparseable jsonpath query',
+            prettyMessage: 'query not supported',
           })
         } else {
           throw e

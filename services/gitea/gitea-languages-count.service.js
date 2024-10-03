@@ -61,7 +61,7 @@ export default class GiteaLanguageCount extends GiteaBase {
     return super.fetch({
       schema,
       url: `${baseUrl}/api/v1/repos/${user}/${repo}/languages`,
-      httpErrors: httpErrorsFor('user or repo not found'),
+      httpErrors: httpErrorsFor(),
     })
   }
 

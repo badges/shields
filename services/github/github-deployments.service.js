@@ -130,7 +130,7 @@ export default class GithubDeployments extends GithubAuthV4Service {
     return { state }
   }
 
-  async handle({ user, repo, environment }, queryParams) {
+  async handle({ user, repo, environment }) {
     const json = await this.fetch({ user, repo, environment })
     const { state } = this.transform({ data: json.data })
     return this.constructor.render({ state })

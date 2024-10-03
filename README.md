@@ -3,25 +3,23 @@
         height="130">
 </p>
 <p align="center">
-    <a href="https://github.com/badges/shields/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/badges/shields" /></a>
-    <a href="#backers" alt="Backers on Open Collective">
+    <a href="https://shields.io/community#backers" alt="Backers on Open Collective">
         <img src="https://img.shields.io/opencollective/backers/shields" /></a>
-    <a href="#sponsors" alt="Sponsors on Open Collective">
+    <a href="https://shields.io/community#sponsors" alt="Sponsors on Open Collective">
         <img src="https://img.shields.io/opencollective/sponsors/shields" /></a>
     <a href="https://github.com/badges/shields/pulse" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/m/badges/shields" /></a>
-    <a href="https://circleci.com/gh/badges/shields/tree/master">
-        <img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status"></a>
-    <a href="https://circleci.com/gh/badges/daily-tests">
-        <img src="https://img.shields.io/circleci/project/github/badges/daily-tests?label=service%20tests"
-            alt="service-test status"></a>
+    <a href="https://github.com/badges/shields/discussions" alt="Discussions">
+        <img src="https://img.shields.io/github/discussions/badges/shields" /></a>
+    <a href="https://github.com/badges/shields/actions/workflows/daily-tests.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/badges/shields/daily-tests.yml?label=daily%20tests"
+            alt="Daily Tests Status"></a>
     <a href="https://coveralls.io/github/badges/shields">
         <img src="https://img.shields.io/coveralls/github/badges/shields"
-            alt="coverage"></a>
+            alt="Code Coverage"></a>
     <a href="https://discord.gg/HjJCwm5">
-        <img src="https://img.shields.io/discord/308323056592486420?logo=discord"
-            alt="chat on Discord"></a>
+        <img src="https://img.shields.io/discord/308323056592486420?logo=discord&logoColor=white"
+            alt="Chat on Discord"></a>
 </p>
 
 This is home to [Shields.io][shields.io], a service for concise, consistent,
@@ -133,7 +131,7 @@ snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
-Daily tests, including a full run of the service tests and overall code coverage, are run via [badges/daily-tests][daily-tests].
+Our [full test suite][full test suite] as well as [code coverage][code coverage] are run on a daily basis.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
 [gitpod]: https://www.gitpod.io/
@@ -142,10 +140,11 @@ Daily tests, including a full run of the service tests and overall code coverage
 [prometheus configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus
 [sentry]: https://sentry.io/
 [sentry configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry
-[daily-tests]: https://github.com/badges/daily-tests
 [nodemon]: https://nodemon.io/
 [nodemon debug]: https://github.com/Microsoft/vscode-recipes/tree/master/nodemon
 [vs code]: https://code.visualstudio.com/
+[full test suite]: https://github.com/badges/shields/actions/workflows/daily-tests.yml
+[code coverage]: https://coveralls.io/github/badges/shields
 
 ## Hosting your own server
 
@@ -223,9 +222,6 @@ Alumni:
 
 All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
 domain unless specified otherwise.
-
-The assets in `logo/` are trademarks of their respective companies and are
-under their terms and license.
 
 ## Community
 

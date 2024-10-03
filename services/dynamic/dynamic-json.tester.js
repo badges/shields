@@ -145,8 +145,8 @@ t.create('query with lexical error')
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'unparseable jsonpath query',
-    color: 'red',
+    message: 'no result',
+    color: 'lightgrey',
   })
 
 t.create('query with parse error')
@@ -155,22 +155,51 @@ t.create('query with parse error')
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'unparseable jsonpath query',
-    color: 'red',
+    message: 'no result',
+    color: 'lightgrey',
   })
 
 // Example from https://stackoverflow.com/q/11670384/893113
-const badQuery =
+const invalidTokenQuery =
   "$[?(en|**|(@.object.property.one=='other') && (@.object.property.two=='something(abc/def)'))]"
 t.create('query with invalid token')
   .get(
     `.json?url=https://github.com/badges/shields/raw/master/package.json&query=${encodeURIComponent(
-      badQuery,
+      invalidTokenQuery,
     )}`,
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'unparseable jsonpath query',
+    message: 'query not supported',
+    color: 'red',
+  })
+
+const invalidEscapequery = "$.definitions.common.properties.['@id'].format"
+t.create('query with invalid escape')
+  .get(
+    `.json?url=https://raw.githubusercontent.com/json-ld/json-ld.org/refs/heads/main/schemas/jsonld-schema.json&query=${encodeURIComponent(
+      invalidEscapequery,
+    )}`,
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'query not supported',
+    color: 'red',
+  })
+
+/*
+Based on https://github.com/JSONPath-Plus/JSONPath/blob/v9.0.0/test/test.errors.js#L53-L68
+This functionality is disabled for security reasons.
+*/
+t.create('query with eval filtering expression')
+  .get(
+    `.json?url=https://github.com/badges/shields/raw/master/package.json&query=${encodeURIComponent(
+      '$..keywords[(@.length-1)]',
+    )}`,
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'query not supported',
     color: 'red',
   })
 
@@ -185,12 +214,11 @@ t.create('JSON contains an array')
   })
 
 t.create('JSON contains a string')
-  .get('.json?url=https://example.test/json&query=$.foo,')
+  .get('.json?url=https://example.test/json&query=$')
   .intercept(nock =>
     nock('https://example.test').get('/json').reply(200, '"foo"'),
   )
   .expectBadge({
     label: 'custom badge',
-    message: 'resource must contain an object or array',
-    color: 'lightgrey',
+    message: 'foo',
   })

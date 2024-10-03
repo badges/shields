@@ -4,6 +4,68 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-09-25
+
+This release includes an important security fix. See
+
+- https://github.com/badges/shields/security/advisories/GHSA-rxvx-x284-4445
+- https://github.com/badges/shields/issues/10553
+
+for more details
+
+- [dynamicjson dynamicyaml dynamictoml] switch to jsonpath-plus [#10551](https://github.com/badges/shields/issues/10551)
+- [Snapcraft] license [#10520](https://github.com/badges/shields/issues/10520)
+- deprecate [wheelmap] service [#10538](https://github.com/badges/shields/issues/10538)
+- Use old.stats.jenkins.io for JSON data [#10522](https://github.com/badges/shields/issues/10522)
+- catch xml ParseError [#10516](https://github.com/badges/shields/issues/10516)
+- migrate [MozillaObservatory] to /scan endpoint [#10491](https://github.com/badges/shields/issues/10491)
+- fix incorrect codecov config link [#10511](https://github.com/badges/shields/issues/10511)
+- [OSSLifecycle OSSLifecycleRedirect] Add file_url param to pull from non-github sources [#10489](https://github.com/badges/shields/issues/10489)
+- perf: improve logoSize performance [#10488](https://github.com/badges/shields/issues/10488)
+- perf: faster `resetIconPosition` avoiding to parse path twice [#10497](https://github.com/badges/shields/issues/10497)
+- perf: limit logoSize precision to 3 [#10521](https://github.com/badges/shields/issues/10521)
+- Dependency updates
+
+## server-2024-09-02
+
+- Publish linux/amd64 docker images for snapshot builds [#10476](https://github.com/badges/shields/issues/10476)
+- Fix Gitea not having credentials/authorizedOrigins in Docker environments [#10486](https://github.com/badges/shields/issues/10486)
+- fix typo in pepy downloads [#10475](https://github.com/badges/shields/issues/10475)
+- ignore a couple of docusaurus warnings [#10469](https://github.com/badges/shields/issues/10469)
+- Use Ecologi API to power Treeware badges [#10467](https://github.com/badges/shields/issues/10467)
+- move go version badge to platform support category [#10444](https://github.com/badges/shields/issues/10444)
+- [Crates] Implement Dependents Badge [#10438](https://github.com/badges/shields/issues/10438)
+- [Crates] Added crate size badge [#10421](https://github.com/badges/shields/issues/10421)
+- Dependency updates
+
+## server-2024-08-01
+
+- send Cross-Origin-Resource-Policy header on all responses [#10420](https://github.com/badges/shields/issues/10420)
+- migrate [MozillaObservatory] to new API [#10402](https://github.com/badges/shields/issues/10402)
+- use metric() for [discord] and [revolt] badges [#10406](https://github.com/badges/shields/issues/10406)
+- Cache text only static badges for longer [#10403](https://github.com/badges/shields/issues/10403)
+- Fix [FreeCodeCampPoints] not found handling [#10377](https://github.com/badges/shields/issues/10377)
+- Fix [Gitea] not found message [#10373](https://github.com/badges/shields/issues/10373)
+- Deprecate [Bountysource] service [#10371](https://github.com/badges/shields/issues/10371)
+- Sunset Shields custom logos [#10347](https://github.com/badges/shields/issues/10347)
+- Use ellipsis when many versions returned for [ModrinthGameVersions] [#10350](https://github.com/badges/shields/issues/10350)
+- deprecate [tokei] service [#9581](https://github.com/badges/shields/issues/9581)
+- Add CF-Ray header value to Sentry errors if available [#10339](https://github.com/badges/shields/issues/10339)
+- Use XML for Chocolatey, affects [Chocolatey Resharper PowershellGallery] [#10344](https://github.com/badges/shields/issues/10344)
+- include github contributors badge in docs site [#10337](https://github.com/badges/shields/issues/10337)
+- Dependency updates
+
+## server-2024-07-01
+
+- Add [AUR] Popularity Badge [#10304](https://github.com/badges/shields/issues/10304)
+- fix npm badges when `maintainers` not in response [#10286](https://github.com/badges/shields/issues/10286)
+- Expose `logoBase64` and `links` in badge-maker NPM package [#10283](https://github.com/badges/shields/issues/10283)
+- Remove `logoPosition` [#10284](https://github.com/badges/shields/issues/10284)
+- [MBIN] Add subscribers badge [#10270](https://github.com/badges/shields/issues/10270)
+- Add [Docker] support for loong64 arch [#10241](https://github.com/badges/shields/issues/10241)
+- Add puppetforge quality score badges [#10201](https://github.com/badges/shields/issues/10201)
+- Dependency updates
+
 ## server-2024-06-01
 
 - Remove namedLogo from defaultBadgeData of non-social badges [#10195](https://github.com/badges/shields/issues/10195)

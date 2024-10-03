@@ -21,11 +21,10 @@ const description =
 
 class BaseModrinthService extends BaseJsonService {
   async fetchVersions({ projectId }) {
-    const bruh = {
+    return this._requestJson({
       schema: versionSchema,
       url: `https://api.modrinth.com/v2/project/${projectId}/version`,
-    }
-    return this._requestJson(bruh)
+    })
   }
 
   async fetchProject({ projectId }) {

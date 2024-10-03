@@ -12,19 +12,23 @@ export default class GithubContributors extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github',
-    pattern: ':variant(contributors|contributors-anon)/:user/:repo',
+    // note we call this param 'metric' instead of 'variant' because of
+    // https://github.com/badges/shields/issues/10323
+    pattern: ':metric(contributors|contributors-anon)/:user/:repo',
   }
 
   static openApi = {
-    '/github/{variant}/{user}/{repo}': {
+    '/github/{metric}/{user}/{repo}': {
       get: {
         summary: 'GitHub contributors',
         description: documentation,
         parameters: pathParams(
           {
-            name: 'variant',
+            name: 'metric',
             example: 'contributors',
-            schema: { type: 'string', enum: this.getEnum('variant') },
+            schema: { type: 'string', enum: this.getEnum('metric') },
+            description:
+              '`contributors-anon` includes anonymous commits, whereas `contributors` excludes them.',
           },
           {
             name: 'user',
@@ -45,8 +49,8 @@ export default class GithubContributors extends GithubAuthV3Service {
     return renderContributorBadge({ contributorCount })
   }
 
-  async handle({ variant, user, repo }) {
-    const isAnon = variant === 'contributors-anon'
+  async handle({ metric, user, repo }) {
+    const isAnon = metric === 'contributors-anon'
 
     const { res, buffer } = await this._request({
       url: `/repos/${user}/${repo}/contributors`,

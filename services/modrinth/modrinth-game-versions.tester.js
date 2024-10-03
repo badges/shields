@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import { withRegex } from '../test-validators.js'
 
@@ -7,7 +8,12 @@ t.create('Game Versions')
   .get('/AANobbMI.json')
   .expectBadge({
     label: 'game versions',
-    message: withRegex(/\d+\.\d+(\.\d+)?( \| )?/),
+    message: Joi.alternatives().try(
+      withRegex(/^(\d+\.\d+(\.\d+)?( \| )?)+$/),
+      withRegex(
+        /^\d+\.\d+(\.\d+)? \| \d+\.\d+(\.\d+)? \| \.\.\. \| \d+\.\d+(\.\d+)? \| \d+\.\d+(\.\d+)?$/,
+      ),
+    ),
   })
 
 t.create('Game Versions (not found)')

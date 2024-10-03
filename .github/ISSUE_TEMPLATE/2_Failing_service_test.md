@@ -18,10 +18,6 @@ labels: 'keep-service-tests-green'
 
 <!-- Indicate whether or not the live badge is working. -->
 
-:link: **CircleCI link**
-
-<!-- Provide a link to the failing test in CircleCI. -->
-
 :lady_beetle: **Stack trace**
 
 ```

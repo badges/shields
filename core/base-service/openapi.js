@@ -84,7 +84,7 @@ function services2openapi(services, sort) {
     for (const [key, value] of Object.entries(
       addGlobalProperties(service.openApi),
     )) {
-      if (key in paths && key !== '/github/{variant}/{user}/{repo}') {
+      if (key in paths) {
         throw new Error(`Conflicting route: ${key}`)
       }
       paths[key] = value
@@ -124,7 +124,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'One of the named logos (bitcoin, dependabot, gitlab, npm, paypal, serverfault, stackexchange, superuser, telegram, travis) or simple-icons. All simple-icons are referenced using icon slugs. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository. <a href="/docs/logos">Further info</a>.',
+            'Icon slug from simple-icons. You can click the icon title on <a href="https://simpleicons.org/" rel="noopener noreferrer" target="_blank">simple-icons</a> to copy the slug or they can be found in the <a href="https://github.com/simple-icons/simple-icons/blob/master/slugs.md">slugs.md file</a> in the simple-icons repository. <a href="/docs/logos">Further info</a>.',
           schema: {
             type: 'string',
           },
@@ -135,7 +135,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'The color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported). Supported for named logos and Shields logos but not for custom logos. For multicolor Shields logos, the corresponding named logo will be used and colored.',
+            'The color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported). Supported for simple-icons logos but not for custom logos.',
           schema: {
             type: 'string',
           },
@@ -146,7 +146,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for simple-icons logos only.',
+            'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for simple-icons logos but not for custom logos.',
           schema: {
             type: 'string',
           },

@@ -45,8 +45,8 @@ export default class ObsService extends BaseXmlService {
 
   static defaultBadgeData = { label: 'build' }
 
-  static render({ repository, status }) {
-    return renderBuildStatusBadge({ repository, status })
+  static render({ status }) {
+    return renderBuildStatusBadge({ status })
   }
 
   async fetch({ instance, project, packageName, repository, arch }) {
@@ -73,7 +73,6 @@ export default class ObsService extends BaseXmlService {
       arch,
     })
     return this.constructor.render({
-      repository,
       status: resp.status['@_code'],
     })
   }

@@ -29,7 +29,7 @@ export default class PepyDownloads extends BaseJsonService {
   static openApi = {
     '/pepy/dt/{packageName}': {
       get: {
-        summary: 'Pepy Total Downlods',
+        summary: 'Pepy Total Downloads',
         description,
         parameters: pathParams({
           name: 'packageName',

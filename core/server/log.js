@@ -28,10 +28,12 @@ const log = (...msg) => {
   console.log(d, ...msg)
 }
 
-const error = err => {
+const error = (err, tags) => {
   const d = date()
   listeners.forEach(f => f(d, err))
-  Sentry.captureException(err)
+  Sentry.captureException(err, {
+    tags,
+  })
   console.error(d, err)
 }
 

@@ -1,11 +1,11 @@
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-// Change open since December 2010, hopefully won't get merged or abandoned anytime soon.
+// Change open since September 2017, hopefully won't get merged or abandoned anytime soon.
 t.create('Gerrit new change')
-  .get('/2013.json?baseUrl=https://git.eclipse.org/r')
+  .get('/105728.json?baseUrl=https://git.eclipse.org/r')
   .expectBadge({
-    label: 'change 2013',
+    label: 'change 105728',
     message: 'new',
     color: '#2cbe4e',
   })

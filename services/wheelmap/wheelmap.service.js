@@ -1,71 +1,11 @@
-import Joi from 'joi'
-import { BaseJsonService, pathParams } from '../index.js'
+import { deprecatedService } from '../index.js'
 
-const schema = Joi.object({
-  node: Joi.object({
-    wheelchair: Joi.string().required(),
-  }).required(),
-}).required()
-
-export default class Wheelmap extends BaseJsonService {
-  static category = 'other'
-
-  static route = {
+export const Wheelmap = deprecatedService({
+  category: 'other',
+  route: {
     base: 'wheelmap/a',
-    pattern: ':nodeId(-?[0-9]+)',
-  }
-
-  static auth = {
-    passKey: 'wheelmap_token',
-    authorizedOrigins: ['https://wheelmap.org'],
-    isRequired: true,
-  }
-
-  static openApi = {
-    '/wheelmap/a/{nodeId}': {
-      get: {
-        summary: 'Wheelmap',
-        parameters: pathParams({
-          name: 'nodeId',
-          example: '26699541',
-        }),
-      },
-    },
-  }
-
-  static defaultBadgeData = { label: 'accessibility' }
-
-  static render({ accessibility }) {
-    let color
-    if (accessibility === 'yes') {
-      color = 'brightgreen'
-    } else if (accessibility === 'limited') {
-      color = 'yellow'
-    } else if (accessibility === 'no') {
-      color = 'red'
-    }
-    return { message: accessibility, color }
-  }
-
-  async fetch({ nodeId }) {
-    return this._requestJson(
-      this.authHelper.withQueryStringAuth(
-        { passKey: 'api_key' },
-        {
-          schema,
-          url: `https://wheelmap.org/api/nodes/${nodeId}`,
-          httpErrors: {
-            401: 'invalid token',
-            404: 'node not found',
-          },
-        },
-      ),
-    )
-  }
-
-  async handle({ nodeId }) {
-    const json = await this.fetch({ nodeId })
-    const accessibility = json.node.wheelchair
-    return this.constructor.render({ accessibility })
-  }
-}
+    pattern: ':nodeId',
+  },
+  label: 'wheelmap',
+  dateAdded: new Date('2024-09-14'),
+})

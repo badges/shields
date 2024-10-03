@@ -77,8 +77,8 @@ The endpoint badge takes a single required query param: <code>url</code>, which 
       <tr>
         <td><code>namedLogo</code></td>
         <td>
-          Default: none. One of the named logos supported by Shields
-          or <a href="https://simpleicons.org/">simple-icons</a>. Can be
+          Default: none. One of the
+		  <a href="https://simpleicons.org/">simple-icons</a> slugs. Can be
           overridden by the query string.
         </td>
       </tr>
@@ -90,20 +90,11 @@ The endpoint badge takes a single required query param: <code>url</code>, which 
         <td><code>logoColor</code></td>
         <td>
           Default: none. Same meaning as the query string. Can be overridden by
-          the query string. Only works for named logos and Shields logos. If you
-          override the color of a multicolor Shield logo, the corresponding
-          named logo will be used and colored.
+          the query string. Only works for simple-icons logos.
         </td>
       </tr>
       <tr>
         <td><code>logoWidth</code></td>
-        <td>
-          Default: none. Same meaning as the query string. Can be overridden by
-          the query string.
-        </td>
-      </tr>
-      <tr>
-        <td><code>logoPosition</code></td>
         <td>
           Default: none. Same meaning as the query string. Can be overridden by
           the query string.
@@ -157,7 +148,6 @@ export default class Endpoint extends BaseJsonService {
     logoSvg,
     logoColor,
     logoWidth,
-    logoPosition,
     style,
     cacheSeconds,
   }) {
@@ -171,7 +161,6 @@ export default class Endpoint extends BaseJsonService {
       logoSvg,
       logoColor,
       logoWidth,
-      logoPosition,
       style,
       // don't allow the user to set cacheSeconds any shorter than this._cacheLength
       cacheSeconds: Math.max(

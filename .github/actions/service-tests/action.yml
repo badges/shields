@@ -36,10 +36,6 @@ inputs:
     description: 'The SERVICETESTS_TWITCH_CLIENT_SECRET secret'
     required: false
     default: ''
-  wheelmap-token:
-    description: 'The SERVICETESTS_WHEELMAP_TOKEN secret'
-    required: false
-    default: ''
   youtube-api-key:
     description: 'The SERVICETESTS_YOUTUBE_API_KEY secret'
     required: false
@@ -75,7 +71,6 @@ runs:
         SL_INSIGHT_API_TOKEN: '${{ inputs.sl-insight-api-token }}'
         TWITCH_CLIENT_ID: '${{ inputs.twitch-client-id }}'
         TWITCH_CLIENT_SECRET: '${{ inputs.twitch-client-secret }}'
-        WHEELMAP_TOKEN: '${{ inputs.wheelmap-token }}'
         YOUTUBE_API_KEY: '${{ inputs.youtube-api-key }}'
 
     - name: Write Markdown Summary

@@ -1,6 +1,6 @@
 import zlib from 'zlib'
 import { expect } from 'chai'
-import { getShieldsIcon, getSimpleIcon } from '../../lib/logos.js'
+import { getSimpleIcon } from '../../lib/logos.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -63,7 +63,7 @@ t.create('named logo')
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
+    expect(body).to.include(getSimpleIcon({ name: 'npm' }))
   })
 
 t.create('named logo with color')
@@ -83,7 +83,7 @@ t.create('named logo with color')
   })
 
 const logoSvg = Buffer.from(
-  getShieldsIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
+  getSimpleIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
   'base64',
 ).toString('ascii')
 
@@ -99,7 +99,7 @@ t.create('custom svg logo')
   )
   .after((err, res, body) => {
     expect(err).not.to.be.ok
-    expect(body).to.include(getShieldsIcon({ name: 'npm' }))
+    expect(body).to.include(getSimpleIcon({ name: 'npm' }))
   })
 
 t.create('logoWidth')
@@ -117,6 +117,24 @@ t.create('logoWidth')
     label: 'hey',
     message: 'yo',
     logoWidth: 30,
+  })
+
+// The logoPosition param was removed, but passing it should not
+// throw a validation error. It should just do nothing.
+t.create('logoPosition')
+  .get('.json?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      logoSvg,
+      logoPosition: 30,
+    }),
+  )
+  .expectBadge({
+    label: 'hey',
+    message: 'yo',
   })
 
 t.create('Invalid schema')

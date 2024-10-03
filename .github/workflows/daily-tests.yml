@@ -1,0 +1,70 @@
+name: Run Daily Tests
+on:
+  schedule:
+    - cron: '45 3 * * *'
+    # At 03:45, daily
+  workflow_dispatch:
+
+jobs:
+  daily-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 20
+
+      - name: Core tests
+        if: always()
+        uses: ./.github/actions/core-tests
+
+      - name: Package tests
+        if: always()
+        uses: ./.github/actions/package-tests
+
+      - name: Integration Tests (with PAT)
+        if: always()
+        uses: ./.github/actions/integration-tests
+        with:
+          github-token: '${{ secrets.GH_PAT }}'
+
+      - name: Run Service tests
+        run: npm run test:services -- --reporter json --reporter-option 'output=reports/service-tests.json'
+        if: always()
+        env:
+          RETRY_COUNT: 3
+          GH_TOKEN: '${{ secrets.GH_PAT }}'
+          LIBRARIESIO_TOKENS: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
+          OBS_USER: '${{ secrets.SERVICETESTS_OBS_USER }}'
+          OBS_PASS: '${{ secrets.SERVICETESTS_OBS_PASS }}'
+          PEPY_KEY: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
+          SL_INSIGHT_USER_UUID: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
+          SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
+          TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
+          TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
+          YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
+
+      - name: Write Service Tests Markdown Summary
+        if: always()
+        run: |
+          echo '# Services' >> $GITHUB_STEP_SUMMARY
+          node scripts/mocha2md.js Report reports/service-tests.json >> $GITHUB_STEP_SUMMARY

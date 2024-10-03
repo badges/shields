@@ -45,7 +45,7 @@ export default class Bitrise extends BaseJsonService {
           }),
           pathParam({
             name: 'branch',
-            example: 'master',
+            example: 'develop',
           }),
           queryParam({
             name: 'token',

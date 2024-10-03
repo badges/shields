@@ -1,0 +1,71 @@
+name: Coveralls Code Coverage
+on:
+  schedule:
+    - cron: '10 7 * * *'
+    # At 07:10, daily
+  workflow_dispatch:
+
+jobs:
+  coveralls-code-coverage:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ci_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          # Even though we're currently deploying on Node 20, we run coverage test on Node 22
+          # to work around https://github.com/bcoe/v8-coverage/pull/2.
+          node-version: 22
+        env:
+          NPM_CONFIG_ENGINE_STRICT: 'false'
+
+      - name: Migrate DB
+        run: npm run migrate up
+        env:
+          POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
+        shell: bash
+
+      - name: Coverage for Main Tests
+        run: npm run coverage:test
+        env:
+          GH_TOKEN: '${{ secrets.GH_PAT }}'
+          POSTGRES_URL: postgresql://postgres:postgres@localhost:5432/ci_test
+        shell: bash
+
+      - name: Coverage for Service Tests
+        run: npm run coverage:test:services
+        continue-on-error: true
+        env:
+          RETRY_COUNT: 3
+          GH_TOKEN: '${{ secrets.GH_PAT }}'
+          LIBRARIESIO_TOKENS: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
+          OBS_USER: '${{ secrets.SERVICETESTS_OBS_USER }}'
+          OBS_PASS: '${{ secrets.SERVICETESTS_OBS_PASS }}'
+          PEPY_KEY: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
+          SL_INSIGHT_USER_UUID: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
+          SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
+          TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
+          TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
+          YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
+        shell: bash
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
