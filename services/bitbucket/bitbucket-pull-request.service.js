@@ -32,20 +32,6 @@ function pullRequestClassGenerator(raw) {
       queryParamSchema,
     }
 
-    static auth = {
-      userKey: 'bitbucket_username',
-      passKey: 'bitbucket_password',
-      serviceKey: 'bitbucket',
-      isRequired: true,
-    }
-
-    static authServer = {
-      userKey: 'bitbucket_server_username',
-      passKey: 'bitbucket_server_password',
-      serviceKey: 'bitbucketServer',
-      isRequired: true,
-    }
-
     static get openApi() {
       const key = `/bitbucket/${routePrefix}/{user}/{repo}`
       const route = {}
@@ -85,16 +71,27 @@ function pullRequestClassGenerator(raw) {
     constructor(context, config) {
       super(context, config)
 
-      // can only be set here as we must get config
+      this.bitbucketAuthHelper = new AuthHelper(
+        {
+          userKey: 'bitbucket_username',
+          passKey: 'bitbucket_password',
+          authorizedOrigins: ['https://bitbucket.org'],
+        },
+        config,
+      )
       this.bitbucketServerAuthHelper = new AuthHelper(
-        BitbucketPullRequest.authServer,
+        {
+          userKey: 'bitbucket_server_username',
+          passKey: 'bitbucket_server_password',
+          serviceKey: 'bitbucketServer',
+        },
         config,
       )
     }
 
     async fetchCloud({ user, repo }) {
       return this._requestJson(
-        this.authHelper.withBasicAuth({
+        this.bitbucketAuthHelper.withBasicAuth({
           url: `https://bitbucket.org/api/2.0/repositories/${user}/${repo}/pullrequests/`,
           schema,
           options: { searchParams: { state: 'OPEN', limit: 0 } },
@@ -106,7 +103,7 @@ function pullRequestClassGenerator(raw) {
     // https://docs.atlassian.com/bitbucket-server/rest/5.16.0/bitbucket-rest.html#idm46229602363312
     async fetchServer({ server, user, repo }) {
       return this._requestJson(
-        this.authHelper.withBasicAuth({
+        this.bitbucketServerAuthHelper.withBasicAuth({
           url: `${server}/rest/api/1.0/projects/${user}/repos/${repo}/pull-requests`,
           schema,
           options: {
@@ -124,7 +121,6 @@ function pullRequestClassGenerator(raw) {
 
     async fetch({ server, user, repo }) {
       if (server !== undefined) {
-        this.authHelper = this.bitbucketServerAuthHelper
         return this.fetchServer({ server, user, repo })
       } else {
         return this.fetchCloud({ user, repo })
