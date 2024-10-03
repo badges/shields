@@ -5,7 +5,7 @@ const authConfigOverride = {
   public: {
     services: {
       jenkins: {
-        authorizedOrigins: ['https://jenkins.sqlalchemy.org'],
+        authorizedOrigins: ['https://ci-maven.apache.org'],
       },
     },
   },
@@ -17,7 +17,7 @@ describe('JenkinsCoverage', function () {
       return testAuth(
         JenkinsCoverage,
         'BasicAuth',
-        { results: { elements: [{ name: 'Lines', ratio: 88 }] } },
+        { instructionCoverage: { percentage: 93 } },
         { configOverride: authConfigOverride },
       )
     })
