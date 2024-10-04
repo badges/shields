@@ -128,6 +128,7 @@ class Badge {
     logoPadding,
     color = '#4c1',
     labelColor,
+    idPrefix = '',
   }) {
     const horizPadding = 5
     const hasLogo = !!logo
@@ -178,6 +179,7 @@ class Badge {
     this.label = label
     this.message = message
     this.accessibleText = accessibleText
+    this.idPrefix = idPrefix
 
     this.logoElement = getLogoElement({
       logo,
@@ -286,7 +288,7 @@ class Badge {
           },
         }),
       ],
-      attrs: { id: 'r' },
+      attrs: { id: `${this.idPrefix}r` },
     })
   }
 
@@ -313,7 +315,7 @@ class Badge {
       attrs: {
         width: this.width,
         height: this.constructor.height,
-        fill: 'url(#s)',
+        fill: `url(#${this.idPrefix}s)`,
       },
     })
     const content = withGradient
@@ -379,14 +381,14 @@ class Plastic extends Badge {
           attrs: { offset: 1, 'stop-color': '#000', 'stop-opacity': '.5' },
         }),
       ],
-      attrs: { id: 's', x2: 0, y2: '100%' },
+      attrs: { id: `${this.idPrefix}s`, x2: 0, y2: '100%' },
     })
 
     const clipPath = this.getClipPathElement(4)
 
     const backgroundGroup = this.getBackgroundGroupElement({
       withGradient: true,
-      attrs: { 'clip-path': 'url(#r)' },
+      attrs: { 'clip-path': `url(#${this.idPrefix}r)` },
     })
 
     return renderBadge(
@@ -428,14 +430,14 @@ class Flat extends Badge {
           attrs: { offset: 1, 'stop-opacity': '.1' },
         }),
       ],
-      attrs: { id: 's', x2: 0, y2: '100%' },
+      attrs: { id: `${this.idPrefix}s`, x2: 0, y2: '100%' },
     })
 
     const clipPath = this.getClipPathElement(3)
 
     const backgroundGroup = this.getBackgroundGroupElement({
       withGradient: true,
-      attrs: { 'clip-path': 'url(#r)' },
+      attrs: { 'clip-path': `url(#${this.idPrefix}r)` },
     })
 
     return renderBadge(
@@ -492,6 +494,7 @@ function social({
   logoPadding,
   color = '#4c1',
   labelColor = '#555',
+  idPrefix = '',
 }) {
   // Social label is styled with a leading capital. Convert to caps here so
   // width can be measured using the correct characters.
@@ -565,9 +568,9 @@ function social({
     const rect = new XmlElement({
       name: 'rect',
       attrs: {
-        id: 'llink',
+        id: `${idPrefix}llink`,
         stroke: '#d5d5d5',
-        fill: 'url(#a)',
+        fill: `url(#${idPrefix}a)`,
         x: '.5',
         y: '.5',
         width: labelRectWidth,
@@ -640,7 +643,7 @@ function social({
       name: 'text',
       content: [message],
       attrs: {
-        id: 'rlink',
+        id: `${idPrefix}rlink`,
         x: messageTextX,
         y: 140,
         transform: FONT_SCALE_DOWN_VALUE,
@@ -660,7 +663,7 @@ function social({
   const style = new XmlElement({
     name: 'style',
     content: [
-      'a:hover #llink{fill:url(#b);stroke:#ccc}a:hover #rlink{fill:#4183c4}',
+      `a:hover #${idPrefix}llink{fill:url(#${idPrefix}b);stroke:#ccc}a:hover #${idPrefix}rlink{fill:#4183c4}`,
     ],
   })
   const gradients = new ElementList({
@@ -681,7 +684,7 @@ function social({
             attrs: { offset: 1, 'stop-opacity': '.1' },
           }),
         ],
-        attrs: { id: 'a', x2: 0, y2: '100%' },
+        attrs: { id: `${idPrefix}a`, x2: 0, y2: '100%' },
       }),
       new XmlElement({
         name: 'linearGradient',
@@ -695,7 +698,7 @@ function social({
             attrs: { offset: 1, 'stop-opacity': '.1' },
           }),
         ],
-        attrs: { id: 'b', x2: 0, y2: '100%' },
+        attrs: { id: `${idPrefix}b`, x2: 0, y2: '100%' },
       }),
     ],
   })
