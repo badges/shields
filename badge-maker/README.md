@@ -73,6 +73,10 @@ The format is the following:
   // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'
   // Each offers a different visual design.
   style: 'flat',
+
+  // (Optional) A string with only letters, numbers, -, and _. This can be used to prevent
+  // CSS cross-contamination when the SVG badge is embedded directly into HTML pages.
+  idSuffix: 'dd'
 }
 ```
 
