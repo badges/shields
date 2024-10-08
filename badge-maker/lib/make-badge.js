@@ -20,7 +20,7 @@ module.exports = function makeBadge({
   logoSize,
   logoWidth,
   links = ['', ''],
-  idPrefix,
+  idSuffix,
 }) {
   // String coercion and whitespace removal.
   label = `${label}`.trim()
@@ -39,7 +39,7 @@ module.exports = function makeBadge({
       link: links,
       name: label,
       value: message,
-      idPrefix,
+      idSuffix,
     })
   }
 
@@ -61,7 +61,7 @@ module.exports = function makeBadge({
       logoPadding: logo && label.length ? 3 : 0,
       color: toSvgColor(color),
       labelColor: toSvgColor(labelColor),
-      idPrefix,
+      idSuffix,
     }),
   )
 }
