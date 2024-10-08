@@ -15,6 +15,8 @@ import { InvalidResponse } from './errors.js'
  * @abstract
  */
 class BaseXmlService extends BaseService {
+  static headers = { Accept: 'application/xml, text/xml' }
+
   /**
    * Request data from an upstream API serving XML,
    * parse it and validate against a schema
@@ -53,7 +55,7 @@ class BaseXmlService extends BaseService {
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
-      ...{ headers: { Accept: 'application/xml, text/xml' } },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     const { buffer } = await this._request({

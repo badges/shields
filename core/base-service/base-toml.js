@@ -14,6 +14,14 @@ import trace from './trace.js'
  * @abstract
  */
 class BaseTomlService extends BaseService {
+  static headers = {
+    Accept:
+      // the official header should be application/toml - see https://toml.io/en/v1.0.0#mime-type
+      // but as this is not registered here https://www.iana.org/assignments/media-types/media-types.xhtml
+      // some apps use other mime-type like application/x-toml, text/plain etc....
+      'text/x-toml, text/toml, application/x-toml, application/toml, text/plain',
+  }
+
   /**
    * Request data from an upstream API serving TOML,
    * parse it and validate against a schema
@@ -48,15 +56,7 @@ class BaseTomlService extends BaseService {
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
-      ...{
-        headers: {
-          Accept:
-            // the official header should be application/toml - see https://toml.io/en/v1.0.0#mime-type
-            // but as this is not registered here https://www.iana.org/assignments/media-types/media-types.xhtml
-            // some apps use other mime-type like application/x-toml, text/plain etc....
-            'text/x-toml, text/toml, application/x-toml, application/toml, text/plain',
-        },
-      },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     const { buffer } = await this._request({
