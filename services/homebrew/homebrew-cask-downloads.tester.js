@@ -17,12 +17,12 @@ t.create('yearly downloads (valid)')
 
 t.create('daily downloads (not found)')
   .get('/dm/not-a-package.json')
-  .expectBadge({ label: 'downloads', message: 'formula not found' })
+  .expectBadge({ label: 'downloads', message: 'cask not found' })
 
 t.create('yearly downloads (not found)')
   .get('/dq/not-a-package.json')
-  .expectBadge({ label: 'downloads', message: 'formula not found' })
+  .expectBadge({ label: 'downloads', message: 'cask not found' })
 
 t.create('yearly downloads (not found)')
   .get('/dy/not-a-package.json')
-  .expectBadge({ label: 'downloads', message: 'formula not found' })
+  .expectBadge({ label: 'downloads', message: 'cask not found' })
