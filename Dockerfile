@@ -28,6 +28,10 @@ LABEL fly.version=$version
 # Run the server using production configs.
 ENV NODE_ENV=production
 
+# Create and Run the app as non-root user
+RUN addgroup appgroup && adduser -S -G appgroup appuser
+USER appuser
+
 WORKDIR /usr/src/app
 COPY --from=builder --chown=0:0 /usr/src/app /usr/src/app
 
