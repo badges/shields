@@ -127,11 +127,12 @@ function omitv(version) {
   return version
 }
 
-const ignoredVersionPatterns = /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}/
+const ignoredVersionPatterns =
+  /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}|^[a-f0-9]{7,40}$/
 
 /**
- * Add a starting v to the version unless it doesn't starts with a digit or is a date (yyyy-mm-dd)
- * For example, addv("1.2.3") returns "v1.2.3", but addv("hello") or addv("2021-10-31"), returns "hello" and "2021-10-31" respectively.
+ * Add a starting v to the version unless it doesn't starts with a digit, is a date (yyyy-mm-dd), or is a commit hash.
+ * For example, addv("1.2.3") returns "v1.2.3", but addv("hello"), addv("2021-10-31"), addv("abcdef1"), returns "hello", "2021-10-31", and "abcdef1" respectively.
  *
  * @param {string} version - Version string
  * @returns {string} Version string with the starting v
