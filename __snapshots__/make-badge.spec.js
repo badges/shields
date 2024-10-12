@@ -2229,3 +2229,143 @@ exports['The badge generator badges with logos should always produce the same ba
 </svg>
 
 `
+
+exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="107"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s1" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r1">
+    <rect width="107" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r1)">
+    <rect width="62" height="20" fill="#0f0" />
+    <rect x="62" width="45" height="20" fill="#b3e" />
+    <rect width="107" height="20" fill="url(#s1)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="405"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="835" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix plastic 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="107"
+  height="18"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <linearGradient id="s1" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r1">
+    <rect width="107" height="18" rx="4" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r1)">
+    <rect width="62" height="18" fill="#0f0" />
+    <rect x="62" width="45" height="18" fill="#b3e" />
+    <rect width="107" height="18" fill="url(#s1)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="405"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text x="405" y="130" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text x="835" y="130" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
