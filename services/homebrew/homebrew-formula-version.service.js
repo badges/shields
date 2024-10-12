@@ -16,7 +16,7 @@ export default class HomebrewVersion extends BaseJsonService {
   static openApi = {
     '/homebrew/v/{formula}': {
       get: {
-        summary: 'homebrew version',
+        summary: 'Homebrew Formula Version',
         parameters: pathParams({
           name: 'formula',
           example: 'cake',

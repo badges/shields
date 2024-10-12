@@ -13,7 +13,7 @@ export default class HomebrewCask extends BaseJsonService {
   static openApi = {
     '/homebrew/cask/v/{cask}': {
       get: {
-        summary: 'homebrew cask',
+        summary: 'Homebrew Cask Version',
         parameters: pathParams({
           name: 'cask',
           example: 'iterm2',

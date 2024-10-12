@@ -215,3 +215,16 @@ t.create('query with type conversion to number')
     message: '44.95',
     color: 'blue',
   })
+
+t.create('query HTML document')
+  .get(
+    `.json?${queryString.stringify({
+      url: 'https://httpbin.org/html',
+      query: '//h1[1]',
+    })}`,
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'Herman Melville - Moby-Dick',
+    color: 'blue',
+  })
