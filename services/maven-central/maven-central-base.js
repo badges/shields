@@ -7,7 +7,7 @@ export default class MavenCentralBase extends BaseXmlService {
     return this._requestXml({
       schema,
       url: `https://repo1.maven.org/maven2/${group}/${artifact}/maven-metadata.xml`,
-      httpErrors: { 404: 'solution not found' },
+      httpErrors: { 404: 'artifact not found' },
     })
   }
 }

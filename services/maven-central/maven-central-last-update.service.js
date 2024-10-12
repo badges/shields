@@ -1,17 +1,20 @@
 import Joi from 'joi'
-import { pathParams } from '../index.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import dayjs from 'dayjs'
+import { InvalidResponse, pathParams } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import MavenCentralBase from './maven-central-base.js'
+dayjs.extend(customParseFormat)
 
 const updateResponseSchema = Joi.object({
   metadata: Joi.object({
     versioning: Joi.object({
       lastUpdated: nonNegativeInteger,
-    }),
-  }),
-})
+    }).required(),
+  }).required(),
+}).required()
 
 export default class MavenCentralLastUpdate extends MavenCentralBase {
   static category = 'activity'
@@ -48,12 +51,16 @@ export default class MavenCentralLastUpdate extends MavenCentralBase {
       artifactId,
       schema: updateResponseSchema,
     })
-    const date = new Date(
-      `${metadata.versioning.lastUpdated}`.replace(
-        /^(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)$/,
-        '$4:$5:$6 $2/$3/$1',
-      ),
+
+    const date = dayjs(
+      String(metadata.versioning.lastUpdated),
+      'YYYYMMDDHHmmss',
     )
+
+    if (!date.isValid) {
+      throw new InvalidResponse({ prettyMessage: 'invalid date' })
+    }
+
     return this.constructor.render({ date })
   }
 }

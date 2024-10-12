@@ -7,9 +7,9 @@ t.create('last update date').get('/com.google.guava/guava.json').expectBadge({
   message: isFormattedDate,
 })
 
-t.create('last update for unknown solution')
+t.create('last update when artifact not found')
   .get('/com.fail.test/this-does-not-exist.json')
   .expectBadge({
     label: 'last updated',
-    message: 'solution not found',
+    message: 'artifact not found',
   })
