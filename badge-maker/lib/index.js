@@ -52,7 +52,7 @@ function _validate(format) {
       `Field \`style\` must be one of (${styleValues.toString()})`,
     )
   }
-  if ('idSuffix' in format && /^[a-zA-Z0-9\-_]+$/.test(format.idSuffix)) {
+  if ('idSuffix' in format && !/^[a-zA-Z0-9\-_]*$/.test(format.idSuffix)) {
     throw new ValidationError(
       'Field `idSuffix` must contain only numbers, letters, -, and _',
     )
