@@ -96,6 +96,10 @@ describe('Text formatters', function () {
     given('v0.6').expect('v0.6')
     given('hello').expect('hello')
     given('2017-05-05-Release-2.3.17').expect('2017-05-05-Release-2.3.17')
+    given('5aa272da7924fa76581fd5ea83b24cfbb3528b8a').expect(
+      '5aa272da7924fa76581fd5ea83b24cfbb3528b8a',
+    )
+    given('5aa272da79').expect('5aa272da79')
   })
 
   test(maybePluralize, () => {
