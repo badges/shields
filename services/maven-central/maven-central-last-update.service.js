@@ -9,9 +9,9 @@ const updateResponseSchema = Joi.object({
   metadata: Joi.object({
     versioning: Joi.object({
       lastUpdated: nonNegativeInteger,
-    }),
-  }),
-})
+    }).required(),
+  }).required(),
+}).required()
 
 export default class MavenCentralLastUpdate extends MavenCentralBase {
   static category = 'activity'
