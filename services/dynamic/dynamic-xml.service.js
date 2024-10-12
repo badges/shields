@@ -70,7 +70,7 @@ export default class DynamicXml extends BaseService {
 
   static defaultBadgeData = { label: 'custom badge' }
 
-  transform({ pathExpression, buffer }) {
+  transform({ pathExpression, buffer, contentType = 'text/xml' }) {
     // e.g. //book[2]/@id
     const pathIsAttr = (
       pathExpression.split('/').slice(-1)[0] || ''
@@ -78,14 +78,20 @@ export default class DynamicXml extends BaseService {
 
     let parsed
     try {
-      parsed = new DOMParser().parseFromString(buffer, 'text/xml')
+      parsed = new DOMParser().parseFromString(buffer, contentType)
     } catch (e) {
       throw new InvalidResponse({ prettyMessage: e.message })
     }
 
     let values
     try {
-      values = xpath.select(pathExpression, parsed)
+      if (contentType === 'text/html') {
+        values = xpath
+          .parse(pathExpression)
+          .select({ node: parsed, isHtml: true })
+      } else {
+        values = xpath.select(pathExpression, parsed)
+      }
     } catch (e) {
       throw new InvalidParameter({ prettyMessage: e.message })
     }
@@ -122,16 +128,25 @@ export default class DynamicXml extends BaseService {
   }
 
   async handle(_namedParams, { url, query: pathExpression, prefix, suffix }) {
-    const { buffer } = await this._request({
+    const { buffer, res } = await this._request({
       url,
       options: { headers: { Accept: 'application/xml, text/xml' } },
       httpErrors,
       logErrors: [],
     })
 
+    let contentType = 'text/xml'
+    if (
+      res.headers['content-type'] &&
+      res.headers['content-type'].includes('text/html')
+    ) {
+      contentType = 'text/html'
+    }
+
     const { values: value } = this.transform({
       pathExpression,
       buffer,
+      contentType,
     })
 
     return renderDynamicBadge({ value, prefix, suffix })
