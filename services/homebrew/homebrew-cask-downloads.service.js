@@ -41,7 +41,7 @@ export default class HomebrewCaskDownloads extends BaseJsonService {
   static openApi = {
     '/homebrew/cask/installs/{interval}/{cask}': {
       get: {
-        summary: 'homebrew cask downloads',
+        summary: 'Homebrew Cask Downloads',
         parameters: pathParams(
           {
             name: 'interval',
