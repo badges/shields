@@ -54,7 +54,7 @@ function _validate(format) {
   }
   if ('idSuffix' in format && /^[a-zA-Z0-9\-_]+$/.test(format.idSuffix)) {
     throw new ValidationError(
-      'field `idSuffix` must contain only numbers, letters, -, and _',
+      'Field `idSuffix` must contain only numbers, letters, -, and _',
     )
   }
 }
