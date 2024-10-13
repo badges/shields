@@ -2299,7 +2299,46 @@ exports['The badge generator "flat" template badge generation should match snaps
 
 `
 
-exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix plastic 1'] = `
+exports['The badge generator "flat-square" template badge generation should match snapshots: message with custom suffix 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="107"
+  height="20"
+  role="img"
+  aria-label="cactus: grown"
+>
+  <title>cactus: grown</title>
+  <g shape-rendering="crispEdges">
+    <rect width="62" height="20" fill="#0f0" />
+    <rect x="62" width="45" height="20" fill="#b3e" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      cactus
+    </text>
+    <text x="835" y="140" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "plastic" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -2363,6 +2402,149 @@ exports['The badge generator "flat" template badge generation should match snaps
       grown
     </text>
     <text x="835" y="130" transform="scale(.1)" fill="#fff" textLength="350">
+      grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "for-the-badge" template badge generation should match snapshots: message with custom suffix 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="163.75"
+  height="28"
+  role="img"
+  aria-label="CACTUS: GROWN"
+>
+  <title>CACTUS: GROWN</title>
+  <g shape-rendering="crispEdges">
+    <rect width="89.5" height="28" fill="#0f0" />
+    <rect x="89.5" width="74.25" height="28" fill="#b3e" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text transform="scale(.1)" x="532.5" y="175" textLength="485" fill="#fff">
+      CACTUS
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1266.25"
+      y="175"
+      textLength="502.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      GROWN
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator "social" template badge generation should match snapshots: message with custom suffix 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="112"
+  height="20"
+  role="img"
+  aria-label="Cactus: grown"
+>
+  <title>Cactus: grown</title>
+  <style>
+    a:hover #llink1 {
+      fill: url(#b1);
+      stroke: #ccc;
+    }
+    a:hover #rlink1 {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a1" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b1" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="64"
+      height="19"
+      rx="2"
+    />
+    <rect x="70.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
+    <rect x="70" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+    <path d="M70.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink1"
+      stroke="#d5d5d5"
+      fill="url(#a1)"
+      x=".5"
+      y=".5"
+      width="64"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="405"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="370"
+    >
+      Cactus
+    </text>
+    <text x="405" y="140" transform="scale(.1)" textLength="370">Cactus</text>
+    <text
+      aria-hidden="true"
+      x="905"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="330"
+    >
+      grown
+    </text>
+    <text id="rlink1" x="905" y="140" transform="scale(.1)" textLength="330">
       grown
     </text>
   </g>

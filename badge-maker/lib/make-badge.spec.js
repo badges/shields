@@ -179,19 +179,6 @@ describe('The badge generator', function () {
       })
     })
 
-    it('should match snapshots: message with custom suffix plastic', async function () {
-      await expectBadgeToMatchSnapshot({
-        label: 'cactus',
-        message: 'grown',
-        format: 'svg',
-        color: '#b3e',
-        labelColor: '#0f0',
-        style: 'plastic',
-        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
-        idSuffix: '1',
-      })
-    })
-
     it('should match snapshots: message only, no logo', async function () {
       await expectBadgeToMatchSnapshot({
         label: '',
@@ -284,6 +271,19 @@ describe('The badge generator', function () {
       })
     })
 
+    it('should match snapshots: message with custom suffix', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'flat-square',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        idSuffix: '1',
+      })
+    })
+
     it('should match snapshots: message only, no logo', async function () {
       await expectBadgeToMatchSnapshot({
         label: '',
@@ -373,6 +373,19 @@ describe('The badge generator', function () {
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+      })
+    })
+
+    it('should match snapshots: message with custom suffix', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'plastic',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        idSuffix: '1',
       })
     })
 
@@ -495,6 +508,19 @@ describe('The badge generator', function () {
       })
     })
 
+    it('should match snapshots: message with custom suffix', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'for-the-badge',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        idSuffix: '1',
+      })
+    })
+
     it('should match snapshots: message only, no logo', async function () {
       await expectBadgeToMatchSnapshot({
         label: '',
@@ -611,6 +637,19 @@ describe('The badge generator', function () {
         color: '#b3e',
         labelColor: '#0f0',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+      })
+    })
+
+    it('should match snapshots: message with custom suffix', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: 'cactus',
+        message: 'grown',
+        format: 'svg',
+        style: 'social',
+        color: '#b3e',
+        labelColor: '#0f0',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        idSuffix: '1',
       })
     })
 
