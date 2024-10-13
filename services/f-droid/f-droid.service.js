@@ -3,8 +3,7 @@ import {
   optionalNonNegativeInteger,
   nonNegativeInteger,
 } from '../validators.js'
-import { addv } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
@@ -46,13 +45,6 @@ export default class FDroid extends BaseJsonService {
 
   static defaultBadgeData = { label: 'f-droid' }
 
-  static render({ version }) {
-    return {
-      message: addv(version),
-      color: versionColor(version),
-    }
-  }
-
   async fetch({ appId }) {
     const url = `https://f-droid.org/api/v1/packages/${appId}`
     return this._requestJson({
@@ -83,6 +75,6 @@ export default class FDroid extends BaseJsonService {
     const json = await this.fetch({ appId })
     const suggested = includePre === undefined
     const { version } = this.transform({ json, suggested })
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version })
   }
 }
