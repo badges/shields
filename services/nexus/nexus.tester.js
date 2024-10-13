@@ -258,7 +258,7 @@ t.create('Nexus 3 - search release version of an nonexistent artifact')
 
 t.create('Nexus 3 - search snapshot version valid snapshot artifact')
   .get(
-    '/s/com.tomkeuper.bedwars/bedwars-api.json?server=https://repo.tomkeuper.com&nexusVersion=3',
+    '/s/net.voxelpi.event/event.json?server=https://repo.voxelpi.net&nexusVersion=3',
   )
   .expectBadge({
     label: 'nexus',
