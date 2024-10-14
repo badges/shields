@@ -19,7 +19,7 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
 
   static defaultBadgeData = {
     label: 'extension size',
-    color: 'blue'
+    color: 'blue',
   }
 
   async handle({ storeId }) {

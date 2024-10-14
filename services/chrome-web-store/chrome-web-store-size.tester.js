@@ -1,7 +1,7 @@
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
-const isFileSize = /^\d+(\.\d+)?(MiB|KiB)$/;
+const isFileSize = /^\d+(\.\d+)?(MiB|KiB)$/
 
 t.create('Size').get('/nccfelhkfpbnefflolffkclhenplhiab.json').expectBadge({
   label: 'extension size',

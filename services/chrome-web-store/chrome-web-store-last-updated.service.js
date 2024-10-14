@@ -20,7 +20,7 @@ export default class ChromeWebStoreLastUpdated extends BaseChromeWebStoreService
   }
 
   static defaultBadgeData = {
-    label: 'extension last updated'
+    label: 'extension last updated',
   }
 
   async handle({ storeId }) {
@@ -31,7 +31,7 @@ export default class ChromeWebStoreLastUpdated extends BaseChromeWebStoreService
       throw new NotFound({ prettyMessage: 'not found' })
     }
 
-    const lastUpdatedDate = Date.parse(lastUpdated);
+    const lastUpdatedDate = Date.parse(lastUpdated)
 
     return {
       message: formatDate(lastUpdatedDate),
