@@ -50,7 +50,7 @@ export default class SnapcraftLastUpdate extends SnapcraftBase {
             name: 'arch',
             example: 'amd64',
             description:
-              'Architecture, When not specified, this will default to `amd64`.',
+              'Architecture, when not specified, this will default to `amd64`.',
           }),
         ],
       },
