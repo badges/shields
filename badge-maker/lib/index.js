@@ -52,6 +52,11 @@ function _validate(format) {
       `Field \`style\` must be one of (${styleValues.toString()})`,
     )
   }
+  if ('idSuffix' in format && !/^[a-zA-Z0-9\-_]*$/.test(format.idSuffix)) {
+    throw new ValidationError(
+      'Field `idSuffix` must contain only numbers, letters, -, and _',
+    )
+  }
 }
 
 function _clean(format) {
@@ -63,6 +68,7 @@ function _clean(format) {
     'style',
     'logoBase64',
     'links',
+    'idSuffix',
   ]
 
   const cleaned = {}
@@ -95,6 +101,7 @@ function _clean(format) {
  * @param {string} format.style (Optional) Visual style (e.g: 'flat')
  * @param {string} format.logoBase64 (Optional) Logo data URL
  * @param {Array} format.links (Optional) Links array (e.g: ['https://example.com', 'https://example.com'])
+ * @param {string} format.idSuffix (Optional) Suffix for IDs, e.g. 1, 2, and 3 for three invocations that will be used on the same page.
  * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */

@@ -154,6 +154,7 @@ describe('Nexus', function () {
           },
         ),
       ).to.deep.equal({
+        label: undefined,
         message: 'v2.3.4',
         color: 'blue',
       })
