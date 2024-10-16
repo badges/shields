@@ -104,8 +104,11 @@ const isPercentage = Joi.alternatives().try(
   isDecimalPercentageNegative,
 )
 
-const isFileSize = withRegex(
+const isMetricFileSize = withRegex(
   /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/,
+)
+const isIecFileSize = withRegex(
+  /^[0-9]*[.]?[0-9]+\s(B|KiB|MiB|GiB|TiB|PiB|EiB|ZiB|YiB)$/,
 )
 
 const isFormattedDate = Joi.alternatives().try(
@@ -199,7 +202,8 @@ export {
   isPercentage,
   isIntegerPercentage,
   isDecimalPercentage,
-  isFileSize,
+  isMetricFileSize,
+  isIecFileSize,
   isFormattedDate,
   isRelativeFormattedDate,
   isDependencyState,
