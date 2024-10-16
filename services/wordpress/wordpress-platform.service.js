@@ -1,5 +1,6 @@
 import { NotFound, pathParams } from '../index.js'
 import { addv } from '../text-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import { version as versionColor } from '../color-formatters.js'
 import { description, BaseWordpress } from './wordpress-base.js'
 import { versionColorForWordpressVersion } from './wordpress-version-color.js'
@@ -46,13 +47,6 @@ function WordpressRequiresVersion(extensionType) {
 
     static defaultBadgeData = { label: 'wordpress' }
 
-    static render({ wordpressVersion }) {
-      return {
-        message: addv(wordpressVersion),
-        color: versionColor(wordpressVersion),
-      }
-    }
-
     async handle({ slug }) {
       const { requires: wordpressVersion } = await this.fetch({
         extensionType,
@@ -65,7 +59,7 @@ function WordpressRequiresVersion(extensionType) {
         })
       }
 
-      return this.constructor.render({ wordpressVersion })
+      return renderVersionBadge({ version: wordpressVersion })
     }
   }
 }
