@@ -248,7 +248,7 @@ function renderVersionBadge({
   versionFormatter = versionColor,
 }) {
   return {
-    label: tag ? `${defaultLabel}@${tag}` : undefined,
+    label: tag ? `${defaultLabel}@${tag}` : defaultLabel,
     message: addv(version),
     color: versionFormatter(version),
   }
