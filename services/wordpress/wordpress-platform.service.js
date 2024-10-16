@@ -1,6 +1,5 @@
 import { NotFound, pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { version as versionColor } from '../color-formatters.js'
 import { description, BaseWordpress } from './wordpress-base.js'
 import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
@@ -132,14 +131,6 @@ function RequiresPHPVersionForType(extensionType) {
 
     static defaultBadgeData = { label: 'php' }
 
-    static render({ version }) {
-      return {
-        label: 'php',
-        message: `>=${version}`,
-        color: versionColor(version),
-      }
-    }
-
     async handle({ slug }) {
       const { requires_php: requiresPhp } = await this.fetch({
         extensionType,
@@ -152,9 +143,7 @@ function RequiresPHPVersionForType(extensionType) {
         })
       }
 
-      return this.constructor.render({
-        version: requiresPhp,
-      })
+      return renderVersionBadge({ version: requiresPhp, prefix: '>=' })
     }
   }
 }
