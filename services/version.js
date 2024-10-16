@@ -234,6 +234,7 @@ function rangeStart(v) {
  * @param {string} options.version - The version number to display on the badge
  * @param {string} [options.tag] - The tag to display on the badge, such as "alpha" or "beta"
  * @param {string} [options.defaultLabel] - The default label to display on the badge, such as "npm" or "github"
+ * @param {string} [options.postfix] - The postfix to display on the message, such as "tested"
  * @param {Function} [options.versionFormatter=versionColor] - The function to use to format the color of the badge based on the version number
  * @returns {object} A badge object that has three properties: label, message, and color
  * @example
@@ -245,11 +246,12 @@ function renderVersionBadge({
   version,
   tag,
   defaultLabel,
+  postfix,
   versionFormatter = versionColor,
 }) {
   return {
     label: tag ? `${defaultLabel}@${tag}` : defaultLabel,
-    message: addv(version),
+    message: addv(version) + (postfix ? ` ${postfix}` : ''),
     color: versionFormatter(version),
   }
 }
