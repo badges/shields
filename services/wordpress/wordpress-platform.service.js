@@ -1,5 +1,4 @@
 import { NotFound, pathParams } from '../index.js'
-import { addv } from '../text-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import { version as versionColor } from '../color-formatters.js'
 import { description, BaseWordpress } from './wordpress-base.js'
@@ -87,21 +86,18 @@ class WordpressPluginTestedVersion extends BaseWordpress {
 
   static defaultBadgeData = { label: 'wordpress' }
 
-  static async render({ testedVersion }) {
-    // Atypically, the `render()` function of this badge is `async` because it needs to pull
-    // data from the server.
-    return {
-      message: `${addv(testedVersion)} tested`,
-      color: await versionColorForWordpressVersion(testedVersion),
-    }
-  }
-
   async handle({ slug }) {
     const { tested: testedVersion } = await this.fetch({
       extensionType: 'plugin',
       slug,
     })
-    return this.constructor.render({ testedVersion })
+    // Atypically, pulling color data from the server with async operation.
+    const color = await versionColorForWordpressVersion(testedVersion)
+    return renderVersionBadge({
+      version: testedVersion,
+      postfix: 'tested',
+      versionFormatter: () => color,
+    })
   }
 }
 
