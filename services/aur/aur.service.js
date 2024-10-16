@@ -4,7 +4,7 @@ import {
   age as ageColor,
 } from '../color-formatters.js'
 import { renderLicenseBadge } from '../licenses.js'
-import { addv, metric, formatDate } from '../text-formatters.js'
+import { metric, formatDate } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseJsonService,
@@ -12,6 +12,7 @@ import {
   InvalidResponse,
   pathParams,
 } from '../index.js'
+import { renderVersionBadge } from '../version.js'
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -170,7 +171,7 @@ class AurVersion extends BaseAurService {
 
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'
-    return { message: addv(version), color }
+    return renderVersionBadge({ version, versionFormatter: () => color })
   }
 
   async handle({ packageName }) {
