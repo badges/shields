@@ -1,6 +1,5 @@
 import { pathParams } from '../index.js'
-import { addv as versionText } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import BaseCondaService from './conda-base.js'
 
 export default class CondaVersion extends BaseCondaService {
@@ -33,20 +32,12 @@ export default class CondaVersion extends BaseCondaService {
     },
   }
 
-  static render({ variant, channel, version }) {
-    return {
-      label: variant === 'vn' ? channel : `conda | ${channel}`,
-      message: versionText(version),
-      color: versionColor(version),
-    }
-  }
-
   async handle({ variant, channel, packageName }) {
     const json = await this.fetch({ channel, packageName })
-    return this.constructor.render({
-      variant,
-      channel,
+    const defaultLabel = variant === 'vn' ? channel : `conda | ${channel}`
+    return renderVersionBadge({
       version: json.latest_version,
+      defaultLabel,
     })
   }
 }

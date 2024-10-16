@@ -34,7 +34,7 @@ describe('npm', function () {
         await NpmVersion.invoke(defaultContext, config, { packageName: 'npm' }),
       ).to.deep.equal({
         color: 'orange',
-        label: undefined,
+        label: 'npm',
         message: 'v0.1.0',
       })
 
