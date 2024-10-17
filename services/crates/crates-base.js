@@ -27,6 +27,14 @@ const versionResponseSchema = Joi.object({
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }
 
+  /**
+   * Fetches data from the crates.io API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.crate - The crate name.
+   * @param {string} [options.version] - The crate version number (optional).
+   * @returns {Promise<object>} the JSON response from the API.
+   */
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
