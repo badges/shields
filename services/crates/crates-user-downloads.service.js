@@ -18,7 +18,7 @@ export default class CratesUserDownloads extends BaseCratesUserService {
           name: 'userId',
           example: '3027',
           description:
-            'The user ID can be found using https://crates.io/api/v1/users/{username}',
+            'The user ID can be found using `https://crates.io/api/v1/users/{username}`',
         }),
       },
     },
