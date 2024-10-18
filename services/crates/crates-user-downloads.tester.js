@@ -6,7 +6,10 @@ t.create('total user downloads')
   .get('/udt/3027.json')
   .expectBadge({ label: 'downloads', message: isMetric })
 
-// we can not test for id not linked to user as it returns 0 downloads
+// non-existent user returns 0 downloads with 200 OK rather then 404.
+t.create('total user downloads (user not found)')
+  .get('/udt/2147483647.json') // 2147483647 is the maximum valid user id as API uses i32
+  .expectBadge({ label: 'downloads', message: '0' })
 
 t.create('total user downloads (invalid)')
   .get('/udt/999999999999999999999999.json')
