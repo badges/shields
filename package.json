@@ -150,7 +150,7 @@
     "@docusaurus/preset-classic": "^3.5.2",
     "@easyops-cn/docusaurus-search-local": "^0.45.0",
     "@mdx-js/react": "^3.0.1",
-    "@typescript-eslint/parser": "^8.8.1",
+    "@typescript-eslint/parser": "^8.10.0",
     "c8": "^10.1.2",
     "caller": "^1.1.0",
     "chai": "^4.5.0",
