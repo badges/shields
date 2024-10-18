@@ -1,6 +1,6 @@
 import { createServiceTester } from '../tester.js'
 import {
-  isFileSize,
+  isMetricFileSize,
   isHumanized,
   isMetric,
   isOrdinalNumber,
@@ -21,11 +21,11 @@ t.create('WhatPulse team as team id, clicks')
 
 t.create('WhatPulse team as team id, download')
   .get('/download/team/1295.json')
-  .expectBadge({ label: 'download', message: isFileSize })
+  .expectBadge({ label: 'download', message: isMetricFileSize })
 
 t.create('WhatPulse team as team id, upload')
   .get('/upload/team/1295.json')
-  .expectBadge({ label: 'upload', message: isFileSize })
+  .expectBadge({ label: 'upload', message: isMetricFileSize })
 
 t.create('WhatPulse team as team name, keys - from Ranks')
   .get('/keys/team/dutch power cows.json?rank')

@@ -1,8 +1,13 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
 import { pathParam, queryParam } from '../index.js'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
-import NpmBase, { packageNameDescription } from './npm-base.js'
+import NpmBase, {
+  packageNameDescription,
+  queryParamSchema as baseQueryParamSchema,
+} from './npm-base.js'
+
+const defaultUnits = 'metric'
 
 const schema = Joi.object({
   dist: Joi.object({
@@ -10,12 +15,17 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const queryParamSchema = baseQueryParamSchema.keys({
+  units: unitsQueryParam.default(defaultUnits),
+})
+
 export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
 
   static route = {
     base: 'npm/unpacked-size',
     pattern: ':scope(@[^/]+)?/:packageName/:version*',
+    queryParamSchema,
   }
 
   static openApi = {
@@ -32,6 +42,7 @@ export default class NpmUnpackedSize extends NpmBase {
             name: 'registry_uri',
             example: 'https://registry.npmjs.com',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -52,6 +63,7 @@ export default class NpmUnpackedSize extends NpmBase {
             name: 'registry_uri',
             example: 'https://registry.npmjs.com',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -68,7 +80,7 @@ export default class NpmUnpackedSize extends NpmBase {
 
   async handle(
     { scope, packageName, version },
-    { registry_uri: registryUrl = 'https://registry.npmjs.org' },
+    { registry_uri: registryUrl = 'https://registry.npmjs.org', units },
   ) {
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
@@ -78,10 +90,13 @@ export default class NpmUnpackedSize extends NpmBase {
     })
     const { unpackedSize } = dist
 
+    if (unpackedSize) {
+      return renderSizeBadge(unpackedSize, units, 'unpacked size')
+    }
     return {
       label: 'unpacked size',
-      message: unpackedSize ? prettyBytes(unpackedSize) : 'unknown',
-      color: unpackedSize ? 'blue' : 'lightgray',
+      message: 'unknown',
+      color: 'lightgray',
     }
   }
 }

@@ -1,14 +1,19 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
+import { nonNegativeInteger } from '../validators.js'
+
+const defaultUnits = 'metric'
 
 const schema = Joi.object({
   size: Joi.object({
-    compressedSize: Joi.string().required(),
+    rawCompressedSize: nonNegativeInteger,
   }).required(),
 }).required()
 
 const queryParamSchema = Joi.object({
   exports: Joi.string(),
+  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
 const esbuild =
@@ -47,6 +52,7 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'isVal,val',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -69,19 +75,13 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'randEmail,randFullName',
           }),
+          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
   }
 
   static defaultBadgeData = { label: 'bundlejs', color: 'informational' }
-
-  static render({ size }) {
-    return {
-      label: 'minified size (gzip)',
-      message: size,
-    }
-  }
 
   async fetch({ scope, packageName, exports }) {
     const searchParams = {
@@ -108,9 +108,9 @@ export default class BundlejsPackage extends BaseJsonService {
     })
   }
 
-  async handle({ scope, packageName }, { exports }) {
+  async handle({ scope, packageName }, { exports, units }) {
     const json = await this.fetch({ scope, packageName, exports })
-    const size = json.size.compressedSize
-    return this.constructor.render({ size })
+    const size = json.size.rawCompressedSize
+    return renderSizeBadge(size, units, 'minified size (gzip)')
   }
 }

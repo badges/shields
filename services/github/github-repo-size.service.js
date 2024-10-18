@@ -1,45 +1,50 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
-import { pathParams } from '../index.js'
+import { pathParam } from '../index.js'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
+
+const defaultUnits = 'IEC'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
 }).required()
 
+const queryParamSchema = Joi.object({
+  units: unitsQueryParam.default(defaultUnits),
+}).required()
+
 export default class GithubRepoSize extends GithubAuthV3Service {
   static category = 'size'
-  static route = { base: 'github/repo-size', pattern: ':user/:repo' }
+
+  static route = {
+    base: 'github/repo-size',
+    pattern: ':user/:repo',
+    queryParamSchema,
+  }
+
   static openApi = {
     '/github/repo-size/{user}/{repo}': {
       get: {
         summary: 'GitHub repo size',
         description: documentation,
-        parameters: pathParams(
-          {
+        parameters: [
+          pathParam({
             name: 'user',
             example: 'atom',
-          },
-          {
+          }),
+          pathParam({
             name: 'repo',
             example: 'atom',
-          },
-        ),
+          }),
+          unitsOpenApiParam(defaultUnits),
+        ],
       },
     },
   }
 
   static defaultBadgeData = { label: 'repo size' }
-
-  static render({ size }) {
-    return {
-      // note the GH API returns size in Kb
-      message: prettyBytes(size * 1024),
-      color: 'blue',
-    }
-  }
 
   async fetch({ user, repo }) {
     return this._requestJson({
@@ -49,8 +54,10 @@ export default class GithubRepoSize extends GithubAuthV3Service {
     })
   }
 
-  async handle({ user, repo }) {
+  async handle({ user, repo }, { units }) {
     const { size } = await this.fetch({ user, repo })
-    return this.constructor.render({ size })
+    // note the GH API returns size in KiB
+    // so we multiply by 1024 to get a size in bytes and then format that in IEC bytes
+    return renderSizeBadge(size * 1024, units, 'repo size')
   }
 }
