@@ -24,9 +24,21 @@ const versionResponseSchema = Joi.object({
   version: versionSchema.required(),
 }).required()
 
+const userStatsSchema = Joi.object({
+  total_downloads: nonNegativeInteger.required(),
+}).required()
+
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }
 
+  /**
+   * Fetches data from the crates.io API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.crate - The crate name.
+   * @param {string} [options.version] - The crate version number (optional).
+   * @returns {Promise<object>} the JSON response from the API.
+   */
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
@@ -54,7 +66,23 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
+class BaseCratesUserService extends BaseJsonService {
+  static defaultBadgeData = { label: 'crates.io' }
+
+  /**
+   * Fetches data from the crates.io API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.userId - The user ID.
+   * @returns {Promise<object>} the JSON response from the API.
+   */
+  async fetch({ userId }) {
+    const url = `https://crates.io/api/v1/users/${userId}/stats`
+    return this._requestJson({ schema: userStatsSchema, url })
+  }
+}
+
 const description =
   '[Crates.io](https://crates.io/) is a package registry for Rust.'
 
-export { BaseCratesService, description }
+export { BaseCratesService, BaseCratesUserService, description }
