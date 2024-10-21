@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
+import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import { latest } from '../version.js'
-import { BaseJsonService, NotFound, pathParams, queryParams } from '../index.js'
+import { BaseJsonService, NotFound, pathParams, queryParam } from '../index.js'
 import {
   archEnum,
   archSchema,
@@ -41,26 +41,30 @@ const pagedSchema = Joi.object({
 
 const sortEnum = ['date', 'semver']
 
+const defaultUnits = 'IEC'
+
 const queryParamSchema = Joi.object({
   sort: Joi.string()
     .valid(...sortEnum)
     .default('date'),
   arch: archSchema,
+  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
-const openApiQueryParams = queryParams(
-  {
+const openApiQueryParams = [
+  queryParam({
     name: 'sort',
     example: 'semver',
     schema: { type: 'string', enum: sortEnum },
     description: 'If not specified, the default is `date`',
-  },
-  {
+  }),
+  queryParam({
     name: 'arch',
     example: 'amd64',
     schema: { type: 'string', enum: archEnum },
-  },
-)
+  }),
+  unitsOpenApiParam(defaultUnits),
+]
 
 // If user provided the arch parameter,
 // check if any of the returned images has an architecture matching the arch parameter provided.
@@ -123,10 +127,6 @@ export default class DockerSize extends BaseJsonService {
   static _cacheLength = 600
 
   static defaultBadgeData = { label: 'image size', color: 'blue' }
-
-  static render({ size }) {
-    return { message: prettyBytes(size) }
-  }
 
   async fetch({ user, repo, tag, page }) {
     page = page ? `&page=${page}` : ''
@@ -217,7 +217,7 @@ export default class DockerSize extends BaseJsonService {
     }
   }
 
-  async handle({ user, repo, tag }, { sort, arch }) {
+  async handle({ user, repo, tag }, { sort, arch, units }) {
     let data
 
     if (!tag && sort === 'date') {
@@ -233,6 +233,6 @@ export default class DockerSize extends BaseJsonService {
     }
 
     const { size } = await this.transform({ tag, sort, data, arch })
-    return this.constructor.render({ size })
+    return renderSizeBadge(size, units, 'image size')
   }
 }
