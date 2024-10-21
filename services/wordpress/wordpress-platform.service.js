@@ -1,6 +1,5 @@
 import { NotFound, pathParams } from '../index.js'
-import { addv } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import { description, BaseWordpress } from './wordpress-base.js'
 import { versionColorForWordpressVersion } from './wordpress-version-color.js'
 
@@ -46,13 +45,6 @@ function WordpressRequiresVersion(extensionType) {
 
     static defaultBadgeData = { label: 'wordpress' }
 
-    static render({ wordpressVersion }) {
-      return {
-        message: addv(wordpressVersion),
-        color: versionColor(wordpressVersion),
-      }
-    }
-
     async handle({ slug }) {
       const { requires: wordpressVersion } = await this.fetch({
         extensionType,
@@ -65,7 +57,7 @@ function WordpressRequiresVersion(extensionType) {
         })
       }
 
-      return this.constructor.render({ wordpressVersion })
+      return renderVersionBadge({ version: wordpressVersion })
     }
   }
 }
@@ -93,21 +85,18 @@ class WordpressPluginTestedVersion extends BaseWordpress {
 
   static defaultBadgeData = { label: 'wordpress' }
 
-  static async render({ testedVersion }) {
-    // Atypically, the `render()` function of this badge is `async` because it needs to pull
-    // data from the server.
-    return {
-      message: `${addv(testedVersion)} tested`,
-      color: await versionColorForWordpressVersion(testedVersion),
-    }
-  }
-
   async handle({ slug }) {
     const { tested: testedVersion } = await this.fetch({
       extensionType: 'plugin',
       slug,
     })
-    return this.constructor.render({ testedVersion })
+    // Atypically, pulling color data from the server with async operation.
+    const color = await versionColorForWordpressVersion(testedVersion)
+    return renderVersionBadge({
+      version: testedVersion,
+      postfix: 'tested',
+      versionFormatter: () => color,
+    })
   }
 }
 
@@ -142,14 +131,6 @@ function RequiresPHPVersionForType(extensionType) {
 
     static defaultBadgeData = { label: 'php' }
 
-    static render({ version }) {
-      return {
-        label: 'php',
-        message: `>=${version}`,
-        color: versionColor(version),
-      }
-    }
-
     async handle({ slug }) {
       const { requires_php: requiresPhp } = await this.fetch({
         extensionType,
@@ -162,9 +143,7 @@ function RequiresPHPVersionForType(extensionType) {
         })
       }
 
-      return this.constructor.render({
-        version: requiresPhp,
-      })
+      return renderVersionBadge({ version: requiresPhp, prefix: '>=' })
     }
   }
 }
