@@ -20,7 +20,7 @@ export default class ChromeWebStoreLastUpdated extends BaseChromeWebStoreService
   }
 
   static defaultBadgeData = {
-    label: 'extension last updated',
+    label: 'last updated',
   }
 
   async handle({ storeId }) {
