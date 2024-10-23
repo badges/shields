@@ -1,9 +1,5 @@
-import { ServiceTester } from '../tester.js'
-
-export const t = new ServiceTester({
-  id: 'scoop',
-  title: 'Scoop License',
-})
+import { createServiceTester } from '../tester.js'
+export const t = await createServiceTester()
 
 t.create('License (valid) - with nested response')
   .get('/l/ngrok.json')
