@@ -10,7 +10,7 @@ const bucketsSchema = Joi.object()
   .pattern(/.+/, Joi.string().pattern(gitHubRepoRegExp).required())
   .required()
 
-export default class ScoopBase extends ConditionalGithubAuthV3Service {
+export class ScoopBase extends ConditionalGithubAuthV3Service {
   async fetch({ app, schema }, queryParams) {
     if (!this.buckets) {
       this.buckets = await fetchJsonFromRepo(this, {
@@ -68,3 +68,6 @@ export default class ScoopBase extends ConditionalGithubAuthV3Service {
     }
   }
 }
+
+export const description =
+  "App's containing bucket. Can either be a name (e.g `extras`) or a URL to a GitHub Repo (e.g `https://github.com/jewlexx/personal-scoop`)"

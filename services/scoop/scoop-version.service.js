@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import ScoopBase from './scoop-base.js'
+import { description, ScoopBase } from './scoop-base.js'
 
 const scoopSchema = Joi.object({
   version: Joi.string().required(),
@@ -33,8 +33,7 @@ export default class ScoopVersion extends ScoopBase {
           pathParam({ name: 'app', example: 'ngrok' }),
           queryParam({
             name: 'bucket',
-            description:
-              "App's containing bucket. Can either be a name (e.g `extras`) or a URL to a GitHub Repo (e.g `https://github.com/jewlexx/personal-scoop`)",
+            description,
             example: 'extras',
           }),
         ],

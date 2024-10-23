@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import toArray from '../../core/base-service/to-array.js'
-import ScoopBase from './scoop-base.js'
+import { description, ScoopBase } from './scoop-base.js'
 
 const scoopLicenseSchema = Joi.object({
   license: Joi.alternatives()
@@ -42,8 +42,7 @@ export default class ScoopLicense extends ScoopBase {
           pathParam({ name: 'app', example: 'ngrok' }),
           queryParam({
             name: 'bucket',
-            description:
-              "App's containing bucket. Can either be a name (e.g `extras`) or a URL to a GitHub Repo (e.g `https://github.com/jewlexx/personal-scoop`)",
+            description,
             example: 'extras',
           }),
         ],
