@@ -27,13 +27,13 @@ export default class ScoopVersion extends ScoopBase {
     '/scoop/v/{app}': {
       get: {
         summary: 'Scoop Version',
-        description:
-          '[Scoop](https://scoop.sh/) is a command-line installer for Windows',
+        description,
         parameters: [
           pathParam({ name: 'app', example: 'ngrok' }),
           queryParam({
             name: 'bucket',
-            description,
+            description:
+              "App's containing bucket. Can either be a name (e.g `extras`) or a URL to a GitHub Repo (e.g `https://github.com/jewlexx/personal-scoop`)",
             example: 'extras',
           }),
         ],

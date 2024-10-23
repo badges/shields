@@ -36,13 +36,13 @@ export default class ScoopLicense extends ScoopBase {
     '/scoop/l/{app}': {
       get: {
         summary: 'Scoop License',
-        description:
-          '[Scoop](https://scoop.sh/) is a command-line installer for Windows',
+        description,
         parameters: [
           pathParam({ name: 'app', example: 'ngrok' }),
           queryParam({
             name: 'bucket',
-            description,
+            description:
+              "App's containing bucket. Can either be a name (e.g `extras`) or a URL to a GitHub Repo (e.g `https://github.com/jewlexx/personal-scoop`)",
             example: 'extras',
           }),
         ],
