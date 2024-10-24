@@ -6,7 +6,6 @@ import {
 } from '../test-validators.js'
 import {
   queryIndex,
-  nuGetV3VersionJsonWithDash,
   nuGetV3VersionJsonFirstCharZero,
   nuGetV3VersionJsonFirstCharNotZero,
   nuGetV3VersionJsonBuildMetadataWithDash,
@@ -49,24 +48,6 @@ t.create('version (valid)')
   .expectBadge({
     label: 'nuget',
     message: isVPlusDottedVersionNClauses,
-  })
-
-t.create('version (yellow badge)')
-  .get('/v/Microsoft.AspNetCore.Mvc.json')
-  .intercept(nock =>
-    nock('https://api.nuget.org').get('/v3/index.json').reply(200, queryIndex),
-  )
-  .intercept(nock =>
-    nock('https://api-v2v3search-0.nuget.org')
-      .get(
-        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2',
-      )
-      .reply(200, nuGetV3VersionJsonWithDash),
-  )
-  .expectBadge({
-    label: 'nuget',
-    message: 'v1.2-beta',
-    color: 'orange',
   })
 
 t.create('version (orange badge)')
@@ -147,24 +128,6 @@ t.create('version (pre) (valid)')
   .expectBadge({
     label: 'nuget',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-  })
-
-t.create('version (pre) (yellow badge)')
-  .get('/vpre/Microsoft.AspNetCore.Mvc.json')
-  .intercept(nock =>
-    nock('https://api.nuget.org').get('/v3/index.json').reply(200, queryIndex),
-  )
-  .intercept(nock =>
-    nock('https://api-v2v3search-0.nuget.org')
-      .get(
-        '/query?q=packageid%3Amicrosoft.aspnetcore.mvc&prerelease=true&semVerLevel=2',
-      )
-      .reply(200, nuGetV3VersionJsonWithDash),
-  )
-  .expectBadge({
-    label: 'nuget',
-    message: 'v1.2-beta',
-    color: 'orange',
   })
 
 t.create('version (pre) (orange badge)')
