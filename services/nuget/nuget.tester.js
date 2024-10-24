@@ -66,7 +66,7 @@ t.create('version (yellow badge)')
   .expectBadge({
     label: 'nuget',
     message: 'v1.2-beta',
-    color: 'yellow',
+    color: 'orange',
   })
 
 t.create('version (orange badge)')
@@ -164,7 +164,7 @@ t.create('version (pre) (yellow badge)')
   .expectBadge({
     label: 'nuget',
     message: 'v1.2-beta',
-    color: 'yellow',
+    color: 'orange',
   })
 
 t.create('version (pre) (orange badge)')
