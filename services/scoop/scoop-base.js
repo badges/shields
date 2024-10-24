@@ -11,6 +11,10 @@ const bucketsSchema = Joi.object()
   .required()
 
 export class ScoopBase extends ConditionalGithubAuthV3Service {
+  // The buckets file (https://github.com/lukesampson/scoop/blob/master/buckets.json) changes very rarely.
+  // Cache it for the lifetime of the current Node.js process.
+  buckets = null
+
   async fetch({ app, schema }, queryParams) {
     if (!this.buckets) {
       this.buckets = await fetchJsonFromRepo(this, {

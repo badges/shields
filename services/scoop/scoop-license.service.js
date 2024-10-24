@@ -20,10 +20,6 @@ const queryParamSchema = Joi.object({
 })
 
 export default class ScoopLicense extends ScoopBase {
-  // The buckets file (https://github.com/lukesampson/scoop/blob/master/buckets.json) changes very rarely.
-  // Cache it for the lifetime of the current Node.js process.
-  buckets = null
-
   static category = 'license'
 
   static route = {

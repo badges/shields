@@ -1,41 +1,42 @@
 import { createServiceTester } from '../tester.js'
+
 export const t = await createServiceTester()
 
 t.create('License (valid) - with nested response')
-  .get('/l/ngrok.json')
+  .get('/ngrok.json')
   .expectBadge({
     label: 'license',
     message: 'Shareware',
   })
 
 t.create('License (valid) - with string response')
-  .get('/l/nvs.json')
+  .get('/nvs.json')
   .expectBadge({
     label: 'license',
     message: 'MIT',
   })
 
-t.create('License (invalid)').get('/l/not-a-real-app.json').expectBadge({
+t.create('License (invalid)').get('/not-a-real-app.json').expectBadge({
   label: 'license',
   message: 'not-a-real-app not found in bucket "main"',
 })
 
 t.create('License (valid custom bucket)')
-  .get('/l/atom.json?bucket=extras')
+  .get('/atom.json?bucket=extras')
   .expectBadge({
     label: 'license',
     message: 'MIT',
   })
 
 t.create('license (not found in custom bucket)')
-  .get('/l/not-a-real-app.json?bucket=extras')
+  .get('/not-a-real-app.json?bucket=extras')
   .expectBadge({
     label: 'license',
     message: 'not-a-real-app not found in bucket "extras"',
   })
 
 t.create('license (wrong bucket)')
-  .get('/l/not-a-real-app.json?bucket=not-a-real-bucket')
+  .get('/not-a-real-app.json?bucket=not-a-real-bucket')
   .expectBadge({
     label: 'license',
     message: 'bucket "not-a-real-bucket" not found',
@@ -47,7 +48,7 @@ const validBucketUrl = encodeURIComponent(
 )
 
 t.create('license (valid bucket url)')
-  .get(`/l/sfsu.json?bucket=${validBucketUrl}`)
+  .get(`/sfsu.json?bucket=${validBucketUrl}`)
   .expectBadge({
     label: 'license',
     message: 'Apache-2.0',
@@ -58,14 +59,14 @@ const validBucketUrlTrailingSlash = encodeURIComponent(
 )
 
 t.create('license (valid bucket url)')
-  .get(`/l/sfsu.json?bucket=${validBucketUrlTrailingSlash}`)
+  .get(`/sfsu.json?bucket=${validBucketUrlTrailingSlash}`)
   .expectBadge({
     label: 'license',
     message: 'Apache-2.0',
   })
 
 t.create('license (not found in custom bucket)')
-  .get(`/l/not-a-real-app.json?bucket=${validBucketUrl}`)
+  .get(`/not-a-real-app.json?bucket=${validBucketUrl}`)
   .expectBadge({
     label: 'license',
     message: `not-a-real-app not found in bucket "${decodeURIComponent(validBucketUrl)}"`,
@@ -74,7 +75,7 @@ t.create('license (not found in custom bucket)')
 const nonGithubUrl = encodeURIComponent('https://example.com/')
 
 t.create('license (non-github url)')
-  .get(`/l/not-a-real-app.json?bucket=${nonGithubUrl}`)
+  .get(`/not-a-real-app.json?bucket=${nonGithubUrl}`)
   .expectBadge({
     label: 'license',
     message: `bucket "${decodeURIComponent(nonGithubUrl)}" not found`,
@@ -83,7 +84,7 @@ t.create('license (non-github url)')
 const nonBucketRepo = encodeURIComponent('https://github.com/jewlexx/sfsu')
 
 t.create('version (non-bucket repo)')
-  .get(`/l/sfsu.json?bucket=${nonBucketRepo}`)
+  .get(`/sfsu.json?bucket=${nonBucketRepo}`)
   .expectBadge({
     label: 'license',
     // !!! Important note here
