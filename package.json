@@ -47,7 +47,7 @@
     "joi": "17.13.3",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^4.1.0",
-    "jsonpath-plus": "^10.0.6",
+    "jsonpath-plus": "^10.1.0",
     "lodash.countby": "^4.6.0",
     "lodash.groupby": "^4.6.0",
     "lodash.times": "^4.3.2",
