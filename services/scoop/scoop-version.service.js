@@ -1,14 +1,11 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { description, ScoopBase } from './scoop-base.js'
+import { queryParamSchema, description, ScoopBase } from './scoop-base.js'
 
 const scoopSchema = Joi.object({
   version: Joi.string().required(),
 }).required()
-const queryParamSchema = Joi.object({
-  bucket: Joi.string(),
-})
 
 export default class ScoopVersion extends ScoopBase {
   static category = 'version'

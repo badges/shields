@@ -10,6 +10,10 @@ const bucketsSchema = Joi.object()
   .pattern(/.+/, Joi.string().pattern(gitHubRepoRegExp).required())
   .required()
 
+export const queryParamSchema = Joi.object({
+  bucket: Joi.string(),
+})
+
 export class ScoopBase extends ConditionalGithubAuthV3Service {
   // The buckets file (https://github.com/lukesampson/scoop/blob/master/buckets.json) changes very rarely.
   // Cache it for the lifetime of the current Node.js process.

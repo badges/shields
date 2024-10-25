@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { renderLicenseBadge } from '../licenses.js'
 import toArray from '../../core/base-service/to-array.js'
-import { description, ScoopBase } from './scoop-base.js'
+import { queryParamSchema, description, ScoopBase } from './scoop-base.js'
 
 const scoopLicenseSchema = Joi.object({
   license: Joi.alternatives()
@@ -14,10 +14,6 @@ const scoopLicenseSchema = Joi.object({
     )
     .required(),
 }).required()
-
-const queryParamSchema = Joi.object({
-  bucket: Joi.string(),
-})
 
 export default class ScoopLicense extends ScoopBase {
   static category = 'license'
