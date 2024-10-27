@@ -30,7 +30,7 @@ t.create('last updated date based on the version (valid scenario)')
   })
 
 t.create('last updated date based on the version (invalid scenario)')
-  .get('/express.json?version=not-a-verion')
+  .get('/express.json?version=not-a-version')
   .expectBadge({
     label: 'last updated',
     message: 'version not found',

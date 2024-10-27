@@ -143,4 +143,25 @@ export default class NpmBase extends BaseJsonService {
 
     return this.constructor._validate(packageData, packageDataSchema)
   }
+
+  async fetch({ registryUrl, scope, packageName, schema }) {
+    registryUrl = registryUrl || this.constructor.defaultRegistryUrl
+    let url
+
+    if (scope === undefined) {
+      url = `${registryUrl}/${packageName}`
+    } else {
+      const scoped = this.constructor.encodeScopedPackage({
+        scope,
+        packageName,
+      })
+      url = `${registryUrl}/${scoped}`
+    }
+
+    return this._requestJson({
+      url,
+      schema,
+      httpErrors: { 404: 'package not found' },
+    })
+  }
 }

@@ -1,14 +1,10 @@
 import Joi from 'joi'
 import dayjs from 'dayjs'
 import { optionalUrl } from '../validators.js'
-import {
-  BaseJsonService,
-  InvalidParameter,
-  pathParam,
-  queryParam,
-} from '../index.js'
+import { InvalidParameter, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
+import NpmBase from './npm-base.js'
 
 const queryParamSchema = Joi.object({
   registry_uri: optionalUrl,
@@ -17,16 +13,13 @@ const queryParamSchema = Joi.object({
 
 const updateResponseSchema = Joi.object({
   time: Joi.object({
-    created: Joi.string().required(),
     modified: Joi.string().required(),
   })
     .pattern(Joi.string(), Joi.any())
     .required(),
 }).required()
 
-const defaultUrl = 'https://registry.npmjs.org'
-
-export class NpmLastUpdate extends BaseJsonService {
+export class NpmLastUpdate extends NpmBase {
   static category = 'activity'
 
   static route = {
@@ -66,19 +59,17 @@ export class NpmLastUpdate extends BaseJsonService {
     }
   }
 
-  async handle({ packageName }, queryParams) {
-    let url
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams,
+    )
 
-    if (queryParams !== undefined && queryParams.registry_uri !== undefined) {
-      url = `${queryParams.registry_uri}/${packageName}`
-    } else {
-      url = `${defaultUrl}/${packageName}`
-    }
-
-    const { time } = await this._requestJson({
+    const { time } = await this.fetch({
+      registryUrl,
+      scope,
+      packageName,
       schema: updateResponseSchema,
-      url,
-      httpErrors: { 404: 'package not found' },
     })
 
     let date
