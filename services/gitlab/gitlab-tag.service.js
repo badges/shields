@@ -1,8 +1,6 @@
 import Joi from 'joi'
-import { version as versionColor } from '../color-formatters.js'
 import { optionalUrl } from '../validators.js'
-import { latest } from '../version.js'
-import { addv } from '../text-formatters.js'
+import { latest, renderVersionBadge } from '../version.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
 import GitLabBase from './gitlab-base.js'
@@ -63,13 +61,6 @@ export default class GitlabTag extends GitLabBase {
 
   static defaultBadgeData = { label: 'tag' }
 
-  static render({ version, sort }) {
-    return {
-      message: addv(version),
-      color: sort === 'semver' ? versionColor(version) : 'blue',
-    }
-  }
-
   async fetch({ project, baseUrl }) {
     // https://docs.gitlab.com/ee/api/tags.html
     // N.B. the documentation has contradictory information about default sort order.
@@ -114,6 +105,6 @@ export default class GitlabTag extends GitLabBase {
       sort,
       includePrereleases: pre !== undefined,
     })
-    return this.constructor.render({ version, sort })
+    return renderVersionBadge({ version })
   }
 }

@@ -24,14 +24,6 @@ t.create('version (valid)')
     color: 'blue',
   })
 
-t.create('version (yellow badge)')
-  .get('/feedz/v/shieldstests/public/Shields.TestPreOnly.json')
-  .expectBadge({
-    label: 'feedz',
-    message: 'v0.1.0-pre',
-    color: 'yellow',
-  })
-
 t.create('version (orange badge)')
   .get('/feedz/v/shieldstests/public/Shields.NoV1.json')
   .expectBadge({
@@ -75,14 +67,6 @@ t.create('version (pre) (valid)')
     label: 'feedz',
     message: 'v1.0.0',
     color: 'blue',
-  })
-
-t.create('version (pre) (yellow badge)')
-  .get('/feedz/vpre/shieldstests/public/Shields.TestPreOnly.json')
-  .expectBadge({
-    label: 'feedz',
-    message: 'v0.1.0-pre',
-    color: 'yellow',
   })
 
 t.create('version (pre) (orange badge)')

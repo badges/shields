@@ -23,7 +23,10 @@ function version(version) {
   if (first === 'v') {
     first = version[1]
   }
-  if (first === '0' || /alpha|beta|snapshot|dev|pre|rc/i.test(version)) {
+  if (
+    first === '0' ||
+    /alpha|beta|snapshot|dev|pre|rc|scm|cvs/i.test(version)
+  ) {
     return 'orange'
   } else {
     return 'blue'
