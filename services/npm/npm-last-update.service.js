@@ -4,7 +4,7 @@ import { optionalUrl } from '../validators.js'
 import { InvalidParameter, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import NpmBase from './npm-base.js'
+import NpmBase, { packageNameDescription } from './npm-base.js'
 
 const queryParamSchema = Joi.object({
   registry_uri: optionalUrl,
@@ -22,11 +22,10 @@ const updateResponseSchema = Joi.object({
 export class NpmLastUpdate extends NpmBase {
   static category = 'activity'
 
-  static route = {
-    base: 'npm/last-update',
-    pattern: ':packageName',
-    queryParamSchema,
-  }
+  static route = this.buildRoute('npm/last-update', {
+    withTag: false,
+    queryParams: queryParamSchema,
+  })
 
   static openApi = {
     '/npm/last-update/{packageName}': {
@@ -36,6 +35,7 @@ export class NpmLastUpdate extends NpmBase {
           pathParam({
             name: 'packageName',
             example: 'express',
+            packageNameDescription,
           }),
           queryParam({
             name: 'registry_uri',
@@ -72,15 +72,13 @@ export class NpmLastUpdate extends NpmBase {
       schema: updateResponseSchema,
     })
 
-    let date
-    if (queryParams !== undefined && queryParams.version !== undefined) {
-      if (time[queryParams.version] === undefined) {
-        throw new InvalidParameter({ prettyMessage: 'version not found' })
-      }
-      date = dayjs(time[queryParams.version])
-    } else {
-      date = dayjs(time.modified)
+    const version = queryParams?.version
+
+    if (version && !time[version]) {
+      throw new InvalidParameter({ prettyMessage: 'version not found' })
     }
+
+    const date = version ? dayjs(time[version]) : dayjs(time.modified)
 
     return this.constructor.render({ date })
   }
