@@ -1,15 +1,9 @@
 import Joi from 'joi'
 import dayjs from 'dayjs'
-import { optionalUrl } from '../validators.js'
 import { InvalidParameter, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
-
-const queryParamSchema = Joi.object({
-  registry_uri: optionalUrl,
-  version: Joi.string(),
-}).required()
 
 const updateResponseSchema = Joi.object({
   time: Joi.object({
@@ -19,12 +13,16 @@ const updateResponseSchema = Joi.object({
     .required(),
 }).required()
 
+const additionalQueryParamSchema = {
+  version: Joi.string(),
+}
+
 export class NpmLastUpdate extends NpmBase {
   static category = 'activity'
 
   static route = this.buildRoute('npm/last-update', {
     withTag: false,
-    queryParams: queryParamSchema,
+    additionalQueryParamSchema,
   })
 
   static openApi = {
