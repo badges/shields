@@ -139,6 +139,27 @@ describe('The server', function () {
       expect(() => JSON.parse(body)).not.to.throw()
     })
 
+    describe('Content Security Policy', function () {
+      it('should disable javascript when serving SVG content (no extension)', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green`)
+        expect(headers['content-security-policy']).to.equal(
+          "script-src 'none';",
+        )
+      })
+
+      it('should disable javascript when serving SVG content (with extension)', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green.svg`)
+        expect(headers['content-security-policy']).to.equal(
+          "script-src 'none';",
+        )
+      })
+
+      it('should not send content security headers when serving JSON content', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green.json`)
+        expect(headers).not.to.have.property('content-security-policy')
+      })
+    })
+
     it('should preserve label case', async function () {
       const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
       expect(statusCode).to.equal(200)
