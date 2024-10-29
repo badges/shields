@@ -45,22 +45,18 @@ export default class NpmBase extends BaseJsonService {
     serviceKey: 'npm',
   }
 
-  static buildRoute(base, { withTag, additionalQueryParamSchema } = {}) {
+  static buildRoute(base, { withTag } = {}) {
     if (withTag) {
       return {
         base,
         pattern: ':scope(@[^/]+)?/:packageName/:tag*',
-        queryParamSchema: additionalQueryParamSchema
-          ? queryParamSchema.append(additionalQueryParamSchema)
-          : queryParamSchema,
+        queryParamSchema,
       }
     } else {
       return {
         base,
         pattern: ':scope(@[^/]+)?/:packageName',
-        queryParamSchema: additionalQueryParamSchema
-          ? queryParamSchema.append(additionalQueryParamSchema)
-          : queryParamSchema,
+        queryParamSchema,
       }
     }
   }

@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import dayjs from 'dayjs'
-import { InvalidParameter, pathParam, queryParam } from '../index.js'
+import { pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
@@ -13,17 +13,10 @@ const updateResponseSchema = Joi.object({
     .required(),
 }).required()
 
-const additionalQueryParamSchema = {
-  version: Joi.string(),
-}
-
 export class NpmLastUpdate extends NpmBase {
   static category = 'activity'
 
-  static route = this.buildRoute('npm/last-update', {
-    withTag: false,
-    additionalQueryParamSchema,
-  })
+  static route = this.buildRoute('npm/last-update', { withTag: false })
 
   static openApi = {
     '/npm/last-update/{packageName}': {
@@ -70,13 +63,7 @@ export class NpmLastUpdate extends NpmBase {
       schema: updateResponseSchema,
     })
 
-    const version = queryParams?.version
-
-    if (version && !time[version]) {
-      throw new InvalidParameter({ prettyMessage: 'version not found' })
-    }
-
-    const date = version ? dayjs(time[version]) : dayjs(time.modified)
+    const date = dayjs(time.modified)
 
     return this.constructor.render({ date })
   }
