@@ -7,6 +7,7 @@ import NpmBase, { packageNameDescription } from './npm-base.js'
 
 const updateResponseSchema = Joi.object({
   time: Joi.object({
+    created: Joi.string().required(),
     modified: Joi.string().required(),
   })
     .pattern(Joi.string(), Joi.any())
@@ -63,7 +64,7 @@ export class NpmLastUpdate extends NpmBase {
       schema: updateResponseSchema,
     })
 
-    const date = dayjs(time.modified)
+    const date = time.modified ? dayjs(time.modified) : dayjs(time.created)
 
     return this.constructor.render({ date })
   }
