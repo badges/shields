@@ -33,10 +33,6 @@ export class NpmLastUpdate extends NpmBase {
             name: 'registry_uri',
             example: 'https://registry.npmjs.com',
           }),
-          queryParam({
-            name: 'version',
-            example: '5.0.0',
-          }),
         ],
       },
     },
