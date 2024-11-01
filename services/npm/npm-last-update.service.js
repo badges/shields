@@ -12,7 +12,7 @@ const updateResponseSchema = Joi.object({
   })
     .pattern(Joi.string(), Joi.any())
     .required(),
-  'dist-tags': Joi.object().pattern(Joi.string(), Joi.any()).required(),
+  'dist-tags': Joi.object().pattern(Joi.string(), Joi.string()).required(),
 }).required()
 
 export class NpmLastUpdate extends NpmBase {
