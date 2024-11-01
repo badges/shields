@@ -4,6 +4,33 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-11-01
+
+- add content security policy header to SVG responses [#10642](https://github.com/badges/shields/issues/10642)
+- Refactor - use renderVersionBadge - part 3 [luarocks gitlab nuget feedz] [#10630](https://github.com/badges/shields/issues/10630)
+- [Scoop] Added scoop-license badge. [#10627](https://github.com/badges/shields/issues/10627)
+- [Chromewebstore] Extension size & last updated [#10613](https://github.com/badges/shields/issues/10613)
+- Deprecate HackageDeps service [#10618](https://github.com/badges/shields/issues/10618)
+- Add [CratesUserDownloads] service and tester [#10619](https://github.com/badges/shields/issues/10619)
+- refactor - usage renderVersionBadge - part 2 [amo archlinux aur bower cdnjs chromewebstore cocoapods conan conda cookbook cpan cran crates ctan curseforge debian docker dub eclipsemarketplace elmpackage f-droid factorio fedora feedz flathub galaxytoolshed gem gitea github gitlab greasyfork hackage hexpm homebrew itunes jenkins jetbrains jitpack jsr mavenmetadata modrinth nexus npm nuget openvsx opm ore packagist piwheels polymart pub puppetforge pypi ros scoop snapcraft spack spiget thunderstore twitch ubuntu vaadindirectory vcpkg visualstudioappcenter visualstudiomarketplace vpm wordpress] [#10615](https://github.com/badges/shields/issues/10615)
+- set VM size to shared-cpu-1x/256Mb on staging apps [#10617](https://github.com/badges/shields/issues/10617)
+- update failing test to use package iptables [#10616](https://github.com/badges/shields/issues/10616)
+- [Snapcraft] - Added snapcraft last update badge [#10610](https://github.com/badges/shields/issues/10610)
+- [GitHubHacktoberfest] 2024 support [#10612](https://github.com/badges/shields/issues/10612)
+- change nexus test for valid version [#10609](https://github.com/badges/shields/issues/10609)
+- Refactor version rendering in [wordpress nexus] and [f-droid] services [#10608](https://github.com/badges/shields/issues/10608)
+- Add option for IDs to have a prefix [#10576](https://github.com/badges/shields/issues/10576)
+- add [homebrew] cask download badge [#10595](https://github.com/badges/shields/issues/10595)
+- remove prefix v for commit hash version [#10597](https://github.com/badges/shields/issues/10597)
+- [Maven] Added badge for Maven-Cenral last-update (#10301) [#10585](https://github.com/badges/shields/issues/10585)
+- [DynamicXml] parse doc as html if served with text/html content type [#10607](https://github.com/badges/shields/issues/10607)
+- add created timestamp to tokens table [#10573](https://github.com/badges/shields/issues/10573)
+- Revert "Use old.stats.jenkins.io for JSON data (#10522)" [#10537](https://github.com/badges/shields/issues/10537)
+- catch queries that cause TypeError [#10556](https://github.com/badges/shields/issues/10556)
+- publish blog about security vuln [#10555](https://github.com/badges/shields/issues/10555)
+- call out security advisory in changelog [#10554](https://github.com/badges/shields/issues/10554)
+- Dependency updates
+
 ## server-2024-09-25
 
 This release includes an important security fix. See
