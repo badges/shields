@@ -81,15 +81,18 @@ export class NpmLastUpdate extends NpmBase {
 
     let date
 
-    if (tag && tag in packageData['dist-tags']) {
+    if (tag) {
       const tagVersion = packageData['dist-tags'][tag]
+
+      if (!tagVersion) {
+        throw new NotFound({ prettyMessage: 'tag not found' })
+      }
+
       date = dayjs(packageData.time[tagVersion])
-    } else if (tag && !(tag in packageData['dist-tags'])) {
-      throw new NotFound({ prettyMessage: 'tag not found' })
     } else {
-      date = packageData.time.modified
-        ? dayjs(packageData.time.modified)
-        : dayjs(packageData.time.created)
+      const timeKey = packageData.time.modified ? 'modified' : 'created'
+
+      date = dayjs(packageData.time[timeKey])
     }
 
     return this.constructor.render({ date })
