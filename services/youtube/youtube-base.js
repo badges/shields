@@ -4,7 +4,17 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 
 const description = `
-The YouTube badges provided by Shields.io leverage the YouTube API Services. By using this badge, you are:
+Shields.io is committed to protecting the privacy of its users. We do not collect, store, or track any personal
+information or data returned by the YouTube API Services. Our service is designed to generate badges based on
+public YouTube data, and we do not retain any user-specific information:
+* Data Collection: we do not collect, store, or process any personal data from users. The information
+retrieved from the YouTube API is used solely to generate badges in real-time and is not stored or saved by us.
+* Cookies and Tracking: Shields.io does not use cookies or any other tracking technologies to collect or store user data.
+* Data Sharing: no information retrieved via the YouTube API is shared with third parties or used beyond generating the
+requested badges.
+* Contact Information: if you have any questions or concerns about our data practices, please contact us at team at shields.io.
+
+By using the YouTube badge, you are:
 * agreeing to be bound by the YouTube Terms of Service, which can be found here: [https://www.youtube.com/t/terms](https://www.youtube.com/t/terms)
 * acknowledging and accepting the Google Privacy Policy, which can be found here: [https://policies.google.com/privacy](https://policies.google.com/privacy)
 `
