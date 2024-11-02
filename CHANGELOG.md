@@ -4,6 +4,24 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-11-02
+
+- cleanly handle null or undefined result from jsonpath-plus [#10645](https://github.com/badges/shields/issues/10645)
+- add content security policy header to SVG responses [#10642](https://github.com/badges/shields/issues/10642)
+- [Scoop] Added scoop-license badge. [#10627](https://github.com/badges/shields/issues/10627)
+- [Chromewebstore] Extension size & last updated [#10613](https://github.com/badges/shields/issues/10613)
+- Deprecate HackageDeps service [#10618](https://github.com/badges/shields/issues/10618)
+- Add [CratesUserDownloads] service and tester [#10619](https://github.com/badges/shields/issues/10619)
+- [Snapcraft] - Added snapcraft last update badge [#10610](https://github.com/badges/shields/issues/10610)
+- [GitHubHacktoberfest] 2024 support [#10612](https://github.com/badges/shields/issues/10612)
+- add [homebrew] cask download badge [#10595](https://github.com/badges/shields/issues/10595)
+- remove prefix v for commit hash version [#10597](https://github.com/badges/shields/issues/10597)
+- [Maven] Added badge for Maven-Cenral last-update (#10301) [#10585](https://github.com/badges/shields/issues/10585)
+- [DynamicXml] parse doc as html if served with text/html content type [#10607](https://github.com/badges/shields/issues/10607)
+- Revert "Use old.stats.jenkins.io for JSON data (#10522)" [#10537](https://github.com/badges/shields/issues/10537)
+- catch queries that cause TypeError [#10556](https://github.com/badges/shields/issues/10556)
+- Dependency updates
+
 ## server-2024-09-25
 
 This release includes an important security fix. See
