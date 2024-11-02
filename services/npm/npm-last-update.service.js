@@ -101,6 +101,7 @@ export class NpmLastUpdate extends NpmBase {
       throw new InvalidResponse({ prettyMessage: 'invalid date' })
     }
 
+    // comment to trigger build
     return this.constructor.render({ date })
   }
 }
