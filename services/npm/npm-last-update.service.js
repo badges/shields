@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import dayjs from 'dayjs'
-import { NotFound, pathParam, queryParam } from '../index.js'
+import { InvalidResponse, NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
 import NpmBase, { packageNameDescription } from './npm-base.js'
@@ -95,6 +95,10 @@ export class NpmLastUpdate extends NpmBase {
       const timeKey = packageData.time.modified ? 'modified' : 'created'
 
       date = dayjs(packageData.time[timeKey])
+    }
+
+    if (!date.isValid) {
+      throw new InvalidResponse({ prettyMessage: 'invalid date' })
     }
 
     return this.constructor.render({ date })
