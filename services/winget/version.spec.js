@@ -39,5 +39,10 @@ describe('Winget Version helpers', function () {
     given('unknown', '1.0').expect(-1)
     given('unknown', '1.fork').expect(-1)
     given('unknown', 'UNKNOWN').expect(0)
+
+    // porting failure tests
+    // https://github.com/badges/shields/pull/10245#discussion_r1817931237
+    // trailing .0 and .0-beta
+    given('1.6.0', '1.6.0-beta.98').expect(-1)
   })
 })

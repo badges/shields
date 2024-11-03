@@ -47,6 +47,9 @@ function compareVersion(v1, v2) {
   const parts1 = v1Trimmed.split('.')
   const parts2 = v2Trimmed.split('.')
 
+  trimLastZeros(parts1)
+  trimLastZeros(parts2)
+
   for (let i = 0; i < Math.min(parts1.length, parts2.length); i++) {
     const part1 = parts1[i]
     const part2 = parts2[i]
@@ -61,19 +64,10 @@ function compareVersion(v1, v2) {
     return 0
   }
 
-  // ignore .0s at the end
   if (parts1.length > parts2.length) {
-    for (let i = parts2.length; i < parts1.length; i++) {
-      if (parts1[i].trim() !== '0') {
-        return 1
-      }
-    }
+    return 1
   } else if (parts1.length < parts2.length) {
-    for (let i = parts1.length; i < parts2.length; i++) {
-      if (parts2[i].trim() !== '0') {
-        return -1
-      }
-    }
+    return -1
   }
 
   return 0
@@ -97,6 +91,17 @@ function trimPrefix(version) {
     return version.slice(digitPos.index)
   }
   return version
+}
+
+/**
+ * Removes all trailing zeros from a version number part array.
+ *
+ * @param {string[]} parts - parts
+ */
+function trimLastZeros(parts) {
+  while (parts.length > 1 && parts[parts.length - 1].trim() === '0') {
+    parts.pop()
+  }
 }
 
 /**
