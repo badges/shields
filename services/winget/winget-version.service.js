@@ -14,6 +14,14 @@ const schema = Joi.object({
           Joi.object({
             type: Joi.string().required(),
             name: Joi.string().required(),
+            object: Joi.object({
+              entries: Joi.array().items(
+                Joi.object({
+                  type: Joi.string().required(),
+                  name: Joi.string().required(),
+                }),
+              ),
+            }).required(),
           }),
         ),
       })
@@ -64,6 +72,14 @@ export default class WingetVersion extends GithubAuthV4Service {
                 entries {
                   type
                   name
+                  object {
+                    ... on Tree {
+                      entries {
+                        type
+                        name
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -78,15 +94,26 @@ export default class WingetVersion extends GithubAuthV4Service {
 
   async handle({ name }) {
     const json = await this.fetch({ name })
-    if (json.data.repository.object === null) {
+    if (json.data.repository.object?.entries == null) {
       throw new InvalidParameter({
         prettyMessage: 'package not found',
       })
     }
     const entries = json.data.repository.object.entries
-    const directories = entries.filter(file => file.type === 'tree')
-    const versions = directories.map(file => file.name)
+    const directories = entries.filter(entry => entry.type === 'tree')
+    const versionDirs = directories.filter(dir =>
+      dir.object.entries.some(
+        file => file.type === 'blob' && file.name === `${name}.yaml`,
+      ),
+    )
+    const versions = versionDirs.map(dir => dir.name)
     const version = latest(versions)
+
+    if (version == null) {
+      throw new InvalidParameter({
+        prettyMessage: 'no versions found',
+      })
+    }
 
     return renderVersionBadge({ version })
   }
