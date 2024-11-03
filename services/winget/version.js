@@ -163,7 +163,7 @@ function latest(versions) {
 
   let version = versions[0]
   for (let i = 1; i < len; i++) {
-    if (compareVersion(version, versions[i]) < 0) {
+    if (compareVersion(version, versions[i]) <= 0) {
       version = versions[i]
     }
   }

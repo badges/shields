@@ -1,5 +1,5 @@
 import { test, given } from 'sazerac'
-import { compareVersion } from './version.js'
+import { compareVersion, latest } from './version.js'
 
 describe('Winget Version helpers', function () {
   test(compareVersion, () => {
@@ -44,5 +44,11 @@ describe('Winget Version helpers', function () {
     // https://github.com/badges/shields/pull/10245#discussion_r1817931237
     // trailing .0 and .0-beta
     given('1.6.0', '1.6.0-beta.98').expect(-1)
+  })
+
+  test(latest, () => {
+    // compareVersion('3.1.1.0', '3.1.1') == 0, so It's free to choose any of them.
+    // I don't know why but it looks winget registry uses last newest version.
+    given(['3.1.1.0', '3.1.1']).expect('3.1.1')
   })
 })
