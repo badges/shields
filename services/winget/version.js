@@ -151,9 +151,8 @@ function compareVersionPart(part1, part2) {
  * @param {string[]} versions - The array of version numbers to compare
  * @returns {string|undefined} The largest version number as a string, or undefined if the array is empty
  * @example
- * latest(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because it is the largest version number and pre-release versions are excluded.
- * latest(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because pre-release versions are included but none of them are present in the array.
- * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta']) // returns '1.2.4' because pre-release versions are excluded and it is the largest version number among the remaining ones.
+ * latest(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because it is the largest version number.
+ * latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta']) // returns '2.0-beta'. there is no special handling for pre-release versions.
  */
 function latest(versions) {
   const len = versions.length
