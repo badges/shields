@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BaseSteamAPI</title>
+    <title>JSDoc: Module: services/winget/version</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BaseSteamAPI</h1>
+    <h1 class="page-title">Module: services/winget/version</h1>
 
     
 
@@ -28,41 +28,17 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-services_steam_steam-base.html">services/steam/steam-base</a>~</span>BaseSteamAPI<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>The steam api is based like /{interface}/{method}/v{version}/</p></div>
-        
-    
 </header>
 
 <article>
     <div class="container-overview">
     
         
+            <div class="description"><p>Comparing versions with winget's version comparator.</p>
+<p>See https://github.com/microsoft/winget-cli/blob/ae566c7bf21cfcc75be7ec30e4036a30eede8396/src/AppInstallerSharedLib/Versions.cpp for original implementation.</p></div>
+        
 
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="BaseSteamAPI"><span class="type-signature"></span>new BaseSteamAPI<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
 
 
 <dl class="details">
@@ -94,43 +70,19 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_steam_steam-base.js.html">services/steam/steam-base.js</a>, <a href="services_steam_steam-base.js.html#line12">line 12</a>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
     
 
     
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://partner.steamgames.com/doc/webapi_overview#2">https://partner.steamgames.com/doc/webapi_overview#2</a></li>
-        </ul>
-    </dd>
-    
 
     
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     
     </div>
 
@@ -147,19 +99,105 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id=".interf"><span class="type-signature">(static) </span>interf<span class="type-signature"></span></h4>
 
+    
+
+    
+    <h4 class="name" id="~compareVersion"><span class="type-signature">(inner) </span>compareVersion<span class="signature">(v1, v2)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>Steam API Interface</p>
+    <p>Compares two strings representing version numbers lexicographically and returns an integer value.</p>
 </div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>v1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The first version to compare</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>v2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The second version to compare</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -195,19 +233,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_steam_steam-base.js.html">services/steam/steam-base.js</a>, <a href="services_steam_steam-base.js.html#line18">line 18</a>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://partner.steamgames.com/doc/webapi_overview#2">https://partner.steamgames.com/doc/webapi_overview#2</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -218,17 +249,142 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>-1 if v1 is smaller than v2, 1 if v1 is larger than v2, 0 if v1 and v2 are equal</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>compareVersion('1.2.3', '1.2.4') // returns -1 because numeric part of first version is smaller than the numeric part of second version.</code></pre>
+
+
+
         
             
-<h4 class="name" id=".method"><span class="type-signature">(static) </span>method<span class="type-signature"></span></h4>
 
+    
+
+    
+    <h4 class="name" id="~compareVersionPart"><span class="type-signature">(inner) </span>compareVersionPart<span class="signature">(part1, part2)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>Steam API Method</p>
+    <p>Compares two strings representing version number parts lexicographically and returns an integer value.</p>
 </div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>part1</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The first version part to compare</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>part2</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The second version part to compare</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -264,19 +420,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_steam_steam-base.js.html">services/steam/steam-base.js</a>, <a href="services_steam_steam-base.js.html#line27">line 27</a>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://partner.steamgames.com/doc/webapi_overview#2">https://partner.steamgames.com/doc/webapi_overview#2</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -287,17 +436,119 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>-1 if part1 is smaller than part2, 1 if part1 is larger than part2, 0 if part1 and part2 are equal</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>compareVersionPart('3', '4') // returns -1 because numeric part of first part is smaller than the numeric part of second part.</code></pre>
+
+
+
         
             
-<h4 class="name" id=".version"><span class="type-signature">(static) </span>version<span class="type-signature"></span></h4>
 
+    
+
+    
+    <h4 class="name" id="~latest"><span class="type-signature">(inner) </span>latest<span class="signature">(versions)</span><span class="type-signature"> &rarr; {string|undefined}</span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    <p>Steam API Version</p>
+    <p>Finds the largest version number lexicographically from an array of strings representing version numbers and returns it as a string.</p>
 </div>
 
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>versions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The array of version numbers to compare</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -333,19 +584,12 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_steam_steam-base.js.html">services/steam/steam-base.js</a>, <a href="services_steam_steam-base.js.html#line36">line 36</a>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line157">line 157</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="https://partner.steamgames.com/doc/webapi_overview#2">https://partner.steamgames.com/doc/webapi_overview#2</a></li>
-        </ul>
-    </dd>
     
 
     
@@ -356,9 +600,349 @@
 
 
 
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
         
+<div class="param-desc">
+    <p>The largest version number as a string, or undefined if the array is empty</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
     
 
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>latest(['1.2.3', '1.2.4', '1.3', '2.0']) // returns '2.0' because it is the largest version number.
+latest(['1.2.3', '1.2.4', '1.3-alpha', '2.0-beta']) // returns '2.0-beta'. there is no special handling for pre-release versions.</code></pre>
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~trimLastZeros"><span class="type-signature">(inner) </span>trimLastZeros<span class="signature">(parts)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes all trailing zeros from a version number part array.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>parts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>parts</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line101">line 101</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~trimPrefix"><span class="type-signature">(inner) </span>trimPrefix<span class="signature">(version)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Removes all leading non-digit characters from a version number string
+if there is a digit before the split character, or no split characters exist.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>version</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The version number string to trim</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_winget_version.js.html">services/winget/version.js</a>, <a href="services_winget_version.js.html#line83">line 83</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The version number string with all leading non-digit characters removed</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
