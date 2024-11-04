@@ -47,6 +47,9 @@ describe('Winget Version helpers', function () {
   })
 
   test(latest, () => {
+    given(['1.2.3', '1.2.4', '2.0', '1.3.9.1']).expect('2.0')
+    given(['1.2.3', '1.2.4', '2.0-beta', '1.3-alpha']).expect('2.0-beta')
+
     // compareVersion('3.1.1.0', '3.1.1') == 0, so It's free to choose any of them.
     // I don't know why but it looks winget registry uses last newest version.
     given(['3.1.1.0', '3.1.1']).expect('3.1.1')
