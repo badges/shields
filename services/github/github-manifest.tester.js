@@ -11,14 +11,14 @@ export const t = new ServiceTester({
 t.create('Manifest version')
   .get('/v/sindresorhus/show-all-github-issues.json')
   .expectBadge({
-    label: 'version',
+    label: 'manifest',
     message: isVPlusDottedVersionAtLeastOne,
   })
 
 t.create('Manifest version (path)')
   .get('/v/RedSparr0w/IndieGala-Helper.json?filename=extension/manifest.json')
   .expectBadge({
-    label: 'version',
+    label: 'manifest',
     message: isVPlusDottedVersionAtLeastOne,
   })
 
@@ -27,7 +27,7 @@ t.create('Manifest version (path not found)')
     '/v/RedSparr0w/IndieGala-Helper.json?filename=invalid-directory/manifest.json',
   )
   .expectBadge({
-    label: 'version',
+    label: 'manifest',
     message:
       'repo not found, branch not found, or invalid-directory/manifest.json missing',
   })
@@ -54,6 +54,6 @@ t.create('Manifest object (path)')
 t.create('Manifest invalid json response')
   .get('/v/RedSparr0w/not-a-real-project.json')
   .expectBadge({
-    label: 'version',
+    label: 'manifest',
     message: 'repo not found, branch not found, or manifest.json missing',
   })
