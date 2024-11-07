@@ -7,7 +7,6 @@ import {
 
 // e.g. v19.3b0
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)
-const isShortSha = Joi.string().regex(/[0-9a-f]{7}/)
 
 export const t = new ServiceTester({
   id: 'GithubPipenv',
@@ -83,9 +82,9 @@ t.create('Locked version of unknown dependency')
 
 t.create('Locked version of VCS dependency')
   .get(
-    '/locked/dependency-version/thorn-oss/perception/dev/videoalignment.json',
+    '/locked/dependency-version/metabolize/rq-dashboard-on-heroku/dev/black.json',
   )
   .expectBadge({
-    label: 'videoalignment',
-    message: isShortSha,
+    label: 'black',
+    message: isBlackVersion,
   })
