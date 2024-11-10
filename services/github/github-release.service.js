@@ -66,7 +66,7 @@ class GithubRelease extends GithubAuthV3Service {
     )
     return renderVersionBadge({
       version,
-      forcePrerelease: isPrerelease,
+      isPrerelease,
     })
   }
 }
