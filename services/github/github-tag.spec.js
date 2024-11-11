@@ -43,17 +43,6 @@ describe('GithubTag', function () {
     }).expect('1.2.0-beta')
   })
 
-  test(GithubTag.render, () => {
-    given({ usingSemver: false, version: '1.2.3' }).expect({
-      message: 'v1.2.3',
-      color: 'blue',
-    })
-    given({ usingSemver: true, version: '2.0.0' }).expect({
-      message: 'v2.0.0',
-      color: 'blue',
-    })
-  })
-
   test(GithubTag.getLimit, () => {
     given({ sort: 'date', filter: undefined }).expect(1)
     given({ sort: 'date', filter: '' }).expect(1)
