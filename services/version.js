@@ -237,6 +237,7 @@ function rangeStart(v) {
  * @param {string} [options.prefix]  - The prefix to display on the message, such as ">=", "v", overrides the default behavior of using addv
  * @param {string} [options.postfix] - The postfix to display on the message, such as "tested"
  * @param {Function} [options.versionFormatter=versionColor] - The function to use to format the color of the badge based on the version number
+ * @param {boolean} [options.isPrerelease] - Whether the version is explicitly marked as a prerelease by upstream API
  * @returns {object} A badge object that has three properties: label, message, and color
  * @example
  * renderVersionBadge({version: '1.2.3', tag: 'alpha', defaultLabel: 'npm'}) // returns {label: 'npm@alpha', message: 'v1.2.3', color: 'orange'} because
@@ -250,13 +251,14 @@ function renderVersionBadge({
   prefix,
   postfix,
   versionFormatter = versionColor,
+  isPrerelease,
 }) {
   return {
     label: tag ? `${defaultLabel}@${tag}` : defaultLabel,
     message:
       (prefix ? `${prefix}${version}` : addv(version)) +
       (postfix ? ` ${postfix}` : ''),
-    color: versionFormatter(version),
+    color: versionFormatter(isPrerelease ? 'pre' : version),
   }
 }
 
