@@ -92,11 +92,7 @@ export class NpmLastUpdateWithTag extends NpmLastUpdateBase {
 }
 
 export class NpmLastUpdate extends NpmLastUpdateBase {
-  static route = {
-    base: 'npm/last-update',
-    pattern: ':scope(@[^/]+)?/:packageName',
-    queryParamSchema,
-  }
+  static route = this.buildRoute('npm/last-update', { withTag: false })
 
   static openApi = {
     '/npm/last-update/{packageName}': {
