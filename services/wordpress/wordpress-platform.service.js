@@ -94,7 +94,7 @@ class WordpressPluginTestedVersion extends BaseWordpress {
     const color = await versionColorForWordpressVersion(testedVersion)
     return renderVersionBadge({
       version: testedVersion,
-      postfix: 'tested',
+      suffix: 'tested',
       versionFormatter: () => color,
     })
   }

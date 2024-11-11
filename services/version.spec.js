@@ -155,7 +155,7 @@ describe('Version helpers', function () {
       message: 'v1.2.3',
       color: 'blue',
     })
-    given({ version: '1.2.3', postfix: 'tested' }).expect({
+    given({ version: '1.2.3', suffix: 'tested' }).expect({
       label: undefined,
       message: 'v1.2.3 tested',
       color: 'blue',
@@ -164,7 +164,7 @@ describe('Version helpers', function () {
       version: '1.2.3',
       tag: 'beta',
       defaultLabel: 'github',
-      postfix: 'tested',
+      suffix: 'tested',
     }).expect({
       label: 'github@beta',
       message: 'v1.2.3 tested',
@@ -197,7 +197,7 @@ describe('Version helpers', function () {
     given({
       version: '1.2.3',
       prefix: '^',
-      postfix: 'tested',
+      suffix: 'tested',
     }).expect({
       label: undefined,
       message: '^1.2.3 tested',
@@ -208,7 +208,7 @@ describe('Version helpers', function () {
       tag: 'beta',
       defaultLabel: 'github',
       prefix: '^',
-      postfix: 'tested',
+      suffix: 'tested',
     }).expect({
       label: 'github@beta',
       message: '^1.2.3 tested',
