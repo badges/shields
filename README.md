@@ -198,13 +198,11 @@ You can read more about [the project's inception][thread],
 
 Maintainers:
 
-- [calebcartwright](https://github.com/calebcartwright) (core team)
-- [chris48s](https://github.com/chris48s) (core team)
-- [Daniel15](https://github.com/Daniel15) (core team)
-- [paulmelnikow](https://github.com/paulmelnikow) (core team)
-- [platan](https://github.com/platan) (core team)
-- [PyvesB](https://github.com/PyvesB) (core team)
-- [RedSparr0w](https://github.com/RedSparr0w) (core team)
+- [calebcartwright](https://github.com/calebcartwright)
+- [chris48s](https://github.com/chris48s)
+- [jNullj](https://github.com/jnullj)
+- [paulmelnikow](https://github.com/paulmelnikow)
+- [PyvesB](https://github.com/PyvesB)
 
 Operations:
 
@@ -215,8 +213,11 @@ Operations:
 
 Alumni:
 
+- [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
+- [platan](https://github.com/platan)
+- [RedSparr0w](https://github.com/RedSparr0w)
 
 ## License
 
