@@ -3,13 +3,13 @@ import dayjs from 'dayjs'
 import { InvalidResponse, NotFound, pathParam, queryParam } from '../index.js'
 import { formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import NpmBase, { packageNameDescription } from './npm-base.js'
+import NpmBase, {
+  packageNameDescription,
+  queryParamSchema,
+} from './npm-base.js'
 
-const updateResponseSchema = Joi.object({
-  time: Joi.object({
-    created: Joi.string().required(),
-    modified: Joi.string().required(),
-  })
+const fullSchema = Joi.object({
+  time: Joi.object()
     .pattern(Joi.string().required(), Joi.string().required())
     .required(),
   'dist-tags': Joi.object()
@@ -17,28 +17,31 @@ const updateResponseSchema = Joi.object({
     .required(),
 }).required()
 
-export class NpmLastUpdate extends NpmBase {
+const abbreviatedSchema = Joi.object({
+  modified: Joi.string().required(),
+}).required()
+
+class NpmLastUpdateBase extends NpmBase {
   static category = 'activity'
 
-  static route = this.buildRoute('npm/last-update', { withTag: true })
+  static defaultBadgeData = { label: 'last updated' }
+
+  static render({ date }) {
+    return {
+      message: formatDate(date),
+      color: ageColor(date),
+    }
+  }
+}
+
+export class NpmLastUpdateWithTag extends NpmLastUpdateBase {
+  static route = {
+    base: 'npm/last-update',
+    pattern: ':scope(@[^/]+)?/:packageName/:tag',
+    queryParamSchema,
+  }
 
   static openApi = {
-    '/npm/last-update/{packageName}': {
-      get: {
-        summary: 'NPM Last Update',
-        parameters: [
-          pathParam({
-            name: 'packageName',
-            example: 'verdaccio',
-            packageNameDescription,
-          }),
-          queryParam({
-            name: 'registry_uri',
-            example: 'https://registry.npmjs.com',
-          }),
-        ],
-      },
-    },
     '/npm/last-update/{packageName}/{tag}': {
       get: {
         summary: 'NPM Last Update (with dist tag)',
@@ -61,15 +64,6 @@ export class NpmLastUpdate extends NpmBase {
     },
   }
 
-  static defaultBadgeData = { label: 'last updated' }
-
-  static render({ date }) {
-    return {
-      message: formatDate(date),
-      color: ageColor(date),
-    }
-  }
-
   async handle(namedParams, queryParams) {
     const { scope, packageName, tag, registryUrl } =
       this.constructor.unpackParams(namedParams, queryParams)
@@ -78,24 +72,62 @@ export class NpmLastUpdate extends NpmBase {
       registryUrl,
       scope,
       packageName,
-      schema: updateResponseSchema,
+      schema: fullSchema,
     })
 
-    let date
+    const tagVersion = packageData['dist-tags'][tag]
 
-    if (tag) {
-      const tagVersion = packageData['dist-tags'][tag]
-
-      if (!tagVersion) {
-        throw new NotFound({ prettyMessage: 'tag not found' })
-      }
-
-      date = dayjs(packageData.time[tagVersion])
-    } else {
-      const timeKey = packageData.time.modified ? 'modified' : 'created'
-
-      date = dayjs(packageData.time[timeKey])
+    if (!tagVersion) {
+      throw new NotFound({ prettyMessage: 'tag not found' })
     }
+
+    const date = dayjs(packageData.time[tagVersion])
+
+    if (!date.isValid) {
+      throw new InvalidResponse({ prettyMessage: 'invalid date' })
+    }
+
+    return this.constructor.render({ date })
+  }
+}
+
+export class NpmLastUpdate extends NpmLastUpdateBase {
+  static route = this.buildRoute('npm/last-update', { withTag: false })
+
+  static openApi = {
+    '/npm/last-update/{packageName}': {
+      get: {
+        summary: 'NPM Last Update',
+        parameters: [
+          pathParam({
+            name: 'packageName',
+            example: 'verdaccio',
+            packageNameDescription,
+          }),
+          queryParam({
+            name: 'registry_uri',
+            example: 'https://registry.npmjs.com',
+          }),
+        ],
+      },
+    },
+  }
+
+  async handle(namedParams, queryParams) {
+    const { scope, packageName, registryUrl } = this.constructor.unpackParams(
+      namedParams,
+      queryParams,
+    )
+
+    const packageData = await this.fetch({
+      registryUrl,
+      scope,
+      packageName,
+      schema: abbreviatedSchema,
+      abbreviated: true,
+    })
+
+    const date = dayjs(packageData.modified)
 
     if (!date.isValid) {
       throw new InvalidResponse({ prettyMessage: 'invalid date' })
