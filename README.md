@@ -204,13 +204,6 @@ Maintainers:
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
-Operations:
-
-- [calebcartwright](https://github.com/calebcartwright)
-- [chris48s](https://github.com/chris48s)
-- [paulmelnikow](https://github.com/paulmelnikow)
-- [PyvesB](https://github.com/PyvesB)
-
 Alumni:
 
 - [Daniel15](https://github.com/Daniel15)
