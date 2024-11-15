@@ -49,7 +49,7 @@ function parseDate(...args) {
  * @returns {string} Formatted date string
  */
 function formatDate(d) {
-  const date = dayjs(d)
+  const date = parseDate(d)
   const dateString = date.calendar(null, {
     lastDay: '[yesterday]',
     sameDay: '[today]',
@@ -72,7 +72,7 @@ function formatDate(d) {
  */
 function age(date, reversed = false) {
   const colorByAge = colorScale([7, 30, 180, 365, 730], undefined, !reversed)
-  const daysElapsed = dayjs().diff(dayjs(date), 'days')
+  const daysElapsed = dayjs().diff(parseDate(date), 'days')
   return colorByAge(daysElapsed)
 }
 
