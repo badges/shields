@@ -9,7 +9,7 @@ authors:
 tags: []
 ---
 
-We serve a lot of badges which display information fetched from the GitHub API. When I say a lot, this varies a bit but in a typical hour we serve more than 100k but less than 1 million badges that call the GitHub API excluding badges served from downstream cache. So we're making hundreds of thousands of calls to the GitHub API every hour.
+We serve a lot of badges which display information fetched from the GitHub API. When I say a lot, this varies a bit but in a typical hour we make hundreds of thousands of calls to the GitHub API.
 
 But hang on. GitHub's API has rate limits.
 
