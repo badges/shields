@@ -1,6 +1,5 @@
 import { pathParams } from '../index.js'
-import { age } from '../color-formatters.js'
-import { formatDate } from '../text-formatters.js'
+import { renderDateBadge } from '../date.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 export default class VisualStudioMarketplaceReleaseDate extends VisualStudioMarketplaceBase {
@@ -28,13 +27,6 @@ export default class VisualStudioMarketplaceReleaseDate extends VisualStudioMark
     label: 'release date',
   }
 
-  static render({ releaseDate }) {
-    return {
-      message: formatDate(releaseDate),
-      color: age(releaseDate),
-    }
-  }
-
   transform({ json }) {
     const { extension } = this.transformExtension({ json })
     const releaseDate = extension.releaseDate
@@ -44,6 +36,6 @@ export default class VisualStudioMarketplaceReleaseDate extends VisualStudioMark
   async handle({ extensionId }) {
     const json = await this.fetch({ extensionId })
     const { releaseDate } = this.transform({ json })
-    return this.constructor.render({ releaseDate })
+    return renderDateBadge(releaseDate)
   }
 }

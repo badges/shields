@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { age as ageColor } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { relativeUri } from '../validators.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -88,13 +87,6 @@ export default class GithubLastCommit extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
-    return {
-      message: formatDate(commitDate),
-      color: ageColor(Date.parse(commitDate)),
-    }
-  }
-
   async fetch({ user, repo, branch, path }) {
     return this._requestJson({
       url: `/repos/${user}/${repo}/commits`,
@@ -111,8 +103,6 @@ export default class GithubLastCommit extends GithubAuthV3Service {
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return this.constructor.render({
-      commitDate: commit[displayTimestamp].date,
-    })
+    return renderDateBadge(commit[displayTimestamp].date)
   }
 }

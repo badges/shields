@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { age as ageColor } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { relativeUri } from '../validators.js'
 
 const schema = Joi.object({
@@ -43,13 +42,6 @@ export default class BitbucketLastCommit extends BaseJsonService {
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
-    return {
-      message: formatDate(commitDate),
-      color: ageColor(Date.parse(commitDate)),
-    }
-  }
-
   async fetch({ user, repo, branch, path }) {
     // https://developer.atlassian.com/cloud/bitbucket/rest/api-group-commits/#api-repositories-workspace-repo-slug-commits-get
     return this._requestJson({
@@ -76,6 +68,6 @@ export default class BitbucketLastCommit extends BaseJsonService {
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return this.constructor.render({ commitDate: commit.date })
+    return renderDateBadge(commit.date)
   }
 }

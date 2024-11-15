@@ -1,12 +1,8 @@
 import Joi from 'joi'
-import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import dayjs from 'dayjs'
-import { InvalidResponse, pathParams } from '../index.js'
+import { pathParams } from '../index.js'
+import { parseDate, renderDateBadge } from '../date.js'
 import { nonNegativeInteger } from '../validators.js'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
 import MavenCentralBase from './maven-central-base.js'
-dayjs.extend(customParseFormat)
 
 const updateResponseSchema = Joi.object({
   metadata: Joi.object({
@@ -38,13 +34,6 @@ export default class MavenCentralLastUpdate extends MavenCentralBase {
 
   static defaultBadgeData = { label: 'last updated' }
 
-  static render({ date }) {
-    return {
-      message: formatDate(date),
-      color: ageColor(date),
-    }
-  }
-
   async handle({ groupId, artifactId }) {
     const { metadata } = await this.fetch({
       groupId,
@@ -52,15 +41,11 @@ export default class MavenCentralLastUpdate extends MavenCentralBase {
       schema: updateResponseSchema,
     })
 
-    const date = dayjs(
+    const date = parseDate(
       String(metadata.versioning.lastUpdated),
       'YYYYMMDDHHmmss',
     )
 
-    if (!date.isValid) {
-      throw new InvalidResponse({ prettyMessage: 'invalid date' })
-    }
-
-    return this.constructor.render({ date })
+    return renderDateBadge(date)
   }
 }

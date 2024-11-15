@@ -1,8 +1,6 @@
 import Joi from 'joi'
-import dayjs from 'dayjs'
-import { InvalidResponse, NotFound, pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
+import { renderDateBadge } from '../date.js'
 import NpmBase, {
   packageNameDescription,
   queryParamSchema,
@@ -21,25 +19,16 @@ const abbreviatedSchema = Joi.object({
   modified: Joi.string().required(),
 }).required()
 
-class NpmLastUpdateBase extends NpmBase {
+export class NpmLastUpdateWithTag extends NpmBase {
   static category = 'activity'
 
-  static defaultBadgeData = { label: 'last updated' }
-
-  static render({ date }) {
-    return {
-      message: formatDate(date),
-      color: ageColor(date),
-    }
-  }
-}
-
-export class NpmLastUpdateWithTag extends NpmLastUpdateBase {
   static route = {
     base: 'npm/last-update',
     pattern: ':scope(@[^/]+)?/:packageName/:tag',
     queryParamSchema,
   }
+
+  static defaultBadgeData = { label: 'last updated' }
 
   static openApi = {
     '/npm/last-update/{packageName}/{tag}': {
@@ -81,18 +70,16 @@ export class NpmLastUpdateWithTag extends NpmLastUpdateBase {
       throw new NotFound({ prettyMessage: 'tag not found' })
     }
 
-    const date = dayjs(packageData.time[tagVersion])
-
-    if (!date.isValid) {
-      throw new InvalidResponse({ prettyMessage: 'invalid date' })
-    }
-
-    return this.constructor.render({ date })
+    return renderDateBadge(packageData.time[tagVersion])
   }
 }
 
-export class NpmLastUpdate extends NpmLastUpdateBase {
+export class NpmLastUpdate extends NpmBase {
+  static category = 'activity'
+
   static route = this.buildRoute('npm/last-update', { withTag: false })
+
+  static defaultBadgeData = { label: 'last updated' }
 
   static openApi = {
     '/npm/last-update/{packageName}': {
@@ -127,12 +114,6 @@ export class NpmLastUpdate extends NpmLastUpdateBase {
       abbreviated: true,
     })
 
-    const date = dayjs(packageData.modified)
-
-    if (!date.isValid) {
-      throw new InvalidResponse({ prettyMessage: 'invalid date' })
-    }
-
-    return this.constructor.render({ date })
+    return renderDateBadge(packageData.modified)
   }
 }

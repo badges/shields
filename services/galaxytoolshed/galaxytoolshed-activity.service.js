@@ -1,5 +1,5 @@
 import { pathParams } from '../index.js'
-import { formatDate } from '../text-formatters.js'
+import { renderDateBadge } from '../date.js'
 import BaseGalaxyToolshedService from './galaxytoolshed-base.js'
 
 export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService {
@@ -29,11 +29,6 @@ export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService
 
   static defaultBadgeData = {
     label: 'created date',
-    color: 'blue',
-  }
-
-  static render({ date }) {
-    return { message: formatDate(date) }
   }
 
   async handle({ repository, owner }) {
@@ -42,6 +37,6 @@ export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService
       owner,
     })
     const { create_time: date } = response[0]
-    return this.constructor.render({ date })
+    return renderDateBadge(date)
   }
 }

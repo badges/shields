@@ -1,8 +1,6 @@
 import Joi from 'joi'
-import dayjs from 'dayjs'
-import { pathParams, queryParam, NotFound, InvalidResponse } from '../index.js'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
+import { pathParams, queryParam, NotFound } from '../index.js'
+import { renderDateBadge } from '../date.js'
 import SnapcraftBase, { snapcraftPackageParam } from './snapcraft-base.js'
 
 const queryParamSchema = Joi.object({
@@ -57,13 +55,6 @@ export default class SnapcraftLastUpdate extends SnapcraftBase {
     },
   }
 
-  static render({ lastUpdatedDate }) {
-    return {
-      message: formatDate(lastUpdatedDate),
-      color: ageColor(lastUpdatedDate),
-    }
-  }
-
   static transform(apiData, track, risk, arch) {
     const channelMap = apiData['channel-map']
     let filteredChannelMap = channelMap.filter(
@@ -99,12 +90,6 @@ export default class SnapcraftLastUpdate extends SnapcraftBase {
       arch,
     )
 
-    const lastUpdatedDate = dayjs(channel['released-at'])
-
-    if (!lastUpdatedDate.isValid) {
-      throw new InvalidResponse({ prettyMessage: 'invalid date' })
-    }
-
-    return this.constructor.render({ lastUpdatedDate })
+    return renderDateBadge(channel['released-at'])
   }
 }

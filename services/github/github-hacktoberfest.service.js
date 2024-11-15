@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import Joi from 'joi'
 import dayjs from 'dayjs'
 import { pathParam, queryParam } from '../index.js'
+import { parseDate } from '../date.js'
 import { metric, maybePluralize } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
@@ -97,7 +98,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
       // The global cutoff time is 11/1 noon UTC.
       // https://github.com/badges/shields/pull/4109#discussion_r330782093
       // We want to show "1 day left" on the last day so we add 1.
-      daysLeft = dayjs(`${year}-11-01 12:00:00 Z`).diff(dayjs(), 'days') + 1
+      daysLeft = parseDate(`${year}-11-01 12:00:00 Z`).diff(dayjs(), 'days') + 1
     }
     if (daysLeft < 0) {
       return {
@@ -181,7 +182,10 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   }
 
   static getCalendarPosition(year) {
-    const daysToStart = dayjs(`${year}-10-01 00:00:00 Z`).diff(dayjs(), 'days')
+    const daysToStart = parseDate(`${year}-10-01 00:00:00 Z`).diff(
+      dayjs(),
+      'days',
+    )
     const isBefore = daysToStart > 0
     return { daysToStart, isBefore }
   }
