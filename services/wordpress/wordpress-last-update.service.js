@@ -6,7 +6,7 @@ const extensionData = {
   plugin: {
     capt: 'Plugin',
     exampleSlug: 'bbpress',
-    lastUpdateFormat: 'YYYY-MM-DD hh:mma [GMT]',
+    lastUpdateFormat: 'YYYY-MM-DD h:mma [GMT]',
   },
   theme: {
     capt: 'Theme',
