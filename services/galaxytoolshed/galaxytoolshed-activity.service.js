@@ -37,6 +37,6 @@ export default class GalaxyToolshedCreatedDate extends BaseGalaxyToolshedService
       owner,
     })
     const { create_time: date } = response[0]
-    return renderDateBadge(date)
+    return renderDateBadge(date, true)
   }
 }
