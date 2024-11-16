@@ -5,10 +5,6 @@
  * @module
  */
 
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime.js'
-dayjs.extend(relativeTime)
-
 /**
  * Creates a string of stars and empty stars based on the rating.
  * The number of stars is determined by the integer part of the rating.
