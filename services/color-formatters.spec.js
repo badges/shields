@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import { forCases, given, test } from 'sazerac'
 import {
-  age,
   colorScale,
   coveragePercentage,
   letterScore,
@@ -51,46 +50,6 @@ describe('Color formatters', function () {
     given('E').expect('orange')
     given('F').expect('red')
     given('Z').expect('red')
-  })
-
-  const monthsAgo = months => {
-    const result = new Date()
-    // This looks wack but it works.
-    result.setMonth(result.getMonth() - months)
-    return result
-  }
-  test(age, () => {
-    given(Date.now())
-      .describe('when given the current timestamp')
-      .expect('brightgreen')
-    given(new Date())
-      .describe('when given the current Date')
-      .expect('brightgreen')
-    given(new Date(2001, 1, 1))
-      .describe('when given a Date many years ago')
-      .expect('red')
-    given(monthsAgo(2))
-      .describe('when given a Date two months ago')
-      .expect('yellowgreen')
-    given(monthsAgo(15))
-      .describe('when given a Date 15 months ago')
-      .expect('orange')
-    // --- reversed --- //
-    given(Date.now(), true)
-      .describe('when given the current timestamp and reversed')
-      .expect('red')
-    given(new Date(), true)
-      .describe('when given the current Date and reversed')
-      .expect('red')
-    given(new Date(2001, 1, 1), true)
-      .describe('when given a Date many years ago and reversed')
-      .expect('brightgreen')
-    given(monthsAgo(2), true)
-      .describe('when given a Date two months ago and reversed')
-      .expect('yellow')
-    given(monthsAgo(15), true)
-      .describe('when given a Date 15 months ago and reversed')
-      .expect('green')
   })
 
   test(version, () => {

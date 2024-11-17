@@ -6,7 +6,6 @@
  */
 
 import pep440 from '@renovatebot/pep440'
-import dayjs from 'dayjs'
 
 /**
  * Determines the color used for a badge based on version.
@@ -175,24 +174,7 @@ function colorScale(steps, colors, reversed) {
   }
 }
 
-/**
- * Determines the color used for a badge according to the age.
- * Age is calculated as days elapsed till current date.
- * The color varies from bright green to red as the age increases
- * or the other way around if `reverse` is given `true`.
- *
- * @param {string} date Date string
- * @param {boolean} reversed Reverse the color scale a.k.a. the older, the better
- * @returns {string} Badge color
- */
-function age(date, reversed = false) {
-  const colorByAge = colorScale([7, 30, 180, 365, 730], undefined, !reversed)
-  const daysElapsed = dayjs().diff(dayjs(date), 'days')
-  return colorByAge(daysElapsed)
-}
-
 export {
-  age,
   colorScale,
   coveragePercentage,
   downloadCount,

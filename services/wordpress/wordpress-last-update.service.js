@@ -1,16 +1,12 @@
-import dayjs from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat.js'
-import { InvalidResponse, pathParams } from '../index.js'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
+import { pathParams } from '../index.js'
+import { parseDate, renderDateBadge } from '../date.js'
 import { description, BaseWordpress } from './wordpress-base.js'
-dayjs.extend(customParseFormat)
 
 const extensionData = {
   plugin: {
     capt: 'Plugin',
     exampleSlug: 'bbpress',
-    lastUpdateFormat: 'YYYY-MM-DD hh:mma [GMT]',
+    lastUpdateFormat: 'YYYY-MM-DD h:mma [GMT]',
   },
   theme: {
     capt: 'Theme',
@@ -50,35 +46,15 @@ function LastUpdateForType(extensionType) {
 
     static defaultBadgeData = { label: 'last updated' }
 
-    static render({ lastUpdated }) {
-      return {
-        label: 'last updated',
-        message: formatDate(lastUpdated),
-        color: ageColor(lastUpdated),
-      }
-    }
-
-    transform(lastUpdate) {
-      const date = dayjs(lastUpdate, lastUpdateFormat)
-
-      if (date.isValid()) {
-        return date.format('YYYY-MM-DD')
-      } else {
-        throw new InvalidResponse({ prettyMessage: 'invalid date' })
-      }
-    }
-
     async handle({ slug }) {
       const { last_updated: lastUpdated } = await this.fetch({
         extensionType,
         slug,
       })
 
-      const newDate = this.transform(lastUpdated)
+      const date = parseDate(lastUpdated, lastUpdateFormat)
 
-      return this.constructor.render({
-        lastUpdated: newDate,
-      })
+      return renderDateBadge(date)
     }
   }
 }

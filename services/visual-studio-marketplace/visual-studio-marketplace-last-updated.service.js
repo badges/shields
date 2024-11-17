@@ -1,6 +1,5 @@
 import { pathParams } from '../index.js'
-import { age } from '../color-formatters.js'
-import { formatDate } from '../text-formatters.js'
+import { renderDateBadge } from '../date.js'
 import VisualStudioMarketplaceBase from './visual-studio-marketplace-base.js'
 
 export default class VisualStudioMarketplaceLastUpdated extends VisualStudioMarketplaceBase {
@@ -28,13 +27,6 @@ export default class VisualStudioMarketplaceLastUpdated extends VisualStudioMark
     label: 'last updated',
   }
 
-  static render({ lastUpdated }) {
-    return {
-      message: formatDate(lastUpdated),
-      color: age(lastUpdated),
-    }
-  }
-
   transform({ json }) {
     const { extension } = this.transformExtension({ json })
     const lastUpdated = extension.lastUpdated
@@ -44,6 +36,6 @@ export default class VisualStudioMarketplaceLastUpdated extends VisualStudioMark
   async handle({ extensionId }) {
     const json = await this.fetch({ extensionId })
     const { lastUpdated } = this.transform({ json })
-    return this.constructor.render({ lastUpdated })
+    return renderDateBadge(lastUpdated)
   }
 }
