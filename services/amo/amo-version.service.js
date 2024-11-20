@@ -16,8 +16,11 @@ export default class AmoVersion extends BaseAmoService {
     },
   }
 
-  async handle({ addonId }) {
+  async handle({ addonId }, { versionPrefix }) {
     const data = await this.fetch({ addonId })
-    return renderVersionBadge({ version: data.current_version.version })
+    return renderVersionBadge({
+      version: data.current_version.version,
+      prefix: versionPrefix,
+    })
   }
 }
