@@ -46,7 +46,7 @@ export default class Fedora extends BaseJsonService {
 
   static defaultBadgeData = { label: 'fedora' }
 
-  async handle({ packageName, branch = defaultBranch }) {
+  async handle({ packageName, branch = defaultBranch }, { versionPrefix }) {
     const data = await this._requestJson({
       schema,
       url: `https://apps.fedoraproject.org/mdapi/${encodeURIComponent(
@@ -56,6 +56,6 @@ export default class Fedora extends BaseJsonService {
         400: 'branch not found',
       },
     })
-    return renderVersionBadge({ version: data.version })
+    return renderVersionBadge({ version: data.version, prefix: versionPrefix })
   }
 }
