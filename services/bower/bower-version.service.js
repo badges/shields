@@ -30,10 +30,10 @@ export default class BowerVersion extends BaseBowerService {
     return version
   }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const data = await this.fetch({ packageName })
     const version = this.constructor.transform(data)
 
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
