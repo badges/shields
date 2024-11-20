@@ -99,10 +99,6 @@ export default class DockerVersion extends BaseJsonService {
 
   static defaultBadgeData = { label: 'version', color: 'blue' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
     return await fetch(this, {
@@ -152,7 +148,7 @@ export default class DockerVersion extends BaseJsonService {
     }
   }
 
-  async handle({ user, repo, tag }, { sort, arch }) {
+  async handle({ user, repo, tag }, { sort, arch, versionPrefix }) {
     let data, pagedData
 
     if (!tag && sort === 'date') {
@@ -182,6 +178,6 @@ export default class DockerVersion extends BaseJsonService {
       pagedData,
       arch,
     })
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
