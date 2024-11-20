@@ -19,9 +19,9 @@ export default class CratesVersion extends BaseCratesService {
     },
   }
 
-  async handle({ crate }) {
+  async handle({ crate }, { versionPrefix }) {
     const json = await this.fetch({ crate })
     const version = this.constructor.getLatestVersion(json)
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
