@@ -112,7 +112,10 @@ class FeedzVersionService extends BaseJsonService {
     }
   }
 
-  async handle({ variant, organization, repository, packageName }) {
+  async handle(
+    { variant, organization, repository, packageName },
+    { versionPrefix },
+  ) {
     const includePrereleases = variant === 'vpre'
     const baseUrl = this.apiUrl({ organization, repository })
     const json = await this.fetch({ baseUrl, packageName })
@@ -121,6 +124,7 @@ class FeedzVersionService extends BaseJsonService {
     return renderVersionBadge({
       version,
       defaultLabel: FeedzVersionService.defaultBadgeData.label,
+      prefix: versionPrefix,
     })
   }
 }
