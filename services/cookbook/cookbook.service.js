@@ -27,8 +27,8 @@ export default class Cookbook extends BaseJsonService {
     return this._requestJson({ schema, url })
   }
 
-  async handle({ cookbook }) {
+  async handle({ cookbook }, { versionPrefix }) {
     const { version } = await this.fetch({ cookbook })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
