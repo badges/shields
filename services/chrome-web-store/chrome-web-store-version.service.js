@@ -20,12 +20,12 @@ export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
 
   static defaultBadgeData = { label: 'chrome web store' }
 
-  async handle({ storeId }) {
+  async handle({ storeId }, { versionPrefix }) {
     const chromeWebStore = await this.fetch({ storeId })
     const version = chromeWebStore.version()
     if (version == null) {
       throw new NotFound({ prettyMessage: 'not found' })
     }
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
