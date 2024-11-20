@@ -67,6 +67,8 @@ async function loadServiceClasses(servicePaths) {
         serviceClass.serviceFamily = servicePath
           .replace(serviceDir, '')
           .split(path.sep)[1]
+        // add global category specific query params
+        serviceClass.addGlobalCategoryQueryParams()
         serviceClass.validateDefinition()
         return serviceClasses.push(serviceClass)
       }

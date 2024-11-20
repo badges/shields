@@ -17,6 +17,8 @@ const globalParamRefs = [
   { $ref: '#/components/parameters/link' },
 ]
 
+const categoryGlobalQueryParams = {}
+
 function getCodeSamples(altText) {
   return [
     {
@@ -72,18 +74,37 @@ function addGlobalProperties(endpoints) {
   return paths
 }
 
+function addCategoryProperties(endpoints, category) {
+  if (!categoryGlobalQueryParams[category.name.toLowerCase()]) {
+    return endpoints
+  }
+  const paths = {}
+  for (const key of Object.keys(endpoints)) {
+    paths[key] = endpoints[key]
+    const additionalParams =
+      categoryGlobalQueryParams[category.name.toLowerCase()]?.openApiParams ||
+      []
+    paths[key].get.parameters = [
+      ...paths[key].get.parameters,
+      ...additionalParams,
+    ]
+    paths[key].get['x-code-samples'] = getCodeSamples(paths[key].get.summary)
+  }
+  return paths
+}
+
 function sortPaths(obj) {
   const entries = Object.entries(obj)
   entries.sort((a, b) => a[1].get.summary.localeCompare(b[1].get.summary))
   return Object.fromEntries(entries)
 }
 
-function services2openapi(services, sort) {
+function services2openapi(services, category, sort) {
   const paths = {}
   for (const service of services) {
-    for (const [key, value] of Object.entries(
-      addGlobalProperties(service.openApi),
-    )) {
+    let servicePaths = addCategoryProperties(service.openApi, category)
+    servicePaths = addGlobalProperties(servicePaths)
+    for (const [key, value] of Object.entries(servicePaths)) {
       if (key in paths) {
         throw new Error(`Conflicting route: ${key}`)
       }
@@ -214,7 +235,7 @@ function category2openapi({ category, services, sort = false }) {
         },
       },
     },
-    paths: services2openapi(services, sort),
+    paths: services2openapi(services, category, sort),
   }
 
   return spec
@@ -355,4 +376,5 @@ export {
   pathParams,
   queryParam,
   queryParams,
+  categoryGlobalQueryParams,
 }

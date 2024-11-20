@@ -20,7 +20,7 @@ import {
   Deprecated,
 } from './errors.js'
 import { fetch } from './got.js'
-import { getEnum } from './openapi.js'
+import { getEnum, categoryGlobalQueryParams } from './openapi.js'
 import {
   makeFullUrl,
   assertValidRoute,
@@ -200,6 +200,25 @@ class BaseService {
           `Inconsistent Open Api spec and Route found for service ${this.name}`,
         )
       }
+    }
+  }
+
+  static addGlobalCategoryQueryParams() {
+    if (!categoryGlobalQueryParams[this.category.toLowerCase()]) {
+      return
+    }
+    for (const path of Object.values(this.openApi)) {
+      path?.get?.parameters.push(
+        ...categoryGlobalQueryParams[this.category.toLowerCase()].openApiParams,
+      )
+    }
+    if (this.route.queryParamSchema) {
+      this.route.queryParamSchema = this.route.queryParamSchema.concat(
+        categoryGlobalQueryParams[this.category.toLowerCase()].joiSchema,
+      )
+    } else {
+      this.route.queryParamSchema =
+        categoryGlobalQueryParams[this.category.toLowerCase()].joiSchema
     }
   }
 
