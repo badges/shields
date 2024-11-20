@@ -19,8 +19,8 @@ export default class CpanVersion extends BaseCpanService {
     },
   }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const { version } = await this.fetch({ packageName })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
