@@ -62,13 +62,9 @@ class CranVersion extends BaseCranService {
     },
   }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const data = await this.fetch({ packageName })
-    return this.constructor.render({ version: data.Version })
+    return renderVersionBadge({ version: data.Version, prefix: versionPrefix })
   }
 }
 
