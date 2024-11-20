@@ -32,16 +32,12 @@ export default class EclipseMarketplaceVersion extends EclipseMarketplaceBase {
 
   static defaultBadgeData = { label: 'eclipse marketplace' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ name }) {
+  async handle({ name }, { versionPrefix }) {
     const { marketplace } = await this.fetch({
       name,
       schema: versionResponseSchema,
     })
     const version = marketplace.node.version
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
