@@ -72,21 +72,18 @@ class CtanVersion extends BaseCtanService {
     },
   }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ library }) {
+  async handle({ library }, { versionPrefix }) {
     const json = await this.fetch({ library })
     const version = json.version.number
     if (version !== '') {
-      return renderVersionBadge({ version })
+      return renderVersionBadge({ version, prefix: versionPrefix })
     } else {
       const date = json.version.date
       if (date !== '') {
         return renderVersionBadge({
           version: date,
           versionFormatter: color => 'blue',
+          prefix: versionPrefix,
         })
       } else {
         return new InvalidResponse({
