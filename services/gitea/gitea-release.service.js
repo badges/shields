@@ -126,6 +126,7 @@ export default class GiteaRelease extends GiteaBase {
       sort,
       display_name: displayName,
       date_order_by: orderBy,
+      versionPrefix,
     },
   ) {
     const isSemver = sort === 'semver'
@@ -141,6 +142,6 @@ export default class GiteaRelease extends GiteaBase {
       includePrereleases: pre !== undefined,
       displayName,
     })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
