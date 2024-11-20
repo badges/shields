@@ -28,11 +28,7 @@ export default class ElmPackage extends BaseJsonService {
 
   static defaultBadgeData = { label: 'elm package' }
 
-  static render(props) {
-    return renderVersionBadge(props)
-  }
-
-  async handle({ user, packageName }) {
+  async handle({ user, packageName }, { versionPrefix }) {
     const url = `https://package.elm-lang.org/packages/${user}/${packageName}/latest/elm.json`
     const { version } = await this._requestJson({
       schema,
@@ -41,6 +37,6 @@ export default class ElmPackage extends BaseJsonService {
         404: 'package not found',
       },
     })
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
