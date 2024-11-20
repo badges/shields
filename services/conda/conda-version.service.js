@@ -32,12 +32,13 @@ export default class CondaVersion extends BaseCondaService {
     },
   }
 
-  async handle({ variant, channel, packageName }) {
+  async handle({ variant, channel, packageName }, { versionPrefix }) {
     const json = await this.fetch({ channel, packageName })
     const defaultLabel = variant === 'vn' ? channel : `conda | ${channel}`
     return renderVersionBadge({
       version: json.latest_version,
       defaultLabel,
+      prefix: versionPrefix,
     })
   }
 }
