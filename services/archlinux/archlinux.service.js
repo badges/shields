@@ -37,7 +37,7 @@ export default class ArchLinux extends BaseJsonService {
 
   static defaultBadgeData = { label: 'arch linux' }
 
-  async handle({ repository, architecture, packageName }) {
+  async handle({ repository, architecture, packageName }, { versionPrefix }) {
     const data = await this._requestJson({
       schema,
       url: `https://www.archlinux.org/packages/${encodeURIComponent(
@@ -46,6 +46,6 @@ export default class ArchLinux extends BaseJsonService {
         packageName,
       )}/json/`,
     })
-    return renderVersionBadge({ version: data.pkgver })
+    return renderVersionBadge({ version: data.pkgver, prefix: versionPrefix })
   }
 }
