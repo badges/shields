@@ -24,7 +24,7 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
 
   static defaultBadgeData = { label: 'conan' }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const configContent = await fetchRepoContent(this, {
       user: 'conan-io',
       repo: 'conan-center-index',
@@ -34,6 +34,6 @@ export default class ConanVersion extends ConditionalGithubAuthV3Service {
 
     const version = parseLatestVersionFromConfig(configContent)
 
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
