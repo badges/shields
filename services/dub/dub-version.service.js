@@ -28,8 +28,8 @@ export default class DubVersion extends BaseJsonService {
     })
   }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const version = await this.fetch({ packageName })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
