@@ -169,18 +169,23 @@ class AurVersion extends BaseAurService {
 
   static _cacheLength = 3600
 
-  static render({ version, outOfDate }) {
+  static render({ version, outOfDate, versionPrefix }) {
     const color = outOfDate === null ? 'blue' : 'orange'
-    return renderVersionBadge({ version, versionFormatter: () => color })
+    return renderVersionBadge({
+      version,
+      versionFormatter: () => color,
+      prefix: versionPrefix,
+    })
   }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const {
       results: [{ Version: version, OutOfDate: outOfDate }],
     } = await this.fetch({ packageName })
     return this.constructor.render({
       version,
       outOfDate,
+      versionPrefix,
     })
   }
 }
