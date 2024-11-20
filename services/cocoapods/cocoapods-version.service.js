@@ -20,8 +20,8 @@ export default class CocoapodsVersion extends BaseCocoaPodsService {
 
   static defaultBadgeData = { label: 'pod' }
 
-  async handle({ spec }) {
+  async handle({ spec }, { versionPrefix }) {
     const { version } = await this.fetch({ spec })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
