@@ -64,13 +64,12 @@ class FactorioModPortalLatestVersion extends BaseFactorioModPortalService {
 
   static defaultBadgeData = { label: 'latest version' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ modName }) {
+  async handle({ modName, versionPrefix }) {
     const resp = await this.fetch({ modName })
-    return this.constructor.render({ version: resp.latest_release.version })
+    return renderVersionBadge({
+      version: resp.latest_release.version,
+      prefix: versionPrefix,
+    })
   }
 }
 
@@ -97,14 +96,10 @@ class FactorioModPortalFactorioVersion extends BaseFactorioModPortalService {
 
   static defaultBadgeData = { label: 'factorio version' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
-  async handle({ modName }) {
+  async handle({ modName }, { versionPrefix }) {
     const resp = await this.fetch({ modName })
     const version = resp.latest_release.info_json.factorio_version
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
 
