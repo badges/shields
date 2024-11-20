@@ -92,7 +92,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
     return response[1].changeset_revision
   }
 
-  async handle({ repository, owner, tool, requirement }) {
+  async handle({ repository, owner, tool, requirement }, { versionPrefix }) {
     const response = await this.fetchLastOrderedInstallableRevisionsSchema({
       repository,
       owner,
@@ -102,6 +102,6 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
       tool,
       requirement,
     })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
