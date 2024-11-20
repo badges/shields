@@ -57,7 +57,10 @@ export default class Debian extends BaseJsonService {
 
   static defaultBadgeData = { label: 'debian' }
 
-  async handle({ packageName, distribution = defaultDistribution }) {
+  async handle(
+    { packageName, distribution = defaultDistribution },
+    { versionPrefix },
+  ) {
     const data = await this._requestJson({
       schema,
       url: 'https://api.ftp-master.debian.org/madison',
@@ -84,6 +87,9 @@ export default class Debian extends BaseJsonService {
       throw new NotFound()
     }
     const versions = Object.keys(packageData[distKeys[0]])
-    return renderVersionBadge({ version: latest(versions) })
+    return renderVersionBadge({
+      version: latest(versions),
+      prefix: versionPrefix,
+    })
   }
 }
