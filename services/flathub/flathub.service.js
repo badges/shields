@@ -28,7 +28,7 @@ export default class Flathub extends BaseJsonService {
 
   static defaultBadgeData = { label: 'flathub' }
 
-  async handle({ packageName }) {
+  async handle({ packageName }, { versionPrefix }) {
     const data = await this._requestJson({
       schema,
       url: `https://flathub.org/api/v1/apps/${encodeURIComponent(packageName)}`,
@@ -40,6 +40,9 @@ export default class Flathub extends BaseJsonService {
       throw new NotFound()
     }
 
-    return renderVersionBadge({ version: data.currentReleaseVersion })
+    return renderVersionBadge({
+      version: data.currentReleaseVersion,
+      prefix: versionPrefix,
+    })
   }
 }
