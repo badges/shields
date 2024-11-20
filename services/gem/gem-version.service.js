@@ -47,8 +47,12 @@ export default class GemVersion extends BaseJsonService {
 
   static defaultBadgeData = { label: 'gem' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version, versionFormatter: versionColor })
+  static render({ version, prefix }) {
+    return renderVersionBadge({
+      version,
+      versionFormatter: versionColor,
+      prefix,
+    })
   }
 
   async fetch({ gem }) {
@@ -69,10 +73,16 @@ export default class GemVersion extends BaseJsonService {
     if (queryParams && typeof queryParams.include_prereleases !== 'undefined') {
       const data = await this.fetchLatest({ gem })
       const versions = data.map(version => version.number)
-      return this.constructor.render({ version: latest(versions) })
+      return this.constructor.render({
+        version: latest(versions),
+        prefix: queryParams.versionPrefix,
+      })
     } else {
       const { version } = await this.fetch({ gem })
-      return this.constructor.render({ version })
+      return this.constructor.render({
+        version,
+        prefix: queryParams.versionPrefix,
+      })
     }
   }
 }
