@@ -71,10 +71,10 @@ export default class FDroid extends BaseJsonService {
     return { version }
   }
 
-  async handle({ appId }, { include_prereleases: includePre }) {
+  async handle({ appId }, { include_prereleases: includePre, versionPrefix }) {
     const json = await this.fetch({ appId })
     const suggested = includePre === undefined
     const { version } = this.transform({ json, suggested })
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version, prefix: versionPrefix })
   }
 }
