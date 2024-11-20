@@ -25,10 +25,6 @@ export default class Cdnjs extends BaseJsonService {
 
   static defaultBadgeData = { label: 'cdnjs' }
 
-  static render({ version }) {
-    return renderVersionBadge({ version })
-  }
-
   async fetch({ library }) {
     const url = `https://api.cdnjs.com/libraries/${library}?fields=version`
     return this._requestJson({
@@ -37,7 +33,7 @@ export default class Cdnjs extends BaseJsonService {
     })
   }
 
-  async handle({ library }) {
+  async handle({ library }, { versionPrefix }) {
     const json = await this.fetch({ library })
 
     if (Object.keys(json).length === 0) {
@@ -46,6 +42,6 @@ export default class Cdnjs extends BaseJsonService {
       throw new NotFound()
     }
 
-    return this.constructor.render({ version: json.version })
+    return renderVersionBadge({ version: json.version, prefix: versionPrefix })
   }
 }
