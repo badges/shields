@@ -1,3 +1,5 @@
+import Joi from 'joi'
+
 /**
  * Functions for publishing the shields.io URL schema as an OpenAPI Document
  *
@@ -17,7 +19,20 @@ const globalParamRefs = [
   { $ref: '#/components/parameters/link' },
 ]
 
-const categoryGlobalQueryParams = {}
+const categoryGlobalQueryParams = {
+  version: {
+    openApiParams: queryParams({
+      name: 'versionPrefix',
+      example: 'v',
+      schema: { type: 'string' },
+      description:
+        'Overide version prefix. Can be used to remove default v prefix or replace it.',
+    }),
+    joiSchema: Joi.object({
+      versionPrefix: Joi.string(),
+    }).required(),
+  },
+}
 
 function getCodeSamples(altText) {
   return [
