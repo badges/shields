@@ -3,9 +3,5 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('hit counter')
-  .get('/badges/shields/async%20handle.json')
+  .get('/search/code.json?query=async%20handle')
   .expectBadge({ label: 'async handle counter', message: isMetric })
-
-t.create('hit counter for nonexistent repo')
-  .get('/badges/puppets/async%20handle.json')
-  .expectBadge({ label: 'async handle counter', message: '0' })
