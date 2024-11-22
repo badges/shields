@@ -2,10 +2,12 @@ import { isSemver } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('docker version (valid, library)').get('/_/python.json').expectBadge({
-  label: 'version',
-  message: isSemver,
-})
+t.create('docker version (valid, library)')
+  .get('/_/docker-dev.json')
+  .expectBadge({
+    label: 'version',
+    message: isSemver,
+  })
 
 t.create('docker version (valid, library with tag)')
   .get('/_/alpine/latest.json')
