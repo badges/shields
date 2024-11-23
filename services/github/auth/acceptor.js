@@ -1,12 +1,16 @@
 import queryString from 'query-string'
 import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
+import { OAuthStateManager } from '../../oauth-utils.js'
+
+const githubStateManager = new OAuthStateManager()
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
   const baseUrl = 'https://img.shields.io'
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
-    ask.res.statusCode = 302 // Found.
+    const githubCSRFclientId = githubStateManager.generateAnonymizedClientId()
+    const state = githubStateManager.new(githubCSRFclientId)
     const query = queryString.stringify({
       // TODO The `_user` property bypasses security checks in AuthHelper.
       // (e.g: enforceStrictSsl and shouldAuthenticateRequest).
@@ -14,18 +18,44 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       // it's not setting a bad example.
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
+      state,
     })
-    ask.res.setHeader(
-      'Location',
-      `https://github.com/login/oauth/authorize?${query}`,
-    )
-    end('')
+    const script = `
+      <script>
+        localStorage.setItem('githubCSRFclientId', '${githubCSRFclientId}');
+        window.location.href = 'https://github.com/login/oauth/authorize?${query}';
+      </script>
+    `
+    ask.res.setHeader('Content-Type', 'text/html')
+    end(script)
   })
 
   server.route(/^\/github-auth\/done$/, async (data, match, end, ask) => {
     if (!data.code) {
       log.log(`GitHub OAuth data: ${JSON.stringify(data)}`)
       return end('GitHub OAuth authentication failed to provide a code.')
+    }
+
+    if (!data.githubCSRFclientId) {
+      ask.res.setHeader('Content-Type', 'text/html')
+      const postData = JSON.stringify(data)
+      return end(`
+            <script>
+              const form = ${postData};
+              form.githubCSRFclientId = localStorage.getItem('githubCSRFclientId');
+              fetch('/github-auth/done', {
+                method: 'POST',
+                form,
+              }).then(response => response.text())
+                .then(data => {
+                  document.body.innerHTML = data;
+                });
+            </script>
+        `)
+    }
+
+    if (!githubStateManager.isValid(data.githubCSRFclientId, data.state)) {
+      return end('GitHub OAuth state not valid.')
     }
 
     const options = {
