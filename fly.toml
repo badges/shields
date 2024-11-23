@@ -25,6 +25,8 @@ processes = []
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
 
   [services.concurrency]
     hard_limit = 25
