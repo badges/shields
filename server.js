@@ -27,11 +27,13 @@ Sentry.init({
   },
 })
 
-if (+process.argv[2]) {
-  config.public.bind.port = +process.argv[2]
-}
-if (process.argv[3]) {
-  config.public.bind.address = process.argv[3]
+if (process.env.NODE_CONFIG_ENV !== 'test') {
+  if (+process.argv[2]) {
+    config.public.bind.port = +process.argv[2]
+  }
+  if (process.argv[3]) {
+    config.public.bind.address = process.argv[3]
+  }
 }
 
 console.log('Configuration:')
@@ -64,6 +66,7 @@ if (fs.existsSync(legacySecretsPath)) {
 }
 
 async function startServer() {
+  console.log(config)
   const server = new Server(config)
   await server.start()
   return server
