@@ -1,18 +1,19 @@
 import { expect } from 'chai'
 import isSvg from 'is-svg'
 import got from './core/got-test-client.js'
+import startServer from './server.js'
 
-let serverModule
+let server
 before(async function () {
   this.timeout('30s')
   // remove args coming from mocha
   // https://github.com/badges/shields/issues/3365
   process.argv = []
-  serverModule = await import('./server.js')
+  server = await startServer()
 })
 
 after('shut down the server', async function () {
-  await serverModule.server.stop()
+  await server.stop()
 })
 
 it('should render a badge', async function () {
