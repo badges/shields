@@ -1,10 +1,8 @@
 import Joi from 'joi'
-import {
-  floorCount as floorCountColor,
-  age as ageColor,
-} from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
+import { floorCount as floorCountColor } from '../color-formatters.js'
 import { renderLicenseBadge } from '../licenses.js'
-import { addv, metric, formatDate } from '../text-formatters.js'
+import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseJsonService,
@@ -12,6 +10,7 @@ import {
   InvalidResponse,
   pathParams,
 } from '../index.js'
+import { renderVersionBadge } from '../version.js'
 
 const aurSchema = Joi.object({
   resultcount: nonNegativeInteger,
@@ -170,7 +169,7 @@ class AurVersion extends BaseAurService {
 
   static render({ version, outOfDate }) {
     const color = outOfDate === null ? 'blue' : 'orange'
-    return { message: addv(version), color }
+    return renderVersionBadge({ version, versionFormatter: () => color })
   }
 
   async handle({ packageName }) {
@@ -242,16 +241,10 @@ class AurLastModified extends BaseAurService {
 
   static defaultBadgeData = { label: 'last modified' }
 
-  static render({ date }) {
-    const color = ageColor(date)
-    const message = formatDate(date)
-    return { color, message }
-  }
-
   async handle({ packageName }) {
     const json = await this.fetch({ packageName })
     const date = 1000 * parseInt(json.results[0].LastModified)
-    return this.constructor.render({ date })
+    return renderDateBadge(date)
   }
 }
 

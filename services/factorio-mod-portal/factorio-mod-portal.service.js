@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
-import { age } from '../color-formatters.js'
-import { formatDate } from '../text-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { nonNegativeInteger } from '../validators.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import { renderVersionBadge } from '../version.js'
@@ -131,18 +130,9 @@ class FactorioModPortalLastUpdated extends BaseFactorioModPortalService {
 
   static defaultBadgeData = { label: 'last updated' }
 
-  static render({ lastUpdated }) {
-    return {
-      message: formatDate(lastUpdated),
-      color: age(lastUpdated),
-    }
-  }
-
   async handle({ modName }) {
     const resp = await this.fetch({ modName })
-    return this.constructor.render({
-      lastUpdated: resp.latest_release.released_at,
-    })
+    return renderDateBadge(resp.latest_release.released_at)
   }
 }
 

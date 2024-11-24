@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
-import { formatDate, metric } from '../text-formatters.js'
-import { age } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { InvalidResponse, pathParams } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
@@ -133,11 +133,13 @@ const ageUpdateMap = {
   }).required(),
   transform: ({ json, property }) =>
     property === 'age' ? json.created_at : json.updated_at,
-  render: ({ property, value }) => ({
-    color: age(value),
-    label: property === 'age' ? 'created' : 'updated',
-    message: formatDate(value),
-  }),
+  render: ({ property, value }) => {
+    const label = property === 'age' ? 'created' : 'updated'
+    return {
+      ...renderDateBadge(value),
+      label,
+    }
+  },
 }
 
 const milestoneMap = {

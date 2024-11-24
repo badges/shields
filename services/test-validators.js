@@ -55,6 +55,8 @@ const isPhpVersionReduction = withRegex(
   /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/,
 )
 
+const isCommitHash = withRegex(/^[a-f0-9]{7,40}$/)
+
 const isStarRating = withRegex(
   /^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/,
 )
@@ -190,6 +192,7 @@ export {
   isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   isComposerVersion,
   isPhpVersionReduction,
+  isCommitHash,
   isStarRating,
   isMetric,
   isMetricAllowNegative,

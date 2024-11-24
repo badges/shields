@@ -1,13 +1,13 @@
 import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
 import {
+  isCommitHash,
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } from '../test-validators.js'
 
 // e.g. v19.3b0
 const isBlackVersion = Joi.string().regex(/^v\d+(\.\d+)*(.*)?$/)
-const isShortSha = Joi.string().regex(/[0-9a-f]{7}/)
 
 export const t = new ServiceTester({
   id: 'GithubPipenv',
@@ -82,10 +82,8 @@ t.create('Locked version of unknown dependency')
   })
 
 t.create('Locked version of VCS dependency')
-  .get(
-    '/locked/dependency-version/thorn-oss/perception/dev/videoalignment.json',
-  )
+  .get('/locked/dependency-version/pypa/pipenv/dev/pypiserver.json')
   .expectBadge({
-    label: 'videoalignment',
-    message: isShortSha,
+    label: 'pypiserver',
+    message: isCommitHash,
   })

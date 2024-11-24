@@ -5,12 +5,6 @@
  * @module
  */
 
-import dayjs from 'dayjs'
-import calendar from 'dayjs/plugin/calendar.js'
-import relativeTime from 'dayjs/plugin/relativeTime.js'
-dayjs.extend(calendar)
-dayjs.extend(relativeTime)
-
 /**
  * Creates a string of stars and empty stars based on the rating.
  * The number of stars is determined by the integer part of the rating.
@@ -127,11 +121,12 @@ function omitv(version) {
   return version
 }
 
-const ignoredVersionPatterns = /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}/
+const ignoredVersionPatterns =
+  /^[^0-9]|[0-9]{4}-[0-9]{2}-[0-9]{2}|^[a-f0-9]{7,40}$/
 
 /**
- * Add a starting v to the version unless it doesn't starts with a digit or is a date (yyyy-mm-dd)
- * For example, addv("1.2.3") returns "v1.2.3", but addv("hello") or addv("2021-10-31"), returns "hello" and "2021-10-31" respectively.
+ * Add a starting v to the version unless it doesn't starts with a digit, is a date (yyyy-mm-dd), or is a commit hash.
+ * For example, addv("1.2.3") returns "v1.2.3", but addv("hello"), addv("2021-10-31"), addv("abcdef1"), returns "hello", "2021-10-31", and "abcdef1" respectively.
  *
  * @param {string} version - Version string
  * @returns {string} Version string with the starting v
@@ -164,39 +159,6 @@ function maybePluralize(singular, countable, plural) {
   }
 }
 
-/**
- * Returns a formatted date string without the year based on the value of input date param d.
- *
- * @param {Date | string | number | object } d - Input date in dayjs compatible format, date object, datestring, Unix timestamp etc.
- * @returns {string} Formatted date string
- */
-function formatDate(d) {
-  const date = dayjs(d)
-  const dateString = date.calendar(null, {
-    lastDay: '[yesterday]',
-    sameDay: '[today]',
-    lastWeek: '[last] dddd',
-    sameElse: 'MMMM YYYY',
-  })
-  // Trim current year from date string
-  return dateString.replace(` ${dayjs().year()}`, '').toLowerCase()
-}
-
-/**
- * Returns a relative date from the input timestamp.
- * For example, day after tomorrow's timestamp will return 'in 2 days'.
- *
- * @param {number | string} timestamp - Unix timestamp
- * @returns {string} Relative date from the unix timestamp
- */
-function formatRelativeDate(timestamp) {
-  const parsedDate = dayjs.unix(parseInt(timestamp, 10))
-  if (!parsedDate.isValid()) {
-    return 'invalid date'
-  }
-  return dayjs().to(parsedDate).toLowerCase()
-}
-
 export {
   starRating,
   currencyFromCode,
@@ -205,6 +167,4 @@ export {
   omitv,
   addv,
   maybePluralize,
-  formatDate,
-  formatRelativeDate,
 }

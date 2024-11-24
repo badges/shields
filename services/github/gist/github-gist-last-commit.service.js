@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { pathParams } from '../../index.js'
-import { formatDate } from '../../text-formatters.js'
-import { age as ageColor } from '../../color-formatters.js'
+import { renderDateBadge } from '../../date.js'
 import { GithubAuthV3Service } from '../github-auth-service.js'
 import { documentation, httpErrorsFor } from '../github-helpers.js'
 
@@ -27,13 +26,6 @@ export default class GistLastCommit extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
-    return {
-      message: formatDate(commitDate),
-      color: ageColor(Date.parse(commitDate)),
-    }
-  }
-
   async fetch({ gistId }) {
     return this._requestJson({
       url: `/gists/${gistId}`,
@@ -44,6 +36,6 @@ export default class GistLastCommit extends GithubAuthV3Service {
 
   async handle({ gistId }) {
     const { updated_at: commitDate } = await this.fetch({ gistId })
-    return this.constructor.render({ commitDate })
+    return renderDateBadge(commitDate)
   }
 }

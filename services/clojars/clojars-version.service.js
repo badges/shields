@@ -34,6 +34,10 @@ class ClojarsVersionService extends BaseClojarsService {
   static defaultBadgeData = { label: 'clojars' }
 
   static render({ clojar, version }) {
+    // clojars format is non standard to fit community style
+    // dont use renderVersionBadge
+    // see also https://github.com/badges/shields/pull/431
+    // commit d0414c9
     return {
       message: `[${clojar} "${version}"]`,
       color: versionColor(version),

@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import { addv } from '../text-formatters.js'
 import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { renderVersionBadge } from '../version.js'
 import { latestVersion } from './luarocks-version-helpers.js'
 
 const schema = Joi.object({
@@ -42,25 +42,6 @@ export default class Luarocks extends BaseJsonService {
     label: 'luarocks',
   }
 
-  static render({ version }) {
-    // The badge colors are following the heuristic rule where `scm < dev <
-    // stable` (e.g., `scm-1` < `dev-1` < `0.1.0-1`).
-    let color
-    switch (version.slice(0, 3).toLowerCase()) {
-      case 'dev':
-        color = 'yellow'
-        break
-      case 'scm':
-      case 'cvs':
-        color = 'orange'
-        break
-      default:
-        color = 'brightgreen'
-    }
-
-    return { message: addv(version), color }
-  }
-
   async fetch({ user, moduleName }) {
     const { repository } = await this._requestJson({
       url: `https://luarocks.org/manifests/${encodeURIComponent(
@@ -91,6 +72,6 @@ export default class Luarocks extends BaseJsonService {
       const versions = Object.keys(moduleInfo)
       version = latestVersion(versions)
     }
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version })
   }
 }

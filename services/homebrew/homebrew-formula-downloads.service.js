@@ -41,7 +41,7 @@ export default class HomebrewDownloads extends BaseJsonService {
   static openApi = {
     '/homebrew/installs/{interval}/{formula}': {
       get: {
-        summary: 'homebrew downloads',
+        summary: 'Homebrew Formula Downloads',
         parameters: pathParams(
           {
             name: 'interval',
