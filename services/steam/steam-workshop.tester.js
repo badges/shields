@@ -1,7 +1,6 @@
 import { ServiceTester } from '../tester.js'
 import {
   isMetric,
-  isIecFileSize,
   isMetricFileSize,
   isFormattedDate,
 } from '../test-validators.js'
@@ -18,10 +17,6 @@ t.create('Collection Files')
 t.create('File Size')
   .get('/size/1523924535.json')
   .expectBadge({ label: 'size', message: isMetricFileSize })
-
-t.create('File Size (IEC bytes)')
-  .get('/size/1523924535.json?units=IEC')
-  .expectBadge({ label: 'size', message: isIecFileSize })
 
 t.create('Release Date')
   .get('/release-date/1523924535.json')

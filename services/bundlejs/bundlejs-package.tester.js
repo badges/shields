@@ -1,4 +1,4 @@
-import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
+import { isMetricFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -13,10 +13,6 @@ t.create('bundlejs/package (version)')
 t.create('bundlejs/package (scoped)')
   .get('/@cycle/rx-run.json')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
-
-t.create('bundlejs/package (IEC bytes)')
-  .get('/jquery.json?units=IEC')
-  .expectBadge({ label: 'minified size (gzip)', message: isIecFileSize })
 
 t.create('bundlejs/package (select exports)')
   .get('/value-enhancer.json?exports=isVal,val')

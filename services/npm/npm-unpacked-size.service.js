@@ -1,23 +1,17 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
-import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
+import { renderSizeBadge } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
 import NpmBase, {
   packageNameDescription,
-  queryParamSchema as baseQueryParamSchema,
+  queryParamSchema,
 } from './npm-base.js'
-
-const defaultUnits = 'metric'
 
 const schema = Joi.object({
   dist: Joi.object({
     unpackedSize: optionalNonNegativeInteger,
   }).required(),
 }).required()
-
-const queryParamSchema = baseQueryParamSchema.keys({
-  units: unitsQueryParam.default(defaultUnits),
-})
 
 export default class NpmUnpackedSize extends NpmBase {
   static category = 'size'
@@ -42,7 +36,6 @@ export default class NpmUnpackedSize extends NpmBase {
             name: 'registry_uri',
             example: 'https://registry.npmjs.com',
           }),
-          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -63,7 +56,6 @@ export default class NpmUnpackedSize extends NpmBase {
             name: 'registry_uri',
             example: 'https://registry.npmjs.com',
           }),
-          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -80,7 +72,7 @@ export default class NpmUnpackedSize extends NpmBase {
 
   async handle(
     { scope, packageName, version },
-    { registry_uri: registryUrl = 'https://registry.npmjs.org', units },
+    { registry_uri: registryUrl = 'https://registry.npmjs.org' },
   ) {
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
@@ -91,7 +83,7 @@ export default class NpmUnpackedSize extends NpmBase {
     const { unpackedSize } = dist
 
     if (unpackedSize) {
-      return renderSizeBadge(unpackedSize, units, 'unpacked size')
+      return renderSizeBadge(unpackedSize, 'metric', 'unpacked size')
     }
     return {
       label: 'unpacked size',

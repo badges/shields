@@ -1,9 +1,9 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
+import { renderSizeBadge } from '../size.js'
 import { metric, formatDate } from '../text-formatters.js'
 import { age as ageColor } from '../color-formatters.js'
-import { NotFound, pathParam, pathParams } from '../index.js'
+import { NotFound, pathParams } from '../index.js'
 import BaseSteamAPI from './steam-base.js'
 
 const description = `
@@ -160,16 +160,16 @@ class SteamFileService extends BaseSteamAPI {
 
   static version = '1'
 
-  async onRequest(obj) {
+  async onRequest({ response }) {
     throw new Error(`onRequest() wasn't implemented for ${this.name}`)
   }
 
-  async handle(pathParams, queryParams) {
+  async handle({ fileId }) {
     const options = {
       method: 'POST',
       form: {
         itemcount: 1,
-        'publishedfileids[0]': pathParams.fileId,
+        'publishedfileids[0]': fileId,
       },
     }
 
@@ -179,18 +179,9 @@ class SteamFileService extends BaseSteamAPI {
       throw new NotFound({ prettyMessage: 'file not found' })
     }
 
-    return this.onRequest({
-      response: json.response.publishedfiledetails[0],
-      pathParams,
-      queryParams,
-    })
+    return this.onRequest({ response: json.response.publishedfiledetails[0] })
   }
 }
-
-const defaultUnits = 'metric'
-const fileSizeQueryParamSchema = Joi.object({
-  units: unitsQueryParam.default(defaultUnits),
-}).required()
 
 class SteamFileSize extends SteamFileService {
   static category = 'size'
@@ -198,7 +189,6 @@ class SteamFileSize extends SteamFileService {
   static route = {
     base: 'steam/size',
     pattern: ':fileId',
-    queryParamSchema: fileSizeQueryParamSchema,
   }
 
   static openApi = {
@@ -206,13 +196,10 @@ class SteamFileSize extends SteamFileService {
       get: {
         summary: 'Steam File Size',
         description,
-        parameters: [
-          pathParam({
-            name: 'fileId',
-            example: '100',
-          }),
-          unitsOpenApiParam(defaultUnits),
-        ],
+        parameters: pathParams({
+          name: 'fileId',
+          example: '100',
+        }),
       },
     },
   }
@@ -221,8 +208,8 @@ class SteamFileSize extends SteamFileService {
     label: 'size',
   }
 
-  async onRequest({ response, queryParams }) {
-    return renderSizeBadge(response.file_size, queryParams.units)
+  async onRequest({ response }) {
+    return renderSizeBadge(response.file_size, 'metric')
   }
 }
 

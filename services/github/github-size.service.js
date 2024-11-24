@@ -1,15 +1,12 @@
 import Joi from 'joi'
-import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
+import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
-const defaultUnits = 'IEC'
-
 const queryParamSchema = Joi.object({
   branch: Joi.string(),
-  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
 const schema = Joi.alternatives(
@@ -42,7 +39,6 @@ export default class GithubSize extends GithubAuthV3Service {
             example: 'master',
             description: 'Can be a branch, a tag or a commit hash.',
           }),
-          unitsOpenApiParam(defaultUnits),
         ],
       },
     },
@@ -64,11 +60,12 @@ export default class GithubSize extends GithubAuthV3Service {
     }
   }
 
-  async handle({ user, repo, path }, { branch, units }) {
+  async handle({ user, repo, path }, queryParams) {
+    const branch = queryParams.branch
     const body = await this.fetch({ user, repo, path, branch })
     if (Array.isArray(body)) {
       throw new NotFound({ prettyMessage: 'not a regular file' })
     }
-    return renderSizeBadge(body.size, units)
+    return renderSizeBadge(body.size, 'iec')
   }
 }

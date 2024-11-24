@@ -1,4 +1,4 @@
-import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
+import { isIecFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -14,13 +14,6 @@ t.create('docker image size (valid, library, arch parameter )')
   .expectBadge({
     label: 'image size',
     message: isIecFileSize,
-  })
-
-t.create('docker image size (valid, metric bytes)')
-  .get('/_/mysql.json?units=metric')
-  .expectBadge({
-    label: 'image size',
-    message: isMetricFileSize,
   })
 
 t.create('docker image size (valid, library with tag)')

@@ -1,14 +1,10 @@
-import { isIecFileSize, isMetricFileSize } from '../test-validators.js'
+import { isIecFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('File size')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json')
   .expectBadge({ label: 'size', message: isIecFileSize })
-
-t.create('File size (metric bytes)')
-  .get('/webcaetano/craft/build/phaser-craft.min.js.json?units=metric')
-  .expectBadge({ label: 'size', message: isMetricFileSize })
 
 t.create('File size 404')
   .get('/webcaetano/craft/build/does-not-exist.min.js.json')

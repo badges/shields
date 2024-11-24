@@ -3,8 +3,6 @@
  */
 
 import byteSize from 'byte-size'
-import Joi from 'joi'
-import { queryParam } from './index.js'
 
 /**
  * Creates a badge object that displays information about a size in bytes number.
@@ -19,24 +17,9 @@ import { queryParam } from './index.js'
 function renderSizeBadge(bytes, units, label = 'size') {
   return {
     label,
-    message: byteSize(bytes, { units: units.toLowerCase() }).toString(),
+    message: byteSize(bytes, { units }).toString(),
     color: 'blue',
   }
 }
 
-const unitsDescription = `Units to use for displaying bytes.
-- IEC uses multiples of 1024. 1024 bytes = 1 KiB
-- Metric uses multiples of 1000. 1000 bytes = 1 kB
-`
-const unitsEnum = ['IEC', 'metric']
-const unitsQueryParam = Joi.string().valid(...unitsEnum)
-
-function unitsOpenApiParam(defaultUnits) {
-  return queryParam({
-    name: 'units',
-    schema: { type: 'string', enum: unitsEnum },
-    description: `${unitsDescription}\nDefault: \`${defaultUnits}\``,
-  })
-}
-
-export { renderSizeBadge, unitsQueryParam, unitsOpenApiParam }
+export { renderSizeBadge }

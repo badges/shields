@@ -1,17 +1,11 @@
 import Joi from 'joi'
-import { renderSizeBadge, unitsQueryParam, unitsOpenApiParam } from '../size.js'
+import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, pathParam } from '../index.js'
-
-const defaultUnits = 'IEC'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
   gzip: nonNegativeInteger,
-}).required()
-
-const queryParamSchema = Joi.object({
-  units: unitsQueryParam.default(defaultUnits),
 }).required()
 
 const description =
@@ -23,7 +17,6 @@ export default class Bundlephobia extends BaseJsonService {
   static route = {
     base: 'bundlephobia',
     pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
-    queryParamSchema,
   }
 
   static openApi = {
@@ -31,88 +24,84 @@ export default class Bundlephobia extends BaseJsonService {
       get: {
         summary: 'npm bundle size',
         description,
-        parameters: [
-          pathParam({
+        parameters: pathParams(
+          {
             name: 'format',
             schema: { type: 'string', enum: this.getEnum('format') },
             example: 'min',
-          }),
-          pathParam({
+          },
+          {
             name: 'packageName',
             example: 'react',
-          }),
-          unitsOpenApiParam(defaultUnits),
-        ],
+          },
+        ),
       },
     },
     '/bundlephobia/{format}/{scope}/{packageName}': {
       get: {
         summary: 'npm bundle size (scoped)',
         description,
-        parameters: [
-          pathParam({
+        parameters: pathParams(
+          {
             name: 'format',
             schema: { type: 'string', enum: this.getEnum('format') },
             example: 'min',
-          }),
-          pathParam({
+          },
+          {
             name: 'scope',
             example: '@cycle',
-          }),
-          pathParam({
+          },
+          {
             name: 'packageName',
             example: 'core',
-          }),
-          unitsOpenApiParam(defaultUnits),
-        ],
+          },
+        ),
       },
     },
     '/bundlephobia/{format}/{packageName}/{version}': {
       get: {
         summary: 'npm bundle size (version)',
         description,
-        parameters: [
-          pathParam({
+        parameters: pathParams(
+          {
             name: 'format',
             schema: { type: 'string', enum: this.getEnum('format') },
             example: 'min',
-          }),
-          pathParam({
+          },
+          {
             name: 'packageName',
             example: 'react',
-          }),
-          pathParam({
+          },
+          {
             name: 'version',
             example: '15.0.0',
-          }),
-          unitsOpenApiParam(defaultUnits),
-        ],
+          },
+        ),
       },
     },
     '/bundlephobia/{format}/{scope}/{packageName}/{version}': {
       get: {
         summary: 'npm bundle size (scoped version)',
         description,
-        parameters: [
-          pathParam({
+        parameters: pathParams(
+          {
             name: 'format',
             schema: { type: 'string', enum: this.getEnum('format') },
             example: 'min',
-          }),
-          pathParam({
+          },
+          {
             name: 'scope',
             example: '@cycle',
-          }),
-          pathParam({
+          },
+          {
             name: 'packageName',
             example: 'core',
-          }),
-          pathParam({
+          },
+          {
             name: 'version',
             example: '7.0.0',
-          }),
-          unitsOpenApiParam(defaultUnits),
-        ],
+          },
+        ),
       },
     },
   }
@@ -121,9 +110,9 @@ export default class Bundlephobia extends BaseJsonService {
 
   static defaultBadgeData = { label: 'bundlephobia', color: 'informational' }
 
-  static render({ format, size, units }) {
+  static render({ format, size }) {
     const label = format === 'min' ? 'minified size' : 'minzipped size'
-    return renderSizeBadge(size, units, label)
+    return renderSizeBadge(size, 'iec', label)
   }
 
   async fetch({ scope, packageName, version }) {
@@ -141,9 +130,9 @@ export default class Bundlephobia extends BaseJsonService {
     })
   }
 
-  async handle({ format, scope, packageName, version }, { units }) {
+  async handle({ format, scope, packageName, version }) {
     const json = await this.fetch({ scope, packageName, version })
     const size = format === 'min' ? json.size : json.gzip
-    return this.constructor.render({ format, size, units })
+    return this.constructor.render({ format, size })
   }
 }
