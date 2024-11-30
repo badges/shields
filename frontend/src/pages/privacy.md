@@ -30,7 +30,7 @@ Users may optionally authorize our [GitHub OAuth app](https://img.shields.io/git
 
 Authorizing our app shares with us a GitHub token which has read-only access to public data. We only ask for the minimum permissions necessary. Authorizing the OAuth app doesn't allow us access to your private data or allow us to perform any actions on your behalf.
 
-The only information we store is the **GitHub** token and the **timestamp** when you authorized the app.
+The only information we store is the **GitHub token** and the **timestamp** when you authorized the app.
 
 - The GitHub token is used solely to increase the rate limit for accessing the GitHub API.
 - The signup timestamp is stored for internal record-keeping purposes.
