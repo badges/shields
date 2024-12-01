@@ -1,4 +1,4 @@
-import { InvalidResponse, pathParams } from '../index.js'
+import { pathParams } from '../index.js'
 import { renderSizeBadge } from '../size.js'
 import { BaseCratesService, description } from './crates-base.js'
 
@@ -41,11 +41,6 @@ export default class CratesSize extends BaseCratesService {
   async handle({ crate, version }) {
     const json = await this.fetch({ crate, version })
     const size = this.constructor.getVersionObj(json).crate_size
-
-    if (size == null) {
-      throw new InvalidResponse({ prettyMessage: 'unknown' })
-    }
-
     return renderSizeBadge(size, 'iec')
   }
 }
