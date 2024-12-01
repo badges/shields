@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
 import { pathParams } from '../index.js'
+import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseVisualStudioAppCenterService,
@@ -47,14 +47,8 @@ export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioA
     color: 'blue',
   }
 
-  static render({ size }) {
-    return {
-      message: prettyBytes(size),
-    }
-  }
-
   async handle({ owner, app, token }) {
     const { size } = await this.fetch({ owner, app, token, schema })
-    return this.constructor.render({ size })
+    return renderSizeBadge(size, 'metric')
   }
 }

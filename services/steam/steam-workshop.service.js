@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
 import { renderDateBadge } from '../date.js'
+import { renderSizeBadge } from '../size.js'
 import { renderDownloadsBadge } from '../downloads.js'
 import { metric } from '../text-formatters.js'
 import { NotFound, pathParams } from '../index.js'
@@ -208,12 +208,8 @@ class SteamFileSize extends SteamFileService {
     label: 'size',
   }
 
-  static render({ fileSize }) {
-    return { message: prettyBytes(fileSize), color: 'informational' }
-  }
-
   async onRequest({ response }) {
-    return this.constructor.render({ fileSize: response.file_size })
+    return renderSizeBadge(response.file_size, 'metric')
   }
 }
 

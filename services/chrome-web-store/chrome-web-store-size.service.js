@@ -1,4 +1,4 @@
-import { NotFound, pathParams } from '../index.js'
+import { InvalidResponse, NotFound, pathParams } from '../index.js'
 import BaseChromeWebStoreService from './chrome-web-store-base.js'
 
 export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
@@ -22,6 +22,17 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
     color: 'blue',
   }
 
+  transform(sizeStr) {
+    const match = sizeStr.match(/^(\d+)([a-zA-Z]+)$/)
+    if (!match) {
+      throw new InvalidResponse({
+        prettyMessage: 'size does not match expected format',
+      })
+    }
+    const [, size, units] = match
+    return `${size} ${units}`
+  }
+
   async handle({ storeId }) {
     const chromeWebStore = await this.fetch({ storeId })
     const size = chromeWebStore.size()
@@ -30,6 +41,6 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
       throw new NotFound({ prettyMessage: 'not found' })
     }
 
-    return { message: size }
+    return { message: this.transform(size) }
   }
 }
