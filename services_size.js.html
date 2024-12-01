@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ImproperlyConfigured</title>
+    <title>JSDoc: Source: services/size.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,187 +17,43 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ImproperlyConfigured</h1>
+    <h1 class="page-title">Source: services/size.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-core_base-service_errors.html">core/base-service/errors</a>~</span>ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Throw this error when required credentials are missing</p></div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="ImproperlyConfigured"><span class="type-signature"></span>new ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>props</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-core_base-service_errors.html#~RuntimeErrorProps">module:core/base-service/errors~RuntimeErrorProps</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Refer to individual attrs</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line132">line 132</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+
+import byteSize from 'byte-size'
+
+/**
+ * Creates a badge object that displays information about a size in bytes number.
+ * It should usually be used to output a size badge.
+ *
+ * @param {number} bytes - Raw number of bytes to be formatted
+ * @param {'metric'|'iec'} units - Either 'metric' (multiples of 1000) or 'iec' (multiples of 1024).
+ *   This should align with how the upstream displays sizes.
+ * @param {string} [label='size'] - Custom label
+ * @returns {object} A badge object that has three properties: label, message, and color
+ */
+function renderSizeBadge(bytes, units, label = 'size') {
+  return {
+    label,
+    message: byteSize(bytes, { units }).toString(),
+    color: 'blue',
+  }
+}
+
+export { renderSizeBadge }
+</code></pre>
+        </article>
+    </section>
 
 
 

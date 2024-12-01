@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ImproperlyConfigured</title>
+    <title>JSDoc: Module: services/size</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ImproperlyConfigured</h1>
+    <h1 class="page-title">Module: services/size</h1>
 
     
 
@@ -28,12 +28,6 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-core_base-service_errors.html">core/base-service/errors</a>~</span>ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Throw this error when required credentials are missing</p></div>
-        
-    
 </header>
 
 <article>
@@ -41,17 +35,88 @@
     
         
 
-    
-    <h2>Constructor</h2>
-    
+        
 
-    
-    <h4 class="name" id="ImproperlyConfigured"><span class="type-signature"></span>new ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h4>
-    
+
+<dl class="details">
 
     
 
+    
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_size.js.html">services/size.js</a>, <a href="services_size.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~renderSizeBadge"><span class="type-signature">(inner) </span>renderSizeBadge<span class="signature">(bytes, units, label<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates a badge object that displays information about a size in bytes number.
+It should usually be used to output a size badge.</p>
+</div>
 
 
 
@@ -74,7 +139,11 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -86,23 +155,113 @@
 
         <tr>
             
-                <td class="name"><code>props</code></td>
+                <td class="name"><code>bytes</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="module-core_base-service_errors.html#~RuntimeErrorProps">module:core/base-service/errors~RuntimeErrorProps</a></span>
+<span class="param-type">number</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last"><p>Refer to individual attrs</p></td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Raw number of bytes to be formatted</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>units</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">'metric'</span>
+|
+
+<span class="param-type">'iec'</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Either 'metric' (multiples of 1000) or 'iec' (multiples of 1024).
+This should align with how the upstream displays sizes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>label</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    'size'
+                
+                </td>
+            
+
+            <td class="description last"><p>Custom label</p></td>
         </tr>
 
     
@@ -143,7 +302,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line132">line 132</a>
+        <a href="services_size.js.html">services/size.js</a>, <a href="services_size.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -168,28 +327,34 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A badge object that has three properties: label, message, and color</p>
+</div>
 
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
 
+
+    </dd>
+</dl>
 
     
-    </div>
 
-    
 
-    
 
-    
 
-    
 
-    
-
-    
-
-    
-
+        
     
 
     
