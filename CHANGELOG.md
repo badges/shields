@@ -4,6 +4,15 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-12-01
+
+- add [WingetVersion] Badge [#10245](https://github.com/badges/shields/issues/10245)
+- Fix broken URL for pingpong.one [#10655](https://github.com/badges/shields/issues/10655)
+- [npm] - Last update badge added [#10641](https://github.com/badges/shields/issues/10641)
+- reduce overhead of NPM Last Update badge; test [npm] [#10666](https://github.com/badges/shields/issues/10666)
+- Add YouTube-specific privacy notes [#10646](https://github.com/badges/shields/issues/10646)
+- Dependency updates
+
 ## server-2024-11-02
 
 - cleanly handle null or undefined result from jsonpath-plus [#10645](https://github.com/badges/shields/issues/10645)
