@@ -4,6 +4,26 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2024-12-01
+
+- remove obsolete [CratesSize] test for null size [#10688](https://github.com/badges/shields/issues/10688)
+- fix [DockerVersion] service test [#10690](https://github.com/badges/shields/issues/10690)
+- Add renderDateBadge helper; affects [aur BitbucketLastCommit chrome date eclipse factorio galaxytoolshed GiteaLastCommit GistLastCommit GithubCreatedAt GithubHacktoberfest GithubIssueDetail GithubLastCommit GithubReleaseDate GitlabLastCommit maven npm openvsx snapcraft SourceforgeLastCommit steam vaadin visualstudio wordpress] [#10682](https://github.com/badges/shields/issues/10682)
+- Add blog post about token pool, improve 'authorise our app' CTA [#10683](https://github.com/badges/shields/issues/10683)
+- remove 'operations' section from README [#10673](https://github.com/badges/shields/issues/10673)
+- add jNullj, remove inactive maintainers [#10672](https://github.com/badges/shields/issues/10672)
+- reduce overhead of NPM Last Update badge; test [npm] [#10666](https://github.com/badges/shields/issues/10666)
+- rename postfix param to suffix [#10667](https://github.com/badges/shields/issues/10667)
+- Refactor - use renderVersionBadge - part 4 [githubrelease githubtag] [#10656](https://github.com/badges/shields/issues/10656)
+- fix [githubpipenv] service tests [#10658](https://github.com/badges/shields/issues/10658)
+- fix [githubmanifest] service tests [#10657](https://github.com/badges/shields/issues/10657)
+- add [WingetVersion] Badge [#10245](https://github.com/badges/shields/issues/10245)
+- Fix broken URL for pingpong.one [#10655](https://github.com/badges/shields/issues/10655)
+- Remove [Nuget MyGet] color tests [#10654](https://github.com/badges/shields/issues/10654)
+- [npm] - Last update badge added [#10641](https://github.com/badges/shields/issues/10641)
+- Add YouTube-specific privacy notes [#10646](https://github.com/badges/shields/issues/10646)
+- Dependency updates
+
 ## server-2024-11-02
 
 - cleanly handle null or undefined result from jsonpath-plus [#10645](https://github.com/badges/shields/issues/10645)
