@@ -123,6 +123,15 @@ const config = {
               },
             ],
           },
+          {
+            title: 'Policy',
+            items: [
+              {
+                label: 'Privacy Policy',
+                href: '/privacy',
+              },
+            ],
+          },
         ],
         copyright: `Copyright © ${new Date().getFullYear()} Shields.io. Built with Docusaurus.`,
       },
