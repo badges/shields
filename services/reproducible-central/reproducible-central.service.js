@@ -10,14 +10,14 @@ export default class ReproducibleCentral extends BaseJsonService {
   static category = 'dependencies'
 
   static route = {
-    base: 'reproducible-central/a',
+    base: 'reproducible-central/artifact',
     pattern: ':groupId/:artifactId/:version',
   }
 
   static openApi = {
-    '/reproducible-central/a/{groupId}/{artifactId}/{version}': {
+    '/reproducible-central/artifact/{groupId}/{artifactId}/{version}': {
       get: {
-        summary: 'Reproducible Central',
+        summary: 'Reproducible Central Artifact',
         parameters: pathParams(
           {
             name: 'groupId',
@@ -37,8 +37,7 @@ export default class ReproducibleCentral extends BaseJsonService {
   }
 
   static defaultBadgeData = {
-    label: 'Reproducible Builds',
-    labelColor: '1e5b96',
+    label: 'reproducible builds',
   }
 
   static render({ message, color }) {
@@ -68,7 +67,10 @@ export default class ReproducibleCentral extends BaseJsonService {
 
   async handle({ groupId, artifactId, version }) {
     if (version.endsWith('-SNAPSHOT')) {
-      return this.constructor.render({ message: 'SNAPSHOT', color: 'grey' })
+      return this.constructor.render({
+        message: 'SNAPSHOT, not evaluated',
+        color: 'grey',
+      })
     }
 
     try {
