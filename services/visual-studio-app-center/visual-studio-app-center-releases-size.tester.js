@@ -1,5 +1,5 @@
 import { createServiceTester } from '../tester.js'
-import { isFileSize } from '../test-validators.js'
+import { isMetricFileSize } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('8368844 bytes to 8.37 megabytes')
@@ -13,7 +13,7 @@ t.create('8368844 bytes to 8.37 megabytes')
   )
   .expectBadge({
     label: 'size',
-    message: '8.37 MB',
+    message: '8.4 MB',
   })
 
 t.create('Valid Release')
@@ -22,7 +22,7 @@ t.create('Valid Release')
   )
   .expectBadge({
     label: 'size',
-    message: isFileSize,
+    message: isMetricFileSize,
   })
 
 t.create('Valid user, invalid project, valid API token')

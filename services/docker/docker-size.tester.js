@@ -1,4 +1,4 @@
-import { isFileSize } from '../test-validators.js'
+import { isIecFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -6,35 +6,35 @@ t.create('docker image size (valid, library)')
   .get('/_/alpine.json')
   .expectBadge({
     label: 'image size',
-    message: isFileSize,
+    message: isIecFileSize,
   })
 
 t.create('docker image size (valid, library, arch parameter )')
   .get('/_/mysql.json?arch=amd64')
   .expectBadge({
     label: 'image size',
-    message: isFileSize,
+    message: isIecFileSize,
   })
 
 t.create('docker image size (valid, library with tag)')
   .get('/_/alpine/latest.json')
   .expectBadge({
     label: 'image size',
-    message: isFileSize,
+    message: isIecFileSize,
   })
 
 t.create('docker image size (valid, user)')
   .get('/jrottenberg/ffmpeg.json')
   .expectBadge({
     label: 'image size',
-    message: isFileSize,
+    message: isIecFileSize,
   })
 
 t.create('docker image size (valid, user with tag)')
   .get('/jrottenberg/ffmpeg/3.2-alpine.json')
   .expectBadge({
     label: 'image size',
-    message: isFileSize,
+    message: isIecFileSize,
   })
 
 t.create('docker image size (invalid, incorrect tag)')
