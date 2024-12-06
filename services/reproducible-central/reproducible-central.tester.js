@@ -6,7 +6,7 @@ t.create('reproducible gav')
   .expectBadge({
     label: 'reproducible builds',
     message: '47/47',
-    color: 'green',
+    color: 'brightgreen',
   })
 
 t.create('mostly reproducible gav')
@@ -29,7 +29,7 @@ t.create('non-rebuildable gav')
   .get('/org.apache.maven/maven-core/4.0.0-alpha-2')
   .expectBadge({
     label: 'reproducible builds',
-    message: 'X',
+    message: 'unable to rebuild',
     color: 'red',
   })
 
@@ -37,14 +37,22 @@ t.create('unknown v for known ga')
   .get('/org.apache.maven/maven-core/3.9.9.1')
   .expectBadge({
     label: 'reproducible builds',
-    message: '3.9.9.1',
+    message: 'version not available in Maven Central',
+    color: 'red',
+  })
+
+t.create('untested v for known ga')
+  .get('/org.apache.maven/maven-core/2.2.1')
+  .expectBadge({
+    label: 'reproducible builds',
+    message: 'version not evaluated',
     color: 'grey',
   })
 
 t.create('unknown ga').get('/org.apache.maven/any/3.9.9').expectBadge({
   label: 'reproducible builds',
-  message: 'unknown ga',
-  color: 'orange',
+  message: 'groupId:artifactId unknown',
+  color: 'red',
 })
 
 t.create('SNAPSHOT').get('/any/any/anything-SNAPSHOT').expectBadge({

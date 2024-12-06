@@ -1,10 +1,7 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
 
-const schema = Joi.object({
-  color: Joi.string().required(),
-  message: Joi.string().required(),
-}).required()
+const schema = Joi.object().pattern(Joi.string(), Joi.string()).required()
 
 export default class ReproducibleCentral extends BaseJsonService {
   static category = 'dependencies'
@@ -41,28 +38,42 @@ export default class ReproducibleCentral extends BaseJsonService {
   }
 
   static render({ message, color }) {
+    if (message === undefined) {
+      color = 'red'
+      message = 'version not available in Maven Central'
+    } else if (message === 'X') {
+      color = 'red'
+      message = 'unable to rebuild'
+    } else if (message === '?') {
+      color = 'grey'
+      message = 'version not evaluated'
+    } else if (message.indexOf('/') > 0) {
+      // {ok}/{count}
+      const ok = message.substring(0, message.indexOf('/'))
+      const count = message.substring(message.indexOf('/') + 1)
+      if (ok === count) {
+        color = 'brightgreen'
+      } else if (ok > count - ok) {
+        color = 'yellow'
+      } else {
+        color = 'red'
+      }
+    }
+
     return {
       message,
       color,
     }
   }
 
-  async fetch({ groupId, artifactId, version }) {
+  async fetch({ groupId, artifactId }) {
     return this._requestJson({
       schema,
-      url: `https://jvm-repo-rebuild.github.io/reproducible-central/badge/artifact/${groupId.replace(/\./g, '/')}/${artifactId}/${version}.json`,
+      url: `https://jvm-repo-rebuild.github.io/reproducible-central/badge/artifact/${groupId.replace(/\./g, '/')}/${artifactId}.json`,
+      httpErrors: {
+        404: 'groupId:artifactId unknown',
+      },
     })
-  }
-
-  async fetchIndex({ groupId, artifactId, version }) {
-    const { res } = await this._requestFetcher({
-      url: `https://jvm-repo-rebuild.github.io/reproducible-central/badge/artifact/${groupId.replace(/\./g, '/')}/${artifactId}/index.html`,
-    })
-    if (res.statusCode === 404) {
-      return { message: 'unknown ga', color: 'orange' } // unknown project ga, whatever version
-    } else {
-      return { message: version, color: 'grey' } // unknown version for a known project ga
-    }
   }
 
   async handle({ groupId, artifactId, version }) {
@@ -73,21 +84,10 @@ export default class ReproducibleCentral extends BaseJsonService {
       })
     }
 
-    try {
-      // try full gav
-      const { message, color } = await this.fetch({
-        groupId,
-        artifactId,
-        version,
-      })
-      return this.constructor.render({ message, color })
-    } catch (e) {}
-    // gav data not found: try ga
-    const { message, color } = await this.fetchIndex({
+    const versions = await this.fetch({
       groupId,
       artifactId,
-      version,
     })
-    return this.constructor.render({ message, color })
+    return this.constructor.render({ message: versions[version] })
   }
 }
