@@ -1,8 +1,8 @@
 'use strict'
 
-const path = require('path')
-const { spawn } = require('child-process-promise')
-const { expect, use } = require('chai')
+import path from 'path'
+import { spawn } from 'child-process-promise'
+import { expect, use } from 'chai'
 use(require('sinon-chai'))
 
 function runCli(args) {
