@@ -17,8 +17,14 @@ describe('mergeQueries function', function () {
           }
         `),
       ),
-    ).to.equalIgnoreSpaces(
-      'query ($param: String!) { foo(param: $param) { bar } }',
+    ).to.equal(
+      print(gql`
+        query ($param: String!) {
+          foo(param: $param) {
+            bar
+          }
+        }
+      `),
     )
 
     expect(
@@ -38,8 +44,15 @@ describe('mergeQueries function', function () {
           `,
         ),
       ),
-    ).to.equalIgnoreSpaces(
-      'query ($param: String!) { foo(param: $param) { bar } baz }',
+    ).to.equal(
+      print(gql`
+        query ($param: String!) {
+          foo(param: $param) {
+            bar
+          }
+          baz
+        }
+      `),
     )
 
     expect(
@@ -62,7 +75,15 @@ describe('mergeQueries function', function () {
           `,
         ),
       ),
-    ).to.equalIgnoreSpaces('{ foo bar baz }')
+    ).to.equal(
+      print(gql`
+        {
+          foo
+          bar
+          baz
+        }
+      `),
+    )
 
     expect(
       print(
@@ -79,7 +100,14 @@ describe('mergeQueries function', function () {
           `,
         ),
       ),
-    ).to.equalIgnoreSpaces('{ foo bar }')
+    ).to.equal(
+      print(gql`
+        {
+          foo
+          bar
+        }
+      `),
+    )
   })
 
   it('throws an error when passed invalid params', function () {

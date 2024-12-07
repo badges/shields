@@ -3,7 +3,6 @@
 const path = require('path')
 const { spawn } = require('child-process-promise')
 const { expect, use } = require('chai')
-use(require('chai-string'))
 use(require('sinon-chai'))
 
 function runCli(args) {
@@ -15,7 +14,7 @@ function runCli(args) {
 describe('The CLI', function () {
   it('should provide a help message', async function () {
     const { stdout } = await runCli([])
-    expect(stdout).to.startWith('Usage')
+    expect(stdout.startsWith('Usage')).to.be.true
   })
 
   it('should produce default badges', async function () {
