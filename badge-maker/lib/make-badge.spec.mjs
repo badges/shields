@@ -1,10 +1,10 @@
 'use strict'
 
-const { test, given, forCases } = require('sazerac')
-const { expect } = require('chai')
-const snapshot = require('snap-shot-it')
-const prettier = require('prettier')
-const makeBadge = require('./make-badge')
+import { test, given, forCases } from 'sazerac'
+import { expect } from 'chai'
+import snapshot from 'snap-shot-it'
+import prettier from 'prettier'
+import makeBadge from './make-badge'
 
 async function expectBadgeToMatchSnapshot(format) {
   snapshot(await prettier.format(makeBadge(format), { parser: 'html' }))
