@@ -5,6 +5,12 @@ const schema = Joi.object()
   .pattern(Joi.string(), Joi.string().regex(/^\d+\/\d+$|^[X?]$/))
   .required()
 
+const description = `
+[Reproducible Central](https://github.com/jvm-repo-rebuild/reproducible-central)
+provides [Reproducible Builds](https://reproducible-builds.org/) check status
+for projects published to [Maven Central](https://central.sonatype.com/).
+`
+
 export default class ReproducibleCentral extends BaseJsonService {
   static category = 'dependencies'
 
@@ -17,6 +23,7 @@ export default class ReproducibleCentral extends BaseJsonService {
     '/reproducible-central/artifact/{groupId}/{artifactId}/{version}': {
       get: {
         summary: 'Reproducible Central Artifact',
+        description,
         parameters: pathParams(
           {
             name: 'groupId',
