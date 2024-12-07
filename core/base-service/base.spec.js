@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import chai from 'chai'
+import { expect, use } from 'chai'
 import sinon from 'sinon'
 import prometheus from 'prom-client'
 import chaiAsPromised from 'chai-as-promised'
@@ -16,8 +16,7 @@ import {
 import BaseService from './base.js'
 import { MetricHelper, MetricNames } from './metric-helper.js'
 import '../register-chai-plugins.spec.js'
-const { expect } = chai
-chai.use(chaiAsPromised)
+use(chaiAsPromised)
 
 const queryParamSchema = Joi.object({
   queryParamA: Joi.string(),

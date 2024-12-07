@@ -1,4 +1,4 @@
-import chai from 'chai'
+import { expect } from 'chai'
 import {
   category2openapi,
   pathParam,
@@ -7,7 +7,6 @@ import {
   queryParams,
 } from './openapi.js'
 import BaseJsonService from './base-json.js'
-const { expect } = chai
 
 class OpenApiService extends BaseJsonService {
   static category = 'build'
