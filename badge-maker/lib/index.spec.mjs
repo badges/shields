@@ -1,7 +1,7 @@
 'use strict'
 
-const { expect } = require('chai')
-const { makeBadge, ValidationError } = require('.')
+import { expect } from 'chai'
+import { makeBadge, ValidationError } from '.'
 
 describe('makeBadge function', function () {
   it('should produce badge with valid input', async function () {

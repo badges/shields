@@ -1,5 +1,5 @@
 import { test, given } from 'sazerac'
-import chai, { expect } from 'chai'
+import { expect, use } from 'chai'
 import sinon from 'sinon'
 import httpMocks from 'node-mocks-http'
 import chaiDatetime from 'chai-datetime'
@@ -10,7 +10,7 @@ import {
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
 } from './cache-headers.js'
-chai.use(chaiDatetime)
+use(chaiDatetime)
 
 describe('Cache header functions', function () {
   let res
