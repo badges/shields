@@ -15,24 +15,10 @@ t.create('total installs | not found')
 
 // version installs
 
-t.create('version installs | valid: numeric version')
+t.create('version installs | no longer available')
   .get('/view-job-filters/1.26.json')
   .expectBadge({
-    label: 'installs@1.26',
-    message: isMetric,
+    label: 'installs',
+    message: 'no longer available per version',
+    color: 'lightgrey'
   })
-
-t.create('version installs | valid: alphanumeric version')
-  .get('/build-failure-analyzer/1.17.2-DRE3.21.json')
-  .expectBadge({
-    label: 'installs@1.17.2-DRE3.21',
-    message: isMetric,
-  })
-
-t.create('version installs | not found: non-existent plugin')
-  .get('/not-a-plugin/1.26.json')
-  .expectBadge({ label: 'installs', message: 'plugin not found' })
-
-t.create('version installs | not found: non-existent version')
-  .get('/view-job-filters/1.1-NOT-FOUND.json')
-  .expectBadge({ label: 'installs', message: 'version not found' })

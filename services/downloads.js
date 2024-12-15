@@ -22,8 +22,6 @@ import { metric } from './text-formatters.js'
  *    value instead of the color being based on the count of downloads
  * @param {string} [attrs.messageSuffixOverride] If provided then the badge message will
  *    will have this value added to the download count, separated with a space
- * @param {string} [attrs.versionedLabelPrefix] If provided then the badge label will use
- *    this value as the prefix for versioned badges, e.g. `foobar@v1.23`. Defaults to 'downloads'
  * @returns {object} Badge
  */
 function renderDownloadsBadge({
@@ -33,7 +31,6 @@ function renderDownloadsBadge({
   labelOverride,
   colorOverride,
   messageSuffixOverride,
-  versionedLabelPrefix = 'downloads',
 }) {
   let messageSuffix = ''
   if (messageSuffixOverride) {
@@ -46,7 +43,7 @@ function renderDownloadsBadge({
   if (labelOverride) {
     label = labelOverride
   } else if (version) {
-    label = `${versionedLabelPrefix}@${version}`
+    label = `downloads@${version}`
   }
 
   return {
