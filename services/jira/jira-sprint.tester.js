@@ -4,11 +4,11 @@ import { sprintId, sprintQueryString } from './jira-test-helpers.js'
 export const t = await createServiceTester()
 
 t.create('unknown sprint')
-  .get('/abc.json?baseUrl=https://jira.spring.io')
+  .get('/abc.json?baseUrl=http://issues.apache.org/jira')
   .expectBadge({ label: 'jira', message: 'sprint not found' })
 
 t.create('known sprint')
-  .get('/94.json?baseUrl=https://jira.spring.io')
+  .get('/3.json?baseUrl=http://issues.apache.org/jira')
   .expectBadge({
     label: 'completion',
     message: isIntegerPercentage,
