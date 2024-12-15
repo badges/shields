@@ -20,5 +20,5 @@ t.create('version installs | no longer available')
   .expectBadge({
     label: 'installs',
     message: 'no longer available per version',
-    color: 'lightgrey'
+    color: 'lightgrey',
   })
