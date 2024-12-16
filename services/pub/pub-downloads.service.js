@@ -1,11 +1,11 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
-import { metric } from '../text-formatters.js'
+import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
 import { baseDescription } from './pub-common.js'
 
 const description = `${baseDescription}
-  <p>This badge shows a measure of how many developers have downloaded a package. This provides a raw measure of the overall sentiment of a package from peer developers.</p>`
+  <p>This badge shows a measure of how many developers have downloaded a package monthly.</p>`
 
 const schema = Joi.object({
   downloadCount30Days: nonNegativeInteger,
@@ -14,12 +14,12 @@ const schema = Joi.object({
 export default class PubDownloads extends BaseJsonService {
   static category = 'downloads'
 
-  static route = { base: 'pub/downloads', pattern: ':packageName' }
+  static route = { base: 'pub/dm', pattern: ':packageName' }
 
   static openApi = {
-    '/pub/downloads/{packageName}': {
+    '/pub/dm/{packageName}': {
       get: {
-        summary: 'Pub Downloads',
+        summary: 'Pub Monthly Downloads',
         description,
         parameters: pathParams({
           name: 'packageName',
@@ -32,11 +32,11 @@ export default class PubDownloads extends BaseJsonService {
   static defaultBadgeData = { label: 'downloads' }
 
   static render({ downloadCount30Days }) {
-    return {
-      label: 'downloads',
-      message: metric(downloadCount30Days),
-      color: 'blue',
-    }
+    return renderDownloadsBadge({
+      downloads: downloadCount30Days,
+      interval: 'month',
+      colorOverride: 'blue',
+    })
   }
 
   async fetch({ packageName }) {
