@@ -24,7 +24,7 @@ export default class GitlabLanguage extends GitLabBase {
   static openApi = {
     '/gitlab/languages/{project}': {
       get: {
-        summary: 'GitLab Top Languages',
+        summary: 'GitLab Top Language',
         description,
         parameters: [
           pathParam({
