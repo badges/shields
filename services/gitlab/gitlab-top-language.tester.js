@@ -11,7 +11,7 @@ t.create('Valid Repository')
   })
 
 t.create('Valid Blank Repo')
-  .get('/KoruptTinker/gitlab_blank_repo.json')
+  .get('/KoruptTinker/gitlab-blank-repo.json')
   .expectBadge({
     label: 'no languages found',
     message: 'NA',
