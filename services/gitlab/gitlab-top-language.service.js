@@ -12,7 +12,7 @@ const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
 }).required()
 
-export default class GitlabLanguage extends GitLabBase {
+export default class GitlabTopLanguage extends GitLabBase {
   static category = 'analysis'
 
   static route = {
@@ -59,7 +59,6 @@ export default class GitlabLanguage extends GitLabBase {
         color: 'blue',
       }
     }
-    // Get max value from here
   }
 
   async fetch({ project, baseUrl }) {
