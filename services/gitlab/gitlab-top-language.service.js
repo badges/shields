@@ -1,11 +1,14 @@
 import Joi from 'joi'
 import { optionalUrl } from '../validators.js'
-import { pathParam, queryParam } from '../index.js'
+import { InvalidResponse, pathParam, queryParam } from '../index.js'
 import GitLabBase from './gitlab-base.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
 
 const schema = Joi.object()
-  .pattern(Joi.string(), Joi.number().min(0).max(100).precision(2))
+  .pattern(
+    Joi.string().required(),
+    Joi.number().min(0).max(100).precision(2).required(),
+  )
   .required()
 
 const queryParamSchema = Joi.object({
@@ -43,21 +46,13 @@ export default class GitlabTopLanguage extends GitLabBase {
   static defaultBadgeData = { label: 'language' }
 
   static render({ languageData }) {
-    if (Object.keys(languageData).length > 0) {
-      const topLanguage = Object.keys(languageData).reduce((a, b) =>
-        languageData[a] > languageData[b] ? a : b,
-      )
-      return {
-        label: topLanguage.toLowerCase(),
-        message: `${languageData[topLanguage].toFixed(1)}%`,
-        color: 'blue',
-      }
-    } else {
-      return {
-        label: 'no languages found',
-        message: 'NA',
-        color: 'blue',
-      }
+    const topLanguage = Object.keys(languageData).reduce((a, b) =>
+      languageData[a] > languageData[b] ? a : b,
+    )
+    return {
+      label: topLanguage.toLowerCase(),
+      message: `${languageData[topLanguage].toFixed(1)}%`,
+      color: 'blue',
     }
   }
 
@@ -75,6 +70,10 @@ export default class GitlabTopLanguage extends GitLabBase {
       baseUrl,
     })
 
-    return this.constructor.render({ languageData })
+    if (Object.keys(languageData).length > 0) {
+      return this.constructor.render({ languageData })
+    } else {
+      throw new InvalidResponse({ prettyMessage: 'no languages found' })
+    }
   }
 }
