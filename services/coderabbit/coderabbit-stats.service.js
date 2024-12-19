@@ -2,11 +2,10 @@ import Joi from 'joi'
 import { BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
-  prCount: Joi.number().required(),
+  reviews: Joi.number().required(),
 }).required()
 
-// Note: Service name must match file name without '.service.js'
-class CoderabbitStats extends BaseJsonService {
+class CodeRabbitStats extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'coderabbit',
@@ -15,26 +14,35 @@ class CoderabbitStats extends BaseJsonService {
 
   static examples = [
     {
-      title: 'CodeRabbit PR Stats',
+      title: 'CodeRabbit Review Stats',
       namedParams: {
         provider: 'github',
-        org: 'coderabbit-ai',
-        repo: 'demo-repository',
+        org: 'coderabbitai',
+        repo: 'ast-grep-essentials',
       },
       staticPreview: this.render({
-        prCount: 100,
+        reviews: 101,
       }),
+      documentation: 'Shows the number of CodeRabbit reviews for a repository',
     },
   ]
 
   static defaultBadgeData = {
-    label: 'coderabbit reviews',
+    label: 'CodeRabbit',
+    labelColor: '171717',
   }
 
-  static render({ prCount }) {
+  static render({ reviews }) {
     return {
-      message: `${prCount} PRs`,
-      color: 'blue',
+      message: `${reviews} Reviews`,
+      color: 'ff570a',
+    }
+  }
+
+  static renderError({ message }) {
+    return {
+      message,
+      color: '9f9f9f',
     }
   }
 
@@ -43,15 +51,19 @@ class CoderabbitStats extends BaseJsonService {
       schema,
       url: `https://api.coderabbit.ai/stats/${provider}/${org}/${repo}`,
       httpErrors: {
-        404: 'repository not found',
+        404: 'invalid',
       },
     })
   }
 
   async handle({ provider, org, repo }) {
-    const data = await this.fetch({ provider, org, repo })
-    return this.constructor.render(data)
+    try {
+      const data = await this.fetch({ provider, org, repo })
+      return this.constructor.render(data)
+    } catch (error) {
+      return this.constructor.renderError({ message: error.message })
+    }
   }
 }
 
-export default CoderabbitStats
+export default CodeRabbitStats
