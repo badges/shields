@@ -64,7 +64,7 @@ const commonJsConfig = {
 
 // config specific to linting Node (ESModules) files
 const nodeEsmConfig = {
-  files: ['**/*.js', '!frontend/**/*.js', '!badge-maker/**/*.js'],
+  files: ['**/*.@(js|mjs)', '!frontend/**/*.js', '!badge-maker/**/*.js'],
 
   languageOptions: {
     globals: {
@@ -135,7 +135,7 @@ const servicesConfig = {
 // config specific to linting Mocha tests
 const mochaConfig = {
   files: [
-    '**/*.spec.@(js|ts)',
+    '**/*.spec.@(js|mjs|ts)',
     '**/*.integration.js',
     '**/test-helpers.js',
     'core/service-test-runner/**/*.js',
