@@ -118,7 +118,7 @@ const servicesConfig = {
           'isDeprecated',
           'route',
           'auth',
-          'examples',
+          'openApi',
           '_cacheLength',
           'defaultBadgeData',
           'render',

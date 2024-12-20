@@ -9,14 +9,6 @@ const description = `<p>This badge indicates whether the package supports the <b
 export default class NodeCurrentVersion extends NodeVersionBase {
   static route = this.buildRoute('node/v', { withTag: true })
 
-  static defaultBadgeData = {
-    label: 'node',
-  }
-
-  static type = 'current'
-
-  static colorResolver = versionColorForRangeCurrent
-
   static openApi = {
     '/node/v/{packageName}': {
       get: {
@@ -57,4 +49,12 @@ export default class NodeCurrentVersion extends NodeVersionBase {
       },
     },
   }
+
+  static defaultBadgeData = {
+    label: 'node',
+  }
+
+  static type = 'current'
+
+  static colorResolver = versionColorForRangeCurrent
 }
