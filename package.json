@@ -43,7 +43,7 @@
     "glob": "^11.0.0",
     "global-agent": "^3.0.0",
     "got": "^14.4.5",
-    "graphql": "16.9.0",
+    "graphql": "16.10.0",
     "graphql-tag": "^2.12.6",
     "joi": "17.13.3",
     "joi-extension-semver": "5.0.0",
