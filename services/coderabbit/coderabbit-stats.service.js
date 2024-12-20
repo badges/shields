@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   reviews: Joi.number().required(),
@@ -12,37 +12,40 @@ class CodeRabbitStats extends BaseJsonService {
     pattern: 'stats/:provider/:org/:repo',
   }
 
-  static examples = [
-    {
-      title: 'CodeRabbit Review Stats',
-      namedParams: {
-        provider: 'github',
-        org: 'coderabbitai',
-        repo: 'ast-grep-essentials',
+  static openApi = {
+    '/coderabbit/stats/{provider}/{org}/{repo}': {
+      get: {
+        summary: 'CodeRabbit Pull Request Reviews',
+        description:
+          'By default, this badge pulls the number of PRs reviewed by [CodeRabbit](https://coderabbit.ai), AI code review tool',
+        parameters: pathParams(
+          {
+            name: 'provider',
+            example: 'github, gitlab, bitbucket',
+            description: 'Version Control Provider (e.g., github)',
+          },
+          {
+            name: 'org',
+            example: 'coderabbitai',
+            description: 'Organization or User name',
+          },
+          {
+            name: 'repo',
+            example: 'ast-grep-essentials',
+            description: 'Repository name',
+          },
+        ),
       },
-      staticPreview: this.render({
-        reviews: 101,
-      }),
-      documentation: 'Shows the number of CodeRabbit reviews for a repository',
     },
-  ]
+  }
 
   static defaultBadgeData = {
-    label: 'CodeRabbit',
-    labelColor: '171717',
+    label: 'CodeRabbit Reviews',
   }
 
   static render({ reviews }) {
     return {
-      message: `${reviews} Reviews`,
-      color: 'ff570a',
-    }
-  }
-
-  static renderError({ message }) {
-    return {
-      message,
-      color: '9f9f9f',
+      message: `${reviews}`,
     }
   }
 
@@ -51,18 +54,14 @@ class CodeRabbitStats extends BaseJsonService {
       schema,
       url: `https://api.coderabbit.ai/stats/${provider}/${org}/${repo}`,
       httpErrors: {
-        404: 'invalid',
+        404: 'repo not found',
       },
     })
   }
 
   async handle({ provider, org, repo }) {
-    try {
-      const data = await this.fetch({ provider, org, repo })
-      return this.constructor.render(data)
-    } catch (error) {
-      return this.constructor.renderError({ message: error.message })
-    }
+    const data = await this.fetch({ provider, org, repo })
+    return this.constructor.render(data)
   }
 }
 
