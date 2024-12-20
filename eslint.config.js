@@ -135,7 +135,7 @@ const servicesConfig = {
 // config specific to linting Mocha tests
 const mochaConfig = {
   files: [
-    '**/*.spec.@(js|ts|tsx)',
+    '**/*.spec.@(js|ts)',
     '**/*.integration.js',
     '**/test-helpers.js',
     'core/service-test-runner/**/*.js',
@@ -162,7 +162,7 @@ const mochaConfig = {
 
 // config specific to linting Cypress tests
 const cypressConfig = {
-  files: ['**/*.cy.@(js|ts|tsx)'],
+  files: ['**/*.cy.@(js|ts)'],
   ...cypressPlugin.configs.recommended,
 }
 // append these to cypress.configs.recommended, without overwriting

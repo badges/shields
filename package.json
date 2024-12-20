@@ -82,9 +82,9 @@
     "coverage:report:generate": "c8 report",
     "coverage:report:open": "open-cli coverage/lcov-report/index.html",
     "coverage:report": "run-s --silent coverage:report:generate coverage:report:open",
-    "lint": "eslint \"**/*.@(cjs|js|ts|tsx)\"",
-    "prettier": "prettier --write \"**/*.@(cjs|js|ts|tsx|md|json|yml)\"",
-    "prettier:check": "prettier --check \"**/*.@(cjs|js|ts|tsx|md|json|yml)\"",
+    "lint": "eslint \"**/*.@(cjs|js|ts)\"",
+    "prettier": "prettier --write \"**/*.@(cjs|js|ts|md|json|yml)\"",
+    "prettier:check": "prettier --check \"**/*.@(cjs|js|ts|md|json|yml)\"",
     "danger": "danger",
     "test:e2e": "cypress run",
     "test:core": "cross-env NODE_CONFIG_ENV=test mocha \"core/**/*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
@@ -124,7 +124,7 @@
     "docusaurus:clear": "docusaurus clear frontend"
   },
   "lint-staged": {
-    "**/*.@(js|ts|tsx)": [
+    "**/*.@(js|ts)": [
       "eslint --fix",
       "prettier --write"
     ],
