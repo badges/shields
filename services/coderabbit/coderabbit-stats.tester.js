@@ -6,7 +6,7 @@ t.create('live CodeRabbitStats')
   .get('/stats/github/coderabbitai/ast-grep-essentials.json')
   .expectBadge({
     label: 'CodeRabbit Reviews',
-    message: /^\d+$/,
+    message: Joi.number().min(0)
   })
 
 t.create('CodeRabbitStats valid repo')
