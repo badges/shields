@@ -47,13 +47,13 @@ export default function coalesceBadge(
     label: overrideLabel,
     logo: overrideLogo,
     logoColor: overrideLogoColor,
+    logoSize: overrideLogoSize,
     link: overrideLink,
     colorB: legacyOverrideColor,
     colorA: legacyOverrideLabelColor,
   } = overrides
   let {
     logoWidth: overrideLogoWidth,
-    logoSize: overrideLogoSize,
     color: overrideColor,
     labelColor: overrideLabelColor,
   } = overrides

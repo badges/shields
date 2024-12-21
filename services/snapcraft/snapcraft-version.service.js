@@ -32,8 +32,6 @@ export default class SnapcraftVersion extends SnapcraftBase {
     queryParamSchema,
   }
 
-  static defaultBadgeData = { label: 'snapcraft' }
-
   static openApi = {
     '/snapcraft/v/{package}/{track}/{risk}': {
       get: {
@@ -54,6 +52,8 @@ export default class SnapcraftVersion extends SnapcraftBase {
       },
     },
   }
+
+  static defaultBadgeData = { label: 'snapcraft' }
 
   static render({ version }) {
     return renderVersionBadge({ version })
