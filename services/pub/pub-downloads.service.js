@@ -35,7 +35,6 @@ export default class PubDownloads extends BaseJsonService {
     return renderDownloadsBadge({
       downloads: downloadCount30Days,
       interval: 'month',
-      colorOverride: 'blue',
     })
   }
 

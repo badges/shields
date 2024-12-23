@@ -8,7 +8,7 @@ t.create('pub monthly downloads (valid)')
   .expectBadge({
     label: 'downloads',
     message: isMetricOverTimePeriod,
-    color: 'blue',
+    color: 'green',
   })
 
 t.create('pub monthly downloads (not found)')
