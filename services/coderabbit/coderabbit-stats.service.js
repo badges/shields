@@ -21,7 +21,7 @@ class CodeRabbitStats extends BaseJsonService {
         parameters: pathParams(
           {
             name: 'provider',
-            example: 'github, gitlab, bitbucket',
+            example: 'github',
             description: 'Version Control Provider (e.g., github)',
           },
           {
@@ -55,7 +55,7 @@ class CodeRabbitStats extends BaseJsonService {
       schema,
       url: `https://api.coderabbit.ai/stats/${provider}/${org}/${repo}`,
       httpErrors: {
-        404: 'repo not found',
+        400: 'provider or repo not found',
       },
     })
   }

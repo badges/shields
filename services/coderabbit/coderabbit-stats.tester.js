@@ -21,12 +21,12 @@ t.create('live CodeRabbitStats nonexistent org')
   .get('/prs/github/not-valid/not-found.json')
   .expectBadge({
     label: 'coderabbit reviews',
-    message: 'invalid',
+    message: 'provider or repo not found',
   })
 
 t.create('live CodeRabbitStats invalid repo')
   .get('/prs/github/coderabbitai/invalid-repo-name.json')
   .expectBadge({
     label: 'coderabbit reviews',
-    message: 'invalid',
+    message: 'provider or repo not found',
   })
