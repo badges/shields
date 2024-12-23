@@ -40,7 +40,7 @@ class CodeRabbitStats extends BaseJsonService {
   }
 
   static defaultBadgeData = {
-    label: 'Coderabbit reviews',
+    label: 'coderabbit reviews',
   }
 
   static render({ reviews }) {
