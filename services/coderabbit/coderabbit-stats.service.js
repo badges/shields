@@ -9,15 +9,15 @@ class CodeRabbitStats extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'coderabbit',
-    pattern: 'stats/:provider/:org/:repo',
+    pattern: 'prs/:provider/:org/:repo',
   }
 
   static openApi = {
-    '/coderabbit/stats/{provider}/{org}/{repo}': {
+    '/coderabbit/prs/{provider}/{org}/{repo}': {
       get: {
         summary: 'CodeRabbit Pull Request Reviews',
         description:
-          'By default, this badge pulls the number of PRs reviewed by [CodeRabbit](https://coderabbit.ai), AI code review tool',
+          'This badge pulls the number of PRs reviewed by [CodeRabbit](https://coderabbit.ai), AI code review tool',
         parameters: pathParams(
           {
             name: 'provider',
@@ -40,7 +40,7 @@ class CodeRabbitStats extends BaseJsonService {
   }
 
   static defaultBadgeData = {
-    label: 'CodeRabbit Reviews',
+    label: 'Coderabbit reviews',
   }
 
   static render({ reviews }) {
