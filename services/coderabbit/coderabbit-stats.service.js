@@ -46,6 +46,7 @@ class CodeRabbitStats extends BaseJsonService {
   static render({ reviews }) {
     return {
       message: `${reviews}`,
+      color: 'blue',
     }
   }
 
