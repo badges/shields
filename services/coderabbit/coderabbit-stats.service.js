@@ -9,7 +9,7 @@ class CodeRabbitStats extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'coderabbit',
-    pattern: 'prs/:provider/:org/:repo',
+    pattern: 'prs/:provider(github|bitbucket|gitlab)/:org/:repo',
   }
 
   static openApi = {
@@ -22,7 +22,8 @@ class CodeRabbitStats extends BaseJsonService {
           {
             name: 'provider',
             example: 'github',
-            description: 'Version Control Provider (e.g., github)',
+            description: 'Version Control Provider',
+            schema: { type: 'string', enum: this.getEnum('provider') },
           },
           {
             name: 'org',
