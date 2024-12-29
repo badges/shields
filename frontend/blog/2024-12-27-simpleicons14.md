@@ -9,7 +9,18 @@ authors:
 tags: []
 ---
 
-Logos on Shields.io are provided by SimpleIcons. We've recently upgraded to SimpleIcons 14. This release removes 59 icons:
+Logos on Shields.io are provided by SimpleIcons. We've recently upgraded to SimpleIcons 14. This release removes 53 icons and renames 6:
+
+Renames:
+
+- D3.js to D3
+- Tencent QQ to QQ
+- T-Mobile to Deutsche Telekom
+- Nuxt.js to Nuxt
+- smash.gg start.gg
+- Tutanota to Tuta
+
+Removals:
 
 - Adobe
 - Adobe Acrobat Reader
@@ -30,7 +41,6 @@ Logos on Shields.io are provided by SimpleIcons. We've recently upgraded to Simp
 - CKEditor 4
 - Cliqz
 - Coil
-- D3.js
 - del.icio.us
 - El Jueves
 - Ello
@@ -50,22 +60,17 @@ Logos on Shields.io are provided by SimpleIcons. We've recently upgraded to Simp
 - Nintendo DS
 - Nintendo GameCube
 - Nintendo Switch
-- Nuxt.js
 - Oracle
 - Pokémon
 - RadioPublic
 - Realm
 - Revue
 - Skyrock
-- smash.gg
 - Spinrilla
 - StackPath
 - Stitcher
 - Studyverse
-- T-Mobile
 - Tableau
-- Tencent QQ
-- Tutanota
 - Uptobox
 - Wii
 - Wii U
