@@ -16,7 +16,7 @@ export default class PypiTyping extends PypiBase {
     },
   }
 
-  static defaultBadgeData = { label: 'Typing' }
+  static defaultBadgeData = { label: 'typing' }
 
   static render({ isTyped }) {
     if (isTyped) {
