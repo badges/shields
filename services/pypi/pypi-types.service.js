@@ -1,6 +1,6 @@
 import PypiBase, { pypiGeneralParams } from './pypi-base.js'
 
-export default class PypiTyping extends PypiBase {
+export default class PypiTypes extends PypiBase {
   static category = 'platform-support'
 
   static route = this.buildRoute('pypi/types')
