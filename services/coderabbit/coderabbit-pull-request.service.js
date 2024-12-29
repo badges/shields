@@ -5,7 +5,7 @@ const schema = Joi.object({
   reviews: Joi.number().required(),
 }).required()
 
-class CodeRabbitStats extends BaseJsonService {
+class CodeRabbitPullRequest extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'coderabbit',
@@ -67,4 +67,4 @@ class CodeRabbitStats extends BaseJsonService {
   }
 }
 
-export default CodeRabbitStats
+export default CodeRabbitPullRequest
