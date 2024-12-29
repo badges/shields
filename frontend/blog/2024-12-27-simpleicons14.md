@@ -3,7 +3,7 @@ slug: simple-icons-14
 title: Simple Icons 14
 authors:
   name: jNullj
-  title: Shields.io Maintainer
+  title: Shields.io Core Team
   url: https://github.com/jNullj
   image_url: https://avatars.githubusercontent.com/u/15849761
 tags: []
