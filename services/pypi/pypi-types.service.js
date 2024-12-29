@@ -3,20 +3,20 @@ import PypiBase, { pypiGeneralParams } from './pypi-base.js'
 export default class PypiTyping extends PypiBase {
   static category = 'platform-support'
 
-  static route = this.buildRoute('pypi/typing')
+  static route = this.buildRoute('pypi/types')
 
   static openApi = {
-    '/pypi/typing/{packageName}': {
+    '/pypi/types/{packageName}': {
       get: {
-        summary: 'PyPI - Typing',
+        summary: 'PyPI - Types',
         description:
-          'Whether the package provides type information (inline annotations or stub files)',
+          'Whether the package provides type information, as indicated by the presence of the Typing :: Typed classifier in the package metadata',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static defaultBadgeData = { label: 'Typing' }
+  static defaultBadgeData = { label: 'Types' }
 
   static render({ isTyped }) {
     if (isTyped) {
@@ -26,7 +26,7 @@ export default class PypiTyping extends PypiBase {
       }
     } else {
       return {
-        message: 'no',
+        message: 'untyped',
         color: 'red',
       }
     }
