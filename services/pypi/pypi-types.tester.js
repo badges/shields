@@ -7,7 +7,7 @@ t.create('types (yes)')
 
 t.create('types (no)')
   .get('/z3-solver.json')
-  .expectBadge({ label: 'types', message: 'no' })
+  .expectBadge({ label: 'types', message: 'untyped' })
 
 t.create('types (invalid)')
   .get('/not-a-package.json')
