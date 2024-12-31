@@ -82,6 +82,22 @@ t.create('named logo with color')
     expect(body).to.include(getSimpleIcon({ name: 'github', color: 'blue' }))
   })
 
+t.create('named logo with size')
+  .get('.svg?url=https://example.com/badge')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+      namedLogo: 'github',
+      logoSize: 'auto',
+    }),
+  )
+  .after((err, res, body) => {
+    expect(err).not.to.be.ok
+    expect(body).to.include(getSimpleIcon({ name: 'github', size: 'auto' }))
+  })
+
 const logoSvg = Buffer.from(
   getSimpleIcon({ name: 'npm' }).replace('data:image/svg+xml;base64,', ''),
   'base64',

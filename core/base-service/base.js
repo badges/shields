@@ -65,6 +65,7 @@ const serviceDataSchema = Joi.object({
   namedLogo: Joi.string(),
   logoSvg: Joi.string(),
   logoColor: optionalStringWhenNamedLogoPresent,
+  logoSize: optionalStringWhenNamedLogoPresent,
   logoWidth: optionalNumberWhenAnyLogoPresent,
   cacheSeconds: Joi.number().integer().min(0),
   style: Joi.string(),
