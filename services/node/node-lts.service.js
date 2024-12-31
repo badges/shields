@@ -9,14 +9,6 @@ const description = `<p>This badge indicates whether the package supports <b>all
 export default class NodeLtsVersion extends NodeVersionBase {
   static route = this.buildRoute('node/v-lts', { withTag: true })
 
-  static defaultBadgeData = {
-    label: 'node-lts',
-  }
-
-  static type = 'lts'
-
-  static colorResolver = versionColorForRangeLts
-
   static openApi = {
     '/node/v-lts/{packageName}': {
       get: {
@@ -57,4 +49,12 @@ export default class NodeLtsVersion extends NodeVersionBase {
       },
     },
   }
+
+  static defaultBadgeData = {
+    label: 'node-lts',
+  }
+
+  static type = 'lts'
+
+  static colorResolver = versionColorForRangeLts
 }

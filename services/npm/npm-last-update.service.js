@@ -28,8 +28,6 @@ export class NpmLastUpdateWithTag extends NpmBase {
     queryParamSchema,
   }
 
-  static defaultBadgeData = { label: 'last updated' }
-
   static openApi = {
     '/npm/last-update/{packageName}/{tag}': {
       get: {
@@ -52,6 +50,8 @@ export class NpmLastUpdateWithTag extends NpmBase {
       },
     },
   }
+
+  static defaultBadgeData = { label: 'last updated' }
 
   async handle(namedParams, queryParams) {
     const { scope, packageName, tag, registryUrl } =
@@ -79,8 +79,6 @@ export class NpmLastUpdate extends NpmBase {
 
   static route = this.buildRoute('npm/last-update', { withTag: false })
 
-  static defaultBadgeData = { label: 'last updated' }
-
   static openApi = {
     '/npm/last-update/{packageName}': {
       get: {
@@ -99,6 +97,8 @@ export class NpmLastUpdate extends NpmBase {
       },
     },
   }
+
+  static defaultBadgeData = { label: 'last updated' }
 
   async handle(namedParams, queryParams) {
     const { scope, packageName, registryUrl } = this.constructor.unpackParams(
