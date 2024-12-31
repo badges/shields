@@ -87,7 +87,7 @@ encourage you to contribute logos there. Please review their
 
 Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields!
 
-We're also asking for [one-time \$10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
+We're also asking for [donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
 
 ## Getting help
 

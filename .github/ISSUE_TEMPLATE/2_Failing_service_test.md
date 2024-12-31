@@ -28,5 +28,5 @@ labels: 'keep-service-tests-green'
 
 <!--- Optional: only if you have suggestions on a fix/reason for the bug -->
 
-<!-- Love Shields? Please consider donating $10 to sustain our activities:
+<!-- Love Shields? Please consider donating to sustain our activities:
 👉  https://opencollective.com/shields -->
