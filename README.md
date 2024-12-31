@@ -60,7 +60,7 @@ This repo hosts:
 - amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow)
 - Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen)
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
-- [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
+- Uptime Robot uptime percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
