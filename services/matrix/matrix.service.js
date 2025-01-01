@@ -40,6 +40,9 @@ const matrixSummarySchema = Joi.object({
 const description = `
 In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
 
+Alternatively access via the experimental <code>summary</code> endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)) can be configured with the query parameter <code>fetchMode</code> for less server load and better performance, if supported by the homeserver<br/>
+For the <code>matrix.org</code> homeserver <code>fetchMode</code> is hard-coded to <code>summary</code>.
+
 The following steps will show you how to setup the badge URL using the Element Matrix client.
 
 <ul>
@@ -85,7 +88,7 @@ export default class Matrix extends BaseJsonService {
           queryParam({
             name: 'fetchMode',
             example: 'guest',
-            description: `If not specified, the default fetch mode is "guest" using guest access (except for matrix.org). Alternatively the experimental "summary" endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)) can be used if enabled for the homeserver, which reduces requests and has better performance.`,
+            description: `If not specified, the default fetch mode is <code>guest</code> (except for matrix.org).`,
             schema: {
               type: 'string',
               enum: ['guest', 'summary'],
