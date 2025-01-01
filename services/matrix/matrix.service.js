@@ -81,7 +81,7 @@ export default class Matrix extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 30
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'chat' }
 
