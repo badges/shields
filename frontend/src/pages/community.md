@@ -61,7 +61,4 @@ Shields.io is possible thanks to the people and companies who donate money, serv
     <li>
         <a href="https://github.com/">GitHub</a>
     </li>
-    <li>
-        <a href="https://uptimerobot.com/">Uptime Robot</a>
-    </li>
 </ul>
