@@ -1,5 +1,5 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isMetric } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
@@ -7,7 +7,7 @@ t.create('live CodeRabbitPullRequest')
   .get('/prs/github/coderabbitai/ast-grep-essentials.json')
   .expectBadge({
     label: 'coderabbit reviews',
-    message: Joi.number().min(0),
+    message: isMetric,
   })
 
 t.create('live CodeRabbitPullRequest nonexistent org')
