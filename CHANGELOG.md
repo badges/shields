@@ -8,21 +8,13 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - Add [PypiTypes] badge [#10774](https://github.com/badges/shields/issues/10774)
 - feat(endpoint-badge): add logoSize support [#10132](https://github.com/badges/shields/issues/10132)
-- Migrate to ESLint 9 [#10762](https://github.com/badges/shields/issues/10762)
-- use isDecimalPercentage in tests for github/lab top lang [#10752](https://github.com/badges/shields/issues/10752)
-- Fix [JiraSprint] tests [#10746](https://github.com/badges/shields/issues/10746)
 - fix auto-sized logo sizes [#10764](https://github.com/badges/shields/issues/10764)
-- fix parseDate() test for different timezones [#10765](https://github.com/badges/shields/issues/10765)
-- docs: add blog post for Simple Icons 14 upgrade [#10773](https://github.com/badges/shields/issues/10773)
 - Add [Coderabbit] PR Stats service and tests [#10749](https://github.com/badges/shields/issues/10749)
 - add [PUB] downloads badge [#10745](https://github.com/badges/shields/issues/10745)
 - Add [GitLab] Top Language Badge [#10750](https://github.com/badges/shields/issues/10750)
 - provide a non-repository scoped version of [githubcodesearch] [#10733](https://github.com/badges/shields/issues/10733)
-- Upgrade to Chai 5.x [#10732](https://github.com/badges/shields/issues/10732)
 - [ReproducibleCentral] add Reproducible Central in Dependencies [#10705](https://github.com/badges/shields/issues/10705)
-- add a privacy policy [#10715](https://github.com/badges/shields/issues/10715)
 - Add ability to format bytes as metric or IEC; affects [bundlejs bundlephobia ChromeWebStoreSize CratesSize DockerSize GithubRepoSize GithubCodeSize GithubSize NpmUnpackedSize SpigetDownloadSize steam VisualStudioAppCenterReleasesSize whatpulse] [#10547](https://github.com/badges/shields/issues/10547)
-- enable auto suspend/resume [#10699](https://github.com/badges/shields/issues/10699)
 - Dependency updates
 
 ## server-2024-12-01
