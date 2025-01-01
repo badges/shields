@@ -5,9 +5,11 @@ import {
   pathParam,
   queryParam,
 } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
+  fetchMode: Joi.string().optional(),
 }).required()
 
 const matrixRegisterSchema = Joi.object({
@@ -30,6 +32,10 @@ const matrixStateSchema = Joi.array()
     }),
   )
   .required()
+
+const matrixSummarySchema = Joi.object({
+  num_joined_members: nonNegativeInteger,
+}).required()
 
 const description = `
 In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
@@ -75,6 +81,15 @@ export default class Matrix extends BaseJsonService {
           queryParam({
             name: 'server_fqdn',
             example: 'matrix.org',
+          }),
+          queryParam({
+            name: 'fetchMode',
+            example: 'guest',
+            description: `If not specified, the default fetch mode is "guest" using guest access (except for matrix.org). Alternatively the experimental "summary" endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)) can be used if enabled for the homeserver, which reduces requests and has better performance.`,
+            schema: {
+              type: 'string',
+              enum: ['guest', 'summary'],
+            },
           }),
         ],
       },
@@ -147,7 +162,7 @@ export default class Matrix extends BaseJsonService {
     })
   }
 
-  async fetch({ roomAlias, serverFQDN }) {
+  async fetch({ roomAlias, serverFQDN, fetchMode }) {
     let host
     if (serverFQDN === undefined) {
       const splitAlias = roomAlias.split(':')
@@ -166,36 +181,56 @@ export default class Matrix extends BaseJsonService {
     } else {
       host = serverFQDN
     }
-    const accessToken = await this.retrieveAccessToken({ host })
-    const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
-    const data = await this._requestJson({
-      url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
-        lookup.room_id,
-      )}/state`,
-      schema: matrixStateSchema,
-      options: {
-        searchParams: {
-          access_token: accessToken,
+    if (host.toLowerCase() === 'matrix.org' || fetchMode === 'summary') {
+      // summary endpoint (default for matrix.org)
+      const data = await this._requestJson({
+        url: `https://${host}/_matrix/client/unstable/im.nheko.summary/rooms/%23${encodeURIComponent(
+          roomAlias,
+        )}/summary`,
+        schema: matrixSummarySchema,
+        httpErrors: {
+          400: 'unknown request',
+          404: 'room or endpoint not found',
         },
-      },
-      httpErrors: {
-        400: 'unknown request',
-        401: 'bad auth token',
-        403: 'room not world readable or is invalid',
-      },
-    })
-    return Array.isArray(data)
-      ? data.filter(
-          m =>
-            m.type === 'm.room.member' &&
-            m.sender === m.state_key &&
-            m.content.membership === 'join',
-        ).length
-      : 0
+      })
+      return data.num_joined_members
+    } else {
+      // guest access
+      const accessToken = await this.retrieveAccessToken({ host })
+      const lookup = await this.lookupRoomAlias({
+        host,
+        roomAlias,
+        accessToken,
+      })
+      const data = await this._requestJson({
+        url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
+          lookup.room_id,
+        )}/state`,
+        schema: matrixStateSchema,
+        options: {
+          searchParams: {
+            access_token: accessToken,
+          },
+        },
+        httpErrors: {
+          400: 'unknown request',
+          401: 'bad auth token',
+          403: 'room not world readable or is invalid',
+        },
+      })
+      return Array.isArray(data)
+        ? data.filter(
+            m =>
+              m.type === 'm.room.member' &&
+              m.sender === m.state_key &&
+              m.content.membership === 'join',
+          ).length
+        : 0
+    }
   }
 
-  async handle({ roomAlias }, { server_fqdn: serverFQDN }) {
-    const members = await this.fetch({ roomAlias, serverFQDN })
+  async handle({ roomAlias }, { server_fqdn: serverFQDN, fetchMode }) {
+    const members = await this.fetch({ roomAlias, serverFQDN, fetchMode })
     return this.constructor.render({ members })
   }
 }
