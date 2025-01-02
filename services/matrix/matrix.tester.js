@@ -543,7 +543,6 @@ t.create('specify the homeserver fqdn for summary')
 
 t.create('test on real matrix room for guest API compliance')
   .get('/ndcube:openastronomy.org.json?server_fqdn=openastronomy.modular.im')
-  .timeout(10000)
   .expectBadge({
     label: 'chat',
     message: Joi.string().regex(/^[0-9]+ users$/),
@@ -552,7 +551,6 @@ t.create('test on real matrix room for guest API compliance')
 
 t.create('test on real matrix room for summary API compliance')
   .get('/twim:matrix.org.json')
-  .timeout(10000)
   .expectBadge({
     label: 'chat',
     message: Joi.string().regex(/^[0-9]+ users$/),
