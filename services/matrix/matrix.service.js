@@ -165,6 +165,53 @@ export default class Matrix extends BaseJsonService {
     })
   }
 
+  async fetchSummary({ host, roomAlias }) {
+    const data = await this._requestJson({
+      url: `https://${host}/_matrix/client/unstable/im.nheko.summary/rooms/%23${encodeURIComponent(
+        roomAlias,
+      )}/summary`,
+      schema: matrixSummarySchema,
+      httpErrors: {
+        400: 'unknown request',
+        404: 'room or endpoint not found',
+      },
+    })
+    return data.num_joined_members
+  }
+
+  async fetchGuest({ host, roomAlias }) {
+    const accessToken = await this.retrieveAccessToken({ host })
+    const lookup = await this.lookupRoomAlias({
+      host,
+      roomAlias,
+      accessToken,
+    })
+    const data = await this._requestJson({
+      url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
+        lookup.room_id,
+      )}/state`,
+      schema: matrixStateSchema,
+      options: {
+        searchParams: {
+          access_token: accessToken,
+        },
+      },
+      httpErrors: {
+        400: 'unknown request',
+        401: 'bad auth token',
+        403: 'room not world readable or is invalid',
+      },
+    })
+    return Array.isArray(data)
+      ? data.filter(
+          m =>
+            m.type === 'm.room.member' &&
+            m.sender === m.state_key &&
+            m.content.membership === 'join',
+        ).length
+      : 0
+  }
+
   async fetch({ roomAlias, serverFQDN, fetchMode }) {
     let host
     if (serverFQDN === undefined) {
@@ -186,49 +233,10 @@ export default class Matrix extends BaseJsonService {
     }
     if (host.toLowerCase() === 'matrix.org' || fetchMode === 'summary') {
       // summary endpoint (default for matrix.org)
-      const data = await this._requestJson({
-        url: `https://${host}/_matrix/client/unstable/im.nheko.summary/rooms/%23${encodeURIComponent(
-          roomAlias,
-        )}/summary`,
-        schema: matrixSummarySchema,
-        httpErrors: {
-          400: 'unknown request',
-          404: 'room or endpoint not found',
-        },
-      })
-      return data.num_joined_members
+      return this.fetchSummary({ host, roomAlias })
     } else {
       // guest access
-      const accessToken = await this.retrieveAccessToken({ host })
-      const lookup = await this.lookupRoomAlias({
-        host,
-        roomAlias,
-        accessToken,
-      })
-      const data = await this._requestJson({
-        url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
-          lookup.room_id,
-        )}/state`,
-        schema: matrixStateSchema,
-        options: {
-          searchParams: {
-            access_token: accessToken,
-          },
-        },
-        httpErrors: {
-          400: 'unknown request',
-          401: 'bad auth token',
-          403: 'room not world readable or is invalid',
-        },
-      })
-      return Array.isArray(data)
-        ? data.filter(
-            m =>
-              m.type === 'm.room.member' &&
-              m.sender === m.state_key &&
-              m.content.membership === 'join',
-          ).length
-        : 0
+      return this.fetchGuest({ host, roomAlias })
     }
   }
 
