@@ -7,9 +7,13 @@ import {
 } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 
+const fetchModeEnum = ['guest', 'summary']
+
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
-  fetchMode: Joi.string().optional(),
+  fetchMode: Joi.string()
+    .valid(...fetchModeEnum)
+    .default('guest'),
 }).required()
 
 const matrixRegisterSchema = Joi.object({
@@ -91,7 +95,7 @@ export default class Matrix extends BaseJsonService {
             description: `If not specified, the default fetch mode is <code>guest</code> (except for matrix.org).`,
             schema: {
               type: 'string',
-              enum: ['guest', 'summary'],
+              enum: fetchModeEnum,
             },
           }),
         ],
