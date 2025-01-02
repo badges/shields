@@ -541,6 +541,26 @@ t.create('specify the homeserver fqdn for summary')
     color: 'brightgreen',
   })
 
+t.create('test fetchMode override for matrix.org')
+  .get('/ALIAS:DUMMY.dumb.json?server_fqdn=matrix.org&fetchMode=guest')
+  .intercept(nock =>
+    nock('https://matrix.org/')
+      .get(
+        '/_matrix/client/unstable/im.nheko.summary/rooms/%23ALIAS%3ADUMMY.dumb/summary',
+      )
+      .reply(
+        200,
+        JSON.stringify({
+          num_joined_members: 4,
+        }),
+      ),
+  )
+  .expectBadge({
+    label: 'chat',
+    message: '4 users',
+    color: 'brightgreen',
+  })
+
 t.create('test on real matrix room for guest API compliance')
   .get('/ndcube:openastronomy.org.json?server_fqdn=openastronomy.modular.im')
   .expectBadge({
