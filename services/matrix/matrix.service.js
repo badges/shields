@@ -92,7 +92,7 @@ export default class Matrix extends BaseJsonService {
           queryParam({
             name: 'fetchMode',
             example: 'guest',
-            description: `If not specified, the default fetch mode is <code>guest</code> (except for matrix.org).`,
+            description: `<code>guest</code> configures guest authentication while <code>summary</code> configures usage of the experimental "summary" endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)). If not specified, the default fetch mode is <code>guest</code> (except for matrix.org).`,
             schema: {
               type: 'string',
               enum: fetchModeEnum,
