@@ -541,7 +541,7 @@ t.create('specify the homeserver fqdn for summary')
     color: 'brightgreen',
   })
 
-t.create('test fetchMode override for matrix.org')
+t.create('test fetchMode=guest is ignored for matrix.org')
   .get('/ALIAS:DUMMY.dumb.json?server_fqdn=matrix.org&fetchMode=guest')
   .intercept(nock =>
     nock('https://matrix.org/')
