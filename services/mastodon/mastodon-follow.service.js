@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
-import { optionalUrl, nonNegativeInteger } from '../validators.js'
+import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const schema = Joi.object({
@@ -13,11 +13,7 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const description = `
-To find your user id, you can use [this tool](https://prouser123.me/misc/mastodon-userid-lookup.html).
-
-Alternatively you can make a request to \`https://your.mastodon.server/.well-known/webfinger?resource=acct:<user>@<domain>\`
-
-Failing that, you can also visit your profile page, where your user ID will be in the header in a tag like this: \`<link href='https://your.mastodon.server/api/salmon/<your-user-id>' rel='salmon'>\`
+To find your user id, you can make a request to \`https://your.mastodon.server/api/v1/accounts/lookup?acct=yourusername\`.
 `
 
 export default class MastodonFollow extends BaseJsonService {
@@ -41,7 +37,7 @@ export default class MastodonFollow extends BaseJsonService {
           }),
           queryParam({
             name: 'domain',
-            example: 'https://mastodon.social',
+            example: 'mastodon.social',
           }),
         ],
       },
@@ -58,8 +54,8 @@ export default class MastodonFollow extends BaseJsonService {
       message: metric(followers),
       style: 'social',
       link: [
-        `${domain}/users/${username}`,
-        `${domain}/users/${username}/followers`,
+        `https://${domain}/users/${username}`,
+        `https://${domain}/users/${username}/followers`,
       ],
     }
   }
