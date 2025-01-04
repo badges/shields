@@ -9,7 +9,7 @@ const schema = Joi.object({
 })
 
 const queryParamSchema = Joi.object({
-  domain: optionalUrl,
+  domain: Joi.string().optional(),
 }).required()
 
 const description = `
@@ -67,13 +67,18 @@ export default class MastodonFollow extends BaseJsonService {
   async fetch({ id, domain }) {
     return this._requestJson({
       schema,
-      url: `${domain}/api/v1/accounts/${id}/`,
+      url: `https://${domain}/api/v1/accounts/${id}/`,
     })
   }
 
-  async handle({ id }, { domain = 'https://mastodon.social' }) {
+  async handle({ id }, { domain = 'mastodon.social' }) {
     if (isNaN(id))
       throw new NotFound({ prettyMessage: 'invalid user id format' })
+    if (domain.startsWith('https://')) {
+      domain = domain.substring(8)
+    } else if (domain.startsWith('http://')) {
+      domain = domain.substring(7)
+    }
     const data = await this.fetch({ id, domain })
     return this.constructor.render({
       username: data.username,
