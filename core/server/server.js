@@ -194,6 +194,8 @@ const privateConfigSchema = Joi.object({
   opencollective_token: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
+  reddit_client_id: Joi.string(),
+  reddit_client_secret: Joi.string(),
   sentry_dsn: Joi.string(),
   sl_insight_userUuid: Joi.string(),
   sl_insight_apiToken: Joi.string(),
