@@ -70,11 +70,7 @@ export default class MastodonFollow extends BaseJsonService {
   async handle({ id }, { domain = 'mastodon.social' }) {
     if (isNaN(id))
       throw new NotFound({ prettyMessage: 'invalid user id format' })
-    if (domain.startsWith('https://')) {
-      domain = domain.substring(8)
-    } else if (domain.startsWith('http://')) {
-      domain = domain.substring(7)
-    }
+    domain = domain.replace(/^https?:\/\//, '')
     const data = await this.fetch({ id, domain })
     return this.constructor.render({
       username: data.username,
