@@ -28,6 +28,17 @@ t.create('Followers - default domain - invalid user ID (id not in use)')
   })
 
 t.create('Followers - alternate domain')
+  .get('/2214.json?domain=mastodon.xyz')
+  .expectBadge({
+    label: 'follow @PhotonQyv',
+    message: isMetric,
+    link: [
+      'https://mastodon.xyz/users/PhotonQyv',
+      'https://mastodon.xyz/users/PhotonQyv/followers',
+    ],
+  })
+
+t.create('Followers - alternate domain legacy')
   .get('/2214.json?domain=https%3A%2F%2Fmastodon.xyz')
   .expectBadge({
     label: 'follow @PhotonQyv',
