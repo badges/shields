@@ -28,8 +28,11 @@ export default class FDroid extends BaseJsonService {
     '/f-droid/v/{appId}': {
       get: {
         summary: 'F-Droid Version',
-        description:
-          '[F-Droid](https://f-droid.org/) is a catalogue of Open Source Android apps',
+        description: `
+          [F-Droid](https://f-droid.org/) is a catalogue of Open Source Android apps.
+
+          This badge by default uses <code>f-droid.org</code>, but also supports custom repos.
+          `,
         parameters: [
           pathParam({
             name: 'appId',
@@ -42,6 +45,7 @@ export default class FDroid extends BaseJsonService {
           queryParam({
             name: 'endpoint',
             example: 'fdroid',
+            description: `If the API is not located at root path, specify the additional path to the API.`,
           }),
           queryParam({
             name: 'include_prereleases',
