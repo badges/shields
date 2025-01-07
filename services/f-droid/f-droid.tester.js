@@ -136,7 +136,7 @@ t.create(
 
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('custom repo: The real api did not change')
-  .get('/v/com.looker.droidify.json')
+  .get('/v/com.looker.droidify.json?serverFqdn=apt.izzysoft.de&endpoint=fdroid')
   .expectBadge({
     label: 'f-droid',
     message: isVPlusDottedVersionAtLeastOne,
