@@ -136,6 +136,7 @@ class Badge {
     const accessibleText = createAccessibleText({ label, message })
 
     const hasLabel = label.length || labelColor
+    const logoOnly = hasLogo && !hasLabel && !message.length
     if (labelColor == null) {
       labelColor = '#555'
     }
@@ -159,7 +160,10 @@ class Badge {
       }
     }
     let rightWidth = messageWidth + 2 * horizPadding
-    if (hasLogo && !hasLabel) {
+    if (logoOnly) {
+      const paddingRight = message.length ? horizPadding - 1 : 0
+      rightWidth += totalLogoWidth + paddingRight
+    } else if (hasLogo && !hasLabel) {
       rightWidth += totalLogoWidth + horizPadding - 1
     }
 
@@ -804,11 +808,13 @@ function forTheBadge({
   // there is no label. When `needsLabelRect` is true, render a label rect and a
   // message rect; when false, only a message rect.
   const hasLabel = Boolean(label.length)
+  const logoOnly = !hasLabel && !message
   const needsLabelRect = hasLabel || (logo && labelColor)
+  const gutter = logoOnly ? LOGO_TEXT_GUTTER - LOGO_MARGIN : LOGO_TEXT_GUTTER
   let logoMinX, labelTextMinX
   if (logo) {
     logoMinX = LOGO_MARGIN
-    labelTextMinX = logoMinX + logoWidth + LOGO_TEXT_GUTTER
+    labelTextMinX = logoMinX + logoWidth + gutter
   } else {
     labelTextMinX = TEXT_MARGIN
   }
@@ -823,9 +829,8 @@ function forTheBadge({
     messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
   } else {
     if (logo) {
-      messageTextMinX = TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER
-      messageRectWidth =
-        2 * TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER + messageTextWidth
+      messageTextMinX = TEXT_MARGIN + logoWidth + gutter
+      messageRectWidth = 2 * TEXT_MARGIN + logoWidth + gutter + messageTextWidth
     } else {
       messageTextMinX = TEXT_MARGIN
       messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
