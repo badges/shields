@@ -136,7 +136,6 @@ class Badge {
     const accessibleText = createAccessibleText({ label, message })
 
     const hasLabel = label.length || labelColor
-    const logoOnly = hasLogo && !hasLabel && !message.length
     if (labelColor == null) {
       labelColor = '#555'
     }
@@ -160,11 +159,8 @@ class Badge {
       }
     }
     let rightWidth = messageWidth + 2 * horizPadding
-    if (logoOnly) {
-      const paddingRight = message.length ? horizPadding - 1 : 0
-      rightWidth += totalLogoWidth + paddingRight
-    } else if (hasLogo && !hasLabel) {
-      rightWidth += totalLogoWidth + horizPadding - 1
+    if (hasLogo && !hasLabel) {
+      rightWidth += totalLogoWidth + message.length ? horizPadding - 1 : 0
     }
 
     const width = leftWidth + rightWidth
