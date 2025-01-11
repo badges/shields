@@ -9,6 +9,8 @@ private:
   gitlab_token: '...'
   obs_user: '...'
   obs_pass: '...'
+  reddit_client_id: '...'
+  reddit_client_secret: '...'
   twitch_client_id: '...'
   twitch_client_secret: '...'
   weblate_api_key: '...'
