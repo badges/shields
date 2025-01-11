@@ -1,3 +1,5 @@
+import cluster from 'cluster'
+import { availableParallelism } from 'os'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -25,11 +27,13 @@ Sentry.init({
   },
 })
 
-if (+process.argv[2]) {
-  config.public.bind.port = +process.argv[2]
-}
-if (process.argv[3]) {
-  config.public.bind.address = process.argv[3]
+if (process.env.NODE_CONFIG_ENV !== 'test') {
+  if (+process.argv[2]) {
+    config.public.bind.port = +process.argv[2]
+  }
+  if (process.argv[3]) {
+    config.public.bind.address = process.argv[3]
+  }
 }
 
 console.log('Configuration:')
@@ -60,6 +64,26 @@ if (fs.existsSync(legacySecretsPath)) {
   )
   process.exit(1)
 }
-export const server = new Server(config)
 
-await server.start()
+async function startServer() {
+  console.log(config)
+  const server = new Server(config)
+  await server.start()
+  return server
+}
+
+export default startServer
+
+const numCPUs = availableParallelism()
+if (process.env.NODE_CONFIG_ENV !== 'test') {
+  if (cluster.isPrimary) {
+    console.log(`Primary ${process.pid} is running`)
+
+    for (let i = 0; i < numCPUs; i++) {
+      cluster.fork()
+    }
+  } else {
+    await startServer()
+    console.log(`Worker ${process.pid} started`)
+  }
+}
