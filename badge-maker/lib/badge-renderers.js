@@ -804,9 +804,9 @@ function forTheBadge({
   // there is no label. When `needsLabelRect` is true, render a label rect and a
   // message rect; when false, only a message rect.
   const hasLabel = Boolean(label.length)
-  const logoOnly = !hasLabel && !message
+  const noText = !hasLabel && !message
   const needsLabelRect = hasLabel || (logo && labelColor)
-  const gutter = logoOnly ? LOGO_TEXT_GUTTER - LOGO_MARGIN : LOGO_TEXT_GUTTER
+  const gutter = noText ? LOGO_TEXT_GUTTER - LOGO_MARGIN : LOGO_TEXT_GUTTER
   let logoMinX, labelTextMinX
   if (logo) {
     logoMinX = LOGO_MARGIN
