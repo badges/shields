@@ -4,8 +4,6 @@ import { BaseJsonService } from '../index.js'
 const tokenSchema = Joi.object({
   access_token: Joi.string().required(),
   expires_in: Joi.number(),
-  scope: Joi.string(),
-  token_type: Joi.string(),
 })
 
 // Abstract class for Reddit badges
