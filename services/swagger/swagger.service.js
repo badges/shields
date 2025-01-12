@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { BaseJsonService, NotFound, queryParams } from '../index.js'
 
 const schema = Joi.object()
@@ -14,7 +14,7 @@ const schema = Joi.object()
   .required()
 
 const queryParamSchema = Joi.object({
-  specUrl: optionalUrl.required(),
+  specUrl: url,
 }).required()
 
 export default class SwaggerValidatorService extends BaseJsonService {
