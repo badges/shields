@@ -1,7 +1,7 @@
 'use strict'
 
 import { expect } from 'chai'
-import { makeBadge, ValidationError } from '.'
+import { makeBadge, ValidationError } from './index.js'
 
 describe('makeBadge function', function () {
   it('should produce badge with valid input', async function () {

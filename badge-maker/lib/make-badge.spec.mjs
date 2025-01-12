@@ -4,7 +4,7 @@ import { test, given, forCases } from 'sazerac'
 import { expect } from 'chai'
 import snapshot from 'snap-shot-it'
 import prettier from 'prettier'
-import makeBadge from './make-badge'
+import makeBadge from './make-badge.js'
 
 async function expectBadgeToMatchSnapshot(format) {
   snapshot(await prettier.format(makeBadge(format), { parser: 'html' }))

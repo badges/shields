@@ -1,12 +1,16 @@
 'use strict'
 
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { spawn } from 'child-process-promise'
 import { expect, use } from 'chai'
-use(require('sinon-chai'))
+import sinonChai from 'sinon-chai'
+use(sinonChai)
+
+const dirName = path.dirname(fileURLToPath(import.meta.url))
 
 function runCli(args) {
-  return spawn('node', [path.join(__dirname, 'badge-cli.js'), ...args], {
+  return spawn('node', [path.join(dirName, 'badge-cli.js'), ...args], {
     capture: ['stdout'],
   })
 }
