@@ -22,8 +22,8 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
     color: 'blue',
   }
 
-  transform(sizeStr) {
-    const match = sizeStr.match(/^(\d+)([a-zA-Z]+)$/)
+  static transform(sizeStr) {
+    const match = sizeStr.match(/^([\d.]+)([a-zA-Z]+)$/)
     if (!match) {
       throw new InvalidResponse({
         prettyMessage: 'size does not match expected format',
@@ -41,6 +41,6 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
       throw new NotFound({ prettyMessage: 'not found' })
     }
 
-    return { message: this.transform(size) }
+    return { message: this.constructor.transform(size) }
   }
 }
