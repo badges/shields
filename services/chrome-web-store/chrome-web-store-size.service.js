@@ -23,7 +23,7 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
   }
 
   static transform(sizeStr) {
-    const match = sizeStr.match(/^([\d.]+)([a-zA-Z]+)$/)
+    const match = sizeStr.match(/^(\d+(?:\.\d+)?)([a-zA-Z]+)$/)
     if (!match) {
       throw new InvalidResponse({
         prettyMessage: 'size does not match expected format',
