@@ -21,6 +21,8 @@ describe('transform function', function () {
     expect(() => ChromeWebStoreSize.transform('foobar')).to.throw(
       InvalidResponse,
     )
-    expect(() => ChromeWebStoreSize.transform('4.4.4 KiB')).to.throw(InvalidResponse)
+    expect(() => ChromeWebStoreSize.transform('4.4.4 KiB')).to.throw(
+      InvalidResponse,
+    )
   })
 })
