@@ -1,9 +1,9 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { BaseService, pathParams, queryParams } from '../index.js'
 
 const queryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  url,
 }).required()
 
 class TwitterUrl extends BaseService {

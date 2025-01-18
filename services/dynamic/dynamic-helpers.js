@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 
 const queryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  url,
   query: Joi.string().required(),
   prefix: Joi.alternatives().try(Joi.string(), Joi.number()),
   suffix: Joi.alternatives().try(Joi.string(), Joi.number()),

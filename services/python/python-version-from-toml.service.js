@@ -1,10 +1,10 @@
 import Joi from 'joi'
 import BaseTomlService from '../../core/base-service/base-toml.js'
 import { queryParams } from '../index.js'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 
 const queryParamSchema = Joi.object({
-  tomlFilePath: optionalUrl.required(),
+  tomlFilePath: url,
 }).required()
 
 const schema = Joi.object({

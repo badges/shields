@@ -1,14 +1,14 @@
 import { URL } from 'url'
 import Joi from 'joi'
 import { httpErrors } from '../dynamic-common.js'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
 import { BaseJsonService, InvalidParameter, queryParams } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
 const queryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  url,
 }).required()
 
 const description = `
