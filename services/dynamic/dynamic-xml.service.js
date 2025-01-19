@@ -1,4 +1,4 @@
-import { DOMParser } from '@xmldom/xmldom'
+import { DOMParser, MIME_TYPE } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
 import { renderDynamicBadge, httpErrors } from '../dynamic-common.js'
@@ -9,6 +9,8 @@ import {
   queryParams,
 } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
+
+const MIME_TYPES = Object.values(MIME_TYPE)
 
 const description = `
 The Dynamic XML Badge allows you to extract an arbitrary value from any
@@ -136,11 +138,10 @@ export default class DynamicXml extends BaseService {
     })
 
     let contentType = 'text/xml'
-    if (
-      res.headers['content-type'] &&
-      res.headers['content-type'].includes('text/html')
-    ) {
-      contentType = 'text/html'
+    if (res.headers['content-type']) {
+      contentType =
+        MIME_TYPES.find(mime => res.headers['content-type'].includes(mime)) ??
+        'text/xml'
     }
 
     const { values: value } = this.transform({
