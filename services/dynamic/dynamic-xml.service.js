@@ -72,6 +72,10 @@ export default class DynamicXml extends BaseService {
 
   static defaultBadgeData = { label: 'custom badge' }
 
+  getmimeType(contentType) {
+    return MIME_TYPES.find(mime => contentType.includes(mime)) ?? 'text/xml'
+  }
+
   transform({ pathExpression, buffer, contentType = 'text/xml' }) {
     // e.g. //book[2]/@id
     const pathIsAttr = (
@@ -139,9 +143,7 @@ export default class DynamicXml extends BaseService {
 
     let contentType = 'text/xml'
     if (res.headers['content-type']) {
-      contentType =
-        MIME_TYPES.find(mime => res.headers['content-type'].includes(mime)) ??
-        'text/xml'
+      contentType = this.getmimeType(res.headers['content-type'])
     }
 
     const { values: value } = this.transform({

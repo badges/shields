@@ -157,4 +157,19 @@ describe('DynamicXml', function () {
       values: ['Herman Melville - Moby-Dick'],
     })
   })
+
+  test(DynamicXml.prototype.getmimeType, () => {
+    // known types
+    given('text/html').expect('text/html')
+    given('application/xml').expect('application/xml')
+    given('application/xhtml+xml').expect('application/xhtml+xml')
+    given('image/svg+xml').expect('image/svg+xml')
+
+    // with character set
+    given('text/html; charset=utf-8').expect('text/html')
+
+    // should fall back to text/xml if mime type is not one of the known types
+    given('text/csv').expect('text/xml')
+    given('foobar').expect('text/xml')
+  })
 })
