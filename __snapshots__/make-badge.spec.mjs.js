@@ -237,7 +237,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="63"
+  width="49"
   height="20"
   role="img"
   aria-label="grown"
@@ -247,11 +247,11 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
-  <clipPath id="r"><rect width="63" height="20" rx="3" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="49" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="63" height="20" fill="#b3e" />
-    <rect width="63" height="20" fill="url(#s)" />
+    <rect x="0" width="49" height="20" fill="#b3e" />
+    <rect width="49" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -626,7 +626,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="63"
+  width="49"
   height="20"
   role="img"
   aria-label="grown"
@@ -634,7 +634,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>grown</title>
   <g shape-rendering="crispEdges">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="63" height="20" fill="#b3e" />
+    <rect x="0" width="49" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -978,7 +978,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="63"
+  width="49"
   height="18"
   role="img"
   aria-label="grown"
@@ -990,11 +990,11 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset=".9" stop-color="#000" stop-opacity=".3" />
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
-  <clipPath id="r"><rect width="63" height="18" rx="4" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="49" height="18" rx="4" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="18" fill="#555" />
-    <rect x="0" width="63" height="18" fill="#b3e" />
-    <rect width="63" height="18" fill="url(#s)" />
+    <rect x="0" width="49" height="18" fill="#b3e" />
+    <rect width="49" height="18" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -2161,75 +2161,6 @@ exports['The badge generator "social" template badge generation should match sna
 
 `
 
-exports['The badge generator badges with logos should always produce the same badge badge with logo 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="113"
-  height="20"
-  role="img"
-  aria-label="label: message"
->
-  <title>label: message</title>
-  <linearGradient id="s" x2="0" y2="100%">
-    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
-    <stop offset="1" stop-opacity=".1" />
-  </linearGradient>
-  <clipPath id="r">
-    <rect width="113" height="20" rx="3" fill="#fff" />
-  </clipPath>
-  <g clip-path="url(#r)">
-    <rect width="54" height="20" fill="#555" />
-    <rect x="54" width="59" height="20" fill="#4c1" />
-    <rect width="113" height="20" fill="url(#s)" />
-  </g>
-  <g
-    fill="#fff"
-    text-anchor="middle"
-    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
-    text-rendering="geometricPrecision"
-    font-size="110"
-  >
-    <image
-      x="5"
-      y="3"
-      width="14"
-      height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
-    />
-    <text
-      aria-hidden="true"
-      x="365"
-      y="150"
-      fill="#010101"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="270"
-    >
-      label
-    </text>
-    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
-      label
-    </text>
-    <text
-      aria-hidden="true"
-      x="825"
-      y="150"
-      fill="#010101"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="490"
-    >
-      message
-    </text>
-    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
-      message
-    </text>
-  </g>
-</svg>
-
-`
-
 exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -2546,6 +2477,1596 @@ exports['The badge generator "social" template badge generation should match sna
     </text>
     <text id="rlink1" x="905" y="140" transform="scale(.1)" textLength="330">
       grown
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge default badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="113"
+  height="20"
+  role="img"
+  aria-label="label: message"
+>
+  <title>label: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="113" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="59" height="20" fill="#4c1" />
+    <rect width="113" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="825"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge default badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="141"
+  height="20"
+  role="img"
+  aria-label="undefined: message"
+>
+  <title>undefined: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="141" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="82" height="20" fill="#555" />
+    <rect x="82" width="59" height="20" fill="#4c1" />
+    <rect width="141" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="505"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="505" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+    <text
+      aria-hidden="true"
+      x="1105"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="1105" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge default badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+    <rect width="119" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge default badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+    <rect width="119" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="113"
+  height="20"
+  role="img"
+  aria-label="label: message"
+>
+  <title>label: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="113" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="59" height="20" fill="#4c1" />
+    <rect width="113" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="825"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="141"
+  height="20"
+  role="img"
+  aria-label="undefined: message"
+>
+  <title>undefined: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="141" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="82" height="20" fill="#555" />
+    <rect x="82" width="59" height="20" fill="#4c1" />
+    <rect width="141" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="505"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="505" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+    <text
+      aria-hidden="true"
+      x="1105"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="1105" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+    <rect width="119" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+    <rect width="119" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat-square badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="113"
+  height="20"
+  role="img"
+  aria-label="label: message"
+>
+  <title>label: message</title>
+  <g shape-rendering="crispEdges">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="59" height="20" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat-square badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="141"
+  height="20"
+  role="img"
+  aria-label="undefined: message"
+>
+  <title>undefined: message</title>
+  <g shape-rendering="crispEdges">
+    <rect width="82" height="20" fill="#555" />
+    <rect x="82" width="59" height="20" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text x="505" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+    <text x="1105" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat-square badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <g shape-rendering="crispEdges">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge flat-square badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="20"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <g shape-rendering="crispEdges">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="65" height="20" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text x="855" y="140" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge for-the-badge badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="164"
+  height="28"
+  role="img"
+  aria-label="LABEL: MESSAGE"
+>
+  <title>LABEL: MESSAGE</title>
+  <g shape-rendering="crispEdges">
+    <rect width="78.25" height="28" fill="#555" />
+    <rect x="78.25" width="85.75" height="28" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      transform="scale(.1)"
+      x="476.25"
+      y="175"
+      textLength="372.5"
+      fill="#fff"
+    >
+      LABEL
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1211.25"
+      y="175"
+      textLength="617.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      MESSAGE
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge for-the-badge badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="198"
+  height="28"
+  role="img"
+  aria-label="UNDEFINED: MESSAGE"
+>
+  <title>UNDEFINED: MESSAGE</title>
+  <g shape-rendering="crispEdges">
+    <rect width="112.25" height="28" fill="#555" />
+    <rect x="112.25" width="85.75" height="28" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      transform="scale(.1)"
+      x="646.25"
+      y="175"
+      textLength="712.5"
+      fill="#fff"
+    >
+      UNDEFINED
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1551.25"
+      y="175"
+      textLength="617.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      MESSAGE
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge for-the-badge badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="180.5"
+  height="28"
+  role="img"
+  aria-label="LABEL: UNDEFINED"
+>
+  <title>LABEL: UNDEFINED</title>
+  <g shape-rendering="crispEdges">
+    <rect width="78.25" height="28" fill="#555" />
+    <rect x="78.25" width="102.25" height="28" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      transform="scale(.1)"
+      x="476.25"
+      y="175"
+      textLength="372.5"
+      fill="#fff"
+    >
+      LABEL
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1293.75"
+      y="175"
+      textLength="782.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      UNDEFINED
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge for-the-badge badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="180.5"
+  height="28"
+  role="img"
+  aria-label="LABEL: UNDEFINED"
+>
+  <title>LABEL: UNDEFINED</title>
+  <g shape-rendering="crispEdges">
+    <rect width="78.25" height="28" fill="#555" />
+    <rect x="78.25" width="102.25" height="28" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      transform="scale(.1)"
+      x="476.25"
+      y="175"
+      textLength="372.5"
+      fill="#fff"
+    >
+      LABEL
+    </text>
+    <text
+      transform="scale(.1)"
+      x="1293.75"
+      y="175"
+      textLength="782.5"
+      fill="#fff"
+      font-weight="bold"
+    >
+      UNDEFINED
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge social badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="118"
+  height="20"
+  role="img"
+  aria-label="Label: message"
+>
+  <title>Label: message</title>
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <rect x="62.5" y="0.5" width="55" height="19" rx="2" fill="#fafafa" />
+    <rect x="62" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+    <path d="M62.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="290"
+    >
+      Label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" textLength="290">Label</text>
+    <text
+      aria-hidden="true"
+      x="895"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="470"
+    >
+      message
+    </text>
+    <text id="rlink" x="895" y="140" transform="scale(.1)" textLength="470">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge social badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="142"
+  height="20"
+  role="img"
+  aria-label="Undefined: message"
+>
+  <title>Undefined: message</title>
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="80"
+      height="19"
+      rx="2"
+    />
+    <rect x="86.5" y="0.5" width="55" height="19" rx="2" fill="#fafafa" />
+    <rect x="86" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+    <path d="M86.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="80"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="485"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="530"
+    >
+      Undefined
+    </text>
+    <text x="485" y="140" transform="scale(.1)" textLength="530">
+      Undefined
+    </text>
+    <text
+      aria-hidden="true"
+      x="1135"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="470"
+    >
+      message
+    </text>
+    <text id="rlink" x="1135" y="140" transform="scale(.1)" textLength="470">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge social badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="124"
+  height="20"
+  role="img"
+  aria-label="Label: undefined"
+>
+  <title>Label: undefined</title>
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <rect x="62.5" y="0.5" width="61" height="19" rx="2" fill="#fafafa" />
+    <rect x="62" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+    <path d="M62.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="290"
+    >
+      Label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" textLength="290">Label</text>
+    <text
+      aria-hidden="true"
+      x="925"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="530"
+    >
+      undefined
+    </text>
+    <text id="rlink" x="925" y="140" transform="scale(.1)" textLength="530">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge social badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="124"
+  height="20"
+  role="img"
+  aria-label="Label: undefined"
+>
+  <title>Label: undefined</title>
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <rect x="62.5" y="0.5" width="61" height="19" rx="2" fill="#fafafa" />
+    <rect x="62" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+    <path d="M62.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="56"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="290"
+    >
+      Label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" textLength="290">Label</text>
+    <text
+      aria-hidden="true"
+      x="925"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="530"
+    >
+      undefined
+    </text>
+    <text id="rlink" x="925" y="140" transform="scale(.1)" textLength="530">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge plastic badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="113"
+  height="18"
+  role="img"
+  aria-label="label: message"
+>
+  <title>label: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="113" height="18" rx="4" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="18" fill="#555" />
+    <rect x="54" width="59" height="18" fill="#4c1" />
+    <rect width="113" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="130" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="825"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="825" y="130" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge plastic badge with logo, no label, has message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="141"
+  height="18"
+  role="img"
+  aria-label="undefined: message"
+>
+  <title>undefined: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="141" height="18" rx="4" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="82" height="18" fill="#555" />
+    <rect x="82" width="59" height="18" fill="#4c1" />
+    <rect width="141" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="505"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="505" y="130" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+    <text
+      aria-hidden="true"
+      x="1105"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="1105" y="130" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge plastic badge with logo, has label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="18"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="18" rx="4" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="18" fill="#555" />
+    <rect x="54" width="65" height="18" fill="#4c1" />
+    <rect width="119" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="130" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="130" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge plastic badge with logo, no label, no message 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="119"
+  height="18"
+  role="img"
+  aria-label="label: undefined"
+>
+  <title>label: undefined</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="119" height="18" rx="4" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="18" fill="#555" />
+    <rect x="54" width="65" height="18" fill="#4c1" />
+    <rect width="119" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="130" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="855"
+      y="140"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="550"
+    >
+      undefined
+    </text>
+    <text x="855" y="130" transform="scale(.1)" fill="#fff" textLength="550">
+      undefined
     </text>
   </g>
 </svg>
