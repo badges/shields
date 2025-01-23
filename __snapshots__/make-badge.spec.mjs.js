@@ -237,7 +237,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="49"
+  width="63"
   height="20"
   role="img"
   aria-label="grown"
@@ -247,11 +247,11 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
-  <clipPath id="r"><rect width="49" height="20" rx="3" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="63" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="49" height="20" fill="#b3e" />
-    <rect width="49" height="20" fill="url(#s)" />
+    <rect x="0" width="63" height="20" fill="#b3e" />
+    <rect width="63" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -626,7 +626,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="49"
+  width="63"
   height="20"
   role="img"
   aria-label="grown"
@@ -634,7 +634,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>grown</title>
   <g shape-rendering="crispEdges">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="49" height="20" fill="#b3e" />
+    <rect x="0" width="63" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -978,7 +978,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="49"
+  width="63"
   height="18"
   role="img"
   aria-label="grown"
@@ -990,11 +990,11 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset=".9" stop-color="#000" stop-opacity=".3" />
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
-  <clipPath id="r"><rect width="49" height="18" rx="4" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="63" height="18" rx="4" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="18" fill="#555" />
-    <rect x="0" width="49" height="18" fill="#b3e" />
-    <rect width="49" height="18" fill="url(#s)" />
+    <rect x="0" width="63" height="18" fill="#b3e" />
+    <rect width="63" height="18" fill="url(#s)" />
   </g>
   <g
     fill="#fff"

@@ -160,7 +160,7 @@ class Badge {
     }
     let rightWidth = messageWidth + 2 * horizPadding
     if (hasLogo && !hasLabel) {
-      rightWidth += totalLogoWidth + message.length ? horizPadding - 1 : 0
+      rightWidth += totalLogoWidth + (message.length ? horizPadding - 1 : 0)
     }
 
     const width = leftWidth + rightWidth
