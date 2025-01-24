@@ -156,6 +156,16 @@ describe('DynamicXml', function () {
     }).expect({
       values: ['Herman Melville - Moby-Dick'],
     })
+
+    // lowercase doctype
+    // https://github.com/badges/shields/issues/10827
+    given({
+      pathExpression: '//h1[1]',
+      buffer: exampleHtml.replace('<!DOCTYPE html>', '<!doctype html>'),
+      contentType: 'text/html',
+    }).expect({
+      values: ['Herman Melville - Moby-Dick'],
+    })
   })
 
   test(DynamicXml.prototype.getmimeType, () => {
