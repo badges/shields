@@ -107,7 +107,7 @@ Other classes implement useful behavior on top of [BaseService].
 
 [baseservice]: https://contributing.shields.io/module-core_base-service_base.html
 
-As a first step we will look at the code for an example which generates a badge without contacting an API.
+As a first step we will look at the code for an example which generates a badge without contacting an API. Note that camelCase should be used for variables, functions, and path/query parameters.
 
 ```js
 // (1)
@@ -345,6 +345,8 @@ export default class GemVersion extends BaseJsonService {
    ```
 
    but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand.
+
+7. Path and query parameters should be camelCase, for example use `gemName` instead of `gem_name`.
 
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
