@@ -700,12 +700,64 @@ describe('The badge generator', function () {
   })
 
   describe('badges with logos should always produce the same badge', function () {
-    it('badge with logo', async function () {
+    it('default badge with logo', async function () {
       await expectBadgeToMatchSnapshot({
         label: 'label',
         message: 'message',
         format: 'svg',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+      })
+    })
+  })
+
+  describe('badges with logo-only should always produce the same badge', function () {
+    it('flat badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'flat',
+      })
+    })
+
+    it('flat-square badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'flat-square',
+      })
+    })
+
+    it('for-the-badge badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'for-the-badge',
+      })
+    })
+
+    it('social badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'social',
+      })
+    })
+
+    it('plastic badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'plastic',
       })
     })
   })
