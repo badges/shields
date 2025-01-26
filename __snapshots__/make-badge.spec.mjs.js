@@ -2628,43 +2628,123 @@ exports['The badge generator badges with logo-only should always produce the sam
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="35"
-  height="28"
+  width="26"
+  height="20"
   role="img"
   aria-label=""
 >
   <title></title>
-  <g shape-rendering="crispEdges">
-    <rect width="35" height="28" fill="#4c1" />
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="25"
+      height="19"
+      rx="2"
+    />
   </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
   <g
-    fill="#fff"
+    aria-hidden="true"
+    fill="#333"
     text-anchor="middle"
-    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
     text-rendering="geometricPrecision"
-    font-size="100"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
   >
-    <image
-      x="9"
-      y="7"
-      width="14"
-      height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="25"
+      height="19"
+      rx="2"
     />
     <text
-      transform="scale(.1)"
-      x="230"
-      y="175"
-      textLength="0"
+      aria-hidden="true"
+      x="195"
+      y="150"
       fill="#fff"
-      font-weight="bold"
+      transform="scale(.1)"
+      textLength="10"
     ></text>
+    <text x="195" y="140" transform="scale(.1)" textLength="10"></text>
   </g>
 </svg>
 
 `
 
 exports['The badge generator badges with logo-only should always produce the same badge plastic badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="25"
+  height="18"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r"><rect width="25" height="18" rx="4" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="0" height="18" fill="#555" />
+    <rect x="0" width="25" height="18" fill="#4c1" />
+    <rect width="25" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge for-the-badge badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"

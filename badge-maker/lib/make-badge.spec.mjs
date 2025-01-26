@@ -731,7 +731,7 @@ describe('The badge generator', function () {
       })
     })
 
-    it('social badge, logo-only', async function () {
+    it('for-the-badge badge, logo-only', async function () {
       await expectBadgeToMatchSnapshot({
         label: '',
         message: '',
@@ -741,13 +741,23 @@ describe('The badge generator', function () {
       })
     })
 
+    it('social badge, logo-only', async function () {
+      await expectBadgeToMatchSnapshot({
+        label: '',
+        message: '',
+        format: 'svg',
+        logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
+        style: 'social',
+      })
+    })
+
     it('plastic badge, logo-only', async function () {
       await expectBadgeToMatchSnapshot({
         label: '',
         message: '',
         format: 'svg',
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
-        style: 'for-the-badge',
+        style: 'plastic',
       })
     })
   })
