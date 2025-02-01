@@ -24,6 +24,7 @@ Production hosting is managed by the Shields ops team:
 | Cloudflare (CDN)              | Access management           | @espadrine                                                      |
 | Cloudflare (CDN)              | Admin access                | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
 | Twitch                        | OAuth app                   | @PyvesB                                                         |
+| Reddit                        | OAuth app                   | @chris48s, @PyvesB                                              |
 | Discord                       | OAuth app                   | @PyvesB                                                         |
 | YouTube                       | Account owner               | @PyvesB                                                         |
 | GitLab                        | Account owner               | @calebcartwright                                                |
@@ -32,7 +33,6 @@ Production hosting is managed by the Shields ops team:
 | DNS                           | Read-only account access    | @espadrine, @paulmelnikow, @chris48s                            |
 | Sentry                        | Error reports               | @espadrine, @paulmelnikow                                       |
 | Metrics server                | Owner                       | @platan                                                         |
-| UptimeRobot                   | Account owner               | @paulmelnikow                                                   |
 | More metrics                  | Owner                       | @RedSparr0w                                                     |
 
 ## Attached state
@@ -119,19 +119,15 @@ The canonical and only recommended domain for badge URLs is `img.shields.io`. Cu
 ## Monitoring
 
 Overall server performance and requests by service are monitored using
-[Prometheus and Grafana][metrics].
+[Prometheus and Grafana][server metrics].
 
 Request performance is monitored in two places:
 
-- [Status][] (using [UptimeRobot][])
+- [Status][] (using NodePing)
 - [Server metrics][] using Prometheus and Grafana
-- [@RedSparr0w's monitor][monitor] which posts [notifications][] to a private
   [#monitor chat room][monitor discord]
 
 [metrics]: https://metrics.shields.io/
-[status]: https://stats.uptimerobot.com/PjXogHB5p
+[status]: https://nodeping.com/reports/status/YBISBQB254
 [server metrics]: https://metrics.shields.io/
-[uptimerobot]: https://uptimerobot.com/
-[monitor]: https://shields.redsparr0w.com/1568/
-[notifications]: http://shields.redsparr0w.com/discord_notification
 [monitor discord]: https://discordapp.com/channels/308323056592486420/470700909182320646

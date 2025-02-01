@@ -261,7 +261,6 @@ function Curl({ postman, codeSamples }) {
                 {tokens.map((line, i) => (
                   // this <span> does have a key but eslint fails
                   // to detect it because it is an arg to getLineProps()
-                  // eslint-disable-next-line react/jsx-key
                   <span
                     {...getLineProps({
                       line,
@@ -276,7 +275,6 @@ function Curl({ postman, codeSamples }) {
                       return (
                         // this <span> does have a key but eslint fails
                         // to detect it because it is an arg to getLineProps()
-                        // eslint-disable-next-line react/jsx-key
                         <span
                           {...getTokenProps({
                             token,

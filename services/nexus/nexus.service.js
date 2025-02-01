@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
 import {
-  optionalUrl,
+  url,
   optionalDottedVersionNClausesWithOptionalSuffix,
 } from '../validators.js'
 import {
@@ -49,7 +49,7 @@ const nexus2ResolveApiSchema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: url,
   queryOpt: Joi.string()
     .regex(/(:[\w.]+=[^:]*)+/i)
     .optional(),

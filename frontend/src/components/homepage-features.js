@@ -68,15 +68,7 @@ const FeatureList = [
     title: 'Love Shields?',
     description: (
       <>
-        Please consider{' '}
-        <a
-          href="https://opencollective.com/shields"
-          rel="noreferrer"
-          target="_blank"
-        >
-          donating
-        </a>{' '}
-        to sustain our activities
+        Please consider <a href="/donate">donating</a> to sustain our activities
       </>
     ),
   },

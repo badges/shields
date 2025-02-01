@@ -1,11 +1,11 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
 import { BaseXmlService, NotFound, queryParams } from '../index.js'
 import { description } from './maven-metadata.js'
 
 const queryParamSchema = Joi.object({
-  metadataUrl: optionalUrl.required(),
+  metadataUrl: url,
   versionPrefix: Joi.string().optional(),
   versionSuffix: Joi.string().optional(),
 }).required()

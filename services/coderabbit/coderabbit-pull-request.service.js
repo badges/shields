@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { BaseJsonService, pathParams } from '../index.js'
+import { metric } from '../text-formatters.js'
 
 const schema = Joi.object({
   reviews: Joi.number().required(),
@@ -46,7 +47,7 @@ class CodeRabbitPullRequest extends BaseJsonService {
 
   static render({ reviews }) {
     return {
-      message: `${reviews}`,
+      message: metric(reviews),
       color: 'blue',
     }
   }

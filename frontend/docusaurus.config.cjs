@@ -77,6 +77,7 @@ const config = {
             label: 'Documentation',
             position: 'left',
           },
+          { to: '/donate', label: 'Donate', position: 'left' },
           { to: '/community', label: 'Community', position: 'left' },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
@@ -115,7 +116,7 @@ const config = {
             items: [
               {
                 label: 'Service Status',
-                href: 'https://stats.uptimerobot.com/PjXogHB5p',
+                href: 'https://nodeping.com/reports/status/YBISBQB254',
               },
               {
                 label: 'Metrics dashboard',

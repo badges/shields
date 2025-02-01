@@ -2161,75 +2161,6 @@ exports['The badge generator "social" template badge generation should match sna
 
 `
 
-exports['The badge generator badges with logos should always produce the same badge badge with logo 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="113"
-  height="20"
-  role="img"
-  aria-label="label: message"
->
-  <title>label: message</title>
-  <linearGradient id="s" x2="0" y2="100%">
-    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
-    <stop offset="1" stop-opacity=".1" />
-  </linearGradient>
-  <clipPath id="r">
-    <rect width="113" height="20" rx="3" fill="#fff" />
-  </clipPath>
-  <g clip-path="url(#r)">
-    <rect width="54" height="20" fill="#555" />
-    <rect x="54" width="59" height="20" fill="#4c1" />
-    <rect width="113" height="20" fill="url(#s)" />
-  </g>
-  <g
-    fill="#fff"
-    text-anchor="middle"
-    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
-    text-rendering="geometricPrecision"
-    font-size="110"
-  >
-    <image
-      x="5"
-      y="3"
-      width="14"
-      height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
-    />
-    <text
-      aria-hidden="true"
-      x="365"
-      y="150"
-      fill="#010101"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="270"
-    >
-      label
-    </text>
-    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
-      label
-    </text>
-    <text
-      aria-hidden="true"
-      x="825"
-      y="150"
-      fill="#010101"
-      fill-opacity=".3"
-      transform="scale(.1)"
-      textLength="490"
-    >
-      message
-    </text>
-    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
-      message
-    </text>
-  </g>
-</svg>
-
-`
-
 exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
@@ -2547,6 +2478,307 @@ exports['The badge generator "social" template badge generation should match sna
     <text id="rlink1" x="905" y="140" transform="scale(.1)" textLength="330">
       grown
     </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logos should always produce the same badge default badge with logo 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="113"
+  height="20"
+  role="img"
+  aria-label="label: message"
+>
+  <title>label: message</title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r">
+    <rect width="113" height="20" rx="3" fill="#fff" />
+  </clipPath>
+  <g clip-path="url(#r)">
+    <rect width="54" height="20" fill="#555" />
+    <rect x="54" width="59" height="20" fill="#4c1" />
+    <rect width="113" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="825"
+      y="150"
+      fill="#010101"
+      fill-opacity=".3"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
+    </text>
+    <text x="825" y="140" transform="scale(.1)" fill="#fff" textLength="490">
+      message
+    </text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge flat badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="25"
+  height="20"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <clipPath id="r"><rect width="25" height="20" rx="3" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="0" height="20" fill="#555" />
+    <rect x="0" width="25" height="20" fill="#4c1" />
+    <rect width="25" height="20" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge flat-square badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="25"
+  height="20"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <g shape-rendering="crispEdges">
+    <rect width="0" height="20" fill="#555" />
+    <rect x="0" width="25" height="20" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="3"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge social badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="26"
+  height="20"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <style>
+    a:hover #llink {
+      fill: url(#b);
+      stroke: #ccc;
+    }
+    a:hover #rlink {
+      fill: #4183c4;
+    }
+  </style>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <linearGradient id="b" x2="0" y2="100%">
+    <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+    <stop offset="1" stop-opacity=".1" />
+  </linearGradient>
+  <g stroke="#d5d5d5">
+    <rect
+      stroke="none"
+      fill="#fcfcfc"
+      x="0.5"
+      y="0.5"
+      width="25"
+      height="19"
+      rx="2"
+    />
+  </g>
+  <image
+    x="5"
+    y="3"
+    width="14"
+    height="14"
+    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+  />
+  <g
+    aria-hidden="true"
+    fill="#333"
+    text-anchor="middle"
+    font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+    text-rendering="geometricPrecision"
+    font-weight="700"
+    font-size="110px"
+    line-height="14px"
+  >
+    <rect
+      id="llink"
+      stroke="#d5d5d5"
+      fill="url(#a)"
+      x=".5"
+      y=".5"
+      width="25"
+      height="19"
+      rx="2"
+    />
+    <text
+      aria-hidden="true"
+      x="195"
+      y="150"
+      fill="#fff"
+      transform="scale(.1)"
+      textLength="10"
+    ></text>
+    <text x="195" y="140" transform="scale(.1)" textLength="10"></text>
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge plastic badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="25"
+  height="18"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <linearGradient id="s" x2="0" y2="100%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".7" />
+    <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
+    <stop offset=".9" stop-color="#000" stop-opacity=".3" />
+    <stop offset="1" stop-color="#000" stop-opacity=".5" />
+  </linearGradient>
+  <clipPath id="r"><rect width="25" height="18" rx="4" fill="#fff" /></clipPath>
+  <g clip-path="url(#r)">
+    <rect width="0" height="18" fill="#555" />
+    <rect x="0" width="25" height="18" fill="#4c1" />
+    <rect width="25" height="18" fill="url(#s)" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="110"
+  >
+    <image
+      x="5"
+      y="2"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+  </g>
+</svg>
+
+`
+
+exports['The badge generator badges with logo-only should always produce the same badge for-the-badge badge, logo-only 1'] = `
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35"
+  height="28"
+  role="img"
+  aria-label=""
+>
+  <title></title>
+  <g shape-rendering="crispEdges">
+    <rect width="35" height="28" fill="#4c1" />
+  </g>
+  <g
+    fill="#fff"
+    text-anchor="middle"
+    font-family="Verdana,Geneva,DejaVu Sans,sans-serif"
+    text-rendering="geometricPrecision"
+    font-size="100"
+  >
+    <image
+      x="9"
+      y="7"
+      width="14"
+      height="14"
+      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    />
+    <text
+      transform="scale(.1)"
+      x="230"
+      y="175"
+      textLength="0"
+      fill="#fff"
+      font-weight="bold"
+    ></text>
   </g>
 </svg>
 

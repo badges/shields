@@ -1,7 +1,0 @@
-/api-docs/
-/build
-/coverage
-/__snapshots__
-public
-badge-maker/node_modules/
-!.github/

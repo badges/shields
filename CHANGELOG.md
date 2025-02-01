@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-01-01
+
+- Add [PypiTypes] badge [#10774](https://github.com/badges/shields/issues/10774)
+- feat(endpoint-badge): add logoSize support [#10132](https://github.com/badges/shields/issues/10132)
+- fix auto-sized logo sizes [#10764](https://github.com/badges/shields/issues/10764)
+- Add [Coderabbit] PR Stats service and tests [#10749](https://github.com/badges/shields/issues/10749)
+- add [PUB] downloads badge [#10745](https://github.com/badges/shields/issues/10745)
+- Add [GitLab] Top Language Badge [#10750](https://github.com/badges/shields/issues/10750)
+- provide a non-repository scoped version of [githubcodesearch] [#10733](https://github.com/badges/shields/issues/10733)
+- [ReproducibleCentral] add Reproducible Central in Dependencies [#10705](https://github.com/badges/shields/issues/10705)
+- Add ability to format bytes as metric or IEC; affects [bundlejs bundlephobia ChromeWebStoreSize CratesSize DockerSize GithubRepoSize GithubCodeSize GithubSize NpmUnpackedSize SpigetDownloadSize steam VisualStudioAppCenterReleasesSize whatpulse] [#10547](https://github.com/badges/shields/issues/10547)
+- Dependency updates
+
 ## server-2024-12-01
 
 - add [WingetVersion] Badge [#10245](https://github.com/badges/shields/issues/10245)

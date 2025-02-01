@@ -1,14 +1,12 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isDecimalPercentage } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
-t.create('Valid Repository')
-  .get('/wireshark/wireshark.json')
-  .expectBadge({
-    label: 'c',
-    message: Joi.string().regex(/^([1-9]?[0-9]\.[0-9]|100\.0)%$/),
-  })
+t.create('Valid Repository').get('/wireshark/wireshark.json').expectBadge({
+  label: 'c',
+  message: isDecimalPercentage,
+})
 
 t.create('Valid Blank Repo')
   .get('/KoruptTinker/gitlab-blank-repo.json')
