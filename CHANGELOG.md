@@ -4,6 +4,28 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-02-01
+
+- fix badge style when logo only [#10794](https://github.com/badges/shields/issues/10794)
+- add tests for dynamic xml with lowercase doctype [#10845](https://github.com/badges/shields/issues/10845)
+- pass matching mime type to xmldom; test [dynamicxml] [#10830](https://github.com/badges/shields/issues/10830)
+- fix badge-maker package tests [#10809](https://github.com/badges/shields/issues/10809)
+- URL validator tidyup; affects [discourse dynamic endpoint gerrit jira maven nexus osslifecycle python vpm website] securityheaders sonar swagger w3c [#10810](https://github.com/badges/shields/issues/10810)
+- allow [chromewebstore] size to contain decimal point [#10812](https://github.com/badges/shields/issues/10812)
+- fix: cypress video [#10829](https://github.com/badges/shields/issues/10829)
+- Add auth support to [Reddit] badges [#10790](https://github.com/badges/shields/issues/10790)
+- Fixed mixed up Code climate endpoints [#10813](https://github.com/badges/shields/issues/10813)
+- feat: add terraform registry providers and modules downloads [#10793](https://github.com/badges/shields/issues/10793)
+- fix missing comma in badge-maker docs example [#10808](https://github.com/badges/shields/issues/10808)
+- add support for npm 11 [#10795](https://github.com/badges/shields/issues/10795)
+- Renew [Mastodon] docs and improve parameter handling [#10789](https://github.com/badges/shields/issues/10789)
+- Support [Matrix] summary endpoint [#10782](https://github.com/badges/shields/issues/10782)
+- update monitoring docs/links [#10780](https://github.com/badges/shields/issues/10780)
+- Improve donate Call To Action [#10777](https://github.com/badges/shields/issues/10777)
+- use metric() in [coderabbit] badge [#10779](https://github.com/badges/shields/issues/10779)
+- cache matrix badges for 4 hours [#10778](https://github.com/badges/shields/issues/10778)
+- Dependency updates
+
 ## server-2025-01-01
 
 - Add [PypiTypes] badge [#10774](https://github.com/badges/shields/issues/10774)
