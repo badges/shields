@@ -10,7 +10,7 @@ export default class PypiTypes extends PypiBase {
       get: {
         summary: 'PyPI - Types',
         description:
-          'Whether the package provides type information, as indicated by the presence of the Typing :: Typed classifier in the package metadata',
+          'Type information provided by the package, as indicated by the presence of the `Typing :: Typed` and `Typing :: Stubs Only` classifiers in the package metadata',
         parameters: pypiGeneralParams,
       },
     },
@@ -18,10 +18,15 @@ export default class PypiTypes extends PypiBase {
 
   static defaultBadgeData = { label: 'types' }
 
-  static render({ isTyped }) {
+  static render({ isTyped, isStubsOnly }) {
     if (isTyped) {
       return {
         message: 'typed',
+        color: 'brightgreen',
+      }
+    } else if (isStubsOnly) {
+      return {
+        message: 'stubs',
         color: 'brightgreen',
       }
     } else {
@@ -35,6 +40,9 @@ export default class PypiTypes extends PypiBase {
   async handle({ egg }, { pypiBaseUrl }) {
     const packageData = await this.fetch({ egg, pypiBaseUrl })
     const isTyped = packageData.info.classifiers.includes('Typing :: Typed')
-    return this.constructor.render({ isTyped })
+    const isStubsOnly = packageData.info.classifiers.includes(
+      'Typing :: Stubs Only',
+    )
+    return this.constructor.render({ isTyped, isStubsOnly })
   }
 }
