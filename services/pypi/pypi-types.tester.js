@@ -10,7 +10,7 @@ t.create('types (no)')
   .expectBadge({ label: 'types', message: 'untyped' })
 
 t.create('types (stubs)')
-  .get('/pandas-stubs.json')
+  .get('/types-requests.json')
   .expectBadge({ label: 'types', message: 'stubs' })
 
 t.create('types (invalid)')
