@@ -65,6 +65,11 @@ export default class DynamicXml extends BaseService {
             description: 'Optional suffix to append to the value',
             example: ']',
           },
+          {
+            name: 'omitChar',
+            description: 'Optional character to remove from output',
+            example: '^',
+          },
         ),
       },
     },
