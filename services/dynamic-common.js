@@ -74,6 +74,7 @@ function transformAndValidate({ data, key }) {
  * @param {any} attrs.value Value or array of value to be used for the badge message
  * @param {string} [attrs.prefix] If provided then the badge message will use this value as a prefix
  * @param {string} [attrs.suffix] If provided then the badge message will use this value as a suffix
+ * @param {string} [attrs.omitChar] If provided then the badge message will remove this character from its content
  * @returns {object} Badge with label, message and color properties
  */
 function renderDynamicBadge({
@@ -82,9 +83,12 @@ function renderDynamicBadge({
   value,
   prefix = '',
   suffix = '',
+  omitChar = '',
 }) {
-  const renderedValue =
+  let renderedValue =
     value === undefined ? 'not specified' : toArray(value).join(', ')
+
+  if (omitChar) renderedValue = renderedValue.replaceAll(omitChar, '')
   return {
     label: tag ? `${defaultLabel}@${tag}` : defaultLabel,
     message: `${prefix}${renderedValue}${suffix}`,

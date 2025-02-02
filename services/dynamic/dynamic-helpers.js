@@ -6,6 +6,7 @@ const queryParamSchema = Joi.object({
   query: Joi.string().required(),
   prefix: Joi.alternatives().try(Joi.string(), Joi.number()),
   suffix: Joi.alternatives().try(Joi.string(), Joi.number()),
+  omitChar: Joi.string(),
 })
   .rename('uri', 'url', { ignoreUndefined: true, override: true })
   .required()

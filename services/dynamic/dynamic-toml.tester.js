@@ -105,3 +105,17 @@ t.create('TOML contains a string')
     message: 'unparseable toml response',
     color: 'lightgrey',
   })
+
+t.create('can omit specific character')
+  .get(
+    `.json?url=https://example.test/toml&query=$.somePackage&omitChar=${encodeURIComponent('^')}`,
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/toml')
+      .reply(200, 'somePackage = "^1.2.3"'),
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '1.2.3',
+  })

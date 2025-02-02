@@ -36,7 +36,10 @@ export default superclass =>
       )
     }
 
-    async handle(namedParams, { url, query: pathExpression, prefix, suffix }) {
+    async handle(
+      namedParams,
+      { url, query: pathExpression, prefix, suffix, omitChar },
+    ) {
       const data = await this.fetch({
         schema: Joi.any(),
         url,
@@ -63,7 +66,6 @@ export default superclass =>
       if (!values || !values.length) {
         throw new InvalidResponse({ prettyMessage: 'no result' })
       }
-
-      return renderDynamicBadge({ value: values, prefix, suffix })
+      return renderDynamicBadge({ value: values, prefix, suffix, omitChar })
     }
   }

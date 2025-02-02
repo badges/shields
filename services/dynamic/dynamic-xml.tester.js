@@ -228,3 +228,18 @@ t.create('query HTML document')
     message: 'Herman Melville - Moby-Dick',
     color: 'blue',
   })
+
+t.create('can omit specific character')
+  .get(
+    `.json?${queryString.stringify({
+      url: exampleUrl,
+      query: "//book[@id='bk101']/price",
+      omitChar: '.',
+    })}`,
+  )
+  .intercept(withExampleXml)
+  .expectBadge({
+    label: 'custom badge',
+    message: '4495',
+    color: 'blue',
+  })

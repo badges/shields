@@ -133,7 +133,10 @@ export default class DynamicXml extends BaseService {
     return { values }
   }
 
-  async handle(_namedParams, { url, query: pathExpression, prefix, suffix }) {
+  async handle(
+    _namedParams,
+    { url, query: pathExpression, prefix, suffix, omitChar },
+  ) {
     const { buffer, res } = await this._request({
       url,
       options: { headers: { Accept: 'application/xml, text/xml' } },
@@ -152,6 +155,6 @@ export default class DynamicXml extends BaseService {
       contentType,
     })
 
-    return renderDynamicBadge({ value, prefix, suffix })
+    return renderDynamicBadge({ value, prefix, suffix, omitChar })
   }
 }

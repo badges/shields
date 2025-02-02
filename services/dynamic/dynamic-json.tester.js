@@ -222,3 +222,17 @@ t.create('JSON contains a string')
     label: 'custom badge',
     message: 'foo',
   })
+
+t.create('can omit specific character')
+  .get(
+    `.json?url=https://example.test/json&query=$.somePackage&omitChar=${encodeURIComponent('^')}`,
+  )
+  .intercept(nock =>
+    nock('https://example.test')
+      .get('/json')
+      .reply(200, JSON.stringify({ somePackage: '^1.2.3' })),
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: '1.2.3',
+  })
