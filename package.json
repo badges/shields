@@ -23,7 +23,7 @@
   "dependencies": {
     "@renovatebot/pep440": "^4.0.1",
     "@renovatebot/ruby-semver": "^4.0.0",
-    "@sentry/node": "^8.53.0",
+    "@sentry/node": "^8.54.0",
     "@shields_io/camp": "^18.1.2",
     "@xmldom/xmldom": "0.9.7",
     "badge-maker": "file:badge-maker",
