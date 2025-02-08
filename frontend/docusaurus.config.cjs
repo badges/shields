@@ -115,11 +115,11 @@ const config = {
             title: 'Stats',
             items: [
               {
-                label: 'Service Status',
+                label: 'Service Status (Upptime)',
                 href: 'https://badges.github.io/uptime-monitoring/',
               },
               {
-                label: 'NodePing',
+                label: 'Service Status (NodePing)',
                 href: 'https://nodeping.com/reports/status/YBISBQB254',
               },
               {
