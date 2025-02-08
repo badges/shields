@@ -22,4 +22,4 @@ public:
   rasterUrl: 'https://raster.shields.io'
   userAgentBase: 'Shields.io'
   requireCloudflare: true
-  requestTimeoutSeconds: 20
+  requestTimeoutSeconds: 8
