@@ -12,7 +12,6 @@ const globalQueryParams = new Set([
   'logo',
   'logoColor',
   'logoSize',
-  'logoWidth',
   'link',
   'colorA',
   'colorB',
