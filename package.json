@@ -37,7 +37,7 @@
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "decamelize": "^3.2.0",
-    "emojic": "^1.1.17",
+    "emojic": "^1.1.18",
     "escape-string-regexp": "^4.0.0",
     "fast-xml-parser": "^4.5.1",
     "glob": "^11.0.1",
