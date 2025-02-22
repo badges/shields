@@ -185,7 +185,6 @@ describe('coalesceBadge', function () {
           {
             namedLogo: 'appveyor',
             logoColor: 'red',
-            logoWidth: 100,
           },
           {},
         ).logo,
@@ -243,20 +242,6 @@ describe('coalesceBadge', function () {
       expect(
         coalesceBadge({}, { namedLogo: 'npm', logoSize: 'auto' }, {}),
       ).to.include({ logoSize: 'auto' })
-    })
-  })
-
-  describe('Logo width', function () {
-    it('overrides the logoWidth', function () {
-      expect(coalesceBadge({ logoWidth: 20 }, {}, {})).to.include({
-        logoWidth: 20,
-      })
-    })
-
-    it('applies the logo width', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'npm', logoWidth: 275 }, {}),
-      ).to.include({ logoWidth: 275 })
     })
   })
 

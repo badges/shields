@@ -375,7 +375,6 @@ describe('BaseService', function () {
         style: 'flat',
         namedLogo: undefined,
         logo: undefined,
-        logoWidth: undefined,
         logoSize: undefined,
         links: [],
         labelColor: undefined,
