@@ -2998,6 +2998,49 @@ const versionDataWithVaryingArchitectures = [
   { name: '2.6', images: [] },
 ]
 
+const versionDataWithArchSpecificVersions = [
+  {
+    name: '3.8-arm64',
+    images: [
+      {
+        digest:
+          'sha256:3d62c3ceeba113f72efaaf3a35d83081963fa2cd29be76ed1aaa87b59f6f8eae',
+        architecture: 'arm64',
+      },
+    ],
+  },
+  {
+    name: '3.8-amd64',
+    images: [
+      {
+        digest:
+          'sha256:661bdba24d94ee8f1e4002eb3a87d7062244dd2583fb294471e9e00a7bfba45d',
+        architecture: 'amd64',
+      },
+    ],
+  },
+  {
+    name: '3.9-arm64',
+    images: [
+      {
+        digest:
+          'sha256:1c1d100e50a7684afcbdc82929de1bc79bee8adcaafd367c38e5aa7eed4d6e19',
+        architecture: 'arm64',
+      },
+    ],
+  },
+  {
+    name: '3.9-amd64',
+    images: [
+      {
+        digest:
+          'sha256:faf4f034c82d40b66a7285a5e9d305f543a2726961cc6da11206770ef013244e',
+        architecture: 'amd64',
+      },
+    ],
+  },
+]
+
 export {
   sizeDataNoTagSemVerSort,
   versionDataNoTagDateSort,
@@ -3005,4 +3048,5 @@ export {
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
+  versionDataWithArchSpecificVersions,
 }
