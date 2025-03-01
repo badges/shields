@@ -6,9 +6,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2025-03-01
 
-- link to upptime [#10876](https://github.com/badges/shields/issues/10876)
 - time out long running requests more aggressively [#10833](https://github.com/badges/shields/issues/10833)
-- remove docker pull command from homepage [#10867](https://github.com/badges/shields/issues/10867)
 - Dependency updates
 
 ## server-2025-02-02
