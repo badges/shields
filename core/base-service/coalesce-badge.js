@@ -2,7 +2,8 @@ import {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
 } from '../../lib/logos.js'
-import { svg2base64 } from '../../lib/svg-helpers.js'
+import { svg2base64, getIconSize } from '../../lib/svg-helpers.js'
+import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
 
@@ -137,6 +138,12 @@ export default function coalesceBadge(
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
   }
   if (namedLogo) {
+    const iconSize = getIconSize(String(namedLogo).toLowerCase())
+
+    if (iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    }
+
     logoSvgBase64 = prepareNamedLogo({
       name: namedLogo,
       color: namedLogoColor,

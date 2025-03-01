@@ -4,7 +4,6 @@ const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
 const { DEFAULT_LOGO_HEIGHT } = require('./constants')
-const { getIconSize } = require('./svg-helpers.js')
 
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
@@ -18,8 +17,8 @@ module.exports = function makeBadge({
   color,
   labelColor,
   logo,
-  namedLogo,
   logoSize,
+  logoWidth,
   links = ['', ''],
   idSuffix,
 }) {
@@ -27,20 +26,12 @@ module.exports = function makeBadge({
   label = `${label}`.trim()
   message = `${message}`.trim()
 
-  let logoWidth = logo ? DEFAULT_LOGO_HEIGHT : 0
-  if (namedLogo && logoSize === 'auto') {
-    const iconSize = getIconSize(String(namedLogo).toLowerCase())
-
-    if (iconSize) {
-      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
-    }
-  }
-
   // This ought to be the responsibility of the server, not `makeBadge`.
   if (format === 'json') {
     return JSON.stringify({
       label,
       message,
+      logoWidth,
       // Only call normalizeColor for the JSON case: this is handled
       // internally by toSvgColor in the SVG case.
       color: normalizeColor(color),
@@ -56,6 +47,8 @@ module.exports = function makeBadge({
   if (!render) {
     throw new Error(`Unknown badge style: '${style}'`)
   }
+
+  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
 
   return stripXmlWhitespace(
     render({
