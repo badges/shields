@@ -150,12 +150,18 @@ class BaseService {
   static get _cacheLength() {
     const cacheLengths = {
       build: 30,
-      license: 3600,
-      version: 300,
       debug: 60,
-      downloads: 900,
-      rating: 900,
-      social: 900,
+
+      'platform-support': 300,
+      size: 300,
+      version: 300,
+
+      chat: 1800,
+      downloads: 1800,
+      rating: 1800,
+      social: 1800,
+
+      license: 14400,
     }
     return cacheLengths[this.category]
   }
