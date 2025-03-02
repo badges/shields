@@ -6,10 +6,6 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2025-03-02
 
-- Dependency updates
-
-## server-2025-03-01
-
 - time out long running requests more aggressively [#10833](https://github.com/badges/shields/issues/10833)
 - Dependency updates
 
