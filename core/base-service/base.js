@@ -47,10 +47,6 @@ const optionalStringWhenNamedLogoPresent = Joi.alternatives().conditional(
   },
 )
 
-const optionalNumberWhenAnyLogoPresent = Joi.alternatives()
-  .conditional('namedLogo', { is: Joi.string().required(), then: Joi.number() })
-  .conditional('logoSvg', { is: Joi.string().required(), then: Joi.number() })
-
 const serviceDataSchema = Joi.object({
   isError: Joi.boolean(),
   label: Joi.string().allow(''),
@@ -66,7 +62,6 @@ const serviceDataSchema = Joi.object({
   logoSvg: Joi.string(),
   logoColor: optionalStringWhenNamedLogoPresent,
   logoSize: optionalStringWhenNamedLogoPresent,
-  logoWidth: optionalNumberWhenAnyLogoPresent,
   cacheSeconds: Joi.number().integer().min(0),
   style: Joi.string(),
 })

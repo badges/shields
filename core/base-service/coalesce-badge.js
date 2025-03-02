@@ -20,7 +20,7 @@ import toArray from './to-array.js'
 // 1. When `?logo=` contains a simple-icons logo or contains a base64-encoded
 //    SVG, that logo is used. When a `&logoColor=` is specified, that color is
 //    used (except for the base64-encoded logos). Otherwise the default color
-//    is used. The appearance of the logo can be customized using `logoWidth`,
+//    is used.
 //    When `?logo=` is specified, any logo-related parameters specified
 //    dynamically by the service, or by default in the service, are ignored.
 // 2. The second precedence is the dynamic logo returned by a service. This is
@@ -52,11 +52,7 @@ export default function coalesceBadge(
     colorB: legacyOverrideColor,
     colorA: legacyOverrideLabelColor,
   } = overrides
-  let {
-    logoWidth: overrideLogoWidth,
-    color: overrideColor,
-    labelColor: overrideLabelColor,
-  } = overrides
+  let { color: overrideColor, labelColor: overrideLabelColor } = overrides
 
   // Only use the legacy properties if the new ones are not provided
   if (typeof overrideColor === 'undefined') {
@@ -73,7 +69,6 @@ export default function coalesceBadge(
   if (typeof overrideLabelColor === 'number') {
     overrideLabelColor = `${overrideLabelColor}`
   }
-  overrideLogoWidth = +overrideLogoWidth || undefined
 
   const {
     isError,
@@ -85,7 +80,6 @@ export default function coalesceBadge(
     namedLogo: serviceNamedLogo,
     logoColor: serviceLogoColor,
     logoSize: serviceLogoSize,
-    logoWidth: serviceLogoWidth,
     link: serviceLink,
     cacheSeconds: serviceCacheSeconds,
     style: serviceStyle,
@@ -131,7 +125,6 @@ export default function coalesceBadge(
     // If the logo has been overridden it does not make sense to inherit the
     // original width or position.
     logoSize = overrideLogoSize
-    logoWidth = overrideLogoWidth
   } else {
     if (serviceLogoSvg) {
       logoSvgBase64 = svg2base64(serviceLogoSvg)
@@ -143,12 +136,11 @@ export default function coalesceBadge(
       namedLogoColor = coalesce(overrideLogoColor, serviceLogoColor)
     }
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
-    logoWidth = coalesce(overrideLogoWidth, serviceLogoWidth)
   }
   if (namedLogo) {
     const iconSize = getIconSize(String(namedLogo).toLowerCase())
 
-    if (!logoWidth && iconSize && logoSize === 'auto') {
+    if (iconSize && logoSize === 'auto') {
       logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
     }
 
