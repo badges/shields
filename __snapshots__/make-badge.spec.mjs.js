@@ -1,7 +1,6 @@
 exports['The badge generator SVG should match snapshot 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -61,7 +60,6 @@ exports['The badge generator SVG should match snapshot 1'] = `
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -121,7 +119,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="20"
   role="img"
@@ -152,7 +149,7 @@ exports['The badge generator "flat" template badge generation should match snaps
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -190,7 +187,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message only, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="45"
   height="20"
   role="img"
@@ -236,7 +232,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="63"
   height="20"
   role="img"
@@ -265,7 +260,7 @@ exports['The badge generator "flat" template badge generation should match snaps
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -289,7 +284,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="69"
   height="20"
   role="img"
@@ -318,7 +312,7 @@ exports['The badge generator "flat" template badge generation should match snaps
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -340,12 +334,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 `
 
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="90"
-  height="20"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="20">
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -363,7 +352,7 @@ exports['The badge generator "flat" template badge generation should match snaps
     text-rendering="geometricPrecision"
     font-size="110"
   >
-    <a target="_blank" xlink:href="https://shields.io/">
+    <a target="_blank" href="https://shields.io/">
       <rect width="45" x="0" height="20" fill="rgba(0,0,0,0)" />
       <text
         aria-hidden="true"
@@ -380,7 +369,7 @@ exports['The badge generator "flat" template badge generation should match snaps
         cactus
       </text>
     </a>
-    <a target="_blank" xlink:href="https://www.google.co.uk/">
+    <a target="_blank" href="https://www.google.co.uk/">
       <rect width="45" x="45" height="20" fill="rgba(0,0,0,0)" />
       <text
         aria-hidden="true"
@@ -405,7 +394,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: black text when the label color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -465,7 +453,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: black text when the message color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -525,7 +512,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -557,7 +543,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="20"
   role="img"
@@ -580,7 +565,7 @@ exports['The badge generator "flat-square" template badge generation should matc
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
@@ -596,7 +581,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message only, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="45"
   height="20"
   role="img"
@@ -625,7 +609,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="63"
   height="20"
   role="img"
@@ -648,7 +631,7 @@ exports['The badge generator "flat-square" template badge generation should matc
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       grown
@@ -661,7 +644,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="69"
   height="20"
   role="img"
@@ -684,7 +666,7 @@ exports['The badge generator "flat-square" template badge generation should matc
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text x="455" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       grown
@@ -695,12 +677,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 `
 
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="90"
-  height="20"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="20">
   <g shape-rendering="crispEdges">
     <rect width="45" height="20" fill="#0f0" />
     <rect x="45" width="45" height="20" fill="#b3e" />
@@ -712,13 +689,13 @@ exports['The badge generator "flat-square" template badge generation should matc
     text-rendering="geometricPrecision"
     font-size="110"
   >
-    <a target="_blank" xlink:href="https://shields.io/">
+    <a target="_blank" href="https://shields.io/">
       <rect width="45" x="0" height="20" fill="rgba(0,0,0,0)" />
       <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
         cactus
       </text>
     </a>
-    <a target="_blank" xlink:href="https://www.google.co.uk/">
+    <a target="_blank" href="https://www.google.co.uk/">
       <rect width="45" x="45" height="20" fill="rgba(0,0,0,0)" />
       <text x="665" y="140" transform="scale(.1)" fill="#fff" textLength="350">
         grown
@@ -732,7 +709,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: black text when the label color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -764,7 +740,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: black text when the message color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="20"
   role="img"
@@ -796,7 +771,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="18"
   role="img"
@@ -858,7 +832,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="18"
   role="img"
@@ -891,7 +864,7 @@ exports['The badge generator "plastic" template badge generation should match sn
       y="2"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -929,7 +902,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message only, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="45"
   height="18"
   role="img"
@@ -977,7 +949,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="63"
   height="18"
   role="img"
@@ -1008,7 +979,7 @@ exports['The badge generator "plastic" template badge generation should match sn
       y="2"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -1032,7 +1003,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="69"
   height="18"
   role="img"
@@ -1063,7 +1033,7 @@ exports['The badge generator "plastic" template badge generation should match sn
       y="2"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -1085,12 +1055,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 `
 
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="90"
-  height="18"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="18">
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1110,7 +1075,7 @@ exports['The badge generator "plastic" template badge generation should match sn
     text-rendering="geometricPrecision"
     font-size="110"
   >
-    <a target="_blank" xlink:href="https://shields.io/">
+    <a target="_blank" href="https://shields.io/">
       <rect width="45" x="0" height="18" fill="rgba(0,0,0,0)" />
       <text
         aria-hidden="true"
@@ -1127,7 +1092,7 @@ exports['The badge generator "plastic" template badge generation should match sn
         cactus
       </text>
     </a>
-    <a target="_blank" xlink:href="https://www.google.co.uk/">
+    <a target="_blank" href="https://www.google.co.uk/">
       <rect width="45" x="45" height="18" fill="rgba(0,0,0,0)" />
       <text
         aria-hidden="true"
@@ -1152,7 +1117,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: black text when the label color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="18"
   role="img"
@@ -1214,7 +1178,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: black text when the message color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="90"
   height="18"
   role="img"
@@ -1276,7 +1239,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="146.75"
   height="28"
   role="img"
@@ -1315,7 +1277,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="163.75"
   height="28"
   role="img"
@@ -1338,7 +1299,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
       y="7"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text transform="scale(.1)" x="532.5" y="175" textLength="485" fill="#fff">
       CACTUS
@@ -1361,7 +1322,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message only, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="74.25"
   height="28"
   role="img"
@@ -1396,7 +1356,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="94.25"
   height="28"
   role="img"
@@ -1418,7 +1377,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
       y="7"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       transform="scale(.1)"
@@ -1438,7 +1397,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="106.25"
   height="28"
   role="img"
@@ -1461,7 +1419,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
       y="7"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       transform="scale(.1)"
@@ -1479,12 +1437,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 `
 
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="146.75"
-  height="28"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="146.75" height="28">
   <g shape-rendering="crispEdges">
     <rect width="72.5" height="28" fill="#0f0" />
     <rect x="72.5" width="74.25" height="28" fill="#b3e" />
@@ -1496,7 +1449,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
     text-rendering="geometricPrecision"
     font-size="100"
   >
-    <a target="_blank" xlink:href="https://shields.io/">
+    <a target="_blank" href="https://shields.io/">
       <rect width="72.5" height="28" fill="rgba(0,0,0,0)" />
       <text
         transform="scale(.1)"
@@ -1508,7 +1461,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
         CACTUS
       </text>
     </a>
-    <a target="_blank" xlink:href="https://www.google.co.uk/">
+    <a target="_blank" href="https://www.google.co.uk/">
       <rect width="74.25" height="28" x="72.5" fill="rgba(0,0,0,0)" />
       <text
         transform="scale(.1)"
@@ -1529,7 +1482,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: black text when the label color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="146.75"
   height="28"
   role="img"
@@ -1568,7 +1520,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: black text when the message color is light 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="146.75"
   height="28"
   role="img"
@@ -1607,7 +1558,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "social" template badge generation should match snapshots: message/label, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="95"
   height="20"
   role="img"
@@ -1697,7 +1647,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "social" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="112"
   height="20"
   role="img"
@@ -1740,7 +1689,7 @@ exports['The badge generator "social" template badge generation should match sna
     y="3"
     width="14"
     height="14"
-    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
   />
   <g
     aria-hidden="true"
@@ -1794,7 +1743,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "social" template badge generation should match snapshots: message only, no logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="59"
   height="20"
   role="img"
@@ -1882,7 +1830,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "social" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="73"
   height="20"
   role="img"
@@ -1925,7 +1872,7 @@ exports['The badge generator "social" template badge generation should match sna
     y="3"
     width="14"
     height="14"
-    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
   />
   <g
     aria-hidden="true"
@@ -1977,7 +1924,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "social" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="73"
   height="20"
   role="img"
@@ -2020,7 +1966,7 @@ exports['The badge generator "social" template badge generation should match sna
     y="3"
     width="14"
     height="14"
-    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
   />
   <g
     aria-hidden="true"
@@ -2070,12 +2016,7 @@ exports['The badge generator "social" template badge generation should match sna
 `
 
 exports['The badge generator "social" template badge generation should match snapshots: message/label, with links 1'] = `
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="95"
-  height="20"
->
+<svg xmlns="http://www.w3.org/2000/svg" width="95" height="20">
   <style>
     a:hover #llink {
       fill: url(#b);
@@ -2117,7 +2058,7 @@ exports['The badge generator "social" template badge generation should match sna
     font-size="110px"
     line-height="14px"
   >
-    <a target="_blank" xlink:href="https://shields.io/">
+    <a target="_blank" href="https://shields.io/">
       <text
         aria-hidden="true"
         x="235"
@@ -2140,7 +2081,7 @@ exports['The badge generator "social" template badge generation should match sna
         rx="2"
       />
     </a>
-    <a target="_blank" xlink:href="https://www.google.co.uk/">
+    <a target="_blank" href="https://www.google.co.uk/">
       <rect width="42" x="53" height="20" fill="rgba(0,0,0,0)" />
       <text
         aria-hidden="true"
@@ -2164,7 +2105,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="20"
   role="img"
@@ -2195,7 +2135,7 @@ exports['The badge generator "flat" template badge generation should match snaps
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -2233,7 +2173,6 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat-square" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="20"
   role="img"
@@ -2256,7 +2195,7 @@ exports['The badge generator "flat-square" template badge generation should matc
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
@@ -2272,7 +2211,6 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "plastic" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="107"
   height="18"
   role="img"
@@ -2305,7 +2243,7 @@ exports['The badge generator "plastic" template badge generation should match sn
       y="2"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -2343,7 +2281,6 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="163.75"
   height="28"
   role="img"
@@ -2366,7 +2303,7 @@ exports['The badge generator "for-the-badge" template badge generation should ma
       y="7"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text transform="scale(.1)" x="532.5" y="175" textLength="485" fill="#fff">
       CACTUS
@@ -2389,7 +2326,6 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "social" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="112"
   height="20"
   role="img"
@@ -2432,7 +2368,7 @@ exports['The badge generator "social" template badge generation should match sna
     y="3"
     width="14"
     height="14"
-    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
   />
   <g
     aria-hidden="true"
@@ -2486,7 +2422,6 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator badges with logos should always produce the same badge default badge with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="113"
   height="20"
   role="img"
@@ -2517,7 +2452,7 @@ exports['The badge generator badges with logos should always produce the same ba
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       aria-hidden="true"
@@ -2555,7 +2490,6 @@ exports['The badge generator badges with logos should always produce the same ba
 exports['The badge generator badges with logo-only should always produce the same badge flat badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="25"
   height="20"
   role="img"
@@ -2584,7 +2518,7 @@ exports['The badge generator badges with logo-only should always produce the sam
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
   </g>
 </svg>
@@ -2594,7 +2528,6 @@ exports['The badge generator badges with logo-only should always produce the sam
 exports['The badge generator badges with logo-only should always produce the same badge flat-square badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="25"
   height="20"
   role="img"
@@ -2617,7 +2550,7 @@ exports['The badge generator badges with logo-only should always produce the sam
       y="3"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
   </g>
 </svg>
@@ -2627,7 +2560,6 @@ exports['The badge generator badges with logo-only should always produce the sam
 exports['The badge generator badges with logo-only should always produce the same badge social badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="26"
   height="20"
   role="img"
@@ -2667,7 +2599,7 @@ exports['The badge generator badges with logo-only should always produce the sam
     y="3"
     width="14"
     height="14"
-    xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
   />
   <g
     aria-hidden="true"
@@ -2706,7 +2638,6 @@ exports['The badge generator badges with logo-only should always produce the sam
 exports['The badge generator badges with logo-only should always produce the same badge plastic badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="25"
   height="18"
   role="img"
@@ -2737,7 +2668,7 @@ exports['The badge generator badges with logo-only should always produce the sam
       y="2"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
   </g>
 </svg>
@@ -2747,7 +2678,6 @@ exports['The badge generator badges with logo-only should always produce the sam
 exports['The badge generator badges with logo-only should always produce the same badge for-the-badge badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink"
   width="35"
   height="28"
   role="img"
@@ -2769,7 +2699,7 @@ exports['The badge generator badges with logo-only should always produce the sam
       y="7"
       width="14"
       height="14"
-      xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
     />
     <text
       transform="scale(.1)"
