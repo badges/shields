@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Switching to using `href`s instead of the old `xlink:href` syntax
+
 ## 4.1.0
 
 ### Features
