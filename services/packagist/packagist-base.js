@@ -56,7 +56,12 @@ class BasePackagistService extends BaseJsonService {
    * @param {string} attrs.server URL for the packagist registry server (Optional)
    * @returns {object} Parsed response
    */
-  async fetchDev({ user, repo, schema, server = 'https://repo.packagist.org' }) {
+  async fetchDev({
+    user,
+    repo,
+    schema,
+    server = 'https://repo.packagist.org',
+  }) {
     const url = `${server}/p2/${user.toLowerCase()}/${repo.toLowerCase()}~dev.json`
 
     return this._requestJson({
