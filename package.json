@@ -134,7 +134,7 @@
   },
   "nodemonConfig": {
     "verbose": true,
-    "ext": "js",
+    "ext": "js,yml",
     "ignore": [
       "package.json",
       "**/*.spec.js",
@@ -142,7 +142,8 @@
       "**/*.integration.js",
       "frontend/",
       "build/",
-      "cypress/"
+      "cypress/",
+      ".github/"
     ]
   },
   "devDependencies": {
