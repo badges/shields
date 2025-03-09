@@ -96,6 +96,8 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/badges/shields?quickstart=1)
+
 1. Install Node 20 or later. You can use the [package manager][] of your choice.
    Tests need to pass in Node 20 and 22.
 2. Clone this repository.
