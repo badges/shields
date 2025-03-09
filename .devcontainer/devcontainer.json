@@ -3,12 +3,15 @@
 {
   "name": "Node.js",
   // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers-extra/features/prettier:1": {}
+    "ghcr.io/devcontainers-extra/features/prettier:1": {},
+    "ghcr.io/devcontainers-extra/features/apt-packages:1": {
+      "packages": "postgresql"
+    }
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
