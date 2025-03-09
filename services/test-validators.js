@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { semver as isSemver } from './validators.js'
+import { semver as isSemver, anyInteger as isInteger } from './validators.js'
 
 /*
   Note:
@@ -185,6 +185,7 @@ const isCurrency = withRegex(
 
 export {
   isSemver,
+  isInteger,
   isVPlusTripleDottedVersion,
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClauses,
