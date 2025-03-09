@@ -1,4 +1,5 @@
 import { ServiceTester } from '../tester.js'
+
 export const t = new ServiceTester({
   id: 'AnsibleGalaxyCollectionName',
   title: 'AnsibleGalaxyCollectionName',
