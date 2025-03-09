@@ -551,6 +551,8 @@ class Server {
       // https://github.com/badges/shields/issues/10419
       res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
 
+      res.setHeader('X-Frame-Options', 'DENY')
+
       next()
     })
 
