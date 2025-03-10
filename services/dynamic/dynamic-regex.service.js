@@ -1,7 +1,23 @@
+import { createContext, Script } from 'node:vm'
 import Joi from 'joi'
-import { BaseService, NotFound, queryParams } from '../index.js'
+import {
+  BaseService,
+  InvalidParameter,
+  NotFound,
+  queryParams,
+} from '../index.js'
 import { url } from '../validators.js'
 import { renderDynamicBadge } from '../dynamic-common.js'
+
+const SCRIPT = new Script(`
+    let found = searchRegex.exec(string)
+
+    found == null ? null
+    : replace == null ? found[0]
+    : found[0].replace(searchRegex, replace)
+`)
+
+const TIMEOUT = 1000
 
 export default class DynamicRegexService extends BaseService {
   static category = 'dynamic'
@@ -32,20 +48,21 @@ export default class DynamicRegexService extends BaseService {
           {
             name: 'search',
             description:
-              'A regex expression that will be used to extract data from the document',
+              'A regex expression that will be used to extract data from the document, using javascript specification. Documentation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions',
             required: true,
             example: 'Every month it serves (.*?) images',
           },
           {
             name: 'replace',
             description:
-              'A regex expression that will be used as the replacement of the search regex. If empty no replacement will be done (the matched regex text will be fully shown)',
+              'A regex expression that will be used as the replacement of the search regex. If empty no replacement will be done (the matched regex text will be fully shown). You can use $n to specify matched groups, among others. Documentation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_the_replacement',
             required: false,
             example: '$1',
           },
           {
             name: 'flags',
-            description: 'Flags to be used when creating the regex',
+            description:
+              'Flags to be used when creating the regex, like `i` for case insensitive, or `m` for multiline. Documentation: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#advanced_searching_with_flags',
             required: false,
             example: 'g',
           },
@@ -56,19 +73,33 @@ export default class DynamicRegexService extends BaseService {
   static defaultBadgeData = { label: 'match' }
 
   async handle(namedParams, { url, search, replace, flags }) {
+    // fetch file
     const { buffer } = await this._request({ url })
 
-    const searchRegex = RegExp(search, flags)
-    const found = searchRegex.exec(buffer)
+    // exec the regex inside a vm to be able to set a timeout
+    // this will prevent a ReDoS attack (https://en.wikipedia.org/wiki/ReDoS)
+    let value
+    try {
+      value = SCRIPT.runInContext(
+        createContext({
+          string: buffer,
+          searchRegex: RegExp(search, flags),
+          replace,
+        }),
+        { timeout: TIMEOUT },
+      )
+    } catch (ex) {
+      throw new InvalidParameter({
+        prettyMessage: 'Regex failed to be evaluated',
+      })
+    }
 
-    if (found == null) {
+    if (value == null) {
       throw new NotFound({
         prettyMessage: 'Regex did not match',
       })
     }
 
-    return renderDynamicBadge({
-      value: replace ? found[0].replace(searchRegex, replace) : found[0],
-    })
+    return renderDynamicBadge({ value })
   }
 }
