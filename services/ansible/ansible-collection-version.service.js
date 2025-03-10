@@ -28,13 +28,10 @@ export default class AnsibleGalaxyCollectionVersion extends BaseJsonService {
   }
 
   // Use the collection namespace & name as default label, which aren't statically known
-  static defaultBadgeData = {}
+  static defaultBadgeData = { label: 'galaxy' }
 
-  static render({ namespace, name, version }) {
-    return renderVersionBadge({
-      defaultLabel: `${namespace}.${name}`,
-      version,
-    })
+  static render({ version }) {
+    return renderVersionBadge({ version })
   }
 
   async fetch({ namespace, name }) {
@@ -49,10 +46,6 @@ export default class AnsibleGalaxyCollectionVersion extends BaseJsonService {
       namespace,
       name,
     })
-    return this.constructor.render({
-      namespace,
-      name,
-      version: highestVersion.version,
-    })
+    return this.constructor.render({ version: highestVersion.version })
   }
 }

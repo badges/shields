@@ -1,5 +1,5 @@
 import { ServiceTester } from '../tester.js'
-import { isInteger } from '../test-validators.js'
+import { isMetric } from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'AnsibleGalaxyCollectionDownloads',
@@ -8,9 +8,9 @@ export const t = new ServiceTester({
 })
 
 t.create('collection downloads (valid)')
-  .get('/community/general')
-  .expectBadge({ label: 'community.general', message: isInteger })
+  .get('/community/general.json')
+  .expectBadge({ label: 'collection downloads', message: isMetric })
 
 t.create('collection downloads (not found)')
-  .get('/not/real')
-  .expectBadge({ label: 'not.real', message: 'not found' })
+  .get('/not/real.json')
+  .expectBadge({ label: 'collection downloads', message: 'not found' })

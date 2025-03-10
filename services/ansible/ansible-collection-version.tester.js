@@ -8,9 +8,9 @@ export const t = new ServiceTester({
 })
 
 t.create('collection version (valid)')
-  .get('/community/general')
-  .expectBadge({ label: 'community.general', message: isSemver })
+  .get('/community/general.json')
+  .expectBadge({ label: 'galaxy', message: isSemver })
 
 t.create('collection version (not found)')
-  .get('/not/real')
-  .expectBadge({ label: 'not.real', message: 'not found' })
+  .get('/not/real.json')
+  .expectBadge({ label: 'galaxy', message: 'not found' })
