@@ -58,24 +58,24 @@ t.create('Regex search with flags')
     color: 'blue',
   })
 
-t.create('No search match')
+t.create('No matched search')
   .get(
     '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=notfound',
   )
   .expectBadge({
     label: 'match',
-    message: 'Regex did not match',
-    color: 'red',
+    message: '',
+    color: 'blue',
   })
 
-t.create('Timeout (ReDoS)')
+t.create('Custom no matched search')
   .get(
-    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=(-%2B)%2B0',
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=notfound&noMatch=Not found',
   )
   .expectBadge({
     label: 'match',
-    message: 'Regex failed to be evaluated',
-    color: 'red',
+    message: 'Not found',
+    color: 'blue',
   })
 
 t.create('invalid url')
