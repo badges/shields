@@ -3,10 +3,10 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleCollectionSchema = Joi.object({
-  deprecated: Joi.boolean().required(),
+  deprecated: Joi.boolean(),
   highest_version: Joi.object({
-    version: Joi.string().required(),
-  }).required(),
+    version: Joi.string(),
+  }),
   // Ansible docs don't mention this but it appears in the API responses
   download_count: Joi.number().required(),
 }).required()
@@ -18,7 +18,7 @@ export default class AnsibleGalaxyCollectionDownloads extends BaseJsonService {
   static openApi = {
     '/ansible/collection/d/{namespace}/{name}': {
       get: {
-        summary: 'Ansible Collection',
+        summary: 'Ansible Collection Downloads',
         parameters: pathParams(
           { name: 'namespace', example: 'community' },
           { name: 'name', example: 'general' },

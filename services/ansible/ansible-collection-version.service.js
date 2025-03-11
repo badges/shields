@@ -3,12 +3,12 @@ import { renderVersionBadge } from '../version.js'
 import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleCollectionSchema = Joi.object({
-  deprecated: Joi.boolean().required(),
+  deprecated: Joi.boolean(),
   highest_version: Joi.object({
     version: Joi.string().required(),
   }).required(),
   // Ansible docs don't mention this but it appears in the API responses
-  download_count: Joi.number().required(),
+  download_count: Joi.number(),
 }).required()
 
 export default class AnsibleGalaxyCollectionVersion extends BaseJsonService {
@@ -27,7 +27,6 @@ export default class AnsibleGalaxyCollectionVersion extends BaseJsonService {
     },
   }
 
-  // Use the collection namespace & name as default label, which aren't statically known
   static defaultBadgeData = { label: 'galaxy' }
 
   static render({ version }) {
