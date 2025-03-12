@@ -1,0 +1,14 @@
+{
+  "name": "Node.js",
+  // "Officially" maintained node devcontainer image from Microsoft
+  // https://github.com/devcontainers/templates/tree/main/src/javascript-node
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+
+  // Features to add to the dev container. More info: https://containers.dev/features.
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "npm ci"
+}
