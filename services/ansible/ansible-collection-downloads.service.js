@@ -3,10 +3,6 @@ import { renderDownloadsBadge } from '../downloads.js'
 import { BaseJsonService, pathParams } from '../index.js'
 
 const ansibleCollectionSchema = Joi.object({
-  deprecated: Joi.boolean(),
-  highest_version: Joi.object({
-    version: Joi.string(),
-  }),
   // Ansible docs don't mention this but it appears in the API responses
   download_count: Joi.number().required(),
 }).required()
