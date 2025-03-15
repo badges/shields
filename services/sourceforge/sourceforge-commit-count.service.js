@@ -15,7 +15,7 @@ export default class SourceforgeCommitCount extends BaseJsonService {
   }
 
   static openApi = {
-    '/sourceforge/commit-count/{project}': {
+    '/sourceforge/commit-count/{project}/{repo}': {
       get: {
         summary: 'SourceForge Commit Count',
         parameters: pathParams(
