@@ -1,5 +1,5 @@
-import { decodeDataUrlFromQueryParam } from '../../lib/logos.js'
-import { svg2base64 } from '../../lib/svg-helpers.js'
+import { decodeDataUrlFromQueryParam } from '../../badge-maker/lib/simple-icons-utils/logos.js'
+import { svg2base64 } from '../../badge-maker/lib/simple-icons-utils/svg-helpers.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
 
