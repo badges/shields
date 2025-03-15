@@ -3,6 +3,8 @@
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
+const { getIconSize } = require('./simple-icons-utils/svg-helpers')
+const { prepareNamedLogo } = require('./simple-icons-utils/logos')
 const { DEFAULT_LOGO_HEIGHT } = require('./constants')
 
 /*
@@ -17,6 +19,8 @@ module.exports = function makeBadge({
   color,
   labelColor,
   logo,
+  namedLogo,
+  namedLogoColor,
   logoSize,
   logoWidth,
   links = ['', ''],
@@ -48,7 +52,30 @@ module.exports = function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
+  // we assume logo overrides namedLogo
+  if (logoWidth) {
+    logoWidth = +logoWidth
+  } else if (logo) {
+    logoWidth = DEFAULT_LOGO_HEIGHT
+  } else if (namedLogo) {
+    const iconSize = getIconSize(String(namedLogo).toLowerCase())
+    if (iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    } else {
+      logoWidth = DEFAULT_LOGO_HEIGHT
+    }
+  } else {
+    logoWidth = 0
+  }
+
+  if (namedLogo && !logo) {
+    logo = prepareNamedLogo({
+      name: namedLogo,
+      color: namedLogoColor,
+      size: logoSize,
+      style,
+    })
+  }
 
   return stripXmlWhitespace(
     render({
