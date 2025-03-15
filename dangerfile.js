@@ -20,8 +20,6 @@ const documentation = fileMatch(
 )
 const server = fileMatch('core/server/**.js', '!*.spec.js')
 const serverTests = fileMatch('core/server/**.spec.js')
-const legacyHelpers = fileMatch('lib/**/*.js', '!*.spec.js')
-const legacyHelperTests = fileMatch('lib/**/*.spec.js')
 const packageJson = fileMatch('package.json')
 const packageLock = fileMatch('package-lock.json')
 const secretsDocs = fileMatch('doc/server-secrets.md')
@@ -61,17 +59,6 @@ if (server.modified && !serverTests.modified) {
   warn(
     [
       'This PR modified the server but none of its tests. <br>',
-      "That's okay so long as it's refactoring existing code.",
-    ].join(''),
-  )
-}
-
-if (legacyHelpers.created) {
-  warn(['This PR added helper modules in `lib/` which is deprecated.'].join(''))
-} else if (legacyHelpers.edited && !legacyHelperTests.edited) {
-  warn(
-    [
-      'This PR modified helper functions in `lib/` but not accompanying tests. <br>',
       "That's okay so long as it's refactoring existing code.",
     ].join(''),
   )
