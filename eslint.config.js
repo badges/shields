@@ -224,6 +224,7 @@ const config = [
       'badge-maker/node_modules/',
       '!.github/',
       'frontend/.docusaurus/**',
+      '**/package.json',
     ],
   },
 
