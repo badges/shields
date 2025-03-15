@@ -1,7 +1,4 @@
-import {
-  decodeDataUrlFromQueryParam,
-  prepareNamedLogo,
-} from '../../lib/logos.js'
+import { decodeDataUrlFromQueryParam } from '../../lib/logos.js'
 import { svg2base64 } from '../../lib/svg-helpers.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
@@ -136,14 +133,6 @@ export default function coalesceBadge(
     }
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
   }
-  if (namedLogo) {
-    logoSvgBase64 = prepareNamedLogo({
-      name: namedLogo,
-      color: namedLogoColor,
-      size: logoSize,
-      style,
-    })
-  }
 
   return {
     // Use `coalesce()` to support empty labels and messages, as in the static
@@ -165,6 +154,7 @@ export default function coalesceBadge(
     ),
     style,
     namedLogo,
+    namedLogoColor,
     logo: logoSvgBase64,
     logoWidth,
     logoSize,
