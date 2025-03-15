@@ -3,6 +3,7 @@
 const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
+const { getIconSize } = require('./simple-icons-utils/svg-helpers.js')
 const { DEFAULT_LOGO_HEIGHT } = require('./constants')
 
 /*
@@ -17,6 +18,7 @@ module.exports = function makeBadge({
   color,
   labelColor,
   logo,
+  namedLogo,
   logoSize,
   logoWidth,
   links = ['', ''],
@@ -48,7 +50,18 @@ module.exports = function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
+  if (logoWidth) {
+    logoWidth = +logoWidth
+  } else if (logo) {
+    logoWidth = DEFAULT_LOGO_HEIGHT
+  } else if (namedLogo) {
+    const iconSize = getIconSize(String(namedLogo).toLowerCase())
+    if (iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    }
+  } else {
+    logoWidth = 0
+  }
 
   return stripXmlWhitespace(
     render({
