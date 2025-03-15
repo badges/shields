@@ -106,7 +106,7 @@ export default function coalesceBadge(
     style = 'flat'
   }
 
-  let namedLogo, namedLogoColor, logoSize, logoWidth, logoSvgBase64
+  let namedLogo, namedLogoColor, logoSize, logoSvgBase64
   if (overrideLogo) {
     // `?logo=` could be a named logo or encoded svg.
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
@@ -156,7 +156,6 @@ export default function coalesceBadge(
     namedLogo,
     namedLogoColor,
     logo: logoSvgBase64,
-    logoWidth,
     logoSize,
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
