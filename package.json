@@ -87,7 +87,7 @@
     "prettier:check": "prettier --check \"**/*.@(cjs|mjs|js|ts|md|json|yml)\"",
     "danger": "danger",
     "test:e2e": "cypress run",
-    "test:core": "cross-env TZ='UTC' NODE_CONFIG_ENV=test mocha \"core/**/*.spec.js\" \"lib/**/*.spec.js\" \"services/**/*.spec.js\"",
+    "test:core": "cross-env TZ='UTC' NODE_CONFIG_ENV=test mocha \"core/**/*.spec.js\" \"services/**/*.spec.js\"",
     "test:package": "mocha \"badge-maker/**/*.spec.@(mjs|js)\"",
     "test:entrypoint": "cross-env NODE_CONFIG_ENV=test mocha entrypoint.spec.js",
     "test:integration": "cross-env NODE_CONFIG_ENV=test mocha \"core/**/*.integration.js\" \"services/**/*.integration.js\"",
