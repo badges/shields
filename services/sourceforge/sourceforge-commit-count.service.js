@@ -11,17 +11,25 @@ export default class SourceforgeCommitCount extends BaseJsonService {
 
   static route = {
     base: 'sourceforge/commit-count',
-    pattern: ':project',
+    pattern: ':project/:repo',
   }
 
   static openApi = {
     '/sourceforge/commit-count/{project}': {
       get: {
         summary: 'SourceForge Commit Count',
-        parameters: pathParams({
-          name: 'project',
-          example: 'guitarix',
-        }),
+        parameters: pathParams(
+          {
+            name: 'project',
+            example: 'guitarix',
+          },
+          {
+            name: 'repo',
+            example: 'git',
+            description:
+              'The repository name, usually `git` but might be different.',
+          },
+        ),
       },
     },
   }
@@ -35,18 +43,18 @@ export default class SourceforgeCommitCount extends BaseJsonService {
     }
   }
 
-  async fetch({ project }) {
+  async fetch({ project, repo }) {
     return this._requestJson({
-      url: `https://sourceforge.net/rest/p/${project}/git`,
+      url: `https://sourceforge.net/rest/p/${project}/${repo}`,
       schema,
       httpErrors: {
-        404: 'project not found',
+        404: 'project or repo not found',
       },
     })
   }
 
-  async handle({ project }) {
-    const body = await this.fetch({ project })
+  async handle({ project, repo }) {
+    const body = await this.fetch({ project, repo })
     return this.constructor.render({
       commitCount: body.commit_count,
     })
