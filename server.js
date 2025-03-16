@@ -65,7 +65,6 @@ export const server = new Server(config)
 process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down...')
   await server.stop()
-  process.exit(0)
 })
 
 await server.start()
