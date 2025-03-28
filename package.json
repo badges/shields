@@ -173,7 +173,7 @@
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsdoc": "50.6.9",
     "eslint-plugin-mocha": "10.5.0",
-    "eslint-plugin-prettier": "5.2.3",
+    "eslint-plugin-prettier": "5.2.5",
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-sort-class-members": "1.21.0",
