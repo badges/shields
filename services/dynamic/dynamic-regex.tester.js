@@ -2,31 +2,7 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-t.create('No URL specified').get('.json?search=.*&label=Found').expectBadge({
-  label: 'Found',
-  message: 'invalid query parameter: url',
-  color: 'red',
-})
-
-t.create('No search specified')
-  .get(
-    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/README.md&label=Found',
-  )
-  .expectBadge({
-    label: 'Found',
-    message: 'invalid query parameter: search',
-    color: 'red',
-  })
-
-t.create('Malformed url')
-  .get(
-    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/%0README.md&search=.*&label=Found',
-  )
-  .expectBadge({
-    label: 'Found',
-    message: 'invalid',
-    color: 'lightgrey',
-  })
+////////// OK tests //////////
 
 t.create('Regex search')
   .get(
@@ -78,7 +54,35 @@ t.create('Custom no matched search')
     color: 'blue',
   })
 
-t.create('invalid url')
+t.create('Avoid ReDoS check')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=(-%2B)%2B0&noMatch=none',
+  )
+  .expectBadge({
+    label: 'match',
+    message: 'none',
+    color: 'blue',
+  })
+
+////////// KO tests //////////
+
+t.create('No URL specified').get('.json?search=.*&label=Found').expectBadge({
+  label: 'Found',
+  message: 'invalid query parameter: url',
+  color: 'red',
+})
+
+t.create('No search specified')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/README.md&label=Found',
+  )
+  .expectBadge({
+    label: 'Found',
+    message: 'invalid query parameter: search',
+    color: 'red',
+  })
+
+t.create('Invalid url')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.json&search=.*',
   )
@@ -88,7 +92,19 @@ t.create('invalid url')
     color: 'red',
   })
 
-t.create('user color overrides default')
+////////// generic //////////
+
+t.create('Malformed url')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/%0README.md&search=.*&label=Found',
+  )
+  .expectBadge({
+    label: 'Found',
+    message: 'invalid',
+    color: 'lightgrey',
+  })
+
+t.create('User color overrides default')
   .get(
     '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=unblocking \\[.*\\]&color=10ADED',
   )
@@ -98,7 +114,7 @@ t.create('user color overrides default')
     color: '#10aded',
   })
 
-t.create('error color overrides default')
+t.create('Error color overrides default')
   .get(
     '.json?url=https://github.com/badges/shields/raw/master/notafile.json&search=$1',
   )
@@ -108,7 +124,7 @@ t.create('error color overrides default')
     color: 'red',
   })
 
-t.create('error color overrides user specified')
+t.create('Error color overrides user specified')
   .get('.json?search=$1&color=10ADED')
   .expectBadge({
     label: 'match',
