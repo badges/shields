@@ -4,7 +4,7 @@ import { BaseService, InvalidParameter, queryParams } from '../index.js'
 import { url } from '../validators.js'
 import { renderDynamicBadge } from '../dynamic-common.js'
 
-export default class DynamicRegexService extends BaseService {
+export default class DynamicRegex extends BaseService {
   static category = 'dynamic'
   static route = {
     base: `badge/dynamic/regex`,
