@@ -4,6 +4,25 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-04-01
+
+- fix(#10970): codecov branch badge [#10971](https://github.com/badges/shields/issues/10971)
+- docker: cleanup some building [#10957](https://github.com/badges/shields/issues/10957)
+- graceful shutdown [#10958](https://github.com/badges/shields/issues/10958)
+- Update [SourceForge] commit count badge to support repository parameter [#10954](https://github.com/badges/shields/issues/10954)
+- ignore package.json files in linting [#10956](https://github.com/badges/shields/issues/10956)
+- add node 22 to engines declaration [#10940](https://github.com/badges/shields/issues/10940)
+- feat: add new badges for new [ansible] collection APIs [#10938](https://github.com/badges/shields/issues/10938)
+- build: creates a devcontainer configuration for contributors [#10937](https://github.com/badges/shields/issues/10937)
+- [sourceforge] add repo param to last commit service [#10935](https://github.com/badges/shields/issues/10935)
+- nodemon watch yml conf files and ignore .github [#10924](https://github.com/badges/shields/issues/10924)
+- update security policy: clarify we don't pay bounties [#10934](https://github.com/badges/shields/issues/10934)
+- tweak default cache lengths by category [#10919](https://github.com/badges/shields/issues/10919)
+- [Packagist] Update default domain for repo metadata [#10920](https://github.com/badges/shields/issues/10920)
+- use SVG2 hrefs [#10918](https://github.com/badges/shields/issues/10918)
+- remove `logoWidth` param [#10878](https://github.com/badges/shields/issues/10878)
+- Dependency updates
+
 ## server-2025-03-02
 
 - time out long running requests more aggressively [#10833](https://github.com/badges/shields/issues/10833)
