@@ -28,6 +28,22 @@ describe('coalesceBadge', function () {
         coalesceBadge({ label: 'purr count' }, { label: 'purrs' }, {}),
       ).to.include({ label: 'purr count' })
     })
+
+    it('truncates really long labels', function () {
+      expect(
+        coalesceBadge(
+          {},
+          {
+            label:
+              'This is really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long',
+          },
+          {},
+        ),
+      ).to.include({
+        label:
+          'This is really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really lo',
+      })
+    })
   })
 
   describe('Message', function () {
@@ -43,6 +59,22 @@ describe('coalesceBadge', function () {
       // `render()` to always return a string.
       expect(coalesceBadge({}, { message: 10 }, {})).to.include({
         message: 10,
+      })
+    })
+
+    it('truncates really long messages', function () {
+      expect(
+        coalesceBadge(
+          {},
+          {
+            message:
+              'This is really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long',
+          },
+          {},
+        ),
+      ).to.include({
+        message:
+          'This is really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really lo',
       })
     })
   })
