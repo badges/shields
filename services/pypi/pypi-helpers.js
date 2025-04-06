@@ -52,6 +52,10 @@ function getLicenses(packageData) {
   } = packageData
 
   /*
+  The .license_expression field contains an SPDX expression, and it
+  is the preferred way of documenting a Python project's license.
+  See https://peps.python.org/pep-0639/
+
   The .license field may either contain
   - a short license description (e.g: 'MIT' or 'GPL-3.0') or
   - the full text of a license
@@ -60,7 +64,9 @@ function getLicenses(packageData) {
   See https://github.com/badges/shields/issues/8689 and
   https://github.com/badges/shields/pull/8690 for more info.
   */
-  if (license && license.length < 40) {
+  if (packageData.info.license_expression) {
+    return [packageData.info.license_expression]
+  } else if (license && license.length < 40) {
     return [license]
   } else {
     const parenthesizedAcronymRegex = /\(([^)]+)\)/

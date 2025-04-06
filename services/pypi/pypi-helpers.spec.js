@@ -100,10 +100,21 @@ describe('PyPI helpers', function () {
   })
 
   test(getLicenses, () => {
-    forCases([given({ info: { license: 'MIT', classifiers: [] } })]).expect([
-      'MIT',
-    ])
     forCases([
+      given({
+        info: {
+          license: null,
+          license_expression: 'MIT',
+          classifiers: [],
+        },
+      }),
+      given({
+        info: {
+          license: 'MIT',
+          license_expression: null,
+          classifiers: [],
+        },
+      }),
       given({
         info: {
           license: null,
