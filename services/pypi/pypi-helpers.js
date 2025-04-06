@@ -47,17 +47,16 @@ function parseClassifiers(parsedData, pattern, preserveCase = false) {
 }
 
 function getLicenses(packageData) {
-  const {
-    info: { license },
-  } = packageData
+  const license = packageData.info.license
+  const licenseExpression = packageData.info.license_expression
 
-  if (packageData.info.license_expression) {
+  if (licenseExpression) {
     /*
     The .license_expression field contains an SPDX expression, and it
     is the preferred way of documenting a Python project's license.
     See https://peps.python.org/pep-0639/
     */
-    return [packageData.info.license_expression]
+    return [licenseExpression]
   } else if (license && license.length < 40) {
     /*
     The .license field may either contain
