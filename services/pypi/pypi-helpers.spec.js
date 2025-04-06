@@ -118,12 +118,14 @@ describe('PyPI helpers', function () {
       given({
         info: {
           license: null,
+          license_expression: null,
           classifiers: ['License :: OSI Approved :: MIT License'],
         },
       }),
       given({
         info: {
           license: '',
+          license_expression: null,
           classifiers: ['License :: OSI Approved :: MIT License'],
         },
       }),
@@ -131,12 +133,14 @@ describe('PyPI helpers', function () {
         info: {
           license:
             'this text is really really really really really really long',
+          license_expression: null,
           classifiers: ['License :: OSI Approved :: MIT License'],
         },
       }),
       given({
         info: {
           license: '',
+          license_expression: null,
           classifiers: [
             'License :: OSI Approved :: MIT License',
             'License :: DFSG approved',
@@ -147,24 +151,28 @@ describe('PyPI helpers', function () {
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: ['License :: Public Domain'],
       },
     }).expect(['Public Domain'])
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: ['License :: Netscape Public License (NPL)'],
       },
     }).expect(['NPL'])
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: ['License :: OSI Approved :: Apache Software License'],
       },
     }).expect(['Apache-2.0'])
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: [
           'License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication',
         ],
@@ -173,6 +181,7 @@ describe('PyPI helpers', function () {
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: [
           'License :: OSI Approved :: GNU Affero General Public License v3',
         ],
@@ -181,6 +190,7 @@ describe('PyPI helpers', function () {
     given({
       info: {
         license: '',
+        license_expression: null,
         classifiers: ['License :: OSI Approved :: Zero-Clause BSD (0BSD)'],
       },
     }).expect(['0BSD'])
