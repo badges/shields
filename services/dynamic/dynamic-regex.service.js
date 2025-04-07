@@ -44,14 +44,14 @@ export default class DynamicRegex extends BaseService {
             description:
               'A re2 expression that will be used to extract data from the document. Only the first matched text will be returned.',
             required: true,
-            example: 'Every month it serves (.*?) images',
+            example: 'Every (.\\*?) it serves (?<amount>.\\*?) images',
           },
           {
             name: 'replace',
             description:
-              'A regex expression that will be used as the replacement of the search regex, like `$1` to specify the first matched group, etc. If empty (default), no replacement will be done and the full matched text will be shown.',
+              'A replacement string that will be used as the replacement of the search regex. Use `$$` to escape a `$` sign, `$n` to specify the nth matched group, `$<name>` for a named group, etc. If empty (default), no replacement will be done and the full matched text will be shown.',
             required: false,
-            example: '$1',
+            example: '$<amount>/$1',
           },
           {
             name: 'flags',
