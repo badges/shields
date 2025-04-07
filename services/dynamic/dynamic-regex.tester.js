@@ -78,7 +78,7 @@ t.create('Invalid url')
   )
   .expectBadge({
     label: 'match',
-    message: 'not found',
+    message: 'resource not found',
     color: 'red',
   })
 
@@ -120,7 +120,7 @@ t.create('Error color overrides default')
   )
   .expectBadge({
     label: 'match',
-    message: 'not found',
+    message: 'resource not found',
     color: 'red',
   })
 

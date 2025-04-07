@@ -7,7 +7,7 @@ import {
   queryParams,
 } from '../index.js'
 import { url } from '../validators.js'
-import { renderDynamicBadge } from '../dynamic-common.js'
+import { httpErrors, renderDynamicBadge } from '../dynamic-common.js'
 
 const VALID_FLAGS = 'imsU-'
 
@@ -68,7 +68,7 @@ export default class DynamicRegex extends BaseService {
 
   async handle(namedParams, { url, search, replace, flags }) {
     // fetch file
-    const { buffer } = await this._request({ url })
+    const { buffer } = await this._request({ url, logErrors: [], httpErrors })
 
     // validate flags
     if (flags?.split('')?.some(c => VALID_FLAGS.indexOf(c) === -1)) {
