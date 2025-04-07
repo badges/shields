@@ -82,6 +82,16 @@ t.create('Invalid url')
     color: 'red',
   })
 
+t.create('Invalid Regex')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=x(%3F%3Dy)',
+  )
+  .expectBadge({
+    label: 'match',
+    message: 'Invalid re2 regex: invalid perl operator: (?=',
+    color: 'red',
+  })
+
 ////////// generic //////////
 
 t.create('Malformed url')

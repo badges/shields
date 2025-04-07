@@ -81,10 +81,13 @@ export default class DynamicRegex extends BaseService {
     let re2
     try {
       re2 = new RE2(search, flags)
-    } catch (e) {
-      throw new InvalidParameter({
-        prettyMessage: `Invalid re2 regex: ${e.message}`,
-      })
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        throw new InvalidParameter({
+          prettyMessage: `Invalid re2 regex: ${error.message}`,
+        })
+      }
+      throw error
     }
 
     // extract value
