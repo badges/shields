@@ -1,6 +1,11 @@
 import Joi from 'joi'
 import RE2 from 're2'
-import { BaseService, InvalidParameter, queryParams } from '../index.js'
+import {
+  BaseService,
+  InvalidParameter,
+  InvalidResponse,
+  queryParams,
+} from '../index.js'
 import { url } from '../validators.js'
 import { renderDynamicBadge } from '../dynamic-common.js'
 
@@ -55,19 +60,13 @@ export default class DynamicRegex extends BaseService {
             required: false,
             example: 'imsU',
           },
-          {
-            name: 'noMatch',
-            description:
-              'String to be returned if the regex does not match the input. Empty by default.',
-            required: false,
-          },
         ),
       },
     },
   }
   static defaultBadgeData = { label: 'match' }
 
-  async handle(namedParams, { url, search, replace, flags, noMatch = '' }) {
+  async handle(namedParams, { url, search, replace, flags }) {
     // fetch file
     const { buffer } = await this._request({ url })
 
@@ -91,18 +90,16 @@ export default class DynamicRegex extends BaseService {
     // extract value
     const found = re2.exec(buffer)
 
-    let value
     if (found == null) {
-      // not found, use noMatch
-      value = noMatch
-    } else if (replace === undefined) {
-      // found but no replacement specified, use full string
-      value = found[0]
-    } else {
-      // found and replacement specified, convert
-      value = found[0].replace(re2, replace)
+      // not found
+      throw new InvalidResponse({
+        prettyMessage: 'no result',
+      })
     }
 
-    return renderDynamicBadge({ value })
+    // replace if needed
+    return renderDynamicBadge({
+      value: replace === undefined ? found[0] : found[0].replace(re2, replace),
+    })
   }
 }

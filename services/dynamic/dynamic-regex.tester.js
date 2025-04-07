@@ -40,28 +40,18 @@ t.create('No matched search')
   )
   .expectBadge({
     label: 'match',
-    message: '',
-    color: 'blue',
-  })
-
-t.create('Custom no matched search')
-  .get(
-    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=notfound&noMatch=Not found',
-  )
-  .expectBadge({
-    label: 'match',
-    message: 'Not found',
-    color: 'blue',
+    message: 'no result',
+    color: 'lightgrey',
   })
 
 t.create('Avoid ReDoS check')
   .get(
-    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=(-%2B)%2B0&noMatch=none',
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=(-%2B)%2B0',
   )
   .expectBadge({
     label: 'match',
-    message: 'none',
-    color: 'blue',
+    message: 'no result',
+    color: 'lightgrey',
   })
 
 ////////// KO tests //////////
