@@ -92,6 +92,16 @@ t.create('Invalid Regex')
     color: 'red',
   })
 
+t.create('Invalid flags')
+  .get(
+    '.json?url=https://raw.githubusercontent.com/badges/shields/refs/heads/master/frontend/blog/2024-07-10-sunsetting-shields-custom-logos.md&search=questions.*providing&flags=s0',
+  )
+  .expectBadge({
+    label: 'match',
+    message: 'Invalid flags, must be one of: imsU-',
+    color: 'red',
+  })
+
 ////////// generic //////////
 
 t.create('Malformed url')

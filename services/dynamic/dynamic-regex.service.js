@@ -92,9 +92,7 @@ export default class DynamicRegex extends BaseService {
 
     // extract value
     const found = re2.exec(buffer)
-
     if (found == null) {
-      // not found
       throw new InvalidResponse({
         prettyMessage: 'no result',
       })
