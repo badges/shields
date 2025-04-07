@@ -4,6 +4,8 @@ import { BaseService, InvalidParameter, queryParams } from '../index.js'
 import { url } from '../validators.js'
 import { renderDynamicBadge } from '../dynamic-common.js'
 
+const VALID_FLAGS = 'imsU-'
+
 export default class DynamicRegex extends BaseService {
   static category = 'dynamic'
   static route = {
@@ -49,7 +51,7 @@ export default class DynamicRegex extends BaseService {
           {
             name: 'flags',
             description:
-              'Flags to be used when creating the regex, like `i` for case insensitive, or `m` for multiline. None by default.',
+              'Flags to be used when creating the regex: `i` = case-insensitive, `m` = multi-line mode, `s` = dot matches linebreaks, `U` = ungreedy. None by default.',
             required: false,
             example: 'imsU',
           },
@@ -68,6 +70,13 @@ export default class DynamicRegex extends BaseService {
   async handle(namedParams, { url, search, replace, flags, noMatch = '' }) {
     // fetch file
     const { buffer } = await this._request({ url })
+
+    // validate flags
+    if (flags?.split('')?.some(c => VALID_FLAGS.indexOf(c) === -1)) {
+      throw new InvalidParameter({
+        prettyMessage: `Invalid flags, must be one of: ${VALID_FLAGS}`,
+      })
+    }
 
     // build re2 regex
     let re2
