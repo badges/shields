@@ -29,7 +29,7 @@ export default class DynamicRegex extends BaseService {
       get: {
         summary: 'Dynamic Regex Badge',
         description:
-          '⚠️ Experimental: This badge is considered experimental and may change or be removed at any time.\n\nThis badge will extract text from a file using re2 (a subset of regex: https://github.com/google/re2).\nThe main use-case is to extract values from unsupported plain-text files.\nFor example: if a file contains a line like `version - 2.4` you can extract the value `2.4` by using a search regex of `version - (.*)` and `$1` as replacement.\n\nFull Syntax documentation here: https://github.com/google/re2/wiki/Syntax',
+          '⚠️ Experimental: This badge is considered experimental and may change or be removed at any time.\n\nThis badge will extract text from a file using re2 (a subset of regex: https://github.com/google/re2).\nThe main use-case is to extract values from unstructured plain-text files.\nFor example: if a file contains a line like `version - 2.4` you can extract the value `2.4` by using a search regex of `version - (.*)` and `$1` as replacement.\n\nFull Syntax documentation here: https://github.com/google/re2/wiki/Syntax',
         parameters: queryParams(
           {
             name: 'url',
