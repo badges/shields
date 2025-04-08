@@ -66,17 +66,15 @@ export default class DynamicRegex extends BaseService {
   }
   static defaultBadgeData = { label: 'match' }
 
-  async handle(namedParams, { url, search, replace, flags }) {
-    // fetch file
-    const { buffer } = await this._request({ url, logErrors: [], httpErrors })
-
-    // validate flags
+  static validate(flags) {
     if (flags?.split('')?.some(c => VALID_FLAGS.indexOf(c) === -1)) {
       throw new InvalidParameter({
         prettyMessage: `Invalid flags, must be one of: ${VALID_FLAGS}`,
       })
     }
+  }
 
+  static transform(buffer, search, replace, flags) {
     // build re2 regex
     let re2
     try {
@@ -99,8 +97,13 @@ export default class DynamicRegex extends BaseService {
     }
 
     // replace if needed
-    return renderDynamicBadge({
-      value: replace === undefined ? found[0] : found[0].replace(re2, replace),
-    })
+    return replace !== undefined ? found[0].replace(re2, replace) : found[0]
+  }
+
+  async handle(namedParams, { url, search, replace, flags }) {
+    this.validate(flags)
+    const { buffer } = await this._request({ url, logErrors: [], httpErrors })
+    const value = this.transform(buffer, search, replace, flags)
+    return renderDynamicBadge({ value })
   }
 }
