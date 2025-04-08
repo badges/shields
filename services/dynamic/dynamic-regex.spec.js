@@ -78,7 +78,7 @@ describe('transform function', function () {
 
   it('flags usage', function () {
     test(DynamicRegex.transform, () => {
-      given('abc', 'A', undefined, '-i').expect('a')
+      given('abc', 'A', undefined, 'i').expect('a')
       given('abc\ndef', '^d', undefined, 'm').expect('d')
       given('abc\ndef', 'c(.)', '$1', 's').expect('\n')
     })

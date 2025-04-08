@@ -101,9 +101,9 @@ export default class DynamicRegex extends BaseService {
   }
 
   async handle(namedParams, { url, search, replace, flags }) {
-    this.validate(flags)
+    this.constructor.validate(flags)
     const { buffer } = await this._request({ url, logErrors: [], httpErrors })
-    const value = this.transform(buffer, search, replace, flags)
+    const value = this.constructor.transform(buffer, search, replace, flags)
     return renderDynamicBadge({ value })
   }
 }
