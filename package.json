@@ -209,7 +209,7 @@
     "sinon-chai": "4.0.0",
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "2.0.11",
-    "tsd": "^0.31.2",
+    "tsd": "^0.32.0",
     "url": "^0.11.4"
   },
   "engines": {
