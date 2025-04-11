@@ -16,6 +16,8 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
+  serverFqdn: Joi.string().hostname(),
+  endpoint: Joi.string(),
   include_prereleases: Joi.equal(''),
 }).required()
 
@@ -26,12 +28,24 @@ export default class FDroid extends BaseJsonService {
     '/f-droid/v/{appId}': {
       get: {
         summary: 'F-Droid Version',
-        description:
-          '[F-Droid](https://f-droid.org/) is a catalogue of Open Source Android apps',
+        description: `
+          [F-Droid](https://f-droid.org/) is a catalogue of Open Source Android apps.
+
+          This badge by default uses <code>f-droid.org</code>, but also supports custom repos.
+          `,
         parameters: [
           pathParam({
             name: 'appId',
             example: 'org.dystopia.email',
+          }),
+          queryParam({
+            name: 'serverFqdn',
+            example: 'apt.izzysoft.de',
+          }),
+          queryParam({
+            name: 'endpoint',
+            example: 'fdroid',
+            description: `If the API is not located at root path, specify the additional path to the API.`,
           }),
           queryParam({
             name: 'include_prereleases',
@@ -45,8 +59,12 @@ export default class FDroid extends BaseJsonService {
 
   static defaultBadgeData = { label: 'f-droid' }
 
-  async fetch({ appId }) {
-    const url = `https://f-droid.org/api/v1/packages/${appId}`
+  async fetch({ serverFqdn, endpoint, appId }) {
+    endpoint = endpoint.replace('^/|/$', '')
+    if (endpoint !== '') {
+      endpoint = `/${endpoint}`
+    }
+    const url = `https://${serverFqdn}${endpoint}/api/v1/packages/${appId}`
     return this._requestJson({
       schema,
       url,
@@ -71,8 +89,15 @@ export default class FDroid extends BaseJsonService {
     return { version }
   }
 
-  async handle({ appId }, { include_prereleases: includePre }) {
-    const json = await this.fetch({ appId })
+  async handle(
+    { appId },
+    {
+      serverFqdn = 'f-droid.org',
+      endpoint = '',
+      include_prereleases: includePre,
+    },
+  ) {
+    const json = await this.fetch({ serverFqdn, endpoint, appId })
     const suggested = includePre === undefined
     const { version } = this.transform({ json, suggested })
     return renderVersionBadge({ version })
