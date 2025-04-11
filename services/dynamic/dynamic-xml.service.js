@@ -136,7 +136,10 @@ export default class DynamicXml extends BaseService {
   async handle(_namedParams, { url, query: pathExpression, prefix, suffix }) {
     const { buffer, res } = await this._request({
       url,
-      options: { headers: { Accept: 'application/xml, text/xml' } },
+      options: {
+        headers: { Accept: 'application/xml, text/xml' },
+        timeout: { request: 3500 },
+      },
       httpErrors,
       logErrors: [],
     })

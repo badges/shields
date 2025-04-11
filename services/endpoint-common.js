@@ -102,7 +102,7 @@ async function fetchEndpointData(
     url,
     httpErrors,
     logErrors: [],
-    options: { decompress: true },
+    options: { decompress: true, timeout: { request: 3500 } },
   })
   return validateEndpointData(json, {
     prettyErrorMessage: validationPrettyErrorMessage,
