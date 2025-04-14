@@ -52,7 +52,7 @@ t.create('Invalid flags')
   )
   .expectBadge({
     label: 'match',
-    message: 'Invalid flags, must be one of: imsU-',
+    message: 'Invalid flags, must be one of: ims',
     color: 'red',
   })
 

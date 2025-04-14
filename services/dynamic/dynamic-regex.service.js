@@ -9,7 +9,10 @@ import {
 import { url } from '../validators.js'
 import { httpErrors, renderDynamicBadge } from '../dynamic-common.js'
 
-const VALID_FLAGS = 'imsU-'
+const VALID_FLAGS = 'ims'
+// Note: both the 'U' flag and the '-' anti-flag don't work in this particular re2 implementation
+// Also, there are other flags that are supported, but they modify the javascript search and elements returned, which are not configurable by the user
+// For now we only allow the documented & supported ones
 
 export default class DynamicRegex extends BaseService {
   static category = 'dynamic'
@@ -55,9 +58,9 @@ export default class DynamicRegex extends BaseService {
           {
             name: 'flags',
             description:
-              'Flags to be used when creating the regex: `i` = case-insensitive, `m` = multi-line mode, `s` = dot matches linebreaks, `U` = ungreedy. None by default.',
+              'Flags to be used when creating the regex: `i` = case-insensitive, `m` = multi-line mode, `s` = dot matches linebreaks. None by default.',
             required: false,
-            example: 'imsU',
+            example: 'ims',
           },
         ),
       },
