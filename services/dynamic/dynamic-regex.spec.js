@@ -55,8 +55,17 @@ describe('transform function', function () {
     })
   })
 
-  it('ReDoS', function () {
-    const redosInput = `${'a'.repeat(1000)}x`
+  /*
+  1. Do this outside the test function so we're not including
+     the time taken to generate the string in the timeout
+  2. Generate ~10Mb text - the largest response we would accept
+  */
+  const redosInput = `${'a'.repeat(10_000_000)}x`
+
+  it('ReDoS', function (done) {
+    this.timeout(200 /*milliseconds*/)
+
+    // ReDoS examples taken from https://en.wikipedia.org/wiki/ReDoS
     expect(() =>
       DynamicRegex.transform(redosInput, '(a|a)+$', undefined, undefined),
     ).to.throw(InvalidResponse)
@@ -66,6 +75,8 @@ describe('transform function', function () {
     expect(() =>
       DynamicRegex.transform(redosInput, 'a*b?a*c', undefined, undefined),
     ).to.throw(InvalidResponse)
+
+    done()
   })
 
   it('replace result', function () {
