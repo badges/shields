@@ -21,7 +21,6 @@ export default class DynamicRegex extends BaseService {
       search: Joi.string().required(),
       replace: Joi.string().optional(),
       flags: Joi.string().optional(),
-      noMatch: Joi.string().optional(),
     }),
   }
   static openApi = {
