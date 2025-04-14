@@ -11,7 +11,7 @@ describe('validate function', function () {
     expect(() => DynamicRegex.validate('m')).to.not.throw()
     expect(() => DynamicRegex.validate('s')).to.not.throw()
     expect(() => DynamicRegex.validate('U')).to.throw(InvalidParameter)
-    expect(() => DynamicRegex.validate('-imsU')).to.throw(InvalidParameter)
+    expect(() => DynamicRegex.validate('-i')).to.throw(InvalidParameter)
     expect(() => DynamicRegex.validate('-imsU0')).to.throw(InvalidParameter)
   })
 })

@@ -60,7 +60,7 @@ export default class DynamicRegex extends BaseService {
             description:
               'Flags to be used when creating the regex: `i` = case-insensitive, `m` = multi-line mode, `s` = dot matches linebreaks. None by default.',
             required: false,
-            example: 'ims',
+            example: VALID_FLAGS,
           },
         ),
       },
