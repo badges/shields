@@ -152,7 +152,7 @@ export default function coalesceBadge(
     })
   }
 
-  return {
+  const badgeData = {
     // Use `coalesce()` to support empty labels and messages, as in the static
     // badge.
     label: coalesce(overrideLabel, serviceLabel, defaultLabel, category),
@@ -178,4 +178,13 @@ export default function coalesceBadge(
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
   }
+  badgeData.label =
+    typeof badgeData.label === 'string'
+      ? badgeData.label.slice(0, 255)
+      : badgeData.label
+  badgeData.message =
+    typeof badgeData.message === 'string'
+      ? badgeData.message.slice(0, 255)
+      : badgeData.message
+  return badgeData
 }
