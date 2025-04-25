@@ -40,7 +40,7 @@
     "emojic": "^1.1.18",
     "escape-string-regexp": "^4.0.0",
     "fast-xml-parser": "^5.2.0",
-    "glob": "^11.0.1",
+    "glob": "^11.0.2",
     "global-agent": "^3.0.0",
     "got": "^14.4.7",
     "graphql": "16.10.0",
