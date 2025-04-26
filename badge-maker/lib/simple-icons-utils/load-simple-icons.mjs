@@ -4,7 +4,10 @@ let originalSimpleIcons
 try {
   originalSimpleIcons = await import('simple-icons/icons')
 } catch {
-  throw new MissingOptionalDependencyError('simple-icons')
+  // only show warning on first import error
+  // don't throw an error here as its called from anonymous function
+  // eslint-disable-next-line no-unused-vars
+  const e = new MissingOptionalDependencyError('simple-icons')
 }
 
 function loadSimpleIcons() {
