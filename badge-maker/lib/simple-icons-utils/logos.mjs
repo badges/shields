@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { toSvgColor, brightness, normalizeColor } from '../color.js'
-import { svg2base64, getIconSize, resetIconPosition } from './svg-helpers.js'
-import loadSimpleIcons from './load-simple-icons.js'
+import { svg2base64, getIconSize, resetIconPosition } from './svg-helpers.mjs'
+import loadSimpleIcons from './load-simple-icons.mjs'
 const simpleIcons = loadSimpleIcons()
 
 // for backwards-compatibility with deleted logos

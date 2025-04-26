@@ -6,7 +6,7 @@ import {
   prepareNamedLogo,
   getSimpleIcon,
   makeLogo,
-} from './logos.js'
+} from './logos.mjs'
 
 describe('Logo helpers', function () {
   test(prependPrefix, () => {

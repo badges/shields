@@ -1,6 +1,6 @@
 import zlib from 'zlib'
 import { expect } from 'chai'
-import { getSimpleIcon } from '../../badge-maker/lib/simple-icons-utils/logos.js'
+import { getSimpleIcon } from 'badge-maker/lib/simple-icons-utils/logos.mjs'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 

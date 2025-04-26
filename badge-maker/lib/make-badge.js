@@ -4,7 +4,7 @@ const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
 const { DEFAULT_LOGO_HEIGHT } = require('./constants')
-const { MissingOptionalDependencyError } = require('./errors')
+const { MissingOptionalDependencyError } = import('./errors.mjs')
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
 it is likely this will impact on the package's public interface in index.js
@@ -58,8 +58,7 @@ module.exports = function makeBadge({
   } else if (namedLogo) {
     let iconSize
     try {
-      const getIconSize =
-        require('./simple-icons-utils/svg-helpers').getIconSize
+      const { getIconSize } = import('./simple-icons-utils/svg-helpers.mjs')
       iconSize = getIconSize(String(namedLogo).toLowerCase())
     } catch (e) {
       if (!(e instanceof MissingOptionalDependencyError)) {
@@ -77,8 +76,7 @@ module.exports = function makeBadge({
 
   if (namedLogo && !logo) {
     try {
-      const prepareNamedLogo =
-        require('./simple-icons-utils/logos').prepareNamedLogo
+      const { prepareNamedLogo } = import('./simple-icons-utils/logos.mjs')
       logo = prepareNamedLogo({
         name: namedLogo,
         color: namedLogoColor,
