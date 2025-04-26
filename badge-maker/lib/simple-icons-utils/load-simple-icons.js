@@ -1,4 +1,11 @@
-import * as originalSimpleIcons from 'simple-icons/icons'
+import { MissingOptionalDependencyError } from '../errors.js'
+
+let originalSimpleIcons
+try {
+  originalSimpleIcons = await import('simple-icons/icons')
+} catch {
+  throw new MissingOptionalDependencyError('simple-icons')
+}
 
 function loadSimpleIcons() {
   const simpleIcons = {}
