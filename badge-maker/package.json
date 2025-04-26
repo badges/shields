@@ -37,6 +37,9 @@
     "anafanafo": "2.0.0",
     "css-color-converter": "^2.0.0"
   },
+  "optionalDependencies": {
+    "simple-icons": "14.12.3"
+  },
   "scripts": {
     "test": "echo 'Run tests from parent dir'; false"
   }
