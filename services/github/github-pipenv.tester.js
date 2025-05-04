@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { ServiceTester } from '../tester.js'
 import {
-  isCommitHash,
   isVPlusDottedVersionAtLeastOne,
   isVPlusDottedVersionNClausesWithOptionalSuffix,
 } from '../test-validators.js'
@@ -85,5 +84,5 @@ t.create('Locked version of VCS dependency')
   .get('/locked/dependency-version/pypa/pipenv/dev/pypiserver.json')
   .expectBadge({
     label: 'pypiserver',
-    message: isCommitHash,
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
