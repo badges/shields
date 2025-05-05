@@ -84,6 +84,6 @@ t.create('Locked version of unknown dependency')
 t.create('Locked version of VCS dependency')
   .get('/locked/dependency-version/ykdojo/editdojo/tweepy.json')
   .expectBadge({
-    label: 'pypiserver',
+    label: 'tweepy',
     message: isCommitHash,
   })
