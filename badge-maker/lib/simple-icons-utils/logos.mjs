@@ -1,12 +1,7 @@
 import Joi from 'joi'
-import {
-  toSvgColor,
-  brightness,
-  normalizeColor,
-} from '../badge-maker/lib/color.js'
-import coalesce from '../core/base-service/coalesce.js'
-import { svg2base64, getIconSize, resetIconPosition } from './svg-helpers.js'
-import loadSimpleIcons from './load-simple-icons.js'
+import { toSvgColor, brightness, normalizeColor } from '../color.js'
+import { svg2base64, getIconSize, resetIconPosition } from './svg-helpers.mjs'
+import loadSimpleIcons from './load-simple-icons.mjs'
 const simpleIcons = loadSimpleIcons()
 
 // for backwards-compatibility with deleted logos
@@ -119,6 +114,11 @@ function prepareNamedLogo({ name, color, style, size }) {
   }
 
   return getSimpleIcon({ name, color, style, size })
+}
+
+// copied from /core/base-service/coalesce.js
+function coalesce(...candidates) {
+  return candidates.find(c => c !== undefined && c !== null)
 }
 
 function makeLogo(defaultNamedLogo, overrides) {

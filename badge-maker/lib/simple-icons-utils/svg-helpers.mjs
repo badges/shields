@@ -1,6 +1,6 @@
 import { svgPathBbox } from 'svg-path-bbox'
 import svgpath from 'svgpath'
-import loadSimpleIcons from './load-simple-icons.js'
+import loadSimpleIcons from './load-simple-icons.mjs'
 
 const simpleIcons = loadSimpleIcons()
 

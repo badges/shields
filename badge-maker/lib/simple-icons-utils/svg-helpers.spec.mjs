@@ -1,5 +1,5 @@
 import { test, given } from 'sazerac'
-import { svg2base64 } from './svg-helpers.js'
+import { svg2base64 } from './svg-helpers.mjs'
 
 describe('SVG helpers', function () {
   test(svg2base64, () => {

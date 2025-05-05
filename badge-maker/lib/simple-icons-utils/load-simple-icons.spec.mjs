@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import loadSimpleIcons from './load-simple-icons.js'
+import loadSimpleIcons from './load-simple-icons.mjs'
 
 describe('loadSimpleIcons', function () {
   let simpleIcons

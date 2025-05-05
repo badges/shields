@@ -4,7 +4,7 @@ const { normalizeColor, toSvgColor } = require('./color')
 const badgeRenderers = require('./badge-renderers')
 const { stripXmlWhitespace } = require('./xml')
 const { DEFAULT_LOGO_HEIGHT } = require('./constants')
-
+const { MissingOptionalDependencyError } = import('./errors.mjs')
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
 it is likely this will impact on the package's public interface in index.js
@@ -17,6 +17,8 @@ module.exports = function makeBadge({
   color,
   labelColor,
   logo,
+  namedLogo,
+  namedLogoColor,
   logoSize,
   logoWidth,
   links = ['', ''],
@@ -48,7 +50,45 @@ module.exports = function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
+  // we assume logo overrides namedLogo
+  if (logoWidth) {
+    logoWidth = +logoWidth
+  } else if (logo) {
+    logoWidth = DEFAULT_LOGO_HEIGHT
+  } else if (namedLogo) {
+    let iconSize
+    try {
+      const { getIconSize } = import('./simple-icons-utils/svg-helpers.mjs')
+      iconSize = getIconSize(String(namedLogo).toLowerCase())
+    } catch (e) {
+      if (!(e instanceof MissingOptionalDependencyError)) {
+        throw e
+      }
+    }
+    if (iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    } else {
+      logoWidth = DEFAULT_LOGO_HEIGHT
+    }
+  } else {
+    logoWidth = 0
+  }
+
+  if (namedLogo && !logo) {
+    try {
+      const { prepareNamedLogo } = import('./simple-icons-utils/logos.mjs')
+      logo = prepareNamedLogo({
+        name: namedLogo,
+        color: namedLogoColor,
+        size: logoSize,
+        style,
+      })
+    } catch (e) {
+      if (!(e instanceof MissingOptionalDependencyError)) {
+        throw e
+      }
+    }
+  }
 
   return stripXmlWhitespace(
     render({
