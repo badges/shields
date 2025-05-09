@@ -2,7 +2,7 @@ import emojic from 'emojic'
 import Joi from 'joi'
 import trace from '../../core/base-service/trace.js'
 import { BaseService, queryParams } from '../index.js'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import {
   queryParamSchema,
   renderWebsiteStatus,
@@ -20,7 +20,7 @@ A site will be classified as "down" if it fails to respond within 3.5 seconds.
 `
 
 const urlQueryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  url,
 }).required()
 
 export default class Website extends BaseService {

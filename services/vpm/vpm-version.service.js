@@ -1,10 +1,10 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { latest, renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const queryParamSchema = Joi.object({
-  repository_url: optionalUrl.required(),
+  repository_url: url,
   include_prereleases: Joi.equal(''),
 }).required()
 

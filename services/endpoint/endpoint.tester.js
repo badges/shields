@@ -118,6 +118,8 @@ t.create('custom svg logo')
     expect(body).to.include(getSimpleIcon({ name: 'npm' }))
   })
 
+// The logoWidth param was removed, but passing it should not
+// throw a validation error. It should just do nothing.
 t.create('logoWidth')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
@@ -132,7 +134,6 @@ t.create('logoWidth')
   .expectBadge({
     label: 'hey',
     message: 'yo',
-    logoWidth: 30,
   })
 
 // The logoPosition param was removed, but passing it should not

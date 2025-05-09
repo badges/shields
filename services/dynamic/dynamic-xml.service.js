@@ -1,4 +1,4 @@
-import { DOMParser } from '@xmldom/xmldom'
+import { DOMParser, MIME_TYPE } from '@xmldom/xmldom'
 import xpath from 'xpath'
 import { MetricNames } from '../../core/base-service/metric-helper.js'
 import { renderDynamicBadge, httpErrors } from '../dynamic-common.js'
@@ -9,6 +9,8 @@ import {
   queryParams,
 } from '../index.js'
 import { createRoute } from './dynamic-helpers.js'
+
+const MIME_TYPES = Object.values(MIME_TYPE)
 
 const description = `
 The Dynamic XML Badge allows you to extract an arbitrary value from any
@@ -70,6 +72,10 @@ export default class DynamicXml extends BaseService {
 
   static defaultBadgeData = { label: 'custom badge' }
 
+  getmimeType(contentType) {
+    return MIME_TYPES.find(mime => contentType.includes(mime)) ?? 'text/xml'
+  }
+
   transform({ pathExpression, buffer, contentType = 'text/xml' }) {
     // e.g. //book[2]/@id
     const pathIsAttr = (
@@ -130,17 +136,17 @@ export default class DynamicXml extends BaseService {
   async handle(_namedParams, { url, query: pathExpression, prefix, suffix }) {
     const { buffer, res } = await this._request({
       url,
-      options: { headers: { Accept: 'application/xml, text/xml' } },
+      options: {
+        headers: { Accept: 'application/xml, text/xml' },
+        timeout: { request: 3500 },
+      },
       httpErrors,
       logErrors: [],
     })
 
     let contentType = 'text/xml'
-    if (
-      res.headers['content-type'] &&
-      res.headers['content-type'].includes('text/html')
-    ) {
-      contentType = 'text/html'
+    if (res.headers['content-type']) {
+      contentType = this.getmimeType(res.headers['content-type'])
     }
 
     const { values: value } = this.transform({

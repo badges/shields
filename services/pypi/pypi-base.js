@@ -9,6 +9,7 @@ const schema = Joi.object({
     // https://github.com/badges/shields/issues/2022
     // https://github.com/badges/shields/issues/7728
     license: Joi.string().allow('').allow(null),
+    license_expression: Joi.string().allow('').allow(null),
     classifiers: Joi.array().items(Joi.string()).required(),
   }).required(),
   urls: Joi.array()

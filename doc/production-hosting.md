@@ -24,6 +24,7 @@ Production hosting is managed by the Shields ops team:
 | Cloudflare (CDN)              | Access management           | @espadrine                                                      |
 | Cloudflare (CDN)              | Admin access                | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
 | Twitch                        | OAuth app                   | @PyvesB                                                         |
+| Reddit                        | OAuth app                   | @chris48s, @PyvesB                                              |
 | Discord                       | OAuth app                   | @PyvesB                                                         |
 | YouTube                       | Account owner               | @PyvesB                                                         |
 | GitLab                        | Account owner               | @calebcartwright                                                |

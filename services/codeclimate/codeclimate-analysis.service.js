@@ -113,7 +113,7 @@ export default class CodeclimateAnalysis extends BaseJsonService {
     },
     '/codeclimate/tech-debt/{user}/{repo}': {
       get: {
-        summary: 'Code Climate issues',
+        summary: 'Code Climate technical debt',
         parameters: pathParams(
           { name: 'user', example: 'tensorflow' },
           { name: 'repo', example: 'models' },
@@ -122,7 +122,7 @@ export default class CodeclimateAnalysis extends BaseJsonService {
     },
     '/codeclimate/issues/{user}/{repo}': {
       get: {
-        summary: 'Code Climate technical debt',
+        summary: 'Code Climate issues',
         parameters: pathParams(
           { name: 'user', example: 'tensorflow' },
           { name: 'repo', example: 'models' },

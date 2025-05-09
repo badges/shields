@@ -62,7 +62,7 @@ function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
       y: 0.5 * (badgeHeight - logoHeight),
       width: logoWidth,
       height: logoHeight,
-      'xlink:href': logo,
+      href: logo,
     },
   })
 }
@@ -83,13 +83,12 @@ function renderBadge(
     ? new XmlElement({
         name: 'a',
         content,
-        attrs: { target: '_blank', 'xlink:href': leftLink },
+        attrs: { target: '_blank', href: leftLink },
       })
     : new ElementList({ content })
 
   const svgAttrs = {
     xmlns: 'http://www.w3.org/2000/svg',
-    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     width,
     height,
   }
@@ -160,7 +159,7 @@ class Badge {
     }
     let rightWidth = messageWidth + 2 * horizPadding
     if (hasLogo && !hasLabel) {
-      rightWidth += totalLogoWidth + horizPadding - 1
+      rightWidth += totalLogoWidth + (message.length ? horizPadding - 1 : 0)
     }
 
     const width = leftWidth + rightWidth
@@ -244,7 +243,7 @@ class Badge {
     return new XmlElement({
       name: 'a',
       content: [rect, shadow, text],
-      attrs: { target: '_blank', 'xlink:href': link },
+      attrs: { target: '_blank', href: link },
     })
   }
 
@@ -605,7 +604,7 @@ function social({
       ? new XmlElement({
           name: 'a',
           content: [shadow, text, rect],
-          attrs: { target: '_blank', 'xlink:href': leftLink },
+          attrs: { target: '_blank', href: leftLink },
         })
       : new ElementList({ content: [rect, shadow, text] })
   }
@@ -655,7 +654,7 @@ function social({
       ? new XmlElement({
           name: 'a',
           content: [rect, shadow, text],
-          attrs: { target: '_blank', 'xlink:href': rightLink },
+          attrs: { target: '_blank', href: rightLink },
         })
       : new ElementList({ content: [shadow, text] })
   }
@@ -804,11 +803,13 @@ function forTheBadge({
   // there is no label. When `needsLabelRect` is true, render a label rect and a
   // message rect; when false, only a message rect.
   const hasLabel = Boolean(label.length)
+  const noText = !hasLabel && !message
   const needsLabelRect = hasLabel || (logo && labelColor)
+  const gutter = noText ? LOGO_TEXT_GUTTER - LOGO_MARGIN : LOGO_TEXT_GUTTER
   let logoMinX, labelTextMinX
   if (logo) {
     logoMinX = LOGO_MARGIN
-    labelTextMinX = logoMinX + logoWidth + LOGO_TEXT_GUTTER
+    labelTextMinX = logoMinX + logoWidth + gutter
   } else {
     labelTextMinX = TEXT_MARGIN
   }
@@ -823,9 +824,8 @@ function forTheBadge({
     messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
   } else {
     if (logo) {
-      messageTextMinX = TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER
-      messageRectWidth =
-        2 * TEXT_MARGIN + logoWidth + LOGO_TEXT_GUTTER + messageTextWidth
+      messageTextMinX = TEXT_MARGIN + logoWidth + gutter
+      messageRectWidth = 2 * TEXT_MARGIN + logoWidth + gutter + messageTextWidth
     } else {
       messageTextMinX = TEXT_MARGIN
       messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
@@ -868,7 +868,7 @@ function forTheBadge({
         content: [rect, text],
         attrs: {
           target: '_blank',
-          'xlink:href': leftLink,
+          href: leftLink,
         },
       })
     } else {
@@ -907,7 +907,7 @@ function forTheBadge({
         content: [rect, text],
         attrs: {
           target: '_blank',
-          'xlink:href': rightLink,
+          href: rightLink,
         },
       })
     } else {

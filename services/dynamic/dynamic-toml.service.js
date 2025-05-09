@@ -52,6 +52,7 @@ export default class DynamicToml extends jsonPath(BaseTomlService) {
       url,
       httpErrors,
       logErrors: [],
+      options: { timeout: { request: 3500 } },
     })
   }
 }

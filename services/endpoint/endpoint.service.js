@@ -1,14 +1,14 @@
 import { URL } from 'url'
 import Joi from 'joi'
 import { httpErrors } from '../dynamic-common.js'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
 import { BaseJsonService, InvalidParameter, queryParams } from '../index.js'
 
 const blockedDomains = ['github.com', 'shields.io']
 
 const queryParamSchema = Joi.object({
-  url: optionalUrl.required(),
+  url,
 }).required()
 
 const description = `
@@ -102,13 +102,6 @@ The endpoint badge takes a single required query param: <code>url</code>, which 
       </td>
     </tr>
       <tr>
-        <td><code>logoWidth</code></td>
-        <td>
-          Default: none. Same meaning as the query string. Can be overridden by
-          the query string.
-        </td>
-      </tr>
-      <tr>
         <td><code>style</code></td>
         <td>
           Default: <code>flat</code>. The default template to use. Can be
@@ -156,7 +149,6 @@ export default class Endpoint extends BaseJsonService {
     logoSvg,
     logoColor,
     logoSize,
-    logoWidth,
     style,
     cacheSeconds,
   }) {
@@ -170,7 +162,6 @@ export default class Endpoint extends BaseJsonService {
       logoSvg,
       logoColor,
       logoSize,
-      logoWidth,
       style,
       // don't allow the user to set cacheSeconds any shorter than this._cacheLength
       cacheSeconds: Math.max(

@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { queryParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 
 const ratingPercentageScaleSteps = [10, 20, 50, 100]
 const ratingScaleColors = [
@@ -38,7 +38,7 @@ const sonarVersionSchema = Joi.alternatives(
 
 const queryParamSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
-  server: optionalUrl.required(),
+  server: url,
 }).required()
 
 const openApiQueryParams = queryParams(
@@ -48,7 +48,7 @@ const openApiQueryParams = queryParams(
 
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
-  server: optionalUrl.required(),
+  server: url,
   format: Joi.string().allow('short', 'long').optional(),
 }).required()
 
