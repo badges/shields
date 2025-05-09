@@ -16,8 +16,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  serverFqdn: Joi.string().hostname(),
-  endpoint: Joi.string(),
+  server: Joi.string(),
   include_prereleases: Joi.equal(''),
 }).required()
 
@@ -39,13 +38,10 @@ export default class FDroid extends BaseJsonService {
             example: 'org.dystopia.email',
           }),
           queryParam({
-            name: 'serverFqdn',
-            example: 'apt.izzysoft.de',
-          }),
-          queryParam({
-            name: 'endpoint',
-            example: 'fdroid',
-            description: `If the API is not located at root path, specify the additional path to the API.`,
+            name: 'server',
+            example: 'https://apt.izzysoft.de/fdroid',
+            description:
+              'Third party F-Droid server. If the API is not located at root path, specify the additional path to the API.',
           }),
           queryParam({
             name: 'include_prereleases',
@@ -59,12 +55,9 @@ export default class FDroid extends BaseJsonService {
 
   static defaultBadgeData = { label: 'f-droid' }
 
-  async fetch({ serverFqdn, endpoint, appId }) {
-    endpoint = endpoint.replace('^/|/$', '')
-    if (endpoint !== '') {
-      endpoint = `/${endpoint}`
-    }
-    const url = `https://${serverFqdn}${endpoint}/api/v1/packages/${appId}`
+  async fetch({ server, appId }) {
+    server = server.replace(/\/$/, '')
+    const url = `${server}/api/v1/packages/${appId}`
     return this._requestJson({
       schema,
       url,
@@ -91,13 +84,9 @@ export default class FDroid extends BaseJsonService {
 
   async handle(
     { appId },
-    {
-      serverFqdn = 'f-droid.org',
-      endpoint = '',
-      include_prereleases: includePre,
-    },
+    { server = 'https://f-droid.org', include_prereleases: includePre },
   ) {
-    const json = await this.fetch({ serverFqdn, endpoint, appId })
+    const json = await this.fetch({ server, appId })
     const suggested = includePre === undefined
     const { version } = this.transform({ json, suggested })
     return renderVersionBadge({ version })
