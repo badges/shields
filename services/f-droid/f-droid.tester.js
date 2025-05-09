@@ -87,25 +87,25 @@ const base2 = 'https://apt.izzysoft.de/fdroid/api/v1'
 const path2 = `/packages/${testPkg}`
 
 t.create('custom repo: Package is found')
-  .get(`/v/${testPkg}.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
+  .get(`/v/${testPkg}.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
   .intercept(nock => nock(base2).get(path2).reply(200, testJson))
   .expectBadge({ label: 'f-droid', message: 'v0.2.7' })
 
 t.create('custom repo: Package is found (pre-release)')
   .get(
-    `/v/${testPkg}.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid&include_prereleases`,
+    `/v/${testPkg}.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid&include_prereleases`,
   )
   .intercept(nock => nock(base2).get(path2).reply(200, testJson))
   .expectBadge({ label: 'f-droid', message: 'v0.2.11' })
 
 t.create('custom repo: Package is not found with 403')
-  .get(`/v/${testPkg}.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
+  .get(`/v/${testPkg}.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
   .intercept(nock => nock(base2).get(path2).reply(403, 'some 403 text'))
   .expectBadge({ label: 'f-droid', message: 'app not found' })
 
 t.create('custom repo: Package is not found with 404')
   .get(
-    '/v/io.shiels.does.not.exist.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid',
+    '/v/io.shiels.does.not.exist.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid',
   )
   .intercept(nock =>
     nock(base2)
@@ -117,7 +117,7 @@ t.create('custom repo: Package is not found with 404')
 t.create(
   'custom repo: Package is not found with no packages available (empty array)"',
 )
-  .get(`/v/${testPkg}.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
+  .get(`/v/${testPkg}.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
   .intercept(nock =>
     nock(base2)
       .get(path2)
@@ -128,7 +128,7 @@ t.create(
 t.create(
   'custom repo: Package is not found with no packages available (missing array)"',
 )
-  .get(`/v/${testPkg}.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
+  .get(`/v/${testPkg}.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid`)
   .intercept(nock =>
     nock(base2).get(path2).reply(200, `{"packageName":"${testPkg}"}`),
   )
@@ -137,7 +137,7 @@ t.create(
 /* If this test fails, either the API has changed or the app was deleted. */
 t.create('custom repo: The real api did not change')
   .get(
-    '/v/com.looker.droidify.json?server=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid',
+    '/v/com.looker.droidify.json?baseUrl=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid',
   )
   .expectBadge({
     label: 'f-droid',
