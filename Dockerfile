@@ -1,6 +1,7 @@
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 RUN npm install -g "npm@^10"
+RUN apk add python3 make gcc g++ linux-headers musl-dev
 
 RUN mkdir -p /usr/src/app
 RUN mkdir /usr/src/app/private
@@ -22,7 +23,7 @@ RUN npm run build \
 
 
 # Use multi-stage build to reduce size
-FROM node:20-alpine
+FROM node:24-alpine
 
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version
