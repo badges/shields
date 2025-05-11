@@ -12,9 +12,7 @@ const queryParamSchema = Joi.object({
 const schema = Joi.object({
   metadata: Joi.object({
     versioning: Joi.object({
-      versions: Joi.object({
-        version: Joi.array().items(Joi.string().required()).single().required(),
-      }).required(),
+      latest: Joi.string().required(),
     }).required(),
   }).required(),
 }).required()
@@ -62,8 +60,6 @@ export default class MavenMetadata extends BaseXmlService {
       })
     }
     const data = await this.fetch({ metadataUrl })
-    const versions = data.metadata.versioning.versions.version.reverse()
-    const version = versions[0]
-    return renderVersionBadge({ version })
+    return renderVersionBadge({ version: data.metadata.versioning.latest })
   }
 }
