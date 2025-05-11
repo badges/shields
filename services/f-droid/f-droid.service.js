@@ -2,6 +2,7 @@ import Joi from 'joi'
 import {
   optionalNonNegativeInteger,
   nonNegativeInteger,
+  optionalUrl,
 } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
@@ -16,7 +17,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  baseUrl: Joi.string(),
+  baseUrl: optionalUrl,
   include_prereleases: Joi.equal(''),
 }).required()
 
