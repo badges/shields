@@ -20,6 +20,7 @@ jobs:
           - node: '18'
           - node: '20'
           - node: '22'
+          - node: '24'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
