@@ -172,7 +172,7 @@
     "eslint-plugin-cypress": "4.3.0",
     "eslint-plugin-icedfrisby": "0.2.0",
     "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-jsdoc": "50.6.11",
+    "eslint-plugin-jsdoc": "50.6.17",
     "eslint-plugin-mocha": "11.0.0",
     "eslint-plugin-prettier": "5.4.0",
     "eslint-plugin-promise": "7.2.1",
