@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 RUN npm install -g "npm@^10"
 
@@ -22,7 +22,7 @@ RUN npm run build \
 
 
 # Use multi-stage build to reduce size
-FROM node:20-alpine
+FROM node:22-alpine
 
 ARG version=dev
 ENV DOCKER_SHIELDS_VERSION=$version

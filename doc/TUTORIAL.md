@@ -25,7 +25,7 @@ and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node >=20 and NPM 9.x or 10.x is required. If you don't already have them,
+Node 22 and NPM 10.x or 11.x is required. If you don't already have them,
 install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
