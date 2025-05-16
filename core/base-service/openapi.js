@@ -146,7 +146,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for simple-icons logos but not for custom logos.',
+            'Make icons adaptively resize by setting `auto`. Useful for some wider logos like `amd` and `amg`. Supported for both simple-icons logos and custom logos.',
           schema: {
             type: 'string',
           },

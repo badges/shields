@@ -1,3 +1,4 @@
+import { imageSize } from 'image-size'
 import {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
@@ -116,6 +117,19 @@ export default function coalesceBadge(
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
     if (overrideLogoSvgBase64) {
       logoSvgBase64 = overrideLogoSvgBase64
+      logoSize = coalesce(overrideLogoSize, serviceLogoSize)
+
+      if (logoSize === 'auto') {
+        const [, base64Image] = overrideLogoSvgBase64.split(';base64,')
+        const dimensions = base64Image
+          ? imageSize(Buffer.from(base64Image, 'base64'))
+          : null
+
+        if (dimensions) {
+          logoWidth =
+            (dimensions.width / dimensions.height) * DEFAULT_LOGO_HEIGHT
+        }
+      }
     } else {
       namedLogo = overrideLogo
       // If the logo has been overridden it does not make sense to inherit the
