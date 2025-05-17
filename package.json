@@ -45,6 +45,7 @@
     "got": "^14.4.7",
     "graphql": "16.11.0",
     "graphql-tag": "^2.12.6",
+    "image-size": "^2.0.2",
     "joi": "17.13.3",
     "joi-extension-semver": "5.0.0",
     "js-yaml": "^4.1.0",
