@@ -549,7 +549,6 @@ function social({
         name: 'path',
         attrs: {
           d: `M${messageBubbleMainX} 6.5 l-3 3v1 l3 3`,
-          stroke: 'd5d5d5',
           fill: '#fafafa',
         },
       }),
