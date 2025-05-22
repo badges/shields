@@ -27,6 +27,7 @@ const queryParamSchema = Joi.object({
   display_timestamp: Joi.string()
     .valid(...displayEnum)
     .default('author'),
+  locale: Joi.string().description('The locale to use for date formatting (e.g. en, fr, de)'),
 }).required()
 
 export default class GithubLastCommit extends GithubAuthV3Service {
@@ -97,12 +98,12 @@ export default class GithubLastCommit extends GithubAuthV3Service {
   }
 
   async handle({ user, repo, branch }, queryParams) {
-    const { path, display_timestamp: displayTimestamp } = queryParams
+    const { path, display_timestamp: displayTimestamp, locale } = queryParams
     const body = await this.fetch({ user, repo, branch, path })
     const [commit] = body.map(obj => obj.commit)
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return renderDateBadge(commit[displayTimestamp].date)
+    return renderDateBadge(commit[displayTimestamp].date, false, locale)
   }
 }

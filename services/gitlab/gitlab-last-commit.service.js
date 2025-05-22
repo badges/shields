@@ -14,9 +14,10 @@ const schema = Joi.array()
   .required()
 
 const queryParamSchema = Joi.object({
-  ref: Joi.string(),
   gitlab_url: optionalUrl,
+  ref: Joi.string(),
   path: relativeUri,
+  locale: Joi.string().description('The locale to use for date formatting (e.g. en, fr, de)'),
 }).required()
 
 const refText = `
@@ -79,13 +80,13 @@ export default class GitlabLastCommit extends GitLabBase {
 
   async handle(
     { project },
-    { gitlab_url: baseUrl = 'https://gitlab.com', ref, path },
+    { gitlab_url: baseUrl = 'https://gitlab.com', ref, path, locale },
   ) {
     const data = await this.fetch({ project, baseUrl, ref, path })
     const [commit] = data
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return renderDateBadge(commit.committed_date)
+    return renderDateBadge(commit.committed_date, false, locale)
   }
 }

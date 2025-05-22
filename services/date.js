@@ -7,11 +7,13 @@
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar.js'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import localeData from 'dayjs/plugin/localeData.js'
 import { colorScale } from './color-formatters.js'
 import { InvalidResponse } from './index.js'
 
 dayjs.extend(calendar)
 dayjs.extend(customParseFormat)
+dayjs.extend(localeData)
 
 /**
  * Parse and validate a string date into a dayjs object. Use this helper
@@ -46,10 +48,14 @@ function parseDate(...args) {
  * Returns a formatted date string without the year based on the value of input date param d.
  *
  * @param {Date | string | number | dayjs } d JS Date object, string, unix timestamp or dayjs object
+ * @param {string} [locale] The locale to use for formatting (e.g. 'en', 'fr', 'de')
  * @returns {string} Formatted date string
  */
-function formatDate(d) {
+function formatDate(d, locale) {
   const date = parseDate(d)
+  if (locale) {
+    date.locale(locale)
+  }
   const dateString = date.calendar(null, {
     lastDay: '[yesterday]',
     sameDay: '[today]',
@@ -81,12 +87,13 @@ function age(date, reversed = false) {
  *
  * @param {Date | string | number | dayjs } date JS Date object, string, unix timestamp or dayjs object
  * @param {boolean} reversed Reverse the color scale (the older, the better)
+ * @param {string} [locale] The locale to use for formatting (e.g. 'en', 'fr', 'de')
  * @returns {object} A badge object that has two properties: message, and color
  */
-function renderDateBadge(date, reversed = false) {
+function renderDateBadge(date, reversed = false, locale) {
   const d = parseDate(date)
   const color = age(d, reversed)
-  const message = formatDate(d)
+  const message = formatDate(d, locale)
   return { message, color }
 }
 
