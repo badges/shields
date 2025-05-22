@@ -1,21 +1,41 @@
 import Joi from 'joi'
+import { compare } from 'mvncmp'
 import { url } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseXmlService, NotFound, queryParams } from '../index.js'
-import { description } from './maven-metadata.js'
+import {
+  BaseXmlService,
+  InvalidParameter,
+  InvalidResponse,
+  queryParams,
+} from '../index.js'
+
+const strategyEnum = ['release', 'latest', 'comparableVersion']
+
+const strategyDocs = `The strategy used to determine the version that will be shown
+<ul>
+  <li><code>release</code> - use the "release" metadata property (default)</li>
+  <li><code>latest</code> - use the "latest" metadata property</li>
+  <li><code>comparableVersion</code> - sort versions using Maven's ComparableVersion semantics</li>
+</ul>`
 
 const queryParamSchema = Joi.object({
   metadataUrl: url,
   versionPrefix: Joi.string().optional(),
   versionSuffix: Joi.string().optional(),
+  strategy: Joi.string()
+    .valid(...strategyEnum)
+    .default('release')
+    .optional(),
 }).required()
 
 const schema = Joi.object({
   metadata: Joi.object({
     versioning: Joi.object({
+      latest: Joi.string(),
+      release: Joi.string(),
       versions: Joi.object({
-        version: Joi.array().items(Joi.string().required()).single().required(),
-      }).required(),
+        version: Joi.array().items(Joi.string()).single(),
+      }),
     }).required(),
   }).required(),
 }).required()
@@ -33,7 +53,6 @@ export default class MavenMetadata extends BaseXmlService {
     '/maven-metadata/v': {
       get: {
         summary: 'Maven metadata URL',
-        description,
         parameters: queryParams(
           {
             name: 'metadataUrl',
@@ -42,14 +61,10 @@ export default class MavenMetadata extends BaseXmlService {
             required: true,
           },
           {
-            name: 'versionPrefix',
-            example: '29',
-            description: 'Filter only versions with this prefix.',
-          },
-          {
-            name: 'versionSuffix',
-            example: '-android',
-            description: 'Filter only versions with this suffix.',
+            name: 'strategy',
+            description: strategyDocs,
+            schema: { type: 'string', enum: strategyEnum },
+            example: 'release',
           },
         ),
       },
@@ -68,24 +83,50 @@ export default class MavenMetadata extends BaseXmlService {
     })
   }
 
-  async handle(_namedParams, { metadataUrl, versionPrefix, versionSuffix }) {
-    const data = await this.fetch({ metadataUrl })
-    let versions = data.metadata.versioning.versions.version.reverse()
-    if (versionPrefix !== undefined) {
-      versions = versions.filter(v => v.toString().startsWith(versionPrefix))
+  static getLatestVersion(data, strategy) {
+    if (strategy === 'latest') {
+      if (data.metadata.versioning.latest === undefined) {
+        throw new InvalidResponse({
+          prettyMessage: "property 'latest' not found",
+        })
+      }
+      return data.metadata.versioning.latest
+    } else if (strategy === 'release') {
+      if (data.metadata.versioning.release === undefined) {
+        throw new InvalidResponse({
+          prettyMessage: "property 'release' not found",
+        })
+      }
+      return data.metadata.versioning.release
+    } else if (strategy === 'comparableVersion') {
+      if (
+        data.metadata.versioning.versions.version === undefined ||
+        data.metadata.versioning.versions.version.length === 0
+      ) {
+        throw new InvalidResponse({
+          prettyMessage: 'no versions found',
+        })
+      }
+      return data.metadata.versioning.versions.version
+        .sort(compare)
+        .reverse()[0]
     }
-    if (versionSuffix !== undefined) {
-      versions = versions.filter(v => v.toString().endsWith(versionSuffix))
-    }
-    const version = versions[0]
-    // if the filter returned no results, throw a NotFound
-    if (
-      (versionPrefix !== undefined || versionSuffix !== undefined) &&
-      version === undefined
-    )
-      throw new NotFound({
-        prettyMessage: 'version prefix or suffix not found',
+    throw new InvalidParameter({ prettyMessage: 'unknown strategy' })
+  }
+
+  async handle(
+    _namedParams,
+    { metadataUrl, versionPrefix, versionSuffix, strategy },
+  ) {
+    if (versionPrefix !== undefined || versionSuffix !== undefined) {
+      throw new InvalidParameter({
+        prettyMessage:
+          'versionPrefix and versionSuffix params have been removed',
       })
-    return renderVersionBadge({ version })
+    }
+    const data = await this.fetch({ metadataUrl })
+    return renderVersionBadge({
+      version: this.constructor.getLatestVersion(data, strategy),
+    })
   }
 }
