@@ -5,7 +5,7 @@ describe('Resource Cache', function () {
   let getCachedResource, clearResourceCache
 
   before(async function () {
-    const module = await import('./resource-cache.js')
+    const module = await import('../resource-cache.js')
     getCachedResource = module.getCachedResource
     clearResourceCache = module.clearResourceCache
   })
@@ -90,7 +90,7 @@ describe('getCachedResource', function () {
   let getCachedResource, clearResourceCache
 
   before(async function () {
-    const module = await import('./resource-cache.js')
+    const module = await import('../resource-cache.js')
     getCachedResource = module.getCachedResource
     clearResourceCache = module.clearResourceCache
   })

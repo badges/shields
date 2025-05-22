@@ -1,11 +1,12 @@
-import { fetch as sendRequest } from './fetch.js'
-
 const cache = new Map()
 
 export async function getCachedResource(
-  { url, requestFetcher = sendRequest },
+  { url, requestFetcher },
   ttl = 5 * 60 * 1000,
 ) {
+  if (!requestFetcher) {
+    throw new Error('requestFetcher is required')
+  }
   const cached = cache.get(url)
   if (cached && Date.now() - cached.timestamp < ttl) {
     return cached.data
