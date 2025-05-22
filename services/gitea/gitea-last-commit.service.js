@@ -29,7 +29,9 @@ const queryParamSchema = Joi.object({
     .valid(...displayEnum)
     .default('author'),
   gitea_url: optionalUrl,
-  locale: Joi.string().description('The locale to use for date formatting (e.g. en, fr, de)'),
+  locale: Joi.string().description(
+    'The locale to use for date formatting (e.g. en, fr, de)',
+  ),
 }).required()
 
 export default class GiteaLastCommit extends GiteaBase {

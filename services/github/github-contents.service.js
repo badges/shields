@@ -13,7 +13,7 @@ const schema = Joi.object({
 }).required()
 
 export default class GithubContents extends GithubAuthV3Service {
-  static category = 'data'
+  static category = 'other'
 
   static route = {
     base: 'github/contents',
@@ -69,4 +69,4 @@ export default class GithubContents extends GithubAuthV3Service {
     const buffer = Buffer.from(content, 'base64')
     return { message: buffer.toString('utf-8') }
   }
-} 
+}

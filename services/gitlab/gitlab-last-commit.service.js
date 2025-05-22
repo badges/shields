@@ -17,7 +17,9 @@ const queryParamSchema = Joi.object({
   gitlab_url: optionalUrl,
   ref: Joi.string(),
   path: relativeUri,
-  locale: Joi.string().description('The locale to use for date formatting (e.g. en, fr, de)'),
+  locale: Joi.string().description(
+    'The locale to use for date formatting (e.g. en, fr, de)',
+  ),
 }).required()
 
 const refText = `

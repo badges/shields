@@ -33,4 +33,4 @@ t.create('Contents (repo not found)')
   .expectBadge({
     label: 'contents',
     message: 'repo, branch or file not found',
-  }) 
+  })

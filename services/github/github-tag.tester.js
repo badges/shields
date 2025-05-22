@@ -32,7 +32,9 @@ t.create('Tag (with outdated submodules)')
   .get('/v/tag/test/repo-with-submodules.json')
   .expectBadge({
     label: 'tag',
-    message: Joi.string().regex(/^v\d+\.\d+\.\d+ \(\d+ submodule(s)? outdated\)$/),
+    message: Joi.string().regex(
+      /^v\d+\.\d+\.\d+ \(\d+ submodule(s)? outdated\)$/,
+    ),
     color: 'blue',
   })
 

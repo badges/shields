@@ -27,7 +27,9 @@ const queryParamSchema = Joi.object({
   display_timestamp: Joi.string()
     .valid(...displayEnum)
     .default('author'),
-  locale: Joi.string().description('The locale to use for date formatting (e.g. en, fr, de)'),
+  locale: Joi.string().description(
+    'The locale to use for date formatting (e.g. en, fr, de)',
+  ),
 }).required()
 
 export default class GithubLastCommit extends GithubAuthV3Service {
