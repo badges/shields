@@ -50,6 +50,11 @@ module.exports = function makeBadge({
 
   logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
 
+  // Ensure logoWidth is a positive number
+  if (logoWidth < 0) {
+    logoWidth = DEFAULT_LOGO_HEIGHT
+  }
+
   return stripXmlWhitespace(
     render({
       label,

@@ -1,7 +1,7 @@
 import { ImproperlyConfigured } from '../index.js'
 import log from '../../core/server/log.js'
 import { TokenPool } from '../../core/token-pooling/token-pool.js'
-import { getUserAgent } from '../../core/base-service/got-config.js'
+import { getUserAgent } from '../../core/base-service/fetch-config.js'
 
 const userAgent = getUserAgent()
 

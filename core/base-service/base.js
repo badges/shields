@@ -19,7 +19,7 @@ import {
   InvalidParameter,
   Deprecated,
 } from './errors.js'
-import { fetch } from './got.js'
+import { fetch } from './fetch.js'
 import { getEnum } from './openapi.js'
 import {
   makeFullUrl,

@@ -1,7 +1,13 @@
 import { expect } from 'chai'
 import { test, given } from 'sazerac'
 import sinon from 'sinon'
-import { parseDate, formatDate, formatRelativeDate, age } from './date.js'
+import {
+  parseDate,
+  formatDate,
+  formatRelativeDate,
+  age,
+  isValidDate,
+} from './date.js'
 import { InvalidResponse } from './index.js'
 
 describe('parseDate', function () {
@@ -128,5 +134,31 @@ describe('parseDate', function () {
     given(monthsAgo(15), true)
       .describe('when given a Date 15 months ago and reversed')
       .expect('green')
+  })
+})
+
+describe('Date Service', function () {
+  describe('formatDate', function () {
+    it('formats date correctly', function () {
+      const date = new Date('2024-03-20T12:00:00Z')
+      expect(formatDate(date)).to.equal('2024-03-20')
+    })
+
+    it('handles invalid date', function () {
+      expect(formatDate('invalid')).to.equal('Invalid date')
+    })
+  })
+
+  describe('isValidDate', function () {
+    it('returns true for valid date', function () {
+      const date = new Date('2024-03-20T12:00:00Z')
+      expect(isValidDate(date)).to.be.true
+    })
+
+    it('returns false for invalid date', function () {
+      expect(isValidDate('invalid')).to.be.false
+      expect(isValidDate(null)).to.be.false
+      expect(isValidDate(undefined)).to.be.false
+    })
   })
 })

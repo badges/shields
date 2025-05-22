@@ -9,6 +9,8 @@ on:
 jobs:
   test-services-22:
     runs-on: ubuntu-latest
+    matrix:
+      node: [22, 24]
 
     steps:
       - name: Checkout

@@ -142,6 +142,8 @@ export default function coalesceBadge(
 
     if (iconSize && logoSize === 'auto') {
       logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    } else if (!logoWidth) {
+      logoWidth = DEFAULT_LOGO_HEIGHT
     }
 
     logoSvgBase64 = prepareNamedLogo({

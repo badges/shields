@@ -8,6 +8,8 @@ on:
 jobs:
   daily-tests:
     runs-on: ubuntu-latest
+    matrix:
+      node: [20, 22, 24]
 
     services:
       postgres:

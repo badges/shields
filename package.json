@@ -100,7 +100,7 @@
     "pretest": "cross-env BASE_URL=http://localhost:8080 run-s --silent defs",
     "test": "run-s --silent --continue-on-error lint test:package test:core test:entrypoint check-types:package prettier:check",
     "check-types:package": "tsd badge-maker",
-    "depcheck": "check-node-version --node \">= 20.0\"",
+    "depcheck": "check-node-version --node \">= 20.0 || >= 24.0\"",
     "prebuild": "run-s --silent depcheck",
     "defs": "node scripts/export-openapi-cli.js",
     "build": "rimraf public && run-s defs docusaurus:build",
@@ -214,7 +214,7 @@
     "url": "^0.11.4"
   },
   "engines": {
-    "node": "^20 || ^22",
+    "node": "^20 || ^22 || ^24",
     "npm": "^9 || ^10 || ^11"
   },
   "type": "module",

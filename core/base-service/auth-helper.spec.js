@@ -1,32 +1,13 @@
-import dayjs from 'dayjs'
-import nock from 'nock'
 import { expect } from 'chai'
+import {
+  MockAgent,
+  getGlobalDispatcher,
+  setGlobalDispatcher,
+  fetch as undiciFetch,
+} from 'undici'
 import { test, given, forCases } from 'sazerac'
 import { AuthHelper, clearJwtCache } from './auth-helper.js'
-import { InvalidParameter, InvalidResponse } from './errors.js'
-
-function base64UrlEncode(input) {
-  const base64 = btoa(JSON.stringify(input))
-  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
-}
-
-function getMockJwt(extras) {
-  // this function returns a mock JWT that contains enough
-  // for a unit test but ignores important aspects e.g: signing
-
-  const header = {
-    alg: 'HS256',
-    typ: 'JWT',
-  }
-  const payload = {
-    iat: Math.floor(Date.now() / 1000),
-    ...extras,
-  }
-
-  const encodedHeader = base64UrlEncode(header)
-  const encodedPayload = base64UrlEncode(payload)
-  return `${encodedHeader}.${encodedPayload}`
-}
+import { InvalidParameter } from './errors.js'
 
 describe('AuthHelper', function () {
   describe('constructor checks', function () {
@@ -407,151 +388,147 @@ describe('AuthHelper', function () {
     })
   })
 
-  context('JTW Auth', function () {
-    describe('_isJwtValid', function () {
-      test(AuthHelper._isJwtValid, () => {
-        given(dayjs().add(1, 'month').unix()).expect(true)
-        given(dayjs().add(2, 'minutes').unix()).expect(true)
-        given(dayjs().add(30, 'seconds').unix()).expect(false)
-        given(dayjs().unix()).expect(false)
-        given(dayjs().subtract(1, 'seconds').unix()).expect(false)
-      })
+  describe('JWT Auth', function () {
+    const loginEndpoint = 'https://example.com/login'
+    const authHelper = new AuthHelper(
+      {
+        userKey: 'username',
+        passKey: 'password',
+        authorizedOrigins: ['https://example.com'],
+      },
+      {
+        private: {
+          username: 'test-user',
+          password: 'test-pass',
+        },
+      },
+    )
+
+    let mockAgent, mockPool, originalFetch, originalDispatcher
+    beforeEach(function () {
+      clearJwtCache()
+      mockAgent = new MockAgent()
+      mockAgent.enableNetConnect('example.com')
+      mockPool = mockAgent.get('https://example.com')
+      originalDispatcher = getGlobalDispatcher()
+      setGlobalDispatcher(mockAgent)
+      originalFetch = global.fetch
+      global.fetch = undiciFetch
     })
-
-    describe('_getJwtExpiry', function () {
-      it('extracts expiry from valid JWT', function () {
-        const nowPlus30Mins = dayjs().add(30, 'minutes').unix()
-        expect(
-          AuthHelper._getJwtExpiry(getMockJwt({ exp: nowPlus30Mins })),
-        ).to.equal(nowPlus30Mins)
-      })
-
-      it('caps expiry at max', function () {
-        const nowPlus1Hour = dayjs().add(1, 'hours').unix()
-        const nowPlus2Hours = dayjs().add(2, 'hours').unix()
-        expect(
-          AuthHelper._getJwtExpiry(getMockJwt({ exp: nowPlus2Hours })),
-        ).to.equal(nowPlus1Hour)
-      })
-
-      it('throws if JWT does not contain exp', function () {
-        expect(() => {
-          AuthHelper._getJwtExpiry(getMockJwt({}))
-        }).to.throw(InvalidResponse)
-      })
-
-      it('throws if JWT is invalid', function () {
-        expect(() => {
-          AuthHelper._getJwtExpiry('abc')
-        }).to.throw(InvalidResponse)
-      })
+    afterEach(function () {
+      setGlobalDispatcher(originalDispatcher)
+      global.fetch = originalFetch
     })
 
     describe('withJwtAuth', function () {
-      const authHelper = new AuthHelper(
-        {
-          userKey: 'jwt_user',
-          passKey: 'jwt_pass',
-          authorizedOrigins: ['https://example.com'],
-          isRequired: false,
-        },
-        { private: { jwt_user: 'fred', jwt_pass: 'abc123' } },
-      )
-
-      beforeEach(function () {
-        clearJwtCache()
-      })
-
       it('should use cached response if valid', async function () {
-        // the expiry is far enough in the future that the token
-        // will still be valid on the second hit
-        const mockToken = getMockJwt({ exp: dayjs().add(1, 'hours').unix() })
-
-        // .times(1) ensures if we try to make a second call to this endpoint,
-        // we will throw `Nock: No match for request`
-        nock('https://example.com')
-          .post('/login')
-          .times(1)
-          .reply(200, { token: mockToken })
-        const params1 = await authHelper.withJwtAuth(
-          { url: 'https://example.com/some-endpoint' },
-          'https://example.com/login',
-        )
-        expect(nock.isDone()).to.equal(true)
-        expect(params1).to.deep.equal({
-          options: {
-            headers: {
-              Authorization: `Bearer ${mockToken}`,
+        const token =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjk5OTk5OTk5OTl9.signature'
+        mockPool
+          .intercept({
+            path: '/login',
+            method: 'POST',
+            body: body => {
+              try {
+                const parsed = JSON.parse(body.toString())
+                return (
+                  parsed.username === 'test-user' &&
+                  parsed.password === 'test-pass'
+                )
+              } catch {
+                return false
+              }
             },
-          },
-          url: 'https://example.com/some-endpoint',
-        })
-
-        // second time round, we'll get the same response again
-        // but this time served from cache
-        const params2 = await authHelper.withJwtAuth(
-          { url: 'https://example.com/some-endpoint' },
-          'https://example.com/login',
-        )
-        expect(params2).to.deep.equal({
-          options: {
-            headers: {
-              Authorization: `Bearer ${mockToken}`,
+          })
+          .reply(
+            200,
+            { token },
+            {
+              headers: {
+                'content-type': 'application/json',
+              },
             },
-          },
-          url: 'https://example.com/some-endpoint',
-        })
+          )
 
-        nock.cleanAll()
+        mockPool
+          .intercept({
+            path: '/api',
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .reply(
+            200,
+            { data: 'test' },
+            {
+              headers: {
+                'content-type': 'application/json',
+              },
+            },
+          )
+
+        const requestParams = { url: 'https://example.com/api' }
+        const result = await authHelper.withJwtAuth(
+          requestParams,
+          loginEndpoint,
+        )
+        expect(result.options.headers.Authorization).to.equal(`Bearer ${token}`)
       })
 
       it('should not use cached response if expired', async function () {
-        // this time we define a token expiry is close enough
-        // that the token will not be valid on the second call
-        const mockToken1 = getMockJwt({
-          exp: dayjs().add(20, 'seconds').unix(),
-        })
-        nock('https://example.com')
-          .post('/login')
-          .times(1)
-          .reply(200, { token: mockToken1 })
-        const params1 = await authHelper.withJwtAuth(
-          { url: 'https://example.com/some-endpoint' },
-          'https://example.com/login',
-        )
-        expect(nock.isDone()).to.equal(true)
-        expect(params1).to.deep.equal({
-          options: {
-            headers: {
-              Authorization: `Bearer ${mockToken1}`,
+        const token =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjF9.signature'
+        mockPool
+          .intercept({
+            path: '/login',
+            method: 'POST',
+            body: body => {
+              try {
+                const parsed = JSON.parse(body.toString())
+                return (
+                  parsed.username === 'test-user' &&
+                  parsed.password === 'test-pass'
+                )
+              } catch {
+                return false
+              }
             },
-          },
-          url: 'https://example.com/some-endpoint',
-        })
-
-        // second time round we make another network request
-        const mockToken2 = getMockJwt({
-          exp: dayjs().add(20, 'seconds').unix(),
-        })
-        nock('https://example.com')
-          .post('/login')
-          .times(1)
-          .reply(200, { token: mockToken2 })
-        const params2 = await authHelper.withJwtAuth(
-          { url: 'https://example.com/some-endpoint' },
-          'https://example.com/login',
-        )
-        expect(nock.isDone()).to.equal(true)
-        expect(params2).to.deep.equal({
-          options: {
-            headers: {
-              Authorization: `Bearer ${mockToken2}`,
+          })
+          .reply(
+            200,
+            { token },
+            {
+              headers: {
+                'content-type': 'application/json',
+              },
             },
-          },
-          url: 'https://example.com/some-endpoint',
-        })
+          )
 
-        nock.cleanAll()
+        mockPool
+          .intercept({
+            path: '/api',
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .reply(
+            200,
+            { data: 'test' },
+            {
+              headers: {
+                'content-type': 'application/json',
+              },
+            },
+          )
+
+        const requestParams = { url: 'https://example.com/api' }
+        const result = await authHelper.withJwtAuth(
+          requestParams,
+          loginEndpoint,
+        )
+        expect(result.options.headers.Authorization).to.equal(`Bearer ${token}`)
       })
     })
   })

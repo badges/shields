@@ -8,6 +8,8 @@ on:
 jobs:
   coveralls-code-coverage:
     runs-on: ubuntu-latest
+    matrix:
+      node: [22, 24]
 
     services:
       postgres:
