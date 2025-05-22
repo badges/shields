@@ -18,8 +18,21 @@ const schema = Joi.object({
           .items({
             node: Joi.object({
               name: Joi.string().required(),
+              target: Joi.object({
+                oid: Joi.string().required(),
+              }).required(),
             }).required(),
           })
+          .required(),
+      }).required(),
+      submodules: Joi.object({
+        nodes: Joi.array()
+          .items(
+            Joi.object({
+              name: Joi.string().required(),
+              subprojectCommitOid: Joi.string().required(),
+            }),
+          )
           .required(),
       }).required(),
     }).required(),
@@ -80,7 +93,16 @@ class GithubTag extends GithubAuthV4Service {
               edges {
                 node {
                   name
+                  target {
+                    oid
+                  }
                 }
+              }
+            }
+            submodules(first: 100) {
+              nodes {
+                name
+                subprojectCommitOid
               }
             }
           }
@@ -114,13 +136,34 @@ class GithubTag extends GithubAuthV4Service {
       const prettyMessage = filter ? 'no matching tags found' : 'no tags found'
       throw new NotFound({ prettyMessage })
     }
-    return renderVersionBadge({
-      version: this.constructor.getLatestTag({
-        tags,
-        sort,
-        includePrereleases,
-      }),
+
+    const latestTag = this.constructor.getLatestTag({
+      tags,
+      sort,
+      includePrereleases,
     })
+
+    // Get the commit hash for the latest tag
+    const latestTagEdge = json.data.repository.refs.edges.find(
+      edge => edge.node.name === latestTag,
+    )
+    const latestTagCommit = latestTagEdge.node.target.oid
+
+    // Check if any submodules are at a different commit than the tag
+    const submodules = json.data.repository.submodules.nodes
+    const outdatedSubmodules = submodules.filter(
+      submodule => submodule.subprojectCommitOid !== latestTagCommit,
+    )
+
+    if (outdatedSubmodules.length > 0) {
+      return renderVersionBadge({
+        version: `${latestTag} (${outdatedSubmodules.length} submodule${
+          outdatedSubmodules.length === 1 ? '' : 's'
+        } outdated)`,
+      })
+    }
+
+    return renderVersionBadge({ version: latestTag })
   }
 }
 

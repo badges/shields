@@ -28,6 +28,14 @@ t.create('Tag (repo not found)')
   .get('/v/tag/badges/helmets.json')
   .expectBadge({ label: 'tag', message: 'repo not found' })
 
+t.create('Tag (with outdated submodules)')
+  .get('/v/tag/test/repo-with-submodules.json')
+  .expectBadge({
+    label: 'tag',
+    message: Joi.string().regex(/^v\d+\.\d+\.\d+ \(\d+ submodule(s)? outdated\)$/),
+    color: 'blue',
+  })
+
 // redirects
 t.create('Tag (legacy route: tag)')
   .get('/tag/photonstorm/phaser.svg')
