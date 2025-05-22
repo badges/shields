@@ -53,6 +53,7 @@
     "lodash.groupby": "^4.6.0",
     "lodash.times": "^4.3.2",
     "matcher": "^5.0.0",
+    "mvncmp": "^1.0.0",
     "node-env-flag": "^0.1.0",
     "node-pg-migrate": "^7.9.1",
     "parse-link-header": "^2.0.0",
