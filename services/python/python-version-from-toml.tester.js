@@ -1,10 +1,10 @@
 import Joi from 'joi'
-import { isValidRange } from 'pep440-version-utils'
+import { validRange } from 'python-semver'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const validatePep440 = (value, helpers) => {
-  if (!isValidRange(value)) {
+  if (!validRange(value)) {
     return helpers.error('any.invalid')
   }
   return value
