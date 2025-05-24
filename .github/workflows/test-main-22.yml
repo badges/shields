@@ -23,6 +23,3 @@ jobs:
 
       - name: Core tests
         uses: ./.github/actions/core-tests
-
-    matrix:
-      node: [22, 24]
