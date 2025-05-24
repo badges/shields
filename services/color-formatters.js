@@ -5,7 +5,7 @@
  * @module
  */
 
-import pep440 from '@renovatebot/pep440'
+import { isValid, parse } from 'pep440-version-utils'
 
 /**
  * Determines the color used for a badge based on version.
@@ -39,11 +39,11 @@ function version(version) {
  * @returns {string} Badge color
  */
 function pep440VersionColor(version) {
-  if (!pep440.valid(version)) {
+  if (!isValid(version)) {
     return 'lightgrey'
   }
-  const parsedVersion = pep440.explain(version)
-  if (parsedVersion.is_prerelease || parsedVersion.public.startsWith('0.')) {
+  const parsedVersion = parse(version)
+  if (parsedVersion.isPrerelease || parsedVersion.version.startsWith('0.')) {
     return 'orange'
   }
   return 'blue'
