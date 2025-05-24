@@ -26,7 +26,7 @@ jobs:
             npm: '^11'
             engine-strict: 'false'
           - node: '24'
-            npm: '^12'
+            npm: '^11'
             engine-strict: 'true'
     steps:
       - name: Checkout
