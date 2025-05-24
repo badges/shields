@@ -5,7 +5,7 @@
  * @module
  */
 
-import pep440 from '@renovatebot/pep440'
+import semver from 'semver'
 
 /**
  * Determines the color used for a badge based on version.
@@ -39,11 +39,11 @@ function version(version) {
  * @returns {string} Badge color
  */
 function pep440VersionColor(version) {
-  if (!pep440.valid(version)) {
+  if (!semver.valid(version)) {
     return 'lightgrey'
   }
-  const parsedVersion = pep440.explain(version)
-  if (parsedVersion.is_prerelease || parsedVersion.public.startsWith('0.')) {
+  const parsedVersion = semver.parse(version)
+  if (parsedVersion.prerelease || parsedVersion.major === 0) {
     return 'orange'
   }
   return 'blue'

@@ -79,3 +79,10 @@ t.create('Last Commit (path not found)')
     label: 'last commit',
     message: 'user, repo or path not found',
   })
+
+t.create('Last Commit (with locale)')
+  .get('/gitea/tea.json?locale=es')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })

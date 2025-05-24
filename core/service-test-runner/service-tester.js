@@ -123,7 +123,6 @@ class ServiceTester {
     const testerBaseUrl = `${baseUrl}${pathPrefix}`
 
     const fn = this._only ? describe.only : describe
-    // eslint-disable-next-line mocha/prefer-arrow-callback
     fn(this.title, function () {
       specs.forEach(spec => {
         spec._message = `[${spec.hasIntercept ? 'mocked' : 'live'}] ${

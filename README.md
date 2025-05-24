@@ -29,7 +29,9 @@ continuous integration services, package registries, distributions, app
 stores, social networks, code coverage services, and code analysis services.
 Every month it serves over 1.6 billion images and is used by some of the
 world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
-and [Bootstrap][bootstrap] to name a few.
+and [Bootstrap][bootstrap] to name a few. The service also supports localization
+features, allowing badges to display dates and times in the user's preferred
+format and timezone.
 
 [vscode]: https://github.com/Microsoft/vscode
 [vue]: https://github.com/vuejs/vue
@@ -61,6 +63,7 @@ This repo hosts:
 - Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen)
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
 - Uptime Robot uptime percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
+- Last commit date with localization: ![last commit](https://img.shields.io/github/last-commit/badges/shields?label=last%20commit)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)

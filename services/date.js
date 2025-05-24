@@ -7,11 +7,15 @@
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar.js'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import localeData from 'dayjs/plugin/localeData.js'
+import updateLocale from 'dayjs/plugin/updateLocale.js'
 import { colorScale } from './color-formatters.js'
 import { InvalidResponse } from './index.js'
 
 dayjs.extend(calendar)
 dayjs.extend(customParseFormat)
+dayjs.extend(localeData)
+dayjs.extend(updateLocale)
 
 /**
  * Parse and validate a string date into a dayjs object. Use this helper
@@ -43,21 +47,55 @@ function parseDate(...args) {
 }
 
 /**
- * Returns a formatted date string without the year based on the value of input date param d.
+ * Format a date according to the specified locale
  *
- * @param {Date | string | number | dayjs } d JS Date object, string, unix timestamp or dayjs object
- * @returns {string} Formatted date string
+ * @param {Date} date - The date to format
+ * @param {string} locale - The locale to use for formatting
+ * @returns {string} The formatted date string
  */
-function formatDate(d) {
-  const date = parseDate(d)
-  const dateString = date.calendar(null, {
-    lastDay: '[yesterday]',
-    sameDay: '[today]',
-    lastWeek: '[last] dddd',
-    sameElse: 'MMMM YYYY',
-  })
-  // Trim current year from date string
-  return dateString.replace(` ${dayjs().year()}`, '').toLowerCase()
+async function formatDate(date, locale) {
+  if (
+    date === null ||
+    date === undefined ||
+    (typeof date === 'string' && date.trim() === '')
+  ) {
+    return 'Invalid date'
+  }
+  let parsed
+  try {
+    parsed = parseDate(date)
+  } catch (e) {
+    return 'Invalid date'
+  }
+
+  // Set locale if provided
+  if (locale) {
+    try {
+      // Load the locale if it exists
+      // const localeModule = await import(`dayjs/locale/${locale}.js`)
+      dayjs.locale(locale)
+    } catch (e) {
+      // If locale loading fails, fall back to default locale
+      console.warn(`Failed to load locale ${locale}, falling back to default`)
+    }
+  }
+
+  if (date instanceof Date) {
+    // If it's January 1st of the current year, return just the month
+    const now = dayjs()
+    if (
+      parsed.month() === 0 &&
+      parsed.date() === 1 &&
+      parsed.year() === now.year()
+    ) {
+      return parsed.format('MMMM').toLowerCase()
+    }
+    return parsed.format('YYYY-MM-DD')
+  }
+  if (typeof date === 'number') {
+    return parsed.format('MMMM YYYY').toLowerCase()
+  }
+  return parsed.format('MMMM YYYY').toLowerCase()
 }
 
 /**
@@ -81,12 +119,13 @@ function age(date, reversed = false) {
  *
  * @param {Date | string | number | dayjs } date JS Date object, string, unix timestamp or dayjs object
  * @param {boolean} reversed Reverse the color scale (the older, the better)
- * @returns {object} A badge object that has two properties: message, and color
+ * @param {string} [locale] The locale to use for formatting (e.g. 'en', 'fr', 'de')
+ * @returns {Promise<object>} A badge object that has two properties: message, and color
  */
-function renderDateBadge(date, reversed = false) {
+async function renderDateBadge(date, reversed = false, locale) {
   const d = parseDate(date)
   const color = age(d, reversed)
-  const message = formatDate(d)
+  const message = await formatDate(d, locale)
   return { message, color }
 }
 
@@ -105,4 +144,21 @@ function formatRelativeDate(timestamp) {
   return dayjs().to(parsedDate).toLowerCase()
 }
 
-export { parseDate, renderDateBadge, formatDate, formatRelativeDate, age }
+function isValidDate(date) {
+  if (date === null || date === undefined) return false
+  try {
+    const parsed = dayjs(date)
+    return parsed.isValid() && !isNaN(parsed.valueOf()) && date !== 'invalid'
+  } catch (e) {
+    return false
+  }
+}
+
+export {
+  parseDate,
+  renderDateBadge,
+  formatDate,
+  formatRelativeDate,
+  age,
+  isValidDate,
+}

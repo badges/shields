@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Joi from 'joi'
 import checkErrorResponse from './check-error-response.js'
 import { InvalidParameter, InvalidResponse } from './errors.js'
-import { fetch } from './got.js'
+import { fetch } from './fetch.js'
 import { parseJson } from './json.js'
 import validate from './validate.js'
 

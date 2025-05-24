@@ -2,6 +2,7 @@
   "name": "badge-maker",
   "version": "4.1.0",
   "description": "Shields.io badge library",
+  "type": "module",
   "keywords": [
     "GitHub",
     "badge",

@@ -15,11 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - node: '16'
-          - node: '18'
-          - node: '20'
-          - node: '22'
+        node: [20, 22, 24]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

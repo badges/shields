@@ -1,6 +1,6 @@
 'use strict'
 
-const { fromString } = require('css-color-converter')
+import { fromString } from 'css-color-converter'
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
 const namedColors = {
@@ -79,10 +79,4 @@ function brightness(color) {
   return 0
 }
 
-module.exports = {
-  namedColors,
-  isHexColor,
-  normalizeColor,
-  toSvgColor,
-  brightness,
-}
+export { namedColors, isHexColor, normalizeColor, toSvgColor, brightness }

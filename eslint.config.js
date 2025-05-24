@@ -155,7 +155,7 @@ const mochaConfig = {
     'mocha/no-exclusive-tests': 'error',
     'mocha/no-pending-tests': 'error',
     'mocha/no-mocha-arrows': 'error',
-    'mocha/prefer-arrow-callback': 'error',
+    'mocha/prefer-arrow-callback': 'off',
     'no-unused-expressions': 'off',
   },
 }

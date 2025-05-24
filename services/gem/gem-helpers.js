@@ -1,15 +1,15 @@
-import { valid, maxSatisfying, prerelease } from '@renovatebot/ruby-semver'
+import semver from 'semver'
 
 const description =
   '[Ruby Gems](https://rubygems.org/) is a registry for ruby libraries'
 
 function latest(versions) {
   // latest Ruby Gems version, including pre-releases
-  return maxSatisfying(versions, '>0')
+  return semver.maxSatisfying(versions, '>0')
 }
 
 function versionColor(version) {
-  if (!valid(version)) {
+  if (!semver.valid(version)) {
     return 'lightgrey'
   }
 
@@ -19,7 +19,7 @@ function versionColor(version) {
     first = version[1]
   }
 
-  if (first === '0' || prerelease(version)) {
+  if (first === '0' || semver.prerelease(version)) {
     return 'orange'
   }
   return 'blue'

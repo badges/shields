@@ -20,8 +20,9 @@ import ServiceTester from './service-tester.js'
  */
 async function createServiceTester() {
   const servicePath = caller().replace('.tester.js', '.service.js')
-  const ServiceClass = Object.values(await import(servicePath))[0]
-  if (!(ServiceClass.prototype instanceof BaseService)) {
+  const module = await import(servicePath)
+  const ServiceClass = module.default || Object.values(module)[0]
+  if (!ServiceClass || !(ServiceClass.prototype instanceof BaseService)) {
     throw Error(
       `${servicePath} does not export a single service. Invoke new ServiceTester() directly.`,
     )

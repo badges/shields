@@ -29,6 +29,9 @@ const queryParamSchema = Joi.object({
     .valid(...displayEnum)
     .default('author'),
   gitea_url: optionalUrl,
+  locale: Joi.string().description(
+    'The locale to use for date formatting (e.g. en, fr, de)',
+  ),
 }).required()
 
 export default class GiteaLastCommit extends GiteaBase {
@@ -129,6 +132,7 @@ export default class GiteaLastCommit extends GiteaBase {
       gitea_url: baseUrl = 'https://gitea.com',
       display_timestamp: displayTimestamp,
       path,
+      locale,
     },
   ) {
     const body = await this.fetch({
@@ -138,6 +142,6 @@ export default class GiteaLastCommit extends GiteaBase {
       baseUrl,
       path,
     })
-    return renderDateBadge(body[0].commit[displayTimestamp].date)
+    return renderDateBadge(body[0].commit[displayTimestamp].date, false, locale)
   }
 }

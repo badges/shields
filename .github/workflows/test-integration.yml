@@ -48,3 +48,6 @@ jobs:
         uses: ./.github/actions/integration-tests
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+    matrix:
+      node: [20, 22, 24]

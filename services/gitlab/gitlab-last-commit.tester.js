@@ -65,3 +65,10 @@ t.create('last commit (no commits found)')
     label: 'last commit',
     message: 'no commits found',
   })
+
+t.create('last commit (with locale)')
+  .get('/gitlab-org/gitlab.json?locale=de')
+  .expectBadge({
+    label: 'last commit',
+    message: isFormattedDate,
+  })

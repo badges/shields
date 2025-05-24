@@ -1,10 +1,10 @@
 import Joi from 'joi'
-import pep440 from '@renovatebot/pep440'
+import semver from 'semver'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const validatePep440 = (value, helpers) => {
-  if (!pep440.validRange(value)) {
+  if (!semver.validRange(value)) {
     return helpers.error('any.invalid')
   }
   return value

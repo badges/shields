@@ -45,3 +45,7 @@ t.create('last commit (repo not found)')
 t.create('last commit (no commits found)')
   .get('/badges/badgr.co/shielded.json?path=not/a/dir')
   .expectBadge({ label: 'last commit', message: 'no commits found' })
+
+t.create('last commit (with locale)')
+  .get('/eslint/eslint.json?locale=fr')
+  .expectBadge({ label: 'last commit', message: isFormattedDate })

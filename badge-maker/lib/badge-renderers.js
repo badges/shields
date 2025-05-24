@@ -55,12 +55,16 @@ function shouldWrapBodyWithLink({ links }) {
 function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
   const logoHeight = 14
   if (!logo) return ''
+
+  // Ensure logoWidth is at least logoHeight to maintain aspect ratio
+  const finalLogoWidth = Math.max(logoWidth, logoHeight)
+
   return new XmlElement({
     name: 'image',
     attrs: {
       x: horizPadding,
       y: 0.5 * (badgeHeight - logoHeight),
-      width: logoWidth,
+      width: finalLogoWidth,
       height: logoHeight,
       href: logo,
     },

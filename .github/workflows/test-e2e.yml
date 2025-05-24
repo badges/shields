@@ -47,3 +47,6 @@ jobs:
         with:
           name: screenshots
           path: cypress/screenshots
+
+    matrix:
+      node: [20, 22, 24]
