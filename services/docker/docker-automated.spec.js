@@ -1,7 +1,7 @@
+import { expect } from 'chai'
+import { createServiceTester } from '../tester.js'
+import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 import DockerAutomatedBuild from './docker-automated.service.js'
-const { expect } = require('chai')
-const { createServiceTester } = require('../tester')
-const { isVPlusDottedVersionAtLeastOne } = require('../test-validators')
 
 const t = createServiceTester(DockerAutomatedBuild)
 

@@ -1,7 +1,7 @@
 'use strict'
 
-const { test, given } = require('sazerac')
-const { XmlElement } = require('./xml')
+import { test, given } from 'sazerac'
+import { XmlElement } from './xml.js'
 
 function testRender(params) {
   return new XmlElement(params).render()
