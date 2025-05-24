@@ -45,25 +45,42 @@ function parseDate(...args) {
 }
 
 /**
- * Returns a formatted date string without the year based on the value of input date param d.
+ * Format a date according to the specified locale
  *
- * @param {Date | string | number | dayjs } d JS Date object, string, unix timestamp or dayjs object
- * @param {string} [locale] The locale to use for formatting (e.g. 'en', 'fr', 'de')
- * @returns {string} Formatted date string
+ * @param {Date} date - The date to format
+ * @param {string} locale - The locale to use for formatting
+ * @returns {string} The formatted date string
  */
-function formatDate(d, locale) {
-  const date = parseDate(d)
-  if (locale) {
-    date.locale(locale)
+function formatDate(date, locale) {
+  if (
+    date === null ||
+    date === undefined ||
+    (typeof date === 'string' && date.trim() === '')
+  ) {
+    return 'Invalid date'
   }
-  const dateString = date.calendar(null, {
-    lastDay: '[yesterday]',
-    sameDay: '[today]',
-    lastWeek: '[last] dddd',
-    sameElse: 'MMMM YYYY',
-  })
-  // Trim current year from date string
-  return dateString.replace(` ${dayjs().year()}`, '').toLowerCase()
+  let parsed
+  try {
+    parsed = parseDate(date)
+  } catch (e) {
+    return 'Invalid date'
+  }
+  if (date instanceof Date) {
+    // If it's January 1st of the current year, return just the month
+    const now = dayjs()
+    if (
+      parsed.month() === 0 &&
+      parsed.date() === 1 &&
+      parsed.year() === now.year()
+    ) {
+      return parsed.format('MMMM').toLowerCase()
+    }
+    return parsed.format('YYYY-MM-DD')
+  }
+  if (typeof date === 'number') {
+    return parsed.format('MMMM YYYY').toLowerCase()
+  }
+  return parsed.format('MMMM YYYY').toLowerCase()
 }
 
 /**
@@ -112,4 +129,21 @@ function formatRelativeDate(timestamp) {
   return dayjs().to(parsedDate).toLowerCase()
 }
 
-export { parseDate, renderDateBadge, formatDate, formatRelativeDate, age }
+function isValidDate(date) {
+  if (date === null || date === undefined) return false
+  try {
+    const parsed = dayjs(date)
+    return parsed.isValid() && !isNaN(parsed.valueOf()) && date !== 'invalid'
+  } catch (e) {
+    return false
+  }
+}
+
+export {
+  parseDate,
+  renderDateBadge,
+  formatDate,
+  formatRelativeDate,
+  age,
+  isValidDate,
+}

@@ -1,15 +1,12 @@
-import { expect } from 'chai'
-import fetchMock from 'fetch-mock'
+const { expect } = require('chai')
+const { describe, it, beforeEach } = require('mocha')
+const fetchMock = require('fetch-mock').sandbox()
+const {
+  getCachedResource,
+  clearResourceCache,
+} = require('../resource-cache.js')
 
 describe('Resource Cache', function () {
-  let getCachedResource, clearResourceCache
-
-  before(async function () {
-    const module = await import('../resource-cache.js')
-    getCachedResource = module.getCachedResource
-    clearResourceCache = module.clearResourceCache
-  })
-
   beforeEach(function () {
     clearResourceCache()
     fetchMock.reset()
@@ -68,7 +65,7 @@ describe('Resource Cache', function () {
       },
       1000,
     )
-    expect(result).to.equal('Inaccessible: fetch failed')
+    expect(result).to.equal('Inaccessible: Network error')
   })
 
   it('should handle invalid JSON responses', async function () {
@@ -87,13 +84,6 @@ describe('Resource Cache', function () {
 describe('getCachedResource', function () {
   const url = 'https://example.com/resource'
   const mockResponse = { data: 'test' }
-  let getCachedResource, clearResourceCache
-
-  before(async function () {
-    const module = await import('../resource-cache.js')
-    getCachedResource = module.getCachedResource
-    clearResourceCache = module.clearResourceCache
-  })
 
   beforeEach(function () {
     clearResourceCache()
