@@ -5,7 +5,7 @@
  * @module
  */
 
-import { valid, parse } from 'python-semver'
+import semver from 'semver'
 
 /**
  * Determines the color used for a badge based on version.
@@ -39,10 +39,10 @@ function version(version) {
  * @returns {string} Badge color
  */
 function pep440VersionColor(version) {
-  if (!valid(version)) {
+  if (!semver.valid(version)) {
     return 'lightgrey'
   }
-  const parsedVersion = parse(version)
+  const parsedVersion = semver.parse(version)
   if (parsedVersion.prerelease || parsedVersion.major === 0) {
     return 'orange'
   }
