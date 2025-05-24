@@ -9,8 +9,9 @@ on:
 jobs:
   test-services:
     runs-on: ubuntu-latest
-    matrix:
-      node: [20, 22, 24]
+    strategy:
+      matrix:
+        node: [20, 22, 24]
 
     steps:
       - name: Checkout
@@ -19,7 +20,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
 
       - name: Service tests (triggered from local branch)
         if: github.event.pull_request.head.repo.full_name == github.repository
