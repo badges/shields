@@ -1,17 +1,10 @@
-import { expect } from 'chai'
 import { createServiceTester } from '../tester.js'
-import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
-import DockerAutomatedBuild from './docker-automated.service.js'
 
-const t = createServiceTester(DockerAutomatedBuild)
+// Validator for 'automated' or 'manual' message
+const isAutomatedOrManual = /^(automated|manual)$/
 
-describe('DockerAutomatedBuild', function () {
-  it('returns the expected response', async function () {
-    const response = await t.request({ user: 'jrottenberg', name: 'ffmpeg' })
-    expect(response).to.be.an('object')
-    expect(response).to.have.property('schemaVersion', 1)
-    expect(response).to.have.property('label', 'docker build')
-    expect(response).to.have.property('message')
-    expect(response.message).to.match(isVPlusDottedVersionAtLeastOne)
-  })
-})
+export const t = await createServiceTester()
+
+t.create('docker automated build (automated)')
+  .get('/jrottenberg/ffmpeg.json')
+  .expectBadge({ label: 'docker build', message: isAutomatedOrManual })
