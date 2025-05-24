@@ -106,6 +106,6 @@ export default class GithubLastCommit extends GithubAuthV3Service {
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return renderDateBadge(commit[displayTimestamp].date, false, locale)
+    return await renderDateBadge(commit[displayTimestamp].date, false, locale)
   }
 }

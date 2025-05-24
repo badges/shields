@@ -182,6 +182,7 @@
     "eslint-plugin-sort-class-members": "1.21.0",
     "form-data": "^4.0.2",
     "globals": "16.1.0",
+    "icedfrisby-nock": "^2.1.0",
     "is-svg": "^6.0.0",
     "jsdoc": "^4.0.4",
     "lint-staged": "^16.0.0",

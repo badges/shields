@@ -1,4 +1,4 @@
-name: Main (Node 18)
+name: Frontend
 on:
   pull_request:
     types: [opened, reopened, synchronize]
@@ -8,7 +8,7 @@ on:
       - 'dependabot/**'
 
 jobs:
-  test-main:
+  test-frontend:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/setup
         with:
           node-version: ${{ matrix.node }}
+          cypress: true
 
-      - name: Core tests
-        uses: ./.github/actions/core-tests
+      - name: Frontend tests
+        run: npm run test:frontend
