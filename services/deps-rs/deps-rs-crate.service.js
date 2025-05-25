@@ -18,12 +18,8 @@ export default class DepsRsCrate extends BaseDepsRsService {
           },
           {
             name: 'version',
-            example: 'latest',
+            example: '2.0.101',
             description: 'Version number or "latest"',
-            schema: {
-              type: 'string',
-              examples: ['latest', '2.0.101', '1.0.0'],
-            },
           },
         ),
       },
