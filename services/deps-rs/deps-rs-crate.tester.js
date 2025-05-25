@@ -18,4 +18,4 @@ t.create('dependencies (valid crate with specific version)')
 
 t.create('dependencies (not found)')
   .get('/not-a-real-package/latest.json')
-  .expectBadge({ label: 'dependencies', message: 'unknown' })
+  .expectBadge({ label: 'dependencies', message: 'not found' })
