@@ -3,12 +3,12 @@ import { BaseDepsRsService, description } from './deps-rs-base.js'
 
 export default class DepsRsCrate extends BaseDepsRsService {
   static category = 'dependencies'
-  static route = { base: 'deps-rs', pattern: ':crate/:version?' }
+  static route = { base: 'deps-rs', pattern: ':crate/:version' }
 
   static openApi = {
-    '/deps-rs/{crate}': {
+    '/deps-rs/{crate}/latest': {
       get: {
-        summary: 'Deps.rs Crate Dependencies',
+        summary: 'Deps.rs Crate Dependencies (latest)',
         description,
         parameters: pathParams({
           name: 'crate',
@@ -18,7 +18,7 @@ export default class DepsRsCrate extends BaseDepsRsService {
     },
     '/deps-rs/{crate}/{version}': {
       get: {
-        summary: 'Deps.rs Crate Dependencies (version)',
+        summary: 'Deps.rs Crate Dependencies (specific version)',
         description,
         parameters: pathParams(
           {

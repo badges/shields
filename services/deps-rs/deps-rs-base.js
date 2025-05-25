@@ -16,13 +16,11 @@ class BaseDepsRsService extends BaseJsonService {
    *
    * @param {object} options - The options for the request
    * @param {string} options.crate - The crate name.
-   * @param {string} [options.version] - The crate version number (optional).
+   * @param {string} options.version - The crate version number or 'latest'.
    * @returns {Promise<object>} the JSON response from the API.
    */
   async fetchCrate({ crate, version }) {
-    const url = version
-      ? `https://deps.rs/crate/${crate}/${version}/shield.json`
-      : `https://deps.rs/crate/${crate}/latest/shield.json`
+    const url = `https://deps.rs/crate/${crate}/${version}/shield.json`
     return this._requestJson({ schema: depsResponseSchema, url })
   }
 
