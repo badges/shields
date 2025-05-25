@@ -11,4 +11,4 @@ t.create('dependencies (valid repo)')
 
 t.create('dependencies (not found)')
   .get('/github/not-a-real-user/not-a-real-repo.json')
-  .expectBadge({ label: 'dependencies', message: 'not found' })
+  .expectBadge({ label: 'dependencies', message: 'unknown' })
