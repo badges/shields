@@ -6,9 +6,20 @@ export default class DepsRsCrate extends BaseDepsRsService {
   static route = { base: 'deps-rs', pattern: ':crate/:version' }
 
   static openApi = {
+    '/deps-rs/{crate}/latest': {
+      get: {
+        summary: 'Deps.rs Crate Dependencies (latest)',
+        description,
+        parameters: pathParams({
+          name: 'crate',
+          example: 'syn',
+          description: 'The name of the Rust crate',
+        }),
+      },
+    },
     '/deps-rs/{crate}/{version}': {
       get: {
-        summary: 'Deps.rs Crate Dependencies',
+        summary: 'Deps.rs Crate Dependencies (specific version)',
         description,
         parameters: pathParams(
           {
@@ -19,7 +30,7 @@ export default class DepsRsCrate extends BaseDepsRsService {
           {
             name: 'version',
             example: '2.0.101',
-            description: 'Version number or "latest"',
+            description: 'Version number',
           },
         ),
       },
