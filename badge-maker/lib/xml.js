@@ -93,4 +93,4 @@ class ElementList {
   }
 }
 
-module.exports = { escapeXml, stripXmlWhitespace, XmlElement, ElementList }
+export { escapeXml, stripXmlWhitespace, XmlElement, ElementList }

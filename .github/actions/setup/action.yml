@@ -42,3 +42,22 @@ runs:
         echo "installing cypress binary"
         npm ci
       shell: bash
+
+    - name: Setup Node.js 20
+      shell: bash
+      run: |
+        curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+
+    - name: Verify Node.js version
+      shell: bash
+      run: |
+        node --version
+        if [[ $(node -v) != "v20."* ]]; then
+          echo "Failed to install Node.js 20"
+          exit 1
+        fi
+
+    - name: Install npm
+      shell: bash
+      run: npm install -g npm@^10

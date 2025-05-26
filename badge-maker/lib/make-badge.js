@@ -56,7 +56,7 @@ export default function makeBadge({
   }
 
   return stripXmlWhitespace(
-    render({
+    render.render({
       label,
       message,
       links,

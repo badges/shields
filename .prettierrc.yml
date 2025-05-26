@@ -1,5 +1,7 @@
-semi: false
+semi: true
 singleQuote: true
-bracketSpacing: true
+trailingComma: all
+printWidth: 100
+tabWidth: 2
 endOfLine: lf
 arrowParens: avoid

@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: ['ubuntu-latest', 'windows-latest']
-        node: [18]
+        node: [16]
 
     runs-on: ${{ matrix.os }}
 

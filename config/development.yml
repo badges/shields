@@ -1,8 +1,5 @@
-public:
-  bind:
-    address: 'localhost'
+'localhost'
 
-  cors:
-    allowedOrigin: ['http://localhost:3000']
+  ['http://localhost:3000']
 
-  handleInternalErrors: false
+  false

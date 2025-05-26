@@ -1,14 +1,9 @@
-public:
-  bind:
-    address: 'BIND_ADDRESS'
+address: 'BIND_ADDRESS'
     port: 'PORT'
 
-  metrics:
-    prometheus:
-      enabled: 'METRICS_PROMETHEUS_ENABLED'
+  enabled: 'METRICS_PROMETHEUS_ENABLED'
       endpointEnabled: 'METRICS_PROMETHEUS_ENDPOINT_ENABLED'
-    influx:
-      enabled: 'METRICS_INFLUX_ENABLED'
+    enabled: 'METRICS_INFLUX_ENABLED'
       url: 'METRICS_INFLUX_URL'
       timeoutMilliseconds: 'METRICS_INFLUX_TIMEOUT_MILLISECONDS'
       intervalSeconds: 'METRICS_INFLUX_INTERVAL_SECONDS'
@@ -16,8 +11,7 @@ public:
       instanceIdEnvVarName: 'METRICS_INFLUX_INSTANCE_ID_ENV_VAR_NAME'
       envLabel: 'METRICS_INFLUX_ENV_LABEL'
 
-  ssl:
-    isSecure: 'HTTPS'
+  isSecure: 'HTTPS'
     key: 'HTTPS_KEY'
     cert: 'HTTPS_CRT'
 
@@ -25,47 +19,28 @@ public:
 
   rasterUrl: 'RASTER_URL'
 
-  cors:
-    allowedOrigin:
-      __name: 'ALLOWED_ORIGIN'
+  __name: 'ALLOWED_ORIGIN'
       __format: 'json'
 
-  services:
-    bitbucketServer:
-      authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
-    drone:
-      authorizedOrigins: 'DRONE_ORIGINS'
-    gitea:
-      authorizedOrigins: 'GITEA_ORIGINS'
-    github:
-      baseUri: 'GITHUB_URL'
-      debug:
-        enabled: 'GITHUB_DEBUG_ENABLED'
+  authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
+    authorizedOrigins: 'DRONE_ORIGINS'
+    authorizedOrigins: 'GITEA_ORIGINS'
+    baseUri: 'GITHUB_URL'
+      enabled: 'GITHUB_DEBUG_ENABLED'
         intervalSeconds: 'GITHUB_DEBUG_INTERVAL_SECONDS'
-    gitlab:
-      authorizedOrigins: 'GITLAB_ORIGINS'
-    jenkins:
-      authorizedOrigins: 'JENKINS_ORIGINS'
-    jira:
-      authorizedOrigins: 'JIRA_ORIGINS'
-    nexus:
-      authorizedOrigins: 'NEXUS_ORIGINS'
-    npm:
-      authorizedOrigins: 'NPM_ORIGINS'
-    obs:
-      authorizedOrigins: 'OBS_ORIGINS'
-    pypi:
-      baseUri: 'PYPI_URL'
-    sonar:
-      authorizedOrigins: 'SONAR_ORIGINS'
-    teamcity:
-      authorizedOrigins: 'TEAMCITY_ORIGINS'
-    weblate:
-      authorizedOrigins: 'WEBLATE_ORIGINS'
+    authorizedOrigins: 'GITLAB_ORIGINS'
+    authorizedOrigins: 'JENKINS_ORIGINS'
+    authorizedOrigins: 'JIRA_ORIGINS'
+    authorizedOrigins: 'NEXUS_ORIGINS'
+    authorizedOrigins: 'NPM_ORIGINS'
+    authorizedOrigins: 'OBS_ORIGINS'
+    baseUri: 'PYPI_URL'
+    authorizedOrigins: 'SONAR_ORIGINS'
+    authorizedOrigins: 'TEAMCITY_ORIGINS'
+    authorizedOrigins: 'WEBLATE_ORIGINS'
     trace: 'TRACE_SERVICES'
 
-  cacheHeaders:
-    defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
+  defaultCacheLengthSeconds: 'BADGE_MAX_AGE_SECONDS'
 
   fetchLimit: 'FETCH_LIMIT'
   userAgentBase: 'USER_AGENT_BASE'
@@ -75,8 +50,7 @@ public:
 
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
-private:
-  azure_devops_token: 'AZURE_DEVOPS_TOKEN'
+azure_devops_token: 'AZURE_DEVOPS_TOKEN'
   bitbucket_username: 'BITBUCKET_USER'
   bitbucket_password: 'BITBUCKET_PASS'
   bitbucket_server_username: 'BITBUCKET_SERVER_USER'

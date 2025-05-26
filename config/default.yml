@@ -1,38 +1,24 @@
-public:
-  bind:
-    address: '::'
-  metrics:
-    prometheus:
-      enabled: false
-      endpointEnabled: false
-    influx:
-      enabled: false
-      timeoutMilliseconds: 1000
-      intervalSeconds: 15
-  ssl:
-    isSecure: false
-  cors:
-    allowedOrigin: []
-  services:
-    github:
-      baseUri: 'https://api.github.com'
-      debug:
-        enabled: false
-        intervalSeconds: 200
+address: '::'
+  false
+      false
+    false
+      1000
+      15
+  false
+  []
+  baseUri: 'https://api.github.com'
+      false
+        200
       restApiVersion: '2022-11-28'
-    obs:
-      authorizedOrigins: 'https://api.opensuse.org'
-    pypi:
-      baseUri: 'https://pypi.org'
-    weblate:
-      authorizedOrigins: 'https://hosted.weblate.org'
-    trace: false
-  cacheHeaders:
-    defaultCacheLengthSeconds: 120
-  handleInternalErrors: true
+    authorizedOrigins: 'https://api.opensuse.org'
+    baseUri: 'https://pypi.org'
+    authorizedOrigins: 'https://hosted.weblate.org'
+    false
+  120
+  true
   fetchLimit: '10MB'
   userAgentBase: 'shields (self-hosted)'
-  requestTimeoutSeconds: 120
-  requestTimeoutMaxAgeSeconds: 30
-  requireCloudflare: false
-private: {}
+  120
+  30
+  false
+{}

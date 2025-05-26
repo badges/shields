@@ -1,5 +1,4 @@
 name: 'draft-release'
 description: 'Generate a changelog and propose a release PR'
-runs:
-  using: 'docker'
+using: 'docker'
   image: 'Dockerfile'
