@@ -1,5 +1,8 @@
-'localhost'
+server:
+  address: 'localhost'
 
-  ['http://localhost:3000']
+allowedOrigins:
+  - 'http://localhost:3000'
 
-  false
+https:
+  enabled: false

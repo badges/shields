@@ -1,24 +1,44 @@
-address: '::'
-  false
-      false
-    false
-      1000
-      15
-  false
-  []
-  baseUri: 'https://api.github.com'
-      false
-        200
-      restApiVersion: '2022-11-28'
+server:
+  address: '::'
+  port: 8080
+
+metrics:
+  prometheus:
+    enabled: false
+    endpointEnabled: false
+  influx:
+    enabled: false
+    timeoutMilliseconds: 1000
+    intervalSeconds: 15
+
+https:
+  enabled: false
+
+allowedOrigins: []
+
+services:
+  github:
+    baseUri: 'https://api.github.com'
+    debug:
+      enabled: false
+      intervalSeconds: 200
+    restApiVersion: '2022-11-28'
+  opensuse:
     authorizedOrigins: 'https://api.opensuse.org'
+  pypi:
     baseUri: 'https://pypi.org'
+  weblate:
     authorizedOrigins: 'https://hosted.weblate.org'
-    false
-  120
-  true
+
+cache:
+  defaultCacheLengthSeconds: 120
+
+fetch:
+  enabled: true
   fetchLimit: '10MB'
   userAgentBase: 'shields (self-hosted)'
-  120
-  30
-  false
-{}
+  requestTimeoutSeconds: 120
+  requestTimeoutMaxAgeSeconds: 30
+  requireCloudflare: false
+
+tokens: {}

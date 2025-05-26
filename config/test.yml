@@ -1,8 +1,12 @@
-address: 'localhost'
-    1111
+server:
+  address: 'localhost'
+  port: 1111
 
+redirect:
   redirectUrl: 'http://frontend.example.test'
 
+raster:
   rasterUrl: 'http://raster.example.test'
 
-  false
+https:
+  enabled: false
