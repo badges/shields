@@ -261,6 +261,43 @@ describe('coalesceBadge', function () {
         ),
       ).to.include({ logo: logoSvg })
     })
+
+    it('uses default width when custom svg is provided and logoSize is not auto', function () {
+      const logoSvg =
+        'data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHdpZHRoPSI1IiBoZWlnaHQ9IjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+'
+
+      expect(coalesceBadge({ logo: logoSvg }, {}, {}).logoWidth).to.be.undefined
+    })
+
+    it('uses default width when custom svg is provided that is not base64-encoded', function () {
+      const logoSvg = 'data:,HelloWorld'
+
+      expect(coalesceBadge({ logo: logoSvg }, {}, {}).logoWidth).to.be.undefined
+    })
+
+    it('uses image width when custom svg is provided and logoSize is auto', function () {
+      const logoSvg =
+        'data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHdpZHRoPSI1IiBoZWlnaHQ9IjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+'
+
+      expect(
+        coalesceBadge({ logo: logoSvg, logoSize: 'auto' }, {}, {}),
+      ).to.include({
+        logoSize: 'auto',
+        logoWidth: 70,
+      })
+    })
+
+    it('uses image width when custom non-svg is provided and logoSize is auto', function () {
+      const logoSvg =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAABCAIAAACZnPOkAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+kFDwkfDkgvZ9oAAAALSURBVAjXY2BABQAAEAABocUhwQAAAABJRU5ErkJggg=='
+
+      expect(
+        coalesceBadge({ logo: logoSvg, logoSize: 'auto' }, {}, {}),
+      ).to.include({
+        logoSize: 'auto',
+        logoWidth: 70,
+      })
+    })
   })
 
   describe('Logo size', function () {
