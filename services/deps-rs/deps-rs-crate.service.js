@@ -40,9 +40,8 @@ export default class DepsRsCrate extends BaseDepsRsService {
   async handle({ crate, version }) {
     const json = await this.fetchCrate({ crate, version })
     return {
-      label: json.label,
       message: json.message,
-      color: json.color,
+      color: this.constructor.mapColor(json.color, json.message),
     }
   }
 }

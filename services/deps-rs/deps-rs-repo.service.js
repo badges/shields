@@ -31,9 +31,8 @@ export default class DepsRsRepo extends BaseDepsRsService {
   async handle({ site, user, repo }) {
     const json = await this.fetchRepo({ site, user, repo })
     return {
-      label: json.label,
       message: json.message,
-      color: json.color,
+      color: this.constructor.mapColor(json.color, json.message),
     }
   }
 }
