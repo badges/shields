@@ -3,20 +3,18 @@ import { BaseJsonService } from '../index.js'
 
 const depsResponseSchema = Joi.object({
   message: Joi.string().required(),
-  color: Joi.string().required(),
 }).required()
 
 class BaseDepsRsService extends BaseJsonService {
   static defaultBadgeData = { label: 'dependencies' }
 
   /**
-   * Maps deps.rs color values to shields color scheme
+   * Maps message values to shields color scheme
    *
-   * @param {string} depsColor - The color returned by deps.rs API
    * @param {string} message - The message to help determine appropriate color
    * @returns {string} The shields color
    */
-  static mapColor(depsColor, message) {
+  static mapColor(message) {
     const normalizedMessage = message.toLowerCase()
 
     const colorMap = {
@@ -30,7 +28,17 @@ class BaseDepsRsService extends BaseJsonService {
       'not found': 'lightgrey',
     }
 
-    return colorMap[normalizedMessage] || depsColor
+    if (colorMap[normalizedMessage]) {
+      return colorMap[normalizedMessage]
+    }
+
+    for (const [key, color] of Object.entries(colorMap)) {
+      if (normalizedMessage.includes(key)) {
+        return color
+      }
+    }
+
+    return 'lightgrey'
   }
 
   /**

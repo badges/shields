@@ -32,7 +32,7 @@ export default class DepsRsRepo extends BaseDepsRsService {
     const json = await this.fetchRepo({ site, user, repo })
     return {
       message: json.message,
-      color: this.constructor.mapColor(json.color, json.message),
+      color: this.constructor.mapColor(json.message),
     }
   }
 }
