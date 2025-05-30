@@ -19,11 +19,9 @@ class BaseDepsRsService extends BaseJsonService {
 
     const colorMap = {
       'up to date': 'brightgreen',
-      secure: 'brightgreen',
-      'maybe insecure': 'orange',
-      outdated: 'orange',
+      none: 'brightgreen',
+      'maybe insecure': 'yellowgreen',
       insecure: 'red',
-      vulnerable: 'red',
       unknown: 'lightgrey',
       'not found': 'lightgrey',
     }
@@ -32,10 +30,9 @@ class BaseDepsRsService extends BaseJsonService {
       return colorMap[normalizedMessage]
     }
 
-    for (const [key, color] of Object.entries(colorMap)) {
-      if (normalizedMessage.includes(key)) {
-        return color
-      }
+    // e.g. "1 of 2 outdated"
+    if (normalizedMessage.endsWith('outdated')) {
+      return 'yellow'
     }
 
     return 'lightgrey'
