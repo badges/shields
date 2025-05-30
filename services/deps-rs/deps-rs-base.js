@@ -19,30 +19,18 @@ class BaseDepsRsService extends BaseJsonService {
   static mapColor(depsColor, message) {
     const normalizedMessage = message.toLowerCase()
 
-    if (
-      normalizedMessage.includes('maybe insecure') ||
-      normalizedMessage.includes('outdated')
-    ) {
-      return 'orange'
-    } else if (
-      normalizedMessage.includes('up to date') ||
-      normalizedMessage === 'secure'
-    ) {
-      return 'brightgreen'
-    } else if (
-      normalizedMessage.includes('insecure') ||
-      normalizedMessage.includes('vulnerable')
-    ) {
-      return 'red'
-    } else if (
-      normalizedMessage.includes('unknown') ||
-      normalizedMessage.includes('not found')
-    ) {
-      return 'lightgrey'
+    const colorMap = {
+      'up to date': 'brightgreen',
+      secure: 'brightgreen',
+      'maybe insecure': 'orange',
+      outdated: 'orange',
+      insecure: 'red',
+      vulnerable: 'red',
+      unknown: 'lightgrey',
+      'not found': 'lightgrey',
     }
 
-    // Default fallback
-    return 'lightgrey'
+    return colorMap[normalizedMessage] || depsColor
   }
 
   /**
