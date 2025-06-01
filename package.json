@@ -184,7 +184,7 @@
     "icedfrisby-nock": "^2.1.0",
     "is-svg": "^6.0.0",
     "jsdoc": "^4.0.4",
-    "lint-staged": "^16.0.0",
+    "lint-staged": "^16.1.0",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.8",
     "mocha": "^11.5.0",
