@@ -9,13 +9,13 @@ import {
   queryParams,
 } from '../index.js'
 
-const strategyEnum = ['release', 'latest', 'comparableVersion']
+const strategyEnum = ['highestVersion', 'releaseProperty', 'latestProperty']
 
 const strategyDocs = `The strategy used to determine the version that will be shown
 <ul>
-  <li><code>release</code> - use the "release" metadata property (default)</li>
-  <li><code>latest</code> - use the "latest" metadata property</li>
-  <li><code>comparableVersion</code> - sort versions using Maven's ComparableVersion semantics</li>
+  <li><code>highestVersion</code> - sort versions using Maven's ComparableVersion semantics (default)</li>
+  <li><code>releaseProperty</code> - use the "release" metadata property</li>
+  <li><code>latestProperty</code> - use the "latest" metadata property</li>
 </ul>`
 
 const queryParamSchema = Joi.object({
@@ -24,7 +24,7 @@ const queryParamSchema = Joi.object({
   versionSuffix: Joi.string().optional(),
   strategy: Joi.string()
     .valid(...strategyEnum)
-    .default('release')
+    .default('highestVersion')
     .optional(),
 }).required()
 
@@ -64,7 +64,7 @@ export default class MavenMetadata extends BaseXmlService {
             name: 'strategy',
             description: strategyDocs,
             schema: { type: 'string', enum: strategyEnum },
-            example: 'release',
+            example: 'highestVersion',
           },
         ),
       },
@@ -84,21 +84,21 @@ export default class MavenMetadata extends BaseXmlService {
   }
 
   static getLatestVersion(data, strategy) {
-    if (strategy === 'latest') {
+    if (strategy === 'latestProperty') {
       if (data.metadata.versioning.latest === undefined) {
         throw new InvalidResponse({
           prettyMessage: "property 'latest' not found",
         })
       }
       return data.metadata.versioning.latest
-    } else if (strategy === 'release') {
+    } else if (strategy === 'releaseProperty') {
       if (data.metadata.versioning.release === undefined) {
         throw new InvalidResponse({
           prettyMessage: "property 'release' not found",
         })
       }
       return data.metadata.versioning.release
-    } else if (strategy === 'comparableVersion') {
+    } else if (strategy === 'highestVersion') {
       if (
         data.metadata.versioning.versions.version === undefined ||
         data.metadata.versioning.versions.version.length === 0

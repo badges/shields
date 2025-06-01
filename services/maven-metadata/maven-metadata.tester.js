@@ -31,7 +31,7 @@ t.create('valid maven-metadata.xml uri')
 
 t.create('release strategy')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=release',
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=releaseProperty',
   )
   .intercept(nock =>
     nock('https://repo1.maven.org/maven2')
@@ -42,7 +42,7 @@ t.create('release strategy')
 
 t.create('latest strategy')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=latest',
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=latestProperty',
   )
   .intercept(nock =>
     nock('https://repo1.maven.org/maven2')
@@ -53,7 +53,7 @@ t.create('latest strategy')
 
 t.create('comparableVersion strategy')
   .get(
-    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=comparableVersion',
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=highestVersion',
   )
   .intercept(nock =>
     nock('https://repo1.maven.org/maven2')
