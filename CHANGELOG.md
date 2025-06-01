@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-06-01
+
+- Remove Non-Functional SVG Stroke Attribute in Social Badge Renderer [#11095](https://github.com/badges/shields/issues/11095)
+- run npm audit fix [#11076](https://github.com/badges/shields/issues/11076)
+- deprecate [pub] popularity badge [#11074](https://github.com/badges/shields/issues/11074)
+- deprecate [coincap] service [#11075](https://github.com/badges/shields/issues/11075)
+- Support [F-Droid] custom repos [#10792](https://github.com/badges/shields/issues/10792)
+- fix: consider decimal rating for Firefox extension [#11068](https://github.com/badges/shields/issues/11068)
+- fix: live test for [githubpipenv] wrong validation [#11053](https://github.com/badges/shields/issues/11053)
+- fix [githubpullrequestcheckstate] live tests - update pr num [#11054](https://github.com/badges/shields/issues/11054)
+- set shorter upstream request timeout on [endpoint] and [dynamic] badges [#10996](https://github.com/badges/shields/issues/10996)
+- Dependency updates
+
 ## server-2025-05-01
 
 - New experimental [DynamicRegex] badge [#10985](https://github.com/badges/shields/issues/10985)
