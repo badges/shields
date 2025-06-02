@@ -3,7 +3,10 @@ import { BaseDepsRsService, description } from './deps-rs-base.js'
 
 export default class DepsRsRepo extends BaseDepsRsService {
   static category = 'dependencies'
-  static route = { base: 'deps-rs/repo', pattern: ':site/:user/:repo' }
+  static route = {
+    base: 'deps-rs/repo',
+    pattern: ':site(github|gitlab|bitbucket|sourcehut|codeberg)/:user/:repo',
+  }
 
   static openApi = {
     '/deps-rs/repo/{site}/{user}/{repo}': {
@@ -14,6 +17,7 @@ export default class DepsRsRepo extends BaseDepsRsService {
           {
             name: 'site',
             example: 'github',
+            schema: { type: 'string', enum: this.getEnum('site') },
           },
           {
             name: 'user',
