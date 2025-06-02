@@ -2,11 +2,23 @@ import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
+const messageValidator = Joi.alternatives().try(
+  Joi.valid(
+    'up to date',
+    'none',
+    'maybe insecure',
+    'insecure',
+    'unknown',
+    'not found',
+  ),
+  Joi.string().pattern(/outdated$/),
+)
+
 t.create('dependencies (valid repo)')
   .get('/github/dtolnay/syn.json')
   .expectBadge({
     label: 'dependencies',
-    message: Joi.string(),
+    message: messageValidator,
   })
 
 t.create('dependencies (not found)')
