@@ -3,14 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 const messageValidator = Joi.alternatives().try(
-  Joi.valid(
-    'up to date',
-    'none',
-    'maybe insecure',
-    'insecure',
-    'unknown',
-    'not found',
-  ),
+  Joi.valid('up to date', 'none', 'maybe insecure', 'insecure'),
   Joi.string().pattern(/outdated$/),
 )
 
