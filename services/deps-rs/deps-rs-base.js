@@ -24,6 +24,7 @@ class BaseDepsRsService extends BaseJsonService {
       insecure: 'red',
       unknown: 'lightgrey',
       'not found': 'lightgrey',
+      invalid: 'lightgrey',
     }
 
     if (colorMap[normalizedMessage]) {
