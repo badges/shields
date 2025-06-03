@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/base-yaml.js</title>
+    <title>JSDoc: Source: services/deps-rs/deps-rs-base.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/base-yaml.js</h1>
+    <h1 class="page-title">Source: services/deps-rs/deps-rs-base.js</h1>
 
     
 
@@ -26,91 +26,91 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
+            <pre class="prettyprint source linenums"><code>import Joi from 'joi'
+import { BaseJsonService } from '../index.js'
 
-import emojic from 'emojic'
-import yaml from 'js-yaml'
-import BaseService from './base.js'
-import { InvalidResponse } from './errors.js'
-import trace from './trace.js'
+const depsResponseSchema = Joi.object({
+  message: Joi.string().required(),
+}).required()
 
-/**
- * Services which query a YAML endpoint should extend BaseYamlService
- *
- * @abstract
- */
-class BaseYamlService extends BaseService {
+class BaseDepsRsService extends BaseJsonService {
+  static defaultBadgeData = { label: 'dependencies' }
+
   /**
-   * Request data from an upstream API serving YAML,
-   * parse it and validate against a schema
+   * Maps message values to shields color scheme
    *
-   * @param {object} attrs Refer to individual attrs
-   * @param {Joi} attrs.schema Joi schema to validate the response against
-   * @param {string} attrs.url URL to request
-   * @param {object} [attrs.options={}] Options to pass to got. See
-   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
-   *    and custom error messages e.g: `{ 404: 'package not found' }`.
-   *    This can be used to extend or override the
-   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
-   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
-   *    and an object of params to pass when we construct an Inaccessible exception object
-   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
-   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
-   *    for allowed keys
-   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
-   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
-   *    that will be logged (to sentry, if configured).
-   * @param {object} [attrs.encoding='utf8'] Character encoding
-   * @returns {object} Parsed response
-   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
+   * @param {string} message - The message to help determine appropriate color
+   * @returns {string} The shields color
    */
-  async _requestYaml({
-    schema,
-    url,
-    options = {},
-    httpErrors = {},
-    systemErrors = {},
-    logErrors = [429],
-    encoding = 'utf8',
-  }) {
-    const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    const mergedOptions = {
-      ...{
-        headers: {
-          Accept:
-            'text/x-yaml, text/yaml, application/x-yaml, application/yaml, text/plain',
-        },
-      },
-      ...options,
+  static mapColor(message) {
+    const normalizedMessage = message.toLowerCase()
+
+    const colorMap = {
+      'up to date': 'brightgreen',
+      none: 'brightgreen',
+      'maybe insecure': 'yellowgreen',
+      insecure: 'red',
+      unknown: 'lightgrey',
+      'not found': 'lightgrey',
+      invalid: 'lightgrey',
     }
-    const { buffer } = await this._request({
+
+    if (colorMap[normalizedMessage]) {
+      return colorMap[normalizedMessage]
+    }
+
+    // e.g. "1 of 2 outdated"
+    if (normalizedMessage.endsWith('outdated')) {
+      return 'yellow'
+    }
+
+    return 'lightgrey'
+  }
+
+  /**
+   * Fetches data from the deps.rs API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.crate - The crate name.
+   * @param {string} options.version - The crate version number or 'latest'.
+   * @returns {Promise&lt;object>} the JSON response from the API.
+   */
+  async fetchCrate({ crate, version }) {
+    const url = `https://deps.rs/crate/${crate}/${version}/shield.json`
+    return this._requestJson({
+      schema: depsResponseSchema,
       url,
-      options: mergedOptions,
-      httpErrors,
-      systemErrors,
-      logErrors,
+      httpErrors: {
+        404: 'not found',
+      },
     })
-    let parsed
-    try {
-      parsed = yaml.load(buffer.toString(), encoding)
-    } catch (err) {
-      logTrace(emojic.dart, 'Response YAML (unparseable)', buffer)
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable yaml response',
-        underlyingError: err,
-      })
-    }
-    logTrace(emojic.dart, 'Response YAML (before validation)', parsed, {
-      deep: true,
+  }
+
+  /**
+   * Fetches data from the deps.rs API for a repository.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.site - The repository site (e.g., 'github').
+   * @param {string} options.user - The repository owner/user.
+   * @param {string} options.repo - The repository name.
+   * @returns {Promise&lt;object>} the JSON response from the API.
+   */
+  async fetchRepo({ site, user, repo }) {
+    const url = `https://deps.rs/repo/${site}/${user}/${repo}/shield.json`
+    return this._requestJson({
+      schema: depsResponseSchema,
+      url,
+      httpErrors: {
+        404: 'unknown',
+      },
     })
-    return this.constructor._validate(parsed, schema)
   }
 }
 
-export default BaseYamlService
+const description =
+  '[Deps.rs](https://deps.rs/) is a service that checks dependency security status in Rust projects.'
+
+export { BaseDepsRsService, description }
 </code></pre>
         </article>
     </section>
