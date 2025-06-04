@@ -62,6 +62,61 @@ t.create('comparableVersion strategy')
   )
   .expectBadge({ label: 'maven', message: 'v1.31-rc1' })
 
+t.create('comparableVersion strategy with versionPrefix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&versionPrefix=1.31',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, mockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'v1.31-rc1' })
+
+t.create('comparableVersion strategy with versionSuffix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&versionSuffix=1',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, mockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'v1.31-rc1' })
+
+t.create('comparableVersion strategy with versionPrefix and versionSuffix')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&versionPrefix=1.31&versionSuffix=1',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, mockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'v1.31-rc1' })
+
+t.create('comparableVersion strategy with filter')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&filter=*beta*',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, mockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'v1.31-beta1' })
+
+t.create('no versions matched')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&filter=foobar',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, mockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'no matching versions found' })
+
 t.create('invalid maven-metadata.xml uri')
   .get(
     '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/code/gson/gson/foobar.xml',

@@ -1,4 +1,5 @@
 import { redirector, pathParam } from '../index.js'
+import { commonParams } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
@@ -14,6 +15,7 @@ export default redirector({
         parameters: [
           pathParam({ name: 'groupId', example: 'com.google.guava' }),
           pathParam({ name: 'artifactId', example: 'guava' }),
+          ...commonParams,
         ],
       },
     },

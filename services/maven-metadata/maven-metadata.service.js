@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { matcher } from 'matcher'
 import { compare } from 'mvncmp'
 import { url } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
@@ -6,27 +7,28 @@ import {
   BaseXmlService,
   InvalidParameter,
   InvalidResponse,
+  NotFound,
   queryParams,
 } from '../index.js'
-
-const strategyEnum = ['highestVersion', 'releaseProperty', 'latestProperty']
-
-const strategyDocs = `The strategy used to determine the version that will be shown
-<ul>
-  <li><code>highestVersion</code> - sort versions using Maven's ComparableVersion semantics (default)</li>
-  <li><code>releaseProperty</code> - use the "release" metadata property</li>
-  <li><code>latestProperty</code> - use the "latest" metadata property</li>
-</ul>`
+import { strategyEnum, commonParams } from './maven-metadata.js'
 
 const queryParamSchema = Joi.object({
   metadataUrl: url,
+  // versionPrefix and versionSuffix params are undocumented
+  // but supported for legacy compatibility
   versionPrefix: Joi.string().optional(),
   versionSuffix: Joi.string().optional(),
+  // filter is now the preferred way to do this
+  filter: Joi.string().optional(),
   strategy: Joi.string()
     .valid(...strategyEnum)
     .default('highestVersion')
     .optional(),
-}).required()
+})
+  // versionPrefix/Suffix are invalid
+  // when combined with filter
+  .oxor('filter', 'versionPrefix')
+  .oxor('filter', 'versionSuffix')
 
 const schema = Joi.object({
   metadata: Joi.object({
@@ -60,12 +62,7 @@ export default class MavenMetadata extends BaseXmlService {
               'https://repo1.maven.org/maven2/com/google/guava/guava/maven-metadata.xml',
             required: true,
           },
-          {
-            name: 'strategy',
-            description: strategyDocs,
-            schema: { type: 'string', enum: strategyEnum },
-            example: 'highestVersion',
-          },
+          ...commonParams,
         ),
       },
     },
@@ -83,7 +80,14 @@ export default class MavenMetadata extends BaseXmlService {
     })
   }
 
-  static getLatestVersion(data, strategy) {
+  static applyFilter({ versions, filter }) {
+    if (!filter) {
+      return versions
+    }
+    return matcher(versions, filter)
+  }
+
+  static getLatestVersion({ data, strategy, filter }) {
     if (strategy === 'latestProperty') {
       if (data.metadata.versioning.latest === undefined) {
         throw new InvalidResponse({
@@ -107,26 +111,40 @@ export default class MavenMetadata extends BaseXmlService {
           prettyMessage: 'no versions found',
         })
       }
-      return data.metadata.versioning.versions.version
-        .sort(compare)
-        .reverse()[0]
+      const versions = this.applyFilter({
+        versions: data.metadata.versioning.versions.version,
+        filter,
+      })
+      if (versions.length === 0) {
+        throw new NotFound({ prettyMessage: 'no matching versions found' })
+      }
+      return versions.sort(compare).reverse()[0]
     }
     throw new InvalidParameter({ prettyMessage: 'unknown strategy' })
   }
 
   async handle(
     _namedParams,
-    { metadataUrl, versionPrefix, versionSuffix, strategy },
+    { metadataUrl, versionPrefix, versionSuffix, strategy, filter },
   ) {
-    if (versionPrefix !== undefined || versionSuffix !== undefined) {
+    if (
+      (versionPrefix !== undefined ||
+        versionSuffix !== undefined ||
+        filter !== undefined) &&
+      strategy !== 'highestVersion'
+    ) {
       throw new InvalidParameter({
-        prettyMessage:
-          'versionPrefix and versionSuffix params have been removed',
+        prettyMessage: `filter is not valid with strategy ${strategy}`,
       })
     }
+
+    if (versionPrefix !== undefined || versionSuffix !== undefined) {
+      filter = `${versionPrefix || ''}*${versionSuffix || ''}`
+    }
+
     const data = await this.fetch({ metadataUrl })
     return renderVersionBadge({
-      version: this.constructor.getLatestVersion(data, strategy),
+      version: this.constructor.getLatestVersion({ data, strategy, filter }),
     })
   }
 }

@@ -1,4 +1,5 @@
 import { redirector, pathParam } from '../index.js'
+import { commonParams } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
@@ -13,6 +14,7 @@ export default redirector({
         summary: 'Gradle Plugin Portal Version',
         parameters: [
           pathParam({ name: 'pluginId', example: 'com.gradle.plugin-publish' }),
+          ...commonParams,
         ],
       },
     },
