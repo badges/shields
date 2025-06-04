@@ -1593,7 +1593,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="53.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="53" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M53.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M53.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <g
     aria-hidden="true"
@@ -1682,7 +1682,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="70.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="70" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M70.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M70.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <image
     x="5"
@@ -1778,7 +1778,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="17.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="17" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M17.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M17.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <g
     aria-hidden="true"
@@ -1865,7 +1865,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="31.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="31" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M31.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M31.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <image
     x="5"
@@ -1959,7 +1959,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="31.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="31" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M31.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M31.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <image
     x="5"
@@ -2046,7 +2046,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="53.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="53" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M53.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M53.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <g
     aria-hidden="false"
@@ -2361,7 +2361,7 @@ exports['The badge generator "social" template badge generation should match sna
     />
     <rect x="70.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
     <rect x="70" y="7.5" width="0.5" height="5" stroke="#fafafa" />
-    <path d="M70.5 6.5 l-3 3v1 l3 3" stroke="d5d5d5" fill="#fafafa" />
+    <path d="M70.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
   </g>
   <image
     x="5"
