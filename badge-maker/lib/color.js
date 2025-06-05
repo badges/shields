@@ -1,9 +1,9 @@
 'use strict'
 
-const { fromString } = require('css-color-converter')
+import { fromString } from 'css-color-converter'
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
-const namedColors = {
+export const namedColors = {
   brightgreen: '#4c1',
   green: '#97ca00',
   yellow: '#dfb317',
@@ -33,7 +33,7 @@ Object.entries(aliases).forEach(([alias, original]) => {
 // This function returns false for `#ccc`. However `isCSSColor('#ccc')` is
 // true.
 const hexColorRegex = /^([\da-f]{3}){1,2}$/i
-function isHexColor(s = '') {
+export function isHexColor(s = '') {
   return hexColorRegex.test(s)
 }
 
@@ -41,7 +41,7 @@ function isCSSColor(color) {
   return typeof color === 'string' && fromString(color.trim())
 }
 
-function normalizeColor(color) {
+export function normalizeColor(color) {
   if (color === undefined) {
     return undefined
   } else if (color in namedColors) {
@@ -57,7 +57,7 @@ function normalizeColor(color) {
   }
 }
 
-function toSvgColor(color) {
+export function toSvgColor(color) {
   const normalized = normalizeColor(color)
   if (normalized in namedColors) {
     return namedColors[normalized]
@@ -68,7 +68,7 @@ function toSvgColor(color) {
   }
 }
 
-function brightness(color) {
+export function brightness(color) {
   if (color) {
     const cssColor = fromString(color)
     if (cssColor) {
@@ -77,12 +77,4 @@ function brightness(color) {
     }
   }
   return 0
-}
-
-module.exports = {
-  namedColors,
-  isHexColor,
-  normalizeColor,
-  toSvgColor,
-  brightness,
 }
