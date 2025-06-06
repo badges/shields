@@ -16,8 +16,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '16'
-          - node: '18'
           - node: '20'
           - node: '22'
     steps:
