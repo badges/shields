@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ImproperlyConfigured</title>
+    <title>JSDoc: Class: XmlElement</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ImproperlyConfigured</h1>
+    <h1 class="page-title">Class: XmlElement</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-core_base-service_errors.html">core/base-service/errors</a>~</span>ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-badge-maker_lib_xml.html">badge-maker/lib/xml</a>.</span>XmlElement<span class="signature">(attrs)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Throw this error when required credentials are missing</p></div>
+            <div class="class-description"><p>Representation of an XML element</p></div>
         
     
 </header>
@@ -46,12 +46,16 @@
     
 
     
-    <h4 class="name" id="ImproperlyConfigured"><span class="type-signature"></span>new ImproperlyConfigured<span class="signature">(props)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="XmlElement"><span class="type-signature"></span>new XmlElement<span class="signature">(attrs)</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Xml Element Constructor</p>
+</div>
 
 
 
@@ -86,13 +90,13 @@
 
         <tr>
             
-                <td class="name"><code>props</code></td>
+                <td class="name"><code>attrs</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="module-core_base-service_errors.html#~RuntimeErrorProps">module:core/base-service/errors~RuntimeErrorProps</a></span>
+<span class="param-type">object</span>
 
 
             
@@ -102,7 +106,152 @@
 
             
 
-            <td class="description last"><p>Refer to individual attrs</p></td>
+            <td class="description last"><p>Refer to individual attrs</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Name of the XML tag</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>content</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;(string|module:badge-maker/lib/xml~XmlElement)></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    []
+                
+                </td>
+            
+
+            <td class="description last"><p>Array of objects to render inside the tag. content may contain a mix of
+string and XmlElement objects. If content is <code>[]</code> or omitted the
+element will be rendered as a self-closing element.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last"><p>Object representing the tag's attributes as name/value pairs</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -143,7 +292,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_errors.js.html">core/base-service/errors.js</a>, <a href="core_base-service_errors.js.html#line132">line 132</a>
+        <a href="badge-maker_lib_xml.js.html">badge-maker/lib/xml.js</a>, <a href="badge-maker_lib_xml.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -190,6 +339,120 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="render"><span class="type-signature"></span>render<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Render the XML element to a string, applying appropriate escaping</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="badge-maker_lib_xml.js.html">badge-maker/lib/xml.js</a>, <a href="badge-maker_lib_xml.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>String representation of the XML element</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
