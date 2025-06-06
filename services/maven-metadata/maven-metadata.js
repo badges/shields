@@ -4,7 +4,7 @@ const strategyEnum = ['highestVersion', 'releaseProperty', 'latestProperty']
 
 const strategyDocs = `The strategy used to determine the version that will be shown
 <ul>
-  <li><code>highestVersion</code> - sort versions using Maven's ComparableVersion semantics (default)</li>
+  <li><code>highestVersion</code> - sort versions using Maven's ComparableVersion semantics and pick the highest (default)</li>
   <li><code>releaseProperty</code> - use the "release" metadata property</li>
   <li><code>latestProperty</code> - use the "latest" metadata property</li>
 </ul>`
