@@ -21,7 +21,7 @@ badge build passed :brightgreen > mybadge.svg
 
 ### As a library
 
-```ts
+```js
 import { makeBadge, ValidationError } from 'badge-maker'
 ```
 

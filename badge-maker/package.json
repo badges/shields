@@ -1,6 +1,6 @@
 {
   "name": "badge-maker",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "type": "module",
   "exports": "./lib/index.js",
   "description": "Shields.io badge library",
@@ -27,7 +27,7 @@
     "badge": "lib/badge-cli.js"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "collective": {
     "type": "opencollective",
