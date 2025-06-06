@@ -1,6 +1,8 @@
 {
   "name": "badge-maker",
   "version": "4.1.0",
+  "type": "module",
+  "exports": "./lib/index.js",
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",
@@ -10,7 +12,6 @@
     "shields.io"
   ],
   "types": "index.d.ts",
-  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",

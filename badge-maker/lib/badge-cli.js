@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-'use strict'
-
-const { namedColors } = require('./color')
-const { makeBadge } = require('./index')
+import { namedColors } from './color.js'
+import { makeBadge } from './index.js'
 
 if (process.argv.length < 4) {
   console.log('Usage: badge label message [:color] [@style]')
