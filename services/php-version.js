@@ -38,76 +38,44 @@ function asciiVersionCompare(v1, v2) {
  * @returns {object} Object containing version details
  */
 function numberedVersionData(version) {
-  // A version has a numbered part and a modifier part
-  // (eg, 1.0.0-patch, 2.0.x-dev).
-  const parts = version.split('-')
-  const numbered = parts[0]
+  // https://github.com/composer/semver/blob/46d9139568ccb8d9e7cdd4539cab7347568a5e2e/src/VersionParser.php#L39
+  const regex =
+    /^(\d+(?:\.\d+)*)(?:[._-]?(stable|beta|b|RC|alpha|a|patch|pl|p)?((?:[.-]?\d+)*)?)?([.-]?dev)?$/i
+  const match = version.match(regex)
 
-  // Aliases that get caught here.
-  if (numbered === 'dev') {
-    return {
-      numbers: parts[1],
-      modifier: 5,
-      modifierCount: 1,
-    }
+  if (!match || match.length < 5) {
+    throw new Error(`Unparseable PHP version: ${version}`)
   }
 
-  let modifierLevel = 3
+  let modifierLevel = 3 // default: stable/without modifiers
   let modifierLevelCount = 0
+
+  const modifier = match[2] ? match[2].toLowerCase() : ''
+  const modifierCountStr = match[3] || ''
+  const devModifier = match[4] ? match[4].toLowerCase() : ''
 
   // Normalization based on
   // https://github.com/composer/semver/blob/1.5.0/src/VersionParser.php
+  if (modifier === 'alpha' || modifier === 'a') {
+    modifierLevel = 0
+    modifierLevelCount = +modifierCountStr.replace(/[^\d]/g, '') || 1
+  } else if (modifier === 'beta' || modifier === 'b') {
+    modifierLevel = 1
+    modifierLevelCount = +modifierCountStr.replace(/[^\d]/g, '') || 1
+  } else if (modifier === 'rc') {
+    modifierLevel = 2
+    modifierLevelCount = +modifierCountStr.replace(/[^\d]/g, '') || 1
+  } else if (modifier === 'stable' || modifier === '') {
+    modifierLevel = 3
+    modifierLevelCount = 1
+  } else if (modifier === 'patch' || modifier === 'pl' || modifier === 'p') {
+    modifierLevel = 4
+    modifierLevelCount = +modifierCountStr.replace(/[^\d]/g, '') || 1
+  }
 
-  if (parts.length > 1) {
-    const modifier = parts[parts.length - 1]
-    const firstLetter = modifier.charCodeAt(0)
-    let modifierLevelCountString
-
-    // Modifiers: alpha < beta < RC < normal < patch < dev
-    if (firstLetter === 97 || firstLetter === 65) {
-      // a / A
-      modifierLevel = 0
-      if (/^alpha/i.test(modifier)) {
-        modifierLevelCountString = +modifier.slice(5)
-      } else {
-        modifierLevelCountString = +modifier.slice(1)
-      }
-    } else if (firstLetter === 98 || firstLetter === 66) {
-      // b / B
-      modifierLevel = 1
-      if (/^beta/i.test(modifier)) {
-        modifierLevelCountString = +modifier.slice(4)
-      } else {
-        modifierLevelCountString = +modifier.slice(1)
-      }
-    } else if (firstLetter === 82 || firstLetter === 114) {
-      // R / r
-      modifierLevel = 2
-      modifierLevelCountString = +modifier.slice(2)
-    } else if (firstLetter === 112) {
-      // p
-      modifierLevel = 4
-      if (/^patch/.test(modifier)) {
-        modifierLevelCountString = +modifier.slice(5)
-      } else {
-        modifierLevelCountString = +modifier.slice(1)
-      }
-    } else if (firstLetter === 100) {
-      // d
-      modifierLevel = 5
-      if (/^dev/.test(modifier)) {
-        modifierLevelCountString = +modifier.slice(3)
-      } else {
-        modifierLevelCountString = +modifier.slice(1)
-      }
-    }
-
-    // If we got the empty string, it defaults to a modifier count of 1.
-    if (!modifierLevelCountString) {
-      modifierLevelCount = 1
-    } else {
-      modifierLevelCount = +modifierLevelCountString
-    }
+  if (devModifier) {
+    modifierLevel = 5
+    modifierLevelCount = 1
   }
 
   /**
@@ -123,7 +91,7 @@ function numberedVersionData(version) {
     }
     return n
   }
-  const numberList = numbered.split('.').map(toNum)
+  const numberList = match[1].split('.').map(toNum)
 
   return {
     numbers: numberList,
