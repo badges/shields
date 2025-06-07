@@ -1,5 +1,3 @@
-'use strict'
-
 import { fromString } from 'css-color-converter'
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.

@@ -1,5 +1,3 @@
-'use strict'
-
 import { test, given, forCases } from 'sazerac'
 import { isHexColor, normalizeColor, toSvgColor, brightness } from './color.js'
 

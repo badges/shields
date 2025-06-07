@@ -1,5 +1,3 @@
-'use strict'
-
 import anafanafo from 'anafanafo'
 import { brightness } from './color.js'
 import { XmlElement, ElementList } from './xml.js'
