@@ -1,6 +1,13 @@
 # Changelog
 
-## Unreleased
+## 5.0.0
+
+### Breaking Changes
+
+- Drop compatibility with Node < 20
+- Switch from CommonJS to ESModules
+
+### Other Changes
 
 - Switching to using `href`s instead of the old `xlink:href` syntax
 

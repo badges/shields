@@ -1,5 +1,3 @@
-'use strict'
-
 import { expect } from 'chai'
 import { makeBadge, ValidationError } from './index.js'
 
