@@ -21,15 +21,7 @@ badge build passed :brightgreen > mybadge.svg
 
 ### As a library
 
-With CommonJS in JavaScript,
-
 ```js
-const { makeBadge, ValidationError } = require('badge-maker')
-```
-
-With ESM or TypeScript,
-
-```ts
 import { makeBadge, ValidationError } from 'badge-maker'
 ```
 
