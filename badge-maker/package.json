@@ -16,6 +16,7 @@
     "image",
     "shields.io"
   ],
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",
