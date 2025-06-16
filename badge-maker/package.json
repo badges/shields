@@ -1,6 +1,6 @@
 {
   "name": "badge-maker",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "type": "module",
   "exports": {
     ".": {
