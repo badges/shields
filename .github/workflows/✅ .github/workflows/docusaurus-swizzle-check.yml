@@ -1,0 +1,27 @@
+name: Docusaurus Swizzle Check (Dependabot PRs)
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  docusaurus-swizzled-warning:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Custom Action Dependencies
+        run: |
+          cd .github/actions/docusaurus-swizzled-warning
+          npm ci
+
+      - name: Run Docusaurus Swizzle Checker
+        uses: ./.github/actions/docusaurus-swizzled-warning
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
