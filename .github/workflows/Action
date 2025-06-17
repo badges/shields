@@ -1,0 +1,23 @@
+name: AIC-HMV Badge Shields Monitor
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  shield-checker:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run badge shield checker
+        run: echo "🛡️ AIC-HMV badge enforcement check"
