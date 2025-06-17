@@ -1,4 +1,4 @@
-name: Docusaurus Swizzle Check (Dependabot PRs)
+name: AIC-HMV Badge Shields Master (Dependabot PRs)
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  docusaurus-swizzled-warning:
+  badge-shields-enforcer:
     runs-on: ubuntu-latest
     if: github.actor == 'dependabot[bot]'
 
@@ -16,12 +16,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Custom Action Dependencies
+      - name: Install AIC-HMV Badge Checker
         run: |
-          cd .github/actions/docusaurus-swizzled-warning
+          cd .github/actions/aic-hmv-badge-enforcer
           npm ci
 
-      - name: Run Docusaurus Swizzle Checker
-        uses: ./.github/actions/docusaurus-swizzled-warning
+      - name: Run AIC-HMV Badge Shields Checker
+        uses: ./.github/actions/aic-hmv-badge-enforcer
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
