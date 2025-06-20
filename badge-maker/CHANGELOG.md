@@ -1,6 +1,23 @@
 # Changelog
 
-## Unreleased
+## 5.0.1
+
+### Bug Fixes
+
+- Fix ESM type exports
+
+### Other Changes
+
+- Drop use-strict from badge-maker header
+
+## 5.0.0
+
+### Breaking Changes
+
+- Drop compatibility with Node < 20
+- Switch from CommonJS to ESModules
+
+### Other Changes
 
 - Switching to using `href`s instead of the old `xlink:href` syntax
 
