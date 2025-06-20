@@ -1,8 +1,6 @@
-'use strict'
-
-const anafanafo = require('anafanafo')
-const { brightness } = require('./color')
-const { XmlElement, ElementList } = require('./xml')
+import anafanafo from 'anafanafo'
+import { brightness } from './color.js'
+import { XmlElement, ElementList } from './xml.js'
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
@@ -984,7 +982,7 @@ function forTheBadge({
   )
 }
 
-module.exports = {
+export default {
   plastic: params => Plastic.render(params),
   flat: params => Flat.render(params),
   'flat-square': params => FlatSquare.render(params),

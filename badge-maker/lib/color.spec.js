@@ -1,12 +1,5 @@
-'use strict'
-
-const { test, given, forCases } = require('sazerac')
-const {
-  isHexColor,
-  normalizeColor,
-  toSvgColor,
-  brightness,
-} = require('./color')
+import { test, given, forCases } from 'sazerac'
+import { isHexColor, normalizeColor, toSvgColor, brightness } from './color.js'
 
 test(isHexColor, () => {
   forCases([given('f00bae'), given('4c1'), given('ABC123')]).expect(true)
