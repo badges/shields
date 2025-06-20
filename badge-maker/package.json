@@ -5,7 +5,8 @@
   "exports": {
     ".": {
       "import": "./lib/index.js",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
     }
   },
   "description": "Shields.io badge library",
