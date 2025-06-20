@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.2
+
+### Bug Fixes
+
+- Fix export for require
+
 ## 5.0.1
 
 ### Bug Fixes
