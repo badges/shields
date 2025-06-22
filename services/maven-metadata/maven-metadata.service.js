@@ -104,8 +104,8 @@ export default class MavenMetadata extends BaseXmlService {
       return data.metadata.versioning.release
     } else if (strategy === 'highestVersion') {
       if (
-        data.metadata.versioning.versions.version === undefined ||
-        data.metadata.versioning.versions.version.length === 0
+        data.metadata.versioning.versions?.version === undefined ||
+        data.metadata.versioning.versions?.version.length === 0
       ) {
         throw new InvalidResponse({
           prettyMessage: 'no versions found',

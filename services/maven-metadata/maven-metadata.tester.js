@@ -122,3 +122,64 @@ t.create('invalid maven-metadata.xml uri')
     '/v.json?metadataUrl=https://repo1.maven.org/maven2/com/google/code/gson/gson/foobar.xml',
   )
   .expectBadge({ label: 'maven', message: 'not found' })
+
+t.create('filter with latest strategy')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=latestProperty&filter=*beta*',
+  )
+  .expectBadge({
+    label: 'maven',
+    message: 'filter is not valid with strategy latestProperty',
+  })
+
+t.create('filter with release strategy')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=releaseProperty&filter=*beta*',
+  )
+  .expectBadge({
+    label: 'maven',
+    message: 'filter is not valid with strategy releaseProperty',
+  })
+
+const emptyMockMetaData = `
+<metadata>
+  <groupId>mocked-group-id</groupId>
+  <artifactId>mocked-artifact-id</artifactId>
+  <versioning>
+    <lastUpdated>20190902002617</lastUpdated>
+  </versioning>
+</metadata>
+`
+
+t.create('release not found')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=releaseProperty',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, emptyMockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: "property 'release' not found" })
+
+t.create('latest not found')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=latestProperty',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, emptyMockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: "property 'latest' not found" })
+
+t.create('no versions')
+  .get(
+    '/v.json?metadataUrl=https://repo1.maven.org/maven2/mocked-group-id/mocked-artifact-id/maven-metadata.xml&strategy=highestVersion',
+  )
+  .intercept(nock =>
+    nock('https://repo1.maven.org/maven2')
+      .get('/mocked-group-id/mocked-artifact-id/maven-metadata.xml')
+      .reply(200, emptyMockMetaData),
+  )
+  .expectBadge({ label: 'maven', message: 'no versions found' })
