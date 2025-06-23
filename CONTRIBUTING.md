@@ -135,6 +135,11 @@ Prettier before a commit by default.
 
 [integrate prettier]: https://prettier.io/docs/en/editors.html
 
+### Coding style
+
+This project uses camelCase for variable names and function names and client facing parameters.
+We use PascalCase for class names and service names.
+
 ### Tests
 
 When adding or changing a service [please write tests][service-tests], and ensure the [title of your Pull Requests follows the required conventions](#running-service-tests-in-pull-requests) to ensure your tests are executed.
