@@ -1,8 +1,14 @@
 {
   "name": "badge-maker",
-  "version": "5.0.0",
+  "version": "5.0.2",
   "type": "module",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",

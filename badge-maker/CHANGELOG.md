@@ -1,5 +1,21 @@
 # Changelog
 
+## 5.0.2
+
+### Bug Fixes
+
+- Fix export for require
+
+## 5.0.1
+
+### Bug Fixes
+
+- Fix ESM type exports
+
+### Other Changes
+
+- Drop use-strict from badge-maker header
+
 ## 5.0.0
 
 ### Breaking Changes

@@ -4,8 +4,7 @@ import { BaseJsonService } from '../index.js'
 const resourceSchema = Joi.object({
   response: Joi.object({
     resource: Joi.object({
-      price: Joi.number().required(),
-      downloads: Joi.string().required(),
+      downloads: Joi.number().required(),
       reviews: Joi.object({
         count: Joi.number().required(),
         stars: Joi.number().required(),
