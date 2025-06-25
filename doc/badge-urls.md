@@ -13,6 +13,7 @@
   - The parameter is for an uncommon optional attribute, like an alternate registry URL.
   - The parameter triggers application of alternative logic, like version semantics. e.g: `/github/v/tag/:user/:repo?sort=semver`.
   - Services which require a url/hostname parameter always should use a query string parameter to accept that value. e.g: `/discourse/topics?server=https://meta.discourse.org`.
+- Query parameters for an alternative host of upstream data (like registry, repository, selfhost instance, etc) should be called `baseUrl` and include a full URL with protocol and path (if required).
 
 It is convention to use the following standard routes and abbreviations across services:
 
