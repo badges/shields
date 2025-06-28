@@ -3,6 +3,28 @@ import badgeRenderers from './badge-renderers.js'
 import { stripXmlWhitespace } from './xml.js'
 import { DEFAULT_LOGO_HEIGHT } from './constants.js'
 import { MissingOptionalDependencyError } from './errors.js'
+
+let getIconSize
+let prepareNamedLogo
+
+try {
+  getIconSize = (await import('./simple-icons-utils/svg-helpers.js'))
+    .getIconSize
+} catch (e) {
+  if (!(e instanceof MissingOptionalDependencyError)) {
+    throw e
+  }
+}
+
+try {
+  prepareNamedLogo = (await import('./simple-icons-utils/logos.js'))
+    .prepareNamedLogo
+} catch (e) {
+  if (!(e instanceof MissingOptionalDependencyError)) {
+    throw e
+  }
+}
+
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
 it is likely this will impact on the package's public interface in index.js
@@ -55,13 +77,8 @@ export default function makeBadge({
     logoWidth = DEFAULT_LOGO_HEIGHT
   } else if (namedLogo) {
     let iconSize
-    try {
-      const { getIconSize } = import('./simple-icons-utils/svg-helpers.js')
+    if (getIconSize) {
       iconSize = getIconSize(String(namedLogo).toLowerCase())
-    } catch (e) {
-      if (!(e instanceof MissingOptionalDependencyError)) {
-        throw e
-      }
     }
     if (iconSize && logoSize === 'auto') {
       logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
@@ -73,18 +90,13 @@ export default function makeBadge({
   }
 
   if (namedLogo && !logo) {
-    try {
-      const { prepareNamedLogo } = import('./simple-icons-utils/logos.js')
+    if (prepareNamedLogo) {
       logo = prepareNamedLogo({
         name: namedLogo,
         color: namedLogoColor,
         size: logoSize,
         style,
       })
-    } catch (e) {
-      if (!(e instanceof MissingOptionalDependencyError)) {
-        throw e
-      }
     }
   }
 
