@@ -8,6 +8,7 @@ import {
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
+  versionDataWithArchSpecificVersions,
 } from './docker-fixtures.js'
 
 describe('DockerVersion', function () {
@@ -64,6 +65,13 @@ describe('DockerVersion', function () {
       arch: 'ppc64le',
     }).expect({
       version: '3.10.4',
+    })
+    given({
+      data: versionDataWithArchSpecificVersions,
+      sort: 'semver',
+      arch: 'arm64',
+    }).expect({
+      version: '3.9-arm64',
     })
   })
 
