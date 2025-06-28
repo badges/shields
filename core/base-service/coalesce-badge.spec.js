@@ -176,23 +176,6 @@ describe('coalesceBadge', function () {
       ).to.equal(getSimpleIcon({ name: 'appveyor' })).and.not.be.empty
     })
 
-    it('applies the named logo', function () {
-      expect(coalesceBadge({}, { namedLogo: 'npm' }, {})).to.include({
-        namedLogo: 'npm',
-      })
-      expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).logo).to.equal(
-        getSimpleIcon({ name: 'npm' }),
-      ).and.not.to.be.empty
-    })
-
-    it('applies the named logo with color', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'dependabot', logoColor: 'blue' }, {})
-          .logo,
-      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
-        .to.be.empty
-    })
-
     it('overrides the logo', function () {
       expect(
         coalesceBadge({ logo: 'npm' }, { namedLogo: 'appveyor' }, {}).logo,
@@ -268,12 +251,6 @@ describe('coalesceBadge', function () {
       expect(coalesceBadge({ logoSize: 'auto' }, {}, {})).to.include({
         logoSize: 'auto',
       })
-    })
-
-    it('applies the logo size', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'npm', logoSize: 'auto' }, {}),
-      ).to.include({ logoSize: 'auto' })
     })
   })
 

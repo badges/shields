@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import snapshot from 'snap-shot-it'
 import prettier from 'prettier'
 import makeBadge from './make-badge.js'
+import { getSimpleIcon } from './simple-icons-utils/logos.js'
 
 async function expectBadgeToMatchSnapshot(format) {
   snapshot(await prettier.format(makeBadge(format), { parser: 'html' }))
@@ -757,6 +758,114 @@ describe('The badge generator', function () {
         logo: 'data:image/svg+xml;base64,PHN2ZyB4bWxu',
         style: 'plastic',
       })
+    })
+  })
+
+  describe('Named logos', function () {
+    it('applies the named logo', function () {
+      const svgResult = makeBadge({
+        label: 'test',
+        message: 'npm',
+        namedLogo: 'npm',
+        format: 'svg',
+      })
+      const expectedLogo = getSimpleIcon({ name: 'npm' })
+      expect(svgResult).to.include(expectedLogo)
+    })
+
+    it('applies the named logo (JSON format)', function () {
+      const jsonResult = JSON.parse(
+        makeBadge({
+          label: 'test',
+          message: 'npm',
+          namedLogo: 'npm',
+          format: 'json',
+        }),
+      )
+      const expectedLogo = getSimpleIcon({ name: 'npm' })
+      // .not.be.empty for confidence that nothing has changed with `getSimpleIcon()`.
+      expect(jsonResult.logo).to.equal(expectedLogo).and.to.not.be.empty
+    })
+
+    it('applies the named logo with color', function () {
+      const svgResult = makeBadge({
+        label: 'test',
+        message: 'dependabot',
+        namedLogo: 'dependabot',
+        namedLogoColor: 'blue',
+        format: 'svg',
+      })
+      const expectedLogo = getSimpleIcon({ name: 'dependabot', color: 'blue' })
+      expect(svgResult).to.include(expectedLogo)
+    })
+
+    it('applies the named logo with color (JSON format)', function () {
+      const jsonResult = JSON.parse(
+        makeBadge({
+          label: 'test',
+          message: 'dependabot',
+          namedLogo: 'dependabot',
+          namedLogoColor: 'blue',
+          format: 'json',
+        }),
+      )
+      const expectedLogo = getSimpleIcon({ name: 'dependabot', color: 'blue' })
+      expect(jsonResult.logo).to.equal(expectedLogo).and.to.not.be.empty
+    })
+  })
+
+  describe('Custom logos', function () {
+    it('overrides the logo with custom svg', function () {
+      const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
+      const svgResult = makeBadge({
+        label: 'test',
+        message: 'custom',
+        logo: logoSvg,
+        namedLogo: 'appveyor',
+        format: 'svg',
+      })
+      expect(svgResult).to.include(logoSvg)
+    })
+
+    it('overrides the logo with custom svg (JSON format)', function () {
+      const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
+      const jsonResult = JSON.parse(
+        makeBadge({
+          label: 'test',
+          message: 'custom',
+          logo: logoSvg,
+          namedLogo: 'appveyor',
+          format: 'json',
+        }),
+      )
+      expect(jsonResult.logo).to.equal(logoSvg).and.to.not.be.empty
+    })
+  })
+
+  describe('Logo size', function () {
+    it('applies the logo size', function () {
+      const svgResult = makeBadge({
+        label: 'test',
+        message: 'auto-sized',
+        namedLogo: 'npm',
+        logoSize: 'auto',
+        format: 'svg',
+      })
+      const expectedLogo = getSimpleIcon({ name: 'npm', size: 'auto' })
+      expect(svgResult).to.include(expectedLogo)
+    })
+
+    it('applies the logo size (JSON format)', function () {
+      const jsonResult = JSON.parse(
+        makeBadge({
+          label: 'test',
+          message: 'auto-sized',
+          namedLogo: 'npm',
+          logoSize: 'auto',
+          format: 'json',
+        }),
+      )
+      expect(jsonResult).to.include({ logoSize: 'auto' })
     })
   })
 })
