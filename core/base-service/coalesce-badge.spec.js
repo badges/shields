@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import { getSimpleIcon } from '../../badge-maker/lib/simple-icons-utils/logos.js'
 import coalesceBadge from './coalesce-badge.js'
 
 describe('coalesceBadge', function () {
@@ -228,9 +227,10 @@ describe('coalesceBadge', function () {
     // https://github.com/badges/shields/issues/2998
     it('overrides logoSvg', function () {
       const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
-      expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {}).logo).to.equal(
-        getSimpleIcon({ name: 'npm' }),
-      ).and.not.be.empty
+      expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {})).to.include({
+        namedLogo: 'npm',
+        logo: undefined,
+      })
     })
   })
 
