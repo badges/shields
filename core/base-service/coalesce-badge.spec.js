@@ -191,7 +191,7 @@ describe('coalesceBadge', function () {
         ),
       ).to.include({
         namedLogo: 'dependabot',
-        logoColor: 'blue',
+        namedLogoColor: 'blue',
       })
     })
 
@@ -208,7 +208,7 @@ describe('coalesceBadge', function () {
       )
         .to.include({ namedLogo: 'npm' })
         .and.not.include({
-          logoColor: 'red',
+          namedLogoColor: 'red',
         })
     })
 
@@ -221,7 +221,7 @@ describe('coalesceBadge', function () {
         ),
       ).to.include({
         namedLogo: 'dependabot',
-        logoColor: 'blue',
+        namedLogoColor: 'blue',
       })
     })
 
