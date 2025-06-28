@@ -169,7 +169,6 @@ describe('coalesceBadge', function () {
     })
 
     it('when a social badge, uses the default named logo', function () {
-      // .not.be.empty for confidence that nothing has changed with `getSimpleIcon()`.
       expect(
         coalesceBadge({ style: 'social' }, {}, { namedLogo: 'appveyor' }),
       ).to.include({ namedLogo: 'appveyor' })
