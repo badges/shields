@@ -1,5 +1,5 @@
-import { redirector, pathParam, queryParam } from '../index.js'
-import { description } from '../maven-metadata/maven-metadata.js'
+import { redirector, pathParam } from '../index.js'
+import { commonParams } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
@@ -12,20 +12,10 @@ export default redirector({
     '/maven-central/v/{groupId}/{artifactId}': {
       get: {
         summary: 'Maven Central Version',
-        description,
         parameters: [
           pathParam({ name: 'groupId', example: 'com.google.guava' }),
           pathParam({ name: 'artifactId', example: 'guava' }),
-          queryParam({
-            name: 'versionPrefix',
-            example: '29',
-            description: 'Filter only versions with this prefix.',
-          }),
-          queryParam({
-            name: 'versionSuffix',
-            example: '-android',
-            description: 'Filter only versions with this suffix.',
-          }),
+          ...commonParams,
         ],
       },
     },

@@ -2,7 +2,7 @@ import { MissingOptionalDependencyError } from '../errors.mjs'
 
 let originalSimpleIcons
 try {
-  originalSimpleIcons = await import('simple-icons/icons')
+  originalSimpleIcons = await import('simple-icons')
 } catch {
   // only show warning on first import error
   // don't throw an error here as its called from anonymous function
@@ -11,7 +11,7 @@ try {
 }
 
 function loadSimpleIcons() {
-  const simpleIcons = {}
+  const simpleIcons = new Map()
   // As of v5 the exported keys are the svg slugs
   // Historically, Shields has supported logo specification via
   // name, name with spaces replaced by hyphens, and partially slugs
@@ -38,14 +38,14 @@ function loadSimpleIcons() {
     // Starting in v7, the exported object with the full icon set has updated the keys
     // to include a lowercase `si` prefix, and utilizes proper case naming conventions.
     if (!(`si${title}` in originalSimpleIcons)) {
-      simpleIcons[title.toLowerCase()] = icon
+      simpleIcons.set(title.toLowerCase(), icon)
     }
     const legacyTitle = title.replace(/ /g, '-')
     if (!(`si${legacyTitle}` in originalSimpleIcons)) {
-      simpleIcons[legacyTitle.toLowerCase()] = icon
+      simpleIcons.set(legacyTitle.toLowerCase(), icon)
     }
 
-    simpleIcons[slug] = icon
+    simpleIcons.set(slug, icon)
   })
   return simpleIcons
 }

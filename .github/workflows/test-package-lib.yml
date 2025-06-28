@@ -13,16 +13,13 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '16'
-            npm: '^9'
-            engine-strict: 'false'
-          - node: '18'
-            npm: '^9'
-            engine-strict: 'false'
           - node: '20'
             npm: '^10'
-            engine-strict: 'true'
+            engine-strict: 'false'
           - node: '22'
+            npm: '^11'
+            engine-strict: 'true'
+          - node: '24'
             npm: '^11'
             engine-strict: 'false'
     steps:

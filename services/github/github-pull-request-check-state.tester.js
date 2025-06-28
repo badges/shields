@@ -2,7 +2,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('github pull request check state')
-  .get('/s/pulls/badges/shields/9863.json')
+  .get('/s/pulls/badges/shields/11053.json')
   .expectBadge({ label: 'checks', message: 'success' })
 
 t.create('github pull request check state (pull request not found)')
@@ -26,5 +26,5 @@ t.create(
   })
 
 t.create('github pull request check contexts')
-  .get('/contexts/pulls/badges/shields/9863.json')
+  .get('/contexts/pulls/badges/shields/11053.json')
   .expectBadge({ label: 'checks', message: '1 success' })

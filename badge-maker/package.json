@@ -1,6 +1,14 @@
 {
   "name": "badge-maker",
-  "version": "4.1.0",
+  "version": "5.0.2",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "description": "Shields.io badge library",
   "keywords": [
     "GitHub",
@@ -10,7 +18,6 @@
     "shields.io"
   ],
   "types": "index.d.ts",
-  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",
@@ -26,7 +33,7 @@
     "badge": "lib/badge-cli.js"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "collective": {
     "type": "opencollective",

@@ -1,4 +1,4 @@
-FROM node:20-bullseye
+FROM node:22-bullseye
 
 RUN apt-get update
 RUN apt-get install -y jq

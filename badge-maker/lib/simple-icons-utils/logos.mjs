@@ -71,25 +71,27 @@ function getSimpleIconStyle({ icon, style }) {
 function getSimpleIcon({ name, color, style, size }) {
   const key = name.replace(/ /g, '-')
 
-  if (!(key in simpleIcons)) {
+  if (!simpleIcons.has(key)) {
     return undefined
   }
 
   let iconSvg
 
   const svgColor = toSvgColor(color)
+  const icon = simpleIcons.get(key)
+
   if (svgColor) {
-    iconSvg = simpleIcons[key].svg.replace('<svg', `<svg fill="${svgColor}"`)
+    iconSvg = icon.svg.replace('<svg', `<svg fill="${svgColor}"`)
   } else {
-    const iconStyle = getSimpleIconStyle({ icon: simpleIcons[key], style })
-    iconSvg = simpleIcons[key].styles[iconStyle]
+    const iconStyle = getSimpleIconStyle({ icon, style })
+    iconSvg = icon.styles[iconStyle]
   }
 
   if (size === 'auto') {
     const { width: iconWidth, height: iconHeight } = getIconSize(key)
 
     if (iconWidth !== iconHeight) {
-      const path = resetIconPosition(simpleIcons[key].path)
+      const path = resetIconPosition(icon.path)
       iconSvg = iconSvg
         .replace(
           'viewBox="0 0 24 24"',

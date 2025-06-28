@@ -153,7 +153,7 @@ const mochaConfig = {
 
   rules: {
     'mocha/no-exclusive-tests': 'error',
-    'mocha/no-skipped-tests': 'error',
+    'mocha/no-pending-tests': 'error',
     'mocha/no-mocha-arrows': 'error',
     'mocha/prefer-arrow-callback': 'error',
     'no-unused-expressions': 'off',
@@ -168,7 +168,7 @@ const cypressConfig = {
 // append these to cypress.configs.recommended, without overwriting
 cypressConfig.plugins.mocha = mochaPlugin
 cypressConfig.rules['mocha/no-exclusive-tests'] = 'error'
-cypressConfig.rules['mocha/no-skipped-tests'] = 'error'
+cypressConfig.rules['mocha/no-pending-tests'] = 'error'
 cypressConfig.rules['mocha/no-mocha-arrows'] = 'off'
 
 // config specific to linting Service tests (IcedFrisby)

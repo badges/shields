@@ -1,5 +1,3 @@
-'use strict'
-
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { spawn } from 'child-process-promise'

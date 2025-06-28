@@ -1,15 +1,13 @@
-'use strict'
-
-const { normalizeColor, toSvgColor } = require('./color')
-const badgeRenderers = require('./badge-renderers')
-const { stripXmlWhitespace } = require('./xml')
-const { DEFAULT_LOGO_HEIGHT } = require('./constants')
-const { MissingOptionalDependencyError } = import('./errors.mjs')
+import { normalizeColor, toSvgColor } from './color.js'
+import badgeRenderers from './badge-renderers.js'
+import { stripXmlWhitespace } from './xml.js'
+import { DEFAULT_LOGO_HEIGHT } from './constants.js'
+import { MissingOptionalDependencyError } from './errors.js'
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
 it is likely this will impact on the package's public interface in index.js
 */
-module.exports = function makeBadge({
+export default function makeBadge({
   format,
   style = 'flat',
   label,
