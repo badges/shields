@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getSimpleIcon } from 'badge-maker/lib/simple-icons-utils/logos.mjs'
+import { getSimpleIcon } from '../../badge-maker/lib/simple-icons-utils/logos.js'
 import coalesceBadge from './coalesce-badge.js'
 
 describe('coalesceBadge', function () {

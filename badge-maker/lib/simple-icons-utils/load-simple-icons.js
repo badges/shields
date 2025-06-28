@@ -1,4 +1,4 @@
-import { MissingOptionalDependencyError } from '../errors.mjs'
+import { MissingOptionalDependencyError } from '../errors.js'
 
 let originalSimpleIcons
 try {
