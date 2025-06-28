@@ -56,7 +56,7 @@ export default function makeBadge({
   } else if (namedLogo) {
     let iconSize
     try {
-      const { getIconSize } = import('./simple-icons-utils/svg-helpers.mjs')
+      const { getIconSize } = import('./simple-icons-utils/svg-helpers.js')
       iconSize = getIconSize(String(namedLogo).toLowerCase())
     } catch (e) {
       if (!(e instanceof MissingOptionalDependencyError)) {
@@ -74,7 +74,7 @@ export default function makeBadge({
 
   if (namedLogo && !logo) {
     try {
-      const { prepareNamedLogo } = import('./simple-icons-utils/logos.mjs')
+      const { prepareNamedLogo } = import('./simple-icons-utils/logos.js')
       logo = prepareNamedLogo({
         name: namedLogo,
         color: namedLogoColor,
