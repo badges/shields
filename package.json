@@ -205,7 +205,7 @@
     "read-all-stdin-sync": "^1.0.5",
     "rimraf": "^6.0.1",
     "sazerac": "^2.0.0",
-    "simple-icons": "14.12.3",
+    "simple-icons": "15.2.0",
     "simple-git-hooks": "^2.13.0",
     "sinon": "^21.0.0",
     "sinon-chai": "4.0.0",
