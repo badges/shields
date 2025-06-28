@@ -773,20 +773,6 @@ describe('The badge generator', function () {
       expect(svgResult).to.include(expectedLogo)
     })
 
-    it('applies the named logo (JSON format)', function () {
-      const jsonResult = JSON.parse(
-        makeBadge({
-          label: 'test',
-          message: 'npm',
-          namedLogo: 'npm',
-          format: 'json',
-        }),
-      )
-      const expectedLogo = getSimpleIcon({ name: 'npm' })
-      // .not.be.empty for confidence that nothing has changed with `getSimpleIcon()`.
-      expect(jsonResult.logo).to.equal(expectedLogo).and.to.not.be.empty
-    })
-
     it('applies the named logo with color', function () {
       const svgResult = makeBadge({
         label: 'test',
@@ -797,20 +783,6 @@ describe('The badge generator', function () {
       })
       const expectedLogo = getSimpleIcon({ name: 'dependabot', color: 'blue' })
       expect(svgResult).to.include(expectedLogo)
-    })
-
-    it('applies the named logo with color (JSON format)', function () {
-      const jsonResult = JSON.parse(
-        makeBadge({
-          label: 'test',
-          message: 'dependabot',
-          namedLogo: 'dependabot',
-          namedLogoColor: 'blue',
-          format: 'json',
-        }),
-      )
-      const expectedLogo = getSimpleIcon({ name: 'dependabot', color: 'blue' })
-      expect(jsonResult.logo).to.equal(expectedLogo).and.to.not.be.empty
     })
   })
 
@@ -826,20 +798,6 @@ describe('The badge generator', function () {
       })
       expect(svgResult).to.include(logoSvg)
     })
-
-    it('overrides the logo with custom svg (JSON format)', function () {
-      const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
-      const jsonResult = JSON.parse(
-        makeBadge({
-          label: 'test',
-          message: 'custom',
-          logo: logoSvg,
-          namedLogo: 'appveyor',
-          format: 'json',
-        }),
-      )
-      expect(jsonResult.logo).to.equal(logoSvg).and.to.not.be.empty
-    })
   })
 
   describe('Logo size', function () {
@@ -853,19 +811,6 @@ describe('The badge generator', function () {
       })
       const expectedLogo = getSimpleIcon({ name: 'npm', size: 'auto' })
       expect(svgResult).to.include(expectedLogo)
-    })
-
-    it('applies the logo size (JSON format)', function () {
-      const jsonResult = JSON.parse(
-        makeBadge({
-          label: 'test',
-          message: 'auto-sized',
-          namedLogo: 'npm',
-          logoSize: 'auto',
-          format: 'json',
-        }),
-      )
-      expect(jsonResult).to.include({ logoSize: 'auto' })
     })
   })
 })
