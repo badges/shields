@@ -4,6 +4,27 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-07-01
+
+- Document baseUrl naming convention [#11161](https://github.com/badges/shields/issues/11161)
+- fix/improve maven metadata version badges; affects [maven gradle] [#11077](https://github.com/badges/shields/issues/11077)
+- use simple-icons main export entry [#11184](https://github.com/badges/shields/issues/11184)
+- badge-maker 5.0.2 release [#11182](https://github.com/badges/shields/issues/11182)
+- badge-maker: fix exports so that it can also be required [#11181](https://github.com/badges/shields/issues/11181)
+- fix PHP version parsing [#11128](https://github.com/badges/shields/issues/11128)
+- update [polymart] schema [#11073](https://github.com/badges/shields/issues/11073)
+- badge-maker 5.0.1 release [#11162](https://github.com/badges/shields/issues/11162)
+- badge-maker: Fix ESM type exports [#11160](https://github.com/badges/shields/issues/11160)
+- deploy on node 22 [#11070](https://github.com/badges/shields/issues/11070)
+- drop use-strict from badge-maker header [#11145](https://github.com/badges/shields/issues/11145)
+- badge-maker 5.0.0 [#11144](https://github.com/badges/shields/issues/11144)
+- convert badge-maker to ESM [#11131](https://github.com/badges/shields/issues/11131)
+- improve performance of lookup simple-icons [#11129](https://github.com/badges/shields/issues/11129)
+- [DepsRs] Add Deps.rs dependency status badges [#11107](https://github.com/badges/shields/issues/11107)
+- add icon svg [#11126](https://github.com/badges/shields/issues/11126)
+- remake readme logo [#11109](https://github.com/badges/shields/issues/11109)
+- Dependency updates
+
 ## server-2025-06-01
 
 - Remove Non-Functional SVG Stroke Attribute in Social Badge Renderer [#11095](https://github.com/badges/shields/issues/11095)
