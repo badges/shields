@@ -31,6 +31,7 @@ export default class UptimeObserverBase extends BaseJsonService {
   async fetch({ monitorKey }) {
     this.constructor.ensureIsMonitorApiKey(monitorKey)
 
+    // Docs for API: https://support.uptimeobserver.com/shields-api.yaml
     const url = `https://app.uptimeobserver.com/api/monitor/status/${monitorKey}`
 
     const response = await this._requestJson({
@@ -41,19 +42,6 @@ export default class UptimeObserverBase extends BaseJsonService {
       },
       logErrors: [],
     })
-
-    if (Object.keys(response).length === 0) {
-      try {
-        const rawResponse = await this._request({
-          url,
-          options: { method: 'GET' },
-        })
-        console.log('Raw HTTP response body:', rawResponse)
-        console.log('Raw HTTP response type:', typeof rawResponse)
-      } catch (error) {
-        console.log('Raw HTTP request error:', error.message)
-      }
-    }
 
     // Handle error responses
     if (response.error) {
