@@ -4,8 +4,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./lib/index.js",
       "types": "./index.d.ts",
+      "import": "./lib/index.js",
       "default": "./lib/index.js"
     }
   },

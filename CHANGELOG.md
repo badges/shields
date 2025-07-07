@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-07-01
+
+**Important notice:** Updated node from 20 to 22.
+
+- fix/improve maven metadata version badges; affects [maven gradle] [#11077](https://github.com/badges/shields/issues/11077)
+- fix PHP version parsing [#11128](https://github.com/badges/shields/issues/11128)
+- update [polymart] schema [#11073](https://github.com/badges/shields/issues/11073)
+- deploy on node 22 [#11070](https://github.com/badges/shields/issues/11070)
+- improve performance of lookup simple-icons [#11129](https://github.com/badges/shields/issues/11129)
+- [DepsRs] Add Deps.rs dependency status badges [#11107](https://github.com/badges/shields/issues/11107)
+- add icon svg [#11126](https://github.com/badges/shields/issues/11126)
+- Dependency updates
+
 ## server-2025-06-01
 
 - Remove Non-Functional SVG Stroke Attribute in Social Badge Renderer [#11095](https://github.com/badges/shields/issues/11095)
