@@ -1,4 +1,5 @@
 import { createServiceTester } from '../tester.js'
+import { isPercentage } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
@@ -22,6 +23,13 @@ t.create('UptimeObserver uptime ratio 30 days (mock)')
     color: 'brightgreen',
   })
 
+t.create('UptimeObserver uptime ratio 30 days')
+  .get('/30/33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41.json')
+  .expectBadge({
+    label: 'uptime',
+    message: isPercentage,
+  })
+
 t.create('UptimeObserver uptime ratio 7 days (mock)')
   .get('/7/94e1d60553b1425ab2a276128f3bca7466.json')
   .intercept(nock =>
@@ -42,6 +50,13 @@ t.create('UptimeObserver uptime ratio 7 days (mock)')
     color: 'brightgreen',
   })
 
+t.create('UptimeObserver uptime ratio 7 days')
+  .get('/7/33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41.json')
+  .expectBadge({
+    label: 'uptime',
+    message: isPercentage,
+  })
+
 t.create('UptimeObserver uptime ratio 24h (mock)')
   .get('/1/94e1d60553b1425ab2a276128f3bca7466.json')
   .intercept(nock =>
@@ -60,4 +75,11 @@ t.create('UptimeObserver uptime ratio 24h (mock)')
     label: 'uptime',
     message: '99.5%',
     color: 'brightgreen',
+  })
+
+t.create('UptimeObserver uptime ratio 24h')
+  .get('/1/33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41.json')
+  .expectBadge({
+    label: 'uptime',
+    message: isPercentage,
   })

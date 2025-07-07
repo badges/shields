@@ -1,6 +1,9 @@
+import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
+
+const isUptimeStatus = Joi.string().valid('up', 'down')
 
 t.create('UptimeObserver status (mock)')
   .get('/94e1d60553b1425ab2a276128f3bca7466.json')
@@ -20,6 +23,27 @@ t.create('UptimeObserver status (mock)')
     label: 'status',
     message: 'up',
     color: 'brightgreen',
+  })
+
+t.create('UptimeObserver uptime status (known monitor)')
+  .get('/33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41.json')
+  .expectBadge({
+    label: 'status',
+    message: isUptimeStatus,
+  })
+
+t.create('UptimeObserver uptime status (not found)')
+  .get('/aae1d60553b1425ab2a276128f3bca7466.json')
+  .expectBadge({
+    label: 'status',
+    message: 'not found',
+  })
+
+t.create('UptimeObserver uptime status (unvalid key)')
+  .get('/aae1d60553b1425ab2a.json')
+  .expectBadge({
+    label: 'status',
+    message: 'monitor API key is unvalid',
   })
 
 t.create('UptimeObserver status DOWN (mock)')

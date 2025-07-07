@@ -21,9 +21,13 @@ export default class UptimeObserverBase extends BaseJsonService {
   static category = 'monitoring'
 
   static ensureIsMonitorApiKey(value) {
-    if (!value || value.length <= 32) {
+    if (!value) {
       throw new InvalidParameter({
         prettyMessage: 'monitor API key is required',
+      })
+    } else if (value.length <= 32) {
+      throw new InvalidParameter({
+        prettyMessage: 'monitor API key is unvalid',
       })
     }
   }
