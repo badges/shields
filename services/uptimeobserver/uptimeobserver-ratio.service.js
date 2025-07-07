@@ -16,7 +16,7 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
         summary: 'UptimeObserver default uptime ratio (30 days)',
         parameters: pathParams({
           name: 'monitorKey',
-          example: 'your-monitor-key-here',
+          example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
         }),
       },
     },
@@ -25,7 +25,7 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
         summary: 'UptimeObserver uptime ratio (1 day)',
         parameters: pathParams({
           name: 'monitorKey',
-          example: 'your-monitor-key-here',
+          example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
         }),
       },
     },
@@ -34,7 +34,7 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
         summary: 'UptimeObserver uptime ratio (7 days)',
         parameters: pathParams({
           name: 'monitorKey',
-          example: 'your-monitor-key-here',
+          example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
         }),
       },
     },
@@ -43,7 +43,7 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
         summary: 'UptimeObserver uptime ratio (30 days)',
         parameters: pathParams({
           name: 'monitorKey',
-          example: 'your-monitor-key-here',
+          example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
         }),
       },
     },
