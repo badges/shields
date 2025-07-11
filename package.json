@@ -183,7 +183,7 @@
     "globals": "16.2.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
-    "is-svg": "^6.0.0",
+    "is-svg": "^6.1.0",
     "jsdoc": "^4.0.4",
     "lint-staged": "^16.1.2",
     "lodash.difference": "^4.5.0",
