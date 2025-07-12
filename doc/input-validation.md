@@ -15,7 +15,6 @@ When we receive input data from an upstream API, we perform input validation to:
 - Our definition of "valid" should not be stricter than the upstream API's definition of "valid".
 
 - The schema/validation we choose is informed by the assumptions we're making about the data. e.g:
-
   - If we're going to use a value, make sure it exists.
   - If we need to multiply it by something, we check it's a number.
   - If we're going to call `.split()` on it, we make sure it's a string.
