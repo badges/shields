@@ -161,7 +161,7 @@
     "chai-datetime": "^1.8.1",
     "child-process-promise": "^2.2.1",
     "clsx": "^2.1.1",
-    "concurrently": "^9.1.2",
+    "concurrently": "^9.2.0",
     "cypress": "^14.5.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^13.0.4",
