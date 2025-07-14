@@ -140,7 +140,6 @@
 ### Deprecations
 
 - `labelColor` and `color` are now the recommended attribute names for label color and message color.
-
   - `colorA` (now an alias for `labelColor`),
   - `colorB` (now an alias for `color`) and
   - `colorscheme` (now an alias for `color`)

@@ -66,7 +66,6 @@ Each service has a directory for its files:
   by other badges.
 
   Imagine a service that lives at https://img.shields.io/example/some-param-here.
-
   - For services with a single badge, the badge code will generally be stored in
     `/services/example/example.service.js`.
     If you add a badge for a new API, create a new directory.
@@ -75,7 +74,6 @@ Each service has a directory for its files:
 
   - For service families with multiple badges we usually store the code for each
     badge in its own file like this:
-
     - `/services/example/example-downloads.service.js`
     - `/services/example/example-version.service.js` etc.
 
@@ -228,7 +226,6 @@ Description of the code:
 7. We can use `defaultBadgeData` to set a default `color`, `logo` and/or `label`. If `handle()` doesn't return any of these keys, we'll use the default. Instead of explicitly setting the label text when we return a badge object, we'll use `defaultBadgeData` here to define it declaratively.
 8. We now jump to the bottom of the example code to the function all badges must implement: `async handle()`. This is the function the server will invoke to handle an incoming request. Because our URL pattern captures a variable called `gem`, our function signature is `async handle({ gem })`. We usually separate the process of generating a badge into 2 stages or concerns: fetch and render. The `fetch()` function is responsible for calling an API endpoint to get data. The `render()` function formats the data for display. In a case where there is a lot of calculation or intermediate steps, this pattern may be thought of as fetch, transform, render and it might be necessary to define some helper functions to assist with the 'transform' step.
 9. Working our way upward, the `async fetch()` method is responsible for calling an API endpoint to get data. Extending `BaseJsonService` gives us the helper function `_requestJson()`. Note here that we pass the schema we defined in step 3 as an argument. `_requestJson()` will deal with validating the response against the schema and throwing an error if necessary.
-
    - `_requestJson()` automatically adds an Accept header, checks the status code, parses the response as JSON, and returns the parsed response.
    - `_requestJson()` uses [got](https://github.com/sindresorhus/got) to perform the HTTP request. Options can be passed to got, including method, query string, and headers. If headers are provided they will override the ones automatically set by `_requestJson()`. There is no need to specify json, as the JSON parsing is handled by `_requestJson()`. See the `got` docs for [supported options](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md).
    - Error messages corresponding to each status code can be returned by passing a dictionary of status codes -> messages in `httpErrors`.
@@ -307,7 +304,6 @@ export default class GemVersion extends BaseJsonService {
 ```
 
 1. There are four helper functions we can use to assemble [Open API Parameter objects](https://swagger.io/specification/#parameter-object). These are:
-
    - `pathParam` - returns a single Parameter object describing a single path parameter
    - `pathParams` - returns an array of path parameter objects
    - `queryParam` - returns a single Parameter object describing a single query parameter
