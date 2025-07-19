@@ -17,7 +17,7 @@ jobs:
           ISSUE_BODY: '${{ github.event.issue.body }}'
         run: |
           product=$(echo "$ISSUE_BODY" | grep -A2 "Are you experiencing an issue with.*" | tail -n 1)
-          link=$(echo "$ISSUE_BODY" | grep -A2 "Link to the badge.*" | tail -n 1)
+          link=$(echo "$ISSUE_BODY" | grep -A2 "### 🔗 Link to the badge" | tail -n 1 | grep -oE 'https://img\.shields\.io[^\S)]+')
 
           if [[ "$product" == "shields.io" && "$link" == "https://img.shields.io"* ]]; then
             echo "runNext=true" >> "$GITHUB_OUTPUT"
