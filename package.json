@@ -179,7 +179,7 @@
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-react-hooks": "5.2.0",
     "eslint-plugin-sort-class-members": "1.21.0",
-    "form-data": "^4.0.3",
+    "form-data": "^4.0.4",
     "globals": "16.3.0",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
