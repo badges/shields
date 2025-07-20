@@ -2,14 +2,11 @@ import Joi from 'joi'
 import { BaseJsonService, InvalidParameter, InvalidResponse } from '../index.js'
 
 const errorResponse = Joi.object({
-  status: Joi.string().required(),
-  error: Joi.string(),
+  error: Joi.string().required(),
 }).required()
 
 const monitorResponse = Joi.object({
   status: Joi.string().required(),
-  friendlyName: Joi.string().required(),
-  lastExecution: Joi.string().isoDate().required(),
   uptime24h: Joi.number().min(0).max(100).required(),
   uptime7d: Joi.number().min(0).max(100).required(),
   uptime30d: Joi.number().min(0).max(100).required(),
