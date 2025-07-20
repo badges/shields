@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-const isUptimeStatus = Joi.string().valid('up', 'down')
+const isUptimeStatus = Joi.string().valid('up', 'down', 'paused')
 
 t.create('UptimeObserver status (mock)')
   .get('/94e1d60553b1425ab2a276128f3bca7466.json')
@@ -27,6 +27,13 @@ t.create('UptimeObserver status (mock)')
 
 t.create('UptimeObserver uptime status (known monitor)')
   .get('/33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41.json')
+  .expectBadge({
+    label: 'status',
+    message: isUptimeStatus,
+  })
+
+t.create('UptimeObserver uptime status (paused monitor)')
+  .get('/d48f3768a01a4f36972efebb096cb6c01933.json')
   .expectBadge({
     label: 'status',
     message: isUptimeStatus,
