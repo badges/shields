@@ -67,6 +67,8 @@ export default class SourceforgeDownloads extends BaseJsonService {
     },
   }
 
+  static _cacheLength = 2400
+
   static defaultBadgeData = { label: 'sourceforge' }
 
   static render({ downloads, interval }) {
