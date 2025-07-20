@@ -1,5 +1,6 @@
 import { createServiceTester } from '../tester.js'
 import { isPercentage } from '../test-validators.js'
+import { invalidJSON } from '../response-fixtures.js'
 
 export const t = await createServiceTester()
 
@@ -83,3 +84,30 @@ t.create('UptimeObserver uptime ratio 24h')
     label: 'uptime',
     message: isPercentage,
   })
+
+t.create('UptimeObserver: Percentage (service unavailable)')
+  .get('/1/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741.json')
+  .intercept(nock =>
+    nock('https://app.uptimeobserver.com')
+      .get('/api/monitor/status/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741')
+      .reply(503, '{"error": "oh noes!!"}'),
+  )
+  .expectBadge({ label: 'uptime', message: 'inaccessible' })
+
+t.create('UptimeObserver: Percentage (unexpected response, valid json)')
+  .get('/1/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741.json')
+  .intercept(nock =>
+    nock('https://app.uptimeobserver.com')
+      .get('/api/monitor/status/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741')
+      .reply(200, '[]'),
+  )
+  .expectBadge({ label: 'uptime', message: 'invalid response data' })
+
+t.create('UptimeObserver: Percentage (unexpected response, valid json)')
+  .get('/1/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741.json')
+  .intercept(nock =>
+    nock('https://app.uptimeobserver.com')
+      .get('/api/monitor/status/22Zw1rnH6veb4OLcskqvj6g9Lj4tnyx741')
+      .reply(invalidJSON),
+  )
+  .expectBadge({ label: 'uptime', message: 'unparseable json response' })

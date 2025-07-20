@@ -16,7 +16,7 @@ export default class UptimeObserverStatus extends UptimeObserverBase {
         parameters: [
           pathParam({
             name: 'monitorKey',
-            example: 'your-monitor-key-here',
+            example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
           }),
           ...queryParams,
         ],
