@@ -69,7 +69,7 @@
     "smol-toml": "1.4.1",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
-    "webextension-store-meta": "^1.2.7",
+    "webextension-store-meta": "^1.2.8",
     "xpath": "~0.0.34"
   },
   "scripts": {
