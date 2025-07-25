@@ -33,7 +33,7 @@
     "chalk": "^5.4.1",
     "check-node-version": "^4.2.1",
     "cloudflare-middleware": "^1.0.4",
-    "config": "^4.0.1",
+    "config": "^4.1.0",
     "cross-env": "^7.0.3",
     "dayjs": "^1.11.13",
     "decamelize": "^3.2.0",
@@ -65,11 +65,11 @@
     "query-string": "^9.2.2",
     "re2": "^1.22.1",
     "semver": "~7.7.2",
-    "simple-icons": "15.6.0",
+    "simple-icons": "15.7.0",
     "smol-toml": "1.4.1",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
-    "webextension-store-meta": "^1.2.7",
+    "webextension-store-meta": "^1.2.8",
     "xpath": "~0.0.34"
   },
   "scripts": {
