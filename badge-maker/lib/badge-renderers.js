@@ -15,7 +15,7 @@ function capitalize(s) {
 }
 
 function colorsForBackground(color) {
-  const brightnessThreshold = 0.69
+  const brightnessThreshold = 0.65
   if (brightness(color) <= brightnessThreshold) {
     return { textColor: '#fff', shadowColor: '#010101' }
   } else {
