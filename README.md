@@ -200,13 +200,13 @@ You can read more about [the project's inception][thread],
 Maintainers:
 
 - [calebcartwright](https://github.com/calebcartwright)
-- [chris48s](https://github.com/chris48s)
 - [jNullj](https://github.com/jnullj)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
 Alumni:
 
+- [chris48s](https://github.com/chris48s)
 - [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)
