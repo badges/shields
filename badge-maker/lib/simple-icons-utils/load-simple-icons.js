@@ -1,4 +1,14 @@
-import * as originalSimpleIcons from 'simple-icons'
+import { MissingOptionalDependencyError } from '../errors.js'
+
+let originalSimpleIcons
+try {
+  originalSimpleIcons = await import('simple-icons')
+} catch {
+  // only show warning on first import error
+  // don't throw an error here as its called from anonymous function
+  // eslint-disable-next-line no-unused-vars
+  const e = new MissingOptionalDependencyError('simple-icons')
+}
 
 function loadSimpleIcons() {
   const simpleIcons = new Map()
