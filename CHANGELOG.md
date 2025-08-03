@@ -4,7 +4,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
-## server-2025-08-02
+## server-2025-08-03
 
 - increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
 - Dependency updates
