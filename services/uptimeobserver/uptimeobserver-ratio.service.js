@@ -45,8 +45,13 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
   }
 
   static render({ ratio }) {
+    // Remove trailing zeros, show up to 3 decimal places
+    const formatted = Number(ratio).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 3,
+    })
     return {
-      message: `${ratio}%`,
+      message: `${formatted}%`,
       color: ratioColor(ratio),
     }
   }
