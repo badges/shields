@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-08-03
+
+- Changelog for Release server-2025-08-02 [#11256](https://github.com/badges/shields/issues/11256)
+- docs: add CVE-2025-54313 vulnerability report blog post [#11241](https://github.com/badges/shields/issues/11241)
+- remove chris48s from maintainer team in docs [#11243](https://github.com/badges/shields/issues/11243)
+- increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
+- fix: test-bug-run-badge workflow link extraction [#11225](https://github.com/badges/shields/issues/11225)
+- chore(deps): bump webextension-store-meta [#11194](https://github.com/badges/shields/issues/11194)
+- adjust import conditions [#11189](https://github.com/badges/shields/issues/11189)
+- Dependency updates
+
 ## server-2025-08-02
 
 - increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
