@@ -11,15 +11,6 @@ export default class UptimeObserverRatio extends UptimeObserverBase {
   }
 
   static openApi = {
-    '/uptimeobserver/ratio/{monitorKey}': {
-      get: {
-        summary: 'UptimeObserver default uptime ratio (30 days)',
-        parameters: pathParams({
-          name: 'monitorKey',
-          example: '33Zw1rnH6veb4OLcskqvj6g9Lj4tnyxZ41',
-        }),
-      },
-    },
     '/uptimeobserver/ratio/1/{monitorKey}': {
       get: {
         summary: 'UptimeObserver uptime ratio (1 day)',
