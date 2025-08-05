@@ -8,10 +8,10 @@ import { documentation, httpErrorsFor } from './github-helpers.js'
 // All we do is check its length.
 const schema = Joi.array().items(Joi.object())
 
-const descriptionWithNote = `${documentation}
-
-Note: Co-authors are not included in the count due to endpoint limitations.
-`
+const documentationWithNote = [
+  documentation,
+  'Note: Co-authors are not included in the count due to endpoint limitations.',
+].join('\n\n')
 
 export default class GithubContributors extends GithubAuthV3Service {
   static category = 'activity'
@@ -26,7 +26,7 @@ export default class GithubContributors extends GithubAuthV3Service {
     '/github/{metric}/{user}/{repo}': {
       get: {
         summary: 'GitHub contributors',
-        description: descriptionWithNote,
+        description: documentationWithNote,
         parameters: pathParams(
           {
             name: 'metric',
