@@ -20,7 +20,7 @@ Any custom logo can be passed in a URL parameter by base64 encoding it. e.g:
 
 ## logoColor parameter
 
-The `logoColor` param can be used to set the color of the SimpleIcons named logo. Hex, rgb, rgba, hsl, hsla and css named colors can all be used.
+The `logoColor` param can be used to set the color of the SimpleIcons named logo. Hex, rgb, rgba, hsl, hsla, hwb and css named colors can all be used.
 
 - ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript
 - ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5

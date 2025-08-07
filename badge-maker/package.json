@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "anafanafo": "2.0.0",
-    "css-color-converter": "^2.0.0"
+    "color": "^5.0.0"
   },
   "scripts": {
     "test": "echo 'Run tests from parent dir'; false"

@@ -38,7 +38,7 @@ The static badge accepts a single required path parameter which encodes either:
   </tbody>
 </table>
 
-Hex, rgb, rgba, hsl, hsla and css named colors may be used.
+Hex, rgb, rgba, hsl, hsla, hwb and css named colors may be used.
 `
 
 export default class StaticBadge extends BaseStaticService {

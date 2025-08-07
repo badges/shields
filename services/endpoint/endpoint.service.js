@@ -55,7 +55,7 @@ The endpoint badge takes a single required query param: <code>url</code>, which 
         <td><code>color</code></td>
         <td>
           Default: <code>lightgrey</code>. The right color. Supports the eight
-          named colors above, as well as hex, rgb, rgba, hsl, hsla and css named
+          named colors above, as well as hex, rgb, rgba, hsl, hsla, hwb, and css named
           colors. This can be overridden by the query string.
         </td>
       </tr>
