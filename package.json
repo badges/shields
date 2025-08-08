@@ -65,7 +65,7 @@
     "query-string": "^9.2.2",
     "re2": "^1.22.1",
     "semver": "~7.7.2",
-    "simple-icons": "15.8.0",
+    "simple-icons": "15.9.0",
     "smol-toml": "1.4.1",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
