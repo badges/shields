@@ -1,4 +1,4 @@
-import { fromString } from 'css-color-converter'
+import colour from 'color'
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
 export const namedColors = {
@@ -36,7 +36,13 @@ export function isHexColor(s = '') {
 }
 
 function isCSSColor(color) {
-  return typeof color === 'string' && fromString(color.trim())
+  if (typeof color !== 'string') return false
+  try {
+    const cssColor = colour(color.trim())
+    return Boolean(cssColor)
+  } catch {
+    return false
+  }
 }
 
 export function normalizeColor(color) {
@@ -67,12 +73,14 @@ export function toSvgColor(color) {
 }
 
 export function brightness(color) {
-  if (color) {
-    const cssColor = fromString(color)
+  if (!color) return 0
+  try {
+    const cssColor = colour(color)
+
     if (cssColor) {
-      const rgb = cssColor.toRgbaArray()
+      const rgb = cssColor.rgb().array()
       return +((rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 255000).toFixed(2)
     }
-  }
+  } catch {}
   return 0
 }
