@@ -156,8 +156,12 @@ class Badge {
       }
     }
     let rightWidth = messageWidth + 2 * horizPadding
-    if (hasLogo && !hasLabel) {
-      rightWidth += totalLogoWidth + (message.length ? horizPadding - 1 : 0)
+    if (hasLogo) {
+      if (hasLabel) {
+        rightWidth -= 1
+      } else {
+        rightWidth += totalLogoWidth + (message.length ? horizPadding : 0) - 1
+      }
     }
 
     const width = leftWidth + rightWidth
@@ -762,8 +766,8 @@ function forTheBadge({
 }) {
   const FONT_SIZE = 10
   const BADGE_HEIGHT = 28
-  const TEXT_MARGIN = 12
-  const LOGO_MARGIN = 9
+  const TEXT_MARGIN = 10
+  const LOGO_MARGIN = 10
   const LOGO_TEXT_GUTTER = 6
   const LETTER_SPACING = 1.25
 
