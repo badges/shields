@@ -119,7 +119,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="20"
   role="img"
   aria-label="cactus: grown"
@@ -130,12 +130,12 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
   <clipPath id="r">
-    <rect width="106" height="20" rx="3" fill="#fff" />
+    <rect width="105" height="20" rx="3" fill="#fff" />
   </clipPath>
   <g clip-path="url(#r)">
     <rect width="62" height="20" fill="#0f0" />
-    <rect x="62" width="44" height="20" fill="#b3e" />
-    <rect width="106" height="20" fill="url(#s)" />
+    <rect x="62" width="43" height="20" fill="#b3e" />
+    <rect width="105" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -232,7 +232,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="63"
+  width="62"
   height="20"
   role="img"
   aria-label="grown"
@@ -242,11 +242,11 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
-  <clipPath id="r"><rect width="63" height="20" rx="3" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="62" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="63" height="20" fill="#b3e" />
-    <rect width="63" height="20" fill="url(#s)" />
+    <rect x="0" width="62" height="20" fill="#b3e" />
+    <rect width="62" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -284,7 +284,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="68"
+  width="67"
   height="20"
   role="img"
   aria-label="grown"
@@ -294,11 +294,11 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
-  <clipPath id="r"><rect width="68" height="20" rx="3" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="67" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="24" height="20" fill="#0f0" />
-    <rect x="24" width="44" height="20" fill="#b3e" />
-    <rect width="68" height="20" fill="url(#s)" />
+    <rect x="24" width="43" height="20" fill="#b3e" />
+    <rect width="67" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -543,7 +543,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="20"
   role="img"
   aria-label="cactus: grown"
@@ -551,7 +551,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>cactus: grown</title>
   <g shape-rendering="crispEdges">
     <rect width="62" height="20" fill="#0f0" />
-    <rect x="62" width="44" height="20" fill="#b3e" />
+    <rect x="62" width="43" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -609,7 +609,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="63"
+  width="62"
   height="20"
   role="img"
   aria-label="grown"
@@ -617,7 +617,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>grown</title>
   <g shape-rendering="crispEdges">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="63" height="20" fill="#b3e" />
+    <rect x="0" width="62" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -644,7 +644,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "flat-square" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="68"
+  width="67"
   height="20"
   role="img"
   aria-label="grown"
@@ -652,7 +652,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>grown</title>
   <g shape-rendering="crispEdges">
     <rect width="24" height="20" fill="#0f0" />
-    <rect x="24" width="44" height="20" fill="#b3e" />
+    <rect x="24" width="43" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -832,7 +832,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="18"
   role="img"
   aria-label="cactus: grown"
@@ -845,12 +845,12 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
   <clipPath id="r">
-    <rect width="106" height="18" rx="4" fill="#fff" />
+    <rect width="105" height="18" rx="4" fill="#fff" />
   </clipPath>
   <g clip-path="url(#r)">
     <rect width="62" height="18" fill="#0f0" />
-    <rect x="62" width="44" height="18" fill="#b3e" />
-    <rect width="106" height="18" fill="url(#s)" />
+    <rect x="62" width="43" height="18" fill="#b3e" />
+    <rect width="105" height="18" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -949,7 +949,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="63"
+  width="62"
   height="18"
   role="img"
   aria-label="grown"
@@ -961,11 +961,11 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset=".9" stop-color="#000" stop-opacity=".3" />
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
-  <clipPath id="r"><rect width="63" height="18" rx="4" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="62" height="18" rx="4" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="18" fill="#555" />
-    <rect x="0" width="63" height="18" fill="#b3e" />
-    <rect width="63" height="18" fill="url(#s)" />
+    <rect x="0" width="62" height="18" fill="#b3e" />
+    <rect width="62" height="18" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -1003,7 +1003,7 @@ exports['The badge generator "plastic" template badge generation should match sn
 exports['The badge generator "plastic" template badge generation should match snapshots: message only, with logo and labelColor 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="68"
+  width="67"
   height="18"
   role="img"
   aria-label="grown"
@@ -1015,11 +1015,11 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset=".9" stop-color="#000" stop-opacity=".3" />
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
-  <clipPath id="r"><rect width="68" height="18" rx="4" fill="#fff" /></clipPath>
+  <clipPath id="r"><rect width="67" height="18" rx="4" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="24" height="18" fill="#0f0" />
-    <rect x="24" width="44" height="18" fill="#b3e" />
-    <rect width="68" height="18" fill="url(#s)" />
+    <rect x="24" width="43" height="18" fill="#b3e" />
+    <rect width="67" height="18" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
@@ -2105,7 +2105,7 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator "flat" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="20"
   role="img"
   aria-label="cactus: grown"
@@ -2116,12 +2116,12 @@ exports['The badge generator "flat" template badge generation should match snaps
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
   <clipPath id="r1">
-    <rect width="106" height="20" rx="3" fill="#fff" />
+    <rect width="105" height="20" rx="3" fill="#fff" />
   </clipPath>
   <g clip-path="url(#r1)">
     <rect width="62" height="20" fill="#0f0" />
-    <rect x="62" width="44" height="20" fill="#b3e" />
-    <rect width="106" height="20" fill="url(#s1)" />
+    <rect x="62" width="43" height="20" fill="#b3e" />
+    <rect width="105" height="20" fill="url(#s1)" />
   </g>
   <g
     fill="#fff"
@@ -2173,7 +2173,7 @@ exports['The badge generator "flat" template badge generation should match snaps
 exports['The badge generator "flat-square" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="20"
   role="img"
   aria-label="cactus: grown"
@@ -2181,7 +2181,7 @@ exports['The badge generator "flat-square" template badge generation should matc
   <title>cactus: grown</title>
   <g shape-rendering="crispEdges">
     <rect width="62" height="20" fill="#0f0" />
-    <rect x="62" width="44" height="20" fill="#b3e" />
+    <rect x="62" width="43" height="20" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -2211,7 +2211,7 @@ exports['The badge generator "flat-square" template badge generation should matc
 exports['The badge generator "plastic" template badge generation should match snapshots: message with custom suffix 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="106"
+  width="105"
   height="18"
   role="img"
   aria-label="cactus: grown"
@@ -2224,12 +2224,12 @@ exports['The badge generator "plastic" template badge generation should match sn
     <stop offset="1" stop-color="#000" stop-opacity=".5" />
   </linearGradient>
   <clipPath id="r1">
-    <rect width="106" height="18" rx="4" fill="#fff" />
+    <rect width="105" height="18" rx="4" fill="#fff" />
   </clipPath>
   <g clip-path="url(#r1)">
     <rect width="62" height="18" fill="#0f0" />
-    <rect x="62" width="44" height="18" fill="#b3e" />
-    <rect width="106" height="18" fill="url(#s1)" />
+    <rect x="62" width="43" height="18" fill="#b3e" />
+    <rect width="105" height="18" fill="url(#s1)" />
   </g>
   <g
     fill="#fff"
@@ -2422,7 +2422,7 @@ exports['The badge generator "social" template badge generation should match sna
 exports['The badge generator badges with logos should always produce the same badge default badge with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="112"
+  width="111"
   height="20"
   role="img"
   aria-label="label: message"
@@ -2433,12 +2433,12 @@ exports['The badge generator badges with logos should always produce the same ba
     <stop offset="1" stop-opacity=".1" />
   </linearGradient>
   <clipPath id="r">
-    <rect width="112" height="20" rx="3" fill="#fff" />
+    <rect width="111" height="20" rx="3" fill="#fff" />
   </clipPath>
   <g clip-path="url(#r)">
     <rect width="54" height="20" fill="#555" />
-    <rect x="54" width="58" height="20" fill="#4c1" />
-    <rect width="112" height="20" fill="url(#s)" />
+    <rect x="54" width="57" height="20" fill="#4c1" />
+    <rect width="111" height="20" fill="url(#s)" />
   </g>
   <g
     fill="#fff"
