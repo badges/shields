@@ -1356,14 +1356,14 @@ exports['The badge generator "for-the-badge" template badge generation should ma
 exports['The badge generator "for-the-badge" template badge generation should match snapshots: message only, with logo 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="90.25"
+  width="89.25"
   height="28"
   role="img"
   aria-label="GROWN"
 >
   <title>GROWN</title>
   <g shape-rendering="crispEdges">
-    <rect width="90.25" height="28" fill="#b3e" />
+    <rect width="89.25" height="28" fill="#b3e" />
   </g>
   <g
     fill="#fff"
@@ -2678,14 +2678,14 @@ exports['The badge generator badges with logo-only should always produce the sam
 exports['The badge generator badges with logo-only should always produce the same badge for-the-badge badge, logo-only 1'] = `
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="30"
+  width="34"
   height="28"
   role="img"
   aria-label=""
 >
   <title></title>
   <g shape-rendering="crispEdges">
-    <rect width="30" height="28" fill="#4c1" />
+    <rect width="34" height="28" fill="#4c1" />
   </g>
   <g
     fill="#fff"

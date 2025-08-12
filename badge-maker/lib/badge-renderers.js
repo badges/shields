@@ -825,7 +825,11 @@ function forTheBadge({
   } else {
     if (logo) {
       messageTextMinX = TEXT_MARGIN + logoWidth + gutter
-      messageRectWidth = 2 * TEXT_MARGIN + logoWidth + gutter + messageTextWidth
+      messageRectWidth =
+        2 * TEXT_MARGIN + logoWidth + gutter + messageTextWidth - 1
+      if (noText) {
+        messageRectWidth += 5 // Compensate for the extra padding
+      }
     } else {
       messageTextMinX = TEXT_MARGIN
       messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
