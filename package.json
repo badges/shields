@@ -21,7 +21,7 @@
     "url": "https://github.com/badges/shields"
   },
   "dependencies": {
-    "@renovatebot/pep440": "^4.1.0",
+    "@renovatebot/pep440": "^4.2.0",
     "@renovatebot/ruby-semver": "^4.0.0",
     "@sentry/node": "^10.3.0",
     "@shields_io/camp": "^18.1.2",
