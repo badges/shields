@@ -45,8 +45,8 @@ Examples of additional options:
     https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge
   </li>
   <li>
-    <b>Color (named):</b> <img alt="color: orange" src="https://img.shields.io/badge/coverage-95%-orange" /> -
-    https://img.shields.io/badge/coverage-95%-orange
+    <b>Color (named):</b> <img alt="color: orange" src="https://img.shields.io/badge/coverage-95%25-orange" /> -
+    https://img.shields.io/badge/coverage-95%25-orange
   </li>
   <li>
     <b>Logo:</b> <img alt="logo: GitHub" src="https://img.shields.io/badge/github-repo-blue?logo=github" /> -
