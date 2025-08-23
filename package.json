@@ -208,7 +208,7 @@
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.13.1",
     "sinon": "^21.0.0",
-    "sinon-chai": "4.0.0",
+    "sinon-chai": "4.0.1",
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "2.0.13",
     "tsd": "^0.33.0",
