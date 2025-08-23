@@ -2,6 +2,28 @@ import { normalizeColor, toSvgColor } from './color.js'
 import badgeRenderers from './badge-renderers.js'
 import { stripXmlWhitespace } from './xml.js'
 import { DEFAULT_LOGO_HEIGHT } from './constants.js'
+import { MissingOptionalDependencyError } from './errors.js'
+
+let getIconSize
+let prepareNamedLogo
+
+try {
+  getIconSize = (await import('./simple-icons-utils/svg-helpers.js'))
+    .getIconSize
+} catch (e) {
+  if (!(e instanceof MissingOptionalDependencyError)) {
+    throw e
+  }
+}
+
+try {
+  prepareNamedLogo = (await import('./simple-icons-utils/logos.js'))
+    .prepareNamedLogo
+} catch (e) {
+  if (!(e instanceof MissingOptionalDependencyError)) {
+    throw e
+  }
+}
 
 /*
 note: makeBadge() is fairly thinly wrapped so if we are making changes here
@@ -15,6 +37,8 @@ export default function makeBadge({
   color,
   labelColor,
   logo,
+  namedLogo,
+  namedLogoColor,
   logoSize,
   logoWidth,
   links = ['', ''],
@@ -46,7 +70,35 @@ export default function makeBadge({
     throw new Error(`Unknown badge style: '${style}'`)
   }
 
-  logoWidth = +logoWidth || (logo ? DEFAULT_LOGO_HEIGHT : 0)
+  // we assume logo overrides namedLogo
+  if (logoWidth) {
+    logoWidth = +logoWidth
+  } else if (logo) {
+    logoWidth = DEFAULT_LOGO_HEIGHT
+  } else if (namedLogo) {
+    let iconSize
+    if (getIconSize) {
+      iconSize = getIconSize(String(namedLogo).toLowerCase())
+    }
+    if (iconSize && logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    } else {
+      logoWidth = DEFAULT_LOGO_HEIGHT
+    }
+  } else {
+    logoWidth = 0
+  }
+
+  if (namedLogo && !logo) {
+    if (prepareNamedLogo) {
+      logo = prepareNamedLogo({
+        name: namedLogo,
+        color: namedLogoColor,
+        size: logoSize,
+        style,
+      })
+    }
+  }
 
   return stripXmlWhitespace(
     render({
