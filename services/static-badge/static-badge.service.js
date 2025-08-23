@@ -38,7 +38,7 @@ The static badge accepts a single required path parameter which encodes either:
   </tbody>
 </table>
 
-<b>Examples of additional options:</b>
+Examples of additional options:
 <ul>
   <li>
     <b>Style:</b> <img alt="style: for-the-badge" src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" /> -
