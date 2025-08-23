@@ -105,6 +105,7 @@ There are three ways to specify `color` and `labelColor`:
 
 - `rgb(...)`, `rgba(...)`
 - `hsl(...)`, `hsla(...)`
+- `hwb(...)`
 - ![][aqua] ![][fuchsia] ![][lightslategray] etc.
 
 [brightgreen]: https://img.shields.io/badge/brightgreen-brightgreen.svg
