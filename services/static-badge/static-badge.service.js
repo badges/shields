@@ -42,15 +42,15 @@ Examples of additional options:
 <ul>
   <li>
     <b>Style:</b> <img alt="style: for-the-badge" src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" /> -
-    <code>?style=for-the-badge</code>
+    https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge
   </li>
   <li>
     <b>Color (named):</b> <img alt="color: orange" src="https://img.shields.io/badge/coverage-95%-orange" /> -
-    <code>orange</code>
+    https://img.shields.io/badge/coverage-95%-orange
   </li>
   <li>
     <b>Logo:</b> <img alt="logo: GitHub" src="https://img.shields.io/badge/github-repo-blue?logo=github" /> -
-    <code>?logo=github</code>
+    https://img.shields.io/badge/github-repo-blue?logo=github
   </li>
 </ul>
 
