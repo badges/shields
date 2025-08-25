@@ -181,6 +181,7 @@
     "eslint-plugin-sort-class-members": "1.21.0",
     "form-data": "^4.0.4",
     "globals": "16.3.0",
+    "http-deceiver": "file:vendor/http-deceiver",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
     "is-svg": "^6.1.0",
@@ -213,6 +214,9 @@
     "start-server-and-test": "2.0.13",
     "tsd": "^0.33.0",
     "url": "^0.11.4"
+  },
+  "overrides": {
+    "http-deceiver": "$http-deceiver"
   },
   "engines": {
     "node": "^22",
