@@ -766,7 +766,6 @@ function forTheBadge({
   const FONT_SIZE = 10
   const BADGE_HEIGHT = 28
   const TEXT_MARGIN = 10
-  const LOGO_MARGIN = 10
   const LOGO_TEXT_GUTTER = 6
   const LETTER_SPACING = 1.25
 
@@ -805,40 +804,27 @@ function forTheBadge({
   const hasLabel = Boolean(label.length)
   const noText = !hasLabel && !message
   const needsLabelRect = hasLabel || (logo && labelColor)
-  const gutter = noText ? LOGO_TEXT_GUTTER - LOGO_MARGIN : LOGO_TEXT_GUTTER
-  let logoMinX, labelTextMinX
+  let labelTextMinX = TEXT_MARGIN
+  let labelRectWidth = 2 * TEXT_MARGIN
+  let messageTextMinX = TEXT_MARGIN
+  let messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
   if (logo) {
-    logoMinX = LOGO_MARGIN
-    labelTextMinX = logoMinX + logoWidth + gutter
-  } else {
-    labelTextMinX = TEXT_MARGIN
+    if (labelColor) labelRectWidth += logoWidth
+    labelTextMinX += logoWidth + LOGO_TEXT_GUTTER
   }
-  let labelRectWidth, messageTextMinX, messageRectWidth
   if (needsLabelRect) {
-    if (hasLabel) {
-      labelRectWidth = labelTextMinX + labelTextWidth + TEXT_MARGIN
-    } else {
-      labelRectWidth = 2 * LOGO_MARGIN + logoWidth
-    }
-    messageTextMinX = labelRectWidth + TEXT_MARGIN
-    messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
+    if (hasLabel) labelRectWidth += labelTextMinX + labelTextWidth
+    messageTextMinX += labelRectWidth
   } else {
     if (logo) {
-      messageTextMinX = TEXT_MARGIN + logoWidth + gutter
-      messageRectWidth =
-        2 * TEXT_MARGIN + logoWidth + gutter + messageTextWidth - 1
-      if (noText) {
-        messageRectWidth += 5 // Compensate for the extra padding
-      }
-    } else {
-      messageTextMinX = TEXT_MARGIN
-      messageRectWidth = 2 * TEXT_MARGIN + messageTextWidth
+      messageTextMinX += logoWidth + LOGO_TEXT_GUTTER
+      messageRectWidth += logoWidth + (noText ? 0 : LOGO_TEXT_GUTTER)
     }
   }
 
   const logoElement = getLogoElement({
     logo,
-    horizPadding: logoMinX,
+    horizPadding: TEXT_MARGIN,
     badgeHeight: BADGE_HEIGHT,
     logoWidth,
   })
