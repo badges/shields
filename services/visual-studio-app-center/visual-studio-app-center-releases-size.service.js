@@ -1,54 +1,14 @@
-import Joi from 'joi'
-import { pathParams } from '../index.js'
-import { renderSizeBadge } from '../size.js'
-import { nonNegativeInteger } from '../validators.js'
-import {
-  BaseVisualStudioAppCenterService,
-  description,
-} from './visual-studio-app-center-base.js'
+import { deprecatedService } from '../index.js'
 
-const schema = Joi.object({
-  size: nonNegativeInteger,
-}).required()
-
-export default class VisualStudioAppCenterReleasesSize extends BaseVisualStudioAppCenterService {
-  static category = 'size'
-
-  static route = {
+// Visual Studio App Center was retired. See: https://learn.microsoft.com/en-us/appcenter/retirement
+const VisualStudioAppCenterReleasesSize = deprecatedService({
+  category: 'size',
+  route: {
     base: 'visual-studio-app-center/releases/size',
     pattern: ':owner/:app/:token',
-  }
+  },
+  label: 'size',
+  dateAdded: new Date('2025-08-30'),
+})
 
-  static openApi = {
-    '/visual-studio-app-center/releases/size/{owner}/{app}/{token}': {
-      get: {
-        summary: 'Visual Studio App Center Size',
-        description,
-        parameters: pathParams(
-          {
-            name: 'owner',
-            example: 'jct',
-          },
-          {
-            name: 'app',
-            example: 'my-amazing-app',
-          },
-          {
-            name: 'token',
-            example: 'ac70cv...',
-          },
-        ),
-      },
-    },
-  }
-
-  static defaultBadgeData = {
-    label: 'size',
-    color: 'blue',
-  }
-
-  async handle({ owner, app, token }) {
-    const { size } = await this.fetch({ owner, app, token, schema })
-    return renderSizeBadge(size, 'metric')
-  }
-}
+export default VisualStudioAppCenterReleasesSize

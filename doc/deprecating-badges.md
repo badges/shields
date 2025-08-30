@@ -123,6 +123,7 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - Snap CI
 - Travis.org
 - VersionEye
+- Visual Studio App Center
 - Waffle
 - Wercker
 
