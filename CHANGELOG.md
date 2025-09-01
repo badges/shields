@@ -4,6 +4,14 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-09-01
+
+- chore(deps): bump chai-as-promised from 8.0.1 to 8.0.2 [#11310](https://github.com/badges/shields/issues/11310)
+- docs: add note to [GithubContributors] about co-authors limitations [#11260](https://github.com/badges/shields/issues/11260)
+- Add [UptimeObserver] monitoring shields support [#11147](https://github.com/badges/shields/issues/11147)
+- chore: use the modern labels API for draft release action [#11259](https://github.com/badges/shields/issues/11259)
+- Dependency updates
+
 ## server-2025-08-03
 
 - increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
