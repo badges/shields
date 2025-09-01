@@ -7,7 +7,7 @@ const VisualStudioAppCenterReleasesVersion = deprecatedService({
     base: 'visual-studio-app-center/releases/version',
     pattern: ':owner/:app/:token',
   },
-  label: 'release',
+  label: 'visualstudioappcenter',
   dateAdded: new Date('2025-08-30'),
 })
 

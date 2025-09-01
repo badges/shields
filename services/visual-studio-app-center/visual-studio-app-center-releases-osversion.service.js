@@ -7,7 +7,7 @@ const VisualStudioAppCenterReleasesOSVersion = deprecatedService({
     base: 'visual-studio-app-center/releases/osver',
     pattern: ':owner/:app/:token',
   },
-  label: 'min version',
+  label: 'visualstudioappcenter',
   dateAdded: new Date('2025-08-30'),
 })
 

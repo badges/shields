@@ -7,7 +7,7 @@ const VisualStudioAppCenterReleasesSize = deprecatedService({
     base: 'visual-studio-app-center/releases/size',
     pattern: ':owner/:app/:token',
   },
-  label: 'size',
+  label: 'visualstudioappcenter',
   dateAdded: new Date('2025-08-30'),
 })
 

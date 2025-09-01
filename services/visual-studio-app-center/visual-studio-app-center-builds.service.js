@@ -7,7 +7,7 @@ const VisualStudioAppCenterBuilds = deprecatedService({
     base: 'visual-studio-app-center/builds',
     pattern: ':owner/:app/:branch/:token',
   },
-  label: 'build',
+  label: 'visualstudioappcenter',
   dateAdded: new Date('2025-08-30'),
 })
 
