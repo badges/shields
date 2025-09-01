@@ -8,7 +8,6 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - docs: add note to [GithubContributors] about co-authors limitations [#11260](https://github.com/badges/shields/issues/11260)
 - Add [UptimeObserver] monitoring shields support [#11147](https://github.com/badges/shields/issues/11147)
-- chore: use the modern labels API for draft release action [#11259](https://github.com/badges/shields/issues/11259)
 - Dependency updates
 
 ## server-2025-08-03
