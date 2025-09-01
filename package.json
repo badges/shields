@@ -84,7 +84,7 @@
     "coverage:report:generate": "c8 report",
     "coverage:report:open": "open-cli coverage/lcov-report/index.html",
     "coverage:report": "run-s --silent coverage:report:generate coverage:report:open",
-    "lint": "eslint \"**/*.@(cjs|mjs|js|ts)\"",
+    "lint": "eslint --concurrency auto \"**/*.@(cjs|mjs|js|ts)\"",
     "prettier": "prettier --write \"**/*.@(cjs|mjs|js|ts|md|json|yml)\"",
     "prettier:check": "prettier --check \"**/*.@(cjs|mjs|js|ts|md|json|yml)\"",
     "danger": "danger",
@@ -127,7 +127,7 @@
   },
   "lint-staged": {
     "**/*.@(cjs|mjs|js|ts)": [
-      "eslint --fix",
+      "eslint --fix --concurrency auto",
       "prettier --write"
     ],
     "**/*.@(md|json|yml)": [
