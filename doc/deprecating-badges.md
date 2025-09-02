@@ -11,7 +11,11 @@ Deprecating a badge involves two steps:
 
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
 
-Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service. For example:
+Replace the existing service class implementation with the `DeprecatedService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service.
+
+Set the badge label to the service name. This ensures users can immediately identify which service is no longer available at a glance.
+
+For example:
 
 ```js
 import { deprecatedService } from '../index.js'
