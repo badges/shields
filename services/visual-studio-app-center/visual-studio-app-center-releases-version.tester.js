@@ -1,50 +1,40 @@
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
 
-// Note:
-// Unfortunately an Invalid user, invalid project, valid API token test is not possible due to the way Microsoft cache their responses.
-// For this reason 404 and 403 will instead both display 'project not found'
+export const t = new ServiceTester({
+  id: 'VisualStudioAppCenterReleasesVersion',
+  title: 'VisualStudioAppCenterReleasesVersion',
+  pathPrefix: '/visual-studio-app-center/releases/version',
+})
 
 t.create('[fixed] Example Release')
-  // This application will never have a new release created.
   .get(
     '/jct/test-fixed-android-react/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json',
   )
   .expectBadge({
-    label: 'release',
-    message: 'v1.0 (1)',
+    label: 'visualstudioappcenter',
+    message: 'no longer available',
   })
 
 t.create('Valid user, invalid project, valid API token')
   .get('/jcx/invalid/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json')
   .expectBadge({
-    label: 'release',
-    message: 'project not found',
+    label: 'visualstudioappcenter',
+    message: 'no longer available',
   })
 
 t.create('Invalid user, invalid project, valid API token')
   .get('/invalid/invalid/8c9b519a0750095b9fea3d40b2645d8a0c24a2f3.json')
   .expectBadge({
-    label: 'release',
-    message: 'project not found',
+    label: 'visualstudioappcenter',
+    message: 'no longer available',
   })
 
-t.create('Missing Short Version')
-  .get('/nock/nock/nock.json')
-  .intercept(nock =>
-    nock('https://api.appcenter.ms/v0.1/apps/')
-      .get('/nock/nock/releases/latest')
-      .reply(200, {
-        version: '1.0',
-        short_version: '',
-      }),
-  )
-  .expectBadge({
-    label: 'release',
-    message: 'v1.0',
-  })
+t.create('Missing Short Version').get('/nock/nock/nock.json').expectBadge({
+  label: 'visualstudioappcenter',
+  message: 'no longer available',
+})
 
 t.create('Invalid API Token').get('/invalid/invalid/invalid.json').expectBadge({
-  label: 'release',
-  message: 'invalid token',
+  label: 'visualstudioappcenter',
+  message: 'no longer available',
 })
