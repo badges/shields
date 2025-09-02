@@ -8,7 +8,6 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 - deprecate [VisualStudioAppCenter] [#11321](https://github.com/badges/shields/issues/11321)
 - update [StackExchangeMonthlyQuestions] example and live test [#11320](https://github.com/badges/shields/issues/11320)
-- devop: enable auto concurrency for eslint [#11322](https://github.com/badges/shields/issues/11322)
 - increase cache length for [VisualStudioMarketplace] [#11311](https://github.com/badges/shields/issues/11311)
 - Dependency updates
 
