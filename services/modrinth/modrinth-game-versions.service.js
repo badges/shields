@@ -38,8 +38,14 @@ export default class ModrinthGameVersions extends BaseModrinthService {
   }
 
   async handle({ projectId }) {
-    const { 0: latest } = await this.fetchVersions({ projectId })
-    const versions = latest.game_versions
+    const data = await this.fetchVersions({ projectId })
+    const versions = [
+      ...new Set(
+        data
+          .map(ver => ver.game_versions)
+          .reduce((prev, curr) => [...prev, ...curr]),
+      ),
+    ].sort()
     return this.constructor.render({ versions })
   }
 }
