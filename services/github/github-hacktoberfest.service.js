@@ -53,7 +53,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',
-    pattern: ':year(2019|2020|2021|2022|2023|2024)/:user/:repo',
+    pattern: ':year(2019|2020|2021|2022|2023|2024|2025)/:user/:repo',
     queryParamSchema,
   }
 
@@ -65,7 +65,7 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
         parameters: [
           pathParam({
             name: 'year',
-            example: '2024',
+            example: '2025',
             schema: { type: 'string', enum: this.getEnum('year') },
           }),
           pathParam({ name: 'user', example: 'tmrowco' }),
