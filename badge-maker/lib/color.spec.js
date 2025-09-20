@@ -33,20 +33,23 @@ test(normalizeColor, () => {
   given('rgb(100%, 200%, 222%)').expect('rgb(100%, 200%, 222%)')
   given('rgb(122, 200, 222)').expect('rgb(122, 200, 222)')
   given('rgb(122, 200, 222, 1)').expect('rgb(122, 200, 222, 1)')
+  given('rgb(-100, 20, 111)').expect('rgb(-100, 20, 111)')
+  given('rgba(-100, 20, 111, 1.1)').expect('rgba(-100, 20, 111, 1.1)')
   given('rgba(100, 20, 111, 1)').expect('rgba(100, 20, 111, 1)')
   given('hsl(122, 200%, 222%)').expect('hsl(122, 200%, 222%)')
   given('hsla(122, 200%, 222%, 1)').expect('hsla(122, 200%, 222%, 1)')
+  given('hwb(122, 200%, 222%)').expect('hwb(122, 200%, 222%)')
+  given('hwb(122, 200%, 222%, 1)').expect('hwb(122, 200%, 222%, 1)')
   forCases([
     given(),
     given(''),
     given('not-a-color'),
     given('#ABCFGH'),
-    given('rgb(-100, 20, 111)'),
     given('rgb(100%, 200, 222)'),
-    given('rgba(-100, 20, 111, 1.1)'),
     given('hsl(122, 200, 222, 1)'),
     given('hsl(122, 200, 222)'),
     given('hsl(122, 200, 222%)'),
+    given('hwba(122, 200%, 222, 1)'),
     given(undefined),
     given(null),
     given(true),
