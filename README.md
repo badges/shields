@@ -117,14 +117,6 @@ It also works with full URLs like
 Use `npm run debug:server` to start server in debug mode.
 [This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
 
-Shields has experimental support for [Gitpod][gitpod], a pre-configured development
-environment that runs in your browser. To use Gitpod, click the button below and
-sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
-Please report any Gitpod bugs, questions, or suggestions in issue
-[#2772](https://github.com/badges/shields/issues/2772).
-
-[![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved
@@ -135,7 +127,6 @@ The server can be configured to use [Sentry][] ([configuration][sentry configura
 Our [full test suite][full test suite] as well as [code coverage][code coverage] are run on a daily basis.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
-[gitpod]: https://www.gitpod.io/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [prometheus]: https://prometheus.io/
 [prometheus configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus
