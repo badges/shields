@@ -303,15 +303,6 @@ describe('coalesceBadge', function () {
         style: 'flat',
       })
     })
-
-    it('replaces legacy popout styles', function () {
-      expect(coalesceBadge({ style: 'popout' }, {}, {})).to.include({
-        style: 'flat',
-      })
-      expect(coalesceBadge({ style: 'popout-square' }, {}, {})).to.include({
-        style: 'flat-square',
-      })
-    })
   })
 
   describe('Cache length', function () {

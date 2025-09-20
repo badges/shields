@@ -93,12 +93,6 @@ export default function coalesceBadge(
   } = defaultBadgeData
 
   let style = coalesce(overrideStyle, serviceStyle)
-  if (typeof style !== 'string') {
-    style = 'flat'
-  }
-  if (style.startsWith('popout')) {
-    style = style.replace('popout', 'flat')
-  }
   const styleValues = [
     'plastic',
     'flat',
