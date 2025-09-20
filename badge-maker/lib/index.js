@@ -1,11 +1,10 @@
-'use strict'
 /**
  * @module badge-maker
  */
 
-const _makeBadge = require('./make-badge')
+import _makeBadge from './make-badge.js'
 
-class ValidationError extends Error {}
+export class ValidationError extends Error {}
 
 function _validate(format) {
   if (format !== Object(format)) {
@@ -105,13 +104,8 @@ function _clean(format) {
  * @returns {string} Badge in SVG format
  * @see https://github.com/badges/shields/tree/master/badge-maker/README.md
  */
-function makeBadge(format) {
+export function makeBadge(format) {
   _validate(format)
   const cleanedFormat = _clean(format)
   return _makeBadge(cleanedFormat)
-}
-
-module.exports = {
-  makeBadge,
-  ValidationError,
 }

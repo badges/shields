@@ -290,6 +290,17 @@ Create an account, sign in and obtain generate a key on your
 `PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry,
 users can also override this by query parameter `pypiBaseUrl`.
 
+### Reddit
+
+Using a token for Reddit is optional but will allow higher API rates.
+
+- `REDDIT_CLIENT_ID` (yml: `private.reddit_client_id`)
+- `REDDIT_CLIENT_SECRET` (yml: `private.reddit_client_secret`)
+
+Register to use the API using [this form](https://support.reddithelp.com/hc/en-us/requests/new?ticket_form_id=14868593862164)
+and create an app in the [Reddit preferences page](https://www.reddit.com/prefs/apps)
+in order to obtain a client id and a client secret for making Reddit API calls.
+
 ### SymfonyInsight (formerly Sensiolabs)
 
 - `SL_INSIGHT_USER_UUID` (yml: `private.sl_insight_userUuid`)

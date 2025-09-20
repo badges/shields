@@ -12,7 +12,6 @@ const globalQueryParams = new Set([
   'logo',
   'logoColor',
   'logoSize',
-  'logoWidth',
   'link',
   'colorA',
   'colorB',
@@ -115,7 +114,6 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
     const result = handlerOptions.handler(
       filteredQueryParams,
       match,
-      // eslint-disable-next-line mocha/prefer-arrow-callback
       function sendBadge(format, badgeData) {
         if (serverUnresponsive) {
           return
@@ -128,7 +126,6 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
         makeSend(format, ask.res, end)(svg)
       },
     )
-    // eslint-disable-next-line promise/prefer-await-to-then
     if (result && result.catch) {
       // eslint-disable-next-line promise/prefer-await-to-then
       result.catch(err => {

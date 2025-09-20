@@ -145,7 +145,7 @@ export default class Codecov extends BaseSvgScrapingService {
 
   async fetch({ vcsName, user, repo, branch, token, flag }) {
     const url = `https://codecov.io/${vcsName}/${user}/${repo}${
-      branch ? `/branches/${branch}` : ''
+      branch ? `/branch/${branch}` : ''
     }/graph/badge.svg`
     return this._requestSvg({
       schema,

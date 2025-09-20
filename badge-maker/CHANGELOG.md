@@ -1,5 +1,32 @@
 # Changelog
 
+## 5.0.2
+
+### Bug Fixes
+
+- Fix export for require
+
+## 5.0.1
+
+### Bug Fixes
+
+- Fix ESM type exports
+
+### Other Changes
+
+- Drop use-strict from badge-maker header
+
+## 5.0.0
+
+### Breaking Changes
+
+- Drop compatibility with Node < 20
+- Switch from CommonJS to ESModules
+
+### Other Changes
+
+- Switching to using `href`s instead of the old `xlink:href` syntax
+
 ## 4.1.0
 
 ### Features
@@ -113,7 +140,6 @@
 ### Deprecations
 
 - `labelColor` and `color` are now the recommended attribute names for label color and message color.
-
   - `colorA` (now an alias for `labelColor`),
   - `colorB` (now an alias for `color`) and
   - `colorscheme` (now an alias for `color`)

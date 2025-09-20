@@ -60,7 +60,7 @@ This repo hosts:
 - amount of [Liberapay](https://liberapay.com/) donations per week: ![receives](https://img.shields.io/badge/receives-2.00%20USD%2Fweek-yellow)
 - Python package downloads: ![downloads](https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen)
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
-- [Uptime Robot](https://uptimerobot.com) percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
+- Uptime Robot uptime percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
 
 [Make your own badges!][custom badges]
 (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
@@ -96,8 +96,9 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
-1. Install Node 20 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 20 and 22.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/badges/shields?quickstart=1)
+
+1. Install Node 22. You can use the [package manager][] of your choice.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -199,13 +200,13 @@ You can read more about [the project's inception][thread],
 Maintainers:
 
 - [calebcartwright](https://github.com/calebcartwright)
-- [chris48s](https://github.com/chris48s)
 - [jNullj](https://github.com/jnullj)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
 Alumni:
 
+- [chris48s](https://github.com/chris48s)
 - [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)

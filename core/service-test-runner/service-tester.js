@@ -83,7 +83,7 @@ class ServiceTester {
       .before(() => {
         this.beforeEach()
       })
-      // eslint-disable-next-line mocha/prefer-arrow-callback, promise/prefer-await-to-then
+      // eslint-disable-next-line promise/prefer-await-to-then
       .finally(function () {
         // `this` is the IcedFrisby instance.
         let responseBody

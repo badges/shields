@@ -8,10 +8,7 @@ financial contributions, issues, and pull requests!
 ### Financial contributions
 
 We welcome financial contributions in full transparency on our
-[open collective](https://opencollective.com/shields). Anyone can file an
-expense. If the expense makes sense for the development of the community, it
-will be "merged" into the ledger of our open collective by the core
-contributors and the person who filed the expense will be reimbursed.
+[open collective](https://opencollective.com/shields).
 
 ### Contributing code
 
@@ -90,7 +87,7 @@ encourage you to contribute logos there. Please review their
 
 Feel free to star the repository. This will help increase the visibility of the project, therefore attracting more users and contributors to Shields!
 
-We're also asking for [one-time \$10 donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
+We're also asking for [donations](https://opencollective.com/shields) from developers who use and love Shields, please spread the word!
 
 ## Getting help
 

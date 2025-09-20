@@ -30,3 +30,13 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
 .opencollective-image {
   color-scheme: initial;
 }
+
+.flex-column-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.align-bottom {
+  margin-top: auto;
+}

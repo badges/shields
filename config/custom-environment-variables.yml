@@ -105,6 +105,8 @@ private:
   opencollective_token: 'OPENCOLLECTIVE_TOKEN'
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'
+  reddit_client_id: 'REDDIT_CLIENT_ID'
+  reddit_client_secret: 'REDDIT_CLIENT_SECRET'
   sentry_dsn: 'SENTRY_DSN'
   sl_insight_userUuid: 'SL_INSIGHT_USER_UUID'
   sl_insight_apiToken: 'SL_INSIGHT_API_TOKEN'

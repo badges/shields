@@ -32,8 +32,6 @@ export default class SnapcraftLastUpdate extends SnapcraftBase {
     queryParamSchema,
   }
 
-  static defaultBadgeData = { label: 'last updated' }
-
   static openApi = {
     '/snapcraft/last-update/{package}/{track}/{risk}': {
       get: {
@@ -54,6 +52,8 @@ export default class SnapcraftLastUpdate extends SnapcraftBase {
       },
     },
   }
+
+  static defaultBadgeData = { label: 'last updated' }
 
   static transform(apiData, track, risk, arch) {
     const channelMap = apiData['channel-map']

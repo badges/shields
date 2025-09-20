@@ -7,7 +7,7 @@ t.create('Rating')
   .get('/rating/IndieGala-Helper.json')
   .expectBadge({
     label: 'rating',
-    message: Joi.string().regex(/^\d\/\d$/),
+    message: Joi.string().regex(/^\d(\.\d)?\/\d$/),
   })
 
 t.create('Stars')

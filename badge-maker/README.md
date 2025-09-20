@@ -21,15 +21,7 @@ badge build passed :brightgreen > mybadge.svg
 
 ### As a library
 
-With CommonJS in JavaScript,
-
 ```js
-const { makeBadge, ValidationError } = require('badge-maker')
-```
-
-With ESM or TypeScript,
-
-```ts
 import { makeBadge, ValidationError } from 'badge-maker'
 ```
 
@@ -67,7 +59,7 @@ The format is the following:
   message: 'passed',  // (Required) Badge message
   labelColor: '#555',  // (Optional) Label color
   color: '#4c1',  // (Optional) Message color
-  logoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iOCIgZmlsbD0iI2IxY2U1NiIvPjxwYXRoIGQ9Ik04IDBoMjR2NjRIOGMtNC40MzIgMC04LTMuNTY4LTgtOFY4YzAtNC40MzIgMy41NjgtOCA4LTh6IiBmaWxsPSIjNWQ1ZDVkIi8+PC9zdmc+' // (Optional) Any custom logo can be passed in a URL parameter by base64 encoding
+  logoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iOCIgZmlsbD0iI2IxY2U1NiIvPjxwYXRoIGQ9Ik04IDBoMjR2NjRIOGMtNC40MzIgMC04LTMuNTY4LTgtOFY4YzAtNC40MzIgMy41NjgtOCA4LTh6IiBmaWxsPSIjNWQ1ZDVkIi8+PC9zdmc+', // (Optional) Any custom logo can be passed in a URL parameter by base64 encoding
   links: ['https://example.com', 'https://example.com'], // (Optional) Links array of maximum two links
 
   // (Optional) One of: 'plastic', 'flat', 'flat-square', 'for-the-badge' or 'social'

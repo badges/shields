@@ -10,9 +10,9 @@ t.create('known issue')
   .expectBadge({ label: 'kafka-2896', message: 'Resolved' })
 
 t.create('no status color')
-  .get('/foo-123.json?baseUrl=http://issues.apache.org/jira')
+  .get('/foo-123.json?baseUrl=https://issues.apache.org/jira')
   .intercept(nock =>
-    nock('http://issues.apache.org/jira/rest/api/2/issue')
+    nock('https://issues.apache.org/jira/rest/api/2/issue')
       .get(`/${encodeURIComponent('foo-123')}`)
       .reply(200, {
         fields: {

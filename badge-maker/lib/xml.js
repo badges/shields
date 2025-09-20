@@ -2,13 +2,11 @@
  * @module
  */
 
-'use strict'
-
-function stripXmlWhitespace(xml) {
+export function stripXmlWhitespace(xml) {
   return xml.replace(/>\s+/g, '>').replace(/<\s+/g, '<').trim()
 }
 
-function escapeXml(s) {
+export function escapeXml(s) {
   if (typeof s === 'number') {
     return s
   } else if (s === undefined || typeof s !== 'string') {
@@ -26,7 +24,7 @@ function escapeXml(s) {
 /**
  * Representation of an XML element
  */
-class XmlElement {
+export class XmlElement {
   /**
    * Xml Element Constructor
    *
@@ -77,7 +75,7 @@ class XmlElement {
  * Convenience class. Sometimes it is useful to return an object that behaves
  * like an XmlElement but renders multiple XML tags (not wrapped in a <g>).
  */
-class ElementList {
+export class ElementList {
   constructor({ content = [] }) {
     this.content = content
   }
@@ -92,5 +90,3 @@ class ElementList {
     )
   }
 }
-
-module.exports = { escapeXml, stripXmlWhitespace, XmlElement, ElementList }

@@ -119,7 +119,7 @@ describe('The server', function () {
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
-      expect(headers['content-length']).to.equal('1130')
+      expect(headers['content-length']).to.equal('1087')
     })
 
     it('correctly calculates the content-length header for multi-byte unicode characters', async function () {

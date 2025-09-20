@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 import {
   description,
@@ -25,7 +25,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  targetUrl: optionalUrl.required(),
+  targetUrl: url,
   preset: Joi.string().regex(presetRegex).allow(''),
 }).required()
 
