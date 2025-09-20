@@ -6,14 +6,6 @@ export const t = new ServiceTester({
   pathPrefix: '/ansible/role',
 })
 
-t.create('role name')
-  .get('/14542.json')
-  .expectBadge({ label: 'role', message: 'no longer available' })
-
-t.create('role downloads (deprecated)')
-  .get('/d/14542.json')
-  .expectBadge({ label: 'role downloads', message: 'no longer available' })
-
 t.create('role downloads (valid)')
   .get('/d/openwisp/openwisp2.json')
   .expectBadge({ label: 'role downloads', message: isMetric })

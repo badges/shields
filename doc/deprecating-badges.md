@@ -94,11 +94,14 @@ Past that point, all related code will be deleted, and a not found error will be
 
 Here is a listing of all deleted badges that were once part of the Shields.io service:
 
+- Ansible Collection, Role, Quality
 - APM
 - Beerpay
 - Bintray
 - bitHound
+- Bountysource
 - Cauditor
+- Chrome Web Store Price
 - CocoaPods Apps
 - CocoaPods Downloads
 - Codetally
@@ -122,13 +125,18 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - NSP
 - pkgreview
 - PHP Eye
+- Redmine
 - requires.io
 - Shippable
 - Snap CI
+- Snyk
+- Tas
+- Tokei
 - Travis.org
 - VersionEye
 - Waffle
 - Wercker
+- Wheelmap
 
 ## Additional Information
 

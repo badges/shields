@@ -1,12 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
 import { nonNegativeInteger } from '../validators.js'
-import {
-  BaseJsonService,
-  deprecatedService,
-  NotFound,
-  pathParams,
-} from '../index.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const ansibleRoleSchema = Joi.object({
   results: Joi.array()
@@ -18,29 +13,7 @@ const ansibleRoleSchema = Joi.object({
     .required(),
 }).required()
 
-const AnsibleGalaxyRoleName = deprecatedService({
-  name: 'DeprecatedAnsibleGalaxyRoleName',
-  category: 'other',
-  route: {
-    base: 'ansible/role',
-    pattern: ':roleId',
-  },
-  label: 'role',
-  dateAdded: new Date('2023-10-10'),
-})
-
-const AnsibleGalaxyRoleLegacyDownloads = deprecatedService({
-  name: 'DeprecatedAnsibleGalaxyRoleDownloads',
-  category: 'downloads',
-  route: {
-    base: 'ansible/role/d',
-    pattern: ':roleId',
-  },
-  label: 'role downloads',
-  dateAdded: new Date('2023-10-10'),
-})
-
-class AnsibleGalaxyRoleDownloads extends BaseJsonService {
+export default class AnsibleGalaxyRoleDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = { base: 'ansible/role/d', pattern: ':namespace/:name' }
 
@@ -74,10 +47,4 @@ class AnsibleGalaxyRoleDownloads extends BaseJsonService {
     }
     return renderDownloadsBadge({ downloads: json.results[0].download_count })
   }
-}
-
-export {
-  AnsibleGalaxyRoleDownloads,
-  AnsibleGalaxyRoleName,
-  AnsibleGalaxyRoleLegacyDownloads,
 }
