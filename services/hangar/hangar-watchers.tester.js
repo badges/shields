@@ -7,7 +7,7 @@ t.create('Essentials').get('/Essentials.json').expectBadge({
   message: isMetric,
 })
 
-t.create('Invalid Resource').get('/1.json').expectBadge({
+t.create('Invalid Resource').get('/does-not-exist.json').expectBadge({
   label: 'watchers',
   message: 'not found',
 })

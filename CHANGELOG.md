@@ -4,6 +4,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-09-02
+
+- deprecate [VisualStudioAppCenter] [#11321](https://github.com/badges/shields/issues/11321)
+- update [StackExchangeMonthlyQuestions] example and live test [#11320](https://github.com/badges/shields/issues/11320)
+- increase cache length for [VisualStudioMarketplace] [#11311](https://github.com/badges/shields/issues/11311)
+- Dependency updates
+
+## server-2025-09-01
+
+- docs: add note to [GithubContributors] about co-authors limitations [#11260](https://github.com/badges/shields/issues/11260)
+- Add [UptimeObserver] monitoring shields support [#11147](https://github.com/badges/shields/issues/11147)
+- Dependency updates
+
 ## server-2025-08-03
 
 - increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
