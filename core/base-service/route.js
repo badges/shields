@@ -36,7 +36,7 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
     const fullPattern = `${makeFullUrl(base, pattern)}:ext(${extensionRegex})`
     const keys = []
     regex = pathToRegexp(fullPattern, keys, {
-      strict: true,
+      trailing: false,
       sensitive: true,
     })
     captureNames = keys.map(item => item.name).slice(0, -1)
