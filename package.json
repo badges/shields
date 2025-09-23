@@ -57,7 +57,7 @@
     "node-env-flag": "^0.1.0",
     "node-pg-migrate": "^8.0.3",
     "parse-link-header": "^2.0.0",
-    "path-to-regexp": "^6.3.0",
+    "path-to-regexp": "^8.3.0",
     "pg": "^8.16.3",
     "priorityqueuejs": "^2.0.0",
     "prom-client": "^15.1.3",
