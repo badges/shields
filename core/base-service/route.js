@@ -33,13 +33,19 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
     regex = new RegExp(`^${makeFullUrl(base, format)}(${extensionRegex})$`)
     captureNames = capture || []
   } else {
-    const fullPattern = `${makeFullUrl(base, pattern)}:ext(${extensionRegex})`
+    const fullPatternWithoutExt = `${makeFullUrl(base, pattern)}`
     const keys = []
-    regex = pathToRegexp(fullPattern, keys, {
+    const pathRegex = pathToRegexp(fullPatternWithoutExt, keys, {
       trailing: false,
       sensitive: true,
     })
-    captureNames = keys.map(item => item.name).slice(0, -1)
+    const sourceWithoutEnd = pathRegex.regexp.source.replace(/\$$/, '')
+    // workaround for path-to-regexp not supporting regex anymore
+    regex = new RegExp(
+      `${sourceWithoutEnd}(${extensionRegex})$`,
+      pathRegex.regexp.flags,
+    )
+    captureNames = keys.map(item => item.name)
   }
   return { regex, captureNames }
 }
