@@ -8,7 +8,7 @@ t.create('Grade').get('/github/microsoft/powertoys.json').expectBadge({
 })
 
 t.create('Grade (branch)')
-  .get('/github/spring-projects/spring-boot/main.json')
+  .get('/github/microsoft/powertoys/main.json')
   .expectBadge({
     label: 'code quality',
     message: isValidGrade,
