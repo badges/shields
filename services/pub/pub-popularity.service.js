@@ -6,6 +6,6 @@ export const PubPopularity = deprecatedService({
     base: 'pub/popularity',
     pattern: ':packageName',
   },
-  label: 'popularity',
+  label: 'pubpopularity',
   dateAdded: new Date('2025-05-11'),
 })
