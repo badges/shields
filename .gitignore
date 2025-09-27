@@ -19,6 +19,7 @@ Thumbs.db
 
 # Visual Studio Code User Settings
 .vscode/settings.json
+*.code-workspace
 
 # eclipse
 .project
