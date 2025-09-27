@@ -16,8 +16,6 @@ updates:
       # https://caniuse.com/js-regexp-lookbehind
       - dependency-name: 'decamelize'
       - dependency-name: 'humanize-string'
-      # simple-icons is handled by separate weekly schedule below
-      - dependency-name: 'simple-icons'
     groups:
       # All official @docusaurus/* packages should have the exact same version as @docusaurus/core.
       # From https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups:
@@ -32,18 +30,6 @@ updates:
         applies-to: security-updates
         patterns:
           - '@docusaurus/*'
-
-  # simple-icons package - weekly updates
-  - package-ecosystem: npm
-    directory: '/'
-    schedule:
-      interval: weekly
-      day: friday
-      time: '12:00'
-    allow:
-      - dependency-name: 'simple-icons'
-    open-pull-requests-limit: 99
-    rebase-strategy: disabled
 
   # badge-maker package dependencies
   - package-ecosystem: npm
