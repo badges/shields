@@ -53,7 +53,7 @@ export default class Fedora extends BaseJsonService {
         branch,
       )}/pkg/${encodeURIComponent(packageName)}`,
       httpErrors: {
-        400: 'branch not found',
+        400: 'branch or package not found',
       },
     })
     return renderVersionBadge({ version: data.version })

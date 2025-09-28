@@ -96,8 +96,9 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
-1. Install Node 20 or later. You can use the [package manager][] of your choice.
-   Tests need to pass in Node 20 and 22.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/badges/shields?quickstart=1)
+
+1. Install Node 22. You can use the [package manager][] of your choice.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -116,14 +117,6 @@ It also works with full URLs like
 Use `npm run debug:server` to start server in debug mode.
 [This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
 
-Shields has experimental support for [Gitpod][gitpod], a pre-configured development
-environment that runs in your browser. To use Gitpod, click the button below and
-sign in with GitHub. Gitpod also offers a browser add-on, though it is not required.
-Please report any Gitpod bugs, questions, or suggestions in issue
-[#2772](https://github.com/badges/shields/issues/2772).
-
-[![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/badges/shields)
-
 [Snapshot tests][] ensure we don't inadvertently make changes that affect the
 SVG or JSON output. When deliberately changing the output, run
 `SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved
@@ -134,7 +127,6 @@ The server can be configured to use [Sentry][] ([configuration][sentry configura
 Our [full test suite][full test suite] as well as [code coverage][code coverage] are run on a daily basis.
 
 [package manager]: https://nodejs.org/en/download/package-manager/
-[gitpod]: https://www.gitpod.io/
 [snapshot tests]: https://glebbahmutov.com/blog/snapshot-testing/
 [prometheus]: https://prometheus.io/
 [prometheus configuration]: https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus
@@ -199,13 +191,13 @@ You can read more about [the project's inception][thread],
 Maintainers:
 
 - [calebcartwright](https://github.com/calebcartwright)
-- [chris48s](https://github.com/chris48s)
 - [jNullj](https://github.com/jnullj)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
 Alumni:
 
+- [chris48s](https://github.com/chris48s)
 - [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
 - [olivierlacan](https://github.com/olivierlacan)

@@ -10,11 +10,11 @@ export default class DeprecatedGithubWorkflowStatus extends BaseService {
 
   static openApi = {}
 
-  static defaultBadgeData = { label: 'build' }
+  static defaultBadgeData = { label: 'githubworkflowstatus' }
 
   async handle() {
     return {
-      label: 'build',
+      label: 'githubworkflowstatus',
       message: 'https://github.com/badges/shields/issues/8671',
       /*
       This is a 'special' deprecation because we are making a breaking change

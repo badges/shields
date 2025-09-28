@@ -43,7 +43,11 @@ class BaseCratesService extends BaseJsonService {
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
       : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
     const schema = version ? versionResponseSchema : crateResponseSchema
-    return this._requestJson({ schema, url })
+    return this._requestJson({
+      schema,
+      url,
+      httpErrors: version ? { 400: 'invalid version' } : {},
+    })
   }
 
   static getLatestVersion(response) {

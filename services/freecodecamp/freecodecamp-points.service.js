@@ -36,7 +36,7 @@ export default class FreeCodeCampPoints extends BaseJsonService {
         summary: 'freeCodeCamp points',
         parameters: pathParams({
           name: 'username',
-          example: 'raisedadead',
+          example: 'qapaloma',
         }),
       },
     },
@@ -51,7 +51,7 @@ export default class FreeCodeCampPoints extends BaseJsonService {
   async fetch({ username }) {
     return this._requestJson({
       schema,
-      url: 'https://api.freecodecamp.org/api/users/get-public-profile',
+      url: 'https://api.freecodecamp.org/users/get-public-profile',
       options: {
         searchParams: {
           username,

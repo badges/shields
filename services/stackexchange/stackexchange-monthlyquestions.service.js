@@ -28,7 +28,7 @@ export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
           },
           {
             name: 'query',
-            example: 'dayjs',
+            example: 'javascript',
           },
         ),
       },

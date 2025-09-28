@@ -59,8 +59,6 @@ const FeatureList = [
         >
           docker image
         </a>
-        <br />
-        <code>docker pull shieldsio/shields</code>
       </>
     ),
   },

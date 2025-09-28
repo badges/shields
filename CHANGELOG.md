@@ -4,6 +4,88 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-09-02
+
+- deprecate [VisualStudioAppCenter] [#11321](https://github.com/badges/shields/issues/11321)
+- update [StackExchangeMonthlyQuestions] example and live test [#11320](https://github.com/badges/shields/issues/11320)
+- increase cache length for [VisualStudioMarketplace] [#11311](https://github.com/badges/shields/issues/11311)
+- Dependency updates
+
+## server-2025-09-01
+
+- docs: add note to [GithubContributors] about co-authors limitations [#11260](https://github.com/badges/shields/issues/11260)
+- Add [UptimeObserver] monitoring shields support [#11147](https://github.com/badges/shields/issues/11147)
+- Dependency updates
+
+## server-2025-08-03
+
+- increase [SourceforgeDownloads] cache time [#11226](https://github.com/badges/shields/issues/11226)
+- Dependency updates
+
+## server-2025-07-01
+
+**Important notice:** Updated node from 20 to 22.
+
+- fix/improve maven metadata version badges; affects [maven gradle] [#11077](https://github.com/badges/shields/issues/11077)
+- fix PHP version parsing [#11128](https://github.com/badges/shields/issues/11128)
+- update [polymart] schema [#11073](https://github.com/badges/shields/issues/11073)
+- deploy on node 22 [#11070](https://github.com/badges/shields/issues/11070)
+- improve performance of lookup simple-icons [#11129](https://github.com/badges/shields/issues/11129)
+- [DepsRs] Add Deps.rs dependency status badges [#11107](https://github.com/badges/shields/issues/11107)
+- add icon svg [#11126](https://github.com/badges/shields/issues/11126)
+- Dependency updates
+
+## server-2025-06-01
+
+- Remove Non-Functional SVG Stroke Attribute in Social Badge Renderer [#11095](https://github.com/badges/shields/issues/11095)
+- deprecate [pub] popularity badge [#11074](https://github.com/badges/shields/issues/11074)
+- deprecate [coincap] service [#11075](https://github.com/badges/shields/issues/11075)
+- Support [F-Droid] custom repos [#10792](https://github.com/badges/shields/issues/10792)
+- fix: use decimal rating for Firefox extension [#11068](https://github.com/badges/shields/issues/11068)
+- set shorter upstream request timeout on [endpoint] and [dynamic] badges [#10996](https://github.com/badges/shields/issues/10996)
+- Dependency updates
+
+## server-2025-05-01
+
+- New experimental [DynamicRegex] badge [#10985](https://github.com/badges/shields/issues/10985)
+- limit label and message to 255 chars [#10998](https://github.com/badges/shields/issues/10998)
+- [PyPI] Fix license for packages following PEP 639 [#11001](https://github.com/badges/shields/issues/11001)
+- Dependency updates
+
+## server-2025-04-01
+
+- fix(#10970): codecov branch badge [#10971](https://github.com/badges/shields/issues/10971)
+- docker: cleanup some building [#10957](https://github.com/badges/shields/issues/10957)
+- graceful shutdown [#10958](https://github.com/badges/shields/issues/10958)
+- Update [SourceForge] commit count badge to support repository parameter [#10954](https://github.com/badges/shields/issues/10954)
+- feat: add new badges for new [ansible] collection APIs [#10938](https://github.com/badges/shields/issues/10938)
+- [sourceforge] add repo param to last commit service [#10935](https://github.com/badges/shields/issues/10935)
+- tweak default cache lengths by category [#10919](https://github.com/badges/shields/issues/10919)
+- [Packagist] Update default domain for repo metadata [#10920](https://github.com/badges/shields/issues/10920)
+- use SVG2 hrefs [#10918](https://github.com/badges/shields/issues/10918)
+- remove `logoWidth` param [#10878](https://github.com/badges/shields/issues/10878)
+- Dependency updates
+
+## server-2025-03-02
+
+- time out long running requests more aggressively [#10833](https://github.com/badges/shields/issues/10833)
+- Dependency updates
+
+## server-2025-02-02
+
+- Mark Stubs-only packages with [PypiTypes] badge [#10864](https://github.com/badges/shields/issues/10864)
+- fix badge style when logo only [#10794](https://github.com/badges/shields/issues/10794)
+- pass matching mime type to xmldom; test [dynamicxml] [#10830](https://github.com/badges/shields/issues/10830)
+- allow [chromewebstore] size to contain decimal point [#10812](https://github.com/badges/shields/issues/10812)
+- Add auth support to [Reddit] badges [#10790](https://github.com/badges/shields/issues/10790)
+- Fixed mixed up Code climate endpoints [#10813](https://github.com/badges/shields/issues/10813)
+- feat: add terraform registry providers and modules downloads [#10793](https://github.com/badges/shields/issues/10793)
+- Renew [Mastodon] docs and improve parameter handling [#10789](https://github.com/badges/shields/issues/10789)
+- Support [Matrix] summary endpoint [#10782](https://github.com/badges/shields/issues/10782)
+- use metric() in [coderabbit] badge [#10779](https://github.com/badges/shields/issues/10779)
+- cache matrix badges for 4 hours [#10778](https://github.com/badges/shields/issues/10778)
+- Dependency updates
+
 ## server-2025-01-01
 
 - Add [PypiTypes] badge [#10774](https://github.com/badges/shields/issues/10774)
