@@ -137,7 +137,7 @@ Prettier before a commit by default.
 
 ### Coding style
 
-This project uses camelCase for variable names and function names and client facing parameters.
+This project uses lower camelCase for variable names and function names and client facing parameters.
 We use PascalCase for class names and service names.
 
 ### Tests
