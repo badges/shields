@@ -3,7 +3,7 @@
 Production hosting is managed by the Shields ops team:
 
 - [calebcartwright](https://github.com/calebcartwright)
-- [chris48s](https://github.com/chris48s)
+- [jNullj](https://github.com/jnullj)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 

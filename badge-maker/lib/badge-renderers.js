@@ -1,8 +1,6 @@
-'use strict'
-
-const anafanafo = require('anafanafo')
-const { brightness } = require('./color')
-const { XmlElement, ElementList } = require('./xml')
+import anafanafo from 'anafanafo'
+import { brightness } from './color.js'
+import { XmlElement, ElementList } from './xml.js'
 
 // https://github.com/badges/shields/pull/1132
 const FONT_SCALE_UP_FACTOR = 10
@@ -62,7 +60,7 @@ function getLogoElement({ logo, horizPadding, badgeHeight, logoWidth }) {
       y: 0.5 * (badgeHeight - logoHeight),
       width: logoWidth,
       height: logoHeight,
-      'xlink:href': logo,
+      href: logo,
     },
   })
 }
@@ -83,13 +81,12 @@ function renderBadge(
     ? new XmlElement({
         name: 'a',
         content,
-        attrs: { target: '_blank', 'xlink:href': leftLink },
+        attrs: { target: '_blank', href: leftLink },
       })
     : new ElementList({ content })
 
   const svgAttrs = {
     xmlns: 'http://www.w3.org/2000/svg',
-    'xmlns:xlink': 'http://www.w3.org/1999/xlink',
     width,
     height,
   }
@@ -244,7 +241,7 @@ class Badge {
     return new XmlElement({
       name: 'a',
       content: [rect, shadow, text],
-      attrs: { target: '_blank', 'xlink:href': link },
+      attrs: { target: '_blank', href: link },
     })
   }
 
@@ -550,7 +547,6 @@ function social({
         name: 'path',
         attrs: {
           d: `M${messageBubbleMainX} 6.5 l-3 3v1 l3 3`,
-          stroke: 'd5d5d5',
           fill: '#fafafa',
         },
       }),
@@ -605,7 +601,7 @@ function social({
       ? new XmlElement({
           name: 'a',
           content: [shadow, text, rect],
-          attrs: { target: '_blank', 'xlink:href': leftLink },
+          attrs: { target: '_blank', href: leftLink },
         })
       : new ElementList({ content: [rect, shadow, text] })
   }
@@ -655,7 +651,7 @@ function social({
       ? new XmlElement({
           name: 'a',
           content: [rect, shadow, text],
-          attrs: { target: '_blank', 'xlink:href': rightLink },
+          attrs: { target: '_blank', href: rightLink },
         })
       : new ElementList({ content: [shadow, text] })
   }
@@ -869,7 +865,7 @@ function forTheBadge({
         content: [rect, text],
         attrs: {
           target: '_blank',
-          'xlink:href': leftLink,
+          href: leftLink,
         },
       })
     } else {
@@ -908,7 +904,7 @@ function forTheBadge({
         content: [rect, text],
         attrs: {
           target: '_blank',
-          'xlink:href': rightLink,
+          href: rightLink,
         },
       })
     } else {
@@ -986,7 +982,7 @@ function forTheBadge({
   )
 }
 
-module.exports = {
+export default {
   plastic: params => Plastic.render(params),
   flat: params => Flat.render(params),
   'flat-square': params => FlatSquare.render(params),

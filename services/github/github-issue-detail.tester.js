@@ -66,10 +66,10 @@ t.create('github pull request merge state (pull request not found)')
   })
 
 t.create('github issue milestone')
-  .get('/issues/detail/milestone/badges/shields/4949.json')
+  .get('/issues/detail/milestone/badges/shields/745.json')
   .expectBadge({
     label: 'milestone',
-    message: 'badge-maker v3.4',
+    message: 'Next Deploy',
   })
 
 t.create('github issue milestone (without milestone)')
