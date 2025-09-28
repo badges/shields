@@ -1,8 +1,6 @@
-import dayjs from 'dayjs'
 import Joi from 'joi'
-import { age } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { pathParams } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
@@ -34,14 +32,6 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'created at' }
 
-  static render({ createdAt }) {
-    const date = dayjs(createdAt)
-    return {
-      message: formatDate(date),
-      color: age(date, true),
-    }
-  }
-
   async handle({ user, repo }) {
     const { created_at: createdAt } = await this._requestJson({
       schema,
@@ -49,6 +39,6 @@ export default class GithubCreatedAt extends GithubAuthV3Service {
       httpErrors: httpErrorsFor('repo not found'),
     })
 
-    return this.constructor.render({ createdAt })
+    return renderDateBadge(createdAt, true)
   }
 }

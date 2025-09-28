@@ -1,8 +1,7 @@
 import Joi from 'joi'
-import { version as versionColor } from '../color-formatters.js'
-import { addv } from '../text-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import {
-  optionalUrl,
+  url,
   optionalDottedVersionNClausesWithOptionalSuffix,
 } from '../validators.js'
 import {
@@ -50,7 +49,7 @@ const nexus2ResolveApiSchema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: optionalUrl.required(),
+  server: url,
   queryOpt: Joi.string()
     .regex(/(:[\w.]+=[^:]*)+/i)
     .optional(),
@@ -141,13 +140,6 @@ export default class Nexus extends BaseJsonService {
 
   static defaultBadgeData = {
     label: 'nexus',
-  }
-
-  static render({ version }) {
-    return {
-      message: addv(version),
-      color: versionColor(version),
-    }
   }
 
   addQueryParamsToQueryString({ searchParams, queryOpt }) {
@@ -321,6 +313,6 @@ export default class Nexus extends BaseJsonService {
     })
 
     const { version } = this.transform({ repo, json, actualNexusVersion })
-    return this.constructor.render({ version })
+    return renderVersionBadge({ version })
   }
 }

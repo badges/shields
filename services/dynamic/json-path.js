@@ -60,7 +60,7 @@ export default superclass =>
         }
       }
 
-      if (!values.length) {
+      if (!values || !values.length) {
         throw new InvalidResponse({ prettyMessage: 'no result' })
       }
 

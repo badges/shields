@@ -3,10 +3,10 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('docker version (valid, library)')
-  .get('/_/memcached.json')
+  .get('/docker/example-voting-app-vote.json')
   .expectBadge({
     label: 'version',
-    message: isSemver,
+    message: 'latest',
   })
 
 t.create('docker version (valid, library with tag)')

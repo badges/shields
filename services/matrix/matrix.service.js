@@ -5,9 +5,15 @@ import {
   pathParam,
   queryParam,
 } from '../index.js'
+import { nonNegativeInteger } from '../validators.js'
+
+const fetchModeEnum = ['guest', 'summary']
 
 const queryParamSchema = Joi.object({
   server_fqdn: Joi.string().hostname(),
+  fetchMode: Joi.string()
+    .valid(...fetchModeEnum)
+    .default('guest'),
 }).required()
 
 const matrixRegisterSchema = Joi.object({
@@ -31,8 +37,15 @@ const matrixStateSchema = Joi.array()
   )
   .required()
 
+const matrixSummarySchema = Joi.object({
+  num_joined_members: nonNegativeInteger,
+}).required()
+
 const description = `
 In order for this badge to work, the host of your room must allow guest accounts or dummy accounts to register, and the room must be world readable (chat history visible to anyone).
+
+Alternatively access via the experimental <code>summary</code> endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)) can be configured with the query parameter <code>fetchMode</code> for less server load and better performance, if supported by the homeserver<br/>
+For the <code>matrix.org</code> homeserver <code>fetchMode</code> is hard-coded to <code>summary</code>.
 
 The following steps will show you how to setup the badge URL using the Element Matrix client.
 
@@ -76,12 +89,21 @@ export default class Matrix extends BaseJsonService {
             name: 'server_fqdn',
             example: 'matrix.org',
           }),
+          queryParam({
+            name: 'fetchMode',
+            example: 'guest',
+            description: `<code>guest</code> configures guest authentication while <code>summary</code> configures usage of the experimental "summary" endpoint ([MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266)). If not specified, the default fetch mode is <code>guest</code> (except for matrix.org).`,
+            schema: {
+              type: 'string',
+              enum: fetchModeEnum,
+            },
+          }),
         ],
       },
     },
   }
 
-  static _cacheLength = 30
+  static _cacheLength = 14400
 
   static defaultBadgeData = { label: 'chat' }
 
@@ -147,27 +169,27 @@ export default class Matrix extends BaseJsonService {
     })
   }
 
-  async fetch({ roomAlias, serverFQDN }) {
-    let host
-    if (serverFQDN === undefined) {
-      const splitAlias = roomAlias.split(':')
-      // A room alias can either be in the form #localpart:server or
-      // #localpart:server:port.
-      switch (splitAlias.length) {
-        case 2:
-          host = splitAlias[1]
-          break
-        case 3:
-          host = `${splitAlias[1]}:${splitAlias[2]}`
-          break
-        default:
-          throw new InvalidParameter({ prettyMessage: 'invalid alias' })
-      }
-    } else {
-      host = serverFQDN
-    }
+  async fetchSummary({ host, roomAlias }) {
+    const data = await this._requestJson({
+      url: `https://${host}/_matrix/client/unstable/im.nheko.summary/rooms/%23${encodeURIComponent(
+        roomAlias,
+      )}/summary`,
+      schema: matrixSummarySchema,
+      httpErrors: {
+        400: 'unknown request',
+        404: 'room or endpoint not found',
+      },
+    })
+    return data.num_joined_members
+  }
+
+  async fetchGuest({ host, roomAlias }) {
     const accessToken = await this.retrieveAccessToken({ host })
-    const lookup = await this.lookupRoomAlias({ host, roomAlias, accessToken })
+    const lookup = await this.lookupRoomAlias({
+      host,
+      roomAlias,
+      accessToken,
+    })
     const data = await this._requestJson({
       url: `https://${host}/_matrix/client/r0/rooms/${encodeURIComponent(
         lookup.room_id,
@@ -194,8 +216,36 @@ export default class Matrix extends BaseJsonService {
       : 0
   }
 
-  async handle({ roomAlias }, { server_fqdn: serverFQDN }) {
-    const members = await this.fetch({ roomAlias, serverFQDN })
+  async fetch({ roomAlias, serverFQDN, fetchMode }) {
+    let host
+    if (serverFQDN === undefined) {
+      const splitAlias = roomAlias.split(':')
+      // A room alias can either be in the form #localpart:server or
+      // #localpart:server:port.
+      switch (splitAlias.length) {
+        case 2:
+          host = splitAlias[1]
+          break
+        case 3:
+          host = `${splitAlias[1]}:${splitAlias[2]}`
+          break
+        default:
+          throw new InvalidParameter({ prettyMessage: 'invalid alias' })
+      }
+    } else {
+      host = serverFQDN
+    }
+    if (host.toLowerCase() === 'matrix.org' || fetchMode === 'summary') {
+      // summary endpoint (default for matrix.org)
+      return await this.fetchSummary({ host, roomAlias })
+    } else {
+      // guest access
+      return await this.fetchGuest({ host, roomAlias })
+    }
+  }
+
+  async handle({ roomAlias }, { server_fqdn: serverFQDN, fetchMode }) {
+    const members = await this.fetch({ roomAlias, serverFQDN, fetchMode })
     return this.constructor.render({ members })
   }
 }

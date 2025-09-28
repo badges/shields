@@ -62,4 +62,9 @@ if (fs.existsSync(legacySecretsPath)) {
 }
 export const server = new Server(config)
 
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down...')
+  await server.stop()
+})
+
 await server.start()

@@ -16,6 +16,13 @@ t.create('gets coverage status with flag')
     message: isIntegerPercentage,
   })
 
+t.create('gets coverage status with component')
+  .get('/github/codecov/gazebo.json?component=dir_shared')
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
+
 t.create('gets coverage status for branch')
   .get('/github/codecov/example-python/master.json')
   .expectBadge({
@@ -25,6 +32,13 @@ t.create('gets coverage status for branch')
 
 t.create('gets coverage status for branch with flag')
   .get('/github/codecov/example-node/master.json?flag=istanbul_mocha')
+  .expectBadge({
+    label: 'coverage',
+    message: isIntegerPercentage,
+  })
+
+t.create('gets coverage status for branch with component')
+  .get('/github/codecov/gazebo/main.json?component=dir_shared')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
@@ -46,8 +60,24 @@ t.create('handles unknown repository with flag')
     message: 'unknown',
   })
 
+t.create('handles unknown repository with component')
+  .get(
+    '/github/codecov2/fake-not-even-a-little-bit-real-node.json?component=dir_shared',
+  )
+  .expectBadge({
+    label: 'coverage',
+    message: 'unknown',
+  })
+
 t.create('gets coverage status for unknown flag')
   .get('/github/codecov/example-node.json?flag=unknown_flag')
+  .expectBadge({
+    label: 'coverage',
+    message: 'unknown',
+  })
+
+t.create('gets coverage status for unknown component')
+  .get('/github/codecov/example-node.json?component=unknown_component')
   .expectBadge({
     label: 'coverage',
     message: 'unknown',

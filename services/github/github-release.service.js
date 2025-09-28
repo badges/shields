@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { addv } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
 import { redirector, pathParam, queryParam } from '../index.js'
+import { renderVersionBadge } from '../version.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   fetchLatestRelease,
@@ -46,13 +45,6 @@ class GithubRelease extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'release' }
 
-  static render({ version, sort, isPrerelease }) {
-    let color = 'blue'
-    color = sort === 'semver' ? versionColor(version) : color
-    color = isPrerelease ? 'orange' : color
-    return { message: addv(version), color }
-  }
-
   static transform(latestRelease, display) {
     const { name, tag_name: tagName, prerelease: isPrerelease } = latestRelease
     if (display === 'tag') {
@@ -72,9 +64,8 @@ class GithubRelease extends GithubAuthV3Service {
       latestRelease,
       queryParams.display_name,
     )
-    return this.constructor.render({
+    return renderVersionBadge({
       version,
-      sort: queryParams.sort,
       isPrerelease,
     })
   }

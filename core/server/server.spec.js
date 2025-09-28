@@ -119,7 +119,7 @@ describe('The server', function () {
       )
       expect(statusCode).to.equal(200)
       expect(headers['content-type']).to.equal('image/svg+xml;charset=utf-8')
-      expect(headers['content-length']).to.equal('1130')
+      expect(headers['content-length']).to.equal('1087')
     })
 
     it('correctly calculates the content-length header for multi-byte unicode characters', async function () {
@@ -137,6 +137,27 @@ describe('The server', function () {
       expect(headers['cross-origin-resource-policy']).to.equal('cross-origin')
       expect(headers['content-length']).to.equal('92')
       expect(() => JSON.parse(body)).not.to.throw()
+    })
+
+    describe('Content Security Policy', function () {
+      it('should disable javascript when serving SVG content (no extension)', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green`)
+        expect(headers['content-security-policy']).to.equal(
+          "script-src 'none';",
+        )
+      })
+
+      it('should disable javascript when serving SVG content (with extension)', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green.svg`)
+        expect(headers['content-security-policy']).to.equal(
+          "script-src 'none';",
+        )
+      })
+
+      it('should not send content security headers when serving JSON content', async function () {
+        const { headers } = await got(`${baseUrl}:fruit-apple-green.json`)
+        expect(headers).not.to.have.property('content-security-policy')
+      })
     })
 
     it('should preserve label case', async function () {

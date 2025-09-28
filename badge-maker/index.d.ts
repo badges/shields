@@ -6,6 +6,7 @@ interface Format {
   style?: 'plastic' | 'flat' | 'flat-square' | 'for-the-badge' | 'social'
   logoBase64?: string
   links?: Array<string>
+  idSuffix?: string
 }
 
 export declare class ValidationError extends Error {}

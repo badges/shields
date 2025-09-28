@@ -11,6 +11,7 @@ function streamFromString(str) {
 
 function sendSVG(res, askres, end) {
   askres.setHeader('Content-Type', 'image/svg+xml;charset=utf-8')
+  askres.setHeader('Content-Security-Policy', "script-src 'none';")
   askres.setHeader('Content-Length', Buffer.byteLength(res, 'utf8'))
   end(null, { template: streamFromString(res) })
 }

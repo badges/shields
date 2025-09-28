@@ -1,8 +1,11 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
 import { pathParam, queryParam } from '../index.js'
+import { renderSizeBadge } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
-import NpmBase, { packageNameDescription } from './npm-base.js'
+import NpmBase, {
+  packageNameDescription,
+  queryParamSchema,
+} from './npm-base.js'
 
 const schema = Joi.object({
   dist: Joi.object({
@@ -16,6 +19,7 @@ export default class NpmUnpackedSize extends NpmBase {
   static route = {
     base: 'npm/unpacked-size',
     pattern: ':scope(@[^/]+)?/:packageName/:version*',
+    queryParamSchema,
   }
 
   static openApi = {
@@ -78,10 +82,13 @@ export default class NpmUnpackedSize extends NpmBase {
     })
     const { unpackedSize } = dist
 
+    if (unpackedSize) {
+      return renderSizeBadge(unpackedSize, 'metric', 'unpacked size')
+    }
     return {
       label: 'unpacked size',
-      message: unpackedSize ? prettyBytes(unpackedSize) : 'unknown',
-      color: unpackedSize ? 'blue' : 'lightgray',
+      message: 'unknown',
+      color: 'lightgray',
     }
   }
 }

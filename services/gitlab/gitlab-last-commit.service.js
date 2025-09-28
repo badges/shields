@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { age as ageColor } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { optionalUrl, relativeUri } from '../validators.js'
 import GitLabBase from './gitlab-base.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
@@ -66,13 +65,6 @@ export default class GitlabLastCommit extends GitLabBase {
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
-    return {
-      message: formatDate(commitDate),
-      color: ageColor(Date.parse(commitDate)),
-    }
-  }
-
   async fetch({ project, baseUrl, ref, path }) {
     // https://docs.gitlab.com/ee/api/commits.html#list-repository-commits
     return super.fetch({
@@ -94,6 +86,6 @@ export default class GitlabLastCommit extends GitLabBase {
 
     if (!commit) throw new NotFound({ prettyMessage: 'no commits found' })
 
-    return this.constructor.render({ commitDate: commit.committed_date })
+    return renderDateBadge(commit.committed_date)
   }
 }

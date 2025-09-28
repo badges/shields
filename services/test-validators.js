@@ -55,6 +55,8 @@ const isPhpVersionReduction = withRegex(
   /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/,
 )
 
+const isCommitHash = withRegex(/^[a-f0-9]{7,40}$/)
+
 const isStarRating = withRegex(
   /^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/,
 )
@@ -104,8 +106,11 @@ const isPercentage = Joi.alternatives().try(
   isDecimalPercentageNegative,
 )
 
-const isFileSize = withRegex(
+const isMetricFileSize = withRegex(
   /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/,
+)
+const isIecFileSize = withRegex(
+  /^[0-9]*[.]?[0-9]+\s(B|KiB|MiB|GiB|TiB|PiB|EiB|ZiB|YiB)$/,
 )
 
 const isFormattedDate = Joi.alternatives().try(
@@ -187,6 +192,7 @@ export {
   isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
   isComposerVersion,
   isPhpVersionReduction,
+  isCommitHash,
   isStarRating,
   isMetric,
   isMetricAllowNegative,
@@ -199,7 +205,8 @@ export {
   isPercentage,
   isIntegerPercentage,
   isDecimalPercentage,
-  isFileSize,
+  isMetricFileSize,
+  isIecFileSize,
   isFormattedDate,
   isRelativeFormattedDate,
   isDependencyState,

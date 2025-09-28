@@ -150,5 +150,69 @@ describe('Version helpers', function () {
       message: 'v1.2.3',
       color: 'blue',
     })
+    given({ version: '1.2.3', defaultLabel: 'npm' }).expect({
+      label: 'npm',
+      message: 'v1.2.3',
+      color: 'blue',
+    })
+    given({ version: '1.2.3', suffix: 'tested' }).expect({
+      label: undefined,
+      message: 'v1.2.3 tested',
+      color: 'blue',
+    })
+    given({
+      version: '1.2.3',
+      tag: 'beta',
+      defaultLabel: 'github',
+      suffix: 'tested',
+    }).expect({
+      label: 'github@beta',
+      message: 'v1.2.3 tested',
+      color: 'blue',
+    })
+    given({ version: '1.2.3', prefix: '^' }).expect({
+      label: undefined,
+      message: '^1.2.3',
+      color: 'blue',
+    })
+    given({
+      version: '1.2.3',
+      tag: 'alpha',
+      defaultLabel: 'npm',
+      prefix: '^',
+    }).expect({
+      label: 'npm@alpha',
+      message: '^1.2.3',
+      color: 'blue',
+    })
+    given({
+      version: '1.2.3',
+      defaultLabel: 'npm',
+      prefix: '^',
+    }).expect({
+      label: 'npm',
+      message: '^1.2.3',
+      color: 'blue',
+    })
+    given({
+      version: '1.2.3',
+      prefix: '^',
+      suffix: 'tested',
+    }).expect({
+      label: undefined,
+      message: '^1.2.3 tested',
+      color: 'blue',
+    })
+    given({
+      version: '1.2.3',
+      tag: 'beta',
+      defaultLabel: 'github',
+      prefix: '^',
+      suffix: 'tested',
+    }).expect({
+      label: 'github@beta',
+      message: '^1.2.3 tested',
+      color: 'blue',
+    })
   })
 })

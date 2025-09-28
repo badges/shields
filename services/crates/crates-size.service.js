@@ -1,5 +1,5 @@
-import prettyBytes from 'pretty-bytes'
-import { InvalidResponse, pathParams } from '../index.js'
+import { pathParams } from '../index.js'
+import { renderSizeBadge } from '../size.js'
 import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesSize extends BaseCratesService {
@@ -38,22 +38,9 @@ export default class CratesSize extends BaseCratesService {
     },
   }
 
-  render({ size }) {
-    return {
-      label: 'size',
-      message: prettyBytes(size),
-      color: 'blue',
-    }
-  }
-
   async handle({ crate, version }) {
     const json = await this.fetch({ crate, version })
     const size = this.constructor.getVersionObj(json).crate_size
-
-    if (size == null) {
-      throw new InvalidResponse({ prettyMessage: 'unknown' })
-    }
-
-    return this.render({ size })
+    return renderSizeBadge(size, 'iec')
   }
 }

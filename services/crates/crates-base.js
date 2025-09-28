@@ -4,8 +4,7 @@ import { BaseJsonService, InvalidResponse } from '../index.js'
 
 const versionSchema = Joi.object({
   downloads: nonNegativeInteger,
-  // Crate size is not available for all versions.
-  crate_size: nonNegativeInteger.allow(null),
+  crate_size: nonNegativeInteger,
   num: Joi.string().required(),
   license: Joi.string().required().allow(null),
   rust_version: Joi.string().allow(null),
@@ -24,15 +23,31 @@ const versionResponseSchema = Joi.object({
   version: versionSchema.required(),
 }).required()
 
+const userStatsSchema = Joi.object({
+  total_downloads: nonNegativeInteger.required(),
+}).required()
+
 class BaseCratesService extends BaseJsonService {
   static defaultBadgeData = { label: 'crates.io' }
 
+  /**
+   * Fetches data from the crates.io API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.crate - The crate name.
+   * @param {string} [options.version] - The crate version number (optional).
+   * @returns {Promise<object>} the JSON response from the API.
+   */
   async fetch({ crate, version }) {
     const url = version
       ? `https://crates.io/api/v1/crates/${crate}/${version}`
       : `https://crates.io/api/v1/crates/${crate}?include=versions,downloads`
     const schema = version ? versionResponseSchema : crateResponseSchema
-    return this._requestJson({ schema, url })
+    return this._requestJson({
+      schema,
+      url,
+      httpErrors: version ? { 400: 'invalid version' } : {},
+    })
   }
 
   static getLatestVersion(response) {
@@ -54,7 +69,23 @@ class BaseCratesService extends BaseJsonService {
   }
 }
 
+class BaseCratesUserService extends BaseJsonService {
+  static defaultBadgeData = { label: 'crates.io' }
+
+  /**
+   * Fetches data from the crates.io API.
+   *
+   * @param {object} options - The options for the request
+   * @param {string} options.userId - The user ID.
+   * @returns {Promise<object>} the JSON response from the API.
+   */
+  async fetch({ userId }) {
+    const url = `https://crates.io/api/v1/users/${userId}/stats`
+    return this._requestJson({ schema: userStatsSchema, url })
+  }
+}
+
 const description =
   '[Crates.io](https://crates.io/) is a package registry for Rust.'
 
-export { BaseCratesService, description }
+export { BaseCratesService, BaseCratesUserService, description }

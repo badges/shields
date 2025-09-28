@@ -1,9 +1,7 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
 import { matcher } from 'matcher'
-import { addv } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
-import { latest } from '../version.js'
+import { latest, renderVersionBadge } from '../version.js'
 import { NotFound, redirector, pathParam } from '../index.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import {
@@ -53,13 +51,6 @@ class GithubTag extends GithubAuthV4Service {
 
   static defaultBadgeData = {
     label: 'tag',
-  }
-
-  static render({ version, sort }) {
-    return {
-      message: addv(version),
-      color: sort === 'semver' ? versionColor(version) : 'blue',
-    }
   }
 
   static getLimit({ sort, filter }) {
@@ -123,13 +114,12 @@ class GithubTag extends GithubAuthV4Service {
       const prettyMessage = filter ? 'no matching tags found' : 'no tags found'
       throw new NotFound({ prettyMessage })
     }
-    return this.constructor.render({
+    return renderVersionBadge({
       version: this.constructor.getLatestTag({
         tags,
         sort,
         includePrereleases,
       }),
-      sort,
     })
   }
 }

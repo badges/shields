@@ -1,15 +1,14 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import chai from 'chai'
+import { expect, use } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {
   loadServiceClasses,
   getServicePaths,
   InvalidService,
 } from './loader.js'
-chai.use(chaiAsPromised)
+use(chaiAsPromised)
 
-const { expect } = chai
 const fixturesDir = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
   'loader-test-fixtures',

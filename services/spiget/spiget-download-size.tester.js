@@ -1,10 +1,10 @@
-import { isFileSize } from '../test-validators.js'
+import { isMetricFileSize } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('EssentialsX (hosted resource)')
   .get('/771.json')
-  .expectBadge({ label: 'size', message: isFileSize })
+  .expectBadge({ label: 'size', message: isMetricFileSize })
 
 t.create('external resource').get('/9089.json').expectBadge({
   label: 'size',

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { BaseService, InvalidResponse, queryParam } from '../index.js'
 
 const description = `
@@ -12,7 +12,7 @@ can be viewed on the [OSS Tracker repository](https://github.com/Netflix/osstrac
 `
 
 const queryParamSchema = Joi.object({
-  file_url: optionalUrl.required(),
+  file_url: url,
 }).required()
 
 export default class OssTracker extends BaseService {

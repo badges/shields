@@ -7,5 +7,5 @@ about: Ideas for other new features or improvements
 
 <!-- A clear and concise description of the new feature. -->
 
-<!-- Love Shields? Please consider donating $10 to sustain our activities:
+<!-- Love Shields? Please consider donating to sustain our activities:
 👉  https://opencollective.com/shields -->

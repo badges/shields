@@ -25,6 +25,8 @@ processes = []
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
 
   [services.concurrency]
     hard_limit = 25
@@ -45,3 +47,7 @@ processes = []
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

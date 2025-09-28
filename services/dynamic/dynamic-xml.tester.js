@@ -74,8 +74,9 @@ t.create('multiple results')
   .intercept(withExampleXml)
   .expectBadge({
     label: 'custom badge',
+    // truncated to 255 chars
     message:
-      "XML Developer's Guide, Midnight Rain, Maeve Ascendant, Oberon's Legacy, The Sundered Grail, Lover Birds, Splish Splash, Creepy Crawlies, Paradox Lost, Microsoft .NET: The Programming Bible, MSXML3: A Comprehensive Guide, Visual Studio 7: A Comprehensive Guide",
+      "XML Developer's Guide, Midnight Rain, Maeve Ascendant, Oberon's Legacy, The Sundered Grail, Lover Birds, Splish Splash, Creepy Crawlies, Paradox Lost, Microsoft .NET: The Programming Bible, MSXML3: A Comprehensive Guide, Visual Studio 7: A Comprehensive G",
   })
 
 t.create('prefix and suffix')
@@ -213,5 +214,18 @@ t.create('query with type conversion to number')
   .expectBadge({
     label: 'custom badge',
     message: '44.95',
+    color: 'blue',
+  })
+
+t.create('query HTML document')
+  .get(
+    `.json?${queryString.stringify({
+      url: 'https://httpbin.org/html',
+      query: '//h1[1]',
+    })}`,
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'Herman Melville - Moby-Dick',
     color: 'blue',
   })

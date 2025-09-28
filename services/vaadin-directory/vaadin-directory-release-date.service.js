@@ -1,6 +1,5 @@
 import { pathParams } from '../index.js'
-import { formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { BaseVaadinDirectoryService } from './vaadin-directory-base.js'
 
 export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryService {
@@ -27,14 +26,8 @@ export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryServi
     label: 'latest release date',
   }
 
-  static render({ date }) {
-    return { message: formatDate(date), color: ageColor(date) }
-  }
-
   async handle({ alias, packageName }) {
     const data = await this.fetch({ packageName })
-    return this.constructor.render({
-      date: data.latestAvailableRelease.publicationDate,
-    })
+    return renderDateBadge(data.latestAvailableRelease.publicationDate)
   }
 }

@@ -1,4 +1,4 @@
-import { formatRelativeDate } from '../text-formatters.js'
+import { formatRelativeDate } from '../date.js'
 import { BaseService, pathParams } from '../index.js'
 
 const description = `

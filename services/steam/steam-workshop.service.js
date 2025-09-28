@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
+import { renderDateBadge } from '../date.js'
+import { renderSizeBadge } from '../size.js'
 import { renderDownloadsBadge } from '../downloads.js'
-import { metric, formatDate } from '../text-formatters.js'
-import { age as ageColor } from '../color-formatters.js'
+import { metric } from '../text-formatters.js'
 import { NotFound, pathParams } from '../index.js'
 import BaseSteamAPI from './steam-base.js'
 
@@ -208,12 +208,8 @@ class SteamFileSize extends SteamFileService {
     label: 'size',
   }
 
-  static render({ fileSize }) {
-    return { message: prettyBytes(fileSize), color: 'informational' }
-  }
-
   async onRequest({ response }) {
-    return this.constructor.render({ fileSize: response.file_size })
+    return renderSizeBadge(response.file_size, 'metric')
   }
 }
 
@@ -242,13 +238,9 @@ class SteamFileReleaseDate extends SteamFileService {
     label: 'release date',
   }
 
-  static render({ releaseDate }) {
-    return { message: formatDate(releaseDate), color: ageColor(releaseDate) }
-  }
-
   async onRequest({ response }) {
     const releaseDate = new Date(0).setUTCSeconds(response.time_created)
-    return this.constructor.render({ releaseDate })
+    return renderDateBadge(releaseDate)
   }
 }
 
@@ -277,13 +269,9 @@ class SteamFileUpdateDate extends SteamFileService {
     label: 'update date',
   }
 
-  static render({ updateDate }) {
-    return { message: formatDate(updateDate), color: ageColor(updateDate) }
-  }
-
   async onRequest({ response }) {
     const updateDate = new Date(0).setUTCSeconds(response.time_updated)
-    return this.constructor.render({ updateDate })
+    return renderDateBadge(updateDate)
   }
 }
 

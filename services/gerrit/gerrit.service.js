@@ -1,9 +1,9 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { url } from '../validators.js'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
 
 const queryParamSchema = Joi.object({
-  baseUrl: optionalUrl.required(),
+  baseUrl: url,
 }).required()
 
 const schema = Joi.object({

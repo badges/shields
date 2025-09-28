@@ -1,6 +1,5 @@
 import { pathParams } from '../index.js'
-import { addv } from '../text-formatters.js'
-import { version as versionColor } from '../color-formatters.js'
+import { renderVersionBadge } from '../version.js'
 import { description, BaseWordpress } from './wordpress-base.js'
 
 function VersionForExtensionType(extensionType) {
@@ -43,19 +42,12 @@ function VersionForExtensionType(extensionType) {
 
     static defaultBadgeData = { label: extensionType }
 
-    static render({ version }) {
-      return {
-        message: addv(version),
-        color: versionColor(version),
-      }
-    }
-
     async handle({ slug }) {
       const { version } = await this.fetch({
         extensionType,
         slug,
       })
-      return this.constructor.render({ version })
+      return renderVersionBadge({ version })
     }
   }
 }

@@ -1,5 +1,9 @@
 import { ServiceTester } from '../tester.js'
-import { isMetric, isFileSize, isFormattedDate } from '../test-validators.js'
+import {
+  isMetric,
+  isMetricFileSize,
+  isFormattedDate,
+} from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'steam',
@@ -12,7 +16,7 @@ t.create('Collection Files')
 
 t.create('File Size')
   .get('/size/1523924535.json')
-  .expectBadge({ label: 'size', message: isFileSize })
+  .expectBadge({ label: 'size', message: isMetricFileSize })
 
 t.create('Release Date')
   .get('/release-date/1523924535.json')

@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import prettyBytes from 'pretty-bytes'
+import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 import { NotFound, pathParam, queryParam } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -44,13 +44,6 @@ export default class GithubSize extends GithubAuthV3Service {
     },
   }
 
-  static render({ size }) {
-    return {
-      message: prettyBytes(size),
-      color: 'blue',
-    }
-  }
-
   async fetch({ user, repo, path, branch }) {
     if (branch) {
       return this._requestJson({
@@ -73,6 +66,6 @@ export default class GithubSize extends GithubAuthV3Service {
     if (Array.isArray(body)) {
       throw new NotFound({ prettyMessage: 'not a regular file' })
     }
-    return this.constructor.render({ size: body.size })
+    return renderSizeBadge(body.size, 'iec')
   }
 }

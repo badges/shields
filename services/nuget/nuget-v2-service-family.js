@@ -9,11 +9,8 @@ import {
   pathParam,
   queryParam,
 } from '../index.js'
-import {
-  renderVersionBadge,
-  renderDownloadBadge,
-  odataToObject,
-} from './nuget-helpers.js'
+import { renderVersionBadge } from '../version.js'
+import { renderDownloadBadge, odataToObject } from './nuget-helpers.js'
 
 function createFilter({ packageName, includePrereleases }) {
   const releaseTypeFilter = includePrereleases
@@ -127,10 +124,6 @@ function createServiceFamily({
       label: defaultLabel,
     }
 
-    static render(props) {
-      return renderVersionBadge(props)
-    }
-
     async handle({ packageName }, queryParams) {
       const packageData = await fetch(this, {
         baseUrl: apiBaseUrl,
@@ -138,7 +131,7 @@ function createServiceFamily({
         includePrereleases: queryParams.include_prereleases !== undefined,
       })
       const version = packageData.NormalizedVersion || `${packageData.Version}`
-      return this.constructor.render({ version })
+      return renderVersionBadge({ version })
     }
   }
 

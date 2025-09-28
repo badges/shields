@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: weekly
+      interval: monthly
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
@@ -30,11 +30,12 @@ updates:
         applies-to: security-updates
         patterns:
           - '@docusaurus/*'
+
   # badge-maker package dependencies
   - package-ecosystem: npm
     directory: '/badge-maker'
     schedule:
-      interval: weekly
+      interval: monthly
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99
@@ -52,7 +53,7 @@ updates:
       - '/.github/actions/service-tests'
       - '/.github/actions/setup'
     schedule:
-      interval: weekly
+      interval: monthly
     open-pull-requests-limit: 99
     rebase-strategy: disabled
 
@@ -60,7 +61,7 @@ updates:
   - package-ecosystem: npm
     directory: '/.github/actions/docusaurus-swizzled-warning'
     schedule:
-      interval: weekly
+      interval: monthly
       day: friday
       time: '12:00'
     open-pull-requests-limit: 99

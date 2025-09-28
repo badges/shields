@@ -26,12 +26,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Core tests
         if: always()
@@ -57,6 +57,8 @@ jobs:
           OBS_USER: '${{ secrets.SERVICETESTS_OBS_USER }}'
           OBS_PASS: '${{ secrets.SERVICETESTS_OBS_PASS }}'
           PEPY_KEY: '${{ secrets.SERVICETESTS_PEPY_KEY }}'
+          REDDIT_CLIENT_ID: '${{ secrets.SERVICETESTS_REDDIT_CLIENT_ID }}'
+          REDDIT_CLIENT_SECRET: '${{ secrets.SERVICETESTS_REDDIT_CLIENT_SECRET }}'
           SL_INSIGHT_USER_UUID: '${{ secrets.SERVICETESTS_SL_INSIGHT_USER_UUID }}'
           SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'

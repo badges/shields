@@ -1,7 +1,6 @@
 import Joi from 'joi'
-import { age as ageColor } from '../color-formatters.js'
+import { renderDateBadge } from '../date.js'
 import { pathParam, queryParam } from '../index.js'
-import { formatDate } from '../text-formatters.js'
 import { optionalUrl, relativeUri } from '../validators.js'
 import GiteaBase from './gitea-base.js'
 import { description, httpErrorsFor } from './gitea-helper.js'
@@ -114,13 +113,6 @@ export default class GiteaLastCommit extends GiteaBase {
 
   static defaultBadgeData = { label: 'last commit' }
 
-  static render({ commitDate }) {
-    return {
-      message: formatDate(commitDate),
-      color: ageColor(Date.parse(commitDate)),
-    }
-  }
-
   async fetch({ user, repo, branch, baseUrl, path }) {
     // https://gitea.com/api/swagger#/repository
     return super.fetch({
@@ -146,8 +138,6 @@ export default class GiteaLastCommit extends GiteaBase {
       baseUrl,
       path,
     })
-    return this.constructor.render({
-      commitDate: body[0].commit[displayTimestamp].date,
-    })
+    return renderDateBadge(body[0].commit[displayTimestamp].date)
   }
 }

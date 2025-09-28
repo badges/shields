@@ -1,5 +1,4 @@
 import { test, given } from 'sazerac'
-import sinon from 'sinon'
 import {
   starRating,
   currencyFromCode,
@@ -8,8 +7,6 @@ import {
   omitv,
   addv,
   maybePluralize,
-  formatDate,
-  formatRelativeDate,
 } from './text-formatters.js'
 
 describe('Text formatters', function () {
@@ -96,6 +93,10 @@ describe('Text formatters', function () {
     given('v0.6').expect('v0.6')
     given('hello').expect('hello')
     given('2017-05-05-Release-2.3.17').expect('2017-05-05-Release-2.3.17')
+    given('5aa272da7924fa76581fd5ea83b24cfbb3528b8a').expect(
+      '5aa272da7924fa76581fd5ea83b24cfbb3528b8a',
+    )
+    given('5aa272da79').expect('5aa272da79')
   })
 
   test(maybePluralize, () => {
@@ -108,55 +109,5 @@ describe('Text formatters', function () {
     given('box', [123], 'boxes').expect('box')
     given('box', [123, 456], 'boxes').expect('boxes')
     given('box', undefined, 'boxes').expect('boxes')
-  })
-
-  test(formatDate, () => {
-    given(1465513200000)
-      .describe('when given a timestamp in june 2016')
-      .expect('june 2016')
-  })
-
-  context('in october', function () {
-    let clock
-    beforeEach(function () {
-      clock = sinon.useFakeTimers(new Date(2017, 9, 15).getTime())
-    })
-    afterEach(function () {
-      clock.restore()
-    })
-
-    test(formatDate, () => {
-      given(new Date(2017, 0, 1).getTime())
-        .describe('when given the beginning of this year')
-        .expect('january')
-    })
-  })
-
-  context('in october', function () {
-    let clock
-    beforeEach(function () {
-      clock = sinon.useFakeTimers(new Date(2018, 9, 29).getTime())
-    })
-    afterEach(function () {
-      clock.restore()
-    })
-
-    test(formatRelativeDate, () => {
-      given(new Date(2018, 9, 31).getTime() / 1000)
-        .describe('when given the end of october')
-        .expect('in 2 days')
-    })
-
-    test(formatRelativeDate, () => {
-      given(new Date(2018, 9, 1).getTime() / 1000)
-        .describe('when given the beginning of october')
-        .expect('a month ago')
-    })
-
-    test(formatRelativeDate, () => {
-      given(9999999999999)
-        .describe('when given invalid date')
-        .expect('invalid date')
-    })
   })
 })

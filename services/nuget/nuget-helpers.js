@@ -1,24 +1,7 @@
 import semver from 'semver'
-import { metric, addv } from '../text-formatters.js'
+import { metric } from '../text-formatters.js'
 import { downloadCount as downloadCountColor } from '../color-formatters.js'
 import { getCachedResource } from '../../core/base-service/resource-cache.js'
-
-function renderVersionBadge({ version, feed }) {
-  let color
-  if (version.includes('-')) {
-    color = 'yellow'
-  } else if (version.startsWith('0')) {
-    color = 'orange'
-  } else {
-    color = 'blue'
-  }
-
-  return {
-    message: addv(version),
-    color,
-    label: feed,
-  }
-}
 
 function renderDownloadBadge({ downloads }) {
   return {
@@ -100,7 +83,6 @@ function selectVersion(versions, includePrereleases) {
 }
 
 export {
-  renderVersionBadge,
   renderDownloadBadge,
   odataToObject,
   searchServiceUrl,

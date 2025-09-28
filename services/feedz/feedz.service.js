@@ -1,11 +1,11 @@
 import Joi from 'joi'
 import { BaseJsonService, NotFound, pathParams } from '../index.js'
 import {
-  renderVersionBadge,
   searchServiceUrl,
   stripBuildMetadata,
   selectVersion,
 } from '../nuget/nuget-helpers.js'
+import { renderVersionBadge } from '../version.js'
 
 const singlePageSchema = Joi.object({
   '@id': Joi.string().required(),
@@ -64,10 +64,6 @@ class FeedzVersionService extends BaseJsonService {
     label: 'feedz',
   }
 
-  static render(props) {
-    return renderVersionBadge(props)
-  }
-
   apiUrl({ organization, repository }) {
     return `https://f.feedz.io/${organization}/${repository}/nuget`
   }
@@ -122,9 +118,9 @@ class FeedzVersionService extends BaseJsonService {
     const json = await this.fetch({ baseUrl, packageName })
     const fetchedJson = await this.fetchItems({ json })
     const version = this.transform({ json: fetchedJson, includePrereleases })
-    return this.constructor.render({
+    return renderVersionBadge({
       version,
-      feed: FeedzVersionService.defaultBadgeData.label,
+      defaultLabel: FeedzVersionService.defaultBadgeData.label,
     })
   }
 }

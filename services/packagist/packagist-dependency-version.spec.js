@@ -1,8 +1,7 @@
-import chai from 'chai'
+import { expect, use } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import PackagistDependencyVersion from './packagist-dependency-version.service.js'
-const { expect } = chai
-chai.use(chaiAsPromised)
+use(chaiAsPromised)
 
 describe('PackagistDependencyVersion', function () {
   const fullPackagistJson = {
