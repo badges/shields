@@ -21,7 +21,7 @@ t.create('get magazine subscribers')
   })
 
 t.create('unknown community')
-  .get('/01J12N2ETYG3W5B6G8Y11F5EXG@fedia.io.json')
+  .get('/01J12N2ETYG3W5B6G8Y11F5EXG@yups.io.json')
   .expectBadge({
     label: 'magazine',
     message: 'magazine not found',
@@ -35,9 +35,9 @@ t.create('invalid magazine').get('/magazine.invalid.json').expectBadge({
 })
 
 t.create('test on real mbin magazine for API compliance')
-  .get('/teletext@fedia.io.json')
+  .get('/random@yups.io.json')
   .expectBadge({
-    label: 'subscribe to teletext@fedia.io',
+    label: 'subscribe to random@yups.io',
     message: isMetric,
     color: 'brightgreen',
   })
