@@ -60,9 +60,13 @@ t.create('recent downloads (with version)')
     message: 'recent downloads not supported for specific versions',
   })
 
-t.create('downloads (invalid version)')
-  .get('/d/libc/7.json')
+t.create('downloads (non-existent version)')
+  .get('/d/libc/7.0.0.json')
   .expectBadge({ label: 'crates.io', message: 'not found' })
+
+t.create('downloads (invalid version)')
+  .get('/d/libc/7.json') // Does not follow semver
+  .expectBadge({ label: 'crates.io', message: 'invalid version' })
 
 t.create('downloads (not found)')
   .get('/d/not-a-real-package.json')
