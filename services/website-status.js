@@ -25,7 +25,7 @@ const queryParamSchema = Joi.object({
  * up_message, down_message, up_color and down_color
  * query params
  *
- * @type {Array.<module:core/base-service/openapi~OpenApiParam>}
+ * @type {Array.<import('../base-service/openapi').OpenApiParam>}
  */
 const queryParams = qP(
   { name: 'up_message', example: 'online' },
