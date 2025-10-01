@@ -188,7 +188,7 @@
     "lint-staged": "^16.2.1",
     "lodash.difference": "^4.5.0",
     "minimist": "^1.2.8",
-    "mocha": "^11.7.2",
+    "mocha": "^11.7.3",
     "mocha-env-reporter": "^4.0.0",
     "mocha-junit-reporter": "^2.2.1",
     "mocha-yaml-loader": "^1.0.3",
