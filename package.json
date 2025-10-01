@@ -34,7 +34,7 @@
     "check-node-version": "^4.2.1",
     "cloudflare-middleware": "^1.0.4",
     "config": "^4.1.1",
-    "cross-env": "^10.0.0",
+    "cross-env": "^10.1.0",
     "dayjs": "^1.11.18",
     "decamelize": "^3.2.0",
     "emojic": "^1.1.18",
