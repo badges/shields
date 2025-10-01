@@ -15,7 +15,7 @@ import ServiceTester from './service-tester.js'
  * This can't be used for `.service.js` files which export more than one
  * service.
  *
- * @returns {module:core/service-test-runner/service-tester~ServiceTester}
+ * @returns {ServiceTester}
  *    ServiceTester instance
  */
 async function createServiceTester() {

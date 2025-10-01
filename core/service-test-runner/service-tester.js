@@ -46,7 +46,7 @@ class ServiceTester {
    *
    * @param {Function} ServiceClass
    *    A class that extends base-service/base.BaseService
-   * @returns {module:core/service-test-runner/service-tester~ServiceTester}
+   * @returns {ServiceTester}
    *    ServiceTester for ServiceClass
    */
   static forServiceClass(ServiceClass) {

@@ -223,8 +223,8 @@ function category2openapi({ category, services, sort = false }) {
 /**
  * Helper function for assembling an OpenAPI path parameter object
  *
- * @param {module:core/base-service/openapi~PathParamInput} param Input param
- * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @param {PathParamInput} param Input param
+ * @returns {OpenApiParam} OpenAPI Parameter Object
  * @see https://swagger.io/specification/#parameter-object
  */
 function pathParam({
@@ -253,9 +253,9 @@ function pathParam({
  * ]
  * ```
  *
- * @param {...module:core/base-service/openapi~PathParamInput} params Input params
- * @returns {Array.<module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
- * @see {@link module:core/base-service/openapi~pathParam}
+ * @param {...PathParamInput} params Input params
+ * @returns {Array.<OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link pathParam}
  */
 function pathParams(...params) {
   return params.map(param => pathParam(param))
@@ -264,8 +264,8 @@ function pathParams(...params) {
 /**
  * Helper function for assembling an OpenAPI query parameter object
  *
- * @param {module:core/base-service/openapi~QueryParamInput} param Input param
- * @returns {module:core/base-service/openapi~OpenApiParam} OpenAPI Parameter Object
+ * @param {QueryParamInput} param Input param
+ * @returns {OpenApiParam} OpenAPI Parameter Object
  * @see https://swagger.io/specification/#parameter-object
  */
 function queryParam({
@@ -299,9 +299,9 @@ function queryParam({
  * ]
  * ```
  *
- * @param {...module:core/base-service/openapi~QueryParamInput} params Input params
- * @returns {Array.<module:core/base-service/openapi~OpenApiParam>} Array of OpenAPI Parameter Objects
- * @see {@link module:core/base-service/openapi~queryParam}
+ * @param {...QueryParamInput} params Input params
+ * @returns {Array.<OpenApiParam>} Array of OpenAPI Parameter Objects
+ * @see {@link queryParam}
  */
 function queryParams(...params) {
   return params.map(param => queryParam(param))
