@@ -7,9 +7,11 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 ## server-2025-10-02
 
 **Depreciation:**
+
 - Deprecate [JenkinsPluginInstalls] per version [#10747](https://github.com/badges/shields/issues/10747)
 
 Other changes:
+
 - update Mbin magazine param description [#11389](https://github.com/badges/shields/issues/11389)
 - Update [Fedora] not found handling [#11385](https://github.com/badges/shields/issues/11385)
 - respect arch param when sort=semver in [DockerVersion] badge [#10905](https://github.com/badges/shields/issues/10905)
