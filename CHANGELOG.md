@@ -19,11 +19,10 @@ Other changes:
 - Add support for codecov components [#11370](https://github.com/badges/shields/issues/11370)
 - Drop popout style fallback [#11367](https://github.com/badges/shields/issues/11367)
 - [GitHubHacktoberfest] 2025 support [#11353](https://github.com/badges/shields/issues/11353)
-- Remove Gitpod setup [#11365](https://github.com/badges/shields/issues/11365)
 - Delete old deprecated services [#11352](https://github.com/badges/shields/issues/11352)
 - feat: Add GitLab go.mod Go version service [#11312](https://github.com/badges/shields/issues/11312)
 - documentation updates [#10849](https://github.com/badges/shields/issues/10849), [#11324](https://github.com/badges/shields/issues/11324)
-- devop updates [#11378](https://github.com/badges/shields/issues/11378), [#11379](https://github.com/badges/shields/issues/11379), [#11351](https://github.com/badges/shields/issues/11351)
+- devop updates [#11378](https://github.com/badges/shields/issues/11378), [#11379](https://github.com/badges/shields/issues/11379), [#11351](https://github.com/badges/shields/issues/11351), [#11365](https://github.com/badges/shields/issues/11365)
 - CI tests fixes[#11387](https://github.com/badges/shields/issues/11387), [#11388](https://github.com/badges/shields/issues/11388), [#11381](https://github.com/badges/shields/issues/11381), [#11380](https://github.com/badges/shields/issues/11380), [#11366](https://github.com/badges/shields/issues/11366)
 - Dependency updates
 
