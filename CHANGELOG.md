@@ -4,6 +4,33 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-10-02
+
+- replace mbin test community [#11389](https://github.com/badges/shields/issues/11389)
+- Update documentation for coding style and camelCase usage [#10849](https://github.com/badges/shields/issues/10849)
+- Ignore VS Code workspace files [#11378](https://github.com/badges/shields/issues/11378)
+- Update [Fedora] not found handling [#11385](https://github.com/badges/shields/issues/11385)
+- respect arch param when sort=semver in [DockerVersion] badge [#10905](https://github.com/badges/shields/issues/10905)
+- Handle invalid [Crates] version [#11384](https://github.com/badges/shields/issues/11384)
+- Fix [GithubIssueDetail] test [#11388](https://github.com/badges/shields/issues/11388)
+- Update [FreeCodeCamp] API [#11386](https://github.com/badges/shields/issues/11386)
+- FIx [Gerrit] test [#11387](https://github.com/badges/shields/issues/11387)
+- Fix Dependabot configuration [#11379](https://github.com/badges/shields/issues/11379)
+- Fix [CodeFactor] test [#11381](https://github.com/badges/shields/issues/11381)
+- Fix [Bitrise] tests [#11380](https://github.com/badges/shields/issues/11380)
+- Update labels of deprecated services [GithubWorkflowStatus PubPopularity] [#11369](https://github.com/badges/shields/issues/11369)
+- Add support for codecov components [#11370](https://github.com/badges/shields/issues/11370)
+- Drop popout style fallback [#11367](https://github.com/badges/shields/issues/11367)
+- [GitHubHacktoberfest] 2025 support [#11353](https://github.com/badges/shields/issues/11353)
+- Switch Dependadot to monthly update schedule [#11351](https://github.com/badges/shields/issues/11351)
+- Remove Gitpod setup [#11365](https://github.com/badges/shields/issues/11365)
+- Delete old deprecated services [#11352](https://github.com/badges/shields/issues/11352)
+- Fix [Hangar] tests [#11366](https://github.com/badges/shields/issues/11366)
+- Deprecate [JenkinsPluginInstalls] per version [#10747](https://github.com/badges/shields/issues/10747)
+- docs: instruct to rename label to service name at deprecation [#11324](https://github.com/badges/shields/issues/11324)
+- feat: Add GitLab go.mod Go version service [#11312](https://github.com/badges/shields/issues/11312)
+- Dependency updates
+
 ## server-2025-09-02
 
 - deprecate [VisualStudioAppCenter] [#11321](https://github.com/badges/shields/issues/11321)
