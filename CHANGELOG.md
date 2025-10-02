@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-10-02
+
+**Depreciation:**
+
+- Deprecate [JenkinsPluginInstalls] per version [#10747](https://github.com/badges/shields/issues/10747)
+
+Other changes:
+
+- update Mbin magazine param description [#11389](https://github.com/badges/shields/issues/11389)
+- Update [Fedora] not found handling [#11385](https://github.com/badges/shields/issues/11385)
+- respect arch param when sort=semver in [DockerVersion] badge [#10905](https://github.com/badges/shields/issues/10905)
+- Handle invalid [Crates] version [#11384](https://github.com/badges/shields/issues/11384)
+- Update [FreeCodeCamp] API [#11386](https://github.com/badges/shields/issues/11386)
+- Update labels of deprecated services [GithubWorkflowStatus PubPopularity] [#11369](https://github.com/badges/shields/issues/11369)
+- Add support for codecov components [#11370](https://github.com/badges/shields/issues/11370)
+- Drop popout style fallback [#11367](https://github.com/badges/shields/issues/11367)
+- [GitHubHacktoberfest] 2025 support [#11353](https://github.com/badges/shields/issues/11353)
+- Delete old deprecated services [#11352](https://github.com/badges/shields/issues/11352)
+- feat: Add GitLab go.mod Go version service [#11312](https://github.com/badges/shields/issues/11312)
+- documentation updates [#10849](https://github.com/badges/shields/issues/10849), [#11324](https://github.com/badges/shields/issues/11324)
+- devop updates [#11378](https://github.com/badges/shields/issues/11378), [#11379](https://github.com/badges/shields/issues/11379), [#11351](https://github.com/badges/shields/issues/11351), [#11365](https://github.com/badges/shields/issues/11365)
+- CI tests fixes[#11387](https://github.com/badges/shields/issues/11387), [#11388](https://github.com/badges/shields/issues/11388), [#11381](https://github.com/badges/shields/issues/11381), [#11380](https://github.com/badges/shields/issues/11380), [#11366](https://github.com/badges/shields/issues/11366)
+- Dependency updates
+
 ## server-2025-09-02
 
 - deprecate [VisualStudioAppCenter] [#11321](https://github.com/badges/shields/issues/11321)
