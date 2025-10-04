@@ -23,7 +23,7 @@ t.create('bundlejs/package (scoped version select exports)')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
 t.create('bundlejs/package (externals)')
-  .get('/value-enhancer.json?externals=lodash,axios')
+  .get('/value-enhancer.json?externals=lodash,axios,jquery')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
 t.create('bundlejs/package (not found)')
