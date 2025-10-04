@@ -11,6 +11,7 @@ const schema = Joi.object({
 
 const queryParamSchema = Joi.object({
   exports: Joi.string(),
+  externals: Joi.string(),
 }).required()
 
 const esbuild =
@@ -49,6 +50,10 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'isVal,val',
           }),
+          queryParam({
+            name: 'externals',
+            example: 'lodash,axios',
+          }),
         ],
       },
     },
@@ -71,6 +76,10 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'randEmail,randFullName',
           }),
+          queryParam({
+            name: 'externals',
+            example: 'lodash,axios',
+          }),
         ],
       },
     },
@@ -78,12 +87,17 @@ export default class BundlejsPackage extends BaseJsonService {
 
   static defaultBadgeData = { label: 'bundlejs', color: 'informational' }
 
-  async fetch({ scope, packageName, exports }) {
+  async fetch({ scope, packageName, exports, externals }) {
     const searchParams = {
       q: `${scope ? `${scope}/` : ''}${packageName}`,
     }
     if (exports) {
       searchParams.treeshake = `[{${exports}}]`
+    }
+    if (externals) {
+      searchParams.config = JSON.stringify({
+        esbuild: { external: externals.split(',') },
+      })
     }
     return this._requestJson({
       schema,
@@ -103,8 +117,8 @@ export default class BundlejsPackage extends BaseJsonService {
     })
   }
 
-  async handle({ scope, packageName }, { exports }) {
-    const json = await this.fetch({ scope, packageName, exports })
+  async handle({ scope, packageName }, { exports, externals }) {
+    const json = await this.fetch({ scope, packageName, exports, externals })
     const size = json.size.rawCompressedSize
     return renderSizeBadge(size, 'metric', 'minified size (gzip)')
   }
