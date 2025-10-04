@@ -12,6 +12,35 @@ t.create('GitHub closed pull requests')
     ),
   })
 
+t.create('GitHub closed pull requests excluding drafts')
+  .get('/issues-pr-closed/badges/shields.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'non-drafts pull requests',
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
+    ),
+  })
+
+t.create('GitHub closed pull requests with only drafts')
+  .get('/issues-pr-closed/badges/shields.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'drafts pull requests',
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
+    ),
+  })
+
+t.create('GitHub closed pull requests with only drafts')
+  .get(
+    '/issues-pr-closed/badges/shields.json?excludeDrafts=true&onlyDrafts=true',
+  )
+  .expectBadge({
+    label: 'pull requests',
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
+    ),
+  })
+
 t.create('GitHub closed pull requests raw')
   .get('/issues-pr-closed-raw/badges/shields.json')
   .expectBadge({
@@ -19,10 +48,38 @@ t.create('GitHub closed pull requests raw')
     message: isMetric,
   })
 
+t.create('GitHub closed pull requests raw excluding drafts')
+  .get('/issues-pr-closed-raw/badges/shields.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'closed non-drafts pull requests',
+    message: isMetric,
+  })
+
+t.create('GitHub closed pull requests raw with only drafts')
+  .get('/issues-pr-closed-raw/badges/shields.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'closed drafts pull requests',
+    message: isMetric,
+  })
+
 t.create('GitHub pull requests')
   .get('/issues-pr/badges/shields.json')
   .expectBadge({
     label: 'pull requests',
+    message: isMetricOpenIssues,
+  })
+
+t.create('GitHub pull requests excluding drafts')
+  .get('/issues-pr/badges/shields.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'non-drafts pull requests',
+    message: isMetricOpenIssues,
+  })
+
+t.create('GitHub pull requests with only drafts')
+  .get('/issues-pr/badges/shields.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'drafts pull requests',
     message: isMetricOpenIssues,
   })
 
@@ -37,6 +94,15 @@ t.create('GitHub closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectBadge({
     label: 'issues',
+    message: Joi.string().regex(
+      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
+    ),
+  })
+
+t.create('GitHub closed issues excluding drafts')
+  .get('/issues-closed/badges/shields.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'non-drafts issues',
     message: Joi.string().regex(
       /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
     ),
@@ -65,6 +131,22 @@ t.create('GitHub open issues by label is > zero')
     message: isMetricOpenIssues,
   })
 
+t.create('GitHub open issues by label excludingdrafts')
+  .get('/issues/badges/shields/service-badge.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'service-badge non-drafts issues',
+    // Not always > 0.
+    message: Joi.alternatives(isMetricOpenIssues, Joi.equal('0 open')),
+  })
+
+t.create('GitHub open issues by label with only drafts')
+  .get('/issues/badges/shields/service-badge.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'service-badge drafts issues',
+    // Not always > 0.
+    message: Joi.alternatives(isMetricOpenIssues, Joi.equal('0 open')),
+  })
+
 t.create('GitHub open issues by multi-word label is > zero')
   .get('/issues/Cockatrice/Cockatrice/App%20-%20Cockatrice.json')
   .expectBadge({
@@ -77,6 +159,22 @@ t.create('GitHub open issues by label (raw)')
   .expectBadge({
     label: 'open service-badge issues',
     message: isMetric,
+  })
+
+t.create('GitHub open issues by label (raw) excluding drafts')
+  .get('/issues-raw/badges/shields/service-badge.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'open service-badge non-drafts issues',
+    // Not always > 0.
+    message: Joi.alternatives(isMetric, Joi.equal('0')),
+  })
+
+t.create('GitHub open issues by label (raw) with only drafts')
+  .get('/issues-raw/badges/shields/service-badge.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'open service-badge drafts issues',
+    // Not always > 0.
+    message: Joi.alternatives(isMetric, Joi.equal('0')),
   })
 
 // https://github.com/badges/shields/issues/1870
@@ -102,9 +200,37 @@ t.create('GitHub open pull requests by label')
     message: isMetricOpenIssues,
   })
 
+t.create('GitHub open pull requests by label excluding drafts')
+  .get('/issues-pr/badges/shields/service-badge.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'service-badge non-drafts pull requests',
+    message: isMetricOpenIssues,
+  })
+
+t.create('GitHub open pull requests by label with only drafts')
+  .get('/issues-pr/badges/shields/service-badge.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'service-badge drafts pull requests',
+    message: isMetricOpenIssues,
+  })
+
 t.create('GitHub open pull requests by label (raw)')
   .get('/issues-pr-raw/badges/shields/service-badge.json')
   .expectBadge({
     label: 'open service-badge pull requests',
+    message: isMetric,
+  })
+
+t.create('GitHub open pull requests by label (raw) excluding drafts')
+  .get('/issues-pr-raw/badges/shields/service-badge.json?excludeDrafts=true')
+  .expectBadge({
+    label: 'open service-badge non-drafts pull requests',
+    message: isMetric,
+  })
+
+t.create('GitHub open pull requests by label (raw) with only drafts')
+  .get('/issues-pr-raw/badges/shields/service-badge.json?onlyDrafts=true')
+  .expectBadge({
+    label: 'open service-badge drafts pull requests',
     message: isMetric,
   })

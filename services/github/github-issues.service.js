@@ -89,13 +89,13 @@ export default class GithubIssues extends GithubAuthV4Service {
           ),
           queryParam({
             name: 'excludeDrafts',
-            description: 'Exclude draft pull requests',
+            description: 'Exclude draft issues and pull requests',
             schema: { type: 'boolean' },
             required: false,
           }),
           queryParam({
             name: 'onlyDrafts',
-            description: 'Only include draft pull requests',
+            description: 'Only include draft issues and pull requests',
             schema: { type: 'boolean' },
             required: false,
           }),
@@ -141,7 +141,7 @@ export default class GithubIssues extends GithubAuthV4Service {
     const labelSuffix = isPR ? 'pull requests' : 'issues'
 
     return {
-      label: `${labelPrefix}${draftPrefix}${labelText}${labelSuffix}`,
+      label: `${labelPrefix}${labelText}${draftPrefix}${labelSuffix}`,
       message: `${metric(issueCount)}${
         messageSuffix ? ' ' : ''
       }${messageSuffix}`,
