@@ -88,7 +88,6 @@ t.create('GitHub open issues by label including slash character (raw)')
     message: Joi.alternatives(isMetric, Joi.equal('0')),
   })
 
-// TODO
 t.create('GitHub open issues (repo not found)')
   .get('/issues-raw/badges/helmets.json')
   .expectBadge({

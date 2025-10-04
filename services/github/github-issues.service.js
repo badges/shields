@@ -169,8 +169,14 @@ export default class GithubIssues extends GithubAuthV4Service {
         search: { issueCount },
       },
     } = await this._requestGraphql({
+      // the first part of the query (repository) is used to check if the repo exists
       query: gql`
-        query ($query: String!) {
+        query ($query: String!, $user: String!, $repo: String!) {
+          repository(owner: $user, name: $repo) {
+            issues(states: [OPEN]) {
+              totalCount
+            }
+          }
           search(query: $query, type: ISSUE) {
             issueCount
           }
@@ -178,6 +184,8 @@ export default class GithubIssues extends GithubAuthV4Service {
       `,
       variables: {
         query,
+        user,
+        repo,
       },
       schema: pullRequestCountSchema,
       transformErrors,
