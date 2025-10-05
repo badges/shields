@@ -6,7 +6,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2025-10-02
 
-**Depreciation:**
+**Deprecation:**
 
 - Deprecate [JenkinsPluginInstalls] per version [#10747](https://github.com/badges/shields/issues/10747)
 
@@ -25,7 +25,7 @@ Other changes:
 - feat: Add GitLab go.mod Go version service [#11312](https://github.com/badges/shields/issues/11312)
 - documentation updates [#10849](https://github.com/badges/shields/issues/10849), [#11324](https://github.com/badges/shields/issues/11324)
 - devop updates [#11378](https://github.com/badges/shields/issues/11378), [#11379](https://github.com/badges/shields/issues/11379), [#11351](https://github.com/badges/shields/issues/11351), [#11365](https://github.com/badges/shields/issues/11365)
-- CI tests fixes[#11387](https://github.com/badges/shields/issues/11387), [#11388](https://github.com/badges/shields/issues/11388), [#11381](https://github.com/badges/shields/issues/11381), [#11380](https://github.com/badges/shields/issues/11380), [#11366](https://github.com/badges/shields/issues/11366)
+- CI tests fixes [#11387](https://github.com/badges/shields/issues/11387), [#11388](https://github.com/badges/shields/issues/11388), [#11381](https://github.com/badges/shields/issues/11381), [#11380](https://github.com/badges/shields/issues/11380), [#11366](https://github.com/badges/shields/issues/11366)
 - Dependency updates
 
 ## server-2025-09-02
