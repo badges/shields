@@ -7,6 +7,8 @@
 import Joi from 'joi'
 import { queryParams as qP } from './index.js'
 
+/** @import { OpenApiParam } from '../core/base-service/openapi.js' */
+
 /**
  * Joi schema for validating query params.
  * Checks if the query params object has valid up_message, down_message, up_color and down_color properties.
@@ -25,7 +27,8 @@ const queryParamSchema = Joi.object({
  * up_message, down_message, up_color and down_color
  * query params
  *
- * @type {Array.<import('../base-service/openapi').OpenApiParam>}
+ * @type {Array.<OpenApiParam>}
+ * @see {@link module:core/base-service/openapi~OpenApiParam}
  */
 const queryParams = qP(
   { name: 'up_message', example: 'online' },
