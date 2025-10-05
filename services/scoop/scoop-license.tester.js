@@ -6,7 +6,7 @@ t.create('License (valid) - with nested response')
   .get('/ngrok.json')
   .expectBadge({
     label: 'license',
-    message: 'Shareware',
+    message: 'Freeware',
   })
 
 t.create('License (valid) - with string response')
