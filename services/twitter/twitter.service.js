@@ -90,9 +90,7 @@ class TwitterFollow extends BaseService {
       message: '',
       style: 'social',
       link: [
-        `https://x.com/intent/follow?screen_name=${encodeURIComponent(
-          user,
-        )}`,
+        `https://x.com/intent/follow?screen_name=${encodeURIComponent(user)}`,
       ],
     }
   }
