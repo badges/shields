@@ -13,7 +13,7 @@ t.create('GitHub closed pull requests')
   })
 
 t.create('GitHub closed pull requests excluding drafts')
-  .get('/issues-pr-closed/badges/shields.json?excludeDrafts=true')
+  .get('/issues-pr-closed/badges/shields.json?excludeDrafts')
   .expectBadge({
     label: 'non-drafts pull requests',
     message: Joi.string().regex(
