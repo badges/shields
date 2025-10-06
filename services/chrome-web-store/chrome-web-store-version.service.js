@@ -1,6 +1,8 @@
 import { renderVersionBadge } from '../version.js'
 import { NotFound, pathParams } from '../index.js'
-import BaseChromeWebStoreService from './chrome-web-store-base.js'
+import BaseChromeWebStoreService, {
+  description,
+} from './chrome-web-store-base.js'
 
 export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
   static category = 'version'
@@ -10,6 +12,7 @@ export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
     '/chrome-web-store/v/{storeId}': {
       get: {
         summary: 'Chrome Web Store Version',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',
