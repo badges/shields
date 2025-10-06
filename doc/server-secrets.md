@@ -328,7 +328,7 @@ To increase your quota to 10,000 calls per day, create an account at
 [StackApps](https://stackapps.com/) and
 [register an OAuth app](https://stackapps.com/apps/oauth/register). Having registered
 an OAuth app, you'll be granted a key which can be used to increase your request quota.
-It is not necessary to performa full OAuth Flow to gain an access token.
+It is not necessary to perform a full OAuth Flow to gain an access token.
 
 ### TeamCity
 
