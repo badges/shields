@@ -32,6 +32,8 @@ import { assertValidServiceDefinition } from './service-definitions.js'
 import trace from './trace.js'
 import validate from './validate.js'
 
+/** @import { openApiSchema } from './service-definitions.js' */
+
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
   color: Joi.string(),
@@ -143,7 +145,8 @@ class BaseService {
    *
    * @abstract
    * @see https://swagger.io/specification/#paths-object
-   * @type {import('./service-definitions').openApiSchema}
+   * @see {@link module:core/base-service/service-definitions~openApiSchema}
+   * @type {openApiSchema}
    */
   static openApi = {}
 
