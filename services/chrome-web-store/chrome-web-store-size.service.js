@@ -1,5 +1,7 @@
 import { InvalidResponse, NotFound, pathParams } from '../index.js'
-import BaseChromeWebStoreService from './chrome-web-store-base.js'
+import BaseChromeWebStoreService, {
+  description,
+} from './chrome-web-store-base.js'
 
 export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
   static category = 'size'
@@ -9,6 +11,7 @@ export default class ChromeWebStoreSize extends BaseChromeWebStoreService {
     '/chrome-web-store/size/{storeId}': {
       get: {
         summary: 'Chrome Web Store Size',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'nccfelhkfpbnefflolffkclhenplhiab',
