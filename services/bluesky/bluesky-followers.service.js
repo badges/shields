@@ -1,28 +1,30 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   followersCount: nonNegativeInteger,
 }).required()
 
-const documentation = `
-Displays the number of Bluesky followers for a given handle.
-`
-
 export default class BlueskyFollowers extends BaseJsonService {
   static category = 'social'
   static route = { base: 'bluesky/followers', pattern: ':actor' }
 
-  static examples = [
-    {
-      title: 'Bluesky followers',
-      namedParams: { actor: 'chitvs.bsky.social' },
-      staticPreview: this.render({ followers: 123 }),
-      documentation,
+  static openApi = {
+    '/bluesky/followers/{actor}': {
+      get: {
+        summary: 'Bluesky followers',
+        description:
+          'Displays the number of Bluesky followers for a given handle using the public Bluesky API.',
+        parameters: pathParams({
+          name: 'actor',
+          description: 'Bluesky handle (user ID)',
+          example: 'chitvs.bsky.social',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'followers', namedLogo: 'bluesky' }
 
@@ -37,9 +39,8 @@ export default class BlueskyFollowers extends BaseJsonService {
   async fetch({ actor }) {
     return this._requestJson({
       schema,
+      url: 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile',
       options: {
-        method: 'GET',
-        url: 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile',
         searchParams: { actor },
       },
       httpErrors: {

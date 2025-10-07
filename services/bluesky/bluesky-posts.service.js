@@ -1,29 +1,30 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   postsCount: nonNegativeInteger,
 }).required()
 
-const documentation = `
-Displays the number of Bluesky posts for a given handle.
-Example: https://img.shields.io/bluesky/posts/chitvs.bsky.social
-`
-
 export default class BlueskyPosts extends BaseJsonService {
   static category = 'social'
   static route = { base: 'bluesky/posts', pattern: ':actor' }
 
-  static examples = [
-    {
-      title: 'Bluesky posts',
-      namedParams: { actor: 'chitvs.bsky.social' },
-      staticPreview: this.render({ posts: 0 }),
-      documentation,
+  static openApi = {
+    '/bluesky/posts/{actor}': {
+      get: {
+        summary: 'Bluesky posts',
+        description:
+          'Displays the number of Bluesky posts for a given handle using the public Bluesky API.',
+        parameters: pathParams({
+          name: 'actor',
+          description: 'Bluesky handle (user ID)',
+          example: 'chitvs.bsky.social',
+        }),
+      },
     },
-  ]
+  }
 
   static defaultBadgeData = { label: 'posts', namedLogo: 'bluesky' }
 
@@ -38,9 +39,8 @@ export default class BlueskyPosts extends BaseJsonService {
   async fetch({ actor }) {
     return this._requestJson({
       schema,
+      url: 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile',
       options: {
-        method: 'GET',
-        url: 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile',
         searchParams: { actor },
       },
       httpErrors: {
