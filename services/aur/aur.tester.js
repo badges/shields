@@ -82,6 +82,33 @@ t.create('license (no license)')
   )
   .expectBadge({ label: 'license', message: 'not specified' })
 
+t.create('license (empty license)')
+  .get('/license/vscodium-bin.json')
+  .intercept(nock =>
+    nock('https://aur.archlinux.org')
+      .get('/rpc')
+      .query({
+        v: 5,
+        type: 'info',
+        arg: 'vscodium-bin',
+      })
+      .reply(200, {
+        resultcount: 1,
+        results: [
+          {
+            License: [],
+            NumVotes: 1,
+            Popularity: 0,
+            Version: '1',
+            OutOfDate: null,
+            Maintainer: null,
+            LastModified: 1,
+          },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'license', message: 'not specified' })
+
 t.create('license (package not found)')
   .get('/license/not-a-package.json')
   .expectBadge({ label: 'license', message: 'package not found' })
