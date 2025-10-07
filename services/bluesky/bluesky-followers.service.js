@@ -44,8 +44,7 @@ export default class BlueskyFollowers extends BaseJsonService {
         searchParams: { actor },
       },
       httpErrors: {
-        400: 'invalid',
-        404: 'user not found',
+        400: 'user not found',
       },
     })
   }

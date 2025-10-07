@@ -1,20 +1,19 @@
 import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { isMetric } from '../test-validators.js'
 
 export const t = await createServiceTester()
 
-t.create('Followers (live)')
-  .get('/chitvs.bsky.social.json')
-  .expectBadge({
-    label: 'followers',
-    message: Joi.string().regex(/^\d+(\.\d+)?[kM]?$/),
-  })
+t.create('Followers (live)').get('/chitvs.bsky.social.json').expectBadge({
+  label: 'followers',
+  message: isMetric,
+})
 
 t.create('User not found')
   .get('/this-user-should-not-exist-xyz123.json')
   .expectBadge({
     label: 'followers',
-    message: Joi.allow('user not found', 'invalid'),
+    message: Joi.allow('user not found'),
   })
 
 t.create('Handles valid numeric response')
