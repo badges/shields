@@ -1,4 +1,3 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import { isMetric } from '../test-validators.js'
 
@@ -13,7 +12,7 @@ t.create('User not found')
   .get('/this-user-should-not-exist-xyz123.json')
   .expectBadge({
     label: 'followers',
-    message: Joi.allow('user not found'),
+    message: 'user not found',
   })
 
 t.create('Handles valid numeric response')

@@ -15,7 +15,7 @@ t.create('User not found')
   .get('/this-user-should-not-exist-xyz123.json')
   .expectBadge({
     label: 'posts',
-    message: Joi.allow('user not found'),
+    message: 'user not found',
   })
 
 t.create('Handles valid numeric response')
