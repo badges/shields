@@ -40,3 +40,14 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
 .align-bottom {
   margin-top: auto;
 }
+
+/* Footer background adapts to theme */
+footer {
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-color);
+}
+
+/* Footer links adapt too */
+footer a {
+  color: var(--ifm-link-color);
+}
