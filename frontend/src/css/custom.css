@@ -40,3 +40,209 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
 .align-bottom {
   margin-top: auto;
 }
+
+/* Main footer styling with optimized spacing */
+footer {
+  margin-top: 2rem !important;
+  padding: 2.5rem 0 1.5rem 0 !important;
+  position: relative;
+  background: var(--ifm-footer-background-color) !important;
+  border-top: 1px solid var(--ifm-footer-border-color);
+}
+
+/* Keep the prominent top border but make it more subtle */
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--ifm-color-primary), 
+    var(--ifm-color-primary-light), 
+    var(--ifm-color-primary-dark));
+  opacity: 0.6;
+}
+
+/* Light theme - Compact but distinct */
+[data-theme='light'] footer {
+  --ifm-footer-background-color: #fafbfc;
+  --ifm-footer-color: #2d3748;
+  --ifm-footer-border-color: #e2e8f0;
+  --ifm-footer-link-color: #4a5568;
+  background: #fafbfc !important;
+  color: var(--ifm-footer-color);
+  box-shadow: 
+    0 -1px 0 0 #e2e8f0,
+    0 -2px 4px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark theme - Compact but distinct */
+[data-theme='dark'] footer {
+  --ifm-footer-background-color: #1e2128;
+  --ifm-footer-color: #f7fafc;
+  --ifm-footer-border-color: #2d3748;
+  --ifm-footer-link-color: #cbd5e0;
+  background: #1e2128 !important;
+  color: var(--ifm-footer-color);
+  box-shadow: 
+    0 -1px 0 0 #2d3748,
+    0 -2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer container */
+.footer {
+  container-type: inline-size;
+}
+
+/* Footer links grid - more compact */
+.footer__links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Footer columns */
+.footer__col {
+  margin-bottom: 0;
+}
+
+/* Footer titles - compact but clear */
+.footer__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid;
+  border-image: linear-gradient(90deg, var(--ifm-color-primary), transparent) 1;
+  padding-bottom: 0.5rem;
+}
+
+/* Footer items list - more compact */
+.footer__items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer__item {
+  margin-bottom: 0.5rem;
+}
+
+/* Footer links - compact but interactive */
+.footer__link-item {
+  color: var(--ifm-footer-link-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: block;
+  border-radius: 3px;
+  position: relative;
+  font-size: 0.9rem;
+}
+
+.footer__link-item:hover {
+  color: var(--ifm-color-primary) !important;
+  background: var(--ifm-color-emphasis-100);
+  padding-left: 0.5rem;
+  transform: translateX(2px);
+  text-decoration: none;
+}
+
+/* Add subtle arrow on hover */
+.footer__link-item:hover::after {
+  content: '→';
+  position: absolute;
+  right: -1rem;
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+/* Footer bottom section - more compact */
+.footer__bottom {
+  border-top: 1px solid var(--ifm-footer-border-color);
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.footer__copyright {
+  font-size: 0.9rem;
+  font-weight: 500;
+  opacity: 0.7;
+  color: var(--ifm-footer-link-color);
+}
+
+/* Ensure main content has proper but compact spacing */
+.main-wrapper {
+  min-height: calc(100vh - 200px);
+}
+
+/* Container padding for breathing room */
+.container {
+  padding-bottom: 1rem;
+}
+
+/* Responsive design - optimized for mobile */
+@container (max-width: 996px) {
+  .footer__links {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  footer {
+    margin-top: 1.5rem !important;
+    padding: 2rem 0 1rem 0 !important;
+  }
+  
+  .footer__links {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .footer__title {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .footer__link-item:hover {
+    padding-left: 0.25rem;
+    transform: translateX(1px);
+  }
+  
+  .footer__bottom {
+    padding-top: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  [data-theme='light'] footer {
+    background: #ffffff !important;
+    border-top: 2px solid #000000;
+  }
+  
+  [data-theme='dark'] footer {
+    background: #000000 !important;
+    border-top: 2px solid #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  footer,
+  .footer__link-item {
+    transition: none;
+  }
+  
+  .footer__link-item:hover {
+    transform: none;
+    padding-left: 0;
+  }
+}
