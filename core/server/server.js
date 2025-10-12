@@ -193,7 +193,6 @@ const privateConfigSchema = Joi.object({
   npm_token: Joi.string(),
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
-  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   opencollective_token: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
