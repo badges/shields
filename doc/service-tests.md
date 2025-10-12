@@ -224,7 +224,7 @@ take effect, including the HTTP method (in this case GET), scheme (https), host,
 and path.
 
 [icedfrisby-nock]: https://github.com/paulmelnikow/icedfrisby-nock#usage
-[nock]: https://github.com/node-nock/nock
+[nock]: https://github.com/nock/nock
 
 ## Code coverage
 
@@ -254,4 +254,4 @@ comment there instead.
 - [IcedFrisby API][]
 - [Joi API][]
 - [icedfrisby-nock][]
-- [Nock API](https://github.com/node-nock/nock#use)
+- [Nock API](https://github.com/nock/nock#usage)

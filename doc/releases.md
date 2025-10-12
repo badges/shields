@@ -20,7 +20,7 @@ This is the core, free, anonymous service available for anyone to use and which 
 
 We do not have a fixed schedule for deploying updates to the Shields.io production environment, but we typically deploy the latest version at least once per week.
 
-We do not have any guaranteed SLA for the Shields.io service, but we do have monitoring and observability capabilities in place and our [Operations team](https://github.com/badges/shields#project-leaders) will review and address any availability, performance, etc. issues on a best-effort basis.
+We do not have any guaranteed SLA for the Shields.io service, but we do have monitoring and observability capabilities in place and our [Maintainer team](https://github.com/badges/shields#project-leaders) will review and address any availability, performance, etc. issues on a best-effort basis.
 
 More information about the production environment can be found [here][production hosting]
 

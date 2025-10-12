@@ -6,7 +6,7 @@ Any new configuration setting or secret must be correctly registered so that it 
 
 This generally includes adding the corresponding information for your new setting(s)/secret(s) to the following locations:
 
-- [core/server/server.js](https://github.com/badges/shields/blob/master/core/server/server.js) - Add the new values to the [schemas](https://github.com/badges/shields/blob/master/core/server/server.js#L118-L193). Secrets/tokens/etc. should go in the `privateConfigSchema` while non-secret configuration settings should go in the `publicConfigSchema`.
+- [core/server/server.js](https://github.com/badges/shields/blob/master/core/server/server.js) - Add the new values to the [schemas](https://github.com/badges/shields/blob/e1443eb7146466ad987830c1f286e2b0b186500c/core/server/server.js#L67-L215). Secrets/tokens/etc. should go in the `privateConfigSchema` while non-secret configuration settings should go in the `publicConfigSchema`.
 - [config/custom-environment-variables.yml](https://github.com/badges/shields/blob/master/config/custom-environment-variables.yml)
 - [docs/server-secrets.md](https://github.com/badges/shields/blob/master/doc/server-secrets.md) (only applicable for secrets)
 - [config/default.yml](https://github.com/badges/shields/blob/master/config/default.yml) (optional)
@@ -14,7 +14,7 @@ This generally includes adding the corresponding information for your new settin
 
 The exact values needed will depend on what type of secret/setting you are adding, but for reference a few commits are included below which added secrets and or settings:
 
-- (secret) [8a9efb2fc99f97e78ab133c836ab1685803bf4df](https://github.com/badges/shields/commit/8a9efb2fc99f97e78ab133c836ab1685803bf4df)
+- (secret) [4a75cf09a786c5e93232ae699af985e5bc89440e](https://github.com/badges/shields/commit/4a75cf09a786c5e93232ae699af985e5bc89440e)
 - (secret) [bd6f4ee1465d14a8f188c37823748a21b6a46762](https://github.com/badges/shields/commit/bd6f4ee1465d14a8f188c37823748a21b6a46762)
 - (secret) [0fd557d7bb623e3852c92cebac586d5f6d6d89d8](https://github.com/badges/shields/commit/0fd557d7bb623e3852c92cebac586d5f6d6d89d8)
 - (configuration setting) [b1fc4925928c061234e9492f3794c0797467e123](https://github.com/badges/shields/commit/b1fc4925928c061234e9492f3794c0797467e123)
