@@ -41,13 +41,20 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
   margin-top: auto;
 }
 
-/* Footer background adapts to theme */
-footer {
-  background-color: var(--ifm-background-color);
-  color: var(--ifm-color);
+/* ---------------------------------------------------------------------- */
+/* 🎨 FIX: Make the 'footer--dark' element appear light gray in light theme 🎨 */
+/* ---------------------------------------------------------------------- */
+
+html[data-theme="light"] .footer--dark {
+
+  --ifm-footer-background-color: #f7f7f7; 
+  
+  --ifm-footer-title-color: var(--ifm-font-color-base);
+  --ifm-footer-link-color: var(--ifm-font-color-base); 
+  --ifm-footer-link-hover-color: var(--ifm-color-primary);
+  --ifm-footer-color: var(--ifm-font-color-secondary); 
 }
 
-/* Footer links adapt too */
-footer a {
-  color: var(--ifm-link-color);
+html[data-theme="light"] .footer__bottom {
+  border-top-color: var(--ifm-color-emphasis-200); 
 }
