@@ -99,7 +99,7 @@ test this kind of logic through unit tests (e.g. of `render()` and
 
 [entrypoint]: https://github.com/badges/shields/blob/master/server.js
 [core/server/server]: https://github.com/badges/shields/blob/master/core/server/server.js
-[scoutcamp]: https://github.com/espadrine/sc
+[scoutcamp]: https://github.com/badges/sc
 [legacy-request-handler]: https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js
 
 ## Downstream caching

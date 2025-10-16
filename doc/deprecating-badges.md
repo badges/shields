@@ -145,4 +145,4 @@ Some other information that may be useful:
 - [Contributing Docs](../CONTRIBUTING.md)
 - [Badge Tutorial](./TUTORIAL.md)
 - [Service Tests Tutorial](./service-tests.md)
-- Previous Pull Requests that deprecated badges like [#2352](https://github.com/badges/shields/pull/2352) and [#2410](https://github.com/badges/shields/pull/2410)
+- Previous Pull Requests that deprecated badges like [#10371](https://github.com/badges/shields/pull/10371) and [#11075](https://github.com/badges/shields/pull/11075)
