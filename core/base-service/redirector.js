@@ -1,7 +1,7 @@
 import camelcase from 'camelcase'
 import emojic from 'emojic'
 import Joi from 'joi'
-import queryString from 'query-string'
+import qs from 'qs'
 import BaseService from './base.js'
 import {
   serverHasBeenUpSinceResourceCached,
@@ -92,12 +92,16 @@ export default function redirector(attrs) {
         let urlSuffix = ask.uri.search || ''
 
         if (transformQueryParams) {
-          const specifiedParams = queryString.parse(urlSuffix)
+          const specifiedParams = qs.parse(urlSuffix, {
+            ignoreQueryPrefix: true,
+          })
           const transformedParams = transformQueryParams(namedParams)
           const redirectParams = overrideTransformedQueryParams
             ? Object.assign(transformedParams, specifiedParams)
             : Object.assign(specifiedParams, transformedParams)
-          const outQueryString = queryString.stringify(redirectParams)
+          const outQueryString = qs.stringify(redirectParams, {
+            strictNullHandling: true,
+          })
           urlSuffix = `?${outQueryString}`
         }
 

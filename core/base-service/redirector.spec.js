@@ -216,7 +216,7 @@ describe('Redirector', function () {
 
         expect(statusCode).to.equal(301)
         expect(headers.location).to.equal(
-          '/new/service/hello-world.svg?style=flat-square&token=def456',
+          '/new/service/hello-world.svg?token=def456&style=flat-square',
         )
       })
     })

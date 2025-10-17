@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import queryString from 'query-string'
+import qs from 'qs'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseXmlService,
@@ -43,7 +43,7 @@ async function fetch(
   { baseUrl, packageName, includePrereleases = false },
 ) {
   const url = `${baseUrl}/Packages()`
-  const searchParams = queryString.stringify(
+  const searchParams = qs.stringify(
     {
       $filter: createFilter({ packageName, includePrereleases }),
     },
