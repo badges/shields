@@ -22,6 +22,10 @@ t.create('bundlejs/package (scoped version select exports)')
   .get('/@ngneat/falso@6.4.0.json?exports=randEmail,randFullName')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
+t.create('bundlejs/package (externals)')
+  .get('/value-enhancer.json?externals=lodash,axios,jquery')
+  .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
+
 t.create('bundlejs/package (not found)')
   .get('/react@18.2.0.json')
   .intercept(nock =>
