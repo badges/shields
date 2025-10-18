@@ -2,8 +2,6 @@
  * @module
  */
 
-import difference from 'lodash.difference'
-
 /**
  * Given a pull request title like
  * '[Travis Sonar] Support user token authentication'
@@ -27,7 +25,7 @@ function servicesForTitle(title) {
   services = services.filter(Boolean).map(service => service.toLowerCase())
 
   const ignored = ['wip', 'rfc', 'security']
-  return difference(services, ignored)
+  return services.filter(service => !ignored.includes(service))
 }
 
 export default servicesForTitle
