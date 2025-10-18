@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
-import times from 'lodash.times'
 import { Token, TokenPool } from './token-pool.js'
+
+const times = (n, fn) => [...Array(n)].map(() => fn())
 
 function expectPoolToBeExhausted(pool) {
   expect(() => {
