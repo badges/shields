@@ -40,3 +40,21 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
 .align-bottom {
   margin-top: auto;
 }
+
+/* ---------------------------------------------------------------------- */
+/* 🎨 FIX: Make the 'footer--dark' element appear light gray in light theme 🎨 */
+/* ---------------------------------------------------------------------- */
+
+html[data-theme="light"] .footer--dark {
+
+  --ifm-footer-background-color: #f7f7f7; 
+  
+  --ifm-footer-title-color: var(--ifm-font-color-base);
+  --ifm-footer-link-color: var(--ifm-font-color-base); 
+  --ifm-footer-link-hover-color: var(--ifm-color-primary);
+  --ifm-footer-color: var(--ifm-font-color-secondary); 
+}
+
+html[data-theme="light"] .footer__bottom {
+  border-top-color: var(--ifm-color-emphasis-200); 
+}
