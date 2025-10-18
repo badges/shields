@@ -26,6 +26,17 @@ t.create('bundlejs/package (externals)')
   .get('/value-enhancer.json?externals=lodash,axios,jquery')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
+t.create('bundlejs/package (format min)')
+  .get('/value-enhancer.json?format=min')
+  .expectBadge({ label: 'minified size', message: isMetricFileSize })
+
+t.create('bundlejs/package (format both)')
+  .get('/value-enhancer.json?format=both')
+  .expectBadge({
+    label: 'size',
+    message: /^[\d.]+ [kMG]?B \(gzip: [\d.]+ [kMG]?B\)$/,
+  })
+
 t.create('bundlejs/package (not found)')
   .get('/react@18.2.0.json')
   .intercept(nock =>
