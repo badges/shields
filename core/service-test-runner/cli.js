@@ -10,10 +10,10 @@
 //   echo "service1\nservice2\nservice3" | npm run test:services -- --stdin
 //
 // Run tests but skip tests which intercept requests:
-//   SKIP_INTERCEPTED=TRUE npm run test:services --
+//   SKIP_INTERCEPTED=true npm run test:services --
 //
 // Run tests on a given instance:
-//   SKIP_INTERCEPTED=TRUE TESTED_SERVER_URL=https://test.shields.io npm run test:services --
+//   SKIP_INTERCEPTED=true TESTED_SERVER_URL=https://test.shields.io npm run test:services --
 //
 // Run tests with given number of retries and backoff (in milliseconds):
 //   RETRY_COUNT=3 RETRY_BACKOFF=100 npm run test:services --
@@ -55,7 +55,6 @@
 //    the second step without the first.
 
 import minimist from 'minimist'
-import envFlag from 'node-env-flag'
 import readAllStdinSync from 'read-all-stdin-sync'
 import { createTestServer } from '../server/in-process-server-test-helpers.js'
 import Runner from './runner.js'
@@ -102,7 +101,7 @@ if (process.env.TESTED_SERVER_URL) {
   })
 }
 
-const skipIntercepted = envFlag(process.env.SKIP_INTERCEPTED, false)
+const skipIntercepted = process.env.SKIP_INTERCEPTED === 'true'
 const runner = new Runner({ baseUrl, skipIntercepted, retry })
 await runner.prepare()
 
