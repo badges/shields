@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import byteSize from 'byte-size'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
@@ -7,8 +8,6 @@ const schema = Joi.object({
   size: Joi.object({
     rawCompressedSize: nonNegativeInteger,
     rawUncompressedSize: nonNegativeInteger,
-    compressedSize: Joi.string().required(),
-    uncompressedSize: Joi.string().required(),
   }).required(),
 }).required()
 
@@ -143,7 +142,7 @@ export default class BundlejsPackage extends BaseJsonService {
       case 'both':
         return {
           label: 'size',
-          message: `${json.size.uncompressedSize} (gzip: ${json.size.compressedSize})`,
+          message: `${byteSize(json.size.rawUncompressedSize, { units: 'metric' })} (gzip: ${byteSize(json.size.rawCompressedSize, { units: 'metric' })})`,
           color: 'blue',
         }
       default:
