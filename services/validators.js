@@ -83,9 +83,14 @@ export const url = optionalUrl.required()
  *
  * @type {Joi}
  */
-export const fileSize = Joi.string()
-  .regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
-  .required()
+export const fileSize = Joi.string().regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
+
+/**
+ * Joi validator for a file size in bytes (direct numeric value)
+ *
+ * @type {Joi}
+ */
+export const fileSizeBytes = Joi.number().integer().positive()
 
 /**
  * Joi validator that checks if a value is a relative-only URI

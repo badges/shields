@@ -35,6 +35,10 @@ if (process.argv[3]) {
 console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
+if (config.public.fetchLimit != null) {
+  console.warn('fetchLimit is deprecated, please use fetchLimitBytes instead')
+}
+
 if (fs.existsSync('.env')) {
   console.error(
     'Legacy .env file found. It should be deleted and replaced with environment variables or config/local.yml',
