@@ -27,6 +27,8 @@ class BaseGraphqlService extends BaseService {
     return parseJson(buffer)
   }
 
+  static headers = { Accept: 'application/json' }
+
   /**
    * Request data from an upstream GraphQL API,
    * parse it and validate against a schema
@@ -76,7 +78,7 @@ class BaseGraphqlService extends BaseService {
     transformErrors = defaultTransformErrors,
   }) {
     const mergedOptions = {
-      ...{ headers: { Accept: 'application/json' } },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     mergedOptions.method = 'POST'
