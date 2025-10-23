@@ -30,7 +30,7 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 120
   handleInternalErrors: true
-  fetchLimit: '10MB'
+  fetchLimitBytes: 10485760 # 10MB
   userAgentBase: 'shields (self-hosted)'
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
