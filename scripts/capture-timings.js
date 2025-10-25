@@ -1,5 +1,5 @@
 import readline from 'readline'
-import minimist from 'minimist'
+import { parseArgs } from 'util'
 
 async function captureTimings(warmupIterations) {
   const rl = readline.createInterface({
@@ -43,8 +43,10 @@ function logResults({ times, iterations, warmupIterations }) {
 }
 
 async function main() {
-  const args = minimist(process.argv)
-  const warmupIterations = parseInt(args['warmup-iterations']) || 100
+  const { 'warmup-iterations': warmupIter = '100' } = parseArgs({
+    options: { 'warmup-iterations': { type: 'string' } },
+  }).values
+  const warmupIterations = parseInt(warmupIter)
   const { times, iterations } = await captureTimings(warmupIterations)
   logResults({ times, iterations, warmupIterations })
 }
