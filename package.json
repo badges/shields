@@ -196,7 +196,6 @@
     "prettier": "3.6.2",
     "prism-react-renderer": "^2.4.1",
     "react": "^18.3.0",
-    "react-dom": "^18.3.1",
     "rimraf": "^6.0.1",
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.13.1",
