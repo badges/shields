@@ -26,7 +26,7 @@ export default class SonarDocumentedApiDensity extends SonarBase {
         summary: 'Sonar Documented API Density',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'brave_brave-core' }),
           ...openApiQueryParams,
         ],
       },
@@ -36,8 +36,8 @@ export default class SonarDocumentedApiDensity extends SonarBase {
         summary: 'Sonar Documented API Density (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },
