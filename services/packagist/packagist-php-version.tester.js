@@ -20,5 +20,5 @@ t.create(
 )
   .get('/symfony/symfony/v3.2.8.json?server=https://packagist.org')
   .expectRedirect(
-    '/packagist/dependency-v/symfony/symfony/php.json?server=https%3A%2F%2Fpackagist.org&version=v3.2.8',
+    '/packagist/dependency-v/symfony/symfony/php.json?version=v3.2.8&server=https%3A%2F%2Fpackagist.org',
   )

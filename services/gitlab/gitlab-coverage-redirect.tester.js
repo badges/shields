@@ -10,7 +10,7 @@ t.create('Coverage redirect (with branch)')
 t.create('Coverage redirect (with branch and job_name)')
   .get('/gitlab-org/gitlab-runner/master.json?job_name=test coverage report')
   .expectRedirect(
-    '/gitlab/pipeline-coverage/gitlab-org/gitlab-runner.json?branch=master&job_name=test%20coverage%20report',
+    '/gitlab/pipeline-coverage/gitlab-org/gitlab-runner.json?job_name=test%20coverage%20report&branch=master',
   )
 
 t.create('Coverage redirect (with branch and gitlab_url)')
@@ -18,5 +18,5 @@ t.create('Coverage redirect (with branch and gitlab_url)')
     '/gitlab-org/gitlab-runner/master.json?gitlab_url=https://gitlab.gnome.org',
   )
   .expectRedirect(
-    '/gitlab/pipeline-coverage/gitlab-org/gitlab-runner.json?branch=master&gitlab_url=https%3a%2f%2fgitlab.gnome.org',
+    '/gitlab/pipeline-coverage/gitlab-org/gitlab-runner.json?gitlab_url=https%3a%2f%2fgitlab.gnome.org&branch=master',
   )

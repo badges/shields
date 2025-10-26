@@ -27,7 +27,7 @@ t.create('Nexus repository with query opts')
     '/fs-public-snapshots/https/repository.jboss.org/nexus/com.progress.fuse/fusehq:p=tar.gz:c=agent-apple-osx.svg',
   )
   .expectRedirect(
-    `/nexus/fs-public-snapshots/com.progress.fuse/fusehq.svg?queryOpt=${encodeURIComponent(
+    `/nexus/fs-public-snapshots/com.progress.fuse/fusehq.svg?server=${encodeURIComponent('https://repository.jboss.org/nexus')}&queryOpt=${encodeURIComponent(
       ':p=tar.gz:c=agent-apple-osx',
-    )}&server=${encodeURIComponent('https://repository.jboss.org/nexus')}`,
+    )}`,
   )
