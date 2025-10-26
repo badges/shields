@@ -36,6 +36,10 @@ inputs:
     description: 'The SERVICETESTS_TWITCH_CLIENT_SECRET secret'
     required: false
     default: ''
+  weblate-api-key:
+    description: 'The SERVICETESTS_WEBLATE_API_KEY secret'
+    required: false
+    default: ''
   youtube-api-key:
     description: 'The SERVICETESTS_YOUTUBE_API_KEY secret'
     required: false
@@ -73,6 +77,7 @@ runs:
         SL_INSIGHT_API_TOKEN: '${{ inputs.sl-insight-api-token }}'
         TWITCH_CLIENT_ID: '${{ inputs.twitch-client-id }}'
         TWITCH_CLIENT_SECRET: '${{ inputs.twitch-client-secret }}'
+        WEBLATE_API_KEY: '${{ inputs.weblate-api-key }}'
         YOUTUBE_API_KEY: '${{ inputs.youtube-api-key }}'
 
     - name: Write Markdown Summary
