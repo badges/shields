@@ -1,5 +1,4 @@
 import { expect } from 'chai'
-import { getSimpleIcon } from '../../lib/logos.js'
 import coalesceBadge from './coalesce-badge.js'
 
 describe('coalesceBadge', function () {
@@ -165,38 +164,20 @@ describe('coalesceBadge', function () {
 
   describe('Named logos', function () {
     it('when not a social badge, ignores the default named logo', function () {
-      expect(coalesceBadge({}, {}, { namedLogo: 'appveyor' }).logo).to.be
+      expect(coalesceBadge({}, {}, { namedLogo: 'appveyor' }).namedLogo).to.be
         .undefined
     })
 
     it('when a social badge, uses the default named logo', function () {
-      // .not.be.empty for confidence that nothing has changed with `getSimpleIcon()`.
       expect(
-        coalesceBadge({ style: 'social' }, {}, { namedLogo: 'appveyor' }).logo,
-      ).to.equal(getSimpleIcon({ name: 'appveyor' })).and.not.be.empty
-    })
-
-    it('applies the named logo', function () {
-      expect(coalesceBadge({}, { namedLogo: 'npm' }, {})).to.include({
-        namedLogo: 'npm',
-      })
-      expect(coalesceBadge({}, { namedLogo: 'npm' }, {}).logo).to.equal(
-        getSimpleIcon({ name: 'npm' }),
-      ).and.not.to.be.empty
-    })
-
-    it('applies the named logo with color', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'dependabot', logoColor: 'blue' }, {})
-          .logo,
-      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
-        .to.be.empty
+        coalesceBadge({ style: 'social' }, {}, { namedLogo: 'appveyor' }),
+      ).to.include({ namedLogo: 'appveyor' })
     })
 
     it('overrides the logo', function () {
       expect(
-        coalesceBadge({ logo: 'npm' }, { namedLogo: 'appveyor' }, {}).logo,
-      ).to.equal(getSimpleIcon({ name: 'npm' })).and.not.be.empty
+        coalesceBadge({ logo: 'npm' }, { namedLogo: 'appveyor' }, {}),
+      ).to.include({ namedLogo: 'npm' })
     })
 
     it('overrides the logo with a color', function () {
@@ -205,9 +186,11 @@ describe('coalesceBadge', function () {
           { logo: 'dependabot', logoColor: 'blue' },
           { namedLogo: 'appveyor' },
           {},
-        ).logo,
-      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
-        .be.empty
+        ),
+      ).to.include({
+        namedLogo: 'dependabot',
+        namedLogoColor: 'blue',
+      })
     })
 
     it("when the logo is overridden, it ignores the service's logo color and width", function () {
@@ -219,8 +202,12 @@ describe('coalesceBadge', function () {
             logoColor: 'red',
           },
           {},
-        ).logo,
-      ).to.equal(getSimpleIcon({ name: 'npm' })).and.not.be.empty
+        ),
+      )
+        .to.include({ namedLogo: 'npm' })
+        .and.not.include({
+          namedLogoColor: 'red',
+        })
     })
 
     it("overrides the service logo's color", function () {
@@ -229,17 +216,20 @@ describe('coalesceBadge', function () {
           { logoColor: 'blue' },
           { namedLogo: 'dependabot', logoColor: 'red' },
           {},
-        ).logo,
-      ).to.equal(getSimpleIcon({ name: 'dependabot', color: 'blue' })).and.not
-        .be.empty
+        ),
+      ).to.include({
+        namedLogo: 'dependabot',
+        namedLogoColor: 'blue',
+      })
     })
 
     // https://github.com/badges/shields/issues/2998
     it('overrides logoSvg', function () {
       const logoSvg = 'data:image/svg+xml;base64,PHN2ZyB4bWxu'
-      expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {}).logo).to.equal(
-        getSimpleIcon({ name: 'npm' }),
-      ).and.not.be.empty
+      expect(coalesceBadge({ logo: 'npm' }, { logoSvg }, {})).to.include({
+        namedLogo: 'npm',
+        logo: undefined,
+      })
     })
   })
 
@@ -268,12 +258,6 @@ describe('coalesceBadge', function () {
       expect(coalesceBadge({ logoSize: 'auto' }, {}, {})).to.include({
         logoSize: 'auto',
       })
-    })
-
-    it('applies the logo size', function () {
-      expect(
-        coalesceBadge({}, { namedLogo: 'npm', logoSize: 'auto' }, {}),
-      ).to.include({ logoSize: 'auto' })
     })
   })
 
