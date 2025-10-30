@@ -43,7 +43,7 @@ export default class SonarViolations extends SonarBase {
             example: 'violations',
             schema: { type: 'string', enum: this.getEnum('metric') },
           }),
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'brave_brave-core' }),
           ...openApiQueryParams,
           queryParam({
             name: 'format',
@@ -67,7 +67,7 @@ export default class SonarViolations extends SonarBase {
             example: 'violations',
             schema: { type: 'string', enum: this.getEnum('metric') },
           }),
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: ':brave_brave-core' }),
           pathParam({ name: 'branch', example: 'master' }),
           ...openApiQueryParams,
           queryParam({

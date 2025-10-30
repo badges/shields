@@ -23,7 +23,7 @@ export default class SonarTechDebt extends SonarBase {
         summary: 'Sonar Tech Debt',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'brave_brave-core' }),
           ...openApiQueryParams,
         ],
       },
@@ -33,7 +33,7 @@ export default class SonarTechDebt extends SonarBase {
         summary: 'Sonar Tech Debt (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'brave_brave-core' }),
           pathParam({ name: 'branch', example: 'master' }),
           ...openApiQueryParams,
         ],

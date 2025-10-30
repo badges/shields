@@ -67,7 +67,7 @@ t.create('Fortify Security Rating (legacy API supported)')
 
 t.create('Fortify Security Rating (legacy API not supported)')
   .get(
-    '/swellaby:azdo-shellcheck.json?server=https://sonarcloud.io&sonarVersion=4.2',
+    '/michelin_kstreamplify.json?server=https://sonarcloud.io&sonarVersion=4.2',
   )
   .expectBadge({
     label: 'fortify-security-rating',
