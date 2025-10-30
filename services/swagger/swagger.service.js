@@ -34,7 +34,7 @@ export default class SwaggerValidatorService extends BaseJsonService {
           name: 'specUrl',
           required: true,
           example:
-            'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/master/examples/v2.0/json/petstore-expanded.json',
+            'https://raw.githubusercontent.com/OAI/OpenAPI-Specification/c442afe06ec28443df0c69d01dc38c54968b246f/examples/v2.0/json/petstore-expanded.json',
         }),
       },
     },
