@@ -1,20 +1,23 @@
+import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { pathParams } from '../index.js'
-import GnomeExtensionsBase from './gnome-extensions-base.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
-export default class GnomeExtensionsDownloads extends GnomeExtensionsBase {
+const extensionSchema = Joi.object({
+  downloads: Joi.number().required(),
+})
+
+export default class GnomeExtensionsDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
-    base: 'gnome-extensions/downloads',
+    base: 'gnome-extensions/dt',
     pattern: ':extensionId',
   }
 
   static openApi = {
-    '/gnome-extensions/downloads/{extensionId}': {
+    '/gnome-extensions/dt/{extensionId}': {
       get: {
         summary: 'Gnome Extensions Downloads',
-        description: 'Gnome Extensions Downloads',
         parameters: pathParams({
           name: 'extensionId',
           description: 'Id of the Gnome Extension',
@@ -28,6 +31,16 @@ export default class GnomeExtensionsDownloads extends GnomeExtensionsBase {
 
   static render({ downloads }) {
     return renderDownloadsBadge({ downloads })
+  }
+
+  async getExtension({ extensionId }) {
+    return await this._requestJson({
+      schema: extensionSchema,
+      url: `https://extensions.gnome.org/api/v1/extensions/${extensionId}/`,
+      httpErrors: {
+        404: 'extension not found',
+      },
+    })
   }
 
   async handle({ extensionId }) {
