@@ -7,33 +7,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 ## server-2025-11-01
 
 - Add [GnomeExtensions] Downloads Badge [#11443](https://github.com/badges/shields/issues/11443)
-- Fix [Sonar] tests and examples [#11440](https://github.com/badges/shields/issues/11440)
-- Fix broken redirector tests [#11439](https://github.com/badges/shields/issues/11439)
-- Fix [Swagger] tests [#11442](https://github.com/badges/shields/issues/11442)
-- Remove child-process-promise dependency [#11434](https://github.com/badges/shields/issues/11434)
-- Remove react-dom dependency [#11435](https://github.com/badges/shields/issues/11435)
-- Remove form-data dependency [#11438](https://github.com/badges/shields/issues/11438)
-- Stop depending on lodash groupby, difference and times [#11428](https://github.com/badges/shields/issues/11428)
-- Drop eslint-config-prettier dependency [#11432](https://github.com/badges/shields/issues/11432)
-- Remove read-all-stdin-sync dependency [#11433](https://github.com/badges/shields/issues/11433)
+- Fix [Sonar] examples [#11440](https://github.com/badges/shields/issues/11440)
 - [BundleJS] Add format query parameter support [#11427](https://github.com/badges/shields/issues/11427)
-- fix: remove footer dark style to enable theme switching [#11431](https://github.com/badges/shields/issues/11431)
+- Remove footer dark style to enable theme switching [#11431](https://github.com/badges/shields/issues/11431)
 - Replace query-string with qs [#11425](https://github.com/badges/shields/issues/11425)
 - [BundleJS] Add externals query parameter support [#11400](https://github.com/badges/shields/issues/11400)
-- Update a few docs bits and pieces [#11423](https://github.com/badges/shields/issues/11423)
-- Add action to build documentation on PRs [#11408](https://github.com/badges/shields/issues/11408)
 - Add displayAssetName option to [GitHubDownloads] badge [#11415](https://github.com/badges/shields/issues/11415)
-- bump docusaurus-preset-openapi from 0.7.6 to 0.7.7 [#11416](https://github.com/badges/shields/issues/11416)
 - Increase [VisualStudioMarketplace] cache multiplier [#11413](https://github.com/badges/shields/issues/11413)
 - Handle [Aur] empty license arrays [#11412](https://github.com/badges/shields/issues/11412)
 - Fix [ChromeWebStore] add null check for extension not found in ChromeWebStore [#11414](https://github.com/badges/shields/issues/11414)
 - [Bluesky] Add followers and posts badges [#11405](https://github.com/badges/shields/issues/11405)
-- chore: replace all instances of twitter.com with x.com [#11409](https://github.com/badges/shields/issues/11409)
+- Replace all instances of twitter.com with x.com [#11409](https://github.com/badges/shields/issues/11409)
 - Document [ChromeWebStore] region exclusion [#11407](https://github.com/badges/shields/issues/11407)
-- Fix JSDocs syntax [#11404](https://github.com/badges/shields/issues/11404)
-- Fix [ScoopLicense] test [#11406](https://github.com/badges/shields/issues/11406)
-- Fix typos and linguistic errors in documentation [#11403](https://github.com/badges/shields/issues/11403)
-- Dependency updates
+- Dependency updates and removals
 
 ## server-2025-10-02
 
