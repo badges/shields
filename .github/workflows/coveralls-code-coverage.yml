@@ -64,6 +64,7 @@ jobs:
           SL_INSIGHT_API_TOKEN: '${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}'
           TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
+          WEBLATE_API_KEY: '${{ secrets.SERVICETESTS_WEBLATE_API_KEY }}'
           YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
         shell: bash
 
