@@ -4,6 +4,23 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-11-01
+
+- Add [GnomeExtensions] Downloads Badge [#11443](https://github.com/badges/shields/issues/11443)
+- Fix [Sonar] examples [#11440](https://github.com/badges/shields/issues/11440)
+- [BundleJS] Add format query parameter support [#11427](https://github.com/badges/shields/issues/11427)
+- Remove footer dark style to enable theme switching [#11431](https://github.com/badges/shields/issues/11431)
+- Replace query-string with qs [#11425](https://github.com/badges/shields/issues/11425)
+- [BundleJS] Add externals query parameter support [#11400](https://github.com/badges/shields/issues/11400)
+- Add displayAssetName option to [GitHubDownloads] badge [#11415](https://github.com/badges/shields/issues/11415)
+- Increase [VisualStudioMarketplace] cache multiplier [#11413](https://github.com/badges/shields/issues/11413)
+- Handle [Aur] empty license arrays [#11412](https://github.com/badges/shields/issues/11412)
+- Fix [ChromeWebStore] add null check for extension not found in ChromeWebStore [#11414](https://github.com/badges/shields/issues/11414)
+- [Bluesky] Add followers and posts badges [#11405](https://github.com/badges/shields/issues/11405)
+- Replace all instances of twitter.com with x.com [#11409](https://github.com/badges/shields/issues/11409)
+- Document [ChromeWebStore] region exclusion [#11407](https://github.com/badges/shields/issues/11407)
+- Dependency updates and removals
+
 ## server-2025-10-02
 
 **Deprecation:**
