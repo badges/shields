@@ -158,7 +158,7 @@
     "chai-datetime": "^1.8.1",
     "clsx": "^2.1.1",
     "concurrently": "^9.2.1",
-    "cypress": "^15.3.0",
+    "cypress": "^15.5.0",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^13.0.4",
     "deepmerge": "^4.3.1",
