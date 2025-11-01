@@ -18,6 +18,7 @@ import { clearResourceCache } from '../base-service/resource-cache.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
 import {
   fileSize,
+  fileSizeBytes,
   nonNegativeInteger,
   optionalUrl,
   url as requiredUrl,
@@ -153,6 +154,7 @@ const publicConfigSchema = Joi.object({
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
   fetchLimit: fileSize,
+  fetchLimitBytes: fileSizeBytes,
   userAgentBase: Joi.string().required(),
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
@@ -165,7 +167,9 @@ const publicConfigSchema = Joi.object({
     ),
   ),
   requireCloudflare: Joi.boolean().required(),
-}).required()
+})
+  .or('fetchLimit', 'fetchLimitBytes')
+  .required()
 
 const privateConfigSchema = Joi.object({
   azure_devops_token: Joi.string(),
