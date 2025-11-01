@@ -352,9 +352,8 @@ in order to obtain a client id and a client secret for making Twitch API calls.
 - `WEBLATE_ORIGINS` (yml: `public.services.weblate.authorizedOrigins`)
 - `WEBLATE_API_KEY` (yml: `private.weblate_api_key`)
 
-By default Weblate throttles [unauthenticated request][weblate authentication]
-to only 100 requests per day, after this you will need an API key or else
-badges will stop working.
+Weblate heavily throttles [unauthenticated request][weblate authentication],
+it is recommended to use an API key for requests.
 
 You can find your Weblate API key in your profile under
 ["API access"][weblate api key location].

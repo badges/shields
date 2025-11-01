@@ -9,14 +9,14 @@ export const t = await createServiceTester()
 // for other service tests.
 
 t.create('Coverage')
-  .get('/swellaby%3Aletra.json?server=https://sonarcloud.io')
+  .get('/gitify-app_gitify.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
 t.create('Coverage (branch)')
-  .get('/swellaby%3Aletra/master.json?server=https://sonarcloud.io')
+  .get('/gitify-app_gitify/main.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,

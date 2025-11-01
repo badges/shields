@@ -22,7 +22,7 @@ export default class SonarCoverage extends SonarBase {
         summary: 'Sonar Coverage',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'gitify-app_gitify' }),
           ...openApiQueryParams,
         ],
       },
@@ -32,8 +32,8 @@ export default class SonarCoverage extends SonarBase {
         summary: 'Sonar Coverage (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'gitify-app_gitify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },

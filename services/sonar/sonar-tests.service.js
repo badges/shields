@@ -30,7 +30,7 @@ class SonarTestsSummary extends SonarBase {
           ${testResultsDocumentation}
         `,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
           ...testResultOpenApiQueryParams,
         ],
@@ -43,8 +43,8 @@ class SonarTestsSummary extends SonarBase {
           ${testResultsDocumentation}
         `,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
           ...testResultOpenApiQueryParams,
         ],
@@ -160,7 +160,7 @@ class SonarTests extends SonarBase {
               ],
             },
           }),
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
         ],
       },
@@ -183,8 +183,8 @@ class SonarTests extends SonarBase {
               ],
             },
           }),
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },
@@ -194,7 +194,7 @@ class SonarTests extends SonarBase {
         summary: 'Sonar Test Execution Time',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
         ],
       },
@@ -204,8 +204,8 @@ class SonarTests extends SonarBase {
         summary: 'Sonar Test Execution Time (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },
@@ -215,7 +215,7 @@ class SonarTests extends SonarBase {
         summary: 'Sonar Test Success Rate',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
         ],
       },
@@ -225,8 +225,8 @@ class SonarTests extends SonarBase {
         summary: 'Sonar Test Success Rate (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },

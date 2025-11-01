@@ -54,8 +54,8 @@
 //    Relying on npm scripts is safer. Using "pre" makes it impossible to run
 //    the second step without the first.
 
+import fs from 'fs'
 import minimist from 'minimist'
-import readAllStdinSync from 'read-all-stdin-sync'
 import { createTestServer } from '../server/in-process-server-test-helpers.js'
 import Runner from './runner.js'
 
@@ -72,7 +72,7 @@ let onlyServices
 if (stdinOption && onlyOption) {
   console.error('Do not use --only with --stdin')
 } else if (stdinOption) {
-  const allStdin = readAllStdinSync().trim()
+  const allStdin = fs.readFileSync(0, 'utf-8').trim()
   onlyServices = allStdin ? allStdin.split('\n') : []
 } else if (onlyOption) {
   onlyServices = onlyOption.split(',')

@@ -37,7 +37,7 @@ export default class SonarFortifyRating extends SonarBase {
         summary: 'Sonar Fortify Security Rating',
         description,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
         ],
       },
@@ -47,8 +47,8 @@ export default class SonarFortifyRating extends SonarBase {
         summary: 'Sonar Fortify Security Rating (branch)',
         description,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:letra' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },

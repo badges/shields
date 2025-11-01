@@ -1,6 +1,7 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { spawn } from 'child-process-promise'
+import { execFile } from 'child_process'
+import { promisify } from 'util'
 import { expect, use } from 'chai'
 import sinonChai from 'sinon-chai'
 use(sinonChai)
@@ -8,9 +9,10 @@ use(sinonChai)
 const dirName = path.dirname(fileURLToPath(import.meta.url))
 
 function runCli(args) {
-  return spawn('node', [path.join(dirName, 'badge-cli.js'), ...args], {
-    capture: ['stdout'],
-  })
+  return promisify(execFile)('node', [
+    path.join(dirName, 'badge-cli.js'),
+    ...args,
+  ])
 }
 
 describe('The CLI', function () {
