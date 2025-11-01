@@ -55,7 +55,7 @@
 //    the second step without the first.
 
 import fs from 'fs'
-import minimist from 'minimist'
+import { parseArgs } from 'util'
 import envFlag from 'node-env-flag'
 import { createTestServer } from '../server/in-process-server-test-helpers.js'
 import Runner from './runner.js'
@@ -66,9 +66,11 @@ const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0
 retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
 
-const args = minimist(process.argv.slice(3))
-const stdinOption = args.stdin
-const onlyOption = args.only
+const { stdin: stdinOption, only: onlyOption } = parseArgs({
+  args: process.argv.slice(3),
+  options: { stdin: { type: 'boolean' }, only: { type: 'string' } },
+  strict: false,
+}).values
 let onlyServices
 if (stdinOption && onlyOption) {
   console.error('Do not use --only with --stdin')
