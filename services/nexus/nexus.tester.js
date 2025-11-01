@@ -22,9 +22,7 @@ t.create('Nexus 2 - search release version of an nonexistent artifact')
 
 t.create('Nexus 2 - search snapshot version valid snapshot artifact')
   .timeout(15000)
-  .get(
-    '/s/org.fusesource.apollo/apollo-karaf-feature.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/s/com.datadoghq/ap-tools.json?server=https://oss.sonatype.org')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
@@ -43,7 +41,7 @@ t.create('Nexus 2 - search snapshot version of an nonexistent artifact')
 
 t.create('Nexus 2 - repository version')
   .get(
-    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus',
+    '/google-releases/com.google.collections/google-collections.json?server=https://oss.sonatype.org',
   )
   .expectBadge({
     label: 'nexus',
@@ -53,8 +51,8 @@ t.create('Nexus 2 - repository version')
 t.create('Nexus 2 - repository version with query')
   .timeout(15000)
   .get(
-    `/fs-public-snapshots/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus&queryOpt=${encodeURIComponent(
-      ':p=tar.gz:c=agent-apple-osx',
+    `/google-releases/com.google.collections/google-collections.json?server=https://oss.sonatype.org&queryOpt=${encodeURIComponent(
+      ':p=jar:v=0.9',
     )}`,
   )
   .expectBadge({
@@ -65,7 +63,7 @@ t.create('Nexus 2 - repository version with query')
 t.create('Nexus 2 - repository version of an nonexistent artifact')
   .timeout(15000)
   .get(
-    '/developer/jboss/nonexistent-artifact-id.json?server=https://repository.jboss.org/nexus',
+    '/google-releases/com.google.collections/nonexistent-artifact-id.json?server=https://oss.sonatype.org',
   )
   .expectBadge({
     label: 'nexus',
@@ -73,11 +71,9 @@ t.create('Nexus 2 - repository version of an nonexistent artifact')
   })
 
 t.create('Nexus 2 - snapshot version with + in version')
-  .get(
-    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/s/com.progress.fuse/fusehq.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/lucene/search')
       .query({ g: 'com.progress.fuse', a: 'fusehq' })
       .reply(200, { data: [{ version: '7.0.1+19-8844c122-SNAPSHOT' }] }),
@@ -90,10 +86,10 @@ t.create('Nexus 2 - snapshot version with + in version')
 
 t.create('Nexus 2 - snapshot version with + and hex hash in version')
   .get(
-    '/s/com.typesafe.akka/akka-stream-kafka_2.13.json?server=https://repository.jboss.org/nexus',
+    '/s/com.typesafe.akka/akka-stream-kafka_2.13.json?server=https://oss.sonatype.org',
   )
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/lucene/search')
       .query({ g: 'com.typesafe.akka', a: 'akka-stream-kafka_2.13' })
       .reply(200, { data: [{ version: '2.1.0-M1+58-f25047fc-SNAPSHOT' }] }),
@@ -105,11 +101,9 @@ t.create('Nexus 2 - snapshot version with + and hex hash in version')
   })
 
 t.create('Nexus 2 - search snapshot version not in latestSnapshot')
-  .get(
-    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/s/com.progress.fuse/fusehq.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/lucene/search')
       .query({ g: 'com.progress.fuse', a: 'fusehq' })
       .reply(200, { data: [{ version: '7.0.1-SNAPSHOT' }] }),
@@ -121,11 +115,9 @@ t.create('Nexus 2 - search snapshot version not in latestSnapshot')
   })
 
 t.create('Nexus 2 - search snapshot no snapshot versions')
-  .get(
-    '/s/com.progress.fuse/fusehq.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/s/com.progress.fuse/fusehq.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/lucene/search')
       .query({ g: 'com.progress.fuse', a: 'fusehq' })
       .reply(200, { data: [{ version: '1.2.3' }] }),
@@ -137,9 +129,9 @@ t.create('Nexus 2 - search snapshot no snapshot versions')
   })
 
 t.create('Nexus 2 - search release version')
-  .get('/r/jboss/jboss-client.json?server=https://repository.jboss.org/nexus')
+  .get('/r/jboss/jboss-client.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/lucene/search')
       .query({ g: 'jboss', a: 'jboss-client' })
       .reply(200, { data: [{ latestRelease: '1.0.0' }] }),
@@ -151,11 +143,9 @@ t.create('Nexus 2 - search release version')
   })
 
 t.create('Nexus 2 - repository release version')
-  .get(
-    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/developer/ai.h2o/h2o-automl.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/artifact/maven/resolve')
       .query({
         g: 'ai.h2o',
@@ -177,11 +167,9 @@ t.create('Nexus 2 - repository release version')
   })
 
 t.create('Nexus 2 - repository release version')
-  .get(
-    '/developer/ai.h2o/h2o-automl.json?server=https://repository.jboss.org/nexus',
-  )
+  .get('/developer/ai.h2o/h2o-automl.json?server=https://oss.sonatype.org')
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/artifact/maven/resolve')
       .query({
         g: 'ai.h2o',
@@ -203,10 +191,10 @@ t.create('Nexus 2 - repository release version')
 
 t.create('Nexus 2 - user query params')
   .get(
-    '/fs-public-snapshots/com.progress.fuse/fusehq.json?queryOpt=:c=agent-apple-osx:p=tar.gz&server=https://repository.jboss.org/nexus',
+    '/fs-public-snapshots/com.progress.fuse/fusehq.json?queryOpt=:c=agent-apple-osx:p=tar.gz&server=https://oss.sonatype.org',
   )
   .intercept(nock =>
-    nock('https://repository.jboss.org/nexus')
+    nock('https://oss.sonatype.org')
       .get('/service/local/artifact/maven/resolve')
       .query({
         g: 'com.progress.fuse',
