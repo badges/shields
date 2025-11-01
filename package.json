@@ -39,7 +39,7 @@
     "decamelize": "^3.2.0",
     "emojic": "^1.1.18",
     "escape-string-regexp": "^4.0.0",
-    "fast-xml-parser": "^5.2.5",
+    "fast-xml-parser": "^5.3.0",
     "glob": "^11.0.3",
     "global-agent": "^3.0.0",
     "got": "^14.4.9",
