@@ -207,21 +207,21 @@ describe('The server', function () {
           throwHttpErrors: false,
         },
       )
-      expect(statusCode).to.equal(404)
+      expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('404')
         .and.to.include('badge not found')
     })
 
-    it('should return the 404 badge page for rando links', async function () {
+    it('should return the 404 badge page for random links', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}this/is/most/definitely/not/a/badge.js`,
         {
           throwHttpErrors: false,
         },
       )
-      expect(statusCode).to.equal(404)
+      expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('404')
@@ -245,7 +245,6 @@ describe('The server', function () {
           throwHttpErrors: false,
         },
       )
-      // TODO It would be nice if this were 404 or 410.
       expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)

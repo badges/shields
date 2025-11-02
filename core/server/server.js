@@ -399,6 +399,8 @@ class Server {
       const [, extension] = match
       const format = (extension || '.svg').replace(/^\./, '')
 
+      request.res.statusCode = 200
+
       makeSend(
         format,
         request.res,
@@ -537,9 +539,10 @@ class Server {
     const { githubConstellation, metricInstance } = this
     await githubConstellation.initialize(camp)
     if (metricInstance) {
-      if (this.config.public.metrics.prometheus.endpointEnabled) {
-        metricInstance.registerMetricsEndpoint(camp)
-      }
+      metricInstance.registerMetricsEndpoint(
+        camp,
+        this.config.public.metrics.prometheus.endpointEnabled,
+      )
       if (this.influxMetrics) {
         this.influxMetrics.startPushingMetrics()
       }
