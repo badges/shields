@@ -12,8 +12,8 @@ Many GitHub repositories sport badges for things like:
     <td><img src="http://f.cl.ly/items/2j1D2R0q2C3s1x2y3k09/Screen%20Shot%202013-01-30%20at%202.46.10%20AM.png" alt="Gemnasium badge"></td>
   </tr>
   <tr>
-    <td><a href="http://codeclimate.com"><strong>Code Climate</strong></a><p><sup>(static analysis)</sup></p></td>
-    <td><img src="http://f.cl.ly/items/0H2O1A3q2b3j1D2i0M3j/Screen%20Shot%202013-01-30%20at%202.46.47%20AM.png" alt="Code Climate badge"></td>
+    <td><a href="https://www.jetbrains.com/teamcity/"><strong>TeamCity</strong></a><p><sup>(static analysis)</sup></p></td>
+    <td><img src="https://img.shields.io/teamcity/coverage/ReactJSNet_PullRequests" alt="TeamCity badge"></td>
   </tr>
   <tr>
     <td><a href="http://rubygems.org"><strong>RubyGems</strong></a><p><sup>(released gem version)</sup></p></td>
