@@ -4,7 +4,6 @@
 - [badges2svg](https://github.com/bfontaine/badges2svg)
 - [CII Best Practices](https://bestpractices.coreinfrastructure.org/)
 - [Codacy](https://www.codacy.com)
-- [Code Climate](https://codeclimate.com/changelog/510d4fde56b102523a0004bf)
 - [Coveralls](https://coveralls.io/)
 - [docs.rs](https://docs.rs/)
 - [Forkability](http://basicallydan.github.io/forkability/)
