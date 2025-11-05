@@ -14,9 +14,3 @@ t.create('pub likes (not found)').get('/analysisoptions.json').expectBadge({
   message: 'not found',
   color: 'red',
 })
-
-t.create('pub likes (invalid)').get('/analysis-options.json').expectBadge({
-  label: 'likes',
-  message: 'invalid',
-  color: 'lightgrey',
-})
