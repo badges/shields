@@ -160,3 +160,23 @@ affectedServices.forEach(service => {
     )
   }
 })
+
+allFiles
+  .filter(file => file.match(/^services\/(.+)\/.+\.service.js$/))
+  .forEach(file => {
+    // eslint-disable-next-line promise/prefer-await-to-then
+    danger.git.diffForFile(file).then(({ diff }) => {
+      if (
+        diff.match(/base: '.*(download|install|license|version|release).*'/) ||
+        diff.match(/pattern: '.*(download|install|license|version|release).*'/)
+      ) {
+        warn(
+          [
+            'Found badge URL that may not follow our standard route abbreviations. <br>',
+            "Please ensure you've reviewed our [conventions]",
+            '(https://github.com/badges/shields/blob/master/doc/badge-urls.md)',
+          ].join(''),
+        )
+      }
+    })
+  })
