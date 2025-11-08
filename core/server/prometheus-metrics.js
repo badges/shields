@@ -37,12 +37,17 @@ export default class PrometheusMetrics {
     })
   }
 
-  async registerMetricsEndpoint(server) {
+  async registerMetricsEndpoint(server, enabled = true) {
     const { register } = this
 
     server.route(/^\/metrics$/, async (data, match, end, ask) => {
-      ask.res.setHeader('Content-Type', register.contentType)
-      ask.res.end(await register.metrics())
+      if (enabled) {
+        ask.res.setHeader('Content-Type', register.contentType)
+        ask.res.end(await register.metrics())
+      } else {
+        ask.res.statusCode = 404
+        ask.res.end()
+      }
     })
   }
 
