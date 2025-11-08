@@ -50,8 +50,7 @@ export default class JenkinsTests extends JenkinsBase {
         parameters: [
           queryParam({
             name: 'jobUrl',
-            example:
-              'https://jenkins.sqlalchemy.org/job/alembic_gerrit_pipeline',
+            example: 'https://ci.eclipse.org/jgit/job/jgit',
             required: true,
           }),
           ...testResultOpenApiQueryParams,

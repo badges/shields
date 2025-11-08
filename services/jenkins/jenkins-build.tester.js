@@ -1,12 +1,6 @@
-import Joi from 'joi'
 import { isBuildStatus } from '../build-status.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
-
-const isJenkinsBuildStatus = Joi.alternatives(
-  isBuildStatus,
-  Joi.string().allow('unstable'),
-)
 
 t.create('build job not found')
   .get('/build.json?jobUrl=https://ci.eclipse.org/jgit/job/does-not-exist')
@@ -14,10 +8,10 @@ t.create('build job not found')
 
 t.create('build found (view)')
   .get(
-    '/build.json?jobUrl=https://jenkins.sqlalchemy.org/view/alembic/job/alembic_coverage/',
+    '/build.json?jobUrl=https://ci.hibernate.org/view/Main/job/hibernate-search/job/main',
   )
-  .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
+  .expectBadge({ label: 'build', message: isBuildStatus })
 
 t.create('build found (job)')
   .get('/build.json?jobUrl=https://ci.eclipse.org/jgit/job/jgit')
-  .expectBadge({ label: 'build', message: isJenkinsBuildStatus })
+  .expectBadge({ label: 'build', message: isBuildStatus })
