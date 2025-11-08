@@ -3,7 +3,7 @@ import { isMetric, withRegex } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 const isViolationsLongFormMetric = Joi.alternatives(
-  Joi.allow(0),
+  Joi.equal(0),
   withRegex(
     /(([\d]+) (blocker|critical|major|minor|info))(,\s([\d]+) (critical|major|minor|info))?/,
   ),

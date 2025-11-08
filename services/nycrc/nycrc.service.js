@@ -50,9 +50,7 @@ export default class Nycrc extends ConditionalGithubAuthV3Service {
         .default('.nycrc'),
       // Allow the default threshold detection logic to be overridden, .e.g.,
       // favoring lines over branches:
-      preferredThreshold: Joi.string()
-        .optional()
-        .allow(...validThresholds),
+      preferredThreshold: Joi.string(),
     }).required(),
   }
 

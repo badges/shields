@@ -17,7 +17,7 @@ t.create('Tag (inc pre-release)')
   .expectBadge({
     label: 'tag',
     message: isSemver,
-    color: Joi.string().allow('blue', 'orange').required(),
+    color: Joi.equal('blue', 'orange').required(),
   })
 
 t.create('Tag (no tags)')

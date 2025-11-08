@@ -57,7 +57,7 @@ t.create('Docs with no version specified')
   .get('/tokio.json')
   .expectBadge({
     label: 'docs',
-    message: Joi.allow('passing', 'failing'),
+    message: Joi.equal('passing', 'failing'),
   })
 ```
 
@@ -74,7 +74,7 @@ t.create('Docs with no version specified')
    match based on a set of allowed strings, regexes, or specific values. You can
    refer to their [API reference][joi api].
 4. We expect `label` to be a string literal `"docs"`.
-5. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example crates's documentation build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case, we specify a list with all possible response values, `Joi.allow('passing', 'failing')`. For more complex cases, [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use with regular expressions. Many of the common badge types (version, downloads, rank, etc.) already have validators defined there.
+5. Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a "picture check" to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example crates's documentation build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case, we specify a list with all possible response values, `Joi.equal('passing', 'failing')`. For more complex cases, [services/test-validators.js](https://github.com/badges/shields/blob/master/services/test-validators.js) defines a number of useful validators we can use with regular expressions. Many of the common badge types (version, downloads, rank, etc.) already have validators defined there.
 
 When defining an IcedFrisby test, typically you would invoke the `toss()`
 method, to register the test. This is not necessary, because the Shields test
