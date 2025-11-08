@@ -7,13 +7,7 @@ t.create('score valid')
   .expectBadge({
     label: 'score',
     message: Joi.number().min(0),
-    color: Joi.string().allow(
-      'red',
-      'yellow',
-      'yellowgreen',
-      'green',
-      'brightgreen',
-    ),
+    color: Joi.equal('red', 'yellow', 'yellowgreen', 'green', 'brightgreen'),
   })
 
 t.create('score ivalid')
