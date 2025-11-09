@@ -23,6 +23,10 @@ coverage
 # Dependency directories
 node_modules/
 
+# Node logs produced by profiling
+logs
+*.log
+
 # Lock file for badge-maker
 badge-maker/package-lock.json
 
