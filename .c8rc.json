@@ -19,7 +19,6 @@
     "core/base-service/loader-test-fixtures",
     "scripts",
     "coverage",
-    "build",
     ".github",
     "**/public/",
     "cypress",

@@ -1,14 +1,6 @@
 {
   "source": {
-    "exclude": [
-      "__snapshots__",
-      "build",
-      "coverage",
-      "logo",
-      "node_modules",
-      "private",
-      "public"
-    ],
+    "exclude": ["__snapshots__", "coverage", "node_modules", "public"],
     "excludePattern": ".+\\.(service|spec|tester)\\.js$"
   },
   "plugins": ["plugins/markdown"],
