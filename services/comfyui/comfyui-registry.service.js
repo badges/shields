@@ -208,7 +208,7 @@ class BaseComfyuiService extends BaseJsonService {
   }
 }
 
-class ComfyuiDownloads extends BaseComfyuiService {
+export class ComfyuiDownloads extends BaseComfyuiService {
   static category = 'downloads'
   // Short URL: /comfyui/:node/downloads
   static route = { base: 'comfyui', pattern: ':node/downloads' }
@@ -251,17 +251,22 @@ export class ComfyuiVersion extends BaseComfyuiService {
     },
   }
 
-  // Do not hardcode the label as 'comfyui' — use the requested node name to
-  // avoid ambiguity (e.g. `comfyui-image-captioner`). The dynamic label is
-  // supplied to the renderer at runtime via `defaultLabel: node`.
-  static defaultBadgeData = { label: '' }
+  static defaultBadgeData = { label: 'version' }
 
   async handle({ node }) {
     const data = await this.fetchNode({ node })
     const version = data.latest_version && data.latest_version.version
-    // Use the node identifier as the badge label to avoid ambiguity with the
-    // platform name.
-    return renderVersionBadge({ version, defaultLabel: node })
+    const rawLabel =
+      (typeof data.name === 'string' && data.name.trim()) ||
+      (typeof data.id === 'string' && data.id.trim()) ||
+      (typeof node === 'string' ? node.trim() : node)
+    const label =
+      typeof rawLabel === 'string' && rawLabel
+        ? rawLabel.toLowerCase()
+        : 'version'
+    // Prefer the node's human-friendly name when available, but ensure badge
+    // labels stay lowercase for consistency.
+    return renderVersionBadge({ version, defaultLabel: label })
   }
 }
 
@@ -295,9 +300,3 @@ export class ComfyuiStars extends BaseComfyuiService {
     }
   }
 }
-
-// Export the Downloads class as both a named and default export so tests
-// and the service loader can import it in either style.
-export { ComfyuiDownloads }
-
-export default ComfyuiDownloads
