@@ -24,7 +24,11 @@
     "directory": "badge-maker"
   },
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
-  "license": "CC0-1.0",
+  "contributors": [
+    "Paul Melnikow",
+    "Pierre-Yves Bigourdan"
+  ],
+  "license": "(MIT OR Apache-2.0)",
   "bugs": {
     "url": "https://github.com/badges/shields/issues"
   },

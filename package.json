@@ -14,8 +14,12 @@
   "bugs": {
     "url": "https://github.com/badges/shields/issues"
   },
-  "license": "CC0-1.0",
+  "license": "(MIT OR Apache-2.0)",
   "author": "Thaddée Tyl <thaddee.tyl@gmail.com>",
+  "contributors": [
+    "Paul Melnikow",
+    "Pierre-Yves Bigourdan"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/badges/shields"
