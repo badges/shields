@@ -38,7 +38,23 @@ The static badge accepts a single required path parameter which encodes either:
   </tbody>
 </table>
 
-Hex, rgb, rgba, hsl, hsla and css named colors may be used.
+Examples of additional options:
+<ul>
+  <li>
+    <b>Style:</b> <img alt="style: for-the-badge" src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" /> -
+    https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge
+  </li>
+  <li>
+    <b>Color (named):</b> <img alt="color: orange" src="https://img.shields.io/badge/coverage-95%25-orange" /> -
+    https://img.shields.io/badge/coverage-95%25-orange
+  </li>
+  <li>
+    <b>Logo:</b> <img alt="logo: GitHub" src="https://img.shields.io/badge/github-repo-blue?logo=github" /> -
+    https://img.shields.io/badge/github-repo-blue?logo=github
+  </li>
+</ul>
+
+<i>Hex, rgb, rgba, hsl, hsla and css named colors may be used. <b>Note:</b> Some named colors may differ from CSS color values. For a list of named colors, see the <a href="https://github.com/badges/shields/tree/master/badge-maker#colors" target="_blank">badge-maker readme</a>.</i>
 `
 
 export default class StaticBadge extends BaseStaticService {
