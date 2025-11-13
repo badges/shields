@@ -1,17 +1,17 @@
 import { testAuth } from '../test-helpers.js'
-import SonarFortifyRating from './sonar-fortify-rating.service.js'
+import SonarCoverage from './sonar-coverage.service.js'
 import {
   legacySonarResponse,
   testAuthConfigOverride,
 } from './sonar-spec-helpers.js'
 
-describe('SonarFortifyRating', function () {
+describe('SonarCoverage', function () {
   describe('auth', function () {
     it('sends the auth information as configured', async function () {
       return testAuth(
-        SonarFortifyRating,
+        SonarCoverage,
         'BasicAuth',
-        legacySonarResponse('fortify-security-rating', 4),
+        legacySonarResponse('coverage', 95),
         { configOverride: testAuthConfigOverride },
       )
     })
