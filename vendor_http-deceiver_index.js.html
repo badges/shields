@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: services/test-validators.js</title>
+    <title>JSDoc: Source: vendor/http-deceiver/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: services/test-validators.js</h1>
+    <h1 class="page-title">Source: vendor/http-deceiver/index.js</h1>
 
     
 
@@ -26,229 +26,293 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Joi from 'joi'
-import { semver as isSemver } from './validators.js'
-
-/*
-  Note:
-  Validators defined in this file are used by more than one service.
-  Validators which are only used by one service
-  should be declared in that service's test file.
-*/
-
-const withRegex = re => Joi.string().regex(re)
-
-const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
-
-const isVPlusDottedVersionAtLeastOne = withRegex(/^v\d+(\.\d+)?(\.\d+)?$/)
-
-// matches a version number with N 'clauses' e.g: v1.2 or v1.22.7.392 are valid
-const isVPlusDottedVersionNClauses = withRegex(/^v\d+(\.\d+)*$/)
-
-// matches a version number with N 'clauses'
-// and an optional text suffix
-// e.g: -beta, -preview1, -release-candidate, +beta, ~pre9-12 etc
-const isVPlusDottedVersionNClausesWithOptionalSuffix = withRegex(
-  /^v\d+(\.\d+)*([-+~].*)?$/,
-)
-
-// same as above, but also accepts an optional 'epoch' prefix that can be
-// found e.g. in distro package versions, like 4:6.3.0-4
-const isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch = withRegex(
-  /^v(\d+:)?\d+(\.\d+)*([-+~].*)?$/,
-)
-
-// Simple regex for test Composer versions rule
-// https://getcomposer.org/doc/articles/versions.md
-// Examples:
-// 7.1
-// >=5.6
-// >1.0 &lt;2.0
-// !=1.0 &lt;1.1 || >=1.2
-// 7.1.*
-// 7.* || 5.6.*
-// This regex not support branches, minimum-stability, ref and any (*)
-// https://getcomposer.org/doc/04-schema.md#package-links
-// https://getcomposer.org/doc/04-schema.md#minimum-stability
-const isComposerVersion = withRegex(
-  /^\*|(\s*(>=|>|&lt;|&lt;=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?((\s*\|*)?\s*(>=|>|&lt;|&lt;=|!=|\^|~)?\d+(\.(\*|(\d+(\.(\d+|\*))?)))?)*\s*)$/,
-)
-
-// Regex for validate php-version.versionReduction()
-// >= 7
-// >= 7.1
-// 5.4, 5.6, 7.2
-// 5.4 - 7.1, HHVM
-const isPhpVersionReduction = withRegex(
-  /^((>= \d+(\.\d+)?)|(\d+\.\d+(, \d+\.\d+)*)|(\d+\.\d+ - \d+\.\d+))(, HHVM)?$/,
-)
-
-const isCommitHash = withRegex(/^[a-f0-9]{7,40}$/)
-
-const isStarRating = withRegex(
-  /^(?=.{5}$)(\u2605{0,5}[\u00BC\u00BD\u00BE]?\u2606{0,5})$/,
-)
-
-// Required to be > 0, because accepting zero masks many problems.
-const isMetric = withRegex(/^([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])$/)
-
-// Same as isMetric, but tests for negative numbers also.
-const isMetricAllowNegative = withRegex(
-  /^(0|-?[1-9][0-9]*[kMGTPEZY]?|-?[0-9]\.[0-9][kMGTPEZY])$/,
-)
-
+            <pre class="prettyprint source linenums"><code>/* eslint-disable */
 /**
- * @param {RegExp} nestedRegexp Pattern that must appear after the metric.
- * @returns {Function} A function that returns a RegExp that matches a metric followed by another pattern.
+ * The related issue:
+ * https://github.com/badges/shields/issues/11071
+ *
+ * The code below is a modified version of the original http-deceiver library.
+ * It has been adapted to work with Node.js versions that have deprecated
+ * the original implementation.
+ *
+ * The original library can be found at:
+ * https://github.com/spdy-http2/http-deceiver (MIT License)
+ *
+ * This version is specifically tailored to handle the deprecation of
+ * the `http_parser` module in Node.js v12 and later.
+ * https://github.com/beenotung/http-deceiver/blob/node-v12-deprecation-fix/lib/deceiver.js (MIT License)
+ *
+ * It maintains compatibility with older Node.js versions while providing
+ * a consistent interface for HTTP request and response parsing.
  */
-const isMetricWithPattern = nestedRegexp => {
-  const pattern = `^([1-9][0-9]*[kMGTPEZY]?|[1-9]\\.[1-9][kMGTPEZY])${nestedRegexp.source}$`
-  const regexp = new RegExp(pattern)
-  return withRegex(regexp)
+var assert = require('assert')
+
+var Buffer = require('buffer').Buffer
+
+// Node.js version
+var mode = /^v0\.8\./.test(process.version)
+  ? 'rusty'
+  : /^v0\.(9|10)\./.test(process.version)
+    ? 'old'
+    : /^v0\.12\./.test(process.version)
+      ? 'normal'
+      : 'modern'
+
+var HTTPParser
+
+var methods
+var reverseMethods
+
+// var kOnHeaders
+var kOnHeadersComplete
+var kOnMessageComplete
+var kOnBody
+if (mode === 'normal' || mode === 'modern') {
+  HTTPParser = require('_http_common').HTTPParser
+  methods = require('_http_common').methods
+
+  // &lt;= v11
+  if (!HTTPParser) {
+    HTTPParser = process.binding('http_parser').HTTPParser
+    methods = process.binding('http_parser').methods
+  }
+
+  // &lt;= v5
+  if (!methods) {
+    methods = HTTPParser.methods
+  }
+
+  reverseMethods = {}
+
+  methods.forEach(function (method, index) {
+    reverseMethods[method] = index
+  })
+
+  // kOnHeaders = HTTPParser.kOnHeaders | 0
+  kOnHeadersComplete = HTTPParser.kOnHeadersComplete | 0
+  kOnMessageComplete = HTTPParser.kOnMessageComplete | 0
+  kOnBody = HTTPParser.kOnBody | 0
+} else {
+  // kOnHeaders = 'onHeaders'
+  kOnHeadersComplete = 'onHeadersComplete'
+  kOnMessageComplete = 'onMessageComplete'
+  kOnBody = 'onBody'
 }
 
-const isMetricOpenIssues = isMetricWithPattern(/ open/)
+function Deceiver(socket, options) {
+  this.socket = socket
+  this.options = options || {}
+  this.isClient = this.options.isClient
+}
+module.exports = Deceiver
 
-const isMetricClosedIssues = isMetricWithPattern(/ closed/)
+Deceiver.create = function create(stream, options) {
+  return new Deceiver(stream, options)
+}
 
-const isMetricOverMetric = isMetricWithPattern(
-  /\/([1-9][0-9]*[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY])/,
-)
+Deceiver.prototype._toHeaderList = function _toHeaderList(object) {
+  var out = []
+  var keys = Object.keys(object)
 
-const isMetricOverTimePeriod = isMetricWithPattern(
-  /\/(year|month|four weeks|quarter|week|day)/,
-)
+  for (var i = 0; i &lt; keys.length; i++) {
+    out.push(keys[i], object[keys[i]])
+  }
 
-const isZeroOverTimePeriod = withRegex(
-  /^0\/(year|month|four weeks|quarter|week|day)$/,
-)
+  return out
+}
 
-const isIntegerPercentage = withRegex(/^[1-9][0-9]?%|^100%|^0%$/)
-const isIntegerPercentageNegative = withRegex(/^-?[1-9][0-9]?%|^100%|^0%$/)
-const isDecimalPercentage = withRegex(/^[0-9]+\.[0-9]*%$/)
-const isDecimalPercentageNegative = withRegex(/^-?[0-9]+\.[0-9]*%$/)
-const isPercentage = Joi.alternatives().try(
-  isIntegerPercentage,
-  isDecimalPercentage,
-  isIntegerPercentageNegative,
-  isDecimalPercentageNegative,
-)
-
-const isMetricFileSize = withRegex(
-  /^[0-9]*[.]?[0-9]+\s(B|kB|KB|MB|GB|TB|PB|EB|ZB|YB)$/,
-)
-const isIecFileSize = withRegex(
-  /^[0-9]*[.]?[0-9]+\s(B|KiB|MiB|GiB|TiB|PiB|EiB|ZiB|YiB)$/,
-)
-
-const isFormattedDate = Joi.alternatives().try(
-  Joi.equal('today', 'yesterday'),
-  Joi.string().regex(/^last (sun|mon|tues|wednes|thurs|fri|satur)day$/),
-  Joi.string().regex(
-    /^(january|february|march|april|may|june|july|august|september|october|november|december)( \d{4})?$/,
-  ),
-)
-
-const isRelativeFormattedDate = Joi.alternatives().try(
-  Joi.string().regex(
-    /^(in |)([0-9]+|a few|a|an|)(| )(second|minute|hour|day|month|year)(s|)( ago|)$/,
-  ),
-)
-
-const isDependencyState = withRegex(
-  /^(\d+ out of date|\d+ deprecated|up to date)$/,
-)
-
-const makeTestTotalsValidator = ({ passed, failed, skipped }) =>
-  withRegex(
-    new RegExp(`^[0-9]+ ${passed}(, [0-9]+ ${failed})?(, [0-9]+ ${skipped})?$`),
+Deceiver.prototype._isUpgrade = function _isUpgrade(request) {
+  return (
+    request.method === 'CONNECT' ||
+    request.headers.upgrade ||
+    (request.headers.connection &amp;&amp;
+      /(^|\W)upgrade(\W|$)/i.test(request.headers.connection))
   )
+}
 
-const makeCompactTestTotalsValidator = ({ passed, failed, skipped }) =>
-  withRegex(
-    new RegExp(
-      `^${passed} [0-9]+( \\| ${failed} [0-9]+)?( \\| ${skipped} [0-9]+)?$`,
-    ),
-  )
+// TODO(indutny): support CONNECT
+if (mode === 'modern') {
+  /*
+  function parserOnHeadersComplete(versionMajor, versionMinor, headers, method,
+                                   url, statusCode, statusMessage, upgrade,
+                                   shouldKeepAlive) {
+   */
+  Deceiver.prototype.emitRequest = function emitRequest(request) {
+    var parser = this.socket.parser
+    assert(parser, 'No parser present')
 
-const isDefaultTestTotals = makeTestTotalsValidator({
-  passed: 'passed',
-  failed: 'failed',
-  skipped: 'skipped',
-})
-const isDefaultCompactTestTotals = makeCompactTestTotalsValidator({
-  passed: '✔',
-  failed: '✘',
-  skipped: '➟',
-})
-const isCustomTestTotals = makeTestTotalsValidator({
-  passed: 'good',
-  failed: 'bad',
-  skipped: 'n/a',
-})
-const isCustomCompactTestTotals = makeCompactTestTotalsValidator({
-  passed: '💃',
-  failed: '🤦‍♀️',
-  skipped: '🤷',
-})
+    parser.execute = null
 
-const isOrdinalNumber = Joi.string().regex(/^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ)$/)
-const isOrdinalNumberDaily = Joi.string().regex(
-  /^[1-9][0-9]*(ᵗʰ|ˢᵗ|ⁿᵈ|ʳᵈ) daily$/,
-)
+    var self = this
+    var method = reverseMethods[request.method]
+    parser.execute = function execute() {
+      self._skipExecute(this)
+      this[kOnHeadersComplete](
+        1,
+        1,
+        self._toHeaderList(request.headers),
+        method,
+        request.path,
+        0,
+        '',
+        self._isUpgrade(request),
+        true,
+      )
+      return 0
+    }
 
-const isHumanized = Joi.string().regex(
-  /[0-9a-z]+ (second|seconds|minute|minutes|hour|hours|day|days|month|months|year|years)/,
-)
+    this._emitEmpty()
+  }
 
-// $1,530,602.24 // true
-// 1,530,602.24 // true
-// $1,666.24$ // false
-// ,1,666,88, // false
-// 1.6.66,6 // false
-// .1555. // false
-const isCurrency = withRegex(
-  /(?=.*\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?(\.\d{1,2})?$/,
-)
+  Deceiver.prototype.emitResponse = function emitResponse(response) {
+    var parser = this.socket.parser
+    assert(parser, 'No parser present')
 
-export {
-  isSemver,
-  isVPlusTripleDottedVersion,
-  isVPlusDottedVersionAtLeastOne,
-  isVPlusDottedVersionNClauses,
-  isVPlusDottedVersionNClausesWithOptionalSuffix,
-  isVPlusDottedVersionNClausesWithOptionalSuffixAndEpoch,
-  isComposerVersion,
-  isPhpVersionReduction,
-  isCommitHash,
-  isStarRating,
-  isMetric,
-  isMetricAllowNegative,
-  isMetricWithPattern,
-  isMetricOpenIssues,
-  isMetricClosedIssues,
-  isMetricOverMetric,
-  isMetricOverTimePeriod,
-  isZeroOverTimePeriod,
-  isPercentage,
-  isIntegerPercentage,
-  isDecimalPercentage,
-  isMetricFileSize,
-  isIecFileSize,
-  isFormattedDate,
-  isRelativeFormattedDate,
-  isDependencyState,
-  withRegex,
-  isDefaultTestTotals,
-  isDefaultCompactTestTotals,
-  isCustomTestTotals,
-  isCustomCompactTestTotals,
-  makeTestTotalsValidator,
-  makeCompactTestTotalsValidator,
-  isOrdinalNumber,
-  isOrdinalNumberDaily,
-  isHumanized,
-  isCurrency,
+    parser.execute = null
+
+    var self = this
+    parser.execute = function execute() {
+      self._skipExecute(this)
+      this[kOnHeadersComplete](
+        1,
+        1,
+        self._toHeaderList(response.headers),
+        response.path,
+        response.code,
+        response.status,
+        response.reason || '',
+        self._isUpgrade(response),
+        true,
+      )
+      return 0
+    }
+
+    this._emitEmpty()
+  }
+} else {
+  /*
+    `function parserOnHeadersComplete(info) {`
+
+    info = { .versionMajor, .versionMinor, .url, .headers, .method,
+             .statusCode, .statusMessage, .upgrade, .shouldKeepAlive }
+   */
+  Deceiver.prototype.emitRequest = function emitRequest(request) {
+    var parser = this.socket.parser
+    assert(parser, 'No parser present')
+
+    var method = request.method
+    if (reverseMethods) {
+      method = reverseMethods[method]
+    }
+
+    var info = {
+      versionMajor: 1,
+      versionMinor: 1,
+      url: request.path,
+      headers: this._toHeaderList(request.headers),
+      method: method,
+      statusCode: 0,
+      statusMessage: '',
+      upgrade: this._isUpgrade(request),
+      shouldKeepAlive: true,
+    }
+
+    var self = this
+    parser.execute = function execute() {
+      self._skipExecute(this)
+      this[kOnHeadersComplete](info)
+      return 0
+    }
+
+    this._emitEmpty()
+  }
+
+  Deceiver.prototype.emitResponse = function emitResponse(response) {
+    var parser = this.socket.parser
+    assert(parser, 'No parser present')
+
+    var info = {
+      versionMajor: 1,
+      versionMinor: 1,
+      url: response.path,
+      headers: this._toHeaderList(response.headers),
+      method: false,
+      statusCode: response.status,
+      statusMessage: response.reason || '',
+      upgrade: this._isUpgrade(response),
+      shouldKeepAlive: true,
+    }
+
+    var self = this
+    parser.execute = function execute() {
+      self._skipExecute(this)
+      this[kOnHeadersComplete](info)
+      return 0
+    }
+
+    this._emitEmpty()
+  }
+}
+
+Deceiver.prototype._skipExecute = function _skipExecute(parser) {
+  var self = this
+  var oldExecute = parser.constructor.prototype.execute
+  var oldFinish = parser.constructor.prototype.finish
+
+  parser.execute = null
+  parser.finish = null
+
+  parser.execute = function execute(buffer, start, len) {
+    // Parser reuse
+    if (this.socket !== self.socket) {
+      this.execute = oldExecute
+      this.finish = oldFinish
+      return this.execute(buffer, start, len)
+    }
+
+    if (start !== undefined) {
+      buffer = buffer.slice(start, start + len)
+    }
+    self.emitBody(buffer)
+    return len
+  }
+
+  parser.finish = function finish() {
+    // Parser reuse
+    if (this.socket !== self.socket) {
+      this.execute = oldExecute
+      this.finish = oldFinish
+      return this.finish()
+    }
+
+    this.execute = oldExecute
+    this.finish = oldFinish
+    self.emitMessageComplete()
+  }
+}
+
+Deceiver.prototype.emitBody = function emitBody(buffer) {
+  var parser = this.socket.parser
+  assert(parser, 'No parser present')
+
+  parser[kOnBody](buffer, 0, buffer.length)
+}
+
+Deceiver.prototype._emitEmpty = function _emitEmpty() {
+  // Emit data to force out handling of UPGRADE
+  var empty = new Buffer(0)
+  if (this.socket.ondata) {
+    this.socket.ondata(empty, 0, 0)
+  } else {
+    this.socket.emit('data', empty)
+  }
+}
+
+Deceiver.prototype.emitMessageComplete = function emitMessageComplete() {
+  var parser = this.socket.parser
+  assert(parser, 'No parser present')
+
+  parser[kOnMessageComplete]()
 }
 </code></pre>
         </article>
