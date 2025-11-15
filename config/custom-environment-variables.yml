@@ -102,7 +102,6 @@ private:
   npm_token: 'NPM_TOKEN'
   obs_user: 'OBS_USER'
   obs_pass: 'OBS_PASS'
-  redis_url: 'REDIS_URL'
   opencollective_token: 'OPENCOLLECTIVE_TOKEN'
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'

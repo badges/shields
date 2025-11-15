@@ -51,6 +51,7 @@ t.create('Stars (Org)')
   })
 
 t.create('Stars (Org) Lots of repo')
+  .timeout(15000)
   .get('/github.json')
   .expectBadge({
     label: 'stars',

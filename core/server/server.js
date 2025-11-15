@@ -197,7 +197,6 @@ const privateConfigSchema = Joi.object({
   npm_token: Joi.string(),
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
-  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   opencollective_token: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
@@ -403,6 +402,8 @@ class Server {
       const [, extension] = match
       const format = (extension || '.svg').replace(/^\./, '')
 
+      request.res.statusCode = 200
+
       makeSend(
         format,
         request.res,
@@ -539,11 +540,12 @@ class Server {
     }
 
     const { githubConstellation, metricInstance } = this
-    await githubConstellation.initialize(camp)
+    await githubConstellation.initialize(camp, metricInstance)
     if (metricInstance) {
-      if (this.config.public.metrics.prometheus.endpointEnabled) {
-        metricInstance.registerMetricsEndpoint(camp)
-      }
+      metricInstance.registerMetricsEndpoint(
+        camp,
+        this.config.public.metrics.prometheus.endpointEnabled,
+      )
       if (this.influxMetrics) {
         this.influxMetrics.startPushingMetrics()
       }

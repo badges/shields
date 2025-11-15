@@ -22,7 +22,7 @@ const modernSchema = Joi.object({
           metric: Joi.string().required(),
           value: Joi.alternatives(
             Joi.number().min(0),
-            Joi.allow('OK', 'ERROR'),
+            Joi.equal('OK', 'ERROR'),
           ).required(),
         }),
       )
@@ -40,7 +40,7 @@ const legacySchema = Joi.array()
             key: Joi.string().required(),
             val: Joi.alternatives(
               Joi.number().min(0),
-              Joi.allow('OK', 'ERROR'),
+              Joi.equal('OK', 'ERROR'),
             ).required(),
           }),
         )

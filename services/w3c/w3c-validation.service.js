@@ -16,7 +16,7 @@ const schema = Joi.object({
     .items(
       Joi.object({
         type: Joi.string()
-          .allow('info', 'error', 'non-document-error')
+          .equal('info', 'error', 'non-document-error')
           .required(),
         subType: Joi.string().optional(),
         message: Joi.string().required(),

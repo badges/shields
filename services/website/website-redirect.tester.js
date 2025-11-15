@@ -9,7 +9,7 @@ export const t = new ServiceTester({
 t.create('Website with custom messages')
   .get('/website-up-down/https/www.google.com.svg')
   .expectRedirect(
-    `/website.svg?down_message=down&up_message=up&url=${encodeURIComponent(
+    `/website.svg?up_message=up&down_message=down&url=${encodeURIComponent(
       'https://www.google.com',
     )}`,
   )
@@ -17,7 +17,7 @@ t.create('Website with custom messages')
 t.create('Website with custom messages and colors')
   .get('/website-up-down-yellow-gray/https/www.google.com.svg')
   .expectRedirect(
-    `/website.svg?down_color=gray&down_message=down&up_color=yellow&up_message=up&url=${encodeURIComponent(
+    `/website.svg?up_message=up&down_message=down&up_color=yellow&down_color=gray&url=${encodeURIComponent(
       'https://www.google.com',
     )}`,
   )

@@ -21,7 +21,7 @@ export default class SonarQualityGate extends SonarBase {
         summary: 'Sonar Quality Gate',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:azdo-shellcheck' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
           ...openApiQueryParams,
         ],
       },
@@ -31,8 +31,8 @@ export default class SonarQualityGate extends SonarBase {
         summary: 'Sonar Quality Gate (branch)',
         description: documentation,
         parameters: [
-          pathParam({ name: 'component', example: 'swellaby:azdo-shellcheck' }),
-          pathParam({ name: 'branch', example: 'master' }),
+          pathParam({ name: 'component', example: 'michelin_kstreamplify' }),
+          pathParam({ name: 'branch', example: 'main' }),
           ...openApiQueryParams,
         ],
       },

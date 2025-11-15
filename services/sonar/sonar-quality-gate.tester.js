@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-const isQualityGateStatus = Joi.allow('passed', 'failed')
+const isQualityGateStatus = Joi.string().valid('passed', 'failed')
 
 // The service tests targeting the legacy SonarQube API are mocked
 // because of the lack of publicly accessible, self-hosted, legacy SonarQube instances
@@ -11,9 +11,7 @@ const isQualityGateStatus = Joi.allow('passed', 'failed')
 // for other service tests.
 
 t.create('Quality Gate')
-  .get(
-    '/quality_gate/swellaby%3Aazdo-shellcheck.json?server=https://sonarcloud.io',
-  )
+  .get('/quality_gate/michelin_kstreamplify.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'quality gate',
     message: isQualityGateStatus,
@@ -21,7 +19,7 @@ t.create('Quality Gate')
 
 t.create('Quality Gate (branch)')
   .get(
-    '/quality_gate/swellaby%3Aazdo-shellcheck/master.json?server=https://sonarcloud.io',
+    '/quality_gate/michelin_kstreamplify/main.json?server=https://sonarcloud.io',
   )
   .expectBadge({
     label: 'quality gate',

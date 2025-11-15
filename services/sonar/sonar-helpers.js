@@ -49,7 +49,7 @@ const openApiQueryParams = queryParams(
 const queryParamWithFormatSchema = Joi.object({
   sonarVersion: sonarVersionSchema,
   server: url,
-  format: Joi.string().allow('short', 'long').optional(),
+  format: Joi.equal('short', 'long').optional(),
 }).required()
 
 const documentation = `

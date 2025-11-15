@@ -75,6 +75,18 @@ class GithubApiProvider {
     }
   }
 
+  getTokenDebugInfo({ sanitize = true } = {}) {
+    if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
+      return {
+        standardTokens: this.standardTokens.serializeDebugInfo({ sanitize }),
+        searchTokens: this.searchTokens.serializeDebugInfo({ sanitize }),
+        graphqlTokens: this.graphqlTokens.serializeDebugInfo({ sanitize }),
+      }
+    } else {
+      return {}
+    }
+  }
+
   getV3RateLimitFromHeaders(headers) {
     const h = Joi.attempt(headers, headerSchema)
     return {

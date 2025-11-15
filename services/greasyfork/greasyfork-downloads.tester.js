@@ -3,7 +3,7 @@ import { isMetric, isMetricOverTimePeriod } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('Daily Installs')
-  .get('/dd/407466.json')
+  .get('/dd/545651.json')
   .expectBadge({ label: 'installs', message: isMetricOverTimePeriod })
 
 t.create('Daily Installs (not found)')

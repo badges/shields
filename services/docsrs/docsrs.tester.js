@@ -6,7 +6,7 @@ t.create('Docs with no version specified')
   .get('/tokio.json')
   .expectBadge({
     label: 'docs',
-    message: Joi.allow('passing', 'failing'),
+    message: Joi.equal('passing', 'failing'),
   })
 
 t.create('Passing docs for version').get('/tokio/1.37.0.json').expectBadge({
@@ -33,7 +33,7 @@ t.create('Getting latest version works')
   .get('/rand/latest.json')
   .expectBadge({
     label: 'docs',
-    message: Joi.allow('passing', 'failing'),
+    message: Joi.equal('passing', 'failing'),
   })
 
 t.create('Crate not found')

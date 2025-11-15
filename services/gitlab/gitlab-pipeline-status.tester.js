@@ -7,7 +7,7 @@ export const t = new ServiceTester({
 })
 
 t.create('Pipeline status')
-  .get('/pipeline-status/gitlab-org/gitlab.json?branch=v10.7.6')
+  .get('/pipeline-status/gitlab-org/gitlab.json?branch=ruby-next')
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
@@ -58,5 +58,5 @@ t.create('Pipeline no branch redirect')
 t.create('Pipeline legacy route with branch redirect')
   .get('/pipeline/gitlab-org/gitlab/v10.7.6?style=flat')
   .expectRedirect(
-    '/gitlab/pipeline-status/gitlab-org/gitlab.svg?branch=v10.7.6&style=flat',
+    '/gitlab/pipeline-status/gitlab-org/gitlab.svg?style=flat&branch=v10.7.6',
   )

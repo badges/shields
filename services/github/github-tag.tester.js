@@ -17,7 +17,7 @@ t.create('Tag (inc pre-release)')
   .expectBadge({
     label: 'tag',
     message: isSemver,
-    color: Joi.string().allow('blue', 'orange').required(),
+    color: Joi.equal('blue', 'orange').required(),
   })
 
 t.create('Tag (no tags)')
@@ -36,7 +36,7 @@ t.create('Tag (legacy route: tag)')
 t.create('Tag (legacy route: tag-pre)')
   .get('/tag-pre/photonstorm/phaser.svg')
   .expectRedirect(
-    '/github/v/tag/photonstorm/phaser.svg?include_prereleases&sort=semver',
+    '/github/v/tag/photonstorm/phaser.svg?sort=semver&include_prereleases',
   )
 
 t.create('Tag (legacy route: tag-date)')
