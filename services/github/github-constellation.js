@@ -55,15 +55,22 @@ class GithubConstellation {
   scheduleDebugLogging() {
     if (this._debugEnabled) {
       this.debugInterval = setInterval(() => {
-        log.log(this.apiProvider.getTokenDebugInfo())
+        const debugInfo = this.apiProvider.getTokenDebugInfo()
+        log.log(debugInfo)
+        // Update Prometheus metrics if enabled
+        if (this.metricInstance) {
+          this.metricInstance.noteGithubTokenPoolMetrics(debugInfo)
+        }
       }, 1000 * this._debugIntervalSeconds)
     }
   }
 
-  async initialize(server) {
+  async initialize(server, metricInstance) {
     if (this.apiProvider.authType !== GithubApiProvider.AUTH_TYPES.TOKEN_POOL) {
       return
     }
+
+    this.metricInstance = metricInstance
 
     this.scheduleDebugLogging()
 

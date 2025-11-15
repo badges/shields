@@ -536,7 +536,7 @@ class Server {
     }
 
     const { githubConstellation, metricInstance } = this
-    await githubConstellation.initialize(camp)
+    await githubConstellation.initialize(camp, metricInstance)
     if (metricInstance) {
       metricInstance.registerMetricsEndpoint(
         camp,
