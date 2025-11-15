@@ -272,6 +272,7 @@ class Server {
 
     this.githubConstellation = new GithubConstellation({
       service: publicConfig.services.github,
+      metricsIntervalSeconds: publicConfig.metrics.influx.intervalSeconds,
       private: privateConfig,
     })
 

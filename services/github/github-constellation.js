@@ -22,6 +22,7 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
+    this._metricsIntervalSeconds = config.metricsIntervalSeconds
 
     let authType = GithubApiProvider.AUTH_TYPES.NO_AUTH
 
@@ -57,11 +58,16 @@ class GithubConstellation {
       this.debugInterval = setInterval(() => {
         const debugInfo = this.apiProvider.getTokenDebugInfo()
         log.log(debugInfo)
-        // Update Prometheus metrics if enabled
-        if (this.metricInstance) {
-          this.metricInstance.noteGithubTokenPoolMetrics(debugInfo)
-        }
       }, 1000 * this._debugIntervalSeconds)
+    }
+  }
+
+  scheduleMetricsCollection() {
+    if (this.metricInstance) {
+      this.metricsInterval = setInterval(() => {
+        const debugInfo = this.apiProvider.getTokenDebugInfo()
+        this.metricInstance.noteGithubTokenPoolMetrics(debugInfo)
+      }, 1000 * this._metricsIntervalSeconds)
     }
   }
 
@@ -73,6 +79,7 @@ class GithubConstellation {
     this.metricInstance = metricInstance
 
     this.scheduleDebugLogging()
+    this.scheduleMetricsCollection()
 
     if (!this.persistence) {
       return
@@ -128,6 +135,11 @@ class GithubConstellation {
     if (this.debugInterval) {
       clearInterval(this.debugInterval)
       this.debugInterval = undefined
+    }
+
+    if (this.metricsInterval) {
+      clearInterval(this.metricsInterval)
+      this.metricsInterval = undefined
     }
 
     if (this.persistence) {
