@@ -11,10 +11,22 @@ t.create('Flathub (valid)')
   .get('/org.mozilla.firefox.json')
   .intercept(nock =>
     nock('https://flathub.org')
-      .get('/api/v1/apps/org.mozilla.firefox')
+      .get('/api/v2/appstream/org.mozilla.firefox')
       .reply(200, {
-        flatpakAppId: 'org.mozilla.firefox',
-        currentReleaseVersion: '78.0.1',
+        releases: [
+          {
+            timestamp: '1715769600',
+            version: '78.0.2',
+          },
+          {
+            timestamp: '1715769601',
+            version: '78.0.0',
+          },
+          {
+            timestamp: '1715769602',
+            version: '78.0.1',
+          },
+        ],
       }),
   )
   .expectBadge({ label: 'flathub', message: 'v78.0.1' })

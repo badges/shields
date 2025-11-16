@@ -1,15 +1,15 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
-const schema = Joi.alternatives()
-  .try(
+const schema = Joi.object({
+  releases: Joi.array().items(
     Joi.object({
-      currentReleaseVersion: Joi.string().required(),
+      timestamp: Joi.string().required(),
+      version: Joi.string().required(),
     }).required(),
-    Joi.valid(null).required(),
-  )
-  .required()
+  ),
+}).required()
 
 export default class Flathub extends BaseJsonService {
   static category = 'version'
@@ -29,17 +29,15 @@ export default class Flathub extends BaseJsonService {
   static defaultBadgeData = { label: 'flathub' }
 
   async handle({ packageName }) {
-    const data = await this._requestJson({
+    const { releases } = await this._requestJson({
       schema,
-      url: `https://flathub.org/api/v1/apps/${encodeURIComponent(packageName)}`,
+      url: `https://flathub.org/api/v2/appstream/${encodeURIComponent(packageName)}`,
     })
 
-    // the upstream API indicates "not found"
-    // by returning a 200 OK with a null body
-    if (data === null) {
-      throw new NotFound()
-    }
+    const latestRelease = releases.sort(
+      (a, b) => parseInt(a['timestamp']) - parseInt(b['timestamp']),
+    )[releases.length - 1]
 
-    return renderVersionBadge({ version: data.currentReleaseVersion })
+    return renderVersionBadge({ version: latestRelease['version'] })
   }
 }
