@@ -97,7 +97,7 @@
     "pretest": "cross-env BASE_URL=http://localhost:8080 run-s --silent defs",
     "test": "run-s --silent --continue-on-error lint test:package test:core test:entrypoint check-types:package prettier:check",
     "check-types:package": "tsd badge-maker",
-    "depcheck": "check-node-version --node \"^22\"",
+    "depcheck": "check-node-version --node \"^22 || ^24\"",
     "prebuild": "run-s --silent depcheck",
     "defs": "node scripts/export-openapi-cli.js",
     "build": "rimraf public && run-s defs docusaurus:build",
@@ -163,6 +163,7 @@
     "deepmerge": "^4.3.1",
     "docusaurus-preset-openapi": "0.7.7",
     "eslint": "9.39.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-cypress": "5.2.0",
     "eslint-plugin-icedfrisby": "0.2.0",
@@ -205,7 +206,7 @@
     "http-deceiver": "$http-deceiver"
   },
   "engines": {
-    "node": "^22",
+    "node": "^22 || ^24",
     "npm": "^10 || ^11"
   },
   "type": "module",
