@@ -3,7 +3,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Flathub Version (valid)')
-  .get('/org.mozilla.firefox.json')
+  .get('/org.srb2.SRB2Kart-Saturn.json')
   .expectBadge({
     label: 'flathub',
     message: isVPlusDottedVersionNClauses,
