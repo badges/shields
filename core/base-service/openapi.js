@@ -135,7 +135,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'The color of the logo (hex, rgb, rgba, hsl, hsla and css named colors supported). Supported for simple-icons logos but not for custom logos.',
+            'The color of the logo (hex, rgb, rgba, hsl, hsla, hwb and css named colors supported). Supported for simple-icons logos but not for custom logos.',
           schema: {
             type: 'string',
           },
@@ -168,7 +168,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'Background color of the left part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
+            'Background color of the left part (hex, rgb, rgba, hsl, hsla, hwb and css named colors supported).',
           schema: {
             type: 'string',
           },
@@ -179,7 +179,7 @@ function category2openapi({ category, services, sort = false }) {
           in: 'query',
           required: false,
           description:
-            'Background color of the right part (hex, rgb, rgba, hsl, hsla and css named colors supported).',
+            'Background color of the right part (hex, rgb, rgba, hsl, hsla, hwb and css named colors supported).',
           schema: {
             type: 'string',
           },
