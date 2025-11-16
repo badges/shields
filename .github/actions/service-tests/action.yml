@@ -4,6 +4,10 @@ inputs:
   github-token:
     description: 'The GITHUB_TOKEN secret'
     required: true
+  curseforge-api-key:
+    description: 'The SERVICETESTS_CURSEFORGE_API_KEY secret'
+    required: false
+    default: ''
   librariesio-tokens:
     description: 'The SERVICETESTS_LIBRARIESIO_TOKENS secret'
     required: false
@@ -67,6 +71,7 @@ runs:
       env:
         RETRY_COUNT: 3
         GH_TOKEN: '${{ inputs.github-token }}'
+        CURSEFORGE_API_KEY: '${{ inputs.curseforge-api-key }}'
         LIBRARIESIO_TOKENS: '${{ inputs.librariesio-tokens }}'
         OBS_USER: '${{ inputs.obs-user }}'
         OBS_PASS: '${{ inputs.obs-pass }}'

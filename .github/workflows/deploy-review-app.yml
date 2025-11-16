@@ -32,6 +32,7 @@ jobs:
           # credentials to set when we create the review app
           SECRETS: |
             GH_TOKEN=${{ secrets.GH_PAT }}
+            CURSEFORGE_API_KEY=${{ secrets.SERVICETESTS_CURSEFORGE_API_KEY }}
             LIBRARIESIO_TOKENS=${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}
             OBS_USER=${{ secrets.SERVICETESTS_OBS_USER }}
             OBS_PASS=${{ secrets.SERVICETESTS_OBS_PASS }}

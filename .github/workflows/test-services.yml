@@ -24,6 +24,7 @@ jobs:
         uses: ./.github/actions/service-tests
         with:
           github-token: '${{ secrets.GH_PAT }}'
+          curseforge-api-key: '${{ secrets.SERVICETESTS_CURSEFORGE_API_KEY }}'
           librariesio-tokens: '${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}'
           obs-user: '${{ secrets.SERVICETESTS_OBS_USER }}'
           obs-pass: '${{ secrets.SERVICETESTS_OBS_PASS }}'
