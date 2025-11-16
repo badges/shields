@@ -11,7 +11,7 @@ const schema = Joi.object({
   ),
 }).required()
 
-export default class Flathub extends BaseJsonService {
+export default class FlathubVersion extends BaseJsonService {
   static category = 'version'
   static route = { base: 'flathub/v', pattern: ':packageName' }
   static openApi = {
