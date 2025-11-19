@@ -33,7 +33,7 @@ export default class TeamCityCoverage extends TeamCityBase {
       get: {
         summary: 'TeamCity Coverage',
         parameters: [
-          pathParam({ name: 'buildId', example: 'ReactJSNet_PullRequests' }),
+          pathParam({ name: 'buildId', example: 'FileHelpersStable' }),
           queryParam({
             name: 'server',
             example: 'https://teamcity.jetbrains.com',
