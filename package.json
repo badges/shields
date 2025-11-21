@@ -203,7 +203,9 @@
     "url": "^0.11.4"
   },
   "overrides": {
-    "http-deceiver": "$http-deceiver"
+    "http-deceiver": "$http-deceiver",
+    "glob@>=10 <10.5.0": "10.5.0",
+    "glob@>=11 <11.1.0": "11.1.0"
   },
   "engines": {
     "node": "^22 || ^24",
