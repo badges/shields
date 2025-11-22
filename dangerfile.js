@@ -180,3 +180,15 @@ allFiles
       }
     })
   })
+
+if (affectedServices.length > 0 || testedServices.length > 0) {
+  if (!/\[.+?\]/.test(danger.github.pr.title)) {
+    warn(
+      [
+        'This PR modified service code. <br>',
+        'Please run tests by [including affected services in the pull request title]',
+        '(https://github.com/badges/shields/blob/master/CONTRIBUTING.md#running-service-tests-in-pull-requests).',
+      ].join(''),
+    )
+  }
+}
