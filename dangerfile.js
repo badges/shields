@@ -38,7 +38,7 @@ message(
 const targetBranch = danger.github.pr.base.ref
 if (targetBranch !== 'master') {
   const message = `This PR targets \`${targetBranch}\``
-  const idea = 'It is likely that the target branch should be `master`'
+  const idea = 'It is likely that the target branch should be `master`.'
   warn(`${message} - <i>${idea}</i>`)
 }
 
@@ -103,7 +103,7 @@ if (allFiles.length > 100) {
           [
             ':books: Remember to ensure any changes to `config.private` ',
             `in \`${file}\` are reflected in the [server secrets documentation]`,
-            '(https://github.com/badges/shields/blob/master/doc/server-secrets.md)',
+            '(https://github.com/badges/shields/blob/master/doc/server-secrets.md).',
           ].join(''),
         )
       }
@@ -113,7 +113,7 @@ if (allFiles.length > 100) {
           [
             `Found 'assert' statement added in \`${file}\`. <br>`,
             'Please ensure tests are written using Chai ',
-            '[expect syntax](http://chaijs.com/guide/styles/#expect)',
+            '[expect syntax](http://chaijs.com/guide/styles/#expect).',
           ].join(''),
         )
       }
@@ -172,9 +172,9 @@ allFiles
       ) {
         warn(
           [
-            'Found badge URL that may not follow our standard route abbreviations. <br>',
+            `Found badge URL that may not follow our standard route abbreviations in \`${file}\`. <br>`,
             "Please ensure you've reviewed our [conventions]",
-            '(https://github.com/badges/shields/blob/master/doc/badge-urls.md)',
+            '(https://github.com/badges/shields/blob/master/doc/badge-urls.md).',
           ].join(''),
         )
       }
