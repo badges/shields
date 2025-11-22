@@ -54,7 +54,7 @@ export default class SwaggerValidatorService extends BaseJsonService {
 
   async fetch({ specUrl }) {
     return this._requestJson({
-      url: 'http://validator.swagger.io/validator/debug',
+      url: 'https://validator.swagger.io/validator/debug',
       schema,
       options: {
         searchParams: {
