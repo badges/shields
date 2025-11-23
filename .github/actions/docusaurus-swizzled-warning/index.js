@@ -1,24 +1,22 @@
-'use strict'
-
-const core = require('@actions/core')
-const github = require('@actions/github')
-const {
+import { getInput, info, setFailed } from '@actions/core'
+import { getOctokit, context } from '@actions/github'
+import {
   getAllFilesForPullRequest,
   getChangedFilesBetweenTags,
   findKeyEndingWith,
   getLargeJsonAtRef,
-} = require('./helpers')
+} from './helpers.js'
 
 async function run() {
   try {
-    const token = core.getInput('github-token', { required: true })
+    const token = getInput('github-token', { required: true })
 
-    const { pull_request: pr } = github.context.payload
+    const { pull_request: pr } = context.payload
     if (!pr) {
       throw new Error('Event payload missing `pull_request`')
     }
 
-    const client = github.getOctokit(token)
+    const client = getOctokit(token)
     const packageName = 'docusaurus-theme-openapi'
     const packageParentName = 'docusaurus-preset-openapi'
     const overideComponents = ['Curl', 'Response']
@@ -39,8 +37,8 @@ async function run() {
     }
     const files = await getAllFilesForPullRequest(
       client,
-      github.context.repo.owner,
-      github.context.repo.repo,
+      context.repo.owner,
+      context.repo.repo,
       pr.number,
     )
 
@@ -52,15 +50,15 @@ async function run() {
     const prCommitRefForFile = file.contents_url.split('ref=')[1]
     const pkgLockNewJson = await getLargeJsonAtRef(
       client,
-      github.context.repo.owner,
-      github.context.repo.repo,
+      context.repo.owner,
+      context.repo.repo,
       file.filename,
       prCommitRefForFile,
     )
     const pkgLockOldJson = await getLargeJsonAtRef(
       client,
-      github.context.repo.owner,
-      github.context.repo.repo,
+      context.repo.owner,
+      context.repo.repo,
       file.filename,
       'master',
     )
@@ -101,8 +99,8 @@ async function run() {
     if (newVersionParent > newVersion) {
       newVersion = newVersionParent
     }
-    core.info(`oldVersion=${oldVersion}`)
-    core.info(`newVersion=${newVersion}`)
+    info(`oldVersion=${oldVersion}`)
+    info(`newVersion=${newVersion}`)
 
     if (newVersion !== oldVersion) {
       const pkgChangedFiles = await getChangedFilesBetweenTags(
@@ -129,19 +127,19 @@ async function run() {
       `
       const body = messageTemplate + versionReport + changedComponentsReport
       await client.rest.issues.createComment({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
+        owner: context.repo.owner,
+        repo: context.repo.repo,
         issue_number: pr.number,
         body,
       })
 
-      core.info('Found changes and posted comment, done.')
+      info('Found changes and posted comment, done.')
       return
     }
 
-    core.info('No changes found, done.')
+    info('No changes found, done.')
   } catch (error) {
-    core.setFailed(error.message)
+    setFailed(error.message)
   }
 }
 
