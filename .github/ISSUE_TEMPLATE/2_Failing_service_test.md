@@ -21,7 +21,7 @@ labels: 'keep-service-tests-green'
 :lady_beetle: **Stack trace**
 
 ```
-<!-- Provide the complete stack trace from the CircleCI test summary. -->
+<!-- Provide the complete stack trace from the GitHub Actions test summary. -->
 ```
 
 :bulb: **Possible solution**
