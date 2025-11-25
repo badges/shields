@@ -31,12 +31,12 @@ export default class HackageDeps extends BaseService {
   }
 
   async handle({ packageName }) {
-    const reverseUrl = `http://packdeps.haskellers.com/licenses/${packageName}`
+    const licensesUrl = `http://packdeps.haskellers.com/licenses/${packageName}`
     const feedUrl = `http://packdeps.haskellers.com/feed/${packageName}`
 
-    // first call /reverse to check if the package exists
+    // first call /licenses to check if the package exists
     // this will throw a 404 if it doesn't
-    await this._request({ url: reverseUrl })
+    await this._request({ url: licensesUrl })
 
     // if the package exists, then query /feed to check the dependencies
     const { buffer } = await this._request({ url: feedUrl })
