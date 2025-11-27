@@ -28,7 +28,10 @@ export default class BrowserCalendar extends BaseJsonService {
             name: 'browser',
             example: 'chrome',
             description: 'Browser name',
-            schema: { type: 'string', enum: ['chrome', 'firefox', 'edge', 'safari'] },
+            schema: {
+              type: 'string',
+              enum: ['chrome', 'firefox', 'edge', 'safari'],
+            },
           },
           {
             name: 'version',

@@ -20,12 +20,10 @@ t.create('Firefox compatibility check')
     message: isVersionStatus,
   })
 
-t.create('Edge compatibility check')
-  .get('/edge/<=200.0.0.json')
-  .expectBadge({
-    label: 'Edge',
-    message: isVersionStatus,
-  })
+t.create('Edge compatibility check').get('/edge/<=200.0.0.json').expectBadge({
+  label: 'Edge',
+  message: isVersionStatus,
+})
 
 t.create('Safari compatibility check')
   .get('/safari/>=17.0.0.json')
