@@ -3,8 +3,8 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-// Version format: "131.0.0 ✓" or "131.0.0 ✗"
-const isVersionStatus = Joi.string().regex(/^\d+\.\d+\.\d+ [✓✗]$/)
+// Version format: "131.0.0 ✓" or "26.1 ✓" (Safari may have 2 parts)
+const isVersionStatus = Joi.string().regex(/^\d+(\.\d+)+\s[✓✗]$/)
 
 t.create('Chrome compatibility check')
   .get('/chrome/<=200.0.0.json')
