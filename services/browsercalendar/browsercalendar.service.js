@@ -35,9 +35,9 @@ export default class BrowserCalendar extends BaseJsonService {
           },
           {
             name: 'version',
-            example: '<=150.0.0',
+            example: '^130.0.0',
             description:
-              'Semver version requirement (e.g., <=150.0.0, >=130.0.0, ^140.0.0)',
+              'Semver version requirement (e.g., ^140.0.0, ~130.0.0)',
           },
         ),
       },
