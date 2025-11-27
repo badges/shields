@@ -3,32 +3,33 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-const isBrowserStatus = Joi.string().regex(/^(Chrome|Firefox|Edge|Safari) [^\s]+$/)
+// Version format: "131.0.0 ✓" or "131.0.0 ✗"
+const isVersionStatus = Joi.string().regex(/^\d+\.\d+\.\d+ [✓✗]$/)
 
 t.create('Chrome compatibility check')
   .get('/chrome/<=200.0.0.json')
   .expectBadge({
     label: 'Chrome',
-    message: isBrowserStatus,
+    message: isVersionStatus,
   })
 
 t.create('Firefox compatibility check')
   .get('/firefox/>=100.0.0.json')
   .expectBadge({
     label: 'Firefox',
-    message: isBrowserStatus,
+    message: isVersionStatus,
   })
 
 t.create('Edge compatibility check')
   .get('/edge/<=200.0.0.json')
   .expectBadge({
     label: 'Edge',
-    message: isBrowserStatus,
+    message: isVersionStatus,
   })
 
 t.create('Safari compatibility check')
   .get('/safari/>=17.0.0.json')
   .expectBadge({
     label: 'Safari',
-    message: isBrowserStatus,
+    message: isVersionStatus,
   })
