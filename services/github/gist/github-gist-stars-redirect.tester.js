@@ -6,11 +6,5 @@ export const t = new ServiceTester({
 })
 
 t.create('Stars redirect')
-  .get('/stars/gists/a8b8c979d200ffde13cc08505f7a6436', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader(
-    'Location',
-    '/github/gist/stars/a8b8c979d200ffde13cc08505f7a6436.svg',
-  )
+  .get('/stars/gists/a8b8c979d200ffde13cc08505f7a6436')
+  .expectRedirect('/github/gist/stars/a8b8c979d200ffde13cc08505f7a6436.svg')

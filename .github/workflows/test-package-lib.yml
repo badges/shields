@@ -17,10 +17,10 @@ jobs:
             npm: '^10'
             engine-strict: 'false'
           - node: '22'
-            npm: '11.6.2'
+            npm: '^11'
             engine-strict: 'true'
           - node: '24'
-            npm: '11.6.2'
+            npm: '^11'
             engine-strict: 'false'
     steps:
       - name: Checkout
