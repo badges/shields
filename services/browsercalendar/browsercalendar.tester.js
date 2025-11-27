@@ -7,26 +7,26 @@ export const t = await createServiceTester()
 const isVersionStatus = Joi.string().regex(/^\d+(\.\d+)+\s[✓✗]$/)
 
 t.create('Chrome compatibility check')
-  .get('/chrome/<=200.0.0.json')
+  .get('/chrome/^130.0.0.json')
   .expectBadge({
     label: 'Chrome',
     message: isVersionStatus,
   })
 
 t.create('Firefox compatibility check')
-  .get('/firefox/>=100.0.0.json')
+  .get('/firefox/^100.0.0.json')
   .expectBadge({
     label: 'Firefox',
     message: isVersionStatus,
   })
 
-t.create('Edge compatibility check').get('/edge/<=200.0.0.json').expectBadge({
+t.create('Edge compatibility check').get('/edge/^100.0.0.json').expectBadge({
   label: 'Edge',
   message: isVersionStatus,
 })
 
 t.create('Safari compatibility check')
-  .get('/safari/>=17.0.0.json')
+  .get('/safari/^17.0.0.json')
   .expectBadge({
     label: 'Safari',
     message: isVersionStatus,
