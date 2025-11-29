@@ -17,7 +17,6 @@ import {
   Inaccessible,
   ImproperlyConfigured,
   InvalidParameter,
-  Deprecated,
 } from './errors.js'
 import { fetch } from './got.js'
 import { getEnum } from './openapi.js'
@@ -347,8 +346,7 @@ class BaseService {
     } else if (
       error instanceof ImproperlyConfigured ||
       error instanceof InvalidResponse ||
-      error instanceof Inaccessible ||
-      error instanceof Deprecated
+      error instanceof Inaccessible
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       const serviceData = {

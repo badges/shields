@@ -11,6 +11,8 @@ t.create('no longer available (previously nonexistent repo)')
   .expectBadge({
     label: 'githubworkflowstatus',
     message: 'https://github.com/badges/shields/issues/8671',
+    link: ['https://github.com/badges/shields/issues/8671'],
+    color: 'red',
   })
 
 t.create('no longer available (previously nonexistent workflow)')
@@ -18,6 +20,8 @@ t.create('no longer available (previously nonexistent workflow)')
   .expectBadge({
     label: 'githubworkflowstatus',
     message: 'https://github.com/badges/shields/issues/8671',
+    link: ['https://github.com/badges/shields/issues/8671'],
+    color: 'red',
   })
 
 t.create('no longer available (previously valid workflow)')
@@ -25,6 +29,8 @@ t.create('no longer available (previously valid workflow)')
   .expectBadge({
     label: 'githubworkflowstatus',
     message: 'https://github.com/badges/shields/issues/8671',
+    link: ['https://github.com/badges/shields/issues/8671'],
+    color: 'red',
   })
 
 t.create('no longer available (previously valid workflow - branch)')
@@ -32,6 +38,8 @@ t.create('no longer available (previously valid workflow - branch)')
   .expectBadge({
     label: 'githubworkflowstatus',
     message: 'https://github.com/badges/shields/issues/8671',
+    link: ['https://github.com/badges/shields/issues/8671'],
+    color: 'red',
   })
 
 t.create('no longer available (previously valid workflow - event)')
@@ -39,4 +47,5 @@ t.create('no longer available (previously valid workflow - event)')
   .expectBadge({
     label: 'githubworkflowstatus',
     message: 'https://github.com/badges/shields/issues/8671',
+    link: ['https://github.com/badges/shields/issues/8671'],
   })
