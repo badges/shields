@@ -1,5 +1,3 @@
-'use strict'
-
 /**
  * Returns info about all files changed in a PR (max 3000 results)
  *
@@ -9,7 +7,12 @@
  * @param {number} pullNumber pull request number
  * @returns {object[]} array of object that describe pr changed files - see https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#list-pull-requests-files
  */
-async function getAllFilesForPullRequest(client, owner, repo, pullNumber) {
+export async function getAllFilesForPullRequest(
+  client,
+  owner,
+  repo,
+  pullNumber,
+) {
   const perPage = 100 // Max number of items per page
   let page = 1 // Start with the first page
   let allFiles = []
@@ -43,7 +46,7 @@ async function getAllFilesForPullRequest(client, owner, repo, pullNumber) {
  * @param {string} headTag head tag
  * @returns {string[]} Array listing all changed files betwen the base tag and the head tag
  */
-async function getChangedFilesBetweenTags(
+export async function getChangedFilesBetweenTags(
   client,
   owner,
   repo,
@@ -60,7 +63,7 @@ async function getChangedFilesBetweenTags(
   return response.data.files.map(file => file.filename)
 }
 
-function findKeyEndingWith(obj, ending) {
+export function findKeyEndingWith(obj, ending) {
   for (const key in obj) {
     if (key.endsWith(ending)) {
       return key
@@ -78,7 +81,7 @@ function findKeyEndingWith(obj, ending) {
  * @param {string} ref Git refrence (commit, branch, tag)
  * @returns {string[]} Array listing all changed files betwen the base tag and the head tag
  */
-async function getLargeJsonAtRef(client, owner, repo, path, ref) {
+export async function getLargeJsonAtRef(client, owner, repo, path, ref) {
   const fileSha = (
     await client.rest.repos.getContent({
       owner,
@@ -95,11 +98,4 @@ async function getLargeJsonAtRef(client, owner, repo, path, ref) {
     })
   ).data.content
   return JSON.parse(Buffer.from(fileBlob, 'base64').toString())
-}
-
-module.exports = {
-  getAllFilesForPullRequest,
-  getChangedFilesBetweenTags,
-  findKeyEndingWith,
-  getLargeJsonAtRef,
 }

@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import configModule from 'config'
 import * as Sentry from '@sentry/node'
 import Server from './core/server/server.js'
@@ -16,7 +13,7 @@ Sentry.init({
     )
     if (filtered.length !== integrations.length - disabledIntegrations.length) {
       throw Error(
-        `An error occurred while filtering integrations. The following inetgrations were found: ${integrations.map(
+        `An error occurred while filtering integrations. The following integrations were found: ${integrations.map(
           ({ name }) => name,
         )}`,
       )
@@ -35,31 +32,10 @@ if (process.argv[3]) {
 console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
-if (fs.existsSync('.env')) {
-  console.error(
-    'Legacy .env file found. It should be deleted and replaced with environment variables or config/local.yml',
-  )
-  process.exit(1)
+if (config.public.fetchLimit != null) {
+  console.warn('fetchLimit is deprecated, please use fetchLimitBytes instead')
 }
 
-if (config.private.redis_url != null) {
-  console.error(
-    'RedisTokenPersistence has been removed. Migrate to SqlTokenPersistence',
-  )
-  process.exit(1)
-}
-
-const legacySecretsPath = path.join(
-  path.dirname(fileURLToPath(import.meta.url)),
-  'private',
-  'secret.json',
-)
-if (fs.existsSync(legacySecretsPath)) {
-  console.error(
-    `Legacy secrets file found at ${legacySecretsPath}. It should be deleted and secrets replaced with environment variables or config/local.yml`,
-  )
-  process.exit(1)
-}
 export const server = new Server(config)
 
 process.on('SIGTERM', async () => {

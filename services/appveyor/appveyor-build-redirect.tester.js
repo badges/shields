@@ -7,15 +7,9 @@ export const t = new ServiceTester({
 })
 
 t.create('Appveyor CI')
-  .get('/gruntjs/grunt', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader('Location', '/appveyor/build/gruntjs/grunt.svg')
+  .get('/gruntjs/grunt')
+  .expectRedirect('/appveyor/build/gruntjs/grunt.svg')
 
 t.create('Appveyor CI (branch)')
-  .get('/gruntjs/grunt/develop', {
-    followRedirect: false,
-  })
-  .expectStatus(301)
-  .expectHeader('Location', '/appveyor/build/gruntjs/grunt/develop.svg')
+  .get('/gruntjs/grunt/develop')
+  .expectRedirect('/appveyor/build/gruntjs/grunt/develop.svg')

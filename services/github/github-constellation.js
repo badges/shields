@@ -22,6 +22,7 @@ class GithubConstellation {
   constructor(config) {
     this._debugEnabled = config.service.debug.enabled
     this._debugIntervalSeconds = config.service.debug.intervalSeconds
+    this._metricsIntervalSeconds = config.metricsIntervalSeconds
 
     let authType = GithubApiProvider.AUTH_TYPES.NO_AUTH
 
@@ -55,17 +56,30 @@ class GithubConstellation {
   scheduleDebugLogging() {
     if (this._debugEnabled) {
       this.debugInterval = setInterval(() => {
-        log.log(this.apiProvider.getTokenDebugInfo())
+        const debugInfo = this.apiProvider.getTokenDebugInfo()
+        log.log(debugInfo)
       }, 1000 * this._debugIntervalSeconds)
     }
   }
 
-  async initialize(server) {
+  scheduleMetricsCollection() {
+    if (this.metricInstance) {
+      this.metricsInterval = setInterval(() => {
+        const debugInfo = this.apiProvider.getTokenDebugInfo()
+        this.metricInstance.noteGithubTokenPoolMetrics(debugInfo)
+      }, 1000 * this._metricsIntervalSeconds)
+    }
+  }
+
+  async initialize(server, metricInstance) {
     if (this.apiProvider.authType !== GithubApiProvider.AUTH_TYPES.TOKEN_POOL) {
       return
     }
 
+    this.metricInstance = metricInstance
+
     this.scheduleDebugLogging()
+    this.scheduleMetricsCollection()
 
     if (!this.persistence) {
       return
@@ -121,6 +135,11 @@ class GithubConstellation {
     if (this.debugInterval) {
       clearInterval(this.debugInterval)
       this.debugInterval = undefined
+    }
+
+    if (this.metricsInterval) {
+      clearInterval(this.metricsInterval)
+      this.metricsInterval = undefined
     }
 
     if (this.persistence) {

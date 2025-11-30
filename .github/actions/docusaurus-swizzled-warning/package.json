@@ -1,16 +1,17 @@
 {
-    "name": "docusaurus-swizzled-warning",
-    "version": "0.0.0",
-    "description": "",
-    "main": "index.js",
-    "private": true,
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "jNullj",
-    "license": "CC0",
-    "dependencies": {
-        "@actions/core": "^1.11.1",
-        "@actions/github": "^6.0.1"
-    }
+  "name": "docusaurus-swizzled-warning",
+  "version": "0.0.0",
+  "description": "",
+  "exports": "./index.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jNullj",
+  "license": "CC0",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1"
+  }
 }

@@ -35,11 +35,11 @@ export default class Bugzilla extends BaseJsonService {
         parameters: [
           pathParam({
             name: 'bugNumber',
-            example: '545424',
+            example: '12345',
           }),
           queryParam({
             name: 'baseUrl',
-            example: 'https://bugs.eclipse.org/bugs',
+            example: 'https://gcc.gnu.org/bugzilla',
             description:
               'When not specified, this will default to `https://bugzilla.mozilla.org`.',
           }),

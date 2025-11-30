@@ -332,6 +332,30 @@ class TokenPool {
     this.fifoQueue.forEach(visit)
     this.priorityQueue.forEach(visit)
   }
+
+  /**
+   * Serialize debug information about the token pool.
+   *
+   * @param {object} options Options object
+   * @param {boolean} options.sanitize Whether to sanitize token IDs (default: true)
+   * @returns {object} Debug information about the token pool
+   */
+  serializeDebugInfo({ sanitize = true } = {}) {
+    const allTokenDebugInfo = []
+    let totalUsesRemaining = 0
+
+    this.forEach(token => {
+      totalUsesRemaining += token.usesRemaining
+      allTokenDebugInfo.push(token.getDebugInfo({ sanitize }))
+    })
+
+    return {
+      utcEpochSeconds: getUtcEpochSeconds(),
+      totalUsesRemaining,
+      allTokenDebugInfo,
+      sanitized: sanitize,
+    }
+  }
 }
 
 export { sanitizeToken, Token, TokenPool }
