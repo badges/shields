@@ -173,14 +173,9 @@ export default class Endpoint extends BaseJsonService {
 
   constructor(...args) {
     super(...args)
-    // cache property in class definition for performance
-    if (Endpoint.allowUnsecuredEndpointRequests === undefined) {
-      const config = configModule.util.toObject()
-      Endpoint.allowUnsecuredEndpointRequests =
-        config?.public?.allowUnsecuredEndpointRequests || false
-    }
-    this.allowUnsecuredEndpointRequests =
-      Endpoint.allowUnsecuredEndpointRequests
+    const config = configModule.util.toObject()
+    this._allowUnsecuredEndpointRequests =
+      config?.public?.allowUnsecuredEndpointRequests || false
   }
 
   async handle(namedParams, { url }) {
