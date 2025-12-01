@@ -62,7 +62,7 @@
     "re2": "^1.22.1",
     "semver": "~7.7.3",
     "simple-icons": "15.18.0",
-    "smol-toml": "1.4.2",
+    "smol-toml": "1.5.2",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
     "webextension-store-meta": "^1.2.10",
