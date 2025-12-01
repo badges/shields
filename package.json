@@ -152,7 +152,7 @@
     "@typescript-eslint/parser": "^8.46.2",
     "c8": "^10.1.3",
     "caller": "^1.1.0",
-    "chai": "6.2.0",
+    "chai": "6.2.1",
     "chai-as-promised": "^8.0.2",
     "chai-datetime": "^1.8.1",
     "clsx": "^2.1.1",
