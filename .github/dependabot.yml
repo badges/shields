@@ -5,7 +5,6 @@ updates:
     directory: '/'
     schedule:
       interval: monthly
-      day: friday
       time: '12:00'
     open-pull-requests-limit: 99
     rebase-strategy: disabled
@@ -36,7 +35,6 @@ updates:
     directory: '/badge-maker'
     schedule:
       interval: monthly
-      day: friday
       time: '12:00'
     open-pull-requests-limit: 99
     rebase-strategy: disabled
@@ -62,7 +60,6 @@ updates:
     directory: '/.github/actions/docusaurus-swizzled-warning'
     schedule:
       interval: monthly
-      day: friday
       time: '12:00'
     open-pull-requests-limit: 99
     rebase-strategy: disabled
