@@ -187,7 +187,7 @@ export default class Endpoint extends BaseJsonService {
     } catch (e) {
       throw new InvalidParameter({ prettyMessage: 'invalid url' })
     }
-    if (protocol !== 'https:' && !this.allowUnsecuredEndpointRequests) {
+    if (protocol !== 'https:' && !this._allowUnsecuredEndpointRequests) {
       throw new InvalidParameter({ prettyMessage: 'please use https' })
     }
     if (blockedDomains.some(domain => hostname.endsWith(domain))) {
