@@ -1,8 +1,8 @@
 name: Draft Release
 on:
   schedule:
-    - cron: '0 1 1 * *'
-    # At 01:00 on the first day of every month
+    - cron: '0 1 8 * *'
+    # At 01:00 on the 8th day of every month (one-week delay after dependabot)
   workflow_dispatch:
 
 permissions:
