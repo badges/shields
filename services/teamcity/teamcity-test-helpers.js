@@ -1,18 +1,13 @@
-const user = 'admin'
-const pass = 'password'
-const host = 'mycompany.teamcity.com'
+import TeamCityBase from './teamcity-base.js'
+
 const config = {
   public: {
     services: {
-      teamcity: {
-        authorizedOrigins: [`https://${host}`],
+      [TeamCityBase.auth.serviceKey]: {
+        authorizedOrigins: ['https://teamcity.jetbrains.com'],
       },
     },
   },
-  private: {
-    teamcity_user: user,
-    teamcity_pass: pass,
-  },
 }
 
-export { user, pass, host, config }
+export { config }
