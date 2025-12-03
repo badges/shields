@@ -4,7 +4,7 @@ title: Simple Icons 16
 authors:
   name: LitoMore
   title: Shields.io Core Team
-  url: https://github.com/chris48s
+  url: https://github.com/LitoMore
   image_url: https://avatars.githubusercontent.com/u/8186898
 tags: []
 ---
