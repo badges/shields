@@ -34,5 +34,6 @@ public:
   userAgentBase: 'shields (self-hosted)'
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
+  allowUnsecuredEndpointRequests: false
   requireCloudflare: false
 private: {}

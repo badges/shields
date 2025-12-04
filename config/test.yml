@@ -8,3 +8,5 @@ public:
   rasterUrl: 'http://raster.example.test'
 
   handleInternalErrors: false
+
+  allowUnsecuredEndpointRequests: false
