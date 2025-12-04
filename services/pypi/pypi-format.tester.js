@@ -20,3 +20,22 @@ t.create('format (egg)')
 t.create('format (invalid)')
   .get('/not-a-package.json')
   .expectBadge({ label: 'format', message: 'package or version not found' })
+
+t.create('format (explicit pypi base url)')
+  .get('/requests/2.18.4.json?pypiBaseUrl=https://some-other-pypi.org')
+  .intercept(nock =>
+    nock('https://some-other-pypi.org')
+      .get('/pypi/requests/2.18.4/json')
+      .reply(200, {
+        info: {
+          version: '2.18.4',
+          classifiers: [],
+        },
+        urls: [
+          {
+            packagetype: 'bdist_wheel',
+          },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'format', message: 'wheel' })

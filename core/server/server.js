@@ -166,6 +166,7 @@ const publicConfigSchema = Joi.object({
       'public',
     ),
   ),
+  allowUnsecuredEndpointRequests: Joi.boolean().required(),
   requireCloudflare: Joi.boolean().required(),
 })
   .or('fetchLimit', 'fetchLimitBytes')
