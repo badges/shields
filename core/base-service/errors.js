@@ -178,28 +178,6 @@ class InvalidParameter extends ShieldsRuntimeError {
 }
 
 /**
- * Throw this error to indicate that a service is deprecated or removed
- */
-class Deprecated extends ShieldsRuntimeError {
-  get name() {
-    return 'Deprecated'
-  }
-
-  get defaultPrettyMessage() {
-    return 'no longer available'
-  }
-
-  /**
-   * @param {RuntimeErrorProps} props
-   * Refer to individual attrs
-   */
-  constructor(props) {
-    const message = 'Deprecated'
-    super(props, message)
-  }
-}
-
-/**
  * @typedef {object} RuntimeErrorProps
  * @property {Error} underlyingError Exception we are wrapping (Optional)
  * @property {object} response Response from an upstream API to provide
@@ -219,5 +197,4 @@ export {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
-  Deprecated,
 }

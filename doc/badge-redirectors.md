@@ -216,6 +216,21 @@ We'll keep the redirector for a minimum of one year. It may stay in place for si
 
 It can then be removed and replaced with a deprecated badge linking to an issue that explains the migration path, for example:
 
-![](https://img.shields.io/badge/githubworkflowstatus-https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues%2F8671-red)
+```js
+import { deprecatedService } from '../index.js'
+
+export default deprecatedService({
+  category: 'build',
+  route: {
+    base: 'github/workflow/status',
+    pattern: ':various+',
+  },
+  label: 'githubworkflowstatus',
+  issueUrl: 'https://github.com/badges/shields/issues/8671',
+  dateAdded: new Date('2025-11-29'),
+})
+```
+
+Doing so will render badges similar to the following: ![](https://img.shields.io/badge/githubworkflowstatus-https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues%2F8671-red)
 
 Removal of the resulting deprecated badge follows the process documented [here](./deprecating-badges.md).
