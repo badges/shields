@@ -35,9 +35,9 @@ t.create('invalid magazine').get('/magazine.invalid.json').expectBadge({
 })
 
 t.create('test on real mbin magazine for API compliance')
-  .get('/random@yups.io.json')
+  .get('/kbinEarth@kbin.earth.json')
   .expectBadge({
-    label: 'subscribe to random@yups.io',
+    label: 'subscribe to kbinEarth@kbin.earth',
     message: isMetric,
     color: 'brightgreen',
   })
