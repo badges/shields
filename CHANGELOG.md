@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-12-01
+
+**Important notice:** The `fetchLimit` configuration option is being replaced by `fetchLimitBytes`. If you were overriding the default value of `fetchLimit`, please update your configuration accordingly. See [#11430](https://github.com/badges/shields/issues/11430) for more information.
+
+**Deprecation:**
+
+- Deprecate [NostrBand] bagdes [#11519](https://github.com/badges/shields/issues/11519)
+- Deprecate [DockerCloud] badges [#11501](https://github.com/badges/shields/issues/11501)
+- Deprecate [CodeClimate] service [#11480](https://github.com/badges/shields/issues/11480)
+- Deprecate [BitComponents] service [#11446](https://github.com/badges/shields/issues/11446)
+
+Other changes:
+
+- Return 200 status code for not found badges [#11479](https://github.com/badges/shields/issues/11479)
+- Cache defaultpypiBaseUrl [PyPI] value [#11532](https://github.com/badges/shields/issues/11532)
+- Fix [SwaggerValidator] badges by switching to HTTPS [#11518](https://github.com/badges/shields/issues/11518)
+- Migrate [FlathubVersion] badge to v2 API [#11507](https://github.com/badges/shields/issues/11507)
+- Enhance static badge documentation with examples for style, color, and logo options [#11263](https://github.com/badges/shields/issues/11263)
+- Allow to run on Node.js 24 [#11505](https://github.com/badges/shields/issues/11505)
+- Fix GitHub token pool debug logging and add metrics [#11500](https://github.com/badges/shields/issues/11500)
+- Remove legacy configuration checks [#11424](https://github.com/badges/shields/issues/11424)
+- Increase [NpmDownloads] cache [#11488](https://github.com/badges/shields/issues/11488)
+- Dependency updates and removals
+
 ## server-2025-11-01
 
 - Add [GnomeExtensions] Downloads Badge [#11443](https://github.com/badges/shields/issues/11443)
