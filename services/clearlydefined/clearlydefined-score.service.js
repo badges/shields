@@ -4,7 +4,12 @@ import {
   optionalNonNegativeInteger,
 } from '../validators.js'
 import { floorCount as floorCountColor } from '../color-formatters.js'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import {
+  BaseJsonService,
+  NotFound,
+  InvalidResponse,
+  pathParams,
+} from '../index.js'
 
 const schema = Joi.object({
   scores: Joi.object({
@@ -66,13 +71,23 @@ export default class ClearlyDefinedService extends BaseJsonService {
   }
 
   async fetch({ type, provider, namespace, name, revision }) {
-    return this._requestJson({
-      schema,
-      url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
-      httpErrors: {
-        500: 'unknown type, provider, or upstream issue',
-      },
-    })
+    try {
+      return await this._requestJson({
+        schema,
+        url: `https://api.clearlydefined.io/definitions/${type}/${provider}/${namespace}/${name}/${revision}`,
+      })
+    } catch (error) {
+      // ClearlyDefined API returns an empty response (200 status) for invalid type/provider
+      if (
+        error instanceof InvalidResponse &&
+        error.prettyMessage === 'unparseable json response'
+      ) {
+        throw new InvalidResponse({
+          prettyMessage: 'unknown type, provider, or upstream issue',
+        })
+      }
+      throw error
+    }
   }
 
   async handle({ type, provider, namespace, name, revision }) {
