@@ -23,7 +23,7 @@ export default class CondaLicense extends BaseCondaService {
           },
           {
             name: 'packageName',
-            example: 'setuptools',
+            example: 'mlforecast',
           },
         ),
       },
