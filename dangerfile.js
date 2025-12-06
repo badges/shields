@@ -165,8 +165,9 @@ allFiles
     // eslint-disable-next-line promise/prefer-await-to-then
     danger.git.diffForFile(file).then(({ diff }) => {
       if (
-        diff.match(/base: '.*(download|install|license|version|release).*'/) ||
-        diff.match(/pattern: '.*(download|install|license|version|release).*'/)
+        diff.match(
+          /^\+.*(base|pattern): '.*(download|install|license|version|release).*'/m,
+        )
       ) {
         warn(
           [
