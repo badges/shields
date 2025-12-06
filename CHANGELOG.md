@@ -6,55 +6,27 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2025-12-01
 
-- Cache defaultpypiBaseUrl [PyPI] value [#11532](https://github.com/badges/shields/issues/11532)
-- Remove ignored Dependabot Friday config [#11535](https://github.com/badges/shields/issues/11535)
-- Add badge redirectors documentation [#11524](https://github.com/badges/shields/issues/11524)
-- Leverage expectRedirect in all redirector tests [#11525](https://github.com/badges/shields/issues/11525)
-- fix [bugzilla] live test case to use new custom base url [#11526](https://github.com/badges/shields/issues/11526)
-- Revert "Exclude NPM 11.6.3 and newer (#11517)" [#11527](https://github.com/badges/shields/issues/11527)
-- Convert dangerfile.js and docusaurus-swizzled-warning to ESM [#11521](https://github.com/badges/shields/issues/11521)
-- Update CircleCI reference [#11523](https://github.com/badges/shields/issues/11523)
-- Fix [SwaggerValidator] badges by switching to HTTPS [#11518](https://github.com/badges/shields/issues/11518)
+**Important notice:** The `fetchLimit` configuration option is being replaced by `fetchLimitBytes`. If you were overriding the default value of `fetchLimit`, please update your configuration accordingly. See [#11430](https://github.com/badges/shields/issues/11430) for more information.
+
+**Deprecation:**
+
 - Deprecate [NostrBand] bagdes [#11519](https://github.com/badges/shields/issues/11519)
-- Add Danger warning when no bracketed services in PR title [#11516](https://github.com/badges/shields/issues/11516)
-- Improve URL conventions Danger warning [#11515](https://github.com/badges/shields/issues/11515)
-- Exclude NPM 11.6.3 and newer [#11517](https://github.com/badges/shields/issues/11517)
-- chore(deps): bump glob from 11.0.3 to 13.0.0 [#11512](https://github.com/badges/shields/issues/11512)
-- Fix [Nexus] tests [#11448](https://github.com/badges/shields/issues/11448)
-- Fix [TeamCityCoverage] test and example [#11509](https://github.com/badges/shields/issues/11509)
-- Migrate [FlathubVersion] badge to v2 API [#11507](https://github.com/badges/shields/issues/11507)
-- docs: enhance static badge documentation with examples for style, color, and logo options [#11263](https://github.com/badges/shields/issues/11263)
-- Allow setting [CurseForge] API key in dev environments [#11508](https://github.com/badges/shields/issues/11508)
-- Increase [NostrBandFollowers] test timeouts [#11494](https://github.com/badges/shields/issues/11494)
-- Allow to run on Node.js 24 [#11505](https://github.com/badges/shields/issues/11505)
 - Deprecate [DockerCloud] badges [#11501](https://github.com/badges/shields/issues/11501)
-- Separate GitHub token metrics and debug logging [#11504](https://github.com/badges/shields/issues/11504)
-- chore: unblock the deprecated `http_parser` issue [#11279](https://github.com/badges/shields/issues/11279)
-- Ensure Git converts line endings to lf on Windows [#11503](https://github.com/badges/shields/issues/11503)
-- Introduce fileSizeBytes config [#11430](https://github.com/badges/shields/issues/11430)
-- Fix GitHub token pool debug logging and add metrics [#11500](https://github.com/badges/shields/issues/11500)
-- Fix test:services:trace on Windows [#11495](https://github.com/badges/shields/issues/11495)
-- Remove legacy configuration checks [#11424](https://github.com/badges/shields/issues/11424)
-- Fix [GreasyForkInstalls] tests [#11493](https://github.com/badges/shields/issues/11493)
-- Increase [NpmDownloads] cache [#11488](https://github.com/badges/shields/issues/11488)
-- Clean up ignored files [#11477](https://github.com/badges/shields/issues/11477)
-- Return 200 status code for not found badges [#11479](https://github.com/badges/shields/issues/11479)
-- Increase [GithubTotalStar] test timeout [#11486](https://github.com/badges/shields/issues/11486)
-- Fix incorrect Joi.allow usage, test [DocsRs GithubIssueDetail GithubRelease GithubTag Nycrc OSSFScorecard Sonar W3cValidation] [#11485](https://github.com/badges/shields/issues/11485)
-- Fix [JenkinsTests JenkinsBuild] tests [#11484](https://github.com/badges/shields/issues/11484)
-- Update editorconfig file [#11472](https://github.com/badges/shields/issues/11472)
-- Stop depending on node-env-flag [#11429](https://github.com/badges/shields/issues/11429)
-- Add Danger warning when badge does not follow URL conventions [#11478](https://github.com/badges/shields/issues/11478)
-- docs: remove spec/users.md [#11483](https://github.com/badges/shields/issues/11483)
 - Deprecate [CodeClimate] service [#11480](https://github.com/badges/shields/issues/11480)
 - Deprecate [BitComponents] service [#11446](https://github.com/badges/shields/issues/11446)
-- Delete static images [#11473](https://github.com/badges/shields/issues/11473)
-- Fix [JenkinsTests] tests and example [#11447](https://github.com/badges/shields/issues/11447)
-- Delete [Pub] invalid tests [#11449](https://github.com/badges/shields/issues/11449)
-- Remove mocha-\* dependencies [#11436](https://github.com/badges/shields/issues/11436)
-- Remove minimist dependency [#11437](https://github.com/badges/shields/issues/11437)
-- Allow setting [Weblate] API key in dev environments [#11441](https://github.com/badges/shields/issues/11441)
-- Dependency updates
+
+Other changes:
+
+- Return 200 status code for not found badges [#11479](https://github.com/badges/shields/issues/11479)
+- Cache defaultpypiBaseUrl [PyPI] value [#11532](https://github.com/badges/shields/issues/11532)
+- Fix [SwaggerValidator] badges by switching to HTTPS [#11518](https://github.com/badges/shields/issues/11518)
+- Migrate [FlathubVersion] badge to v2 API [#11507](https://github.com/badges/shields/issues/11507)
+- Enhance static badge documentation with examples for style, color, and logo options [#11263](https://github.com/badges/shields/issues/11263)
+- Allow to run on Node.js 24 [#11505](https://github.com/badges/shields/issues/11505)
+- Fix GitHub token pool debug logging and add metrics [#11500](https://github.com/badges/shields/issues/11500)
+- Remove legacy configuration checks [#11424](https://github.com/badges/shields/issues/11424)
+- Increase [NpmDownloads] cache [#11488](https://github.com/badges/shields/issues/11488)
+- Dependency updates and removals
 
 ## server-2025-11-01
 
