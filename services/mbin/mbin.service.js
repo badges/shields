@@ -24,7 +24,7 @@ export default class Mbin extends BaseJsonService {
           name: 'magazine',
           description:
             'The magazine to query. This is CASE SENSITIVE. Use URL encoding for special characters.',
-          example: 'random@yups.io',
+          example: 'kbinEarth@kbin.earth',
         }),
       },
     },
