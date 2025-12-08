@@ -192,6 +192,7 @@ Maintainers:
 
 - [calebcartwright](https://github.com/calebcartwright)
 - [jNullj](https://github.com/jnullj)
+- [LitoMore](https://github.com/LitoMore)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
