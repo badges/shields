@@ -194,6 +194,7 @@ Maintainers:
 - [jNullj](https://github.com/jnullj)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
+- [LitoMore](https://github.com/LitoMore)
 
 Alumni:
 
