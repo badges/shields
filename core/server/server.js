@@ -364,6 +364,15 @@ class Server {
       public: { rasterUrl },
     } = config
 
+    camp.route(/^\/favicon\.ico$/, (query, match, end, request) => {
+      request.res.statusCode = 404
+      request.res.setHeader(
+        'Cache-Control',
+        'public, max-age=31536000, s-maxage=31536000, immutable',
+      )
+      makeSend('empty', request.res, end)()
+    })
+
     camp.route(/\.(gif|jpg)$/, (query, match, end, request) => {
       const [, format] = match
       makeSend(

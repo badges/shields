@@ -22,11 +22,17 @@ function sendJSON(res, askres, end) {
   end(null, { template: streamFromString(res) })
 }
 
+function sendEmpty(end) {
+  end(null, { template: streamFromString('') })
+}
+
 function makeSend(format, askres, end) {
   if (format === 'svg') {
     return res => sendSVG(res, askres, end)
   } else if (format === 'json') {
     return res => sendJSON(res, askres, end)
+  } else if (format === 'empty') {
+    return () => sendEmpty(end)
   } else {
     throw Error(`Unrecognized format: ${format}`)
   }
