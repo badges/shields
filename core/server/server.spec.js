@@ -238,6 +238,17 @@ describe('The server', function () {
       expect(headers.location).to.equal('http://frontend.example.test')
     })
 
+    it('should return the 404 page with empty response for favicon.icon', async function () {
+      const { statusCode, body, headers } = await got(`${baseUrl}favicon.ico`, {
+        throwHttpErrors: false,
+      })
+      expect(statusCode).to.equal(404)
+      expect(body).to.equal('')
+      expect(headers['cache-control']).to.equal(
+        'public, max-age=31536000, s-maxage=31536000, immutable',
+      )
+    })
+
     it('should return the 410 badge for obsolete formats', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}badge/foo-bar-blue.jpg`,
