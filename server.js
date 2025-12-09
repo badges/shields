@@ -33,7 +33,9 @@ console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
 if (config.public.fetchLimit != null) {
-  console.warn('fetchLimit is deprecated, please use fetchLimitBytes instead')
+  console.error(
+    'fetchLimit is no longer supported, its value will be ignored. Please use fetchLimitBytes instead.',
+  )
 }
 
 export const server = new Server(config)
