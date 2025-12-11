@@ -36,22 +36,27 @@ describe('DeprecatedService', function () {
     expect(service.category).to.equal(category)
   })
 
-  it('uses default deprecation message when no message specified', async function () {
+  it('sets default deprecation message', async function () {
     const service = deprecatedService({ ...commonAttrs })
     expect(await service.invoke()).to.deep.equal({
-      isError: true,
-      color: 'lightgray',
       message: 'no longer available',
     })
   })
 
-  it('uses custom deprecation message when specified', async function () {
-    const message = 'extended outage'
-    const service = deprecatedService({ ...commonAttrs, message })
+  it('sets default deprecation color', async function () {
+    const service = deprecatedService({ ...commonAttrs })
+    expect(service.defaultBadgeData.color).to.equal('lightgray')
+  })
+
+  it('sets specified issue URL and sets red color', async function () {
+    const service = deprecatedService({
+      ...commonAttrs,
+      issueUrl: 'https://github.com/badges/shields/issues/8671',
+    })
+    expect(service.defaultBadgeData.color).to.equal('red')
     expect(await service.invoke()).to.deep.equal({
-      isError: true,
-      color: 'lightgray',
-      message,
+      message: 'https://github.com/badges/shields/issues/8671',
+      link: ['https://github.com/badges/shields/issues/8671'],
     })
   })
 })

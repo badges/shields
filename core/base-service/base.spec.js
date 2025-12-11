@@ -11,7 +11,6 @@ import {
   Inaccessible,
   InvalidResponse,
   InvalidParameter,
-  Deprecated,
 } from './errors.js'
 import BaseService from './base.js'
 import { MetricHelper, MetricNames } from './metric-helper.js'
@@ -289,21 +288,6 @@ describe('BaseService', function () {
           isError: true,
           color: 'lightgray',
           message: 'invalid',
-        })
-      })
-
-      it('handles Deprecated', async function () {
-        class ThrowingService extends DummyService {
-          async handle() {
-            throw new Deprecated()
-          }
-        }
-        expect(
-          await ThrowingService.invoke({}, {}, { namedParamA: 'bar.bar.bar' }),
-        ).to.deep.equal({
-          isError: true,
-          color: 'lightgray',
-          message: 'no longer available',
         })
       })
 

@@ -139,7 +139,7 @@ test this kind of logic through unit tests (e.g. of `render()` and
     commonly means a non-empty message and an optional color. In the case
     of the Endpoint badge, it could include many other parameters. At the
     time of writing the handled error classes were NotFound,
-    InvalidResponse, Inaccessible, InvalidParameter, and Deprecated.
+    InvalidResponse, Inaccessible, and InvalidParameter.
     Throwing any other error is a programmer error which will be
     [reported][error reporting] and described to the user as a **shields
     internal error**.
