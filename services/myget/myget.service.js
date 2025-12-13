@@ -32,10 +32,10 @@ class MyGetVersionService extends Version {
         parameters: pathParams(
           {
             name: 'tenant',
-            example: 'tizen.myget',
+            example: 'vs-devcore.myget',
             description: 'MyGet Tenant in the format `name.myget`',
           },
-          { name: 'feed', example: 'dotnet' },
+          { name: 'feed', example: 'vs-devcore' },
           {
             name: 'variant',
             example: 'v',
@@ -43,7 +43,7 @@ class MyGetVersionService extends Version {
             description:
               'Latest stable version (`v`) or Latest version including prereleases (`vpre`).',
           },
-          { name: 'packageName', example: 'Tizen.NET' },
+          { name: 'packageName', example: 'MicroBuild' },
         ),
       },
     },
@@ -67,11 +67,11 @@ class MyGetDownloadService extends Downloads {
         parameters: pathParams(
           {
             name: 'tenant',
-            example: 'tizen.myget',
+            example: 'vs-devcore.myget',
             description: 'MyGet Tenant in the format `name.myget`',
           },
-          { name: 'feed', example: 'dotnet' },
-          { name: 'packageName', example: 'Tizen.NET' },
+          { name: 'feed', example: 'vs-devcore' },
+          { name: 'packageName', example: 'MicroBuild' },
         ),
       },
     },
