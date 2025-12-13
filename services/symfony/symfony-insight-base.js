@@ -18,14 +18,18 @@ const schema = Joi.object({
         .allow('')
         .required(),
       grade: Joi.equal('platinum', 'gold', 'silver', 'bronze', 'none'),
-      violations: Joi.object({
-        // RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68
-        // The BaseXmlService uses the fast-xml-parser which doesn't support forcing
-        // the xml nodes to always be parsed as an array. Currently, if the response
-        // only contains a single violation then it will be parsed as an object,
-        // otherwise it will be parsed as an array.
-        violation: Joi.array().items(violationSchema).single().required(),
-      }),
+      violations: Joi.alternatives().try(
+        Joi.object({
+          // RE: https://github.com/NaturalIntelligence/fast-xml-parser/issues/68
+          // The BaseXmlService uses the fast-xml-parser which doesn't support forcing
+          // the xml nodes to always be parsed as an array. Currently, if the response
+          // only contains a single violation then it will be parsed as an object,
+          // otherwise it will be parsed as an array.
+          violation: Joi.array().items(violationSchema).single().required(),
+        }),
+        // If no violations are found, the response will be an empty string.
+        Joi.string().allow(''),
+      ),
     }),
   }).required(),
 }).required()
