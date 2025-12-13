@@ -63,9 +63,9 @@ t.create('version (valid)')
   })
 
 t.create('version (tenant)')
-  .get('/tizen.myget/dotnet/v/Tizen.NET.json')
+  .get('/vs-devcore.myget/vs-devcore/v/MicroBuild.json')
   .expectBadge({
-    label: 'dotnet',
+    label: 'vs-devcore',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
