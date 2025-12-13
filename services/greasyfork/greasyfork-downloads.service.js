@@ -19,7 +19,7 @@ export default class GreasyForkInstalls extends BaseGreasyForkService {
           },
           {
             name: 'scriptId',
-            example: '545651',
+            example: '407466',
           },
         ),
       },
