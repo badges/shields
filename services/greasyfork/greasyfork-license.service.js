@@ -12,7 +12,7 @@ export default class GreasyForkLicense extends BaseGreasyForkService {
         summary: 'Greasy Fork License',
         parameters: pathParams({
           name: 'scriptId',
-          example: '407466',
+          example: '406540',
         }),
       },
     },
