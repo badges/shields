@@ -4,6 +4,17 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2025-12-15
+
+- Run URL conventions Danger only on added lines [#11570](https://github.com/badges/shields/issues/11570)
+- Drop support for fetchLimit config [#11569](https://github.com/badges/shields/issues/11569)
+- Treat `img.shields.io/favicon.ico` as 404 resource [#11576](https://github.com/badges/shields/issues/11576)
+- Set checking-in-out attribute to `text=auto` [#11574](https://github.com/badges/shields/issues/11574)
+- Add @LitoMore to maintainers list [#11575](https://github.com/badges/shields/issues/11575)
+- Fix [mbin] test and example [#11572](https://github.com/badges/shields/issues/11572)
+- Fix [CondaLicense] test [#11571](https://github.com/badges/shields/issues/11571)
+- Dependency updates
+
 ## server-2025-12-01
 
 **Important notice:** The `fetchLimit` configuration option is being replaced by `fetchLimitBytes`. If you were overriding the default value of `fetchLimit`, please update your configuration accordingly. See [#11430](https://github.com/badges/shields/issues/11430) for more information.
