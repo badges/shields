@@ -2,7 +2,7 @@ import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Version').get('/v/407466.json').expectBadge({
+t.create('Version').get('/v/406540.json').expectBadge({
   label: 'greasy fork',
   message: isVPlusDottedVersionAtLeastOne,
 })

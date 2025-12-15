@@ -13,7 +13,7 @@ export default class GreasyForkRatingCount extends BaseGreasyForkService {
         summary: 'Greasy Fork Rating',
         parameters: pathParams({
           name: 'scriptId',
-          example: '407466',
+          example: '406540',
         }),
       },
     },
