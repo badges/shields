@@ -1,28 +1,12 @@
-import { BaseService } from '../index.js'
+import { deprecatedService } from '../index.js'
 
-export default class DeprecatedGithubWorkflowStatus extends BaseService {
-  static category = 'build'
-
-  static route = {
+export default deprecatedService({
+  category: 'build',
+  route: {
     base: 'github/workflow/status',
     pattern: ':various+',
-  }
-
-  static openApi = {}
-
-  static defaultBadgeData = { label: 'githubworkflowstatus' }
-
-  async handle() {
-    return {
-      label: 'githubworkflowstatus',
-      message: 'https://github.com/badges/shields/issues/8671',
-      /*
-      This is a 'special' deprecation because we are making a breaking change
-      We've implemented it as a custom class instead of a normal
-      deprecatedService so that we can include link.
-      */
-      link: ['https://github.com/badges/shields/issues/8671'],
-      color: 'red',
-    }
-  }
-}
+  },
+  label: 'githubworkflowstatus',
+  issueUrl: 'https://github.com/badges/shields/issues/8671',
+  dateAdded: new Date('2025-11-29'),
+})
