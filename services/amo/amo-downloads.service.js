@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { redirector, pathParams } from '../index.js'
+import { deprecatedService, pathParams } from '../index.js'
 import { BaseAmoService, description as baseDescription } from './amo-base.js'
 
 const description = `${baseDescription}
@@ -39,14 +39,15 @@ class AmoWeeklyDownloads extends BaseAmoService {
   }
 }
 
-const AmoLegacyRedirect = redirector({
+const AmoLegacyRedirect = deprecatedService({
   category: 'downloads',
+  label: 'mozilla-add-on',
   route: {
     base: 'amo/d',
     pattern: ':addonId',
   },
-  transformPath: ({ addonId }) => `/amo/dw/${addonId}`,
-  dateAdded: new Date('2019-02-23'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
 
 export { AmoWeeklyDownloads, AmoLegacyRedirect }

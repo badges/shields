@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { version as versionColor } from '../color-formatters.js'
-import { redirector, pathParam, queryParam } from '../index.js'
+import { deprecatedService, pathParam, queryParam } from '../index.js'
 import { BaseClojarsService, description } from './clojars-base.js'
 
 const queryParamSchema = Joi.object({
@@ -58,17 +58,15 @@ class ClojarsVersionService extends BaseClojarsService {
   }
 }
 
-const ClojarsVersionRedirector = redirector({
+const ClojarsVersionRedirector = deprecatedService({
   category: 'version',
+  label: 'clojars',
   route: {
     base: 'clojars/vpre',
     pattern: ':clojar',
   },
-  transformPath: ({ clojar }) => `/clojars/v/${clojar}`,
-  transformQueryParams: params => ({
-    include_prereleases: null,
-  }),
-  dateAdded: new Date('2019-12-15'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
 
 export { ClojarsVersionService, ClojarsVersionRedirector }

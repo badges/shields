@@ -8,56 +8,52 @@ export const t = new ServiceTester({
 
 t.create('old Jacoco prefix + job url in path')
   .get(
-    '/j/https/wso2.org/jenkins/view/All%20Builds/job/sonar/job/sonar-carbon-dashboards.svg',
+    '/j/https/wso2.org/jenkins/view/All%20Builds/job/sonar/job/sonar-carbon-dashboards.json',
   )
-  .expectRedirect(
-    `/jenkins/coverage/jacoco.svg?jobUrl=${encodeURIComponent(
-      'https://wso2.org/jenkins/view/All Builds/job/sonar/job/sonar-carbon-dashboards',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('new Jacoco prefix + job url in path')
   .get(
-    '/coverage/jacoco/https/wso2.org/jenkins/view/All%20Builds/job/sonar/job/sonar-carbon-dashboards.svg',
+    '/coverage/jacoco/https/wso2.org/jenkins/view/All%20Builds/job/sonar/job/sonar-carbon-dashboards.json',
   )
-  .expectRedirect(
-    `/jenkins/coverage/jacoco.svg?jobUrl=${encodeURIComponent(
-      'https://wso2.org/jenkins/view/All Builds/job/sonar/job/sonar-carbon-dashboards',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('old Cobertura prefix + job url in path')
-  .get('/c/https/jenkins.sqlalchemy.org/job/alembic_coverage.svg')
-  .expectRedirect(
-    `/jenkins/coverage/cobertura.svg?jobUrl=${encodeURIComponent(
-      'https://jenkins.sqlalchemy.org/job/alembic_coverage',
-    )}`,
-  )
+  .get('/c/https/jenkins.sqlalchemy.org/job/alembic_coverage.json')
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('new Cobertura prefix + job url in path')
   .get(
-    '/coverage/cobertura/https/jenkins.sqlalchemy.org/job/alembic_coverage.svg',
+    '/coverage/cobertura/https/jenkins.sqlalchemy.org/job/alembic_coverage.json',
   )
-  .expectRedirect(
-    `/jenkins/coverage/cobertura.svg?jobUrl=${encodeURIComponent(
-      'https://jenkins.sqlalchemy.org/job/alembic_coverage',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('api prefix + job url in path')
   .get(
-    '/coverage/api/https/jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master.svg',
+    '/coverage/api/https/jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master.json',
   )
-  .expectRedirect(
-    `/jenkins/coverage/api.svg?jobUrl=${encodeURIComponent(
-      'https://jenkins.library.illinois.edu/job/OpenSourceProjects/job/Speedwagon/job/master',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('old v1 api prefix to new prefix')
   .get(
-    '/coverage/api.svg?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master',
+    '/coverage/api.json?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master',
   )
-  .expectRedirect(
-    '/jenkins/coverage/apiv1.svg?jobUrl=http://loneraver.duckdns.org:8082/job/github/job/VisVid/job/master',
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

@@ -1,29 +1,25 @@
-import { redirector } from '../index.js'
-import { buildRedirectUrl } from './jenkins-common.js'
+import { deprecatedService } from '../index.js'
 
 const commonProps = {
   category: 'build',
-  transformPath: () => '/jenkins/tests',
-  transformQueryParams: ({ protocol, host, job }) => ({
-    jobUrl: buildRedirectUrl({ protocol, host, job }),
-  }),
+  label: 'jenkins',
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 }
 
 export default [
-  redirector({
+  deprecatedService({
     route: {
       base: 'jenkins/t',
       pattern: ':protocol(http|https)/:host/:job+',
     },
-    dateAdded: new Date('2019-04-20'),
     ...commonProps,
   }),
-  redirector({
+  deprecatedService({
     route: {
       base: 'jenkins/tests',
       pattern: ':protocol(http|https)/:host/:job+',
     },
-    dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
 ]

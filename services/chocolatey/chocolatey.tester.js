@@ -46,5 +46,8 @@ t.create('version (pre) (not found)')
   .expectBadge({ label: 'chocolatey', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/scriptcs.svg')
-  .expectRedirect('/chocolatey/v/scriptcs.svg?include_prereleases')
+  .get('/vpre/scriptcs.json')
+  .expectBadge({
+    label: 'chocolatey',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

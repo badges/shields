@@ -1,12 +1,13 @@
-import { redirector } from '../index.js'
+import { deprecatedService } from '../index.js'
 
 // https://github.com/badges/shields/issues/8138
-export default redirector({
+export default deprecatedService({
   category: 'build',
+  label: 'gitlab',
   route: {
     base: 'gitlab/v/contributor',
     pattern: ':project+',
   },
-  transformPath: ({ project }) => `/gitlab/contributors/${project}`,
-  dateAdded: new Date('2022-06-29'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })

@@ -7,5 +7,8 @@ export const t = new ServiceTester({
 })
 
 t.create('Build: default branch')
-  .get('.svg?url=https://example.com/badge.json')
-  .expectRedirect('/endpoint.svg?url=https://example.com/badge.json')
+  .get('.json?url=https://example.com/badge.json')
+  .expectBadge({
+    label: 'endpoint',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
