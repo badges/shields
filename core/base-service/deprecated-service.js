@@ -30,6 +30,7 @@ function deprecatedService(attrs) {
     static category = category
     static isDeprecated = true
     static route = route
+    static _cacheLength = 86400
     static defaultBadgeData = {
       label,
       // When an issue URL is provided, render the badge in red to alert the user that an upgrade action is required.
