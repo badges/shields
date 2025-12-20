@@ -207,8 +207,8 @@ Alumni:
 
 ## License
 
-All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
-domain unless specified otherwise.
+Shields.io is dual licensed and distributed under the terms of both the [MIT license](LICENSE-MIT) and the
+[Apache license (Version 2.0)](LICENSE-APACHE).
 
 ## Community
 
