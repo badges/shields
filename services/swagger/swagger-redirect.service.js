@@ -1,18 +1,15 @@
-import { redirector } from '../index.js'
+import { deprecatedService } from '../index.js'
 
 export default [
-  redirector({
+  deprecatedService({
     category: 'other',
+    label: 'swagger',
     name: 'SwaggerRedirect',
     route: {
       base: 'swagger/valid/2.0',
       pattern: ':scheme(http|https)/:url*',
     },
-    transformPath: () => '/swagger/valid/3.0',
-    transformQueryParams: ({ scheme, url }) => {
-      const suffix = /(yaml|yml|json)$/.test(url) ? '' : '.json'
-      return { specUrl: `${scheme}://${url}${suffix}` }
-    },
-    dateAdded: new Date('2019-11-03'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
 ]

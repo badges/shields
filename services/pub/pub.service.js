@@ -1,6 +1,11 @@
 import Joi from 'joi'
 import { latest, renderVersionBadge } from '../version.js'
-import { BaseJsonService, redirector, pathParam, queryParam } from '../index.js'
+import {
+  BaseJsonService,
+  deprecatedService,
+  pathParam,
+  queryParam,
+} from '../index.js'
 import { baseDescription } from './pub-common.js'
 
 const schema = Joi.object({
@@ -60,17 +65,15 @@ class PubVersion extends BaseJsonService {
   }
 }
 
-const PubVersionRedirector = redirector({
+const PubVersionRedirector = deprecatedService({
   category: 'version',
+  label: 'pub',
   route: {
     base: 'pub/vpre',
     pattern: ':packageName',
   },
-  transformPath: ({ packageName }) => `/pub/v/${packageName}`,
-  transformQueryParams: params => ({
-    include_prereleases: null,
-  }),
-  dateAdded: new Date('2019-12-15'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
 
 export { PubVersion, PubVersionRedirector }

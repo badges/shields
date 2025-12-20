@@ -2,6 +2,7 @@ import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import {
   BaseSvgScrapingService,
+  deprecatedService,
   redirector,
   pathParam,
   queryParam,
@@ -107,21 +108,16 @@ class CircleCi extends BaseSvgScrapingService {
 }
 
 const legacyRoutes = [
-  redirector({
+  deprecatedService({
     category: 'build',
+    label: 'circleci',
     route: {
       base: 'circleci/token',
       pattern:
         ':token/project/:vcsType(github|bitbucket)?/:user/:repo/:branch*',
     },
-    transformPath: ({ vcsType, user, repo, branch }) => {
-      const vcs = vcsType || 'gh'
-      return `/circleci/build/${vcs}/${user}/${repo}${
-        branch ? `/${branch}` : ''
-      }`
-    },
-    transformQueryParams: ({ token }) => ({ token }),
-    dateAdded: new Date('2019-05-05'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
   redirector({
     category: 'build',

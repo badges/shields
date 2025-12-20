@@ -1,8 +1,9 @@
-import { redirector } from '../../index.js'
+import { deprecatedService } from '../../index.js'
 
-export default redirector({
+export default deprecatedService({
   category: 'social',
+  label: 'github',
   route: { base: 'github/stars/gists', pattern: ':gistId' },
-  transformPath: ({ gistId }) => `/github/gist/stars/${gistId}`,
-  dateAdded: new Date('2022-10-09'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })

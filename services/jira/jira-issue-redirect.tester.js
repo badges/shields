@@ -7,9 +7,8 @@ export const t = new ServiceTester({
 })
 
 t.create('jira issue')
-  .get('/https/issues.apache.org/jira/kafka-2896.svg')
-  .expectRedirect(
-    `/jira/issue/kafka-2896.svg?baseUrl=${encodeURIComponent(
-      'https://issues.apache.org/jira',
-    )}`,
-  )
+  .get('/https/issues.apache.org/jira/kafka-2896.json')
+  .expectBadge({
+    label: 'jira',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

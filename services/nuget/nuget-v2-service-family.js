@@ -4,7 +4,7 @@ import { nonNegativeInteger } from '../validators.js'
 import {
   BaseXmlService,
   NotFound,
-  redirector,
+  deprecatedService,
   pathParams,
   pathParam,
   queryParam,
@@ -135,17 +135,15 @@ function createServiceFamily({
     }
   }
 
-  const NugetVersionRedirector = redirector({
+  const NugetVersionRedirector = deprecatedService({
     category: 'version',
+    label: defaultLabel,
     route: {
       base: `${serviceBaseUrl}/vpre`,
       pattern: ':packageName',
     },
-    transformPath: ({ packageName }) => `/${serviceBaseUrl}/v/${packageName}`,
-    transformQueryParams: params => ({
-      include_prereleases: null,
-    }),
-    dateAdded: new Date('2019-12-15'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   })
 
   class NugetDownloadService extends BaseXmlService {

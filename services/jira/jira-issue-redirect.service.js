@@ -1,16 +1,14 @@
-import { redirector } from '../index.js'
+import { deprecatedService } from '../index.js'
 
 export default [
-  redirector({
+  deprecatedService({
     category: 'issue-tracking',
+    label: 'jira',
     route: {
       base: 'jira/issue',
       pattern: ':protocol(http|https)/:hostAndPath(.+)/:issueKey',
     },
-    transformPath: ({ issueKey }) => `/jira/issue/${issueKey}`,
-    transformQueryParams: ({ protocol, hostAndPath }) => ({
-      baseUrl: `${protocol}://${hostAndPath}`,
-    }),
-    dateAdded: new Date('2019-09-14'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
 ]

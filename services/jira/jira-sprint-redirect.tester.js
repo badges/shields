@@ -6,10 +6,7 @@ export const t = new ServiceTester({
   pathPrefix: '/jira/sprint',
 })
 
-t.create('jira sprint')
-  .get('/https/jira.spring.io/94.svg')
-  .expectRedirect(
-    `/jira/sprint/94.svg?baseUrl=${encodeURIComponent(
-      'https://jira.spring.io',
-    )}`,
-  )
+t.create('jira sprint').get('/https/jira.spring.io/94.json').expectBadge({
+  label: 'jira',
+  message: 'https://github.com/badges/shields/pull/11583',
+})
