@@ -59,8 +59,8 @@ export default class Discord extends BaseJsonService {
     }
   }
 
-  async fetch({ serverId }) {
-    const url = `https://discord.com/api/v6/guilds/${serverId}/widget.json`
+  async fetch({ apiBaseUrl, serverId }) {
+    const url = `${apiBaseUrl ?? "https://discord.com/api/v6"}/guilds/${serverId}/widget.json`
     return this._requestJson(
       this.authHelper.withBearerAuthHeader(
         {
@@ -76,8 +76,8 @@ export default class Discord extends BaseJsonService {
     )
   }
 
-  async handle({ serverId }) {
-    const data = await this.fetch({ serverId })
+  async handle({ apiBaseUrl, serverId }) {
+    const data = await this.fetch({ apiBaseUrl, serverId })
     return this.constructor.render({ members: data.presence_count })
   }
 }
