@@ -55,7 +55,7 @@ export default class VisualStudioMarketplaceBase extends BaseJsonService {
   static get _cacheLength() {
     // we reached rate limit, instead of fine tuning for each service
     // we add a multipler to the default category cache length
-    return Math.floor(super._cacheLength * 1.3)
+    return Math.floor(super._cacheLength * 1.5)
   }
 
   static defaultBadgeData = {

@@ -120,7 +120,7 @@ export default class DockerSize extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 600
+  static _cacheLength = 900
 
   static defaultBadgeData = { label: 'image size', color: 'blue' }
 
