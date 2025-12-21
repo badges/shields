@@ -14,27 +14,24 @@ Production hosting is managed by the Shields ops team:
 [operations issues]: https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Aoperations
 [ops discord]: https://discordapp.com/channels/308323056592486420/480747695879749633
 
-| Component                     | Subcomponent                | People with access                                              |
-| ----------------------------- | --------------------------- | --------------------------------------------------------------- |
-| shields-io-production         | Full access                 | @calebcartwright, @chris48s, @paulmelnikow                      |
-| shields-io-production         | Access management           | @calebcartwright, @chris48s, @paulmelnikow                      |
-| Raster server                 | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
-| shields-server.com redirector | Full access as team members | @paulmelnikow, @chris48s, @calebcartwright, @platan             |
-| Cloudflare (CDN)              | Account owner               | @espadrine                                                      |
-| Cloudflare (CDN)              | Access management           | @espadrine                                                      |
-| Cloudflare (CDN)              | Admin access                | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
-| Twitch                        | OAuth app                   | @PyvesB                                                         |
-| Reddit                        | OAuth app                   | @chris48s, @PyvesB                                              |
-| Discord                       | OAuth app                   | @PyvesB                                                         |
-| CurseForge                    | OAuth app                   | @PyvesB                                                         |
-| YouTube                       | Account owner               | @PyvesB                                                         |
-| GitLab                        | Account owner               | @calebcartwright                                                |
-| GitLab                        | Account access              | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB             |
-| DNS                           | Account owner               | @olivierlacan                                                   |
-| DNS                           | Read-only account access    | @espadrine, @paulmelnikow, @chris48s                            |
-| Sentry                        | Error reports               | @espadrine, @paulmelnikow                                       |
-| Metrics server                | Owner                       | @platan                                                         |
-| More metrics                  | Owner                       | @RedSparr0w                                                     |
+| Component        | Subcomponent             | People with access                                                                |
+| ---------------- | ------------------------ | --------------------------------------------------------------------------------- |
+| Fly.io           | Admin access             | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB                               |
+| Fly.io           | Account access           | @calebcartwright, @chris48s, @jNullj, @paulmelnikow, @PyvesB                      |
+| Cloudflare (CDN) | Account owner            | @espadrine                                                                        |
+| Cloudflare (CDN) | Admin access             | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                   |
+| DNS              | Account owner            | @olivierlacan                                                                     |
+| DNS              | Read-only account access | @chris48s, @espadrine, @paulmelnikow                                              |
+| Sentry           | Account access           | @calebcartwright, @chris48s, @espadrine, @jNullj, @paulmelnikow, @platan, @PyvesB |
+| Metrics server   | Owner                    | @platan                                                                           |
+| More metrics     | Owner                    | @RedSparr0w                                                                       |
+| Twitch           | OAuth app                | @PyvesB                                                                           |
+| Reddit           | OAuth app                | @chris48s, @PyvesB                                                                |
+| Discord          | OAuth app                | @PyvesB                                                                           |
+| CurseForge       | OAuth app                | @PyvesB                                                                           |
+| YouTube          | Account owner            | @PyvesB                                                                           |
+| GitLab           | Account owner            | @calebcartwright                                                                  |
+| GitLab           | Account access           | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB                               |
 
 ## Attached state
 
@@ -72,8 +69,7 @@ Secrets are supplied directly as environment vars.
 
 ## Badge CDN
 
-Sitting in front of the three servers is a Cloudflare Free account which
-provides several services:
+Sitting in front of our servers is a Cloudflare Free account which provides several services:
 
 - Global CDN, caching, and SSL gateway for `img.shields.io` and `shields.io`
 - Analytics through the Cloudflare dashboard
@@ -81,16 +77,14 @@ provides several services:
 
 Cloudflare is configured to respect the servers' cache headers.
 
-## Raster server
-
-The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is
-hosted on Heroku. It's managed in the
-[squint](https://github.com/badges/squint/) repo.
-
 ### Fly.io Deployment
 
 Both the badge server and frontend are served from Fly.io. Deployments are
 triggered using GitHub actions in a private repo.
+
+The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is
+also hosted on Fly.io. It's managed in the
+[squint](https://github.com/badges/squint/) repo.
 
 ## DNS
 
