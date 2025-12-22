@@ -42,7 +42,7 @@ export default class DockerPulls extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 14400
+  static _cacheLength = 21600
 
   static defaultBadgeData = { label: 'docker pulls' }
 
