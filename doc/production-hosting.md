@@ -14,32 +14,31 @@ Production hosting is managed by the Shields ops team:
 [operations issues]: https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3Aoperations
 [ops discord]: https://discordapp.com/channels/308323056592486420/480747695879749633
 
-| Component        | Subcomponent             | People with access                                                                |
-| ---------------- | ------------------------ | --------------------------------------------------------------------------------- |
-| Fly.io           | Admin access             | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB                               |
-| Fly.io           | Account access           | @calebcartwright, @chris48s, @jNullj, @paulmelnikow, @PyvesB                      |
-| Cloudflare (CDN) | Account owner            | @espadrine                                                                        |
-| Cloudflare (CDN) | Admin access             | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB                   |
-| DNS              | Account owner            | @olivierlacan                                                                     |
-| DNS              | Read-only account access | @chris48s, @espadrine, @paulmelnikow                                              |
-| Sentry           | Account access           | @calebcartwright, @chris48s, @espadrine, @jNullj, @paulmelnikow, @platan, @PyvesB |
-| Metrics server   | Owner                    | @platan                                                                           |
-| More metrics     | Owner                    | @RedSparr0w                                                                       |
-| Twitch           | OAuth app                | @PyvesB                                                                           |
-| Reddit           | OAuth app                | @chris48s, @PyvesB                                                                |
-| Discord          | OAuth app                | @PyvesB                                                                           |
-| CurseForge       | OAuth app                | @PyvesB                                                                           |
-| YouTube          | Account owner            | @PyvesB                                                                           |
-| GitLab           | Account owner            | @calebcartwright                                                                  |
-| GitLab           | Account access           | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB                               |
+| Component | Subcomponent | People with access |
+| --- | --- | --- |
+| Fly.io | Admin access | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB |
+| Fly.io | Account access | @calebcartwright, @chris48s, @jNullj, @paulmelnikow, @PyvesB |
+| Cloudflare (CDN) | Account owner | @espadrine |
+| Cloudflare (CDN) | Admin access | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
+| DNS | Account owner | @olivierlacan |
+| DNS | Read-only account access | @chris48s, @espadrine, @paulmelnikow |
+| Sentry | Account access | @calebcartwright, @chris48s, @espadrine, @jNullj, @paulmelnikow, @platan, @PyvesB |
+| Metrics server | Owner | @platan |
+| More metrics | Owner | @RedSparr0w |
+| Twitch | OAuth app | @PyvesB |
+| Reddit | OAuth app | @chris48s, @PyvesB |
+| Discord | OAuth app | @PyvesB |
+| CurseForge | OAuth app | @PyvesB |
+| YouTube | Account owner | @PyvesB |
+| GitLab | Account owner | @calebcartwright |
+| GitLab | Account access | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB |
 
 ## Attached state
 
 Shields has mercifully little persistent state:
 
 1. The GitHub tokens we collect are stored in a fly.io postgres database
-2. The server keeps the [resource cache][] in memory. It is neither
-   persisted nor inspectable.
+2. The server keeps the [resource cache][] in memory. It is neither persisted nor inspectable.
 
 [resource cache]: https://github.com/badges/shields/blob/master/core/base-service/resource-cache.js
 
@@ -51,13 +50,10 @@ To bootstrap the configuration of non-secret settings, we set a single environme
 NODE_CONFIG_ENV=shields-io-production
 ```
 
-With that variable set, the server ([using `config`][config]) reads these
-files:
+With that variable set, the server ([using `config`][config]) reads these files:
 
-- [`local-shields-io-production.yml`][local-shields-io-production.yml].
-  This file contains secrets which are checked in with a deploy commit.
-- [`shields-io-production.yml`][shields-io-production.yml]. This file
-  contains non-secrets which are checked in to the main repo.
+- [`local-shields-io-production.yml`][local-shields-io-production.yml]. This file contains secrets which are checked in with a deploy commit.
+- [`shields-io-production.yml`][shields-io-production.yml]. This file contains non-secrets which are checked in to the main repo.
 - [`default.yml`][default.yml]. This file contains defaults.
 
 Secrets are supplied directly as environment vars.
@@ -79,12 +75,9 @@ Cloudflare is configured to respect the servers' cache headers.
 
 ### Fly.io Deployment
 
-Both the badge server and frontend are served from Fly.io. Deployments are
-triggered using GitHub actions in a private repo.
+Both the badge server and frontend are served from Fly.io. Deployments are triggered using GitHub actions in a private repo.
 
-The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is
-also hosted on Fly.io. It's managed in the
-[squint](https://github.com/badges/squint/) repo.
+The raster server `raster.shields.io` (a.k.a. the rasterizing proxy) is also hosted on Fly.io. It's managed in the [squint](https://github.com/badges/squint/) repo.
 
 ## DNS
 
@@ -94,10 +87,7 @@ DNS is registered with [DNSimple][].
 
 ## Error reporting
 
-[Error reporting][sentry] is one of the most useful tools we have for monitoring
-the server. It's generously donated by [Sentry][sentry home]. We bundle
-[`@sentry/node`][sentry-node] into the application, and the Sentry DSN is configured
-via `local-shields-io-production.yml` (see [documentation][sentry configuration]).
+[Error reporting][sentry] is one of the most useful tools we have for monitoring the server. It's generously donated by [Sentry][sentry home]. We bundle [`@sentry/node`][sentry-node] into the application, and the Sentry DSN is configured via `local-shields-io-production.yml` (see [documentation][sentry configuration]).
 
 [sentry]: https://sentry.io/shields/
 [sentry-node]: https://www.npmjs.com/package/@sentry/node
@@ -113,14 +103,12 @@ The canonical and only recommended domain for badge URLs is `img.shields.io`. Cu
 
 ## Monitoring
 
-Overall server performance and requests by service are monitored using
-[Prometheus and Grafana][server metrics].
+Overall server performance and requests by service are monitored using [Prometheus and Grafana][server metrics].
 
 Request performance is monitored in two places:
 
 - [Status][] (using NodePing)
-- [Server metrics][] using Prometheus and Grafana
-  [#monitor chat room][monitor discord]
+- [Server metrics][] using Prometheus and Grafana [#monitor chat room][monitor discord]
 
 [metrics]: https://metrics.shields.io/
 [status]: https://nodeping.com/reports/status/YBISBQB254
