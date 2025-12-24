@@ -3,3 +3,4 @@ singleQuote: true
 bracketSpacing: true
 endOfLine: lf
 arrowParens: avoid
+proseWrap: never

@@ -4,8 +4,7 @@ This document describes how to host your own shields server either from source o
 
 ## Installing from Source
 
-You will need Node 22, which you can install using a
-[package manager][].
+You will need Node 22, which you can install using a [package manager][].
 
 On Ubuntu / Debian:
 
@@ -110,9 +109,7 @@ Sending build context to Docker daemon 3.923 MB
 Successfully built 4471b442c220
 ```
 
-Optionally, alter the default values for configuration by setting them via [environment variables](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file).
-See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for possible values.
-In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environment variable names are specified as the quoted, uppercase key values (e.g. `GH_TOKEN`).
+Optionally, alter the default values for configuration by setting them via [environment variables](https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file). See [server-secrets.md](server-secrets.md) and [config/custom-environment-variables.yml](/config/custom-environment-variables.yml) for possible values. In [config/custom-environment-variables.yml](/config/custom-environment-variables.yml), environment variable names are specified as the quoted, uppercase key values (e.g. `GH_TOKEN`).
 
 Then run the container, and be sure to specify the same mapped port as the one Shields is listening on :
 
@@ -124,27 +121,18 @@ Configuration:
 0916211515 Server is starting up: http://0.0.0.0:8080/
 ```
 
-Assuming Docker is running locally, you should be able to get to the
-application at http://localhost:8080/.
+Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/.
 
-If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
-then you will need to replace `localhost` with the IP address of that virtual
-machine.
+If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the IP address of that virtual machine.
 
 ## Raster server
 
-If you want to host PNG badges, you can also self-host a [raster server][]
-which points to your badge server. It's a docker container. We host it on
-Fly.io but should be possible to host on a wide variety of platforms.
+If you want to host PNG badges, you can also self-host a [raster server][] which points to your badge server. It's a docker container. We host it on Fly.io but should be possible to host on a wide variety of platforms.
 
-- In your raster instance, set `BASE_URL` to your Shields instance, e.g.
-  `https://shields.example.co`.
-- Optionally, in your Shields, instance, configure `RASTER_URL` to the base
-  URL, e.g. `https://raster.example.co`. This will send 301 redirects
-  for the legacy raster URLs instead of 404's.
+- In your raster instance, set `BASE_URL` to your Shields instance, e.g. `https://shields.example.co`.
+- Optionally, in your Shields, instance, configure `RASTER_URL` to the base URL, e.g. `https://raster.example.co`. This will send 301 redirects for the legacy raster URLs instead of 404's.
 
-If anyone has set this up, more documentation on how to do this would be
-welcome!
+If anyone has set this up, more documentation on how to do this would be welcome!
 
 [raster server]: https://github.com/badges/squint
 
@@ -156,8 +144,7 @@ These are documented in [server-secrets.md](./server-secrets.md)
 
 ## Separate frontend hosting
 
-If you want to host the frontend on a separate server, such as cloud storage
-or a CDN, you can do that.
+If you want to host the frontend on a separate server, such as cloud storage or a CDN, you can do that.
 
 First, build the frontend, pointing `BASE_URL` to your server.
 
@@ -169,8 +156,7 @@ Then copy the contents of the `public/` folder to your static hosting / CDN.
 
 There are also a couple settings you should configure on the server.
 
-To help out users, you can make the Shields server redirect the server root.
-Set the `REDIRECT_URI` environment variable:
+To help out users, you can make the Shields server redirect the server root. Set the `REDIRECT_URI` environment variable:
 
 ```sh
 REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
@@ -208,8 +194,7 @@ sudo node server
 
 ## Prometheus
 
-Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default.
-You can enable them by `METRICS_PROMETHEUS_ENABLED` and `METRICS_PROMETHEUS_ENDPOINT_ENABLED` environment variables.
+Shields uses [prom-client](https://github.com/siimon/prom-client) to provide [default metrics](https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors). These metrics are disabled by default. You can enable them by `METRICS_PROMETHEUS_ENABLED` and `METRICS_PROMETHEUS_ENDPOINT_ENABLED` environment variables.
 
 ```bash
 METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ENDPOINT_ENABLED=true npm start
@@ -219,6 +204,4 @@ Metrics are available at `/metrics` resource.
 
 ## Cloudflare
 
-Shields.io uses Cloudflare as a downstream CDN. If your installation does the same,
-you can configure your server to only accept requests coming from Cloudflare's IPs.
-Set `public.requireCloudflare: true`.
+Shields.io uses Cloudflare as a downstream CDN. If your installation does the same, you can configure your server to only accept requests coming from Cloudflare's IPs. Set `public.requireCloudflare: true`.
