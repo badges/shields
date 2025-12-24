@@ -24,11 +24,12 @@ export default class GithubFollowers extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'followers', namedLogo: 'github' }
 
-  static render({ followers }) {
+  static render({ followers, user }) {
     return {
       message: metric(followers),
       style: 'social',
       color: 'blue',
+      link: [`https://github.com/${user}?tab=followers`],
     }
   }
 
@@ -38,6 +39,6 @@ export default class GithubFollowers extends GithubAuthV3Service {
       schema,
       httpErrors: httpErrorsFor('user not found'),
     })
-    return this.constructor.render({ followers })
+    return this.constructor.render({ followers, user })
   }
 }
