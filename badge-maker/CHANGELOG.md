@@ -76,8 +76,7 @@
 - Deprecated parameters have been removed. In version 2.2.0 the `colorA`, `colorB` and `colorscheme` params were deprecated. In version 3.0.0 these have been removed.
 - Only SVG output format is now provided. JSON format has been dropped and the `format` key has been removed.
 - The `text` array has been replaced by `label` and `message` keys.
-- The `template` key has been renamed `style`.
-  To upgrade from v2.1.1, change your code from:
+- The `template` key has been renamed `style`. To upgrade from v2.1.1, change your code from:
   ```js
   const { BadgeFactory } = require('gh-badges')
   const bf = new BadgeFactory()
@@ -178,8 +177,7 @@
 
 ## 2.1.0 - 2018-11-18
 
-gh-badges v2.1.0 implements a new text width measurer which uses a lookup table, removing the dependency
-on PDFKit. It is no longer necessary to provide a local copy of Verdana for accurate text width computation.
+gh-badges v2.1.0 implements a new text width measurer which uses a lookup table, removing the dependency on PDFKit. It is no longer necessary to provide a local copy of Verdana for accurate text width computation.
 
 As such, the `fontPath` and `precomputeWidths` parameters are now deprecated. The recommended call to create an instance of `BadgeFactory` is now
 
@@ -247,8 +245,7 @@ const svg = bf.create(format)
 
 ## 2.0.0 - 2018-11-09
 
-gh-badges v2.0.0 declares a new public interface which is synchronous.
-If your version 1.3.0 code looked like this:
+gh-badges v2.0.0 declares a new public interface which is synchronous. If your version 1.3.0 code looked like this:
 
 ```js
 const badge = require('gh-badges')
