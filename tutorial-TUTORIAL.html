@@ -29,37 +29,26 @@
 
 <article>
     <h1>Tutorial on how to add a badge for a service</h1>
-<p>This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, Git and GitHub, however, this document
-will guide you through that journey if you are a beginner.
-Please <a href="https://github.com/badges/shields/edit/master/doc/TUTORIAL.md">improve the tutorial</a> while you read it.</p>
+<p>This tutorial should help you add a service to shields.io in form of a badge. You will need to learn to use JavaScript, Git and GitHub, however, this document will guide you through that journey if you are a beginner. Please <a href="https://github.com/badges/shields/edit/master/doc/TUTORIAL.md">improve the tutorial</a> while you read it.</p>
 <h2>(1) Reading</h2>
 <ul>
 <li><a href="../CONTRIBUTING.md">Contributing Guidance</a></li>
 <li><a href="https://contributing.shields.io/index.html">Documentation</a> for the Shields Core API</li>
-<li>You can also read previous
-<a href="https://github.com/badges/shields/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+label%3Aservice-badge+is%3Amerged">merged pull-requests with the 'service-badge' label</a>
-to see how other people implemented their badges.</li>
+<li>You can also read previous <a href="https://github.com/badges/shields/pulls?utf8=%E2%9C%93&amp;q=is%3Apr+label%3Aservice-badge+is%3Amerged">merged pull-requests with the 'service-badge' label</a> to see how other people implemented their badges.</li>
 </ul>
 <h2>(2) Setup</h2>
 <h3>Pre-requisites</h3>
 <h4>Git</h4>
-<p>You should have <a href="https://git-scm.com/">git</a> installed.
-If you do not, <a href="https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/">install git</a>
-and learn about the <a href="http://try.github.io/">GitHub workflow</a>.</p>
+<p>You should have <a href="https://git-scm.com/">git</a> installed. If you do not, <a href="https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/">install git</a> and learn about the <a href="http://try.github.io/">GitHub workflow</a>.</p>
 <h4>Node, NPM</h4>
-<p>Node 22 and NPM 10.x or 11.x is required. If you don't already have them,
-install node and npm: https://nodejs.org/en/download/</p>
+<p>Node 22 and NPM 10.x or 11.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/</p>
 <h3>Setup a dev install</h3>
 <ol>
 <li><a href="https://github.com/badges/shields/fork">Fork</a> this repository.</li>
-<li>Clone the fork
-<code>git clone git@github.com:YOURGITHUBUSERNAME/shields.git</code></li>
+<li>Clone the fork <code>git clone git@github.com:YOURGITHUBUSERNAME/shields.git</code></li>
 <li><code>cd shields</code></li>
-<li>Install project dependencies
-<code>npm ci</code></li>
-<li>Run the badge server and the frontend dev server
-<code>npm start</code></li>
+<li>Install project dependencies <code>npm ci</code></li>
+<li>Run the badge server and the frontend dev server <code>npm start</code></li>
 <li>Visit the website to check the front-end is loaded: <a href="http://localhost:3000/">http://localhost:3000/</a>.</li>
 </ol>
 <p>In case you get the <em>&quot;getaddrinfo ENOTFOUND localhost&quot;</em> error, visit <a href="http://127.0.0.1:3000">http://127.0.0.1:3000/</a> instead or take a look at <a href="https://github.com/angular/angular-cli/issues/2227#issuecomment-358036526">this issue</a>.</p>
@@ -69,30 +58,21 @@ install node and npm: https://nodejs.org/en/download/</p>
 <li>What is the badge for?</li>
 <li>Which API do you want to use?</li>
 </ul>
-<p>You may additionally proceed to say what you want to work on.
-This information allows other humans to help and build on your work.</p>
+<p>You may additionally proceed to say what you want to work on. This information allows other humans to help and build on your work.</p>
 <h2>(4) Implementing</h2>
 <h3>(4.1) Structure and Layout</h3>
-<p>Service badge code is stored in the <a href="https://github.com/badges/shields/tree/master/services/">/services</a> directory.
-Each service has a directory for its files:</p>
+<p>Service badge code is stored in the <a href="https://github.com/badges/shields/tree/master/services/">/services</a> directory. Each service has a directory for its files:</p>
 <ul>
 <li>
-<p>In files ending with <code>.service.js</code>, you can find the code which handles
-incoming requests and generates the badges.
-Sometimes, code for a service can be re-used.
-This might be the case when you add a badge for an API which is already used
-by other badges.</p>
+<p>In files ending with <code>.service.js</code>, you can find the code which handles incoming requests and generates the badges. Sometimes, code for a service can be re-used. This might be the case when you add a badge for an API which is already used by other badges.</p>
 <p>Imagine a service that lives at https://img.shields.io/example/some-param-here.</p>
 <ul>
 <li>
-<p>For services with a single badge, the badge code will generally be stored in
-<code>/services/example/example.service.js</code>.
-If you add a badge for a new API, create a new directory.</p>
+<p>For services with a single badge, the badge code will generally be stored in <code>/services/example/example.service.js</code>. If you add a badge for a new API, create a new directory.</p>
 <p>Example: <a href="https://github.com/badges/shields/tree/master/services/docsrs">Docs.rs</a></p>
 </li>
 <li>
-<p>For service families with multiple badges we usually store the code for each
-badge in its own file like this:</p>
+<p>For service families with multiple badges we usually store the code for each badge in its own file like this:</p>
 <ul>
 <li><code>/services/example/example-downloads.service.js</code></li>
 <li><code>/services/example/example-version.service.js</code> etc.</li>
@@ -102,29 +82,19 @@ badge in its own file like this:</p>
 </ul>
 </li>
 <li>
-<p>In files ending with <code>.tester.js</code>, you can find the code which uses
-the shields server to test if the badges are generated correctly.
-There is a <a href="#45-write-tests">chapter on Tests</a>.</p>
+<p>In files ending with <code>.tester.js</code>, you can find the code which uses the shields server to test if the badges are generated correctly. There is a <a href="#45-write-tests">chapter on Tests</a>.</p>
 </li>
 </ul>
 <h3>(4.2) Our First Badge</h3>
-<p>All service badge classes inherit from <a href="https://contributing.shields.io/module-core_base-service_base.html">BaseService</a> or another class which extends it.
-Other classes implement useful behavior on top of <a href="https://contributing.shields.io/module-core_base-service_base.html">BaseService</a>.</p>
+<p>All service badge classes inherit from <a href="https://contributing.shields.io/module-core_base-service_base.html">BaseService</a> or another class which extends it. Other classes implement useful behavior on top of <a href="https://contributing.shields.io/module-core_base-service_base.html">BaseService</a>.</p>
 <ul>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a>
-implements methods for performing requests to a JSON API and schema validation.</li>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a>
-implements methods for performing requests to an XML API and schema validation.</li>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a>
-implements methods for performing requests to a YAML API and schema validation.</li>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html">BaseTomlService</a>
-implements methods for performing requests to a TOML API and schema validation.</li>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a>
-implements methods for retrieving information from existing third-party badges.</li>
-<li><a href="https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a>
-implements methods for performing requests to a GraphQL API and schema validation.</li>
-<li>If you are contributing to a <em>service family</em>, you may define a common super
-class for the badges or one may already exist.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html">BaseJsonService</a> implements methods for performing requests to a JSON API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a> implements methods for performing requests to an XML API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html">BaseYamlService</a> implements methods for performing requests to a YAML API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html">BaseTomlService</a> implements methods for performing requests to a TOML API and schema validation.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html">BaseSvgScrapingService</a> implements methods for retrieving information from existing third-party badges.</li>
+<li><a href="https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html">BaseGraphqlService</a> implements methods for performing requests to a GraphQL API and schema validation.</li>
+<li>If you are contributing to a <em>service family</em>, you may define a common super class for the badges or one may already exist.</li>
 </ul>
 <p>As a first step we will look at the code for an example which generates a badge without contacting an API. Note that lower camelCase should be used for variables, functions, and path/query parameters.</p>
 <pre class="prettyprint source lang-js"><code>// (1)
@@ -156,10 +126,7 @@ export default class Example extends BaseService {
 <li><code>route</code> declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
 <ul>
 <li><code>base</code> defines the first part of the URL that doesn't change, e.g. <code>/example/</code>.</li>
-<li><code>pattern</code> defines the variable part of the route, everything that comes after <code>/example/</code>. It can include any
-number of named parameters. These are converted into
-regular expressions by <a href="https://github.com/pillarjs/path-to-regexp#parameters"><code>path-to-regexp</code></a>.
-Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static">That's why they're marked <code>static</code>.</a></li>
+<li><code>pattern</code> defines the variable part of the route, everything that comes after <code>/example/</code>. It can include any number of named parameters. These are converted into regular expressions by <a href="https://github.com/pillarjs/path-to-regexp#parameters"><code>path-to-regexp</code></a>. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static">That's why they're marked <code>static</code>.</a></li>
 <li>There is additional documentation on conventions for <a href="./badge-urls.md">designing badge URLs</a></li>
 </ul>
 </li>
@@ -175,10 +142,8 @@ Because a service instance won't be created until it's time to handle a request,
 <p>To try out this example badge:</p>
 <ol>
 <li>Copy and paste this code into a new file in <code>/services/example/example.service.js</code></li>
-<li>The server should restart on its own. (If it doesn't for some reason, quit
-the running server with <code>Control+C</code>, then start it again with <code>npm start</code>.)</li>
-<li>Visit the badge at <a href="http:%5C/%5C/localhost:8080/example/foo">http://localhost:8080/example/foo</a>.
-It should look like this: <img src="https://img.shields.io/badge/example-foo-blue" alt=""></li>
+<li>The server should restart on its own. (If it doesn't for some reason, quit the running server with <code>Control+C</code>, then start it again with <code>npm start</code>.)</li>
+<li>Visit the badge at <a href="http:%5C/%5C/localhost:8080/example/foo">http://localhost:8080/example/foo</a>. It should look like this: <img src="https://img.shields.io/badge/example-foo-blue" alt=""></li>
 </ol>
 <h3>(4.3) Querying an API</h3>
 <p>The example above was completely static. In order to make a useful service badge we will need to get some data from somewhere. The most common case is that we will query an API which serves up some JSON data, but other formats (e.g: XML) may be used.</p>
@@ -290,10 +255,7 @@ export default class GemVersion extends BaseJsonService {
 <li>API returns a response which can't be parsed as JSON</li>
 <li>API returns a response which doesn't validate against our schema</li>
 </ul>
-<p>Sometimes it may be necessary to manually throw an exception to deal with a
-non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at
-<a href="https://contributing.shields.io/module-core_base-service_errors.html">errors</a>
-and can be imported via the import shortcut and then thrown:</p>
+<p>Sometimes it may be necessary to manually throw an exception to deal with a non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at <a href="https://contributing.shields.io/module-core_base-service_errors.html">errors</a> and can be imported via the import shortcut and then thrown:</p>
 <pre class="prettyprint source lang-js"><code>import { NotFound } from '../index.js'
 
 throw new NotFound({ prettyMessage: 'package not found' })
@@ -382,25 +344,16 @@ export default class GemVersion extends BaseJsonService {
 <p>Save, run <code>npm start</code>, and you can see it <a href="http://127.0.0.1:3000/">locally</a>.</p>
 <p>If you update <code>openApi</code>, you don't have to restart the server. Run <code>npm run prestart</code> in another terminal window and the frontend will update.</p>
 <h3>(4.5) Write Tests<!-- Change the link below when you change the heading --></h3>
-<p>When creating a badge for a new service or changing a badge's behavior, tests
-should be included. They serve several purposes:</p>
+<p>When creating a badge for a new service or changing a badge's behavior, tests should be included. They serve several purposes:</p>
 <ol>
-<li>They speed up future contributors when they are debugging or improving a
-badge.</li>
-<li>If the contributors would like to change your badge, chances are, they forget
-edge cases and break your code.
-Tests may give hints in such cases.</li>
-<li>The contributor and reviewer can easily verify the code works as
-intended.</li>
-<li>When a badge stops working on the live server, maintainers can find out
-right away.</li>
+<li>They speed up future contributors when they are debugging or improving a badge.</li>
+<li>If the contributors would like to change your badge, chances are, they forget edge cases and break your code. Tests may give hints in such cases.</li>
+<li>The contributor and reviewer can easily verify the code works as intended.</li>
+<li>When a badge stops working on the live server, maintainers can find out right away.</li>
 </ol>
-<p>There is a dedicated <a href="service-tests.md">tutorial for tests in the service-tests folder</a>.
-Please follow it to include tests on your pull-request.</p>
+<p>There is a dedicated <a href="service-tests.md">tutorial for tests in the service-tests folder</a>. Please follow it to include tests on your pull-request.</p>
 <h3>(4.6) Update the Docs</h3>
-<p>If your submission requires an API token or authentication credentials, please
-update <a href="./server-secrets.md">server-secrets.md</a>. You should explain what the
-token or credentials are for and how to obtain them.</p>
+<p>If your submission requires an API token or authentication credentials, please update <a href="./server-secrets.md">server-secrets.md</a>. You should explain what the token or credentials are for and how to obtain them.</p>
 <h2>(5) Create a Pull Request</h2>
 <p>Once you have implemented a new badge:</p>
 <ul>
@@ -408,9 +361,7 @@ token or credentials are for and how to obtain them.</p>
 <li><a href="https://help.github.com/articles/creating-a-pull-request/">Create a pull-request</a> to propose your changes.</li>
 <li>CI will check the tests pass and that your code conforms to our coding standards.</li>
 <li>We also use <a href="https://danger.systems/">Danger</a> to check for some common problems. The first comment on your pull request will be posted by a bot. If there are any errors or warnings raised, please review them.</li>
-<li>One of the
-<a href="https://github.com/badges/shields/blob/master/README.md#project-leaders">maintainers</a>
-will review your contribution.</li>
+<li>One of the <a href="https://github.com/badges/shields/blob/master/README.md#project-leaders">maintainers</a> will review your contribution.</li>
 <li>We'll work with you to progress your contribution suggesting improvements if necessary. Although there are some occasions where a contribution is not appropriate, if your contribution conforms to our <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md#badge-guidelines">guidelines</a> we'll aim to work towards merging it. The majority of pull requests adding a service badge are merged.</li>
 <li>If your contribution is merged, the final comment on the pull request will be an automated post which you can monitor to tell when your contribution has been deployed to production.</li>
 </ul>
@@ -427,7 +378,7 @@ will review your contribution.</li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 17:40:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 18:26:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

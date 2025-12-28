@@ -42,8 +42,7 @@
 <li><a href="https://github.com/badges/shields/tree/master/badge-maker"><code>badge-maker</code></a></li>
 </ol>
 </li>
-<li>The base service classes (about 8% of the code, and probably the most important
-code in the codebase)
+<li>The base service classes (about 8% of the code, and probably the most important code in the codebase)
 <ol>
 <li><a href="https://github.com/badges/shields/tree/master/core/base-service"><code>core/base-service</code></a></li>
 </ol>
@@ -58,8 +57,7 @@ code in the codebase)
 <li><a href="https://github.com/badges/shields/tree/master/core/token-pooling"><code>core/token-pooling</code></a></li>
 </ol>
 </li>
-<li>Service common helper functions (about 7% of the code, and fairly important
-since it’s shared across much of the service code)
+<li>Service common helper functions (about 7% of the code, and fairly important since it’s shared across much of the service code)
 <ol>
 <li><code>*.js</code> in the root of <a href="https://github.com/badges/shields/tree/master/services"><code>services</code></a></li>
 </ol>
@@ -102,8 +100,7 @@ since it’s shared across much of the service code)
 <li><a href="https://github.com/badges/shields/tree/master/core/service-test-runner"><code>core/service-test-runner</code></a></li>
 </ol>
 </li>
-<li><a href="https://github.com/badges/shields/blob/master/doc/service-tests.md">The service tests themselves</a> live integration tests of the
-services, and some mocked tests
+<li><a href="https://github.com/badges/shields/blob/master/doc/service-tests.md">The service tests themselves</a> live integration tests of the services, and some mocked tests
 <ol>
 <li><code>*.tester.js</code> in subfolders of <a href="https://github.com/badges/shields/tree/master/services"><code>services</code></a></li>
 </ol>
@@ -119,108 +116,47 @@ services, and some mocked tests
 </ol>
 </li>
 </ol>
-<p>Our goal is to reach 100% coverage of the code in the
-frontend, core, and service helper functions when the unit and functional
-tests are run.</p>
-<p>Our test strategy for the service code is a bit different. It’s primarily
-based on live integration tests. That’s because service response formats can
-change, and when they do the badges break. We want our tests to fail when this
-happens. That way we can fix the problems proactively instead of waiting for
-users to report them. There’s a good discussion about this decision in
-<a href="https://github.com/badges/shields/issues/927">#927</a>. It’s acceptable to write mocked tests of logic that is
-difficult to reach using live tests, however where possible, it’s preferred to
-test this kind of logic through unit tests (e.g. of <code>render()</code> and
-<code>transform()</code> functions).</p>
+<p>Our goal is to reach 100% coverage of the code in the frontend, core, and service helper functions when the unit and functional tests are run.</p>
+<p>Our test strategy for the service code is a bit different. It’s primarily based on live integration tests. That’s because service response formats can change, and when they do the badges break. We want our tests to fail when this happens. That way we can fix the problems proactively instead of waiting for users to report them. There’s a good discussion about this decision in <a href="https://github.com/badges/shields/issues/927">#927</a>. It’s acceptable to write mocked tests of logic that is difficult to reach using live tests, however where possible, it’s preferred to test this kind of logic through unit tests (e.g. of <code>render()</code> and <code>transform()</code> functions).</p>
 <h2>Server initialization</h2>
 <ol>
 <li>
-<p>The server entrypoint is <a href="https://github.com/badges/shields/blob/master/server.js"><code>server.js</code></a> which sets up error
-reporting, loads config, and creates an instance of the server.</p>
+<p>The server entrypoint is <a href="https://github.com/badges/shields/blob/master/server.js"><code>server.js</code></a> which sets up error reporting, loads config, and creates an instance of the server.</p>
 </li>
 <li>
-<p>The Server, which is defined in
-<a href="https://github.com/badges/shields/blob/master/core/server/server.js"><code>core/server/server.js</code></a>, is based on the web
-framework <a href="https://github.com/badges/sc">Scoutcamp</a>. It creates an http server, sets up helpers for
-token persistence and monitoring. Then it loads all the services,
-injecting dependencies as it asks each one to register its route
-with Scoutcamp.</p>
+<p>The Server, which is defined in <a href="https://github.com/badges/shields/blob/master/core/server/server.js"><code>core/server/server.js</code></a>, is based on the web framework <a href="https://github.com/badges/sc">Scoutcamp</a>. It creates an http server, sets up helpers for token persistence and monitoring. Then it loads all the services, injecting dependencies as it asks each one to register its route with Scoutcamp.</p>
 </li>
 <li>
-<p>The service registration continues in <code>BaseService.register</code>. From its
-<code>route</code> property, it derives a regular expression to match the route
-path, and invokes <code>camp.route</code> with this value.</p>
+<p>The service registration continues in <code>BaseService.register</code>. From its <code>route</code> property, it derives a regular expression to match the route path, and invokes <code>camp.route</code> with this value.</p>
 </li>
 <li>
-<p>At this point the situation gets gnarly and hard to follow. For the
-purpose of initialization, suffice it to say that <code>camp.route</code> invokes a
-callback with the four parameters <code>( queryParams, match, end, ask )</code> which
-is created in a legacy helper function in
-<a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler.js</code></a>. This callback
-delegates to a callback in <code>BaseService.register</code> with three different
-parameters <code>( queryParams, match, sendBadge )</code>, which
-then runs <code>BaseService.invoke</code>. <code>BaseService.invoke</code> instantiates the
-service and runs <code>BaseService#handle</code>.</p>
+<p>At this point the situation gets gnarly and hard to follow. For the purpose of initialization, suffice it to say that <code>camp.route</code> invokes a callback with the four parameters <code>( queryParams, match, end, ask )</code> which is created in a legacy helper function in <a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler.js</code></a>. This callback delegates to a callback in <code>BaseService.register</code> with three different parameters <code>( queryParams, match, sendBadge )</code>, which then runs <code>BaseService.invoke</code>. <code>BaseService.invoke</code> instantiates the service and runs <code>BaseService#handle</code>.</p>
 </li>
 </ol>
 <h2>Downstream caching</h2>
 <ol>
-<li>In production, the majority of requests are served from caches, including
-the browser cache, GitHub’s camo proxy server, and other downstream caches.</li>
-<li>The Shields servers sit behind the Cloudflare CDN. The CDN itself handles
-about 40% of the HTTPS requests that come in.</li>
+<li>In production, the majority of requests are served from caches, including the browser cache, GitHub’s camo proxy server, and other downstream caches.</li>
+<li>The Shields servers sit behind the Cloudflare CDN. The CDN itself handles about 40% of the HTTPS requests that come in.</li>
 <li>The remaining requests are proxied to one of the servers.</li>
-<li>See the <a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md">production hosting documentation</a> for a
-fuller discussion of the production architecture.</li>
+<li>See the <a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md">production hosting documentation</a> for a fuller discussion of the production architecture.</li>
 </ol>
 <h2>How the server makes a badge</h2>
 <ol>
-<li>An HTTPS request arrives. Scoutcamp inspects the URL path and matches it
-against the regexes for all the registered routes until it finds one that
-matches. (See <em>Initialization</em> above for an explanation of how routes are
-registered.)</li>
-<li>Scoutcamp invokes a callback with the four parameters:
-<code>( queryParams, match, end, ask )</code>. This callback is defined in
-<a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler</code></a>. A timeout is set to
-handle unresponsive service code and the next callback is invoked: the
-legacy handler function.</li>
-<li>The legacy handler function receives
-<code>( queryParams, match, sendBadge )</code>. Its job is to extract data
-from the regex <code>match</code> and <code>queryParams</code>, and then invoke <code>sendBadge</code>
-with the result.</li>
-<li>The implementation of this function is in <code>BaseService.register</code>. It
-works by running <code>BaseService.invoke</code>, which instantiates the service,
-injects more dependencies, and invokes <code>BaseService.handle</code> which is
-implemented by the service subclass.</li>
-<li>The job of <code>handle()</code>, which should be implemented by each service
-subclass, is to return an object which partially describes a badge or
-throw one of the handled error classes. &quot;Partially rendered&quot; most
-commonly means a non-empty message and an optional color. In the case
-of the Endpoint badge, it could include many other parameters. At the
-time of writing the handled error classes were NotFound,
-InvalidResponse, Inaccessible, and InvalidParameter.
-Throwing any other error is a programmer error which will be
-<a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md#error-reporting">reported</a> and described to the user as a <strong>shields
-internal error</strong>.</li>
-<li>A typical <code>handle()</code> function delegates to one or more helpers to
-handle stages of the request:
+<li>An HTTPS request arrives. Scoutcamp inspects the URL path and matches it against the regexes for all the registered routes until it finds one that matches. (See <em>Initialization</em> above for an explanation of how routes are registered.)</li>
+<li>Scoutcamp invokes a callback with the four parameters: <code>( queryParams, match, end, ask )</code>. This callback is defined in <a href="https://github.com/badges/shields/blob/master/core/base-service/legacy-request-handler.js"><code>legacy-request-handler</code></a>. A timeout is set to handle unresponsive service code and the next callback is invoked: the legacy handler function.</li>
+<li>The legacy handler function receives <code>( queryParams, match, sendBadge )</code>. Its job is to extract data from the regex <code>match</code> and <code>queryParams</code>, and then invoke <code>sendBadge</code> with the result.</li>
+<li>The implementation of this function is in <code>BaseService.register</code>. It works by running <code>BaseService.invoke</code>, which instantiates the service, injects more dependencies, and invokes <code>BaseService.handle</code> which is implemented by the service subclass.</li>
+<li>The job of <code>handle()</code>, which should be implemented by each service subclass, is to return an object which partially describes a badge or throw one of the handled error classes. &quot;Partially rendered&quot; most commonly means a non-empty message and an optional color. In the case of the Endpoint badge, it could include many other parameters. At the time of writing the handled error classes were NotFound, InvalidResponse, Inaccessible, and InvalidParameter. Throwing any other error is a programmer error which will be <a href="https://github.com/badges/shields/blob/master/doc/production-hosting.md#error-reporting">reported</a> and described to the user as a <strong>shields internal error</strong>.</li>
+<li>A typical <code>handle()</code> function delegates to one or more helpers to handle stages of the request:
 <ol>
-<li><strong>fetch</strong>: load the needed data from the upstream service and
-validate it</li>
-<li><strong>transform</strong>: pluck, convert, or summarize the response format
-into a few properties which will be displayed on the badge</li>
-<li><strong>render</strong>: given a few properties, return a message, optional
-color, and optional label.</li>
+<li><strong>fetch</strong>: load the needed data from the upstream service and validate it</li>
+<li><strong>transform</strong>: pluck, convert, or summarize the response format into a few properties which will be displayed on the badge</li>
+<li><strong>render</strong>: given a few properties, return a message, optional color, and optional label.</li>
 </ol>
 </li>
-<li>When an error is thrown, BaseService steps in and converts the error
-object to renderable properties: <code>{ isError, message, color }</code>.</li>
-<li>The service invokes <a href="https://github.com/badges/shields/blob/master/core/base-service/coalesce-badge.js"><code>coalesceBadge</code></a> whose job is to
-coalesce query string overrides with values from the service and the
-service’s defaults to produce an object that fully describes the badge to
-be rendered.</li>
-<li><code>sendBadge</code> is invoked with that object. It does some housekeeping on the
-timeout. Then it renders the badge to svg or raster and pushes out the
-result over the HTTPS connection.</li>
+<li>When an error is thrown, BaseService steps in and converts the error object to renderable properties: <code>{ isError, message, color }</code>.</li>
+<li>The service invokes <a href="https://github.com/badges/shields/blob/master/core/base-service/coalesce-badge.js"><code>coalesceBadge</code></a> whose job is to coalesce query string overrides with values from the service and the service’s defaults to produce an object that fully describes the badge to be rendered.</li>
+<li><code>sendBadge</code> is invoked with that object. It does some housekeeping on the timeout. Then it renders the badge to svg or raster and pushes out the result over the HTTPS connection.</li>
 </ol>
 </article>
 
@@ -235,7 +171,7 @@ result over the HTTPS connection.</li>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 17:40:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 18:26:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -29,20 +29,16 @@
 
 <article>
     <h1>Service tests</h1>
-<p>When creating a badge for a new service or changing a badge's behavior,
-automated tests should be included. They serve three purposes:</p>
+<p>When creating a badge for a new service or changing a badge's behavior, automated tests should be included. They serve three purposes:</p>
 <ol>
 <li>
-<p>The contributor and reviewer can easily verify the code works as
-intended.</p>
+<p>The contributor and reviewer can easily verify the code works as intended.</p>
 </li>
 <li>
-<p>When a badge stops working due to an upstream API, maintainers can find out
-right away.</p>
+<p>When a badge stops working due to an upstream API, maintainers can find out right away.</p>
 </li>
 <li>
-<p>They speed up future contributors when they are debugging or improving a
-badge.</p>
+<p>They speed up future contributors when they are debugging or improving a badge.</p>
 </li>
 </ol>
 <p>Tests should cover:</p>
@@ -53,8 +49,7 @@ badge.</p>
 <li>If a non-trivial validator is defined, include tests for malformed responses</li>
 </ol>
 <h2>Tutorial</h2>
-<p>Before getting started, set up a development environment by following the
-<a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#2-setup">setup instructions</a></p>
+<p>Before getting started, set up a development environment by following the <a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#2-setup">setup instructions</a></p>
 <p>We will write some tests for <a href="https://github.com/badges/shields/blob/master/services/docsrs/docsrs.service.js">Docs.rs</a>, a service that builds documentation of crates, which are packages in the Rust programming language.</p>
 <h3>(1) Boilerplate</h3>
 <p>The code for our badge is in <code>services/docsrs/docsrs.service.js</code>. Tests for this badge should be stored in <code>services/docsrs/docsrs.tester.js</code>.</p>
@@ -63,13 +58,7 @@ badge.</p>
 
 export const t = await createServiceTester()
 </code></pre>
-<p>If our <code>.service.js</code> module exports a single class, we can
-<code>createServiceTester</code>, which uses convention to create a
-<code>ServiceTester</code> object. Calling this inside
-<code>services/docsrs/docsrs.tester.js</code> will create a <code>ServiceTester</code> object
-configured for the service exported in <code>services/docsrs/docsrs.service.js</code>.
-We will add our tests to this <code>ServiceTester</code> object <code>t</code>, which is exported
-from the module.</p>
+<p>If our <code>.service.js</code> module exports a single class, we can <code>createServiceTester</code>, which uses convention to create a <code>ServiceTester</code> object. Calling this inside <code>services/docsrs/docsrs.tester.js</code> will create a <code>ServiceTester</code> object configured for the service exported in <code>services/docsrs/docsrs.service.js</code>. We will add our tests to this <code>ServiceTester</code> object <code>t</code>, which is exported from the module.</p>
 <h3>(2) Our First Test Case</h3>
 <p>First we'll add a test for the typical case:</p>
 <pre class="prettyprint source lang-js"><code>import Joi from 'joi'
@@ -82,9 +71,7 @@ t.create('Docs with no version specified')
   })
 </code></pre>
 <ol>
-<li>The <code>create()</code> method adds a new test to the tester object.
-The chained-on calls come from the API testing framework <a href="https://github.com/MarkHerhold/IcedFrisby">IcedFrisby</a>.
-Here's a <a href="https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code">longer example</a> and the complete <a href="https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md">API guide</a>.</li>
+<li>The <code>create()</code> method adds a new test to the tester object. The chained-on calls come from the API testing framework <a href="https://github.com/MarkHerhold/IcedFrisby">IcedFrisby</a>. Here's a <a href="https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code">longer example</a> and the complete <a href="https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md">API guide</a>.</li>
 <li>We use the <code>get()</code> method to request a badge. There are several points to consider here:
 <ul>
 <li>We need a real crate to test against. In this case we have used <a href="https://docs.rs/tokio">Tokio</a> but we could have chosen any one.</li>
@@ -93,24 +80,17 @@ Here's a <a href="https://github.com/MarkHerhold/IcedFrisby/#show-me-some-code">
 <li>We don't need to explicitly call <code>/docsrs/tokio.json</code> here, only <code>/tokio.json</code>. When we create a tester object with <code>createServiceTester()</code> the URL base defined in our service class (in this case <code>/docsrs</code>) is used as the base URL for any requests made by the tester object.</li>
 </ul>
 </li>
-<li><code>expectBadge()</code> is a helper function which accepts either a string literal, a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> or a <a href="https://github.com/hapijs/joi">Joi</a> schema for the different fields.
-Joi is a validation library that is built into IcedFrisby which you can use to
-match based on a set of allowed strings, regexes, or specific values. You can
-refer to their <a href="https://github.com/hapijs/joi/blob/master/API.md">API reference</a>.</li>
+<li><code>expectBadge()</code> is a helper function which accepts either a string literal, a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">RegExp</a> or a <a href="https://github.com/hapijs/joi">Joi</a> schema for the different fields. Joi is a validation library that is built into IcedFrisby which you can use to match based on a set of allowed strings, regexes, or specific values. You can refer to their <a href="https://github.com/hapijs/joi/blob/master/API.md">API reference</a>.</li>
 <li>We expect <code>label</code> to be a string literal <code>&quot;docs&quot;</code>.</li>
 <li>Because this test depends on a live service, we don't want our test to depend on our API call returning a particular build status. Instead we should perform a &quot;picture check&quot; to assert that the badge data conforms to an expected pattern. Our test should not depend on the status of the example crates's documentation build, but should fail if trying to generate the badge throws an error, or if there is a breaking change to the upstream API. In this case, we specify a list with all possible response values, <code>Joi.equal('passing', 'failing')</code>. For more complex cases, <a href="https://github.com/badges/shields/blob/master/services/test-validators.js">services/test-validators.js</a> defines a number of useful validators we can use with regular expressions. Many of the common badge types (version, downloads, rank, etc.) already have validators defined there.</li>
 </ol>
-<p>When defining an IcedFrisby test, typically you would invoke the <code>toss()</code>
-method, to register the test. This is not necessary, because the Shields test
-harness will call it for you.</p>
+<p>When defining an IcedFrisby test, typically you would invoke the <code>toss()</code> method, to register the test. This is not necessary, because the Shields test harness will call it for you.</p>
 <h3>(3) Running the Tests</h3>
 <p>Lets run the test we have written:</p>
 <pre class="prettyprint source"><code>npm run test:services -- --only=docsrs
 </code></pre>
-<p>The <code>--only=</code> option indicates which service or services you want to test. You
-can provide a comma-separated list here.</p>
-<p>The <code>--</code> tells the NPM CLI to pass the remaining arguments through to the test
-runner.</p>
+<p>The <code>--only=</code> option indicates which service or services you want to test. You can provide a comma-separated list here.</p>
+<p>The <code>--</code> tells the NPM CLI to pass the remaining arguments through to the test runner.</p>
 <p>Here's the output:</p>
 <pre class="prettyprint source"><code>Server is starting up: http://localhost:1111/
   DocsRs
@@ -189,14 +169,8 @@ t.create('Version not found')
     color: 'red',
   })
 </code></pre>
-<p>This will intercept the request and provide our own mock response.
-We use the <code>intercept()</code> method provided by the
-<a href="https://github.com/paulmelnikow/icedfrisby-nock#usage">icedfrisby-nock plugin</a>. It takes a setup function,
-which returns an interceptor, and exposes the full API of the HTTP mocking
-library <a href="https://github.com/nock/nock">Nock</a>.</p>
-<p>Nock is fussy. All parts of a request must match perfectly for the mock to
-take effect, including the HTTP method (in this case GET), scheme (https), host,
-and path.</p>
+<p>This will intercept the request and provide our own mock response. We use the <code>intercept()</code> method provided by the <a href="https://github.com/paulmelnikow/icedfrisby-nock#usage">icedfrisby-nock plugin</a>. It takes a setup function, which returns an interceptor, and exposes the full API of the HTTP mocking library <a href="https://github.com/nock/nock">Nock</a>.</p>
+<p>Nock is fussy. All parts of a request must match perfectly for the mock to take effect, including the HTTP method (in this case GET), scheme (https), host, and path.</p>
 <h2>Code coverage</h2>
 <p>By checking code coverage, we can make sure we've covered all our bases.</p>
 <p>We can generate a coverage report and open it:</p>
@@ -206,9 +180,7 @@ npm run coverage:report:open
 <h2>Pull requests</h2>
 <p>Pull requests must follow the <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md#running-service-tests-in-pull-requests">documented conventions</a> in order to execute the correct set of service tests.</p>
 <h2>Getting help</h2>
-<p>If you have questions about how to write your tests, please open an issue. If
-there's already an issue open for the badge you're working on, you can post a
-comment there instead.</p>
+<p>If you have questions about how to write your tests, please open an issue. If there's already an issue open for the badge you're working on, you can post a comment there instead.</p>
 <h2>Further reading</h2>
 <ul>
 <li><a href="https://github.com/MarkHerhold/IcedFrisby/blob/master/API.md">IcedFrisby API</a></li>
@@ -229,7 +201,7 @@ comment there instead.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 17:40:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 18:26:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

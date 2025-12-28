@@ -66,14 +66,7 @@
         <img src="https://img.shields.io/discord/308323056592486420?logo=discord&logoColor=white"
             alt="Chat on Discord"></a>
 </p>
-<p>This is home to <a href="https://shields.io/">Shields.io</a>, a service for concise, consistent,
-and legible badges in SVG and raster format, which can easily be included in
-GitHub readmes or any other web page. The service supports dozens of
-continuous integration services, package registries, distributions, app
-stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 1.6 billion images and is used by some of the
-world's most popular open-source projects, <a href="https://github.com/Microsoft/vscode">VS Code</a>, <a href="https://github.com/vuejs/vue">Vue.js</a>
-and <a href="https://github.com/twbs/bootstrap">Bootstrap</a> to name a few.</p>
+<p>This is home to <a href="https://shields.io/">Shields.io</a>, a service for concise, consistent, and legible badges in SVG and raster format, which can easily be included in GitHub readmes or any other web page. The service supports dozens of continuous integration services, package registries, distributions, app stores, social networks, code coverage services, and code analysis services. Every month it serves over 1.6 billion images and is used by some of the world's most popular open-source projects, <a href="https://github.com/Microsoft/vscode">VS Code</a>, <a href="https://github.com/vuejs/vue">Vue.js</a> and <a href="https://github.com/twbs/bootstrap">Bootstrap</a> to name a few.</p>
 <p>This repo hosts:</p>
 <ul>
 <li>The <a href="https://shields.io/">Shields.io</a> frontend and server code</li>
@@ -98,17 +91,14 @@ and <a href="https://github.com/twbs/bootstrap">Bootstrap</a> to name a few.</p>
 <li>Chrome Web Store extension rating: <img src="https://img.shields.io/badge/rating-%E2%98%85%E2%98%85%E2%98%85%E2%98%85%E2%98%86-brightgreen" alt="rating"></li>
 <li>Uptime Robot uptime percentage: <img src="https://img.shields.io/badge/uptime-100%25-brightgreen" alt="uptime"></li>
 </ul>
-<p><a href="https://img.shields.io/badges/static-badge">Make your own badges!</a>
-(Quick example: <code>https://img.shields.io/badge/left-right-f39f37</code>)</p>
+<p><a href="https://img.shields.io/badges/static-badge">Make your own badges!</a> (Quick example: <code>https://img.shields.io/badge/left-right-f39f37</code>)</p>
 <h3>Quickstart</h3>
 <p>Browse a <a href="https://shields.io/">complete list of badges</a> and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!</p>
 <p>Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.</p>
 <h2>Contributing</h2>
-<p>Shields is a community project. We invite your participation through issues
-and pull requests! You can peruse the <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">contributing guidelines</a>.</p>
+<p>Shields is a community project. We invite your participation through issues and pull requests! You can peruse the <a href="https://github.com/badges/shields/blob/master/CONTRIBUTING.md">contributing guidelines</a>.</p>
 <p>When adding or changing a service <a href="https://github.com/badges/shields/blob/master/doc/service-tests.md">please add tests</a>.</p>
-<p>This project has quite a backlog of suggestions! If you're new to the project,
-maybe you'd like to open a pull request to address one of them.</p>
+<p>This project has quite a backlog of suggestions! If you're new to the project, maybe you'd like to open a pull request to address one of them.</p>
 <p>You can read a <a href="https://github.com/badges/shields/blob/master/doc/TUTORIAL.md">tutorial on how to add a badge</a>.</p>
 <p><a href="https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><img src="https://img.shields.io/github/issues/badges/shields/good%20first%20issue" alt="GitHub issues by-label"></a></p>
 <p>If you intend on reporting or contributing a fix related to security vulnerabilities, please first refer to our <a href="https://github.com/badges/shields/blob/master/SECURITY.md">security policy</a>.</p>
@@ -121,49 +111,21 @@ maybe you'd like to open a pull request to address one of them.</p>
 <li>Run <code>npm start</code> to start the badge server and the frontend dev server.</li>
 <li>Open <code>http://localhost:3000/</code> to view the frontend.</li>
 </ol>
-<p>When server source files change, the badge server should automatically restart
-itself (using <a href="https://nodemon.io/">nodemon</a>). When the frontend files change, the frontend dev
-server (<code>docusaurus start</code>) should also automatically reload. However the badge
-definitions are built only before the server first starts. To regenerate those,
-either run <code>npm run prestart</code> or manually restart the server.</p>
-<p>To debug a badge from the command line, run <code>npm run badge -- /npm/v/nock</code>.
-It also works with full URLs like
-<code>npm run badge -- https://img.shields.io/npm/v/nock</code>.</p>
-<p>Use <code>npm run debug:server</code> to start server in debug mode.
-<a href="https://github.com/Microsoft/vscode-recipes/tree/master/nodemon">This recipe</a> shows how to debug Node.js application in <a href="https://code.visualstudio.com/">VS Code</a>.</p>
-<p><a href="https://glebbahmutov.com/blog/snapshot-testing/">Snapshot tests</a> ensure we don't inadvertently make changes that affect the
-SVG or JSON output. When deliberately changing the output, run
-<code>SNAPSHOT_DRY=1 npm run test:package</code> to preview changes to the saved
-snapshots, and <code>SNAPSHOT_UPDATE=1 npm run test:package</code> to update them.</p>
+<p>When server source files change, the badge server should automatically restart itself (using <a href="https://nodemon.io/">nodemon</a>). When the frontend files change, the frontend dev server (<code>docusaurus start</code>) should also automatically reload. However the badge definitions are built only before the server first starts. To regenerate those, either run <code>npm run prestart</code> or manually restart the server.</p>
+<p>To debug a badge from the command line, run <code>npm run badge -- /npm/v/nock</code>. It also works with full URLs like <code>npm run badge -- https://img.shields.io/npm/v/nock</code>.</p>
+<p>Use <code>npm run debug:server</code> to start server in debug mode. <a href="https://github.com/Microsoft/vscode-recipes/tree/master/nodemon">This recipe</a> shows how to debug Node.js application in <a href="https://code.visualstudio.com/">VS Code</a>.</p>
+<p><a href="https://glebbahmutov.com/blog/snapshot-testing/">Snapshot tests</a> ensure we don't inadvertently make changes that affect the SVG or JSON output. When deliberately changing the output, run <code>SNAPSHOT_DRY=1 npm run test:package</code> to preview changes to the saved snapshots, and <code>SNAPSHOT_UPDATE=1 npm run test:package</code> to update them.</p>
 <p>The server can be configured to use <a href="https://sentry.io/">Sentry</a> (<a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md#sentry">configuration</a>) and <a href="https://prometheus.io/">Prometheus</a> (<a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md#prometheus">configuration</a>).</p>
 <p>Our <a href="https://github.com/badges/shields/actions/workflows/daily-tests.yml">full test suite</a> as well as <a href="https://coveralls.io/github/badges/shields">code coverage</a> are run on a daily basis.</p>
 <h2>Hosting your own server</h2>
 <p>There is documentation about <a href="https://github.com/badges/shields/blob/master/doc/self-hosting.md">hosting your own server</a>.</p>
 <h2>Related projects</h2>
 <p><a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome"></a></p>
-<p>Status badges are used widely across open-source and private software projects.
-Academics have studied the &quot;signal&quot; badges provide about software project
-quality. There are many existing libraries for rendering these badges, and
-alternatives to the hosted Shields badge service. <a href="https://github.com/badges/awesome-badges">awesome-badges</a> is a
-curated collection of such resources.
-<a href="https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md">Contributions</a> may be considered there.
-(The presence of a project in that collection should not be interpreted as an endorsement nor promotion from the Shields project)</p>
+<p>Status badges are used widely across open-source and private software projects. Academics have studied the &quot;signal&quot; badges provide about software project quality. There are many existing libraries for rendering these badges, and alternatives to the hosted Shields badge service. <a href="https://github.com/badges/awesome-badges">awesome-badges</a> is a curated collection of such resources. <a href="https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md">Contributions</a> may be considered there. (The presence of a project in that collection should not be interpreted as an endorsement nor promotion from the Shields project)</p>
 <h2>History</h2>
-<p>b.adge.me was the original website for this service. Heroku back then had a
-thing which made it hard to use a toplevel domain with it, hence the odd
-domain. It used code developed in 2013 from a library called
-<a href="https://github.com/badges/gh-badges">gh-badges</a>, both developed by <a href="https://github.com/espadrine">Thaddée Tyl</a>.
-The project merged with shields.io by making it use the b.adge.me code
-and closed b.adge.me.</p>
-<p>The original badge specification was developed in 2013 by
-<a href="https://github.com/olivierlacan">Olivier Lacan</a>. It was inspired by the Travis CI and similar
-badges (there were a lot fewer, back then). In 2014 Thaddée Tyl redesigned
-it with help from a Travis CI employee and convinced everyone to switch to
-it. The old design is what today is called the plastic style; the new one
-is the flat style.</p>
-<p>You can read more about <a href="https://github.com/h5bp/lazyweb-requests/issues/150">the project's inception</a>,
-<a href="https://github.com/badges/shields/blob/master/spec/motivation.md">the motivation of the SVG badge specification</a>, and
-<a href="https://github.com/badges/shields/blob/master/spec/SPECIFICATION.md">the specification itself</a>.</p>
+<p>b.adge.me was the original website for this service. Heroku back then had a thing which made it hard to use a toplevel domain with it, hence the odd domain. It used code developed in 2013 from a library called <a href="https://github.com/badges/gh-badges">gh-badges</a>, both developed by <a href="https://github.com/espadrine">Thaddée Tyl</a>. The project merged with shields.io by making it use the b.adge.me code and closed b.adge.me.</p>
+<p>The original badge specification was developed in 2013 by <a href="https://github.com/olivierlacan">Olivier Lacan</a>. It was inspired by the Travis CI and similar badges (there were a lot fewer, back then). In 2014 Thaddée Tyl redesigned it with help from a Travis CI employee and convinced everyone to switch to it. The old design is what today is called the plastic style; the new one is the flat style.</p>
+<p>You can read more about <a href="https://github.com/h5bp/lazyweb-requests/issues/150">the project's inception</a>, <a href="https://github.com/badges/shields/blob/master/spec/motivation.md">the motivation of the SVG badge specification</a>, and <a href="https://github.com/badges/shields/blob/master/spec/SPECIFICATION.md">the specification itself</a>.</p>
 <h2>Project leaders</h2>
 <p>Maintainers:</p>
 <ul>
@@ -183,8 +145,7 @@ is the flat style.</p>
 <li><a href="https://github.com/RedSparr0w">RedSparr0w</a></li>
 </ul>
 <h2>License</h2>
-<p>All assets and code are under the <a href="LICENSE">CC0 LICENSE</a> and in the public
-domain unless specified otherwise.</p>
+<p>All assets and code are under the <a href="LICENSE">CC0 LICENSE</a> and in the public domain unless specified otherwise.</p>
 <h2>Community</h2>
 <p>Thanks to the people and companies who donate money, services or time to keep the project running. <a href="https://shields.io/community">https://shields.io/community</a></p></article>
     </section>
@@ -203,7 +164,7 @@ domain unless specified otherwise.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 17:40:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 18:26:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>

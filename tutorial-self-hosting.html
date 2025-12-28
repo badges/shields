@@ -31,8 +31,7 @@
     <h1>Hosting your own Shields server</h1>
 <p>This document describes how to host your own shields server either from source or using a docker image. See the docs on <a href="https://github.com/badges/shields/blob/master/doc/releases.md#shields-server">releases</a> for info on how we version the server and how to choose a release.</p>
 <h2>Installing from Source</h2>
-<p>You will need Node 22, which you can install using a
-<a href="https://nodejs.org/en/download/package-manager/">package manager</a>.</p>
+<p>You will need Node 22, which you can install using a <a href="https://nodejs.org/en/download/package-manager/">package manager</a>.</p>
 <p>On Ubuntu / Debian:</p>
 <pre class="prettyprint source lang-sh"><code>curl -sL https://deb.nodesource.com/setup_22.x | sudo -E bash -; sudo apt-get install -y nodejs
 </code></pre>
@@ -95,9 +94,7 @@ Sending build context to Docker daemon 3.923 MB
 …
 Successfully built 4471b442c220
 </code></pre>
-<p>Optionally, alter the default values for configuration by setting them via <a href="https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file">environment variables</a>.
-See <a href="server-secrets.md">server-secrets.md</a> and <a href="/config/custom-environment-variables.yml">config/custom-environment-variables.yml</a> for possible values.
-In <a href="/config/custom-environment-variables.yml">config/custom-environment-variables.yml</a>, environment variable names are specified as the quoted, uppercase key values (e.g. <code>GH_TOKEN</code>).</p>
+<p>Optionally, alter the default values for configuration by setting them via <a href="https://docs.docker.com/engine/reference/commandline/run/#set-environment-variables--e---env---env-file">environment variables</a>. See <a href="server-secrets.md">server-secrets.md</a> and <a href="/config/custom-environment-variables.yml">config/custom-environment-variables.yml</a> for possible values. In <a href="/config/custom-environment-variables.yml">config/custom-environment-variables.yml</a>, environment variable names are specified as the quoted, uppercase key values (e.g. <code>GH_TOKEN</code>).</p>
 <p>Then run the container, and be sure to specify the same mapped port as the one Shields is listening on :</p>
 <pre class="prettyprint source lang-console"><code>$ docker run --rm -p 8080:8080 --env PORT=8080 --name shields shieldsio/shields:next
 
@@ -105,37 +102,26 @@ Configuration:
 ...
 0916211515 Server is starting up: http://0.0.0.0:8080/
 </code></pre>
-<p>Assuming Docker is running locally, you should be able to get to the
-application at http://localhost:8080/.</p>
-<p>If you run Docker in a virtual machine (such as boot2docker or Docker Machine)
-then you will need to replace <code>localhost</code> with the IP address of that virtual
-machine.</p>
+<p>Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/.</p>
+<p>If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace <code>localhost</code> with the IP address of that virtual machine.</p>
 <h2>Raster server</h2>
-<p>If you want to host PNG badges, you can also self-host a <a href="https://github.com/badges/squint">raster server</a>
-which points to your badge server. It's a docker container. We host it on
-Fly.io but should be possible to host on a wide variety of platforms.</p>
+<p>If you want to host PNG badges, you can also self-host a <a href="https://github.com/badges/squint">raster server</a> which points to your badge server. It's a docker container. We host it on Fly.io but should be possible to host on a wide variety of platforms.</p>
 <ul>
-<li>In your raster instance, set <code>BASE_URL</code> to your Shields instance, e.g.
-<code>https://shields.example.co</code>.</li>
-<li>Optionally, in your Shields, instance, configure <code>RASTER_URL</code> to the base
-URL, e.g. <code>https://raster.example.co</code>. This will send 301 redirects
-for the legacy raster URLs instead of 404's.</li>
+<li>In your raster instance, set <code>BASE_URL</code> to your Shields instance, e.g. <code>https://shields.example.co</code>.</li>
+<li>Optionally, in your Shields, instance, configure <code>RASTER_URL</code> to the base URL, e.g. <code>https://raster.example.co</code>. This will send 301 redirects for the legacy raster URLs instead of 404's.</li>
 </ul>
-<p>If anyone has set this up, more documentation on how to do this would be
-welcome!</p>
+<p>If anyone has set this up, more documentation on how to do this would be welcome!</p>
 <h2>Server secrets</h2>
 <p>You can add your own server secrets in environment variables or <code>config/local.yml</code>.</p>
 <p>These are documented in <a href="./server-secrets.md">server-secrets.md</a></p>
 <h2>Separate frontend hosting</h2>
-<p>If you want to host the frontend on a separate server, such as cloud storage
-or a CDN, you can do that.</p>
+<p>If you want to host the frontend on a separate server, such as cloud storage or a CDN, you can do that.</p>
 <p>First, build the frontend, pointing <code>BASE_URL</code> to your server.</p>
 <pre class="prettyprint source lang-sh"><code>BASE_URL=https://your-server.example.com npm run build
 </code></pre>
 <p>Then copy the contents of the <code>public/</code> folder to your static hosting / CDN.</p>
 <p>There are also a couple settings you should configure on the server.</p>
-<p>To help out users, you can make the Shields server redirect the server root.
-Set the <code>REDIRECT_URI</code> environment variable:</p>
+<p>To help out users, you can make the Shields server redirect the server root. Set the <code>REDIRECT_URI</code> environment variable:</p>
 <pre class="prettyprint source lang-sh"><code>REDIRECT_URI=http://my-custom-shields.s3.amazonaws.com/
 </code></pre>
 <h2>Sentry</h2>
@@ -160,15 +146,12 @@ Set the <code>REDIRECT_URI</code> environment variable:</p>
 <pre class="prettyprint source lang-sh"><code>sudo node server
 </code></pre>
 <h2>Prometheus</h2>
-<p>Shields uses <a href="https://github.com/siimon/prom-client">prom-client</a> to provide <a href="https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors">default metrics</a>. These metrics are disabled by default.
-You can enable them by <code>METRICS_PROMETHEUS_ENABLED</code> and <code>METRICS_PROMETHEUS_ENDPOINT_ENABLED</code> environment variables.</p>
+<p>Shields uses <a href="https://github.com/siimon/prom-client">prom-client</a> to provide <a href="https://prometheus.io/docs/instrumenting/writing_clientlibs/#standard-and-runtime-collectors">default metrics</a>. These metrics are disabled by default. You can enable them by <code>METRICS_PROMETHEUS_ENABLED</code> and <code>METRICS_PROMETHEUS_ENDPOINT_ENABLED</code> environment variables.</p>
 <pre class="prettyprint source lang-bash"><code>METRICS_PROMETHEUS_ENABLED=true METRICS_PROMETHEUS_ENDPOINT_ENABLED=true npm start
 </code></pre>
 <p>Metrics are available at <code>/metrics</code> resource.</p>
 <h2>Cloudflare</h2>
-<p>Shields.io uses Cloudflare as a downstream CDN. If your installation does the same,
-you can configure your server to only accept requests coming from Cloudflare's IPs.
-Set <code>public.requireCloudflare: true</code>.</p>
+<p>Shields.io uses Cloudflare as a downstream CDN. If your installation does the same, you can configure your server to only accept requests coming from Cloudflare's IPs. Set <code>public.requireCloudflare: true</code>.</p>
 </article>
 
 </section>
@@ -182,7 +165,7 @@ Set <code>public.requireCloudflare: true</code>.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 17:40:37 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 28 2025 18:26:48 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
