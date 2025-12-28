@@ -8,20 +8,18 @@ export const t = new ServiceTester({
 
 t.create('old tests prefix + job url in path')
   .get(
-    '/t/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg',
+    '/t/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.json',
   )
-  .expectRedirect(
-    `/jenkins/tests.svg?jobUrl=${encodeURIComponent(
-      'https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('new tests prefix + job url in path')
   .get(
-    '/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.svg',
+    '/tests/https/jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily.json',
   )
-  .expectRedirect(
-    `/jenkins/tests.svg?jobUrl=${encodeURIComponent(
-      'https://jenkins.qa.ubuntu.com/view/Trusty/view/Smoke Testing/job/trusty-touch-flo-smoke-daily',
-    )}`,
-  )
+  .expectBadge({
+    label: 'jenkins',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

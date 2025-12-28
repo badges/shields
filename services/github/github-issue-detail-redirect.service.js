@@ -1,20 +1,15 @@
-import { redirector } from '../index.js'
-
-const variantMap = {
-  s: 'state',
-  u: 'author',
-}
+import { deprecatedService } from '../index.js'
 
 export default [
-  redirector({
+  deprecatedService({
     category: 'issue-tracking',
+    label: 'github',
     route: {
       base: 'github',
       pattern:
         ':issueKind(issues|pulls)/detail/:variant(s|u)/:user/:repo/:number([0-9]+)',
     },
-    transformPath: ({ issueKind, variant, user, repo, number }) =>
-      `/github/${issueKind}/detail/${variantMap[variant]}/${user}/${repo}/${number}`,
-    dateAdded: new Date('2019-04-04'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
 ]

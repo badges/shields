@@ -1,26 +1,20 @@
-import { redirector } from '../index.js'
-
-const commonAttrs = {
-  dateAdded: new Date('2019-09-15'),
-  category: 'build',
-}
+import { deprecatedService, redirector } from '../index.js'
 
 export default [
-  redirector({
-    ...commonAttrs,
+  deprecatedService({
     name: 'TeamCityBuildLegacyCodeBetterRedirect',
+    category: 'build',
+    label: 'teamcity',
     route: {
       base: 'teamcity/codebetter',
       pattern: ':buildId',
     },
-    transformPath: ({ buildId }) => `/teamcity/build/s/${buildId}`,
-    transformQueryParams: _params => ({
-      server: 'https://teamcity.jetbrains.com',
-    }),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
   redirector({
-    ...commonAttrs,
     name: 'TeamCityBuildRedirect',
+    category: 'build',
     route: {
       base: 'teamcity',
       pattern:
@@ -31,5 +25,6 @@ export default [
     transformQueryParams: ({ protocol, hostAndPath }) => ({
       server: `${protocol}://${hostAndPath}`,
     }),
+    dateAdded: new Date('2019-09-15'),
   }),
 ]

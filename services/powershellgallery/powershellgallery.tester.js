@@ -44,8 +44,11 @@ t.create('version (pre) (not found)')
   .expectBadge({ label: 'powershell gallery', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/ACMESharp.svg')
-  .expectRedirect('/powershellgallery/v/ACMESharp.svg?include_prereleases')
+  .get('/vpre/ACMESharp.json')
+  .expectBadge({
+    label: 'powershell gallery',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('platform (valid)').get('/p/PackageManagement.json').expectBadge({
   label: 'platform',

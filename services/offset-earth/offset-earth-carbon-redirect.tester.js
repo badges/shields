@@ -6,6 +6,7 @@ export const t = new ServiceTester({
   pathPrefix: '/offset-earth',
 })
 
-t.create('Offset Earth carbon alias')
-  .get('/carbon/ecologi.svg')
-  .expectRedirect('/ecologi/carbon/ecologi.svg')
+t.create('Offset Earth carbon alias').get('/carbon/ecologi.json').expectBadge({
+  label: 'offset-earth',
+  message: 'https://github.com/badges/shields/pull/11583',
+})

@@ -1,24 +1,15 @@
-import { redirector } from '../index.js'
-
-const vcsSNameShortFormMap = {
-  bb: 'bitbucket',
-  gh: 'github',
-  gl: 'gitlab',
-}
+import { deprecatedService } from '../index.js'
 
 export default [
-  redirector({
+  deprecatedService({
     category: 'coverage',
+    label: 'codecov',
     route: {
       base: 'codecov/c',
       pattern:
         'token/:token/:vcsName(github|gh|bitbucket|bb|gl|gitlab)/:user/:repo/:branch*',
     },
-    transformPath: ({ vcsName, user, repo, branch }) => {
-      const vcs = vcsSNameShortFormMap[vcsName] || vcsName
-      return `/codecov/c/${vcs}/${user}/${repo}${branch ? `/${branch}` : ''}`
-    },
-    transformQueryParams: ({ token }) => ({ token }),
-    dateAdded: new Date('2019-03-04'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
 ]

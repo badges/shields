@@ -5,6 +5,9 @@ export const t = new ServiceTester({
   pathPrefix: '/github',
 })
 
-t.create('Stars redirect')
-  .get('/stars/gists/a8b8c979d200ffde13cc08505f7a6436')
-  .expectRedirect('/github/gist/stars/a8b8c979d200ffde13cc08505f7a6436.svg')
+t.create('Stars deprecated')
+  .get('/stars/gists/a8b8c979d200ffde13cc08505f7a6436.json')
+  .expectBadge({
+    label: 'github',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

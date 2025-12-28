@@ -6,19 +6,22 @@ export const t = new ServiceTester({
 })
 
 t.create('Build: default branch')
-  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.svg')
-  .expectRedirect(
-    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.svg',
-  )
+  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2.json')
+  .expectBadge({
+    label: 'vso',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('Build: named branch')
-  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.svg')
-  .expectRedirect(
-    '/azure-devops/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.svg',
-  )
+  .get('/build/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/2/master.json')
+  .expectBadge({
+    label: 'vso',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
 
 t.create('Release status')
-  .get('/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1.svg')
-  .expectRedirect(
-    '/azure-devops/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1.svg',
-  )
+  .get('/release/totodem/8cf3ec0e-d0c2-4fcd-8206-ad204f254a96/1/1.json')
+  .expectBadge({
+    label: 'vso',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })
