@@ -19,8 +19,7 @@ We do not store any logs of your visits, requests, or other activities on our si
 
 ## 4. Error Reporting
 
-If a request fails, we send an error report to [Sentry](https://sentry.io/), our error-tracking service.
-These reports contain technical data about the error but do not include any personally identifiable information (PII), such as your IP address. For details on Sentry's data processing, refer to their privacy policy:
+If a request fails, we send an error report to [Sentry](https://sentry.io/), our error-tracking service. These reports contain technical data about the error but do not include any personally identifiable information (PII), such as your IP address. For details on Sentry's data processing, refer to their privacy policy:
 
 - https://sentry.io/privacy/
 

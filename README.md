@@ -22,14 +22,7 @@
             alt="Chat on Discord"></a>
 </p>
 
-This is home to [Shields.io][shields.io], a service for concise, consistent,
-and legible badges in SVG and raster format, which can easily be included in
-GitHub readmes or any other web page. The service supports dozens of
-continuous integration services, package registries, distributions, app
-stores, social networks, code coverage services, and code analysis services.
-Every month it serves over 1.6 billion images and is used by some of the
-world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue]
-and [Bootstrap][bootstrap] to name a few.
+This is home to [Shields.io][shields.io], a service for concise, consistent, and legible badges in SVG and raster format, which can easily be included in GitHub readmes or any other web page. The service supports dozens of continuous integration services, package registries, distributions, app stores, social networks, code coverage services, and code analysis services. Every month it serves over 1.6 billion images and is used by some of the world's most popular open-source projects, [VS Code][vscode], [Vue.js][vue] and [Bootstrap][bootstrap] to name a few.
 
 [vscode]: https://github.com/Microsoft/vscode
 [vue]: https://github.com/vuejs/vue
@@ -62,8 +55,7 @@ This repo hosts:
 - Chrome Web Store extension rating: ![rating](https://img.shields.io/badge/rating-★★★★☆-brightgreen)
 - Uptime Robot uptime percentage: ![uptime](https://img.shields.io/badge/uptime-100%25-brightgreen)
 
-[Make your own badges!][custom badges]
-(Quick example: `https://img.shields.io/badge/left-right-f39f37`)
+[Make your own badges!][custom badges] (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
 [custom badges]: https://img.shields.io/badges/static-badge
 
@@ -75,13 +67,11 @@ Use the button at the bottom to copy your badge url or snippet, which can then b
 
 ## Contributing
 
-Shields is a community project. We invite your participation through issues
-and pull requests! You can peruse the [contributing guidelines][contributing].
+Shields is a community project. We invite your participation through issues and pull requests! You can peruse the [contributing guidelines][contributing].
 
 When adding or changing a service [please add tests][service-tests].
 
-This project has quite a backlog of suggestions! If you're new to the project,
-maybe you'd like to open a pull request to address one of them.
+This project has quite a backlog of suggestions! If you're new to the project, maybe you'd like to open a pull request to address one of them.
 
 You can read a [tutorial on how to add a badge][tutorial].
 
@@ -104,23 +94,13 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 4. Run `npm start` to start the badge server and the frontend dev server.
 5. Open `http://localhost:3000/` to view the frontend.
 
-When server source files change, the badge server should automatically restart
-itself (using [nodemon][]). When the frontend files change, the frontend dev
-server (`docusaurus start`) should also automatically reload. However the badge
-definitions are built only before the server first starts. To regenerate those,
-either run `npm run prestart` or manually restart the server.
+When server source files change, the badge server should automatically restart itself (using [nodemon][]). When the frontend files change, the frontend dev server (`docusaurus start`) should also automatically reload. However the badge definitions are built only before the server first starts. To regenerate those, either run `npm run prestart` or manually restart the server.
 
-To debug a badge from the command line, run `npm run badge -- /npm/v/nock`.
-It also works with full URLs like
-`npm run badge -- https://img.shields.io/npm/v/nock`.
+To debug a badge from the command line, run `npm run badge -- /npm/v/nock`. It also works with full URLs like `npm run badge -- https://img.shields.io/npm/v/nock`.
 
-Use `npm run debug:server` to start server in debug mode.
-[This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
+Use `npm run debug:server` to start server in debug mode. [This recipe][nodemon debug] shows how to debug Node.js application in [VS Code][].
 
-[Snapshot tests][] ensure we don't inadvertently make changes that affect the
-SVG or JSON output. When deliberately changing the output, run
-`SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved
-snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
+[Snapshot tests][] ensure we don't inadvertently make changes that affect the SVG or JSON output. When deliberately changing the output, run `SNAPSHOT_DRY=1 npm run test:package` to preview changes to the saved snapshots, and `SNAPSHOT_UPDATE=1 npm run test:package` to update them.
 
 The server can be configured to use [Sentry][] ([configuration][sentry configuration]) and [Prometheus][] ([configuration][prometheus configuration]).
 
@@ -148,36 +128,18 @@ There is documentation about [hosting your own server][self-hosting].
 
 [![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
 
-Status badges are used widely across open-source and private software projects.
-Academics have studied the "signal" badges provide about software project
-quality. There are many existing libraries for rendering these badges, and
-alternatives to the hosted Shields badge service. [awesome-badges][] is a
-curated collection of such resources.
-[Contributions][contributing to awesome-badges] may be considered there.
-(The presence of a project in that collection should not be interpreted as an endorsement nor promotion from the Shields project)
+Status badges are used widely across open-source and private software projects. Academics have studied the "signal" badges provide about software project quality. There are many existing libraries for rendering these badges, and alternatives to the hosted Shields badge service. [awesome-badges][] is a curated collection of such resources. [Contributions][contributing to awesome-badges] may be considered there. (The presence of a project in that collection should not be interpreted as an endorsement nor promotion from the Shields project)
 
 [awesome-badges]: https://github.com/badges/awesome-badges
 [contributing to awesome-badges]: https://github.com/badges/awesome-badges/blob/main/CONTRIBUTING.md
 
 ## History
 
-b.adge.me was the original website for this service. Heroku back then had a
-thing which made it hard to use a toplevel domain with it, hence the odd
-domain. It used code developed in 2013 from a library called
-[gh-badges][old-gh-badges], both developed by [Thaddée Tyl][espadrine].
-The project merged with shields.io by making it use the b.adge.me code
-and closed b.adge.me.
+b.adge.me was the original website for this service. Heroku back then had a thing which made it hard to use a toplevel domain with it, hence the odd domain. It used code developed in 2013 from a library called [gh-badges][old-gh-badges], both developed by [Thaddée Tyl][espadrine]. The project merged with shields.io by making it use the b.adge.me code and closed b.adge.me.
 
-The original badge specification was developed in 2013 by
-[Olivier Lacan][olivierlacan]. It was inspired by the Travis CI and similar
-badges (there were a lot fewer, back then). In 2014 Thaddée Tyl redesigned
-it with help from a Travis CI employee and convinced everyone to switch to
-it. The old design is what today is called the plastic style; the new one
-is the flat style.
+The original badge specification was developed in 2013 by [Olivier Lacan][olivierlacan]. It was inspired by the Travis CI and similar badges (there were a lot fewer, back then). In 2014 Thaddée Tyl redesigned it with help from a Travis CI employee and convinced everyone to switch to it. The old design is what today is called the plastic style; the new one is the flat style.
 
-You can read more about [the project's inception][thread],
-[the motivation of the SVG badge specification][motivation], and
-[the specification itself][spec].
+You can read more about [the project's inception][thread], [the motivation of the SVG badge specification][motivation], and [the specification itself][spec].
 
 [olivierlacan]: https://github.com/olivierlacan
 [espadrine]: https://github.com/espadrine
@@ -207,8 +169,7 @@ Alumni:
 
 ## License
 
-All assets and code are under the [CC0 LICENSE](LICENSE) and in the public
-domain unless specified otherwise.
+All assets and code are under the [CC0 LICENSE](LICENSE) and in the public domain unless specified otherwise.
 
 ## Community
 
