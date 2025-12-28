@@ -46,7 +46,7 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
  * Only apply this on desktop, which has a multi-column layout.
  * 997px is Docusaurus's desktop breakpoint (--ifm-breakpoint-md).
  */
- @media (min-width: 997px) {
+@media (min-width: 997px) {
   .row > .col.col--5 {
     position: sticky;
     top: calc(var(--ifm-navbar-height) + 1rem);
