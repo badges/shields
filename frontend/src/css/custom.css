@@ -49,7 +49,7 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
  @media (min-width: 997px) {
   .row > .col.col--5 {
     position: sticky;
-    top: var(--ifm-navbar-height);
+    top: calc(var(--ifm-navbar-height) + 1rem);
     max-height: calc(100vh - var(--ifm-navbar-height));
     overflow-y: auto;
     align-self: flex-start;
