@@ -7,9 +7,10 @@ const schema = Joi.object({
     .items(
       Joi.object({
         download_count: Joi.number().integer().required(),
-      }),
+      })
+        .min(1)
+        .required(),
     )
-    .min(1)
     .required(),
 }).required()
 
