@@ -24,7 +24,7 @@ const displayDateEnum = ['created_at', 'published_at']
 const queryParamSchema = Joi.object({
   display_date: Joi.string()
     .valid(...displayDateEnum)
-    .default('created_at'),
+    .default('published_at'),
 }).required()
 
 export default class GithubReleaseDate extends GithubAuthV3Service {
