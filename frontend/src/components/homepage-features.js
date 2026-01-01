@@ -70,6 +70,21 @@ const FeatureList = [
       </>
     ),
   },
+  {
+    title: 'Spread the word',
+    description: (
+      <>
+        Increase the project's visibility by adding a star to its{' '}
+        <a
+          href="https://github.com/badges/shields"
+          rel="noreferrer"
+          target="_blank"
+        >
+          GitHub repository
+        </a>
+      </>
+    ),
+  },
 ]
 
 function Feature({ title, description }) {
