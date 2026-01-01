@@ -51,7 +51,7 @@
     "lodash.countby": "^4.6.0",
     "matcher": "^6.0.0",
     "mvncmp": "^1.0.0",
-    "node-pg-migrate": "^8.0.3",
+    "node-pg-migrate": "^8.0.4",
     "parse-link-header": "^2.0.0",
     "path-to-regexp": "^6.3.0",
     "pg": "^8.16.3",
