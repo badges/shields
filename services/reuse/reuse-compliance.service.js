@@ -42,9 +42,6 @@ export default class Reuse extends BaseJsonService {
     return await this._requestJson({
       schema: responseSchema,
       url: `https://api.reuse.software/status/${remote}`,
-      httpErrors: {
-        400: 'Not a Git repository',
-      },
     })
   }
 

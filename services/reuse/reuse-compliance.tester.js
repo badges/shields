@@ -50,22 +50,9 @@ t.create('valid repo -- checking')
   })
 
 t.create('valid repo -- unregistered')
-  .get('/github.com/username/repo.json')
-  .intercept(nock =>
-    nock('https://api.reuse.software/status')
-      .get('/github.com/username/repo')
-      .reply(200, { status: 'unregistered' }),
-  )
+  .get('/github.com/badges/shields.json')
   .expectBadge({
     label: 'reuse',
     message: 'unregistered',
     color: COLOR_MAP.unregistered,
-  })
-
-t.create('invalid repo')
-  .timeout(15000)
-  .get('/github.com/repo/invalid-repo.json')
-  .expectBadge({
-    label: 'reuse',
-    message: 'Not a Git repository',
   })
