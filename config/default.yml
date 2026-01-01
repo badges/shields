@@ -11,8 +11,6 @@ public:
       intervalSeconds: 15
   ssl:
     isSecure: false
-  cors:
-    allowedOrigin: []
   services:
     github:
       baseUri: 'https://api.github.com'
