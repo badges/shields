@@ -10,9 +10,10 @@ import {
 
 const description = `
 Displays the status of a pull request, as reported by the Commit Status API.
-Nowadays, GitHub Actions and many third party integrations report state via the
-Checks API. If this badge does not show expected values, please try out our
-corresponding Check Runs badge instead. You can read more about status checks in
+
+<b>Note:</b> Nowadays, GitHub Actions and many third party integrations report state via
+the Checks API. If this badge does not show expected values, please try out one of our
+[Check Runs badges](https://shields.io/search/?q=GitHub+check+runs) instead. You can read more about status checks in
 the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
 
 ${commonDocumentation}
