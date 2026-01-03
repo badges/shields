@@ -114,6 +114,9 @@ const publicConfigSchema = Joi.object({
   },
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
+  cors: {
+    allowedOrigin: Joi.array().items(optionalUrl),
+  },
   services: Joi.object({
     bitbucketServer: defaultService,
     drone: defaultService,
