@@ -75,6 +75,9 @@ class YouTubeBase extends BaseJsonService {
           options: {
             searchParams: { id, part: 'statistics' },
           },
+          httpErrors: {
+            400: `${this.constructor.type} not found`,
+          },
         },
       ),
     )
