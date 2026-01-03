@@ -74,6 +74,17 @@ const FeatureList = [
     title: 'Spread the word',
     description: (
       <>
+        <a
+          href="https://github.com/badges/shields"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <img
+            alt="Shields.io GitHub stars"
+            src="https://img.shields.io/github/stars/badges/shields"
+          />
+        </a>
+        <br />
         Increase the project's visibility by adding a star to its{' '}
         <a
           href="https://github.com/badges/shields"
