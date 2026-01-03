@@ -16,6 +16,8 @@ export default class PypiLicense extends PypiBase {
     },
   }
 
+  static _cacheLength = 43200
+
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })
   }

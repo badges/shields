@@ -15,6 +15,8 @@ export default class PypiWheel extends PypiBase {
     },
   }
 
+  static _cacheLength = 43200
+
   static defaultBadgeData = { label: 'wheel' }
 
   static render({ hasWheel }) {
