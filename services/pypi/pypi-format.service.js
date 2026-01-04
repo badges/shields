@@ -15,6 +15,8 @@ export default class PypiFormat extends PypiBase {
     },
   }
 
+  static _cacheLength = 43200
+
   static defaultBadgeData = { label: 'format' }
 
   static render({ hasWheel, hasEgg }) {

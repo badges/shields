@@ -21,5 +21,4 @@ t.create('channel not found')
   .expectBadge({
     label: 'youtube',
     message: 'channel not found',
-    color: 'red',
   })

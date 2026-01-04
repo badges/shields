@@ -95,8 +95,7 @@ This redirects `/website/https/example.com` to `/website?url=https://example.com
 
 ### Example 4: Handling Query Parameter Conflicts
 
-When both path-based and query-string parameters exist, conflicts can occur. By default, transformed query parameters take precedence over user-provided ones.
-Use `overrideTransformedQueryParams: true` to reverse this behavior and let user-provided query parameters win:
+When both path-based and query-string parameters exist, conflicts can occur. By default, transformed query parameters take precedence over user-provided ones. Use `overrideTransformedQueryParams: true` to reverse this behavior and let user-provided query parameters win:
 
 ```js
 import { redirector } from '../index.js'

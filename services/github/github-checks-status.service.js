@@ -9,9 +9,10 @@ import {
 
 const description = `
 Displays the status of a tag, commit, or branch, as reported by the Commit Status API.
-Nowadays, GitHub Actions and many third party integrations report state via the
-Checks API. If this badge does not show expected values, please try out our
-corresponding Check Runs badge instead. You can read more about status checks in
+
+<b>Note:</b> Nowadays, GitHub Actions and many third party integrations report state via
+the Checks API. If this badge does not show expected values, please try out our
+corresponding [Check Runs badge][check-runs-link] instead. You can read more about status checks in
 the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/collaborating-on-repositories-with-code-quality-features/about-status-checks).
 
 ${commonDocumentation}
@@ -32,7 +33,8 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
     '/github/checks-status/{user}/{repo}/{branch}': {
       get: {
         summary: 'GitHub branch status',
-        description,
+        description: `${description}
+        [check-runs-link]: https://shields.io/badges/git-hub-branch-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -43,7 +45,8 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
     '/github/checks-status/{user}/{repo}/{commit}': {
       get: {
         summary: 'GitHub commit status',
-        description,
+        description: `${description}
+        [check-runs-link]: https://shields.io/badges/git-hub-commit-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -57,7 +60,8 @@ export default class GithubChecksStatus extends GithubAuthV3Service {
     '/github/checks-status/{user}/{repo}/{tag}': {
       get: {
         summary: 'GitHub tag status',
-        description,
+        description: `${description}
+        [check-runs-link]: https://shields.io/badges/git-hub-tag-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
