@@ -12,9 +12,6 @@ public:
   ssl:
     isSecure: false
 
-  cors:
-    allowedOrigin: ['http://shields.io', 'https://shields.io']
-
   services:
     gitlab:
       authorizedOrigins: 'https://gitlab.com'
