@@ -24,5 +24,8 @@ t.create('clojars version (not found)')
   .expectBadge({ label: 'clojars', message: 'not found' })
 
 t.create('version (legacy redirect: vpre)')
-  .get('/vpre/prismic.svg')
-  .expectRedirect('/clojars/v/prismic.svg?include_prereleases')
+  .get('/vpre/prismic.json')
+  .expectBadge({
+    label: 'clojars',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

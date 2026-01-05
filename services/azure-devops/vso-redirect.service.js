@@ -1,27 +1,22 @@
-import { redirector } from '../index.js'
+import { deprecatedService } from '../index.js'
 
-export const VsoBuildRedirector = redirector({
+export const VsoBuildRedirector = deprecatedService({
   category: 'build',
+  label: 'vso',
   route: {
     base: 'vso/build',
     pattern: ':organization/:projectId/:definitionId/:branch*',
   },
-  transformPath: ({ organization, projectId, definitionId, branch }) => {
-    let path = `/azure-devops/build/${organization}/${projectId}/${definitionId}`
-    if (branch) {
-      path += `/${branch}`
-    }
-    return path
-  },
-  dateAdded: new Date('2019-02-08'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
-export const VsoReleaseRedirector = redirector({
+export const VsoReleaseRedirector = deprecatedService({
   category: 'build',
+  label: 'vso',
   route: {
     base: 'vso/release',
     pattern: ':organization/:projectId/:definitionId/:environmentId',
   },
-  transformPath: ({ organization, projectId, definitionId, environmentId }) =>
-    `/azure-devops/release/${organization}/${projectId}/${definitionId}/${environmentId}`,
-  dateAdded: new Date('2019-02-08'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
