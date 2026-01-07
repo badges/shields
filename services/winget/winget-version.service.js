@@ -184,7 +184,11 @@ export default class WingetVersion extends GithubAuthV4Service {
 
       const releaseDate = parsed?.ReleaseDate
       if (releaseDate != null) {
-        return parseDate(releaseDate).format('D MMM YYYY').toLowerCase()
+        const releaseDateString =
+          releaseDate instanceof Date
+            ? releaseDate.toISOString().slice(0, 10)
+            : String(releaseDate)
+        return parseDate(releaseDateString).format('D MMM YYYY').toLowerCase()
       }
     }
   }
