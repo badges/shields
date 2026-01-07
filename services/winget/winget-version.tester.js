@@ -13,6 +13,45 @@ t.create('gets the package version of .NET 8')
   .get('/Microsoft.DotNet.SDK.8.json')
   .expectBadge({ label: 'winget', message: isVPlusDottedVersionNClauses })
 
+t.create('optionally includes release date')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql')
+      .reply(200, {
+        data: {
+          repository: {
+            object: {
+              entries: [
+                {
+                  type: 'tree',
+                  name: '5.0.2',
+                  object: {
+                    entries: [
+                      { type: 'blob', name: 'UPX.UPX.installer.yaml' },
+                      { type: 'blob', name: 'UPX.UPX.locale.en-US.yaml' },
+                      { type: 'blob', name: 'UPX.UPX.yaml' },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      })
+      .post('/graphql')
+      .reply(200, {
+        data: {
+          repository: {
+            object: {
+              text: 'ReleaseDate: 2025-08-20\\n',
+            },
+          },
+        },
+      }),
+  )
+  .get('/UPX.UPX.json?include_release_date')
+  .expectBadge({ label: 'winget', message: 'v5.0.2 (20 aug 2025)' })
+
 // test sort based on dotted version order instead of ASCII
 t.create('gets the latest version')
   .intercept(nock =>
