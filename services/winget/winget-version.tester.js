@@ -1,17 +1,80 @@
-import { isVPlusDottedVersionNClauses } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
 // basic test
 t.create('gets the package version of WSL')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql')
+      .reply(200, {
+        data: {
+          repository: {
+            object: {
+              entries: [
+                {
+                  type: 'tree',
+                  name: '2.3.26.0',
+                  object: {
+                    entries: [
+                      {
+                        type: 'blob',
+                        name: 'Microsoft.WSL.yaml',
+                      },
+                    ],
+                  },
+                },
+                {
+                  type: 'tree',
+                  name: '2.4.11',
+                  object: {
+                    entries: [
+                      {
+                        type: 'blob',
+                        name: 'Microsoft.WSL.yaml',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      }),
+  )
   .get('/Microsoft.WSL.json')
-  .expectBadge({ label: 'winget', message: isVPlusDottedVersionNClauses })
+  .expectBadge({ label: 'winget', message: 'v2.4.11' })
 
 // test more than one dots
 t.create('gets the package version of .NET 8')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql')
+      .reply(200, {
+        data: {
+          repository: {
+            object: {
+              entries: [
+                {
+                  type: 'tree',
+                  name: '8.0.101',
+                  object: {
+                    entries: [
+                      {
+                        type: 'blob',
+                        name: 'Microsoft.DotNet.SDK.8.yaml',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      }),
+  )
   .get('/Microsoft.DotNet.SDK.8.json')
-  .expectBadge({ label: 'winget', message: isVPlusDottedVersionNClauses })
+  .expectBadge({ label: 'winget', message: 'v8.0.101' })
 
 t.create('optionally includes release date')
   .intercept(nock =>
@@ -43,7 +106,7 @@ t.create('optionally includes release date')
         data: {
           repository: {
             object: {
-              text: 'ReleaseDate: 2025-08-20\\n',
+              text: 'ReleaseDate: 2025-08-20',
             },
           },
         },
