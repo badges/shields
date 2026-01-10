@@ -99,7 +99,7 @@ function getBadgeExampleCall(serviceClass, paramType) {
  * @param {BaseService} serviceClass - The class to generate configuration for.
  * @param {string} fakeKey - The fake key to be used in the configuration.
  * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
- * @param {string} fakeauthorizedOrigins - authorizedOrigins to add to config.
+ * @param {string[]} fakeauthorizedOrigins - authorizedOrigins to add to config.
  * @param {object} authOverride Return result with overrid params.
  * @returns {object} - The configuration object.
  * @throws {TypeError} - Throws an error if the input is not a class.
@@ -170,12 +170,12 @@ function generateFakeConfig(
  * @param {object} authOverride Return result with overridden params.
  * @param {object} configOverride - Override the config.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
- * @returns {string} First auth origin found.
+ * @returns {string[]} First auth origin found.
  *
  * @example
  * // Example usage:
  * getServiceClassAuthOrigin(Obs)
- * // outputs 'https://api.opensuse.org'
+ * // outputs ['https://api.opensuse.org']
  */
 function getServiceClassAuthOrigin(serviceClass, authOverride, configOverride) {
   if (
