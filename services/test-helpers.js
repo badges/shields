@@ -276,7 +276,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     throw new TypeError('Invalid configOverride: Must be an Object.')
   }
   if (multipleRequests && typeof multipleRequests !== 'boolean') {
-    throw new TypeError('Invalid multipleRequests: Must be an Object.')
+    throw new TypeError('Invalid multipleRequests: Must be a boolean.')
   }
 
   if (!multipleRequests) {
