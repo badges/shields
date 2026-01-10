@@ -403,7 +403,7 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     ),
   ).to.not.have.property('isError')
 
-  // cleapup persistance if we have multiple requests
+  // clean up persistance if we have multiple requests
   if (multipleRequests) {
     scopeArr.forEach(scope => scope.persist(false))
     nock.restore()
