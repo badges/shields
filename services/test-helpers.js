@@ -194,7 +194,7 @@ function getServiceClassAuthOrigin(serviceClass, authOverride, configOverride) {
     const mergedConfig = _.merge(runnerConfig, configOverride)
     if (!mergedConfig.public.services[auth.serviceKey]) {
       throw new TypeError(
-        `Missing service key defenition for ${auth.serviceKey}: Use an override if applicable.`,
+        `Missing service key definition for ${auth.serviceKey}: Use an override if applicable.`,
       )
     }
     return [mergedConfig.public.services[auth.serviceKey].authorizedOrigins]
