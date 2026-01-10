@@ -5,7 +5,7 @@ const authConfigOverride = {
   public: {
     services: {
       jenkins: {
-        authorizedOrigins: ['https://jenkins.sqlalchemy.org'],
+        authorizedOrigins: ['https://ci.eclipse.org'],
       },
     },
   },
