@@ -372,7 +372,20 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
         }
         if (jwtLoginEndpoint.startsWith(authOrigin)) {
           scope
-            .post(/.*/, { username: fakeUser, password: fakeSecret })
+            .post(/.*/, body => {
+              if (typeof body === 'object') {
+                return (
+                  body.username === fakeUser && body.password === fakeSecret
+                )
+              }
+              if (typeof body === 'string') {
+                return (
+                  body.includes(`username=${encodeURIComponent(fakeUser)}`) &&
+                  body.includes(`password=${encodeURIComponent(fakeSecret)}`)
+                )
+              }
+              return false
+            })
             .reply(200, { token: jwtToken })
         } else {
           scope
