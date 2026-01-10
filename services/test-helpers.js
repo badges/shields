@@ -167,7 +167,7 @@ function generateFakeConfig(
  * Returns the first auth origin found for a provided service class.
  *
  * @param {BaseService} serviceClass The service class to find the authorized origins.
- * @param {object} authOverride Return result with overrid params.
+ * @param {object} authOverride Return result with overridden params.
  * @param {object} configOverride - Override the config.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
  * @returns {string} First auth origin found.
