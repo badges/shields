@@ -78,14 +78,11 @@ export const optionalUrl = Joi.string().uri({ scheme: ['http', 'https'] })
 export const url = optionalUrl.required()
 
 /**
- * Joi validator for a file size we are going to pass to bytes.parse
- * see https://github.com/visionmedia/bytes.js#bytesparsestringnumber-value-numbernull
+ * Joi validator for a file size in bytes (direct numeric value)
  *
  * @type {Joi}
  */
-export const fileSize = Joi.string()
-  .regex(/^[0-9]+(b|kb|mb|gb|tb)$/i)
-  .required()
+export const fileSizeBytes = Joi.number().integer().positive().required()
 
 /**
  * Joi validator that checks if a value is a relative-only URI

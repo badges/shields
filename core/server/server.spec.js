@@ -207,21 +207,21 @@ describe('The server', function () {
           throwHttpErrors: false,
         },
       )
-      expect(statusCode).to.equal(404)
+      expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('404')
         .and.to.include('badge not found')
     })
 
-    it('should return the 404 badge page for rando links', async function () {
+    it('should return the 404 badge page for random links', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}this/is/most/definitely/not/a/badge.js`,
         {
           throwHttpErrors: false,
         },
       )
-      expect(statusCode).to.equal(404)
+      expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
         .and.to.include('404')
@@ -238,6 +238,17 @@ describe('The server', function () {
       expect(headers.location).to.equal('http://frontend.example.test')
     })
 
+    it('should return the 404 page with empty response for favicon.icon', async function () {
+      const { statusCode, body, headers } = await got(`${baseUrl}favicon.ico`, {
+        throwHttpErrors: false,
+      })
+      expect(statusCode).to.equal(404)
+      expect(body).to.equal('')
+      expect(headers['cache-control']).to.equal(
+        'public, max-age=31536000, s-maxage=31536000, immutable',
+      )
+    })
+
     it('should return the 410 badge for obsolete formats', async function () {
       const { statusCode, body } = await got(
         `${baseUrl}badge/foo-bar-blue.jpg`,
@@ -245,7 +256,6 @@ describe('The server', function () {
           throwHttpErrors: false,
         },
       )
-      // TODO It would be nice if this were 404 or 410.
       expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)

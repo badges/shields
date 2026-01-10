@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'Review Apps'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: superfly/flyctl-actions/setup-flyctl@master
@@ -32,6 +32,7 @@ jobs:
           # credentials to set when we create the review app
           SECRETS: |
             GH_TOKEN=${{ secrets.GH_PAT }}
+            CURSEFORGE_API_KEY=${{ secrets.SERVICETESTS_CURSEFORGE_API_KEY }}
             LIBRARIESIO_TOKENS=${{ secrets.SERVICETESTS_LIBRARIESIO_TOKENS }}
             OBS_USER=${{ secrets.SERVICETESTS_OBS_USER }}
             OBS_PASS=${{ secrets.SERVICETESTS_OBS_PASS }}
@@ -42,4 +43,5 @@ jobs:
             SL_INSIGHT_USER_UUID=${{ secrets.SERVICETESTS_SL_INSIGHT_API_TOKEN }}
             TWITCH_CLIENT_ID=${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}
             TWITCH_CLIENT_SECRET=${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}
+            WEBLATE_API_KEY=${{ secrets.SERVICETESTS_WEBLATE_API_KEY }}
             YOUTUBE_API_KEY=${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}

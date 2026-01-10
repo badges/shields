@@ -1,16 +1,15 @@
-import bytes from 'bytes'
 import configModule from 'config'
 import Joi from 'joi'
-import { fileSize } from '../../services/validators.js'
+import { fileSizeBytes } from '../../services/validators.js'
 
 const schema = Joi.object({
-  fetchLimit: fileSize,
+  fetchLimitBytes: fileSizeBytes,
   userAgentBase: Joi.string().required(),
 }).required()
 const config = configModule.util.toObject()
 const publicConfig = Joi.attempt(config.public, schema, { allowUnknown: true })
 
-const fetchLimitBytes = bytes(publicConfig.fetchLimit)
+const fetchLimitBytes = publicConfig.fetchLimitBytes
 
 function getUserAgent(userAgentBase = publicConfig.userAgentBase) {
   let version = 'dev'

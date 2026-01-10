@@ -73,6 +73,8 @@ export default class NpmDownloads extends BaseJsonService {
     },
   }
 
+  static _cacheLength = 7200
+
   // For testing.
   static _intervalMap = intervalMap
 

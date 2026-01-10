@@ -1,4 +1,4 @@
-import queryString from 'query-string'
+import qs from 'qs'
 import { createServiceTester } from '../tester.js'
 import { exampleXml } from './dynamic-response-fixtures.js'
 export const t = await createServiceTester()
@@ -25,7 +25,7 @@ t.create('No query specified')
 
 t.create('XML from url')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: "//book[@id='bk102']/title",
     })}`,
@@ -39,7 +39,7 @@ t.create('XML from url')
 
 t.create('uri query parameter alias')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       uri: exampleUrl,
       query: "//book[@id='bk102']/title",
     })}`,
@@ -53,7 +53,7 @@ t.create('uri query parameter alias')
 
 t.create('attribute')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//book[2]/@id',
     })}`,
@@ -66,7 +66,7 @@ t.create('attribute')
 
 t.create('multiple results')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//book/title',
     })}`,
@@ -81,7 +81,7 @@ t.create('multiple results')
 
 t.create('prefix and suffix')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: "//book[@id='bk102']/title",
       prefix: 'title is ',
@@ -95,7 +95,7 @@ t.create('prefix and suffix')
 
 t.create('query doesnt exist')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//does/not/exist',
     })}`,
@@ -109,7 +109,7 @@ t.create('query doesnt exist')
 
 t.create('query doesnt exist (attribute)')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//does/not/@exist',
     })}`,
@@ -123,7 +123,7 @@ t.create('query doesnt exist (attribute)')
 
 t.create('Cannot resolve QName')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//a:si',
     })}`,
@@ -137,7 +137,7 @@ t.create('Cannot resolve QName')
 
 t.create('XPath parse error')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//a[contains(@href, "foo"]',
     })}`,
@@ -161,7 +161,7 @@ t.create('XML from url | invalid url')
 
 t.create('request should set Accept header')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: "//book[@id='bk102']/title",
     })}`,
@@ -177,7 +177,7 @@ t.create('request should set Accept header')
 
 t.create('query with node function')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: '//book[1]/title/text()',
     })}`,
@@ -191,7 +191,7 @@ t.create('query with node function')
 
 t.create('query with type conversion to string')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: 'string(//book[1]/title)',
     })}`,
@@ -205,7 +205,7 @@ t.create('query with type conversion to string')
 
 t.create('query with type conversion to number')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: exampleUrl,
       query: 'number(//book[1]/price)',
     })}`,
@@ -219,7 +219,7 @@ t.create('query with type conversion to number')
 
 t.create('query HTML document')
   .get(
-    `.json?${queryString.stringify({
+    `.json?${qs.stringify({
       url: 'https://httpbin.org/html',
       query: '//h1[1]',
     })}`,

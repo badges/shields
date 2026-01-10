@@ -1,10 +1,10 @@
 import Joi from 'joi'
-import queryString from 'query-string'
+import qs from 'qs'
 import { nonNegativeInteger } from '../validators.js'
 import {
   BaseXmlService,
   NotFound,
-  redirector,
+  deprecatedService,
   pathParams,
   pathParam,
   queryParam,
@@ -43,7 +43,7 @@ async function fetch(
   { baseUrl, packageName, includePrereleases = false },
 ) {
   const url = `${baseUrl}/Packages()`
-  const searchParams = queryString.stringify(
+  const searchParams = qs.stringify(
     {
       $filter: createFilter({ packageName, includePrereleases }),
     },
@@ -135,17 +135,15 @@ function createServiceFamily({
     }
   }
 
-  const NugetVersionRedirector = redirector({
+  const NugetVersionRedirector = deprecatedService({
     category: 'version',
+    label: defaultLabel,
     route: {
       base: `${serviceBaseUrl}/vpre`,
       pattern: ':packageName',
     },
-    transformPath: ({ packageName }) => `/${serviceBaseUrl}/v/${packageName}`,
-    transformQueryParams: params => ({
-      include_prereleases: null,
-    }),
-    dateAdded: new Date('2019-12-15'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   })
 
   class NugetDownloadService extends BaseXmlService {

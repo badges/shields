@@ -1,0 +1,19 @@
+name: Test Documentation
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+
+      - name: Build
+        run: npm run build-docs

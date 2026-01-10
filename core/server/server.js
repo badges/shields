@@ -17,7 +17,7 @@ import { handleRequest } from '../base-service/legacy-request-handler.js'
 import { clearResourceCache } from '../base-service/resource-cache.js'
 import { rasterRedirectUrl } from '../badge-urls/make-badge-url.js'
 import {
-  fileSize,
+  fileSizeBytes,
   nonNegativeInteger,
   optionalUrl,
   url as requiredUrl,
@@ -115,10 +115,7 @@ const publicConfigSchema = Joi.object({
   redirectUrl: optionalUrl,
   rasterUrl: optionalUrl,
   cors: {
-    // This doesn't actually do anything
-    // TODO: maybe remove in future?
-    // https://github.com/badges/shields/pull/8311#discussion_r945337530
-    allowedOrigin: Joi.array().items(optionalUrl).required(),
+    allowedOrigin: Joi.array().items(optionalUrl),
   },
   services: Joi.object({
     bitbucket: defaultService,
@@ -153,7 +150,8 @@ const publicConfigSchema = Joi.object({
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
-  fetchLimit: fileSize,
+  fetchLimit: Joi.string(),
+  fetchLimitBytes: fileSizeBytes,
   userAgentBase: Joi.string().required(),
   requestTimeoutSeconds: nonNegativeInteger,
   requestTimeoutMaxAgeSeconds: nonNegativeInteger,
@@ -165,6 +163,7 @@ const publicConfigSchema = Joi.object({
       'public',
     ),
   ),
+  allowUnsecuredEndpointRequests: Joi.boolean().required(),
   requireCloudflare: Joi.boolean().required(),
 }).required()
 
@@ -194,7 +193,6 @@ const privateConfigSchema = Joi.object({
   npm_token: Joi.string(),
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
-  redis_url: Joi.string().uri({ scheme: ['redis', 'rediss'] }),
   opencollective_token: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
@@ -270,6 +268,7 @@ class Server {
 
     this.githubConstellation = new GithubConstellation({
       service: publicConfig.services.github,
+      metricsIntervalSeconds: publicConfig.metrics.influx.intervalSeconds,
       private: privateConfig,
     })
 
@@ -360,6 +359,15 @@ class Server {
       public: { rasterUrl },
     } = config
 
+    camp.route(/^\/favicon\.ico$/, (query, match, end, request) => {
+      request.res.statusCode = 404
+      request.res.setHeader(
+        'Cache-Control',
+        'public, max-age=31536000, s-maxage=31536000, immutable',
+      )
+      makeSend('empty', request.res, end)()
+    })
+
     camp.route(/\.(gif|jpg)$/, (query, match, end, request) => {
       const [, format] = match
       makeSend(
@@ -399,6 +407,8 @@ class Server {
     camp.notfound(/(\.svg|\.json|)$/, (query, match, end, request) => {
       const [, extension] = match
       const format = (extension || '.svg').replace(/^\./, '')
+
+      request.res.statusCode = 200
 
       makeSend(
         format,
@@ -536,11 +546,12 @@ class Server {
     }
 
     const { githubConstellation, metricInstance } = this
-    await githubConstellation.initialize(camp)
+    await githubConstellation.initialize(camp, metricInstance)
     if (metricInstance) {
-      if (this.config.public.metrics.prometheus.endpointEnabled) {
-        metricInstance.registerMetricsEndpoint(camp)
-      }
+      metricInstance.registerMetricsEndpoint(
+        camp,
+        this.config.public.metrics.prometheus.endpointEnabled,
+      )
       if (this.influxMetrics) {
         this.influxMetrics.startPushingMetrics()
       }

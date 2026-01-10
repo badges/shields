@@ -47,6 +47,9 @@ t.create('version (pre) (not found)')
   .get('/v/not-a-real-package.json?include_prereleases')
   .expectBadge({ label: 'resharper', message: 'not found' })
 
-t.create('version (legacy redirect: vpre)')
-  .get('/vpre/StyleCop.StyleCop.svg')
-  .expectRedirect('/resharper/v/StyleCop.StyleCop.svg?include_prereleases')
+t.create('version (legacy redirect: vpre - deprecated)')
+  .get('/vpre/StyleCop.StyleCop.json')
+  .expectBadge({
+    label: 'resharper',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

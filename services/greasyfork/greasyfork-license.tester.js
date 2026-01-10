@@ -1,7 +1,7 @@
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('License (valid)').get('/l/407466.json').expectBadge({
+t.create('License (valid)').get('/l/406540.json').expectBadge({
   label: 'license',
   message: 'MIT',
 })

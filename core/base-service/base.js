@@ -17,7 +17,6 @@ import {
   Inaccessible,
   ImproperlyConfigured,
   InvalidParameter,
-  Deprecated,
 } from './errors.js'
 import { fetch } from './got.js'
 import { getEnum } from './openapi.js'
@@ -31,6 +30,8 @@ import {
 import { assertValidServiceDefinition } from './service-definitions.js'
 import trace from './trace.js'
 import validate from './validate.js'
+
+/** @import { openApiSchema } from './service-definitions.js' */
 
 const defaultBadgeDataSchema = Joi.object({
   label: Joi.string(),
@@ -91,7 +92,7 @@ class BaseService {
    * Route to mount this service on
    *
    * @abstract
-   * @type {module:core/base-service/base~Route}
+   * @type {Route}
    */
   static get route() {
     throw new Error(`Route not defined for ${this.name}`)
@@ -133,7 +134,7 @@ class BaseService {
    * this._request(this.authHelper.withBasicAuth({ url, schema, options }))
    *
    * @abstract
-   * @type {module:core/base-service/base~Auth}
+   * @type {Auth}
    */
   static auth = undefined
 
@@ -143,7 +144,8 @@ class BaseService {
    *
    * @abstract
    * @see https://swagger.io/specification/#paths-object
-   * @type {module:core/base-service/service-definitions~openApiSchema}
+   * @see {@link module:core/base-service/service-definitions~openApiSchema}
+   * @type {openApiSchema}
    */
   static openApi = {}
 
@@ -171,7 +173,7 @@ class BaseService {
    * These defaults are used if the value is neither included in the service data
    * from the handler nor overridden by the user via query parameters.
    *
-   * @type {module:core/base-service/base~DefaultBadgeData}
+   * @type {DefaultBadgeData}
    */
   static defaultBadgeData = {}
 
@@ -320,7 +322,7 @@ class BaseService {
    * @param {object} namedParams Params parsed from route pattern
    *    defined in this.route.pattern or this.route.capture
    * @param {object} queryParams Params parsed from the query string
-   * @returns {module:core/base-service/base~Badge}
+   * @returns {Badge}
    *    badge Object validated against serviceDataSchema
    */
   async handle(namedParams, queryParams) {
@@ -344,8 +346,7 @@ class BaseService {
     } else if (
       error instanceof ImproperlyConfigured ||
       error instanceof InvalidResponse ||
-      error instanceof Inaccessible ||
-      error instanceof Deprecated
+      error instanceof Inaccessible
     ) {
       trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
       const serviceData = {

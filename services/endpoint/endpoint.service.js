@@ -1,5 +1,6 @@
 import { URL } from 'url'
 import Joi from 'joi'
+import configModule from 'config'
 import { httpErrors } from '../dynamic-common.js'
 import { url } from '../validators.js'
 import { fetchEndpointData } from '../endpoint-common.js'
@@ -170,6 +171,13 @@ export default class Endpoint extends BaseJsonService {
     }
   }
 
+  constructor(...args) {
+    super(...args)
+    const config = configModule.util.toObject()
+    this._allowUnsecuredEndpointRequests =
+      config?.public?.allowUnsecuredEndpointRequests || false
+  }
+
   async handle(namedParams, { url }) {
     let protocol, hostname
     try {
@@ -179,7 +187,7 @@ export default class Endpoint extends BaseJsonService {
     } catch (e) {
       throw new InvalidParameter({ prettyMessage: 'invalid url' })
     }
-    if (protocol !== 'https:') {
+    if (protocol !== 'https:' && !this._allowUnsecuredEndpointRequests) {
       throw new InvalidParameter({ prettyMessage: 'please use https' })
     }
     if (blockedDomains.some(domain => hostname.endsWith(domain))) {

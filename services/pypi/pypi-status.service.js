@@ -15,6 +15,8 @@ export default class PypiStatus extends PypiBase {
     },
   }
 
+  static _cacheLength = 43200
+
   static defaultBadgeData = { label: 'status' }
 
   static render({ status = '' }) {

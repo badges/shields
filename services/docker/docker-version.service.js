@@ -97,6 +97,8 @@ export default class DockerVersion extends BaseJsonService {
     },
   }
 
+  static _cacheLength = 900
+
   static defaultBadgeData = { label: 'version', color: 'blue' }
 
   static render({ version }) {

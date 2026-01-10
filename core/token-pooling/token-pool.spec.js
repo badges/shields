@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
-import times from 'lodash.times'
 import { Token, TokenPool } from './token-pool.js'
+
+const times = (n, fn) => [...Array(n)].map(() => fn())
 
 function expectPoolToBeExhausted(pool) {
   expect(() => {
@@ -120,6 +121,55 @@ describe('The token pool', function () {
     it('next() should return the expected error', function () {
       const tokenPool = new TokenPool()
       expect(() => tokenPool.next()).to.throw('Token pool is exhausted')
+    })
+  })
+
+  context('serializeDebugInfo()', function () {
+    let clock
+    beforeEach(function () {
+      clock = sinon.useFakeTimers({ now: 1544307744484 })
+    })
+    afterEach(function () {
+      clock.restore()
+    })
+
+    it('should return sanitized debug info', function () {
+      const debugInfo = tokenPool.serializeDebugInfo()
+
+      expect(debugInfo.utcEpochSeconds).to.equal(1544307744)
+      expect(debugInfo.totalUsesRemaining).to.equal(ids.length * batchSize)
+      expect(debugInfo.allTokenDebugInfo).to.have.lengthOf(ids.length)
+      expect(debugInfo.sanitized).to.equal(true)
+      debugInfo.allTokenDebugInfo.forEach(tokenInfo => {
+        expect(tokenInfo.id).to.be.a('string')
+        expect(tokenInfo.id).to.have.lengthOf(64) // SHA-256 hex is 64 chars
+        expect(tokenInfo.data).to.equal('[redacted]')
+        expect(tokenInfo.usesRemaining).to.equal(batchSize)
+        expect(tokenInfo.nextReset).to.equal(Token.nextResetNever)
+        expect(tokenInfo.isValid).to.equal(true)
+        expect(tokenInfo.isFrozen).to.equal(false)
+      })
+    })
+
+    it('should return unsanitized debug info', function () {
+      const debugInfo = tokenPool.serializeDebugInfo({ sanitize: false })
+
+      expect(debugInfo.sanitized).to.equal(false)
+      debugInfo.allTokenDebugInfo.forEach((tokenInfo, index) => {
+        expect(tokenInfo.id).to.equal(ids[index])
+      })
+    })
+
+    it('should exclude invalidated tokens', function () {
+      const token = tokenPool.next()
+      token.invalidate()
+
+      const debugInfo = tokenPool.serializeDebugInfo()
+
+      expect(debugInfo.allTokenDebugInfo).to.have.lengthOf(ids.length - 1)
+      expect(debugInfo.totalUsesRemaining).to.equal(
+        (ids.length - 1) * batchSize,
+      )
     })
   })
 })

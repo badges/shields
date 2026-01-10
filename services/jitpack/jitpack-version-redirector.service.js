@@ -1,16 +1,16 @@
-import { redirector } from '../index.js'
+import { deprecatedService, redirector } from '../index.js'
 
 export default [
-  redirector({
+  deprecatedService({
     category: 'version',
+    label: 'jitpack',
     name: 'JitpackVersionGitHubRedirect',
     route: {
       base: 'jitpack/v',
       pattern: ':user/:repo',
     },
-    transformPath: ({ user, repo }) =>
-      `/jitpack/version/com.github.${user}/${repo}`,
-    dateAdded: new Date('2022-08-21'),
+    dateAdded: new Date('2025-12-20'),
+    issueUrl: 'https://github.com/badges/shields/pull/11583',
   }),
   redirector({
     category: 'version',

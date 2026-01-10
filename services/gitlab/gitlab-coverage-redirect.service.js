@@ -1,13 +1,12 @@
-import { redirector } from '../index.js'
+import { deprecatedService } from '../index.js'
 
-export default redirector({
+export default deprecatedService({
   category: 'coverage',
+  label: 'gitlab',
   route: {
     base: 'gitlab/coverage',
     pattern: ':user/:repo/:branch',
   },
-  transformPath: ({ user, repo }) =>
-    `/gitlab/pipeline-coverage/${user}/${repo}`,
-  transformQueryParams: ({ branch }) => ({ branch }),
-  dateAdded: new Date('2022-09-25'),
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 })

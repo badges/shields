@@ -24,7 +24,7 @@ jobs:
         run: echo "::set-output name=date::$(date --rfc-3339=date)"
 
       - name: Checkout branch "master"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: 'master'
 

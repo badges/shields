@@ -1,8 +1,6 @@
 # badge-maker
 
-[![npm version](https://img.shields.io/npm/v/badge-maker.svg)](https://npmjs.org/package/badge-maker)
-[![npm license](https://img.shields.io/npm/l/badge-maker.svg)](https://npmjs.org/package/badge-maker)
-[![npm type definitions](https://img.shields.io/npm/types/badge-maker)](https://npmjs.org/package/badge-maker)
+[![npm version](https://img.shields.io/npm/v/badge-maker.svg)](https://npmjs.org/package/badge-maker) [![npm license](https://img.shields.io/npm/l/badge-maker.svg)](https://npmjs.org/package/badge-maker) [![npm type definitions](https://img.shields.io/npm/types/badge-maker)](https://npmjs.org/package/badge-maker)
 
 ## Installation
 
@@ -44,8 +42,7 @@ try {
 
 ### Node version support
 
-The latest version of badge-maker supports all currently maintained Node
-versions. See the [Node Release Schedule][].
+The latest version of badge-maker supports all currently maintained Node versions. See the [Node Release Schedule][].
 
 [node release schedule]: https://github.com/nodejs/Release#release-schedule
 
@@ -133,9 +130,4 @@ There are three ways to specify `color` and `labelColor`:
 
 ## Raster Formats
 
-Conversion to raster formats is no longer directly supported. In javascript
-code, SVG badges can be converted to raster formats using a library like
-[gm](https://www.npmjs.com/package/gm). On the console, the output of `badge`
-can be piped to a utility like
-[imagemagick](https://imagemagick.org/script/command-line-processing.php)
-e.g: `badge build passed :green | magick svg:- gif:-`.
+Conversion to raster formats is no longer directly supported. In javascript code, SVG badges can be converted to raster formats using a library like [gm](https://www.npmjs.com/package/gm). On the console, the output of `badge` can be piped to a utility like [imagemagick](https://imagemagick.org/script/command-line-processing.php) e.g: `badge build passed :green | magick svg:- gif:-`.

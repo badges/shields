@@ -4,6 +4,10 @@ inputs:
   github-token:
     description: 'The GITHUB_TOKEN secret'
     required: true
+  curseforge-api-key:
+    description: 'The SERVICETESTS_CURSEFORGE_API_KEY secret'
+    required: false
+    default: ''
   librariesio-tokens:
     description: 'The SERVICETESTS_LIBRARIESIO_TOKENS secret'
     required: false
@@ -36,6 +40,10 @@ inputs:
     description: 'The SERVICETESTS_TWITCH_CLIENT_SECRET secret'
     required: false
     default: ''
+  weblate-api-key:
+    description: 'The SERVICETESTS_WEBLATE_API_KEY secret'
+    required: false
+    default: ''
   youtube-api-key:
     description: 'The SERVICETESTS_YOUTUBE_API_KEY secret'
     required: false
@@ -63,6 +71,7 @@ runs:
       env:
         RETRY_COUNT: 3
         GH_TOKEN: '${{ inputs.github-token }}'
+        CURSEFORGE_API_KEY: '${{ inputs.curseforge-api-key }}'
         LIBRARIESIO_TOKENS: '${{ inputs.librariesio-tokens }}'
         OBS_USER: '${{ inputs.obs-user }}'
         OBS_PASS: '${{ inputs.obs-pass }}'
@@ -73,6 +82,7 @@ runs:
         SL_INSIGHT_API_TOKEN: '${{ inputs.sl-insight-api-token }}'
         TWITCH_CLIENT_ID: '${{ inputs.twitch-client-id }}'
         TWITCH_CLIENT_SECRET: '${{ inputs.twitch-client-secret }}'
+        WEBLATE_API_KEY: '${{ inputs.weblate-api-key }}'
         YOUTUBE_API_KEY: '${{ inputs.youtube-api-key }}'
 
     - name: Write Markdown Summary

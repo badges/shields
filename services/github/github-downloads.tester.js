@@ -178,6 +178,10 @@ t.create('downloads for specific asset from latest release')
     ),
   })
 
+t.create('downloads for specific asset from latest release without asset name')
+  .get('/downloads/atom/atom/latest/atom-amd64.deb.json?displayAssetName=false')
+  .expectBadge({ label: 'downloads@latest', message: isMetric })
+
 t.create('downloads-pre for specific asset from latest release')
   .get('/downloads-pre/atom/atom/latest/atom-amd64.deb.json')
   .expectBadge({
@@ -186,6 +190,14 @@ t.create('downloads-pre for specific asset from latest release')
       /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[atom-amd64\.deb\]$/,
     ),
   })
+
+t.create(
+  'downloads-pre for specific asset from latest release without asset name',
+)
+  .get(
+    '/downloads-pre/atom/atom/latest/atom-amd64.deb.json?displayAssetName=false',
+  )
+  .expectBadge({ label: 'downloads@latest', message: isMetric })
 
 t.create('downloads for release with slash')
   .get('/downloads/NHellFire/dban/stable/v2.2.8/total.json')
@@ -199,6 +211,12 @@ t.create('downloads for specific asset with slash')
       /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) \[dban-2\.2\.8_i586\.iso\]$/,
     ),
   })
+
+t.create('downloads for specific asset with slash without asset name')
+  .get(
+    '/downloads/NHellFire/dban/stable/v2.2.8/dban-2.2.8_i586.iso.json?displayAssetName=false',
+  )
+  .expectBadge({ label: 'downloads@stable/v2.2.8', message: isMetric })
 
 t.create('downloads for unknown release')
   .get('/downloads/atom/atom/does-not-exist/total.json')

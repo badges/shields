@@ -23,7 +23,7 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
-html[data-theme="dark"] .docusaurus-highlight-code-line {
+html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -39,4 +39,19 @@ html[data-theme="dark"] .docusaurus-highlight-code-line {
 
 .align-bottom {
   margin-top: auto;
+}
+
+/**
+ * Make the badge builder sticky when you scroll down the page.
+ * Only apply this on desktop, which has a multi-column layout.
+ * 997px is Docusaurus's desktop breakpoint (--ifm-breakpoint-md).
+ */
+@media (min-width: 997px) {
+  .row > .col.col--5 {
+    position: sticky;
+    top: calc(var(--ifm-navbar-height) + 1rem);
+    max-height: calc(100vh - var(--ifm-navbar-height));
+    overflow-y: auto;
+    align-self: flex-start;
+  }
 }

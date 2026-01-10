@@ -10,10 +10,10 @@
 //   echo "service1\nservice2\nservice3" | npm run test:services -- --stdin
 //
 // Run tests but skip tests which intercept requests:
-//   SKIP_INTERCEPTED=TRUE npm run test:services --
+//   SKIP_INTERCEPTED=true npm run test:services --
 //
 // Run tests on a given instance:
-//   SKIP_INTERCEPTED=TRUE TESTED_SERVER_URL=https://test.shields.io npm run test:services --
+//   SKIP_INTERCEPTED=true TESTED_SERVER_URL=https://test.shields.io npm run test:services --
 //
 // Run tests with given number of retries and backoff (in milliseconds):
 //   RETRY_COUNT=3 RETRY_BACKOFF=100 npm run test:services --
@@ -54,9 +54,8 @@
 //    Relying on npm scripts is safer. Using "pre" makes it impossible to run
 //    the second step without the first.
 
-import minimist from 'minimist'
-import envFlag from 'node-env-flag'
-import readAllStdinSync from 'read-all-stdin-sync'
+import fs from 'fs'
+import { parseArgs } from 'util'
 import { createTestServer } from '../server/in-process-server-test-helpers.js'
 import Runner from './runner.js'
 
@@ -66,14 +65,16 @@ const retry = {}
 retry.count = parseInt(process.env.RETRY_COUNT) || 0
 retry.backoff = parseInt(process.env.RETRY_BACKOFF) || 0
 
-const args = minimist(process.argv.slice(3))
-const stdinOption = args.stdin
-const onlyOption = args.only
+const { stdin: stdinOption, only: onlyOption } = parseArgs({
+  args: process.argv.slice(3),
+  options: { stdin: { type: 'boolean' }, only: { type: 'string' } },
+  strict: false,
+}).values
 let onlyServices
 if (stdinOption && onlyOption) {
   console.error('Do not use --only with --stdin')
 } else if (stdinOption) {
-  const allStdin = readAllStdinSync().trim()
+  const allStdin = fs.readFileSync(0, 'utf-8').trim()
   onlyServices = allStdin ? allStdin.split('\n') : []
 } else if (onlyOption) {
   onlyServices = onlyOption.split(',')
@@ -102,7 +103,7 @@ if (process.env.TESTED_SERVER_URL) {
   })
 }
 
-const skipIntercepted = envFlag(process.env.SKIP_INTERCEPTED, false)
+const skipIntercepted = process.env.SKIP_INTERCEPTED === 'true'
 const runner = new Runner({ baseUrl, skipIntercepted, retry })
 await runner.prepare()
 

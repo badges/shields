@@ -14,6 +14,9 @@ t.create('Weekly Downloads (not found)')
   .get('/dw/not-a-real-plugin.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
 
-t.create('/d URL should redirect to /dw')
-  .get('/d/dustman.svg')
-  .expectRedirect('/amo/dw/dustman.svg')
+t.create('/d URL should return deprecated badge')
+  .get('/d/dustman.json')
+  .expectBadge({
+    label: 'mozilla-add-on',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

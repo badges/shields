@@ -1,7 +1,9 @@
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric, starRating } from '../text-formatters.js'
 import { NotFound, pathParams } from '../index.js'
-import BaseChromeWebStoreService from './chrome-web-store-base.js'
+import BaseChromeWebStoreService, {
+  description,
+} from './chrome-web-store-base.js'
 
 class BaseChromeWebStoreRating extends BaseChromeWebStoreService {
   static category = 'rating'
@@ -19,6 +21,7 @@ class ChromeWebStoreRating extends BaseChromeWebStoreRating {
     '/chrome-web-store/rating/{storeId}': {
       get: {
         summary: 'Chrome Web Store Rating',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',
@@ -55,6 +58,7 @@ class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
     '/chrome-web-store/rating-count/{storeId}': {
       get: {
         summary: 'Chrome Web Store Rating Count',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',
@@ -93,6 +97,7 @@ class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
     '/chrome-web-store/stars/{storeId}': {
       get: {
         summary: 'Chrome Web Store Stars',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import byteSize from 'byte-size'
 import { BaseJsonService, pathParam, queryParam } from '../index.js'
 import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
@@ -6,11 +7,14 @@ import { nonNegativeInteger } from '../validators.js'
 const schema = Joi.object({
   size: Joi.object({
     rawCompressedSize: nonNegativeInteger,
+    rawUncompressedSize: nonNegativeInteger,
   }).required(),
 }).required()
 
 const queryParamSchema = Joi.object({
   exports: Joi.string(),
+  externals: Joi.string(),
+  format: Joi.string().valid('min', 'minzip', 'both'),
 }).required()
 
 const esbuild =
@@ -49,6 +53,15 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'isVal,val',
           }),
+          queryParam({
+            name: 'externals',
+            example: 'lodash,axios',
+          }),
+          queryParam({
+            name: 'format',
+            schema: { type: 'string', enum: ['min', 'minzip', 'both'] },
+            example: 'minzip',
+          }),
         ],
       },
     },
@@ -71,6 +84,15 @@ export default class BundlejsPackage extends BaseJsonService {
             name: 'exports',
             example: 'randEmail,randFullName',
           }),
+          queryParam({
+            name: 'externals',
+            example: 'lodash,axios',
+          }),
+          queryParam({
+            name: 'format',
+            schema: { type: 'string', enum: ['min', 'minzip', 'both'] },
+            example: 'minzip',
+          }),
         ],
       },
     },
@@ -78,12 +100,17 @@ export default class BundlejsPackage extends BaseJsonService {
 
   static defaultBadgeData = { label: 'bundlejs', color: 'informational' }
 
-  async fetch({ scope, packageName, exports }) {
+  async fetch({ scope, packageName, exports, externals }) {
     const searchParams = {
       q: `${scope ? `${scope}/` : ''}${packageName}`,
     }
     if (exports) {
       searchParams.treeshake = `[{${exports}}]`
+    }
+    if (externals) {
+      searchParams.config = JSON.stringify({
+        esbuild: { external: externals.split(',') },
+      })
     }
     return this._requestJson({
       schema,
@@ -103,9 +130,29 @@ export default class BundlejsPackage extends BaseJsonService {
     })
   }
 
-  async handle({ scope, packageName }, { exports }) {
-    const json = await this.fetch({ scope, packageName, exports })
-    const size = json.size.rawCompressedSize
-    return renderSizeBadge(size, 'metric', 'minified size (gzip)')
+  async handle({ scope, packageName }, { exports, externals, format }) {
+    const json = await this.fetch({ scope, packageName, exports, externals })
+    switch (format) {
+      case 'min':
+        return renderSizeBadge(
+          json.size.rawUncompressedSize,
+          'metric',
+          'minified size',
+        )
+      case 'both':
+        return {
+          label: 'size',
+          message: `${byteSize(json.size.rawUncompressedSize, { units: 'metric' })} (gzip: ${byteSize(json.size.rawCompressedSize, { units: 'metric' })})`,
+          color: 'blue',
+        }
+      default:
+        // by default use format === 'minzip'
+        // because that's how it used to be before the format query param was added
+        return renderSizeBadge(
+          json.size.rawCompressedSize,
+          'metric',
+          'minified size (gzip)',
+        )
+    }
   }
 }

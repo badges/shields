@@ -17,7 +17,7 @@ const aurSchema = Joi.object({
   results: Joi.array()
     .items(
       Joi.object({
-        License: Joi.array().items(Joi.string().required()).allow(null),
+        License: Joi.array().items(Joi.string()).allow(null),
         NumVotes: nonNegativeInteger,
         Popularity: Joi.number().precision(2).min(0).required(),
         Version: Joi.string().required(),
@@ -74,7 +74,7 @@ class AurLicense extends BaseAurService {
 
   transform(json) {
     const licenses = json.results[0].License
-    if (!licenses) {
+    if (!licenses || licenses.length === 0) {
       throw new NotFound({ prettyMessage: 'not specified' })
     }
 

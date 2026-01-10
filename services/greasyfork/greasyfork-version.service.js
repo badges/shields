@@ -12,7 +12,7 @@ export default class GreasyForkVersion extends BaseGreasyForkService {
         summary: 'Greasy Fork Version',
         parameters: pathParams({
           name: 'scriptId',
-          example: '407466',
+          example: '406540',
         }),
       },
     },

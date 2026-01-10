@@ -39,8 +39,8 @@ t.create('sonar host parameter with version')
   .expectRedirect(
     `/sonar/alert_status/org.ow2.petals:petals-se-ase.svg?${queryString.stringify(
       {
-        server: 'http://sonar.petalslink.com',
         sonarVersion: '4.2',
+        server: 'http://sonar.petalslink.com',
       },
     )}`,
   )

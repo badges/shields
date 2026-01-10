@@ -86,11 +86,9 @@ t.create('no longer available (previously number of layers)')
 
 ## What Happens Next?
 
-Once a service is deprecated, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows:
-![](https://img.shields.io/badge/gratipay-no%20longer%20available-inactive)
+Once a service is deprecated, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows: ![](https://img.shields.io/badge/gratipay-no%20longer%20available-inactive)
 
-Past that point, all related code will be deleted, and a not found error will be rendered instead:
-![](https://img.shields.io/badge/404-badge%20not%20found-critical)
+Past that point, all related code will be deleted, and a not found error will be rendered instead: ![](https://img.shields.io/badge/404-badge%20not%20found-critical)
 
 Here is a listing of all deleted badges that were once part of the Shields.io service:
 
@@ -145,4 +143,4 @@ Some other information that may be useful:
 - [Contributing Docs](../CONTRIBUTING.md)
 - [Badge Tutorial](./TUTORIAL.md)
 - [Service Tests Tutorial](./service-tests.md)
-- Previous Pull Requests that deprecated badges like [#2352](https://github.com/badges/shields/pull/2352) and [#2410](https://github.com/badges/shields/pull/2410)
+- Previous Pull Requests that deprecated badges like [#10371](https://github.com/badges/shields/pull/10371) and [#11075](https://github.com/badges/shields/pull/11075)

@@ -15,6 +15,8 @@ export default class PypiImplementation extends PypiBase {
     },
   }
 
+  static _cacheLength = 43200
+
   static defaultBadgeData = { label: 'implementation' }
 
   static render({ implementations }) {

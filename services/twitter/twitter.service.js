@@ -41,8 +41,8 @@ class TwitterUrl extends BaseService {
       message: '',
       style: 'social',
       link: [
-        `https://twitter.com/intent/tweet?text=Wow:&url=${page}`,
-        `https://twitter.com/search?q=${page}`,
+        `https://x.com/intent/tweet?text=Wow:&url=${page}`,
+        `https://x.com/search?q=${page}`,
       ],
     }
   }
@@ -90,9 +90,7 @@ class TwitterFollow extends BaseService {
       message: '',
       style: 'social',
       link: [
-        `https://twitter.com/intent/follow?screen_name=${encodeURIComponent(
-          user,
-        )}`,
+        `https://x.com/intent/follow?screen_name=${encodeURIComponent(user)}`,
       ],
     }
   }

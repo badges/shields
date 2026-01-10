@@ -1,17 +1,12 @@
 # Tutorial on how to add a badge for a service
 
-This tutorial should help you add a service to shields.io in form of a badge.
-You will need to learn to use JavaScript, Git and GitHub, however, this document
-will guide you through that journey if you are a beginner.
-Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
+This tutorial should help you add a service to shields.io in form of a badge. You will need to learn to use JavaScript, Git and GitHub, however, this document will guide you through that journey if you are a beginner. Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/TUTORIAL.md) while you read it.
 
 ## (1) Reading
 
 - [Contributing Guidance](../CONTRIBUTING.md)
 - [Documentation](https://contributing.shields.io/index.html) for the Shields Core API
-- You can also read previous
-  [merged pull-requests with the 'service-badge' label](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr+label%3Aservice-badge+is%3Amerged)
-  to see how other people implemented their badges.
+- You can also read previous [merged pull-requests with the 'service-badge' label](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr+label%3Aservice-badge+is%3Amerged) to see how other people implemented their badges.
 
 ## (2) Setup
 
@@ -19,25 +14,19 @@ Please [improve the tutorial](https://github.com/badges/shields/edit/master/doc/
 
 #### Git
 
-You should have [git](https://git-scm.com/) installed.
-If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/)
-and learn about the [GitHub workflow](http://try.github.io/).
+You should have [git](https://git-scm.com/) installed. If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/) and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
 
-Node 22 and NPM 10.x or 11.x is required. If you don't already have them,
-install node and npm: https://nodejs.org/en/download/
+Node 22 and NPM 10.x or 11.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
 
 1. [Fork](https://github.com/badges/shields/fork) this repository.
-2. Clone the fork
-   `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
+2. Clone the fork `git clone git@github.com:YOURGITHUBUSERNAME/shields.git`
 3. `cd shields`
-4. Install project dependencies
-   `npm ci`
-5. Run the badge server and the frontend dev server
-   `npm start`
+4. Install project dependencies `npm ci`
+5. Run the badge server and the frontend dev server `npm start`
 6. Visit the website to check the front-end is loaded: [http://localhost:3000/](http://localhost:3000/).
 
 In case you get the _"getaddrinfo ENOTFOUND localhost"_ error, visit [http://127.0.0.1:3000/](http://127.0.0.1:3000) instead or take a look at [this issue](https://github.com/angular/angular-cli/issues/2227#issuecomment-358036526).
@@ -49,63 +38,44 @@ Before you want to implement your service, you may want to [open an issue](https
 - What is the badge for?
 - Which API do you want to use?
 
-You may additionally proceed to say what you want to work on.
-This information allows other humans to help and build on your work.
+You may additionally proceed to say what you want to work on. This information allows other humans to help and build on your work.
 
 ## (4) Implementing
 
 ### (4.1) Structure and Layout
 
-Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory.
-Each service has a directory for its files:
+Service badge code is stored in the [/services](https://github.com/badges/shields/tree/master/services/) directory. Each service has a directory for its files:
 
-- In files ending with `.service.js`, you can find the code which handles
-  incoming requests and generates the badges.
-  Sometimes, code for a service can be re-used.
-  This might be the case when you add a badge for an API which is already used
-  by other badges.
+- In files ending with `.service.js`, you can find the code which handles incoming requests and generates the badges. Sometimes, code for a service can be re-used. This might be the case when you add a badge for an API which is already used by other badges.
 
   Imagine a service that lives at https://img.shields.io/example/some-param-here.
-  - For services with a single badge, the badge code will generally be stored in
-    `/services/example/example.service.js`.
-    If you add a badge for a new API, create a new directory.
+  - For services with a single badge, the badge code will generally be stored in `/services/example/example.service.js`. If you add a badge for a new API, create a new directory.
 
     Example: [Docs.rs](https://github.com/badges/shields/tree/master/services/docsrs)
 
-  - For service families with multiple badges we usually store the code for each
-    badge in its own file like this:
+  - For service families with multiple badges we usually store the code for each badge in its own file like this:
     - `/services/example/example-downloads.service.js`
     - `/services/example/example-version.service.js` etc.
 
     Example: [ruby gems](https://github.com/badges/shields/tree/master/services/gem)
 
-- In files ending with `.tester.js`, you can find the code which uses
-  the shields server to test if the badges are generated correctly.
-  There is a [chapter on Tests][write tests].
+- In files ending with `.tester.js`, you can find the code which uses the shields server to test if the badges are generated correctly. There is a [chapter on Tests][write tests].
 
 ### (4.2) Our First Badge
 
-All service badge classes inherit from [BaseService] or another class which extends it.
-Other classes implement useful behavior on top of [BaseService].
+All service badge classes inherit from [BaseService] or another class which extends it. Other classes implement useful behavior on top of [BaseService].
 
-- [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html)
-  implements methods for performing requests to a JSON API and schema validation.
-- [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html)
-  implements methods for performing requests to an XML API and schema validation.
-- [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html)
-  implements methods for performing requests to a YAML API and schema validation.
-- [BaseTomlService](https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html)
-  implements methods for performing requests to a TOML API and schema validation.
-- [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html)
-  implements methods for retrieving information from existing third-party badges.
-- [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html)
-  implements methods for performing requests to a GraphQL API and schema validation.
-- If you are contributing to a _service family_, you may define a common super
-  class for the badges or one may already exist.
+- [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html) implements methods for performing requests to a JSON API and schema validation.
+- [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html) implements methods for performing requests to an XML API and schema validation.
+- [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html) implements methods for performing requests to a YAML API and schema validation.
+- [BaseTomlService](https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html) implements methods for performing requests to a TOML API and schema validation.
+- [BaseSvgScrapingService](https://contributing.shields.io/module-core_base-service_base-svg-scraping-BaseSvgScrapingService.html) implements methods for retrieving information from existing third-party badges.
+- [BaseGraphqlService](https://contributing.shields.io/module-core_base-service_base-graphql-BaseGraphqlService.html) implements methods for performing requests to a GraphQL API and schema validation.
+- If you are contributing to a _service family_, you may define a common super class for the badges or one may already exist.
 
 [baseservice]: https://contributing.shields.io/module-core_base-service_base.html
 
-As a first step we will look at the code for an example which generates a badge without contacting an API.
+As a first step we will look at the code for an example which generates a badge without contacting an API. Note that lower camelCase should be used for variables, functions, and path/query parameters.
 
 ```js
 // (1)
@@ -137,10 +107,7 @@ Description of the code:
 3. Returns the name of the category to sort this badge into (eg. "build"). Used to sort the examples on the main [shields.io](https://shields.io) website. [Here](https://github.com/badges/shields/blob/master/services/categories.js) is the list of the valid categories. See [section 4.4](#44-adding-documentation-to-the-frontend) for more details.
 4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
-   - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any
-     number of named parameters. These are converted into
-     regular expressions by [`path-to-regexp`][path-to-regexp].
-     Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
+   - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any number of named parameters. These are converted into regular expressions by [`path-to-regexp`][path-to-regexp]. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
    - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
 5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
@@ -152,10 +119,8 @@ The process of turning this object into an image is handled automatically by the
 To try out this example badge:
 
 1. Copy and paste this code into a new file in `/services/example/example.service.js`
-2. The server should restart on its own. (If it doesn't for some reason, quit
-   the running server with `Control+C`, then start it again with `npm start`.)
-3. Visit the badge at <http://localhost:8080/example/foo>.
-   It should look like this: ![](https://img.shields.io/badge/example-foo-blue)
+2. The server should restart on its own. (If it doesn't for some reason, quit the running server with `Control+C`, then start it again with `npm start`.)
+3. Visit the badge at <http://localhost:8080/example/foo>. It should look like this: ![](https://img.shields.io/badge/example-foo-blue)
 
 [path-to-regexp]: https://github.com/pillarjs/path-to-regexp#parameters
 [static]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
@@ -255,10 +220,7 @@ Specifically `BaseJsonService` will handle the following errors for us:
 - API returns a response which can't be parsed as JSON
 - API returns a response which doesn't validate against our schema
 
-Sometimes it may be necessary to manually throw an exception to deal with a
-non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at
-[errors](https://contributing.shields.io/module-core_base-service_errors.html)
-and can be imported via the import shortcut and then thrown:
+Sometimes it may be necessary to manually throw an exception to deal with a non-standard error condition. If so, there are several standard exceptions that can be used. The errors are documented at [errors](https://contributing.shields.io/module-core_base-service_errors.html) and can be imported via the import shortcut and then thrown:
 
 ```js
 import { NotFound } from '../index.js'
@@ -342,6 +304,8 @@ export default class GemVersion extends BaseJsonService {
 
    but we have used the helper function `pathParams` to imply some defaults and reduce the amount of code we need to write by hand.
 
+7. Path and query parameters should be lower camelCase, for example use `gemName` instead of `gem_name`.
+
 Save, run `npm start`, and you can see it [locally](http://127.0.0.1:3000/).
 
 If you update `openApi`, you don't have to restart the server. Run `npm run prestart` in another terminal window and the frontend will update.
@@ -350,27 +314,18 @@ If you update `openApi`, you don't have to restart the server. Run `npm run pres
 
 [write tests]: #45-write-tests
 
-When creating a badge for a new service or changing a badge's behavior, tests
-should be included. They serve several purposes:
+When creating a badge for a new service or changing a badge's behavior, tests should be included. They serve several purposes:
 
-1. They speed up future contributors when they are debugging or improving a
-   badge.
-2. If the contributors would like to change your badge, chances are, they forget
-   edge cases and break your code.
-   Tests may give hints in such cases.
-3. The contributor and reviewer can easily verify the code works as
-   intended.
-4. When a badge stops working on the live server, maintainers can find out
-   right away.
+1. They speed up future contributors when they are debugging or improving a badge.
+2. If the contributors would like to change your badge, chances are, they forget edge cases and break your code. Tests may give hints in such cases.
+3. The contributor and reviewer can easily verify the code works as intended.
+4. When a badge stops working on the live server, maintainers can find out right away.
 
-There is a dedicated [tutorial for tests in the service-tests folder](service-tests.md).
-Please follow it to include tests on your pull-request.
+There is a dedicated [tutorial for tests in the service-tests folder](service-tests.md). Please follow it to include tests on your pull-request.
 
 ### (4.6) Update the Docs
 
-If your submission requires an API token or authentication credentials, please
-update [server-secrets.md](./server-secrets.md). You should explain what the
-token or credentials are for and how to obtain them.
+If your submission requires an API token or authentication credentials, please update [server-secrets.md](./server-secrets.md). You should explain what the token or credentials are for and how to obtain them.
 
 ## (5) Create a Pull Request
 
@@ -380,8 +335,6 @@ Once you have implemented a new badge:
 - [Create a pull-request](https://help.github.com/articles/creating-a-pull-request/) to propose your changes.
 - CI will check the tests pass and that your code conforms to our coding standards.
 - We also use [Danger](https://danger.systems/) to check for some common problems. The first comment on your pull request will be posted by a bot. If there are any errors or warnings raised, please review them.
-- One of the
-  [maintainers](https://github.com/badges/shields/blob/master/README.md#project-leaders)
-  will review your contribution.
+- One of the [maintainers](https://github.com/badges/shields/blob/master/README.md#project-leaders) will review your contribution.
 - We'll work with you to progress your contribution suggesting improvements if necessary. Although there are some occasions where a contribution is not appropriate, if your contribution conforms to our [guidelines](https://github.com/badges/shields/blob/master/CONTRIBUTING.md#badge-guidelines) we'll aim to work towards merging it. The majority of pull requests adding a service badge are merged.
 - If your contribution is merged, the final comment on the pull request will be an automated post which you can monitor to tell when your contribution has been deployed to production.

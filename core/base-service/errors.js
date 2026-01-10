@@ -32,7 +32,7 @@ class ShieldsRuntimeError extends Error {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    * @param {string} message Exception message for debug purposes
    */
@@ -61,7 +61,7 @@ class NotFound extends ShieldsRuntimeError {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    */
   constructor(props = {}) {
@@ -88,7 +88,7 @@ class InvalidResponse extends ShieldsRuntimeError {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    */
   constructor(props = {}) {
@@ -114,7 +114,7 @@ class Inaccessible extends ShieldsRuntimeError {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    */
   constructor(props = {}) {
@@ -139,7 +139,7 @@ class ImproperlyConfigured extends ShieldsRuntimeError {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    */
   constructor(props = {}) {
@@ -165,7 +165,7 @@ class InvalidParameter extends ShieldsRuntimeError {
   }
 
   /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
+   * @param {RuntimeErrorProps} props
    * Refer to individual attrs
    */
   constructor(props = {}) {
@@ -174,28 +174,6 @@ class InvalidParameter extends ShieldsRuntimeError {
       : 'Invalid Parameter'
     super(props, message)
     this.response = props.response
-  }
-}
-
-/**
- * Throw this error to indicate that a service is deprecated or removed
- */
-class Deprecated extends ShieldsRuntimeError {
-  get name() {
-    return 'Deprecated'
-  }
-
-  get defaultPrettyMessage() {
-    return 'no longer available'
-  }
-
-  /**
-   * @param {module:core/base-service/errors~RuntimeErrorProps} props
-   * Refer to individual attrs
-   */
-  constructor(props) {
-    const message = 'Deprecated'
-    super(props, message)
   }
 }
 
@@ -219,5 +197,4 @@ export {
   InvalidResponse,
   Inaccessible,
   InvalidParameter,
-  Deprecated,
 }

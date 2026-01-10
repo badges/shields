@@ -11,8 +11,6 @@ public:
       intervalSeconds: 15
   ssl:
     isSecure: false
-  cors:
-    allowedOrigin: []
   services:
     bitbucket:
       authorizedOrigins: 'https://bitbucket.org'
@@ -32,9 +30,10 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 120
   handleInternalErrors: true
-  fetchLimit: '10MB'
+  fetchLimitBytes: 10485760 # 10MB
   userAgentBase: 'shields (self-hosted)'
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
+  allowUnsecuredEndpointRequests: false
   requireCloudflare: false
 private: {}

@@ -29,7 +29,7 @@ const colorStatusMap = {
 }
 
 const schema = Joi.object({
-  color: Joi.allow(...Object.keys(colorStatusMap)).required(),
+  color: Joi.equal(...Object.keys(colorStatusMap)).required(),
 }).required()
 
 export default class JenkinsBuild extends JenkinsBase {

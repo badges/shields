@@ -195,9 +195,9 @@ class TokenPool {
   /**
    * compareTokens
    *
-   * @param {module:core/token-pooling/token-pool~Token} first first token to compare
-   * @param {module:core/token-pooling/token-pool~Token} second second token to compare
-   * @returns {module:core/token-pooling/token-pool~Token} The token whose current rate allotment is expiring soonest.
+   * @param {Token} first first token to compare
+   * @param {Token} second second token to compare
+   * @returns {Token} The token whose current rate allotment is expiring soonest.
    */
   static compareTokens(first, second) {
     return second.nextReset - first.nextReset
@@ -295,7 +295,7 @@ class TokenPool {
    * new use-remaining count and next-reset time. Invoke `invalidate()` to
    * indicate it should not be reused.
    *
-   * @returns {module:core/token-pooling/token-pool~Token} token
+   * @returns {Token} token
    */
   next() {
     let token = this.currentBatch.token
@@ -331,6 +331,30 @@ class TokenPool {
 
     this.fifoQueue.forEach(visit)
     this.priorityQueue.forEach(visit)
+  }
+
+  /**
+   * Serialize debug information about the token pool.
+   *
+   * @param {object} options Options object
+   * @param {boolean} options.sanitize Whether to sanitize token IDs (default: true)
+   * @returns {object} Debug information about the token pool
+   */
+  serializeDebugInfo({ sanitize = true } = {}) {
+    const allTokenDebugInfo = []
+    let totalUsesRemaining = 0
+
+    this.forEach(token => {
+      totalUsesRemaining += token.usesRemaining
+      allTokenDebugInfo.push(token.getDebugInfo({ sanitize }))
+    })
+
+    return {
+      utcEpochSeconds: getUtcEpochSeconds(),
+      totalUsesRemaining,
+      allTokenDebugInfo,
+      sanitized: sanitize,
+    }
   }
 }
 

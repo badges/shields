@@ -1,42 +1,33 @@
-import { redirector } from '../index.js'
-import { buildRedirectUrl } from './jenkins-common.js'
+import { deprecatedService } from '../index.js'
 
 const commonProps = {
   category: 'coverage',
-  transformQueryParams: ({ protocol, host, job }) => ({
-    jobUrl: buildRedirectUrl({ protocol, host, job }),
-  }),
+  label: 'jenkins',
+  dateAdded: new Date('2025-12-20'),
+  issueUrl: 'https://github.com/badges/shields/pull/11583',
 }
 
 export default [
-  redirector({
+  deprecatedService({
     route: {
       base: 'jenkins',
       pattern: ':coverageFormat(j|c)/:protocol(http|https)/:host/:job+',
     },
-    transformPath: ({ coverageFormat }) =>
-      `/jenkins/coverage/${coverageFormat === 'j' ? 'jacoco' : 'cobertura'}`,
-    dateAdded: new Date('2019-04-20'),
     ...commonProps,
   }),
-  redirector({
+  deprecatedService({
     route: {
       base: 'jenkins/coverage',
       pattern:
         ':coverageFormat(jacoco|cobertura|api)/:protocol(http|https)/:host/:job+',
     },
-    transformPath: ({ coverageFormat }) =>
-      `/jenkins/coverage/${coverageFormat}`,
-    dateAdded: new Date('2019-11-29'),
     ...commonProps,
   }),
-  redirector({
+  deprecatedService({
     route: {
       base: 'jenkins/coverage/api',
       pattern: '',
     },
-    category: 'coverage',
-    transformPath: () => '/jenkins/coverage/apiv1',
-    dateAdded: new Date('2023-03-21'),
+    ...commonProps,
   }),
 ]

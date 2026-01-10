@@ -1,4 +1,4 @@
-import queryString from 'query-string'
+import qs from 'qs'
 import { fetch } from '../../../core/base-service/got.js'
 import log from '../../../core/server/log.js'
 
@@ -7,7 +7,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
 
   server.route(/^\/github-auth$/, (data, match, end, ask) => {
     ask.res.statusCode = 302 // Found.
-    const query = queryString.stringify({
+    const query = qs.stringify({
       // TODO The `_user` property bypasses security checks in AuthHelper.
       // (e.g: enforceStrictSsl and shouldAuthenticateRequest).
       // Do not use it elsewhere. It would be better to clean this up so
@@ -53,7 +53,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
 
     let content
     try {
-      content = queryString.parse(resp.buffer)
+      content = qs.parse(resp.buffer)
     } catch (e) {
       return end('The GitHub OAuth token could not be parsed.')
     }

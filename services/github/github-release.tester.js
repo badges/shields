@@ -17,7 +17,7 @@ t.create('Prerelease')
   .expectBadge({
     label: 'release',
     message: isSemver,
-    color: Joi.string().allow('blue', 'orange').required(),
+    color: Joi.equal('blue', 'orange').required(),
   })
 
 // basic query parameter testing. application of param in transform

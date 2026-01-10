@@ -1,6 +1,8 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import { redirector, NotFound, pathParams } from '../index.js'
-import BaseChromeWebStoreService from './chrome-web-store-base.js'
+import BaseChromeWebStoreService, {
+  description,
+} from './chrome-web-store-base.js'
 
 class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static category = 'downloads'
@@ -10,6 +12,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
     '/chrome-web-store/users/{storeId}': {
       get: {
         summary: 'Chrome Web Store Users',
+        description,
         parameters: pathParams({
           name: 'storeId',
           example: 'ogffaloegjglncjfehdfplabnoondfjo',
