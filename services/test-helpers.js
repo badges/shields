@@ -189,7 +189,7 @@ function getServiceClassAuthOrigin(serviceClass, authOverride, configOverride) {
   }
   const auth = { ...serviceClass.auth, ...authOverride }
   if (auth.authorizedOrigins) {
-    return serviceClass.auth.authorizedOrigins
+    return auth.authorizedOrigins
   } else {
     const mergedConfig = _.merge(runnerConfig, configOverride)
     if (!mergedConfig.public.services[auth.serviceKey]) {
