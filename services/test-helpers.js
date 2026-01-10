@@ -131,10 +131,10 @@ function generateFakeConfig(
   if (Object.keys(auth).length === 0) {
     throw new Error(`Auth empty for ${serviceClass.name}.`)
   }
-  if (fakeKey && !auth.passKey) {
-    throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
-  }
   if (fakeKey && typeof fakeKey !== 'string') {
+    throw new Error('Invalid fakeKey: Must be a String.')
+  }
+  if (fakeKey && !auth.passKey) {
     throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
   }
   // Extract the passKey property from auth, or use a default if not present
