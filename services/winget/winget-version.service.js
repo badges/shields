@@ -42,11 +42,19 @@ const treeSchema = Joi.object({
   }).required(),
 }).required()
 
-const manifestSchema = Joi.object({
+const multiManifestSchema = Joi.object({
   data: Joi.object({
     repository: Joi.object({
       object: Joi.object({
-        text: Joi.string().required(),
+        entries: Joi.array().items(
+          Joi.object({
+            type: Joi.string().required(),
+            name: Joi.string().required(),
+            object: Joi.object({
+              text: Joi.string().allow(null),
+            }).allow(null),
+          }),
+        ),
       })
         .allow(null)
         .required(),
@@ -123,32 +131,6 @@ export default class WingetVersion extends GithubAuthV4Service {
     })
   }
 
-  async fetchManifestText({ path }) {
-    const expression = `HEAD:${path}`
-    const json = await this._requestGraphql({
-      query: gql`
-        query RepoFile($expression: String!) {
-          repository(owner: "microsoft", name: "winget-pkgs") {
-            object(expression: $expression) {
-              ... on Blob {
-                text
-              }
-            }
-          }
-        }
-      `,
-      variables: { expression },
-      schema: manifestSchema,
-      transformErrors,
-    })
-
-    if (json.data.repository.object?.text == null) {
-      throw new InvalidResponse({ prettyMessage: 'manifest not found' })
-    }
-
-    return json.data.repository.object.text
-  }
-
   static getPreferredManifestFilenames({ name, files }) {
     const yamlFiles = files.filter(file => file.endsWith('.yaml'))
     const expectedYaml = `${name}.yaml`
@@ -167,14 +149,45 @@ export default class WingetVersion extends GithubAuthV4Service {
     return [...yamlFiles].sort((a, b) => priority(a) - priority(b))
   }
 
-  async fetchReleaseDate({ manifestPath, manifestFilenames }) {
+  async fetchAllManifests({ manifestPath, manifestFilenames }) {
+    const expression = `HEAD:${manifestPath}`
+    const json = await this._requestGraphql({
+      query: gql`
+        query RepoFiles($expression: String!) {
+          repository(owner: "microsoft", name: "winget-pkgs") {
+            object(expression: $expression) {
+              ... on Tree {
+                entries {
+                  type
+                  name
+                  object {
+                    ... on Blob {
+                      text
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { expression },
+      schema: multiManifestSchema,
+      transformErrors,
+    })
+
+    if (json.data.repository.object?.entries == null) {
+      return null
+    }
+
+    const entries = json.data.repository.object.entries
     for (const filename of manifestFilenames) {
-      const text = await this.fetchManifestText({
-        path: `${manifestPath}/${filename}`,
-      })
+      const entry = entries.find(e => e.name === filename)
+      if (!entry?.object?.text) continue
+
       let parsed
       try {
-        parsed = yaml.load(text)
+        parsed = yaml.load(entry.object.text)
       } catch (err) {
         throw new InvalidResponse({
           prettyMessage: 'unparseable manifest',
@@ -191,6 +204,7 @@ export default class WingetVersion extends GithubAuthV4Service {
         return parseDate(releaseDateString).format('D MMM YYYY').toLowerCase()
       }
     }
+    return null
   }
 
   async handle({ name }, queryParams) {
@@ -230,7 +244,7 @@ export default class WingetVersion extends GithubAuthV4Service {
     const nameSlashed = name.replaceAll('.', '/')
     const manifestPath = `manifests/${nameFirstLower}/${nameSlashed}/${version}`
 
-    const releaseDate = await this.fetchReleaseDate({
+    const releaseDate = await this.fetchAllManifests({
       manifestPath,
       manifestFilenames: this.constructor.getPreferredManifestFilenames({
         name,

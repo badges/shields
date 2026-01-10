@@ -106,7 +106,29 @@ t.create('optionally includes release date')
         data: {
           repository: {
             object: {
-              text: 'ReleaseDate: 2025-08-20',
+              entries: [
+                {
+                  type: 'blob',
+                  name: 'UPX.UPX.installer.yaml',
+                  object: {
+                    text: 'ReleaseDate: 2025-08-20',
+                  },
+                },
+                {
+                  type: 'blob',
+                  name: 'UPX.UPX.locale.en-US.yaml',
+                  object: {
+                    text: 'some other content',
+                  },
+                },
+                {
+                  type: 'blob',
+                  name: 'UPX.UPX.yaml',
+                  object: {
+                    text: 'some content',
+                  },
+                },
+              ],
             },
           },
         },
