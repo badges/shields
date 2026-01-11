@@ -12,6 +12,8 @@ public:
   ssl:
     isSecure: false
   services:
+    bitbucket:
+      authorizedOrigins: 'https://bitbucket.org'
     github:
       baseUri: 'https://api.github.com'
       debug:

@@ -26,6 +26,8 @@ public:
   rasterUrl: 'RASTER_URL'
 
   services:
+    bitbucket:
+      authorizedOrigins: 'BITBUCKET_ORIGINS'
     bitbucketServer:
       authorizedOrigins: 'BITBUCKET_SERVER_ORIGINS'
     drone:

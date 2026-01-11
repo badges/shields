@@ -42,6 +42,8 @@ class BaseSvgScrapingService extends BaseService {
     }
   }
 
+  static headers = { Accept: 'image/svg+xml' }
+
   /**
    * Request data from an endpoint serving SVG,
    * parse a value from it and validate against a schema
@@ -79,7 +81,7 @@ class BaseSvgScrapingService extends BaseService {
   }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
     const mergedOptions = {
-      ...{ headers: { Accept: 'image/svg+xml' } },
+      ...{ headers: this.constructor.headers },
       ...options,
     }
     const { buffer } = await this._request({

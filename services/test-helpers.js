@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import dayjs from 'dayjs'
 import { expect } from 'chai'
 import nock from 'nock'
@@ -37,6 +38,7 @@ function noToken(serviceClass) {
  * Retrieves an example set of parameters for invoking a service class using OpenAPI example of that class.
  *
  * @param {BaseService} serviceClass The service class containing OpenAPI specifications.
+ * @param {'path'|'query'} paramType The type of params to extract, may be path params or query params.
  * @returns {object} An object with call params to use with a service invoke of the first OpenAPI example.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if it lacks the expected structure.
@@ -48,17 +50,21 @@ function noToken(serviceClass) {
  * // Output: { stackexchangesite: 'stackoverflow', query: '123' }
  * StackExchangeReputation.invoke(defaultContext, config, example)
  */
-function getBadgeExampleCall(serviceClass) {
+function getBadgeExampleCall(serviceClass, paramType) {
   if (!(serviceClass.prototype instanceof BaseService)) {
     throw new TypeError(
       'Invalid serviceClass: Must be an instance of BaseService.',
     )
   }
 
-  if (!serviceClass.openApi) {
-    throw new TypeError(
-      `Missing OpenAPI in service class ${serviceClass.name}.`,
+  if (Object.keys(serviceClass.openApi).length === 0) {
+    console.warn(
+      `Missing OpenAPI in service class ${serviceClass.name}. Make sure to use exampleOverride in testAuth.`,
     )
+    return {}
+  }
+  if (!['path', 'query'].includes(paramType)) {
+    throw new TypeError('Invalid paramType: Must be path or query.')
   }
 
   const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
@@ -73,7 +79,13 @@ function getBadgeExampleCall(serviceClass) {
 
   // reformat structure for serviceClass.invoke
   const exampleInvokeParams = firstOpenapiExampleParams.reduce((acc, obj) => {
-    acc[obj.name] = obj.example
+    if (obj.in === paramType) {
+      let example = obj.example
+      if (obj?.schema?.type === 'boolean') {
+        example = example || ''
+      }
+      acc[obj.name] = example
+    }
     return acc
   }, {})
 
@@ -87,7 +99,8 @@ function getBadgeExampleCall(serviceClass) {
  * @param {BaseService} serviceClass - The class to generate configuration for.
  * @param {string} fakeKey - The fake key to be used in the configuration.
  * @param {string} fakeUser - Optional, The fake user to be used in the configuration.
- * @param {string} fakeauthorizedOrigins - authorizedOrigins to add to config.
+ * @param {string[]} fakeauthorizedOrigins - authorizedOrigins to add to config.
+ * @param {object} authOverride Return result with overrid params.
  * @returns {object} - The configuration object.
  * @throws {TypeError} - Throws an error if the input is not a class.
  */
@@ -96,6 +109,7 @@ function generateFakeConfig(
   fakeKey,
   fakeUser,
   fakeauthorizedOrigins,
+  authOverride,
 ) {
   if (
     !serviceClass ||
@@ -106,37 +120,38 @@ function generateFakeConfig(
       'Invalid serviceClass: Must be an instance of BaseService.',
     )
   }
-  if (!fakeKey || typeof fakeKey !== 'string') {
-    throw new TypeError('Invalid fakeKey: Must be a String.')
+  if (!fakeKey && !fakeUser) {
+    throw new TypeError('Must provide at least one: fakeKey or fakeUser.')
   }
   if (!fakeauthorizedOrigins || !Array.isArray(fakeauthorizedOrigins)) {
     throw new TypeError('Invalid fakeauthorizedOrigins: Must be an array.')
   }
 
-  if (!serviceClass.auth) {
-    throw new Error(`Missing auth for ${serviceClass.name}.`)
+  const auth = { ...serviceClass.auth, ...authOverride }
+  if (Object.keys(auth).length === 0) {
+    throw new Error(`Auth empty for ${serviceClass.name}.`)
   }
-  if (!serviceClass.auth.passKey) {
+  if (fakeKey && typeof fakeKey !== 'string') {
+    throw new Error('Invalid fakeKey: Must be a String.')
+  }
+  if (fakeKey && !auth.passKey) {
     throw new Error(`Missing auth.passKey for ${serviceClass.name}.`)
   }
   // Extract the passKey property from auth, or use a default if not present
-  const passKeyProperty = serviceClass.auth.passKey
-  let passUserProperty = 'placeholder'
-  if (fakeUser) {
-    if (typeof fakeKey !== 'string') {
-      throw new TypeError('Invalid fakeUser: Must be a String.')
-    }
-    if (!serviceClass.auth.userKey) {
-      throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
-    }
-    passUserProperty = serviceClass.auth.userKey
+  const passKeyProperty = auth.passKey ? auth.passKey : undefined
+  if (fakeUser && typeof fakeUser !== 'string') {
+    throw new TypeError('Invalid fakeUser: Must be a String.')
   }
+  if (fakeUser && !auth.userKey) {
+    throw new Error(`Missing auth.userKey for ${serviceClass.name}.`)
+  }
+  const passUserProperty = auth.userKey ? auth.userKey : undefined
 
   // Build and return the configuration object with the fake key
   return {
     public: {
       services: {
-        [serviceClass.auth.serviceKey]: {
+        [auth.serviceKey]: {
           authorizedOrigins: fakeauthorizedOrigins,
         },
       },
@@ -152,15 +167,17 @@ function generateFakeConfig(
  * Returns the first auth origin found for a provided service class.
  *
  * @param {BaseService} serviceClass The service class to find the authorized origins.
+ * @param {object} authOverride Return result with overridden params.
+ * @param {object} configOverride - Override the config.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService.
- * @returns {string} First auth origin found.
+ * @returns {string[]} First auth origin found.
  *
  * @example
  * // Example usage:
  * getServiceClassAuthOrigin(Obs)
- * // outputs 'https://api.opensuse.org'
+ * // outputs ['https://api.opensuse.org']
  */
-function getServiceClassAuthOrigin(serviceClass) {
+function getServiceClassAuthOrigin(serviceClass, authOverride, configOverride) {
   if (
     !serviceClass ||
     !serviceClass.prototype ||
@@ -170,12 +187,17 @@ function getServiceClassAuthOrigin(serviceClass) {
       `Invalid serviceClass ${serviceClass}: Must be an instance of BaseService.`,
     )
   }
-  if (serviceClass.auth.authorizedOrigins) {
-    return serviceClass.auth.authorizedOrigins
+  const auth = { ...serviceClass.auth, ...authOverride }
+  if (auth.authorizedOrigins) {
+    return auth.authorizedOrigins
   } else {
-    return [
-      config.public.services[serviceClass.auth.serviceKey].authorizedOrigins,
-    ]
+    const mergedConfig = _.merge(runnerConfig, configOverride)
+    if (!mergedConfig.public.services[auth.serviceKey]) {
+      throw new TypeError(
+        `Missing service key definition for ${auth.serviceKey}: Use an override if applicable.`,
+      )
+    }
+    return [mergedConfig.public.services[auth.serviceKey].authorizedOrigins]
   }
 }
 
@@ -201,12 +223,15 @@ function fakeJwtToken() {
  * @param {'BasicAuth'|'ApiKeyHeader'|'BearerAuthHeader'|'QueryStringAuth'|'JwtAuth'} authMethod The auth method of the tested service class.
  * @param {object} dummyResponse An object containing the dummy response by the server.
  * @param {object} options - Additional options for non default keys and content-type of the dummy response.
- * @param {'application/xml'|'application/json'} options.contentType - Header for the response, may contain any string.
  * @param {string} options.apiHeaderKey - Non default header for ApiKeyHeader auth.
  * @param {string} options.bearerHeaderKey - Non default bearer header prefix for BearerAuthHeader.
  * @param {string} options.queryUserKey - QueryStringAuth user key.
  * @param {string} options.queryPassKey - QueryStringAuth pass key.
  * @param {string} options.jwtLoginEndpoint - jwtAuth Login endpoint.
+ * @param {object} options.exampleOverride - Override example params in test.
+ * @param {object} options.authOverride - Override class auth params.
+ * @param {object} options.configOverride - Override the config for this test.
+ * @param {boolean} options.multipleRequests - For classes that require multiple requests to complete the test.
  * @throws {TypeError} - Throws a TypeError if the input `serviceClass` is not an instance of BaseService,
  *   or if `serviceClass` is missing authorizedOrigins.
  *
@@ -221,38 +246,71 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
     )
   }
 
-  cleanUpNockAfterEach()
-
-  const fakeUser = serviceClass.auth.userKey ? 'fake-user' : undefined
-  const fakeSecret = 'fake-secret'
-  const authOrigins = getServiceClassAuthOrigin(serviceClass)
-  const config = generateFakeConfig(
-    serviceClass,
-    fakeSecret,
-    fakeUser,
-    authOrigins,
-  )
-  const exampleInvokeParams = getBadgeExampleCall(serviceClass)
-  if (options && typeof options !== 'object') {
-    throw new TypeError('Invalid options: Must be an object.')
-  }
   const {
-    contentType,
     apiHeaderKey = 'x-api-key',
     bearerHeaderKey = 'Bearer',
     queryUserKey,
     queryPassKey,
     jwtLoginEndpoint,
+    exampleOverride = {},
+    authOverride,
+    configOverride,
+    multipleRequests = false,
   } = options
-  if (contentType && typeof contentType !== 'string') {
-    throw new TypeError('Invalid contentType: Must be a String.')
-  }
-  const header = contentType ? { 'Content-Type': contentType } : undefined
+  const header = serviceClass.headers
+    ? { 'Content-Type': serviceClass.headers.Accept.split(', ')[0] }
+    : undefined
   if (!apiHeaderKey || typeof apiHeaderKey !== 'string') {
     throw new TypeError('Invalid apiHeaderKey: Must be a String.')
   }
   if (!bearerHeaderKey || typeof bearerHeaderKey !== 'string') {
     throw new TypeError('Invalid bearerHeaderKey: Must be a String.')
+  }
+  if (typeof exampleOverride !== 'object') {
+    throw new TypeError('Invalid exampleOverride: Must be an Object.')
+  }
+  if (authOverride && typeof authOverride !== 'object') {
+    throw new TypeError('Invalid authOverride: Must be an Object.')
+  }
+  if (configOverride && typeof configOverride !== 'object') {
+    throw new TypeError('Invalid configOverride: Must be an Object.')
+  }
+  if (multipleRequests && typeof multipleRequests !== 'boolean') {
+    throw new TypeError('Invalid multipleRequests: Must be a boolean.')
+  }
+
+  if (!multipleRequests) {
+    cleanUpNockAfterEach()
+  }
+
+  const auth = { ...serviceClass.auth, ...authOverride }
+  const fakeUser = auth.userKey
+    ? 'fake-user'
+    : auth.defaultToEmptyStringForUser
+      ? ''
+      : undefined
+  const fakeSecret = auth.passKey ? 'fake-secret' : undefined
+  if (!fakeUser && !fakeSecret) {
+    throw new TypeError(
+      `Missing auth pass/user for ${serviceClass.name}. At least one is required.`,
+    )
+  }
+  const authOrigins = getServiceClassAuthOrigin(
+    serviceClass,
+    authOverride,
+    configOverride,
+  )
+  const config = generateFakeConfig(
+    serviceClass,
+    fakeSecret,
+    fakeUser,
+    authOrigins,
+    authOverride,
+  )
+  const exampleInvokePathParams = getBadgeExampleCall(serviceClass, 'path')
+  const exampleInvokeQueryParams = getBadgeExampleCall(serviceClass, 'query')
+  if (options && typeof options !== 'object') {
+    throw new TypeError('Invalid options: Must be an object.')
   }
 
   if (!authOrigins) {
@@ -263,6 +321,9 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   const scopeArr = []
   authOrigins.forEach(authOrigin => {
     const scope = nock(authOrigin)
+    if (multipleRequests) {
+      scope.persist()
+    }
     scopeArr.push(scope)
     switch (authMethod) {
       case 'BasicAuth':
@@ -311,7 +372,20 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
         }
         if (jwtLoginEndpoint.startsWith(authOrigin)) {
           scope
-            .post(/.*/, { username: fakeUser, password: fakeSecret })
+            .post(/.*/, body => {
+              if (typeof body === 'object') {
+                return (
+                  body.username === fakeUser && body.password === fakeSecret
+                )
+              }
+              if (typeof body === 'string') {
+                return (
+                  body.includes(`username=${encodeURIComponent(fakeUser)}`) &&
+                  body.includes(`password=${encodeURIComponent(fakeSecret)}`)
+                )
+              }
+              return false
+            })
             .reply(200, { token: jwtToken })
         } else {
           scope
@@ -328,8 +402,28 @@ async function testAuth(serviceClass, authMethod, dummyResponse, options = {}) {
   })
 
   expect(
-    await serviceClass.invoke(defaultContext, config, exampleInvokeParams),
+    await serviceClass.invoke(
+      defaultContext,
+      _.merge(config, configOverride),
+      {
+        ...exampleInvokePathParams,
+        ...exampleOverride,
+      },
+      {
+        ...exampleInvokeQueryParams,
+        ...exampleOverride,
+      },
+    ),
   ).to.not.have.property('isError')
+
+  // clean up persistance if we have multiple requests
+  if (multipleRequests) {
+    scopeArr.forEach(scope => scope.persist(false))
+    nock.restore()
+    nock.cleanAll()
+    nock.enableNetConnect()
+    nock.activate()
+  }
 
   // if we get 'Mocks not yet satisfied' we have redundent authOrigins or we are missing a critical request
   scopeArr.forEach(scope => scope.done())
