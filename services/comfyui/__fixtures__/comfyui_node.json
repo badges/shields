@@ -1,0 +1,17 @@
+{
+  "author": "",
+  "banner_url": "",
+  "category": "",
+  "created_at": "2024-07-27T14:14:14.776229Z",
+  "description": "A ComfyUI extension for generating captions for your images.",
+  "downloads": 4894,
+  "github_stars": 19,
+  "icon": "https://raw.githubusercontent.com/neverbiasu/ComfyUI-Image-Captioner/main/assets/icon.png",
+  "id": "comfyui-image-captioner",
+  "latest_version": { "version": "1.0.2" },
+  "license": "{\"file\": \"LICENSE\"}",
+  "name": "ComfyUI-Image-Captioner",
+  "publisher": { "id": "faych", "name": "Faych Chan" },
+  "repository": "https://github.com/neverbiasu/ComfyUI-Image-Captioner",
+  "status": "NodeStatusActive"
+}
