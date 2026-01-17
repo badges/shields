@@ -190,7 +190,7 @@
     "portfinder": "^1.0.38",
     "prettier": "3.7.4",
     "prism-react-renderer": "^2.4.1",
-    "react": "^18.3.0",
+    "react": "^19.2.3",
     "rimraf": "^6.1.2",
     "sazerac": "^2.0.0",
     "simple-git-hooks": "^2.13.1",
