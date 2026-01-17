@@ -7,6 +7,7 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 ## server-2026-01-15
 
 **Important notice:**
+
 - The `cors.allowedOrigin` configuration option is no longer supported and will soon be removed. Please remove it from your configuration.
 - Several badges URLs have been updated, see [#11584](https://github.com/badges/shields/issues/11584) for more information.
 
