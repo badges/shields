@@ -562,7 +562,7 @@ t.create('test fetchMode=guest is ignored for matrix.org')
   })
 
 t.create('test on real matrix room for guest API compliance')
-  .get('/ndcube:openastronomy.org.json?server_fqdn=openastronomy.modular.im')
+  .get('/twim:matrix.org.json?fetchMode=guest')
   .expectBadge({
     label: 'chat',
     message: Joi.string().regex(/^[0-9]+ users$/),
