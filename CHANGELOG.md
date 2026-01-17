@@ -4,6 +4,32 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-01-15
+
+**Important notice:**
+
+- The `cors.allowedOrigin` configuration option is no longer supported and will soon be removed. Please remove it from your configuration.
+- Several badges URLs have been updated, see [#11584](https://github.com/badges/shields/issues/11584) for more information.
+
+Other changes:
+
+- Add link to [GithubFollowers] badge [#11590](https://github.com/badges/shields/issues/11590)
+- Improve GitHub check runs documentation [#11612](https://github.com/badges/shields/issues/11612)
+- Encourage repository stars [#11613](https://github.com/badges/shields/issues/11613)
+- Adapt [YouTube] channel not found handling [#11615](https://github.com/badges/shields/issues/11615)
+- Remove [Reuse] 'Not a Git repository' handling [#11614](https://github.com/badges/shields/issues/11614)
+- Increase PyPI caches [#11621](https://github.com/badges/shields/issues/11621)
+- Prefer `published_at` in github-release-date service [#11616](https://github.com/badges/shields/issues/11616)
+- Make badge builder sticky [#11593](https://github.com/badges/shields/issues/11593)
+- Cache some badges for longer [#11588](https://github.com/badges/shields/issues/11588)
+- Cache deprecated badges for a day [#11582](https://github.com/badges/shields/issues/11582)
+- Fix [Symfony] schema when no violations are found [#11578](https://github.com/badges/shields/issues/11578)
+- Handle [ClearlyDefined] empty response [#11573](https://github.com/badges/shields/issues/11573)
+- Treat `img.shields.io/favicon.ico` as 404 resource [#11576](https://github.com/badges/shields/issues/11576)
+- Set checking-in-out attribute to `text=auto` [#11574](https://github.com/badges/shields/issues/11574)
+- Fix [CondaLicense, GreasyForkInstalls, MyGet, mbin] examples
+- Dependency updates
+
 ## server-2025-12-01
 
 **Important notice:** The `fetchLimit` configuration option is being replaced by `fetchLimitBytes`. If you were overriding the default value of `fetchLimit`, please update your configuration accordingly. See [#11430](https://github.com/badges/shields/issues/11430) for more information.
