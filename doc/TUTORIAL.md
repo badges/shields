@@ -13,7 +13,7 @@ This tutorial should help you add a service to shields.io in form of a badge. Yo
 ### Pre-requisites
 
 #### Git
-
+ 
 You should have [git](https://git-scm.com/) installed. If you do not, [install git](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/) and learn about the [GitHub workflow](http://try.github.io/).
 
 #### Node, NPM
