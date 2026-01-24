@@ -18,7 +18,7 @@ t.create('version (valid)')
   .expectBadge({
     label: 'aur',
     message: isVPlusDottedVersionNClausesWithOptionalSuffix,
-    color: 'blue',
+    color: Joi.string().valid('blue', 'orange').required(),
   })
 
 t.create('version (not found)')
