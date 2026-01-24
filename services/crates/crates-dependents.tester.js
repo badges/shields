@@ -2,7 +2,7 @@ import { isMetric } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('dependent count').get('/tokio.json').expectBadge({
+t.create('dependent count').get('/base64.json').expectBadge({
   label: 'dependents',
   message: isMetric,
 })
