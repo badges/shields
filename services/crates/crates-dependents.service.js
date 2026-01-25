@@ -27,6 +27,8 @@ export default class CratesDependents extends BaseCratesService {
     },
   }
 
+  static _cacheLength = 43200 // due to issue #11633 - cache for 12 hours - this value is not quick to change
+
   static render({ dependentCount }) {
     return {
       label: 'dependents',
