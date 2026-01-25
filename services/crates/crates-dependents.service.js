@@ -7,7 +7,7 @@ import { BaseCratesService, description } from './crates-base.js'
 const dependentsDescription = `
 ${description}
 
-Due to an upstream issue, crates with a very large number of dependents may fail to retrieve data because the upstream API can time out
+Due to upstream API timeouts, crates with a very large number of dependents may fail to retrieve data.
 
 See [#11633](https://github.com/badges/shields/issues/11633) for more info.
 `
