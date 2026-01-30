@@ -14,6 +14,10 @@ t.create('bundlejs/package (scoped)')
   .get('/@cycle/rx-run.json')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
+t.create('bundlejs/package (scoped with subpath export)')
+  .get('/@noble/hashes/sha3.js.json')
+  .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
+
 t.create('bundlejs/package (select exports)')
   .get('/value-enhancer.json?exports=isVal,val')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
