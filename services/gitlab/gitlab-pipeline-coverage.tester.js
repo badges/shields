@@ -57,9 +57,7 @@ t.create('Coverage (custom invalid job)')
   })
 
 t.create('Coverage (custom gitlab URL)')
-  .get(
-    '/GNOME/at-spi2-core.json?gitlab_url=https://gitlab.gnome.org&branch=master',
-  )
+  .get('/sdk/kde-builder.json?gitlab_url=https://invent.kde.org&branch=master')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
@@ -67,7 +65,7 @@ t.create('Coverage (custom gitlab URL)')
 
 t.create('Coverage (custom gitlab URL and job)')
   .get(
-    '/GNOME/libhandy.json?gitlab_url=https://gitlab.gnome.org&branch=master&job_name=unit-test',
+    '/sdk/kde-builder.json?gitlab_url=https://invent.kde.org&branch=master&job_name=unit_and_integration_tests',
   )
   .expectBadge({
     label: 'coverage',
