@@ -1,12 +1,23 @@
 import Joi from 'joi'
 import gql from 'graphql-tag'
+import yaml from 'js-yaml'
 import { renderVersionBadge } from '../version.js'
-import { InvalidParameter, pathParam } from '../index.js'
+import {
+  InvalidParameter,
+  InvalidResponse,
+  pathParam,
+  queryParam,
+} from '../index.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
 import { transformErrors } from '../github/github-helpers.js'
+import { parseDate } from '../date.js'
 import { latest } from './version.js'
 
-const schema = Joi.object({
+const queryParamSchema = Joi.object({
+  include_release_date: Joi.equal(''),
+}).required()
+
+const treeSchema = Joi.object({
   data: Joi.object({
     repository: Joi.object({
       object: Joi.object({
@@ -31,12 +42,33 @@ const schema = Joi.object({
   }).required(),
 }).required()
 
+const multiManifestSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      object: Joi.object({
+        entries: Joi.array().items(
+          Joi.object({
+            type: Joi.string().required(),
+            name: Joi.string().required(),
+            object: Joi.object({
+              text: Joi.string().allow(null),
+            }).allow(null),
+          }),
+        ),
+      })
+        .allow(null)
+        .required(),
+    }).required(),
+  }).required(),
+}).required()
+
 export default class WingetVersion extends GithubAuthV4Service {
   static category = 'version'
 
   static route = {
     base: 'winget/v',
     pattern: ':name',
+    queryParamSchema,
   }
 
   static openApi = {
@@ -48,6 +80,13 @@ export default class WingetVersion extends GithubAuthV4Service {
           pathParam({
             name: 'name',
             example: 'Microsoft.WSL',
+          }),
+          queryParam({
+            name: 'include_release_date',
+            schema: { type: 'boolean' },
+            example: null,
+            description:
+              'Include the ReleaseDate value in the badge, when available',
           }),
         ],
       },
@@ -87,12 +126,88 @@ export default class WingetVersion extends GithubAuthV4Service {
         }
       `,
       variables: { expression },
-      schema,
+      schema: treeSchema,
       transformErrors,
     })
   }
 
-  async handle({ name }) {
+  static getPreferredManifestFilenames({ name, files }) {
+    const yamlFiles = files.filter(file => file.endsWith('.yaml'))
+    const expectedYaml = `${name}.yaml`
+    const expectedInstallerYaml = `${name}.installer.yaml`
+
+    const priority = file => {
+      if (file === expectedInstallerYaml) return 0
+      if (file === expectedYaml) return 1
+      if (file.startsWith(`${name}.`) && file.endsWith('.installer.yaml'))
+        return 2
+      if (file.startsWith(`${name}.`)) return 3
+      if (file.endsWith('.installer.yaml')) return 4
+      return 5
+    }
+
+    return [...yamlFiles].sort((a, b) => priority(a) - priority(b))
+  }
+
+  async fetchAllManifests({ manifestPath, manifestFilenames }) {
+    const expression = `HEAD:${manifestPath}`
+    const json = await this._requestGraphql({
+      query: gql`
+        query RepoFiles($expression: String!) {
+          repository(owner: "microsoft", name: "winget-pkgs") {
+            object(expression: $expression) {
+              ... on Tree {
+                entries {
+                  type
+                  name
+                  object {
+                    ... on Blob {
+                      text
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `,
+      variables: { expression },
+      schema: multiManifestSchema,
+      transformErrors,
+    })
+
+    if (json.data.repository.object?.entries == null) {
+      return null
+    }
+
+    const entries = json.data.repository.object.entries
+    for (const filename of manifestFilenames) {
+      const entry = entries.find(e => e.name === filename)
+      if (!entry?.object?.text) continue
+
+      let parsed
+      try {
+        parsed = yaml.load(entry.object.text)
+      } catch (err) {
+        throw new InvalidResponse({
+          prettyMessage: 'unparseable manifest',
+          underlyingError: err,
+        })
+      }
+
+      const releaseDate = parsed?.ReleaseDate
+      if (releaseDate != null) {
+        const releaseDateString =
+          releaseDate instanceof Date
+            ? releaseDate.toISOString().slice(0, 10)
+            : String(releaseDate)
+        return parseDate(releaseDateString).format('D MMM YYYY').toLowerCase()
+      }
+    }
+    return null
+  }
+
+  async handle({ name }, queryParams) {
     const json = await this.fetch({ name })
     if (json.data.repository.object?.entries == null) {
       throw new InvalidParameter({
@@ -115,6 +230,31 @@ export default class WingetVersion extends GithubAuthV4Service {
       })
     }
 
-    return renderVersionBadge({ version })
+    const includeReleaseDate = queryParams.include_release_date !== undefined
+    if (!includeReleaseDate) {
+      return renderVersionBadge({ version })
+    }
+
+    const latestDir = versionDirs.find(dir => dir.name === version)
+    const manifestFiles = latestDir?.object?.entries
+      ?.filter(entry => entry.type === 'blob')
+      .map(entry => entry.name)
+
+    const nameFirstLower = name[0].toLowerCase()
+    const nameSlashed = name.replaceAll('.', '/')
+    const manifestPath = `manifests/${nameFirstLower}/${nameSlashed}/${version}`
+
+    const releaseDate = await this.fetchAllManifests({
+      manifestPath,
+      manifestFilenames: this.constructor.getPreferredManifestFilenames({
+        name,
+        files: manifestFiles ?? [],
+      }),
+    })
+
+    return renderVersionBadge({
+      version,
+      suffix: releaseDate ? `(${releaseDate})` : undefined,
+    })
   }
 }
