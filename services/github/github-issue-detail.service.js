@@ -22,11 +22,18 @@ const stateMap = {
     state: Joi.equal('open', 'closed').required(),
     merged_at: Joi.string().allow(null),
   }).required(),
-  transform: ({ json }) => ({
-    state: json.state,
-    // Because eslint will not be happy with this snake_case name :(
-    merged: json.merged_at !== null,
-  }),
+  transform: ({ json }) => {
+    const mergedAt =
+      json.pull_request &&
+      Object.prototype.hasOwnProperty.call(json.pull_request, 'merged_at')
+        ? json.pull_request.merged_at
+        : json.merged_at
+    return {
+      state: json.state,
+      // Because eslint will not be happy with this snake_case name :(
+      merged: mergedAt != null,
+    }
+  },
   render: ({ value, isPR, number }) => {
     const state = value.state
     const label = `${isPR ? 'pull request' : 'issue'} ${number}`
