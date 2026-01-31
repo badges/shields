@@ -106,8 +106,25 @@ describe('GithubIssueDetail', function () {
       json: { state: 'closed' },
     }).expect({
       // Since it's a PR, the "merged" value is not crucial here.
-      value: { state: 'closed', merged: true },
+      value: { state: 'closed', merged: false },
       isPR: false,
+    })
+    given({
+      property: 'state',
+      json: { state: 'closed', pull_request: { merged_at: null } },
+    }).expect({
+      value: { state: 'closed', merged: false },
+      isPR: true,
+    })
+    given({
+      property: 'state',
+      json: {
+        state: 'closed',
+        pull_request: { merged_at: '2025-01-01T00:00:00Z' },
+      },
+    }).expect({
+      value: { state: 'closed', merged: true },
+      isPR: true,
     })
     given({
       property: 'state',
