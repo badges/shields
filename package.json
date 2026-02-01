@@ -188,7 +188,7 @@
     "npm-run-all": "^4.1.5",
     "open-cli": "^8.0.0",
     "portfinder": "^1.0.38",
-    "prettier": "3.7.4",
+    "prettier": "3.8.1",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.2.3",
     "rimraf": "^6.1.2",
