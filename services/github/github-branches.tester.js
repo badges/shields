@@ -11,9 +11,7 @@ t.create('Branches')
     color: 'blue',
   })
 
-t.create('Branches (repo not found)')
-  .get('/badges/helmets.json')
-  .expectBadge({
-    label: 'branches',
-    message: 'repo not found',
-  })
+t.create('Branches (repo not found)').get('/badges/helmets.json').expectBadge({
+  label: 'branches',
+  message: 'repo not found',
+})
