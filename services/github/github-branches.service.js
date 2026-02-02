@@ -5,8 +5,8 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
 import {
-    documentation as commonDocumentation,
-    transformErrors,
+  documentation as commonDocumentation,
+  transformErrors,
 } from './github-helpers.js'
 
 const description = `
@@ -68,7 +68,7 @@ export default class GithubBranches extends GithubAuthV4Service {
       `,
       variables: { user, repo },
       schema,
-      transformErrors,
+    transformErrors,
     })
     return this.constructor.render({
       branchCount: json.data.repository.refs.totalCount,
