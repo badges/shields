@@ -7,7 +7,7 @@ t.create('Branches').get('/badges/shields.json').expectBadge({
   label: 'branches',
   message: isMetric,
   color: 'blue',
-  })
+})
 
 t.create('Branches (repo not found)').get('/badges/helmets.json').expectBadge({
   label: 'branches',

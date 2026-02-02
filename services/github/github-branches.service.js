@@ -68,7 +68,7 @@ export default class GithubBranches extends GithubAuthV4Service {
       `,
       variables: { user, repo },
       schema,
-    transformErrors,
+      transformErrors,
     })
     return this.constructor.render({
       branchCount: json.data.repository.refs.totalCount,
