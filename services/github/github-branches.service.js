@@ -4,7 +4,16 @@ import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
-import { documentation, transformErrors } from './github-helpers.js'
+import {
+    documentation as commonDocumentation,
+    transformErrors,
+} from './github-helpers.js'
+
+const description = `
+The GitHub branches badge shows the total number of branches in a repository.
+
+${commonDocumentation}
+`
 
 const schema = Joi.object({
   data: Joi.object({
@@ -18,12 +27,17 @@ const schema = Joi.object({
 
 export default class GithubBranches extends GithubAuthV4Service {
   static category = 'other'
-  static route = { base: 'github/branches', pattern: ':user/:repo' }
+
+  static route = {
+    base: 'github/branches',
+    pattern: ':user/:repo',
+  }
+
   static openApi = {
     '/github/branches/{user}/{repo}': {
       get: {
         summary: 'GitHub branches',
-        description: documentation,
+        description,
         parameters: pathParams(
           { name: 'user', example: 'badges' },
           { name: 'repo', example: 'shields' },
