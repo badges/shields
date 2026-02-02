@@ -71,7 +71,7 @@ class FeedzVersionService extends BaseJsonService {
   async fetch({ baseUrl, packageName }) {
     const registrationsBaseUrl = await searchServiceUrl(
       baseUrl,
-      'RegistrationsBaseUrl',
+      'RegistrationsBaseUrl/3.6.0',
     )
     return await this._requestJson({
       schema: packageSchema,
