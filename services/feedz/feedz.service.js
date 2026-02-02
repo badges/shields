@@ -1,28 +1,5 @@
-import Joi from 'joi'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
-import {
-  searchServiceUrl,
-  stripBuildMetadata,
-  selectVersion,
-} from '../nuget/nuget-helpers.js'
-import { renderVersionBadge } from '../version.js'
-
-const singlePageSchema = Joi.object({
-  '@id': Joi.string().required(),
-  items: Joi.array()
-    .items(
-      Joi.object({
-        catalogEntry: Joi.object({
-          version: Joi.string().required(),
-        }).required(),
-      }),
-    )
-    .default([]),
-}).required()
-
-const packageSchema = Joi.object({
-  items: Joi.array().items(singlePageSchema).default([]),
-}).required()
+import { BaseJsonService, pathParams } from '../index.js'
+import { fetchEndpointData } from '../endpoint-common.js'
 
 class FeedzVersionService extends BaseJsonService {
   static category = 'version'
@@ -64,64 +41,40 @@ class FeedzVersionService extends BaseJsonService {
     label: 'feedz',
   }
 
-  apiUrl({ organization, repository }) {
-    return `https://f.feedz.io/${organization}/${repository}/nuget`
-  }
-
-  async fetch({ baseUrl, packageName }) {
-    const registrationsBaseUrl = await searchServiceUrl(
-      baseUrl,
-      'RegistrationsBaseUrl',
-    )
-    return await this._requestJson({
-      schema: packageSchema,
-      url: `${registrationsBaseUrl}${packageName}/index.json`,
-      httpErrors: {
-        404: 'repository or package not found',
-      },
-    })
-  }
-
-  async fetchItems({ json }) {
-    if (json.items.length === 0 || json.items.some(i => i.catalogEntry)) {
-      return json
-    } else {
-      const items = await Promise.all(
-        json.items.map(i =>
-          this._requestJson({
-            schema: singlePageSchema,
-            url: i['@id'],
-            httpErrors: {
-              404: 'repository or package not found',
-            },
-          }),
-        ),
-      )
-      return { items }
-    }
-  }
-
-  transform({ json, includePrereleases }) {
-    const versions = json.items.flatMap(tl =>
-      tl.items.map(i => stripBuildMetadata(i.catalogEntry.version)),
-    )
-    if (versions.length >= 1) {
-      return selectVersion(versions, includePrereleases)
-    } else {
-      throw new NotFound({ prettyMessage: 'package not found' })
-    }
+  shieldUrl({ organization, repository, packageName, variant }) {
+    const endpoint = variant === 'vpre' ? 'latest' : 'stable'
+    return `https://f.feedz.io/${organization}/${repository}/shield/${packageName}/${endpoint}`
   }
 
   async handle({ variant, organization, repository, packageName }) {
-    const includePrereleases = variant === 'vpre'
-    const baseUrl = this.apiUrl({ organization, repository })
-    const json = await this.fetch({ baseUrl, packageName })
-    const fetchedJson = await this.fetchItems({ json })
-    const version = this.transform({ json: fetchedJson, includePrereleases })
-    return renderVersionBadge({
-      version,
-      defaultLabel: FeedzVersionService.defaultBadgeData.label,
+    const url = this.shieldUrl({
+      organization,
+      repository,
+      packageName,
+      variant,
     })
+    const badgeData = await fetchEndpointData(this, {
+      url,
+      httpErrors: {
+        404: 'repository or package not found',
+      },
+      validationPrettyErrorMessage: 'invalid response from feedz.io',
+    })
+
+    // Feedz.io returns badge data, but we need to:
+    // 1. Override label to match existing behavior ('feedz' instead of 'feedz.io')
+    // 2. Add 'v' prefix to message if not already present
+    let message = badgeData.message
+    if (message && !message.startsWith('v')) {
+      message = `v${message}`
+    }
+
+    return {
+      label: FeedzVersionService.defaultBadgeData.label,
+      message,
+      color: badgeData.color,
+      logoSvg: badgeData.logoSvg,
+    }
   }
 }
 
