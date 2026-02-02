@@ -26,7 +26,6 @@ const stateMap = {
     const mergedAt = json.pull_request?.merged_at ?? json.merged_at
     return {
       state: json.state,
-      // Because eslint will not be happy with this snake_case name :(
       merged: mergedAt != null,
     }
   },
