@@ -30,13 +30,13 @@ describe('GithubIssueDetail', function () {
     })
     given({
       property: 'state',
-      value: { state: 'not_planned' },
+      value: { state: 'not planned' },
       number: '93',
       isPR: false,
     }).expect({
       label: 'issue 93',
       message: 'not planned',
-      color: issueStateColor('not_planned'),
+      color: issueStateColor('not planned'),
     })
     given({
       property: 'state',
@@ -133,7 +133,7 @@ describe('GithubIssueDetail', function () {
       property: 'state',
       json: { state: 'closed', state_reason: 'not_planned' },
     }).expect({
-      value: { state: 'not_planned', merged: false },
+      value: { state: 'not planned', merged: false },
       isPR: false,
     })
     given({
