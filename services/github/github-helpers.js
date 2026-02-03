@@ -11,7 +11,7 @@ function issueStateColor(s) {
   return {
     open: '2cbe4e',
     closed: '6f42c1',
-    not_planned: '666c76',
+    'not planned': '666c76',
     duplicate: '666c76',
   }[s]
 }
