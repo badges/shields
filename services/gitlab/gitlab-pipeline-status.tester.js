@@ -45,7 +45,9 @@ t.create('Pipeline status (nonexistent repo)')
   })
 
 t.create('Pipeline status (custom gitlab URL)')
-  .get('/pipeline-status/GNOME/pango.json?gitlab_url=https://gitlab.gnome.org')
+  .get(
+    '/pipeline-status/sdk/kde-builder.json?gitlab_url=https://invent.kde.org&branch=master',
+  )
   .expectBadge({
     label: 'build',
     message: isBuildStatus,
