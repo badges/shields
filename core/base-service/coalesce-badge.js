@@ -1,9 +1,5 @@
-import {
-  decodeDataUrlFromQueryParam,
-  prepareNamedLogo,
-} from '../../lib/logos.js'
-import { svg2base64, getIconSize } from '../../lib/svg-helpers.js'
-import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
+import { decodeDataUrlFromQueryParam } from '../../badge-maker/lib/simple-icons-utils/logos.js'
+import { svg2base64 } from '../../badge-maker/lib/simple-icons-utils/svg-helpers.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
 
@@ -104,7 +100,7 @@ export default function coalesceBadge(
     style = 'flat'
   }
 
-  let namedLogo, namedLogoColor, logoSize, logoWidth, logoSvgBase64
+  let namedLogo, namedLogoColor, logoSize, logoSvgBase64
   if (overrideLogo) {
     // `?logo=` could be a named logo or encoded svg.
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
@@ -131,20 +127,6 @@ export default function coalesceBadge(
     }
     logoSize = coalesce(overrideLogoSize, serviceLogoSize)
   }
-  if (namedLogo) {
-    const iconSize = getIconSize(String(namedLogo).toLowerCase())
-
-    if (iconSize && logoSize === 'auto') {
-      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
-    }
-
-    logoSvgBase64 = prepareNamedLogo({
-      name: namedLogo,
-      color: namedLogoColor,
-      size: logoSize,
-      style,
-    })
-  }
 
   const badgeData = {
     // Use `coalesce()` to support empty labels and messages, as in the static
@@ -166,8 +148,8 @@ export default function coalesceBadge(
     ),
     style,
     namedLogo,
+    namedLogoColor,
     logo: logoSvgBase64,
-    logoWidth,
     logoSize,
     links: toArray(overrideLink || serviceLink),
     cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
