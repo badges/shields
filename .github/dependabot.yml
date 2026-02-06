@@ -29,6 +29,16 @@ updates:
         applies-to: security-updates
         patterns:
           - '@docusaurus/*'
+      react-version-updates:
+        applies-to: version-updates
+        patterns:
+          - 'react'
+          - 'react-dom'
+      react-security-updates:
+        applies-to: security-updates
+        patterns:
+          - 'react'
+          - 'react-dom'
 
   # badge-maker package dependencies
   - package-ecosystem: npm
