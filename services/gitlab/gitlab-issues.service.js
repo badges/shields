@@ -12,7 +12,7 @@ const schema = Joi.object({
       closed: nonNegativeInteger,
       opened: nonNegativeInteger,
     }).required(),
-  }).allow(null),
+  }),
 }).required()
 
 const queryParamSchema = Joi.object({
