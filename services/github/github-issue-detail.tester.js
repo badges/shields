@@ -7,7 +7,7 @@ t.create('github issue state')
   .get('/issues/detail/state/badges/shields/979.json')
   .expectBadge({
     label: 'issue 979',
-    message: Joi.equal('open', 'closed'),
+    message: 'closed',
   })
 
 t.create('github issue state (repo not found)')

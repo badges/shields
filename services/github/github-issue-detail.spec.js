@@ -29,6 +29,26 @@ describe('GithubIssueDetail', function () {
       color: issueStateColor('closed'),
     })
     given({
+      property: 'state',
+      value: { state: 'not planned' },
+      number: '93',
+      isPR: false,
+    }).expect({
+      label: 'issue 93',
+      message: 'not planned',
+      color: issueStateColor('not planned'),
+    })
+    given({
+      property: 'state',
+      value: { state: 'duplicate' },
+      number: '95',
+      isPR: false,
+    }).expect({
+      label: 'issue 95',
+      message: 'duplicate',
+      color: issueStateColor('duplicate'),
+    })
+    given({
       property: 'title',
       value: 'refactor [FooService]',
       number: '232',
@@ -106,6 +126,27 @@ describe('GithubIssueDetail', function () {
       json: { state: 'closed' },
     }).expect({
       // Since it's a PR, the "merged" value is not crucial here.
+      value: { state: 'closed', merged: false },
+      isPR: false,
+    })
+    given({
+      property: 'state',
+      json: { state: 'closed', state_reason: 'not_planned' },
+    }).expect({
+      value: { state: 'not planned', merged: false },
+      isPR: false,
+    })
+    given({
+      property: 'state',
+      json: { state: 'closed', state_reason: 'duplicate' },
+    }).expect({
+      value: { state: 'duplicate', merged: false },
+      isPR: false,
+    })
+    given({
+      property: 'state',
+      json: { state: 'closed', state_reason: 'other_reason' },
+    }).expect({
       value: { state: 'closed', merged: false },
       isPR: false,
     })

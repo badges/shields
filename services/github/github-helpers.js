@@ -8,7 +8,12 @@ Read more about [how it works](/blog/token-pool).
 `
 
 function issueStateColor(s) {
-  return { open: '2cbe4e', closed: '6f42c1' }[s]
+  return {
+    open: '2cbe4e',
+    closed: '6f42c1',
+    'not planned': '666c76',
+    duplicate: '666c76',
+  }[s]
 }
 
 function httpErrorsFor(notFoundMessage = 'repo not found') {
