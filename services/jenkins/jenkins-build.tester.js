@@ -8,7 +8,7 @@ t.create('build job not found')
 
 t.create('build found (view)')
   .get(
-    '/build.json?jobUrl=https://ci.hibernate.org/view/Main/job/hibernate-search/job/main',
+    '/build.json?jobUrl=https://ci-builds.apache.org/view/all/job/RocketMQ/job/auto-check-and-push-to-dockerhub',
   )
   .expectBadge({ label: 'build', message: isBuildStatus })
 
