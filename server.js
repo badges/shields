@@ -32,12 +32,6 @@ if (process.argv[3]) {
 console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
-if (config.public.fetchLimit != null) {
-  console.error(
-    'fetchLimit is no longer supported, its value will be ignored. Please remove it from your config and use fetchLimitBytes instead.',
-  )
-}
-
 if (config.public.cors != null) {
   console.error(
     'cors.allowedOrigin is no longer supported, its value will be ignored. Please remove it from your config.',

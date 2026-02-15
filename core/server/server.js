@@ -150,7 +150,6 @@ const publicConfigSchema = Joi.object({
   }).required(),
   cacheHeaders: { defaultCacheLengthSeconds: nonNegativeInteger },
   handleInternalErrors: Joi.boolean().required(),
-  fetchLimit: Joi.string(),
   fetchLimitBytes: fileSizeBytes,
   userAgentBase: Joi.string().required(),
   requestTimeoutSeconds: nonNegativeInteger,
