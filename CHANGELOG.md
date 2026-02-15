@@ -6,20 +6,13 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2026-02-15
 
-- fix: [JenkinsBuild] live view test [#11679](https://github.com/badges/shields/issues/11679)
-- add not-planned and duplicate to issue state to [GithubIssueDetail] [#11666](https://github.com/badges/shields/issues/11666)
-- fix: remove null allowance from schema in [GitLabIssues] [#11665](https://github.com/badges/shields/issues/11665)
+- Add not-planned and duplicate to issue state to [GithubIssueDetail] [#11666](https://github.com/badges/shields/issues/11666)
+- Fix: remove null allowance from schema in [GitLabIssues] [#11665](https://github.com/badges/shields/issues/11665)
 - Used the package version list to get version from [Feedz] [#11660](https://github.com/badges/shields/issues/11660)
-- add dependabot react group & update to 19.2.4 [#11667](https://github.com/badges/shields/issues/11667)
 - Fix [GitHub] issue detail merged state for PRs [#11642](https://github.com/badges/shields/issues/11642)
-- Fix [GitlabPipeline] custom URL tests [#11643](https://github.com/badges/shields/issues/11643)
-- feat: add subpath exports support for [bundlejs] [#11639](https://github.com/badges/shields/issues/11639)
-- update [crates] dependents badge description to include timeout issue [#11635](https://github.com/badges/shields/issues/11635)
-- increase cache time for [crates] dependents badge [#11636](https://github.com/badges/shields/issues/11636)
-- fix(tests): update test crate into base64 [#11634](https://github.com/badges/shields/issues/11634)
-- fix(tests): update color validation for version badge in [AUR] tests [#11632](https://github.com/badges/shields/issues/11632)
-- Update react to 19.2.3 and docusaurus-preset-openapi to 0.8.0 [#11629](https://github.com/badges/shields/issues/11629)
-- fix(tests): update guest API compliance test for matrix.org [#11626](https://github.com/badges/shields/issues/11626)
+- Add subpath exports support for [bundlejs] [#11639](https://github.com/badges/shields/issues/11639)
+- Update [crates] dependents badge description to include timeout issue [#11635](https://github.com/badges/shields/issues/11635)
+- Increase cache time for [crates] dependents badge [#11636](https://github.com/badges/shields/issues/11636)
 - Dependency updates
 
 ## server-2026-01-15
