@@ -1,3 +1,6 @@
+go get github.com/jyankhomen/team;
+go vet github.com/jyankhomen/team;
+go test jyankhomen/team
 <p align="center">
     <img src="https://raw.githubusercontent.com/badges/shields/master/readme-logo.svg?sanitize=true"
         height="130">
