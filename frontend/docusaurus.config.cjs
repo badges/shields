@@ -9,7 +9,6 @@ const config = {
   url: 'https://shields.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
   organizationName: 'badges',
   projectName: 'shields',
@@ -30,6 +29,9 @@ const config = {
       comments: true,
       admonitions: true,
       headingIds: true,
+    },
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
     },
   },
 
