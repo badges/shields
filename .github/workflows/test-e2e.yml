@@ -21,7 +21,7 @@ jobs:
           cache-name: cache-cypress
         with:
           path: ~/.cache/Cypress
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json', 'cypress/**') }}
 
       - name: Setup
         uses: ./.github/actions/setup
