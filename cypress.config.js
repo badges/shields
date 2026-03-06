@@ -2,7 +2,7 @@ import { defineConfig } from 'cypress'
 
 export default defineConfig({
   fixturesFolder: false,
-  env: {
+  expose: {
     backend_url: 'http://localhost:8080',
   },
   e2e: {
@@ -12,4 +12,5 @@ export default defineConfig({
   },
   video: true,
   videoCompression: true,
+  allowCypressEnv: false,
 })
