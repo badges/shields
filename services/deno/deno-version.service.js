@@ -1,7 +1,6 @@
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { pathParams } from '../index.js'
-import { BaseJsonService } from '../index.js'
+import { pathParams, BaseJsonService } from '../index.js'
 
 const schema = Joi.object({
   latest_version: Joi.string().required(),
