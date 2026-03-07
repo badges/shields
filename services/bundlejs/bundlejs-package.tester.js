@@ -23,7 +23,7 @@ t.create('bundlejs/package (select exports)')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
 t.create('bundlejs/package (scoped version select exports)')
-  .get('/@ngneat/falso@6.4.0.json?exports=randEmail,randFullName')
+  .get('/@floating-ui/dom@1.6.0.json?exports=computePosition,autoUpdate')
   .expectBadge({ label: 'minified size (gzip)', message: isMetricFileSize })
 
 t.create('bundlejs/package (externals)')
