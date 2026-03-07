@@ -122,7 +122,7 @@ t.create('Violations Long Format (legacy API supported)')
 
 t.create('Blocker Violations')
   .timeout(10000)
-  .get('/blocker_violations/brave_brave-core.json?server=https://sonarcloud.io')
+  .get('/blocker_violations/apache_camel.json?server=https://sonarcloud.io')
   .expectBadge({
     label: 'blocker violations',
     message: isMetric,
