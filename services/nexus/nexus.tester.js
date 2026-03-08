@@ -54,3 +54,15 @@ t.create('repository version with query')
     label: 'nexus',
     message: isVersion,
   })
+
+t.create('search release version without snapshots')
+  .get(
+    // Limit the version from above, so that any later artifacts don't break this test.
+    `/r/net.pistonmaster/pistonmotd-bukkit.json?server=https://repo.codemc.io&queryOpt=${encodeURIComponent(
+      ':maven.baseVersion=<5.1.1',
+    )}`,
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: 'v5.1.0',
+  })
