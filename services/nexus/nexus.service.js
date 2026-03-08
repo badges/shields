@@ -80,7 +80,7 @@ export default class Nexus extends BaseJsonService {
         summary: 'Sonatype Nexus (Repository)',
         parameters: [
           ...pathParams(
-            { name: 'repo', example: 'snapshots' },
+            { name: 'repo', example: 'maven-central' },
             { name: 'groupId', example: 'com.google.guava' },
             { name: 'artifactId', example: 'guava' },
           ),
