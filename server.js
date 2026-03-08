@@ -1,5 +1,5 @@
 import configModule from 'config'
-import * as Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node-core/light'
 import Server from './core/server/server.js'
 
 // Set up Sentry reporting as early in the process as possible.
