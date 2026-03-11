@@ -86,6 +86,10 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 ## Development
 
+Tech stack used:
+
+![Stack Fingerprint](https://stackfingerprint.vercel.app/api/card?repo=badges/shields&theme=slate&layout=banner&size=md&icons=color&pills=round)
+
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/badges/shields?quickstart=1)
 
 1. Install Node 22. You can use the [package manager][] of your choice.
