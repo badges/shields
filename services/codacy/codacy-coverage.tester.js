@@ -2,22 +2,22 @@ import { isIntegerPercentage } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-// https://app.codacy.com/gh/kronenthaler/openstep-parser/dashboard
-// https://github.com/kronenthaler/openstep-parser
-t.create('Coverage').get('/d5402a91aa7b4234bd1c19b5e86a63be.json').expectBadge({
+// https://app.codacy.com/gh/schemacrawler/SchemaCrawler/dashboard
+// https://github.com/schemacrawler/SchemaCrawler
+t.create('Coverage').get('/84c0a068ce9349f2bcaa07b5977bd932.json').expectBadge({
   label: 'coverage',
   message: isIntegerPercentage,
 })
 
 t.create('Coverage on branch')
-  .get('/d5402a91aa7b4234bd1c19b5e86a63be/master.json')
+  .get('/84c0a068ce9349f2bcaa07b5977bd932/main.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,
   })
 
 t.create('Coverage not enabled')
-  .get('/0cb32ce695b743d68257021455330c66.json')
+  .get('/1cc53e72c9fa4d87be03d6085451cb2c.json')
   .expectBadge({
     label: 'coverage',
     message: 'not enabled for this project',
