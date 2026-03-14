@@ -60,6 +60,7 @@ t.create('last commit (project not found)')
   })
 
 t.create('last commit (no commits found)')
+  .timeout(10000)
   .get('/gitlab-org/gitlab.json?path=not/a/dir')
   .expectBadge({
     label: 'last commit',
