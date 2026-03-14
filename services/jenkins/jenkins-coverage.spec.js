@@ -5,7 +5,7 @@ const authConfigOverride = {
   public: {
     services: {
       jenkins: {
-        authorizedOrigins: ['https://ci-maven.apache.org'],
+        authorizedOrigins: ['https://jenkins-2.sse.uni-hildesheim.de'],
       },
     },
   },

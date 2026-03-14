@@ -121,7 +121,7 @@ export default class JenkinsCoverage extends JenkinsBase {
           queryParam({
             name: 'jobUrl',
             example:
-              'https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-surefire/job/master',
+              'https://jenkins-2.sse.uni-hildesheim.de/job/Teaching_SubmissionCheck',
             required: true,
           }),
         ],

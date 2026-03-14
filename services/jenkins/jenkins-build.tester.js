@@ -7,9 +7,7 @@ t.create('build job not found')
   .expectBadge({ label: 'build', message: 'instance or job not found' })
 
 t.create('build found (view)')
-  .get(
-    '/build.json?jobUrl=https://ci-builds.apache.org/view/all/job/RocketMQ/job/auto-check-and-push-to-dockerhub',
-  )
+  .get('/build.json?jobUrl=https://ci.eclipse.org/jgit/view/all/job/jgit')
   .expectBadge({ label: 'build', message: isBuildStatus })
 
 t.create('build found (job)')

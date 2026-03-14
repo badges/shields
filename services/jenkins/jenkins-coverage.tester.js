@@ -10,13 +10,15 @@ export const t = await createServiceTester()
 t.create('jacoco: job found')
   .get(
     `/jacoco.json?jobUrl=${encodeURIComponent(
-      'https://ci-maven.apache.org/job/Maven/job/maven-box/job/maven-surefire/job/master',
+      'https://jenkins-2.sse.uni-hildesheim.de/job/Teaching_SubmissionCheck',
     )}`,
   )
   .expectBadge({ label: 'coverage', message: isIntegerPercentage })
 
 t.create('jacoco: job not found')
-  .get('/jacoco.json?jobUrl=https://ci-maven.apache.org/job/does-not-exist')
+  .get(
+    '/jacoco.json?jobUrl=https://jenkins-2.sse.uni-hildesheim.de/job/does-not-exist',
+  )
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
 
 const coverageCoberturaResponse = {
