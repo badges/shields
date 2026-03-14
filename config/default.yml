@@ -19,7 +19,7 @@ public:
       debug:
         enabled: false
         intervalSeconds: 200
-      restApiVersion: '2022-11-28'
+      restApiVersion: '2026-03-10'
     obs:
       authorizedOrigins: 'https://api.opensuse.org'
     pypi:
@@ -30,7 +30,7 @@ public:
   cacheHeaders:
     defaultCacheLengthSeconds: 120
   handleInternalErrors: true
-  fetchLimitBytes: 10485760 # 10MB
+  fetchLimitBytes: 10485760
   userAgentBase: 'shields (self-hosted)'
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
