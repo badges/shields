@@ -23,7 +23,7 @@ export default class Cookbook extends BaseJsonService {
   static defaultBadgeData = { label: 'cookbook' }
 
   async fetch({ cookbook }) {
-    const url = `https://supermarket.getchef.com/api/v1/cookbooks/${cookbook}/versions/latest`
+    const url = `https://supermarket.chef.io/api/v1/cookbooks/${cookbook}/versions/latest`
     return this._requestJson({ schema, url })
   }
 
