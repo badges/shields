@@ -6,20 +6,19 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2026-03-15
 
-- Update [GitHub] API Version [#11734](https://github.com/badges/shields/issues/11734)
+**Important notice:**
+
+- The `cors.allowedOrigin` and `fetchLimit` configuration options have been be removed. Please make sure they're no longer present in your configuration.
+
+**Deprecation:**
+
 - Drop [Nexus] 2 support [#11728](https://github.com/badges/shields/issues/11728)
-- replace @sentry/node with @sentry/node-core/light [#11731](https://github.com/badges/shields/issues/11731)
-- Fix [Reuse] unregistered handling [#11729](https://github.com/badges/shields/issues/11729)
-- Fix [SonarViolations] test [#11727](https://github.com/badges/shields/issues/11727)
-- Fix [PythonVersionFromToml] test [#11726](https://github.com/badges/shields/issues/11726)
-- Fix [BundleJs] test [#11725](https://github.com/badges/shields/issues/11725)
 - Deprecate [Codeship] service [#11724](https://github.com/badges/shields/issues/11724)
-- Remove cors.allowedOrigin config [#11723](https://github.com/badges/shields/issues/11723)
-- chore(cypress): replace deprecated env function [#11718](https://github.com/badges/shields/issues/11718)
-- fix: update cache key to include Cypress files in [test-e2e.yml] [#11719](https://github.com/badges/shields/issues/11719)
-- fix: move onBrokenMarkdownLinks configuration to hooks [#11720](https://github.com/badges/shields/issues/11720)
-- Remove deprecated fetchLimit from configuration [#11684](https://github.com/badges/shields/issues/11684)
-- fix: update license at [CratesLicense] test [#11685](https://github.com/badges/shields/issues/11685)
+
+Other changes:
+
+- Replace @sentry/node with @sentry/node-core/light [#11731](https://github.com/badges/shields/issues/11731)
+- Fix [Reuse] unregistered handling [#11729](https://github.com/badges/shields/issues/11729)
 - Dependency updates
 
 ## server-2026-02-15
