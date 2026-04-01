@@ -25,7 +25,7 @@
     "@renovatebot/ruby-semver": "^4.1.2",
     "@sentry/node-core": "^10.42.0",
     "@shields_io/camp": "^18.1.2",
-    "@xmldom/xmldom": "0.9.8",
+    "@xmldom/xmldom": "0.9.9",
     "badge-maker": "file:badge-maker",
     "byte-size": "^9.0.1",
     "camelcase": "^9.0.0",
