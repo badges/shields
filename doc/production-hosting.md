@@ -22,7 +22,8 @@ Production hosting is managed by the Shields ops team:
 | Cloudflare (CDN) | Admin access | @calebcartwright, @chris48s, @espadrine, @paulmelnikow, @PyvesB |
 | DNS | Account owner | @olivierlacan |
 | DNS | Read-only account access | @chris48s, @espadrine, @paulmelnikow |
-| Sentry | Account access | @calebcartwright, @chris48s, @espadrine, @jNullj, @paulmelnikow, @platan, @PyvesB |
+| Sentry | Owner | @paulmelnikow, @jNullj |
+| Sentry | Account access | @calebcartwright, @jNullj, @paulmelnikow, @PyvesB |
 | Metrics server | Owner | @platan |
 | More metrics | Owner | @RedSparr0w |
 | Twitch | OAuth app | @PyvesB |
