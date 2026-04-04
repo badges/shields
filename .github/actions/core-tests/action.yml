@@ -3,16 +3,20 @@ description: 'Run core and entrypoint tests'
 runs:
   using: 'composite'
   steps:
+    - name: Create test config
+      run: |
+        mkdir -p config
+        echo "private:" > config/local.yml
+        echo "  postgres_url: 'postgresql://localhost/shields_test'" >> config/local.yml
+      shell: bash
     - name: Core tests
       if: always()
       run: npm run test:core -- --reporter json --reporter-option 'output=reports/core.json'
       shell: bash
-
     - name: Entrypoint tests
       if: always()
       run: npm run test:entrypoint -- --reporter json --reporter-option 'output=reports/entrypoint.json'
       shell: bash
-
     - name: Write Markdown Summary
       if: always()
       run: |
