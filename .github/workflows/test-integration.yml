@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PAT_EXISTS: ${{ secrets.GH_PAT != '' }}
+      POSTGRES_URL: 'postgres://postgres:postgres@localhost:5432/ci_test'
 
     services:
       postgres:
@@ -22,7 +23,6 @@ jobs:
           POSTGRES_DB: ci_test
         options: >-
           --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
 
         ports:
           - 5432:5432

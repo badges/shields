@@ -1,12 +1,11 @@
-public:
+﻿public:
   bind:
     address: 'localhost'
     port: 1111
-
   redirectUrl: 'http://frontend.example.test'
-
   rasterUrl: 'http://raster.example.test'
-
   handleInternalErrors: false
-
   allowUnsecuredEndpointRequests: false
+
+private:
+  postgres_url: 'postgres://postgres:postgres@localhost:5432/ci_test'
