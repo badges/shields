@@ -112,3 +112,17 @@ t.create('Unknown dependency')
     label: 'dependency',
     message: 'dev dependency not found',
   })
+
+t.create('Package manager (strips build metadata suffix)')
+  .get('/packageManager/nodejs/corepack.json')
+  .expectBadge({
+    label: 'packageManager',
+    message: Joi.string().regex(/^(npm|yarn|pnpm|bun)@[\d.]+$/),
+  })
+
+t.create('Package manager (repo not found)')
+  .get('/packageManager/badges/helmets.json')
+  .expectBadge({
+    label: 'package.json',
+    message: 'repo not found, branch not found, or package.json missing',
+  })

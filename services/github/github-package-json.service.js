@@ -289,7 +289,11 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthV3Service {
       branch,
       filename: 'package.json',
     })
-    const value = transformAndValidate({ data, key })
+    let value = transformAndValidate({ data, key })
+    // Strip build metadata suffix from packageManager field (e.g. yarn@3.2.3+sha224.abc -> yarn@3.2.3)
+    if (key === 'packageManager' && typeof value === 'string') {
+      value = value.replace(/\+.*$/, '')
+    }
     return this.constructor.render({ key, value, branch })
   }
 }
