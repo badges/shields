@@ -7,12 +7,12 @@ export default class VoxelShopDownloads extends BaseVoxelShopService {
   static category = 'downloads'
 
   static route = {
-    base: 'voxel-shop/downloads',
+    base: 'voxel-shop/dt',
     pattern: ':resourceId',
   }
 
   static openApi = {
-    '/voxel-shop/downloads/{resourceId}': {
+    '/voxel-shop/dt/{resourceId}': {
       get: {
         summary: 'Voxel Shop Downloads',
         description,

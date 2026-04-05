@@ -6,6 +6,6 @@ export default redirector({
     base: 'polymart/version',
     pattern: ':resourceId',
   },
-  transformPath: ({ resourceId }) => `/voxel-shop/version/${resourceId}`,
+  transformPath: ({ resourceId }) => `/voxel-shop/v/${resourceId}`,
   dateAdded: new Date('2026-04-05'),
 })

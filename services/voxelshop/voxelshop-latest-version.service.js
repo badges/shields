@@ -7,12 +7,12 @@ export default class VoxelShopLatestVersion extends BaseVoxelShopService {
   static category = 'version'
 
   static route = {
-    base: 'voxel-shop/version',
+    base: 'voxel-shop/v',
     pattern: ':resourceId',
   }
 
   static openApi = {
-    '/voxel-shop/version/{resourceId}': {
+    '/voxel-shop/v/{resourceId}': {
       get: {
         summary: 'Voxel Shop Version',
         description,
