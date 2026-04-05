@@ -31,14 +31,14 @@ const resourceFoundOrNotSchema = Joi.alternatives(
 )
 
 const description = `
-<p>You can find your resource ID in the url for your resource page.</p>
-<p>Example: <code>https://polymart.org/resource/polymart-plugin.323</code> - Here the Resource ID is 323.</p>`
+<p>You can find your resource ID in the url for your product page.</p>
+<p>Example: <code>https://voxel.shop/product/323/polymart-plugin</code> - Here the Resource ID is 323.</p>`
 
-class BasePolymartService extends BaseJsonService {
+class BaseVoxelShopService extends BaseJsonService {
   async fetch({
     resourceId,
     schema = resourceFoundOrNotSchema,
-    url = `https://api.polymart.org/v1/getResourceInfo/?resource_id=${resourceId}`,
+    url = `https://api.voxel.shop/v1/getResourceInfo/?resource_id=${resourceId}`,
   }) {
     return this._requestJson({
       schema,
@@ -47,4 +47,4 @@ class BasePolymartService extends BaseJsonService {
   }
 }
 
-export { description, BasePolymartService }
+export { description, BaseVoxelShopService }
