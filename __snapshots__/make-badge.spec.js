@@ -7,6 +7,9 @@ exports['The badge generator SVG should match snapshot 1'] = `
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -29,6 +32,18 @@ exports['The badge generator SVG should match snapshot 1'] = `
       x="235"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -37,6 +52,18 @@ exports['The badge generator SVG should match snapshot 1'] = `
     </text>
     <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -66,6 +93,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -88,6 +118,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="235"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -96,6 +138,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </text>
     <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -125,6 +179,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -156,6 +213,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="405"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -164,6 +233,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </text>
     <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -193,6 +274,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -210,6 +294,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     text-rendering="geometricPrecision"
     font-size="110"
   >
+    <text
+      aria-hidden="true"
+      x="225"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
     <text
       aria-hidden="true"
       x="225"
@@ -238,6 +334,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -267,6 +366,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="405"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -290,6 +401,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -319,6 +433,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="455"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text
+      aria-hidden="true"
+      x="455"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -335,6 +461,9 @@ exports['The badge generator "flat" template badge generation should match snaps
 
 exports['The badge generator "flat" template badge generation should match snapshots: message/label, with links 1'] = `
 <svg xmlns="http://www.w3.org/2000/svg" width="90" height="20">
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -359,6 +488,18 @@ exports['The badge generator "flat" template badge generation should match snaps
         x="235"
         y="150"
         fill="#010101"
+        fill-opacity=".80"
+        filter="url(#blur)"
+        transform="scale(.1)"
+        textLength="350"
+      >
+        cactus
+      </text>
+      <text
+        aria-hidden="true"
+        x="235"
+        y="150"
+        fill="#010101"
         fill-opacity=".3"
         transform="scale(.1)"
         textLength="350"
@@ -371,6 +512,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </a>
     <a target="_blank" href="https://www.google.co.uk/">
       <rect width="45" x="45" height="20" fill="rgba(0,0,0,0)" />
+      <text
+        aria-hidden="true"
+        x="665"
+        y="150"
+        fill="#010101"
+        fill-opacity=".80"
+        filter="url(#blur)"
+        transform="scale(.1)"
+        textLength="350"
+      >
+        grown
+      </text>
       <text
         aria-hidden="true"
         x="665"
@@ -400,6 +553,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -422,6 +578,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="235"
       y="150"
       fill="#ccc"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#ccc"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -430,6 +598,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </text>
     <text x="235" y="140" transform="scale(.1)" fill="#333" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -459,6 +639,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -481,6 +664,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="235"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -489,6 +684,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </text>
     <text x="235" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="150"
+      fill="#ccc"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -801,6 +1008,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="235"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -809,6 +1028,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </text>
     <text x="235" y="130" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="140"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -871,6 +1102,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="405"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -879,6 +1122,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </text>
     <text x="405" y="130" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="140"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -927,6 +1182,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     text-rendering="geometricPrecision"
     font-size="110"
   >
+    <text
+      aria-hidden="true"
+      x="225"
+      y="140"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
     <text
       aria-hidden="true"
       x="225"
@@ -986,6 +1253,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="405"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -1040,6 +1319,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="455"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
+    </text>
+    <text
+      aria-hidden="true"
+      x="455"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -1082,6 +1373,18 @@ exports['The badge generator "plastic" template badge generation should match sn
         x="235"
         y="140"
         fill="#010101"
+        fill-opacity=".80"
+        filter="url(#blur)"
+        transform="scale(.1)"
+        textLength="350"
+      >
+        cactus
+      </text>
+      <text
+        aria-hidden="true"
+        x="235"
+        y="140"
+        fill="#010101"
         fill-opacity=".3"
         transform="scale(.1)"
         textLength="350"
@@ -1094,6 +1397,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </a>
     <a target="_blank" href="https://www.google.co.uk/">
       <rect width="45" x="45" height="18" fill="rgba(0,0,0,0)" />
+      <text
+        aria-hidden="true"
+        x="665"
+        y="140"
+        fill="#010101"
+        fill-opacity=".80"
+        filter="url(#blur)"
+        transform="scale(.1)"
+        textLength="350"
+      >
+        grown
+      </text>
       <text
         aria-hidden="true"
         x="665"
@@ -1147,6 +1462,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="235"
       y="140"
       fill="#ccc"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="140"
+      fill="#ccc"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -1155,6 +1482,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </text>
     <text x="235" y="130" transform="scale(.1)" fill="#333" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="140"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -1208,6 +1547,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="235"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="235"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -1216,6 +1567,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </text>
     <text x="235" y="130" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="665"
+      y="140"
+      fill="#ccc"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -2111,6 +2474,9 @@ exports['The badge generator "flat" template badge generation should match snaps
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s1" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -2142,6 +2508,18 @@ exports['The badge generator "flat" template badge generation should match snaps
       x="405"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -2150,6 +2528,18 @@ exports['The badge generator "flat" template badge generation should match snaps
     </text>
     <text x="405" y="140" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -2250,6 +2640,18 @@ exports['The badge generator "plastic" template badge generation should match sn
       x="405"
       y="140"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="405"
+      y="140"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="350"
@@ -2258,6 +2660,18 @@ exports['The badge generator "plastic" template badge generation should match sn
     </text>
     <text x="405" y="130" transform="scale(.1)" fill="#fff" textLength="350">
       cactus
+    </text>
+    <text
+      aria-hidden="true"
+      x="835"
+      y="140"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="350"
+    >
+      grown
     </text>
     <text
       aria-hidden="true"
@@ -2428,6 +2842,9 @@ exports['The badge generator badges with logos should always produce the same ba
   aria-label="label: message"
 >
   <title>label: message</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
@@ -2459,6 +2876,18 @@ exports['The badge generator badges with logos should always produce the same ba
       x="365"
       y="150"
       fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="270"
+    >
+      label
+    </text>
+    <text
+      aria-hidden="true"
+      x="365"
+      y="150"
+      fill="#010101"
       fill-opacity=".3"
       transform="scale(.1)"
       textLength="270"
@@ -2467,6 +2896,18 @@ exports['The badge generator badges with logos should always produce the same ba
     </text>
     <text x="365" y="140" transform="scale(.1)" fill="#fff" textLength="270">
       label
+    </text>
+    <text
+      aria-hidden="true"
+      x="825"
+      y="150"
+      fill="#010101"
+      fill-opacity=".80"
+      filter="url(#blur)"
+      transform="scale(.1)"
+      textLength="490"
+    >
+      message
     </text>
     <text
       aria-hidden="true"
@@ -2496,6 +2937,9 @@ exports['The badge generator badges with logo-only should always produce the sam
   aria-label=""
 >
   <title></title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
     <stop offset="1" stop-opacity=".1" />
