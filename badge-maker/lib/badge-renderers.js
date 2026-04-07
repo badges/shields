@@ -356,6 +356,19 @@ class Badge {
     })
   }
 
+  getBlurElement() {
+    return new XmlElement({
+      name: 'filter',
+      content: [
+        new XmlElement({
+          name: 'feGaussianBlur',
+          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
+        }),
+      ],
+      attrs: { id: 'blur' },
+    })
+  }
+
   render() {
     throw new Error('Not implemented')
   }
@@ -398,16 +411,7 @@ class Plastic extends Badge {
       attrs: { id: `s${this.idSuffix}`, x2: 0, y2: '100%' },
     })
 
-    const blur = new XmlElement({
-      name: 'filter',
-      content: [
-        new XmlElement({
-          name: 'feGaussianBlur',
-          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
-        }),
-      ],
-      attrs: { id: 'blur' },
-    })
+    const blur = this.getBlurElement()
 
     const clipPath = this.getClipPathElement(4)
 
@@ -443,16 +447,7 @@ class Flat extends Badge {
   }
 
   render() {
-    const blur = new XmlElement({
-      name: 'filter',
-      content: [
-        new XmlElement({
-          name: 'feGaussianBlur',
-          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
-        }),
-      ],
-      attrs: { id: 'blur' },
-    })
+    const blur = this.getBlurElement()
 
     const gradient = new XmlElement({
       name: 'linearGradient',
