@@ -984,6 +984,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1069,6 +1072,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1163,6 +1169,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1222,6 +1231,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1288,6 +1300,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="grown"
 >
   <title>grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1347,6 +1362,9 @@ exports['The badge generator "plastic" template badge generation should match sn
 
 exports['The badge generator "plastic" template badge generation should match snapshots: message/label, with links 1'] = `
 <svg xmlns="http://www.w3.org/2000/svg" width="90" height="18">
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1438,6 +1456,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -1523,6 +1544,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -2607,6 +2631,9 @@ exports['The badge generator "plastic" template badge generation should match sn
   aria-label="cactus: grown"
 >
   <title>cactus: grown</title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s1" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
@@ -3088,6 +3115,9 @@ exports['The badge generator badges with logo-only should always produce the sam
   aria-label=""
 >
   <title></title>
+  <filter id="blur">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" />
+  </filter>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#fff" stop-opacity=".7" />
     <stop offset=".1" stop-color="#aaa" stop-opacity=".1" />
