@@ -398,6 +398,17 @@ class Plastic extends Badge {
       attrs: { id: `s${this.idSuffix}`, x2: 0, y2: '100%' },
     })
 
+    const blur = new XmlElement({
+      name: 'filter',
+      content: [
+        new XmlElement({
+          name: 'feGaussianBlur',
+          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
+        }),
+      ],
+      attrs: { id: 'blur' },
+    })
+
     const clipPath = this.getClipPathElement(4)
 
     const backgroundGroup = this.getBackgroundGroupElement({
@@ -413,7 +424,7 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
