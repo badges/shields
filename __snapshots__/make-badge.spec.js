@@ -17,7 +17,7 @@ exports['The badge generator SVG should match snapshot 1'] = `
   <clipPath id="r"><rect width="90" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="45" height="20" fill="#555" />
-    <rect x="45" width="45" height="20" fill="#4c1" />
+    <rect x="45" width="45" height="20" fill="#4b0" />
     <rect width="90" height="20" fill="url(#s)" />
   </g>
   <g
@@ -2881,7 +2881,7 @@ exports['The badge generator badges with logos should always produce the same ba
   </clipPath>
   <g clip-path="url(#r)">
     <rect width="54" height="20" fill="#555" />
-    <rect x="54" width="59" height="20" fill="#4c1" />
+    <rect x="54" width="59" height="20" fill="#4b0" />
     <rect width="113" height="20" fill="url(#s)" />
   </g>
   <g
@@ -2974,7 +2974,7 @@ exports['The badge generator badges with logo-only should always produce the sam
   <clipPath id="r"><rect width="25" height="20" rx="3" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="25" height="20" fill="#4c1" />
+    <rect x="0" width="25" height="20" fill="#4b0" />
     <rect width="25" height="20" fill="url(#s)" />
   </g>
   <g
@@ -3007,7 +3007,7 @@ exports['The badge generator badges with logo-only should always produce the sam
   <title></title>
   <g shape-rendering="crispEdges">
     <rect width="0" height="20" fill="#555" />
-    <rect x="0" width="25" height="20" fill="#4c1" />
+    <rect x="0" width="25" height="20" fill="#4b0" />
   </g>
   <g
     fill="#fff"
@@ -3127,7 +3127,7 @@ exports['The badge generator badges with logo-only should always produce the sam
   <clipPath id="r"><rect width="25" height="18" rx="4" fill="#fff" /></clipPath>
   <g clip-path="url(#r)">
     <rect width="0" height="18" fill="#555" />
-    <rect x="0" width="25" height="18" fill="#4c1" />
+    <rect x="0" width="25" height="18" fill="#4b0" />
     <rect width="25" height="18" fill="url(#s)" />
   </g>
   <g
@@ -3159,7 +3159,7 @@ exports['The badge generator badges with logo-only should always produce the sam
 >
   <title></title>
   <g shape-rendering="crispEdges">
-    <rect width="35" height="28" fill="#4c1" />
+    <rect width="35" height="28" fill="#4b0" />
   </g>
   <g
     fill="#fff"

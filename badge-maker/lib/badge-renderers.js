@@ -123,7 +123,7 @@ class Badge {
     logo,
     logoWidth,
     logoPadding,
-    color = '#4c1',
+    color = '#4b0',
     labelColor,
     idSuffix = '',
   }) {
@@ -523,7 +523,7 @@ function social({
   logo,
   logoWidth,
   logoPadding,
-  color = '#4c1',
+  color = '#4b0',
   labelColor = '#555',
   idSuffix = '',
 }) {
@@ -791,7 +791,7 @@ function forTheBadge({
   links,
   logo,
   logoWidth,
-  color = '#4c1',
+  color = '#4b0',
   labelColor,
 }) {
   const FONT_SIZE = 10
