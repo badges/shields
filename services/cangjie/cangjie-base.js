@@ -1,10 +1,6 @@
 import Joi from 'joi'
-import {
-  BaseService,
-  InvalidParameter,
-  InvalidResponse,
-  NotFound,
-} from '../index.js'
+import { BaseJsonlService, InvalidParameter, NotFound } from '../index.js'
+import { parseJsonl } from '../../core/base-service/jsonl.js'
 import { latest } from '../version.js'
 
 const indexEntrySchema = Joi.object({
@@ -15,7 +11,7 @@ const indexEntrySchema = Joi.object({
   'index-version': Joi.string().required(),
 }).required()
 
-export class BaseCangjieService extends BaseService {
+export class BaseCangjieService extends BaseJsonlService {
   static defaultBadgeData = { label: 'cangjie' }
 
   static getIndexPath({ moduleName }) {
@@ -30,25 +26,6 @@ export class BaseCangjieService extends BaseService {
     return `${moduleName.slice(0, 2)}/${moduleName.slice(2, 4)}/${moduleName}`
   }
 
-  static parseIndexEntries(indexBody) {
-    return indexBody
-      .split(/\r?\n/)
-      .map(line => line.trim())
-      .filter(Boolean)
-      .map(line => {
-        let entry
-        try {
-          entry = JSON.parse(line)
-        } catch (e) {
-          throw new InvalidResponse({ prettyMessage: 'invalid index entry' })
-        }
-
-        return this._validate(entry, indexEntrySchema, {
-          prettyErrorMessage: 'invalid index entry',
-        })
-      })
-  }
-
   static getLatestVersion(entries) {
     const version = latest(
       entries.filter(({ yanked }) => !yanked).map(({ version }) => version),
@@ -61,17 +38,21 @@ export class BaseCangjieService extends BaseService {
     return version
   }
 
+  _parseJsonl(buffer) {
+    return parseJsonl(buffer, { prettyErrorMessage: 'invalid index entry' })
+  }
+
   async fetch({ moduleName, organization }) {
     const indexPath = this.constructor.getIndexPath({ moduleName })
     const options = organization
       ? { searchParams: { organization } }
       : undefined
 
-    const { buffer } = await this._request({
+    return this._requestJsonl({
+      schema: indexEntrySchema,
       url: `https://pkg.cangjie-lang.cn/registry/index/${indexPath}`,
       options,
+      prettyErrorMessage: 'invalid index entry',
     })
-
-    return this.constructor.parseIndexEntries(buffer.toString())
   }
 }

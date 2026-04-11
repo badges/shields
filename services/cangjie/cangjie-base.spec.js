@@ -1,5 +1,7 @@
 import { expect } from 'chai'
 import { test, given } from 'sazerac'
+import sinon from 'sinon'
+import { InvalidResponse } from '../index.js'
 import { BaseCangjieService } from './cangjie-base.js'
 
 describe('BaseCangjieService', function () {
@@ -17,14 +19,22 @@ describe('BaseCangjieService', function () {
     })
   })
 
-  describe('parseIndexEntries', function () {
-    it('parses line-delimited index entries', function () {
-      const entries = BaseCangjieService.parseIndexEntries(`
+  describe('fetch', function () {
+    it('parses line-delimited index entries', async function () {
+      const requestFetcher = sinon.stub().resolves({
+        buffer: `
 {"name":"demo","version":"1.0.0","yanked":false,"index-version":"1"}
 {"name":"demo","version":"1.1.0","yanked":true,"index-version":"1"}
-      `)
+        `,
+        res: { statusCode: 200 },
+      })
 
-      expect(entries).to.deep.equal([
+      const service = new BaseCangjieService(
+        { requestFetcher },
+        { handleInternalErrors: false },
+      )
+
+      expect(await service.fetch({ moduleName: 'demo' })).to.deep.equal([
         {
           name: 'demo',
           version: '1.0.0',
@@ -38,6 +48,46 @@ describe('BaseCangjieService', function () {
           'index-version': '1',
         },
       ])
+    })
+
+    it('throws invalid index entry for malformed jsonl', async function () {
+      const requestFetcher = sinon.stub().resolves({
+        buffer: 'not json',
+        res: { statusCode: 200 },
+      })
+
+      const service = new BaseCangjieService(
+        { requestFetcher },
+        { handleInternalErrors: false },
+      )
+
+      try {
+        await service.fetch({ moduleName: 'demo' })
+        expect.fail('expected fetch() to throw')
+      } catch (e) {
+        expect(e).to.be.instanceOf(InvalidResponse)
+        expect(e.prettyMessage).to.equal('invalid index entry')
+      }
+    })
+
+    it('throws invalid index entry for schema-invalid lines', async function () {
+      const requestFetcher = sinon.stub().resolves({
+        buffer: '{"name":"demo","version":"1.0.0","index-version":"1"}',
+        res: { statusCode: 200 },
+      })
+
+      const service = new BaseCangjieService(
+        { requestFetcher },
+        { handleInternalErrors: false },
+      )
+
+      try {
+        await service.fetch({ moduleName: 'demo' })
+        expect.fail('expected fetch() to throw')
+      } catch (e) {
+        expect(e).to.be.instanceOf(InvalidResponse)
+        expect(e.prettyMessage).to.equal('invalid index entry')
+      }
     })
   })
 
