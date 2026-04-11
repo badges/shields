@@ -117,7 +117,7 @@ t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
   .expectBadge({ label: 'nuget', message: 'package not found' })
 
-// https://github.com/badges/shields/issues/7942
+// https://github.com/badges/shields/issues/11513
 t.create('version (special characters - encoded)')
   .get('/v/NC%C3%B2dexSDK.json')
   .intercept(nock =>
