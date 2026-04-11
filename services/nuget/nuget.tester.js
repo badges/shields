@@ -137,5 +137,5 @@ t.create('version (special characters - encoded)')
   .expectBadge({
     label: 'nuget',
     message: 'v0.0.1',
-    color: 'blue',
+    color: 'orange',
   })
