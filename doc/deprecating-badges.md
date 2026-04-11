@@ -46,18 +46,18 @@ export const t = new ServiceTester({
 })
 ```
 
-Next you will need to replace/refactor the existing tests to validate the new deprecated badge behavior for this service. Deprecated badges always return a message of `no longer available` (such as `imagelayers | no longer available`) so the tests need to be updated to reflect that message value. For example:
+Next you will need to replace/refactor the existing tests to validate the new deprecated badge behavior for this service. Deprecated badges always return a message of `retired badge` (such as `imagelayers | retired badge`) so the tests need to be updated to reflect that message value. For example:
 
 ```js
-t.create('no longer available (previously image size)')
+t.create('retired badge (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
   .expectBadge({
     label: 'imagelayers',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 ```
 
-Make sure to have a live (non-mocked) test for each badge the service provides that validates the each badge returns the `no longer available` message.
+Make sure to have a live (non-mocked) test for each badge the service provides that validates the each badge returns the `retired badge` message.
 
 Here is an example of what the final result would look like for a test file:
 
@@ -69,18 +69,18 @@ export const t = new ServiceTester({
   title: 'ImageLayers',
 })
 
-t.create('no longer available (previously image size)')
+t.create('retired badge (previously image size)')
   .get('/image-size/_/ubuntu/latest.json')
   .expectBadge({
     label: 'imagelayers',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
-t.create('no longer available (previously number of layers)')
+t.create('retired badge (previously number of layers)')
   .get('/layers/_/ubuntu/latest.json')
   .expectBadge({
     label: 'imagelayers',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 ```
 
