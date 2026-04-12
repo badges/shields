@@ -45,7 +45,7 @@ function deprecatedService(attrs) {
         }
       }
       return {
-        message: 'no longer available',
+        message: 'retired badge',
       }
     }
   }

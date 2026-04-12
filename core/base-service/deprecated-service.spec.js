@@ -39,7 +39,7 @@ describe('DeprecatedService', function () {
   it('sets default deprecation message', async function () {
     const service = deprecatedService({ ...commonAttrs })
     expect(await service.invoke()).to.deep.equal({
-      message: 'no longer available',
+      message: 'retired badge',
     })
   })
 
