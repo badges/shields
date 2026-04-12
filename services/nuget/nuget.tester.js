@@ -116,3 +116,26 @@ t.create('version (pre) (valid)')
 t.create('version (pre) (not found)')
   .get('/vpre/not-a-real-package.json')
   .expectBadge({ label: 'nuget', message: 'package not found' })
+
+// https://github.com/badges/shields/issues/11513
+t.create('version (special characters - encoded)')
+  .get('/v/NC%C3%B2dexSDK.json')
+  .intercept(nock =>
+    nock('https://api.nuget.org').get('/v3/index.json').reply(200, queryIndex),
+  )
+  .intercept(nock =>
+    nock('https://api-v2v3search-0.nuget.org')
+      .get('/query?q=packageid%3Anc%C3%B2dexsdk&prerelease=true&semVerLevel=2')
+      .reply(200, {
+        data: [
+          {
+            versions: [{ version: '0.0.1' }],
+          },
+        ],
+      }),
+  )
+  .expectBadge({
+    label: 'nuget',
+    message: 'v0.0.1',
+    color: 'orange',
+  })
