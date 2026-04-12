@@ -11,5 +11,5 @@ t.create('followers')
   )
   .expectBadge({
     label: 'nostrband',
-    message: 'no longer available',
+    message: 'retired badge',
   })

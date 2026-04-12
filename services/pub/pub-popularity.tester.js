@@ -8,5 +8,5 @@ export const t = new ServiceTester({
 
 t.create('pub popularity').get('/analysis_options.json').expectBadge({
   label: 'pubpopularity',
-  message: 'no longer available',
+  message: 'retired badge',
 })

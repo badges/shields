@@ -7,4 +7,4 @@ export const t = new ServiceTester({
 
 t.create('hackage deps (deprecated)')
   .get('/package.json')
-  .expectBadge({ label: 'hackagedeps', message: 'no longer available' })
+  .expectBadge({ label: 'hackagedeps', message: 'retired badge' })
