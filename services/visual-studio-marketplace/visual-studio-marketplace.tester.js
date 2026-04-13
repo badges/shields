@@ -13,122 +13,122 @@ export const tLegacy = new ServiceTester({
 })
 
 // Downloads / Installs (visual-studio-marketplace)
-t.create('no longer available (visual-studio-marketplace downloads)')
+t.create('retired badge (visual-studio-marketplace downloads)')
   .get('/d/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
-t.create('no longer available (visual-studio-marketplace installs)')
+t.create('retired badge (visual-studio-marketplace installs)')
   .get('/i/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Downloads / Installs (vscode-marketplace - legacy)
 tLegacy
-  .create('no longer available (vscode-marketplace downloads)')
+  .create('retired badge (vscode-marketplace downloads)')
   .get('/d/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 tLegacy
-  .create('no longer available (vscode-marketplace installs)')
+  .create('retired badge (vscode-marketplace installs)')
   .get('/i/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Version (visual-studio-marketplace)
-t.create('no longer available (version)')
+t.create('retired badge (version)')
   .get('/v/lextudio.restructuredtext.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Version (vscode-marketplace - legacy)
 tLegacy
-  .create('no longer available (version legacy)')
+  .create('retired badge (version legacy)')
   .get('/v/lextudio.restructuredtext.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Rating / Stars (visual-studio-marketplace)
-t.create('no longer available (rating)')
+t.create('retired badge (rating)')
   .get('/r/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
-t.create('no longer available (stars)')
+t.create('retired badge (stars)')
   .get('/stars/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Rating / Stars (vscode-marketplace - legacy)
 tLegacy
-  .create('no longer available (rating legacy)')
+  .create('retired badge (rating legacy)')
   .get('/r/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 tLegacy
-  .create('no longer available (stars legacy)')
+  .create('retired badge (stars legacy)')
   .get('/stars/ritwickdey.LiveServer.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Release date / Last updated (visual-studio-marketplace)
-t.create('no longer available (release date)')
+t.create('retired badge (release date)')
   .get('/release-date/yasht.terminal-all-in-one.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
-t.create('no longer available (last updated)')
+t.create('retired badge (last updated)')
   .get('/last-updated/yasht.terminal-all-in-one.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Release date / Last updated (vscode-marketplace - legacy)
 tLegacy
-  .create('no longer available (release date legacy)')
+  .create('retired badge (release date legacy)')
   .get('/release-date/yasht.terminal-all-in-one.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 tLegacy
-  .create('no longer available (last updated legacy)')
+  .create('retired badge (last updated legacy)')
   .get('/last-updated/yasht.terminal-all-in-one.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 // Azure DevOps installs (visual-studio-marketplace)
-t.create('no longer available (azure devops installs total)')
+t.create('retired badge (azure devops installs total)')
   .get('/azure-devops/installs/total/swellaby.mirror-git-repository.json')
   .expectBadge({
     label: 'visual-studio-marketplace',
-    message: 'no longer available',
+    message: 'retired badge',
   })

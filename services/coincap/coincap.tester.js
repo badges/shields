@@ -10,15 +10,15 @@ t.create('coincap change percent 24hr')
   .get('/change-percent-24hr/bitcoin.json')
   .expectBadge({
     label: 'coincap',
-    message: 'no longer available',
+    message: 'retired badge',
   })
 
 t.create('coincap price USD').get('/price-usd/bitcoin.json').expectBadge({
   label: 'coincap',
-  message: 'no longer available',
+  message: 'retired badge',
 })
 
 t.create('coincap rank').get('/rank/bitcoin.json').expectBadge({
   label: 'coincap',
-  message: 'no longer available',
+  message: 'retired badge',
 })
