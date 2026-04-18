@@ -6,21 +6,24 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2026-04-15
 
+**Noteable changes:**
+
 - change deprecated badge messages to 'retired badge' [Bit Codeclimate Codeship Coincap DockerCloud GithubWorkflowStatus Hackage NostrBand Pub Security-Headers VisualStudioAppCenter VisualStudioMarketplace Wikiapiary] [#11798](https://github.com/badges/shields/issues/11798)
-- fix(nuget): fix double URL encoding for non-ASCII package names; test [Nuget MyGet] [#11795](https://github.com/badges/shields/issues/11795)
-- deprecate [VisualStudioMarketplace] [#11792](https://github.com/badges/shields/issues/11792)
-- Validate [WordPress] versions schema [#11787](https://github.com/badges/shields/issues/11787)
-- Remove misleading TODO [#11784](https://github.com/badges/shields/issues/11784)
 - Migrate [Polymart] to [VoxelShop] [#11786](https://github.com/badges/shields/issues/11786)
-- increase cache multiplier for [VisualStudioMarketplace] [#11780](https://github.com/badges/shields/issues/11780)
+
+**Deprecation:**
+
+- deprecate [VisualStudioMarketplace] [#11792](https://github.com/badges/shields/issues/11792)
+
+Other changes:
+
+- fix(nuget): fix double URL encoding for non-ASCII package names; test [Nuget MyGet] [#11795](https://github.com/badges/shields/issues/11795)
+- Validate [WordPress] versions schema [#11787](https://github.com/badges/shields/issues/11787)
 - fix: strip build metadata suffix from packageManager field (fixes #9514) [GithubPackageJson] [#11782](https://github.com/badges/shields/issues/11782)
 - feat: add GitHub branch count badge (fixes #11283) [#11781](https://github.com/badges/shields/issues/11781)
 - production-hosting: Update Sentry [#11778](https://github.com/badges/shields/issues/11778)
-- Exclude NPM 11.12.0 and newer [#11779](https://github.com/badges/shields/issues/11779)
-- Fix [Codacy] tests [#11738](https://github.com/badges/shields/issues/11738)
-- Fix [Jenkins] tests [#11736](https://github.com/badges/shields/issues/11736)
 - Update [Cookbook] host [#11735](https://github.com/badges/shields/issues/11735)
-- Increase [Gitlab] test timeouts [#11737](https://github.com/badges/shields/issues/11737)
+- Tests updates
 - Dependency updates
 
 ## server-2026-03-15
