@@ -10,8 +10,8 @@ git fetch --unshallow --tags
 LAST_TAG=$(git tag | grep server | tail -n 1)
 
 # Set up a git user
-git config user.name "release[bot]"
-git config user.email "actions@users.noreply.github.com"
+git config user.name "github-actions[bot]"
+git config user.email "github-actions[bot]@users.noreply.github.com"
 
 # Find the marker in CHANGELOG.md
 INSERT_POINT=$(grep -n "^\-\-\-$" CHANGELOG.md | cut -f1 -d:)
