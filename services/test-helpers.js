@@ -5,6 +5,7 @@ import nock from 'nock'
 import config from 'config'
 import { fetch } from '../core/base-service/got.js'
 import BaseService from '../core/base-service/base.js'
+import { prepareRoute } from '../core/base-service/route.js'
 const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
@@ -69,6 +70,24 @@ function getBadgeExampleCall(serviceClass, paramType) {
 
   const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
 
+  let enumParam
+  if (paramType === 'path' && serviceClass.routeEnum) {
+    const { captureNames } = prepareRoute(serviceClass.route)
+    const matchingEnum = serviceClass.routeEnum.find(enumValue =>
+      firstOpenapiPath.includes(enumValue),
+    )
+    if (matchingEnum && captureNames.length > 0) {
+      enumParam = { [captureNames[0]]: matchingEnum }
+    } else if (
+      captureNames.length > 0 &&
+      !firstOpenapiPath.includes(captureNames[0])
+    ) {
+      throw new TypeError(
+        `Unable to match routeEnum to OpenAPI path for ${serviceClass.name}. Check the openApi first path and routeEnum values.`,
+      )
+    }
+  }
+
   const firstOpenapiExampleParams =
     serviceClass.openApi[firstOpenapiPath].get.parameters
   if (!Array.isArray(firstOpenapiExampleParams)) {
@@ -89,7 +108,8 @@ function getBadgeExampleCall(serviceClass, paramType) {
     return acc
   }, {})
 
-  return exampleInvokeParams
+  // enum param must come first as this is asumed by base service.
+  return { ...enumParam, ...exampleInvokeParams }
 }
 
 /**
