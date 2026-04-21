@@ -105,7 +105,7 @@ class BaseService {
    * enum applies to the first param in the route pattern.
    *
    * @abstract
-   * @type {string[]} array of allowed values for the enum in the route pattern
+   * @type {string[]}
    */
   static routeEnum = undefined
 
