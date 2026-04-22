@@ -518,7 +518,6 @@ class BaseService {
     serviceConfig,
   ) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
-    const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
     const metricHelper = MetricHelper.create({
@@ -526,41 +525,71 @@ class BaseService {
       ServiceClass: this,
     })
 
-    camp.route(
-      regex,
-      handleRequest(cacheHeaderConfig, {
-        queryParams,
-        handler: async (queryParams, match, sendBadge) => {
-          const metricHandle = metricHelper.startRequest()
-
-          const namedParams = namedParamsForMatch(captureNames, match, this)
-          const serviceData = await this.invoke(
-            {
-              requestFetcher: fetch,
-              githubApiProvider,
-              librariesIoApiProvider,
-              metricHelper,
-            },
-            serviceConfig,
-            namedParams,
-            queryParams,
+    const routesToRegister = []
+    if (
+      this.routeEnum &&
+      Array.isArray(this.routeEnum) &&
+      this.routeEnum.length > 0
+    ) {
+      const { captureNames } = prepareRoute(this.route)
+      const firstParamName =
+        captureNames && captureNames.length > 0 ? captureNames[0] : undefined
+      if (firstParamName) {
+        for (const enumValue of this.routeEnum) {
+          const pattern = this.route.pattern.replace(
+            firstParamName,
+            `firstParamName(${enumValue})`, // keep capture for backwards compatibility
           )
+          routesToRegister.push({
+            route: { ...this.route, pattern },
+          })
+        }
+      } else {
+        routesToRegister.push({ route: this.route })
+      }
+    } else {
+      routesToRegister.push({ route: this.route })
+    }
 
-          const badgeData = coalesceBadge(
-            queryParams,
-            serviceData,
-            this.defaultBadgeData,
-            this,
-          )
-          // The final capture group is the extension.
-          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
-          sendBadge(format, badgeData)
+    for (const { route: routeToRegister } of routesToRegister) {
+      const { regex, captureNames } = prepareRoute(routeToRegister)
 
-          metricHandle.noteResponseSent()
-        },
-        cacheLength: this._cacheLength,
-      }),
-    )
+      camp.route(
+        regex,
+        handleRequest(cacheHeaderConfig, {
+          queryParams,
+          handler: async (queryParams, match, sendBadge) => {
+            const metricHandle = metricHelper.startRequest()
+
+            const namedParams = namedParamsForMatch(captureNames, match, this)
+            const serviceData = await this.invoke(
+              {
+                requestFetcher: fetch,
+                githubApiProvider,
+                librariesIoApiProvider,
+                metricHelper,
+              },
+              serviceConfig,
+              namedParams,
+              queryParams,
+            )
+
+            const badgeData = coalesceBadge(
+              queryParams,
+              serviceData,
+              this.defaultBadgeData,
+              this,
+            )
+            // The final capture group is the extension.
+            const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
+            sendBadge(format, badgeData)
+
+            metricHandle.noteResponseSent()
+          },
+          cacheLength: this._cacheLength,
+        }),
+      )
+    }
   }
 }
 
