@@ -1,6 +1,10 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { deprecatedService, pathParams } from '../index.js'
-import { BaseAmoService, description as baseDescription } from './amo-base.js'
+import { deprecatedService, pathParam, queryParam } from '../index.js'
+import {
+  BaseAmoService,
+  description as baseDescription,
+  queryParamSchema,
+} from './amo-base.js'
 
 const description = `${baseDescription}
 
@@ -11,14 +15,23 @@ only give us weekly downloads. The route \`amo/d\` redirects to \`amo/dw\`.
 
 class AmoWeeklyDownloads extends BaseAmoService {
   static category = 'downloads'
-  static route = { base: 'amo/dw', pattern: ':addonId' }
+  static route = { base: 'amo/dw', pattern: ':addonId', queryParamSchema }
 
   static openApi = {
     '/amo/dw/{addonId}': {
       get: {
         summary: 'Mozilla Add-on Downloads',
         description,
-        parameters: pathParams({ name: 'addonId', example: 'dustman' }),
+        parameters: [
+          pathParam({ name: 'addonId', example: 'dustman' }),
+          queryParam({
+            name: 'registry',
+            example: 'thunderbird',
+            schema: { type: 'string', enum: ['firefox', 'thunderbird'] },
+            description:
+              'Registry to use. Can be `firefox` (default) or `thunderbird`.',
+          }),
+        ],
       },
     },
   }
@@ -31,8 +44,8 @@ class AmoWeeklyDownloads extends BaseAmoService {
     return renderDownloadsBadge({ downloads, interval: 'week' })
   }
 
-  async handle({ addonId }) {
-    const data = await this.fetch({ addonId })
+  async handle({ addonId }, { registry }) {
+    const data = await this.fetch({ addonId, registry })
     return this.constructor.render({
       downloads: data.weekly_downloads,
     })
