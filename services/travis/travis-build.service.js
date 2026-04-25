@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, pathParams } from '../index.js'
+import { BaseSvgScrapingService, pathParams, NotFound } from '../index.js'
 
 const schema = Joi.object({
   message: Joi.alternatives()
@@ -12,9 +12,8 @@ export class TravisComBuild extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
-    base: 'travis',
-    format: 'com/(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
-    capture: ['userRepo', 'branch'],
+    base: 'travis/com',
+    pattern: ':user/:repo/:branch*',
   }
 
   static openApi = {
@@ -62,10 +61,14 @@ export class TravisComBuild extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ userRepo, branch }) {
+  async handle({ user, repo, branch }) {
+    if (user.startsWith('php-v')) {
+      throw new NotFound({ prettyMessage: 'not found' })
+    }
+
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.travis-ci.com/${userRepo}.svg`,
+      url: `https://api.travis-ci.com/${user}/${repo}.svg`,
       options: { searchParams: { branch } },
       valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
