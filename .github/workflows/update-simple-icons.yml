@@ -1,0 +1,40 @@
+name: Update simple-icons
+on:
+  schedule:
+    - cron: '0 12 * * 5'
+    # At 12:00 on Friday
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  update-simple-icons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          node-version: 22
+
+      - name: Update simple-icons
+        run: npm install simple-icons@latest --save-exact
+
+      - name: Read simple-icons version
+        id: simple_icons_version
+        run: |
+          version=$(node -p "require('./package-lock.json').packages['node_modules/simple-icons'].version")
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Create Pull Request if simple-icons has changed
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          commit-message: Update simple-icons to ${{ steps.simple_icons_version.outputs.version }}
+          title: Update simple-icons to ${{ steps.simple_icons_version.outputs.version }}
+          branch: update-simple-icons
+          delete-branch: true

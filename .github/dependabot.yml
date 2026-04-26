@@ -9,6 +9,11 @@ updates:
     open-pull-requests-limit: 99
     rebase-strategy: disabled
     ignore:
+      - dependency-name: 'simple-icons'
+        update-types:
+          - 'version-update:semver-major'
+          - 'version-update:semver-minor'
+          - 'version-update:semver-patch'
       # https://github.com/badges/shields/issues/7324
       # https://github.com/badges/shields/issues/7447
       # we're stuck with these versions until Safari is compatible with lookbehind regex syntax
