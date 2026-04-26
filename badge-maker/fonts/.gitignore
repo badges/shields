@@ -1,0 +1,5 @@
+# Exclude all font files from version control.
+# Verdana is proprietary (© Microsoft) and cannot be committed.
+# All fonts are downloaded/copied by `node scripts/download-fonts.js`.
+*.ttf
+*.otf

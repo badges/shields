@@ -1,4 +1,5 @@
-import anafanafo from 'anafanafo'
+import './canvas-polyfill.js'
+import { prepareWithSegments, walkLineRanges } from '@chenglou/pretext'
 import { brightness } from './color.js'
 import { XmlElement, ElementList } from './xml.js'
 
@@ -27,9 +28,18 @@ function roundUpToOdd(val) {
   return val % 2 === 0 ? val + 1 : val
 }
 
+function measureTextWidth(str, font) {
+  const prepared = prepareWithSegments(str, font)
+  let width = 0
+  walkLineRanges(prepared, Infinity, line => {
+    width = line.width
+  })
+  return width
+}
+
 function preferredWidthOf(str, options) {
   // Increase chances of pixel grid alignment.
-  return roundUpToOdd(anafanafo(str, options) | 0)
+  return roundUpToOdd(measureTextWidth(str, options.font) | 0)
 }
 
 function createAccessibleText({ label, message }) {
@@ -787,11 +797,11 @@ function forTheBadge({
   // the discrepancy. Ideally, swapping out `textLength` for `letterSpacing`
   // should not affect the appearance.
   const labelTextWidth = label.length
-    ? (anafanafo(label, { font: `${FONT_SIZE}px Verdana` }) | 0) +
+    ? (measureTextWidth(label, `${FONT_SIZE}px Verdana`) | 0) +
       LETTER_SPACING * label.length
     : 0
   const messageTextWidth = message.length
-    ? (anafanafo(message, { font: `bold ${FONT_SIZE}px Verdana` }) | 0) +
+    ? (measureTextWidth(message, `bold ${FONT_SIZE}px Verdana`) | 0) +
       LETTER_SPACING * message.length
     : 0
 

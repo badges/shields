@@ -41,7 +41,8 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "dependencies": {
-    "anafanafo": "2.0.0",
+    "@chenglou/pretext": "0.0.3",
+    "@napi-rs/canvas": "^0.1.97",
     "css-color-converter": "^2.0.0"
   },
   "scripts": {

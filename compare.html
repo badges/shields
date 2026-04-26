@@ -1,0 +1,1386 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Badge Comparison: anafanafo vs pretext</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        max-width: 700px;
+        margin: 40px auto;
+      }
+      h1 {
+        font-size: 18px;
+      }
+      h2 {
+        font-size: 15px;
+        color: #333;
+        margin-top: 32px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 4px;
+      }
+      .row {
+        margin: 16px 0;
+      }
+      .label {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 6px;
+      }
+      .match {
+        color: #2a7;
+      }
+      .diff {
+        color: #c44;
+      }
+      .diff-info {
+        font-size: 12px;
+        color: #c44;
+        margin: 4px 0 12px;
+      }
+      .compare {
+        display: flex;
+        gap: 32px;
+      }
+      .side {
+        flex: 1;
+      }
+      .badge-container {
+        background: #f9f9f9;
+        padding: 12px;
+        border-radius: 4px;
+        border: 1px solid #eee;
+      }
+      .report {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .report h3 {
+        font-size: 14px;
+        color: #555;
+        margin-top: 20px;
+      }
+      .report p,
+      .report ul {
+        margin: 8px 0;
+      }
+      .report code {
+        background: #f0f0f0;
+        padding: 1px 5px;
+        border-radius: 3px;
+        font-size: 13px;
+      }
+      .report table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 12px 0;
+        font-size: 13px;
+      }
+      .report th,
+      .report td {
+        border: 1px solid #ddd;
+        padding: 6px 10px;
+        text-align: left;
+      }
+      .report th {
+        background: #f5f5f5;
+      }
+      h3 {
+        font-size: 14px;
+        color: #333;
+        margin-top: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Badge Comparison: anafanafo vs pretext</h1>
+
+    <div class="report">
+      <h2 style="border-bottom: 2px solid #333">Why snapshots changed</h2>
+
+      <p>
+        This PR replaces <code>anafanafo</code> with
+        <code>@chenglou/pretext</code> for text width measurement in badge
+        generation. The two libraries measure text width slightly differently,
+        which causes some snapshot values to change.
+      </p>
+
+      <h3>Summary of all snapshot changes</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Count</th>
+            <th>SVG width diff</th>
+            <th>Cause</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>flat, flat-square, plastic templates</td>
+            <td>0</td>
+            <td>0px</td>
+            <td>
+              No change &mdash; pretext +
+              <code>preferredWidthOf()</code> produces identical results to
+              anafanafo for Verdana 11px
+            </td>
+          </tr>
+          <tr>
+            <td>for-the-badge template</td>
+            <td>0</td>
+            <td>0px</td>
+            <td>
+              No change &mdash; letter-spacing compensation already in place,
+              pretext matches anafanafo for Verdana 10px
+            </td>
+          </tr>
+          <tr>
+            <td>social template (with label text)</td>
+            <td>All</td>
+            <td>0px</td>
+            <td>
+              No change &mdash; pretext text widths match anafanafo for
+              Helvetica bold 11px with the current social badge renderer
+            </td>
+          </tr>
+          <tr>
+            <td>social template (empty label)</td>
+            <td>4</td>
+            <td>-1px</td>
+            <td>
+              Empty string: anafanafo returned width 10 (1px), pretext returns
+              0. See details below.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Root cause: empty string width</h3>
+
+      <p>
+        The only difference comes from the
+        <strong>empty string edge case</strong>. When measuring an empty label
+        (<code>""</code>):
+      </p>
+
+      <ul>
+        <li>
+          <code>anafanafo("")</code> returned <strong>10</strong> (i.e., 1px
+          after <code>scale(.1)</code>), which was then rounded up to 11 by
+          <code>roundUpToOdd()</code>.
+        </li>
+        <li>
+          <code>pretext</code> returns <strong>0</strong> for an empty string,
+          which is the correct behavior &mdash; an empty string has no width.
+        </li>
+      </ul>
+
+      <p>
+        This 1px difference cascades into the SVG: the label rect shrinks by
+        1px, and all downstream x-coordinates shift accordingly.
+      </p>
+
+      <h3>Why the pretext behavior is correct</h3>
+
+      <p>
+        An empty string should have zero width. The old anafanafo value of 10
+        (1px) was a quirk of how anafanafo handled the empty-string case. The
+        new pretext value of 0 produces a more accurate badge &mdash; there is
+        no visible difference since the label text is empty anyway.
+      </p>
+
+      <h3>Affected snapshots (4 total)</h3>
+
+      <p>
+        The only differences are in the 4 snapshots with empty labels. These
+        show a 1px width reduction due to the empty string width change.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Snapshot</th>
+            <th>Old width</th>
+            <th>New width</th>
+            <th>textLength change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>"social" message only, no logo</td>
+            <td>59px</td>
+            <td>58px</td>
+            <td>10 &rarr; 0</td>
+          </tr>
+          <tr>
+            <td>"social" message only, with logo</td>
+            <td>73px</td>
+            <td>72px</td>
+            <td>10 &rarr; 0</td>
+          </tr>
+          <tr>
+            <td>"social" message only, with logo and labelColor</td>
+            <td>73px</td>
+            <td>72px</td>
+            <td>10 &rarr; 0</td>
+          </tr>
+          <tr>
+            <td>"social" logo-only</td>
+            <td>26px</td>
+            <td>25px</td>
+            <td>10 &rarr; 0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Width alignment notes</h3>
+
+      <p>
+        pretext measures raw glyph widths. Only the
+        <code>for-the-badge</code> template still needs explicit letter-spacing
+        compensation to match the previous anafanafo measurements:
+      </p>
+
+      <ul>
+        <li>
+          <strong>social template</strong>: current width calculation matches
+          anafanafo for Helvetica bold 11px
+        </li>
+        <li>
+          <strong>for-the-badge template</strong>:
+          <code>LETTER_SPACING = 1.25</code> per character for Verdana 10px
+        </li>
+        <li>
+          <strong>flat / flat-square / plastic</strong>: no compensation needed
+          &mdash; <code>preferredWidthOf()</code> already matches anafanafo for
+          Verdana 11px
+        </li>
+      </ul>
+    </div>
+
+    <hr style="margin-top: 32px" />
+
+    <h2>Visual comparisons: social template (with label text)</h2>
+
+    <p style="font-size: 13px; color: #666">
+      pretext produces identical text widths to anafanafo for non-empty social
+      badge labels. The badge appearance is the same.
+    </p>
+
+    <h3>message/label, no logo</h3>
+
+    <div class="row">
+      <div class="label">
+        pretext (current) &mdash; width: 95px, textLength: Cactus=370, grown=330
+        <span class="match">(matches anafanafo)</span>
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="95"
+        height="20"
+        role="img"
+        aria-label="Cactus: grown"
+      >
+        <title>Cactus: grown</title>
+        <linearGradient id="o1a" x2="0" y2="100%">
+          <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+          <stop offset="1" stop-opacity=".1" />
+        </linearGradient>
+        <g stroke="#d5d5d5">
+          <rect
+            stroke="none"
+            fill="#fcfcfc"
+            x="0.5"
+            y="0.5"
+            width="47"
+            height="19"
+            rx="2"
+          />
+          <rect x="53.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
+          <rect x="53" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+          <path d="M53.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+        </g>
+        <g
+          aria-hidden="true"
+          fill="#333"
+          text-anchor="middle"
+          font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+          text-rendering="geometricPrecision"
+          font-weight="700"
+          font-size="110px"
+          line-height="14px"
+        >
+          <rect
+            id="o1l"
+            stroke="#d5d5d5"
+            fill="url(#o1a)"
+            x=".5"
+            y=".5"
+            width="47"
+            height="19"
+            rx="2"
+          />
+          <text
+            aria-hidden="true"
+            x="235"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="370"
+          >
+            Cactus
+          </text>
+          <text x="235" y="140" transform="scale(.1)" textLength="370">
+            Cactus
+          </text>
+          <text
+            aria-hidden="true"
+            x="735"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="330"
+          >
+            grown
+          </text>
+          <text x="735" y="140" transform="scale(.1)" textLength="330">
+            grown
+          </text>
+        </g>
+      </svg>
+    </div>
+
+    <h3>message only, no logo (empty label edge case)</h3>
+
+    <div class="row">
+      <div class="label">
+        anafanafo (old) &mdash; width: 59px, label rect width: 11, label
+        textLength: 10
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="59"
+        height="20"
+        role="img"
+        aria-label="grown"
+      >
+        <title>grown</title>
+        <linearGradient id="o2a" x2="0" y2="100%">
+          <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+          <stop offset="1" stop-opacity=".1" />
+        </linearGradient>
+        <g stroke="#d5d5d5">
+          <rect
+            stroke="none"
+            fill="#fcfcfc"
+            x="0.5"
+            y="0.5"
+            width="11"
+            height="19"
+            rx="2"
+          />
+          <rect x="17.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
+          <rect x="17" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+          <path d="M17.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+        </g>
+        <g
+          aria-hidden="true"
+          fill="#333"
+          text-anchor="middle"
+          font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+          text-rendering="geometricPrecision"
+          font-weight="700"
+          font-size="110px"
+          line-height="14px"
+        >
+          <rect
+            id="o2l"
+            stroke="#d5d5d5"
+            fill="url(#o2a)"
+            x=".5"
+            y=".5"
+            width="11"
+            height="19"
+            rx="2"
+          />
+          <text
+            aria-hidden="true"
+            x="55"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="10"
+          ></text>
+          <text x="55" y="140" transform="scale(.1)" textLength="10"></text>
+          <text
+            aria-hidden="true"
+            x="375"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="330"
+          >
+            grown
+          </text>
+          <text x="375" y="140" transform="scale(.1)" textLength="330">
+            grown
+          </text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="row">
+      <div class="label">
+        pretext (current) &mdash;
+        <span class="diff"
+          >width: 58px, label rect width: 10, label textLength: 0 (1px diff from
+          anafanafo)</span
+        >
+      </div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="58"
+        height="20"
+        role="img"
+        aria-label="grown"
+      >
+        <title>grown</title>
+        <linearGradient id="ls2a" x2="0" y2="100%">
+          <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+          <stop offset="1" stop-opacity=".1" />
+        </linearGradient>
+        <g stroke="#d5d5d5">
+          <rect
+            stroke="none"
+            fill="#fcfcfc"
+            x="0.5"
+            y="0.5"
+            width="10"
+            height="19"
+            rx="2"
+          />
+          <rect x="16.5" y="0.5" width="41" height="19" rx="2" fill="#fafafa" />
+          <rect x="16" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+          <path d="M16.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+        </g>
+        <g
+          aria-hidden="true"
+          fill="#333"
+          text-anchor="middle"
+          font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+          text-rendering="geometricPrecision"
+          font-weight="700"
+          font-size="110px"
+          line-height="14px"
+        >
+          <rect
+            id="ls2l"
+            stroke="#d5d5d5"
+            fill="url(#ls2a)"
+            x=".5"
+            y=".5"
+            width="10"
+            height="19"
+            rx="2"
+          />
+          <text
+            aria-hidden="true"
+            x="50"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="0"
+          ></text>
+          <text x="50" y="140" transform="scale(.1)" textLength="0"></text>
+          <text
+            aria-hidden="true"
+            x="365"
+            y="150"
+            fill="#fff"
+            transform="scale(.1)"
+            textLength="330"
+          >
+            grown
+          </text>
+          <text x="365" y="140" transform="scale(.1)" textLength="330">
+            grown
+          </text>
+        </g>
+      </svg>
+    </div>
+
+    <hr style="margin-top: 48px" />
+    <h2>
+      Visual comparisons: empty label snapshots (diff &gt; 1px in inner
+      attributes)
+    </h2>
+    <p style="font-size: 13px; color: #666">
+      These 4 snapshots are the only ones with any difference. The root cause is
+      that <code>anafanafo("")</code> returned 10 while
+      <code>pretext</code> correctly returns 0 for empty strings. This causes a
+      1px SVG width reduction and shifts internal x-coordinates by up to 10
+      units (1px at <code>scale(.1)</code>).
+    </p>
+
+    <h2>"social" template: message only, no logo</h2>
+    <p class="diff-info">
+      SVG width: 59 &rarr; 58 (-1px) | textLength[0]: 10 &rarr; 0 |
+      textLength[1]: 10 &rarr; 0
+    </p>
+
+    <div class="compare">
+      <div class="side">
+        <div class="label">
+          anafanafo (old) &mdash; width: 59px, textLengths: 10, 10, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="59"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_old0_llink {
+                fill: url(#diff_old0_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_old0_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_old0_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_old0_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="11"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="17.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="17" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M17.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_old0_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_old0_a)"
+                x=".5"
+                y=".5"
+                width="11"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="55"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text x="55" y="140" transform="scale(.1)" textLength="10"></text>
+              <text
+                aria-hidden="true"
+                x="375"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_old0_rlink"
+                x="375"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="side">
+        <div class="label">
+          pretext (current) &mdash; width: 58px, textLengths: 0, 0, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="58"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_new0_llink {
+                fill: url(#diff_new0_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_new0_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_new0_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_new0_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="10"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="16.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="16" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M16.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_new0_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_new0_a)"
+                x=".5"
+                y=".5"
+                width="10"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="50"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="0"
+              ></text>
+              <text x="50" y="140" transform="scale(.1)" textLength="0"></text>
+              <text
+                aria-hidden="true"
+                x="365"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_new0_rlink"
+                x="365"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h2>"social" template: message only, with logo</h2>
+    <p class="diff-info">
+      SVG width: 73 &rarr; 72 (-1px) | textLength[0]: 10 &rarr; 0 |
+      textLength[1]: 10 &rarr; 0
+    </p>
+
+    <div class="compare">
+      <div class="side">
+        <div class="label">
+          anafanafo (old) &mdash; width: 73px, textLengths: 10, 10, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="73"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_old1_llink {
+                fill: url(#diff_old1_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_old1_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_old1_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_old1_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="31.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="31" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M31.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_old1_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_old1_a)"
+                x=".5"
+                y=".5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="195"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text
+                x="195"
+                y="140"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text
+                aria-hidden="true"
+                x="515"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_old1_rlink"
+                x="515"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="side">
+        <div class="label">
+          pretext (current) &mdash; width: 72px, textLengths: 0, 0, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="72"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_new1_llink {
+                fill: url(#diff_new1_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_new1_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_new1_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_new1_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="30.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="30" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M30.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_new1_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_new1_a)"
+                x=".5"
+                y=".5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="190"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="0"
+              ></text>
+              <text x="190" y="140" transform="scale(.1)" textLength="0"></text>
+              <text
+                aria-hidden="true"
+                x="505"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_new1_rlink"
+                x="505"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h2>"social" template: message only, with logo and labelColor</h2>
+    <p class="diff-info">
+      SVG width: 73 &rarr; 72 (-1px) | textLength[0]: 10 &rarr; 0 |
+      textLength[1]: 10 &rarr; 0
+    </p>
+
+    <div class="compare">
+      <div class="side">
+        <div class="label">
+          anafanafo (old) &mdash; width: 73px, textLengths: 10, 10, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="73"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_old2_llink {
+                fill: url(#diff_old2_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_old2_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_old2_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_old2_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="31.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="31" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M31.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_old2_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_old2_a)"
+                x=".5"
+                y=".5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="195"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text
+                x="195"
+                y="140"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text
+                aria-hidden="true"
+                x="515"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_old2_rlink"
+                x="515"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="side">
+        <div class="label">
+          pretext (current) &mdash; width: 72px, textLengths: 0, 0, 330, 330
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="72"
+            height="20"
+            role="img"
+            aria-label="grown"
+          >
+            <title>grown</title>
+            <style>
+              a:hover #diff_new2_llink {
+                fill: url(#diff_new2_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_new2_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_new2_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_new2_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+              <rect
+                x="30.5"
+                y="0.5"
+                width="41"
+                height="19"
+                rx="2"
+                fill="#fafafa"
+              />
+              <rect x="30" y="7.5" width="0.5" height="5" stroke="#fafafa" />
+              <path d="M30.5 6.5 l-3 3v1 l3 3" fill="#fafafa" />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_new2_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_new2_a)"
+                x=".5"
+                y=".5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="190"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="0"
+              ></text>
+              <text x="190" y="140" transform="scale(.1)" textLength="0"></text>
+              <text
+                aria-hidden="true"
+                x="505"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+              <text
+                id="diff_new2_rlink"
+                x="505"
+                y="140"
+                transform="scale(.1)"
+                textLength="330"
+              >
+                grown
+              </text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <h2>social badge, logo-only</h2>
+    <p class="diff-info">
+      SVG width: 26 &rarr; 25 (-1px) | textLength[0]: 10 &rarr; 0 |
+      textLength[1]: 10 &rarr; 0
+    </p>
+
+    <div class="compare">
+      <div class="side">
+        <div class="label">
+          anafanafo (old) &mdash; width: 26px, textLengths: 10, 10
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="20"
+            role="img"
+            aria-label=""
+          >
+            <title></title>
+            <style>
+              a:hover #diff_old3_llink {
+                fill: url(#diff_old3_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_old3_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_old3_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_old3_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_old3_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_old3_a)"
+                x=".5"
+                y=".5"
+                width="25"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="195"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+              <text
+                x="195"
+                y="140"
+                transform="scale(.1)"
+                textLength="10"
+              ></text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="side">
+        <div class="label">
+          pretext (current) &mdash; width: 25px, textLengths: 0, 0
+        </div>
+        <div class="badge-container">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="20"
+            role="img"
+            aria-label=""
+          >
+            <title></title>
+            <style>
+              a:hover #diff_new3_llink {
+                fill: url(#diff_new3_b);
+                stroke: #ccc;
+              }
+              a:hover #diff_new3_rlink {
+                fill: #4183c4;
+              }
+            </style>
+            <linearGradient id="diff_new3_a" x2="0" y2="100%">
+              <stop offset="0" stop-color="#fcfcfc" stop-opacity="0" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <linearGradient id="diff_new3_b" x2="0" y2="100%">
+              <stop offset="0" stop-color="#ccc" stop-opacity=".1" />
+              <stop offset="1" stop-opacity=".1" />
+            </linearGradient>
+            <g stroke="#d5d5d5">
+              <rect
+                stroke="none"
+                fill="#fcfcfc"
+                x="0.5"
+                y="0.5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+            </g>
+            <image
+              x="5"
+              y="3"
+              width="14"
+              height="14"
+              href="data:image/svg+xml;base64,PHN2ZyB4bWxu"
+            />
+            <g
+              aria-hidden="true"
+              fill="#333"
+              text-anchor="middle"
+              font-family="Helvetica Neue,Helvetica,Arial,sans-serif"
+              text-rendering="geometricPrecision"
+              font-weight="700"
+              font-size="110px"
+              line-height="14px"
+            >
+              <rect
+                id="diff_new3_llink"
+                stroke="#d5d5d5"
+                fill="url(#diff_new3_a)"
+                x=".5"
+                y=".5"
+                width="24"
+                height="19"
+                rx="2"
+              />
+              <text
+                aria-hidden="true"
+                x="190"
+                y="150"
+                fill="#fff"
+                transform="scale(.1)"
+                textLength="0"
+              ></text>
+              <text x="190" y="140" transform="scale(.1)" textLength="0"></text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

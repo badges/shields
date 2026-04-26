@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Performance Report: anafanafo vs pretext</title>
+    <style>
+      :root {
+        --bg: #fff;
+        --fg: #1a1a2e;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --accent: #3b82f6;
+        --accent2: #10b981;
+        --red: #ef4444;
+        --green: #22c55e;
+        --card-bg: #f9fafb;
+        --bar-anafanafo: #3b82f6;
+        --bar-pretext: #10b981;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--fg);
+        background: var(--bg);
+        line-height: 1.6;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 40px 24px 80px;
+      }
+      h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .subtitle {
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 32px;
+      }
+      h2 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 40px 0 16px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--border);
+      }
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: 28px 0 12px;
+        color: #374151;
+      }
+      p {
+        margin: 8px 0;
+        font-size: 15px;
+      }
+      code {
+        background: #f3f4f6;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-family: 'SF Mono', 'Fira Code', monospace;
+      }
+
+      /* Summary cards */
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+      }
+      .summary-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+      }
+      .summary-card .value {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .summary-card .value.green {
+        color: var(--accent2);
+      }
+      .summary-card .label {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* Bar chart */
+      .chart-container {
+        margin: 20px 0;
+      }
+      .chart-row {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        gap: 12px;
+      }
+      .chart-label {
+        width: 180px;
+        font-size: 13px;
+        text-align: right;
+        flex-shrink: 0;
+        color: #374151;
+      }
+      .chart-bars {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .bar-tag {
+        width: 72px;
+        font-size: 11px;
+        color: var(--muted);
+        text-align: right;
+        flex-shrink: 0;
+      }
+      .bar {
+        height: 22px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #fff;
+        min-width: 40px;
+        transition: width 0.4s ease;
+      }
+      .bar.anafanafo {
+        background: var(--bar-anafanafo);
+      }
+      .bar.pretext {
+        background: var(--bar-pretext);
+      }
+
+      /* Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin: 16px 0;
+      }
+      th {
+        background: #f3f4f6;
+        font-weight: 600;
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 2px solid var(--border);
+        position: sticky;
+        top: 0;
+      }
+      td {
+        padding: 8px 12px;
+        border-bottom: 1px solid var(--border);
+      }
+      tr:hover td {
+        background: #f9fafb;
+      }
+      .num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .diff-pos {
+        color: var(--red);
+      }
+      .diff-neg {
+        color: var(--green);
+      }
+      .diff-zero {
+        color: var(--muted);
+      }
+
+      /* Legend */
+      .legend {
+        display: flex;
+        gap: 24px;
+        margin: 12px 0;
+        font-size: 13px;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+      }
+      .legend-dot.anafanafo {
+        background: var(--bar-anafanafo);
+      }
+      .legend-dot.pretext {
+        background: var(--bar-pretext);
+      }
+
+      /* Info box */
+      .info-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 16px 20px;
+        margin: 20px 0;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .info-box strong {
+        color: #1e40af;
+      }
+
+      /* Tabs */
+      .tab-container {
+        margin: 20px 0;
+      }
+      .tab-buttons {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--border);
+      }
+      .tab-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: var(--muted);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all 0.2s;
+      }
+      .tab-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+      .tab-btn:hover {
+        color: var(--fg);
+      }
+      .tab-panel {
+        display: none;
+        padding-top: 16px;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+
+      .methodology {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 20px 24px;
+        margin: 20px 0;
+        font-size: 14px;
+      }
+      .methodology ul {
+        margin: 8px 0 8px 20px;
+      }
+      .methodology li {
+        margin: 4px 0;
+      }
+      footer {
+        margin-top: 60px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Performance Report: anafanafo vs pretext</h1>
+    <p class="subtitle">
+      Text width measurement benchmark for Shields.io badge rendering &mdash;
+      commit <code>0c49f70</code>
+    </p>
+
+    <!-- ============================================================= -->
+    <h2>Summary</h2>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="value">~2.2×</div>
+        <div class="label">anafanafo is faster (raw speed)</div>
+      </div>
+      <div class="summary-card">
+        <div class="value green">&lt; 1 px</div>
+        <div class="label">Average width difference (Verdana)</div>
+      </div>
+      <div class="summary-card">
+        <div class="value green">Sub-pixel</div>
+        <div class="label">pretext precision level</div>
+      </div>
+      <div class="summary-card">
+        <div class="value">5,000</div>
+        <div class="label">Iterations per font × 26 strings</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Key Takeaway:</strong> anafanafo is approximately
+      <strong>2.2×&nbsp;faster</strong> than pretext in raw throughput. However,
+      pretext provides <strong>sub-pixel precise</strong>
+      measurements using real font metrics via canvas, resulting in more
+      accurate badge rendering. The absolute time difference (~0.003&nbsp;ms per
+      call) is negligible for Shields.io's use case where badges are rendered
+      server-side on demand.
+    </div>
+
+    <!-- ============================================================= -->
+    <h2>Speed Comparison</h2>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot anafanafo"></div>
+        anafanafo 2.0.0
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot pretext"></div>
+        @chenglou/pretext 0.0.3
+      </div>
+    </div>
+
+    <div class="chart-container" id="speed-chart"></div>
+
+    <!-- ============================================================= -->
+    <h2>Width Accuracy Comparison</h2>
+    <p>
+      pretext measures text using actual font outlines via the Canvas API (<code
+        >@napi-rs/canvas</code
+      >
+      Skia backend), while anafanafo uses pre-computed character-width lookup
+      tables. The table below shows measured widths and their differences.
+    </p>
+
+    <div class="tab-container">
+      <div class="tab-buttons" id="tab-buttons"></div>
+      <div id="tab-panels"></div>
+    </div>
+
+    <!-- ============================================================= -->
+    <h2>Methodology</h2>
+    <div class="methodology">
+      <ul>
+        <li>
+          <strong>Environment:</strong> Node.js, macOS, single-threaded
+          benchmark
+        </li>
+        <li>
+          <strong>Iterations:</strong> 5,000 iterations per font, each iterating
+          over 26 representative badge strings
+        </li>
+        <li>
+          <strong>Warm-up:</strong> 1,000 warm-up iterations before timed runs
+          to allow JIT optimisation
+        </li>
+        <li>
+          <strong>Strings:</strong> 26 strings covering short labels
+          (<code>MIT</code>), typical badges, long sentences, full alphabet,
+          digits, and special characters
+        </li>
+        <li>
+          <strong>Fonts tested:</strong> <code>11px Verdana</code>,
+          <code>bold 10px Verdana</code>, <code>bold 11px Helvetica</code>
+        </li>
+        <li>
+          <strong>anafanafo</strong> (v2.0.0): lookup-table-based width
+          estimation — integer-only results
+        </li>
+        <li>
+          <strong>pretext</strong> (v0.0.3): canvas
+          <code>measureText()</code> via <code>@napi-rs/canvas</code> + Skia —
+          sub-pixel precision
+        </li>
+      </ul>
+    </div>
+
+    <!-- ============================================================= -->
+    <h2>How It Works</h2>
+
+    <h3>anafanafo</h3>
+    <p>
+      Uses pre-computed character-width data stored as JSON arrays, one per
+      supported font. Each character's width is looked up and summed to estimate
+      the total string width. Fast but limited to the bundled font set, and
+      returns rounded integer values.
+    </p>
+
+    <h3>@chenglou/pretext</h3>
+    <p>
+      A text layout library that delegates measurement to the Canvas API. In the
+      Shields.io server environment, <code>@napi-rs/canvas</code> provides an
+      <code>OffscreenCanvas</code> polyfill backed by Skia, giving access to
+      real font metrics. Returns floating-point widths with sub-pixel precision.
+    </p>
+
+    <!-- ============================================================= -->
+    <h2>Trade-offs</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>anafanafo</th>
+          <th>pretext</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>~350 ms / 130k calls</td>
+          <td>~800 ms / 130k calls</td>
+        </tr>
+        <tr>
+          <td><strong>Per-call cost</strong></td>
+          <td>~0.003 ms</td>
+          <td>~0.006 ms</td>
+        </tr>
+        <tr>
+          <td><strong>Precision</strong></td>
+          <td>Integer pixels (rounded)</td>
+          <td>Sub-pixel (float)</td>
+        </tr>
+        <tr>
+          <td><strong>Font support</strong></td>
+          <td>4 bundled font/size combos</td>
+          <td>Any system / loaded font</td>
+        </tr>
+        <tr>
+          <td><strong>Dependencies</strong></td>
+          <td>None (pure JS + data)</td>
+          <td><code>@napi-rs/canvas</code> (native addon)</td>
+        </tr>
+        <tr>
+          <td><strong>Accuracy</strong></td>
+          <td>Approximation from metrics tables</td>
+          <td>Real font shaping via Skia</td>
+        </tr>
+        <tr>
+          <td><strong>Bundle size</strong></td>
+          <td>~45 KB (data tables)</td>
+          <td>~15 KB (JS) + native binary</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <footer>
+      Generated for Shields.io &mdash; badge-maker text width measurement
+      benchmark
+    </footer>
+
+    <script>
+      // ================================================================
+      // Benchmark data (collected via scripts/benchmark-text-width.js)
+      // ================================================================
+      const DATA = {
+        iterations: 5000,
+        stringsCount: 26,
+        fonts: [
+          {
+            font: '11px Verdana',
+            anafanafo: { totalMs: 353.09 },
+            pretext: { totalMs: 773.17 },
+            speedup: 0.46,
+            widths: [
+              { text: 'build', anafanafo: 26, pretext: 26.71 },
+              { text: 'passing', anafanafo: 41, pretext: 41.75 },
+              { text: 'coverage', anafanafo: 50, pretext: 49.81 },
+              { text: '98%', anafanafo: 25, pretext: 25.82 },
+              { text: 'license', anafanafo: 37, pretext: 37.57 },
+              { text: 'MIT', anafanafo: 20, pretext: 20.68 },
+              { text: 'npm', anafanafo: 24, pretext: 24.51 },
+              { text: 'v3.2.1', anafanafo: 35, pretext: 35.49 },
+              { text: 'downloads', anafanafo: 58, pretext: 58.38 },
+              { text: '1.2M/month', anafanafo: 67, pretext: 67.89 },
+              { text: 'Hello, World!', anafanafo: 71, pretext: 71.15 },
+              { text: 'shields.io', anafanafo: 51, pretext: 51.56 },
+              { text: 'code quality', anafanafo: 66, pretext: 66.93 },
+              { text: 'A+', anafanafo: 16, pretext: 16.52 },
+              { text: 'dependencies', anafanafo: 75, pretext: 75.17 },
+              { text: 'up to date', anafanafo: 56, pretext: 56.91 },
+              { text: 'docker pulls', anafanafo: 66, pretext: 66.36 },
+              { text: '500M+', anafanafo: 39, pretext: 39.25 },
+              { text: 'GitHub Stars', anafanafo: 70, pretext: 70.72 },
+              { text: '★ 42.3k', anafanafo: 46, pretext: 46.36 },
+              {
+                text: 'continuous integration pipeline status',
+                anafanafo: 208,
+                pretext: 207.97,
+              },
+              {
+                text: 'The quick brown fox jumps over the lazy dog',
+                anafanafo: 250,
+                pretext: 249.89,
+              },
+              {
+                text: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                anafanafo: 196,
+                pretext: 196.35,
+              },
+              {
+                text: 'abcdefghijklmnopqrstuvwxyz',
+                anafanafo: 160,
+                pretext: 160.69,
+              },
+              { text: '0123456789', anafanafo: 69, pretext: 69.93 },
+              {
+                text: '!@#$%^&*()_+-=[]{}|;:,.<>?',
+                anafanafo: 178,
+                pretext: 178.07,
+              },
+            ],
+          },
+          {
+            font: 'bold 10px Verdana',
+            anafanafo: { totalMs: 346.2 },
+            pretext: { totalMs: 781.0 },
+            speedup: 0.44,
+            widths: [
+              { text: 'build', anafanafo: 27, pretext: 27.94 },
+              { text: 'passing', anafanafo: 43, pretext: 43.07 },
+              { text: 'coverage', anafanafo: 51, pretext: 51.17 },
+              { text: '98%', anafanafo: 26, pretext: 26.94 },
+              { text: 'license', anafanafo: 39, pretext: 39.06 },
+              { text: 'MIT', anafanafo: 21, pretext: 21.75 },
+              { text: 'npm', anafanafo: 24, pretext: 24.7 },
+              { text: 'v3.2.1', anafanafo: 35, pretext: 35.05 },
+              { text: 'downloads', anafanafo: 60, pretext: 60.66 },
+              { text: '1.2M/month', anafanafo: 70, pretext: 70.45 },
+              { text: 'Hello, World!', anafanafo: 73, pretext: 73.3 },
+              { text: 'shields.io', anafanafo: 53, pretext: 53.35 },
+              { text: 'code quality', anafanafo: 68, pretext: 68.5 },
+              { text: 'A+', anafanafo: 16, pretext: 16.43 },
+              { text: 'dependencies', anafanafo: 77, pretext: 77.02 },
+              { text: 'up to date', anafanafo: 57, pretext: 57.25 },
+              { text: 'docker pulls', anafanafo: 68, pretext: 68.36 },
+              { text: '500M+', anafanafo: 39, pretext: 39.48 },
+              { text: 'GitHub Stars', anafanafo: 71, pretext: 71.23 },
+              { text: '★ 42.3k', anafanafo: 45, pretext: 45.07 },
+              {
+                text: 'continuous integration pipeline status',
+                anafanafo: 214,
+                pretext: 214.04,
+              },
+              {
+                text: 'The quick brown fox jumps over the lazy dog',
+                anafanafo: 252,
+                pretext: 252.98,
+              },
+              {
+                text: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                anafanafo: 198,
+                pretext: 198.81,
+              },
+              {
+                text: 'abcdefghijklmnopqrstuvwxyz',
+                anafanafo: 165,
+                pretext: 165.7,
+              },
+              { text: '0123456789', anafanafo: 71, pretext: 71.09 },
+              {
+                text: '!@#$%^&*()_+-=[]{}|;:,.<>?',
+                anafanafo: 175,
+                pretext: 175.99,
+              },
+            ],
+          },
+          {
+            font: 'bold 11px Helvetica',
+            anafanafo: { totalMs: 364.61 },
+            pretext: { totalMs: 823.64 },
+            speedup: 0.44,
+            widths: [
+              { text: 'build', anafanafo: 25, pretext: 23.24 },
+              { text: 'passing', anafanafo: 40, pretext: 37.91 },
+              { text: 'coverage', anafanafo: 48, pretext: 45.25 },
+              { text: '98%', anafanafo: 23, pretext: 22.02 },
+              { text: 'license', anafanafo: 37, pretext: 34.24 },
+              { text: 'MIT', anafanafo: 19, pretext: 18.94 },
+              { text: 'npm', anafanafo: 23, pretext: 21.4 },
+              { text: 'v3.2.1', anafanafo: 30, pretext: 29.97 },
+              { text: 'downloads', anafanafo: 57, pretext: 52.59 },
+              { text: '1.2M/month', anafanafo: 62, pretext: 58.08 },
+              { text: 'Hello, World!', anafanafo: 66, pretext: 62.77 },
+              { text: 'shields.io', anafanafo: 49, pretext: 45.86 },
+              { text: 'code quality', anafanafo: 63, pretext: 58.71 },
+              { text: 'A+', anafanafo: 14, pretext: 13.76 },
+              { text: 'dependencies', anafanafo: 73, pretext: 68.5 },
+              { text: 'up to date', anafanafo: 53, pretext: 48.94 },
+              { text: 'docker pulls', anafanafo: 64, pretext: 58.7 },
+              { text: '500M+', anafanafo: 34, pretext: 33.94 },
+              { text: 'GitHub Stars', anafanafo: 67, pretext: 62.97 },
+              { text: '★ 42.3k', anafanafo: 41, pretext: 36.94 },
+              {
+                text: 'continuous integration pipeline status',
+                anafanafo: 197,
+                pretext: 181.03,
+              },
+              {
+                text: 'The quick brown fox jumps over the lazy dog',
+                anafanafo: 234,
+                pretext: 217.68,
+              },
+              {
+                text: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                anafanafo: 197,
+                pretext: 193.74,
+              },
+              {
+                text: 'abcdefghijklmnopqrstuvwxyz',
+                anafanafo: 153,
+                pretext: 140.01,
+              },
+              { text: '0123456789', anafanafo: 61, pretext: 61.18 },
+              {
+                text: '!@#$%^&*()_+-=[]{}|;:,.<>?',
+                anafanafo: 132,
+                pretext: 130.47,
+              },
+            ],
+          },
+        ],
+      }
+
+      // ================================================================
+      // Render speed chart
+      // ================================================================
+      ;(function renderSpeedChart() {
+        const container = document.getElementById('speed-chart')
+        const maxMs = Math.max(
+          ...DATA.fonts.flatMap(f => [f.anafanafo.totalMs, f.pretext.totalMs]),
+        )
+
+        for (const f of DATA.fonts) {
+          const row = document.createElement('div')
+          row.className = 'chart-row'
+
+          const label = document.createElement('div')
+          label.className = 'chart-label'
+          label.textContent = f.font
+
+          const bars = document.createElement('div')
+          bars.className = 'chart-bars'
+
+          for (const [lib, cls] of [
+            ['anafanafo', 'anafanafo'],
+            ['pretext', 'pretext'],
+          ]) {
+            const barRow = document.createElement('div')
+            barRow.className = 'bar-row'
+
+            const tag = document.createElement('div')
+            tag.className = 'bar-tag'
+            tag.textContent = lib
+
+            const bar = document.createElement('div')
+            bar.className = `bar ${cls}`
+            const pct = (f[lib].totalMs / maxMs) * 100
+            bar.style.width = `${pct}%`
+            bar.textContent = `${f[lib].totalMs.toFixed(1)} ms`
+
+            barRow.appendChild(tag)
+            barRow.appendChild(bar)
+            bars.appendChild(barRow)
+          }
+
+          row.appendChild(label)
+          row.appendChild(bars)
+          container.appendChild(row)
+        }
+      })()
+
+      // ================================================================
+      // Render width tables in tabs
+      // ================================================================
+      ;(function renderWidthTabs() {
+        const btnContainer = document.getElementById('tab-buttons')
+        const panelContainer = document.getElementById('tab-panels')
+
+        DATA.fonts.forEach((f, idx) => {
+          // Tab button
+          const btn = document.createElement('button')
+          btn.className = `tab-btn${idx === 0 ? ' active' : ''}`
+          btn.textContent = f.font
+          btn.dataset.idx = idx
+          btn.addEventListener('click', () => {
+            document
+              .querySelectorAll('.tab-btn')
+              .forEach(b => b.classList.remove('active'))
+            document
+              .querySelectorAll('.tab-panel')
+              .forEach(p => p.classList.remove('active'))
+            btn.classList.add('active')
+            document.getElementById(`panel-${idx}`).classList.add('active')
+          })
+          btnContainer.appendChild(btn)
+
+          // Panel
+          const panel = document.createElement('div')
+          panel.className = `tab-panel${idx === 0 ? ' active' : ''}`
+          panel.id = `panel-${idx}`
+
+          // Stats summary
+          const diffs = f.widths.map(w => Math.abs(w.pretext - w.anafanafo))
+          const avgDiff = diffs.reduce((a, b) => a + b, 0) / diffs.length
+          const maxDiff = Math.max(...diffs)
+
+          const stats = document.createElement('p')
+          stats.innerHTML = `
+            <strong>Average Δ:</strong> ${avgDiff.toFixed(2)} px &nbsp;|&nbsp;
+            <strong>Max Δ:</strong> ${maxDiff.toFixed(2)} px &nbsp;|&nbsp;
+            <strong>Speed ratio:</strong> anafanafo is ${(1 / f.speedup).toFixed(1)}× faster
+          `
+          panel.appendChild(stats)
+
+          // Table
+          const table = document.createElement('table')
+          table.innerHTML = `
+            <thead>
+              <tr>
+                <th>Text</th>
+                <th class="num">anafanafo (px)</th>
+                <th class="num">pretext (px)</th>
+                <th class="num">Δ (px)</th>
+              </tr>
+            </thead>
+          `
+          const tbody = document.createElement('tbody')
+          for (const w of f.widths) {
+            const diff = w.pretext - w.anafanafo
+            const absDiff = Math.abs(diff)
+            const cls =
+              absDiff < 0.01 ? 'diff-zero' : diff > 0 ? 'diff-pos' : 'diff-neg'
+            const sign = diff > 0 ? '+' : ''
+
+            const tr = document.createElement('tr')
+            tr.innerHTML = `
+              <td><code>${escapeHtml(w.text)}</code></td>
+              <td class="num">${w.anafanafo.toFixed(2)}</td>
+              <td class="num">${w.pretext.toFixed(2)}</td>
+              <td class="num ${cls}">${sign}${diff.toFixed(2)}</td>
+            `
+            tbody.appendChild(tr)
+          }
+          table.appendChild(tbody)
+          panel.appendChild(table)
+          panelContainer.appendChild(panel)
+        })
+      })()
+
+      function escapeHtml(str) {
+        const div = document.createElement('div')
+        div.appendChild(document.createTextNode(str))
+        return div.innerHTML
+      }
+    </script>
+  </body>
+</html>

@@ -34,5 +34,15 @@ jobs:
         env:
           NPM_CONFIG_ENGINE_STRICT: ${{ matrix.engine-strict }}
 
+      - name: Install fonts for text measurement
+        run: |
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            ttf-mscorefonts-installer
+
+      - name: Download fonts
+        run: node scripts/download-fonts.js
+
       - name: Package tests
         uses: ./.github/actions/package-tests
