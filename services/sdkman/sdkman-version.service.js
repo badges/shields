@@ -26,6 +26,7 @@ export default class SdkmanVersion extends BaseService {
   async fetch({ candidate }) {
     return this._request({
       url: `https://api.sdkman.io/2/candidates/default/${candidate}`,
+      httpErrors: { 400: 'not found' },
     })
   }
 
