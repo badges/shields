@@ -171,7 +171,7 @@
     "eslint-plugin-mocha": "11.2.0",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-promise": "7.2.1",
-    "eslint-plugin-react-hooks": "7.0.1",
+    "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-sort-class-members": "1.21.0",
     "globals": "17.4.0",
     "http-deceiver": "file:vendor/http-deceiver",
