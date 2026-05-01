@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import countBy from 'lodash.countby'
-import { pathParam, queryParam } from '../index.js'
+import { pathParam } from '../index.js'
 import { nonNegativeInteger } from '../validators.js'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -10,10 +10,12 @@ import {
 } from './github-helpers.js'
 
 const description = `
-The Check Runs service shows the status of GitHub action runs.
+The Check Suites service shows the aggregate status of GitHub check suites.
+This is useful for GitHub Actions workflows where individual check runs can fail
+with continue-on-error while the parent check suite succeeds.
 
-For an aggregate status that follows the parent check suite result, use the
-corresponding [Check Suites badge][check-suites-link] instead.
+For individual check run status, use the corresponding
+[Check Runs badge][check-runs-link] instead.
 
 ${commonDocumentation}
 `
@@ -27,7 +29,7 @@ const checkStatuses = [
   'waiting',
 ]
 
-const checkRunConclusions = [
+const checkSuiteConclusions = [
   'action_required',
   'cancelled',
   'failure',
@@ -40,53 +42,42 @@ const checkRunConclusions = [
 ]
 
 const schema = Joi.object({
-  total_count: nonNegativeInteger,
-  check_runs: Joi.array()
+  check_suites: Joi.array()
     .items(
       Joi.object({
-        name: Joi.string().required(),
         status: Joi.equal(...checkStatuses).required(),
-        conclusion: Joi.equal(...checkRunConclusions, null).required(),
+        conclusion: Joi.equal(...checkSuiteConclusions, null).required(),
+        latest_check_runs_count: nonNegativeInteger.required(),
       }),
     )
     .default([]),
 }).required()
 
-const queryParamSchema = Joi.object({
-  nameFilter: Joi.string(),
-})
-
-export default class GithubCheckRuns extends GithubAuthV3Service {
+export default class GithubCheckSuites extends GithubAuthV3Service {
   static category = 'build'
   static route = {
-    base: 'github/check-runs',
+    base: 'github/check-suites',
     pattern: ':user/:repo/:ref+',
-    queryParamSchema,
   }
 
   static openApi = {
-    '/github/check-runs/{user}/{repo}/{branch}': {
+    '/github/check-suites/{user}/{repo}/{branch}': {
       get: {
-        summary: 'GitHub branch check runs',
+        summary: 'GitHub branch check suites',
         description: `${description}
-        [check-suites-link]: https://shields.io/badges/git-hub-branch-check-suites`,
+        [check-runs-link]: https://shields.io/badges/git-hub-branch-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
           pathParam({ name: 'branch', example: 'master' }),
-          queryParam({
-            name: 'nameFilter',
-            description: 'Name of a check run',
-            example: 'test-lint',
-          }),
         ],
       },
     },
-    '/github/check-runs/{user}/{repo}/{commit}': {
+    '/github/check-suites/{user}/{repo}/{commit}': {
       get: {
-        summary: 'GitHub commit check runs',
+        summary: 'GitHub commit check suites',
         description: `${description}
-        [check-suites-link]: https://shields.io/badges/git-hub-commit-check-suites`,
+        [check-runs-link]: https://shields.io/badges/git-hub-commit-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -94,28 +85,18 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
             name: 'commit',
             example: '91b108d4b7359b2f8794a4614c11cb1157dc9fff',
           }),
-          queryParam({
-            name: 'nameFilter',
-            description: 'Name of a check run',
-            example: 'test-lint',
-          }),
         ],
       },
     },
-    '/github/check-runs/{user}/{repo}/{tag}': {
+    '/github/check-suites/{user}/{repo}/{tag}': {
       get: {
-        summary: 'GitHub tag check runs',
+        summary: 'GitHub tag check suites',
         description: `${description}
-        [check-suites-link]: https://shields.io/badges/git-hub-tag-check-suites`,
+        [check-runs-link]: https://shields.io/badges/git-hub-tag-check-runs`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
           pathParam({ name: 'tag', example: '3.3.0' }),
-          queryParam({
-            name: 'nameFilter',
-            description: 'Name of a check run',
-            example: 'test-lint',
-          }),
         ],
       },
     },
@@ -123,45 +104,39 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'checks' }
 
-  static transform(
-    { total_count: totalCount, check_runs: checkRuns },
-    nameFilter,
-  ) {
-    const filteredCheckRuns =
-      nameFilter && nameFilter.length > 0
-        ? checkRuns.filter(checkRun => checkRun.name === nameFilter)
-        : checkRuns
+  static transform({ check_suites: checkSuites }) {
+    const suitesWithCheckRuns = checkSuites.filter(
+      checkSuite => checkSuite.latest_check_runs_count > 0,
+    )
 
     return {
-      total: totalCount,
-      statusCounts: countBy(filteredCheckRuns, 'status'),
-      conclusionCounts: countBy(filteredCheckRuns, 'conclusion'),
+      total: suitesWithCheckRuns.length,
+      statusCounts: countBy(suitesWithCheckRuns, 'status'),
+      conclusionCounts: countBy(suitesWithCheckRuns, 'conclusion'),
     }
   }
 
   static mapState({ total, statusCounts, conclusionCounts }) {
     let state
     if (total === 0) {
-      state = 'no check runs'
-    } else if (statusCounts.queued) {
-      state = 'queued'
-    } else if (statusCounts.requested || statusCounts.waiting) {
+      state = 'no check suites'
+    } else if (
+      statusCounts.queued ||
+      statusCounts.requested ||
+      statusCounts.waiting
+    ) {
       state = 'queued'
     } else if (statusCounts.in_progress || statusCounts.pending) {
       state = 'pending'
     } else if (statusCounts.completed) {
-      // all check runs are completed, now evaluate conclusions
       const orangeStates = ['action_required', 'stale']
       const redStates = ['cancelled', 'failure', 'startup_failure', 'timed_out']
 
-      // assume "passing (green)"
       state = 'passing'
       for (const stateValue of Object.keys(conclusionCounts)) {
         if (orangeStates.includes(stateValue)) {
-          // orange state renders "passing (orange)"
           state = 'partially succeeded'
         } else if (redStates.includes(stateValue)) {
-          // red state renders "failing (red)"
           state = 'failing'
           break
         }
@@ -172,17 +147,15 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     return state
   }
 
-  async handle({ user, repo, ref }, { nameFilter }) {
-    // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
+  async handle({ user, repo, ref }) {
+    // https://docs.github.com/en/rest/checks/suites#list-check-suites-for-a-git-reference
     const json = await this._requestJson({
-      url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
+      url: `/repos/${user}/${repo}/commits/${ref}/check-suites`,
       httpErrors: httpErrorsFor('ref or repo not found'),
       schema,
     })
 
-    const state = this.constructor.mapState(
-      this.constructor.transform(json, nameFilter),
-    )
+    const state = this.constructor.mapState(this.constructor.transform(json))
 
     return renderBuildStatusBadge({ status: state })
   }

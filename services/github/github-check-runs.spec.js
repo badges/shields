@@ -72,6 +72,16 @@ describe('GithubCheckRuns', function () {
     }).expect('pending')
     given({
       total: 1,
+      statusCounts: { waiting: 1 },
+      conclusionCounts: null,
+    }).expect('queued')
+    given({
+      total: 1,
+      statusCounts: { pending: 1 },
+      conclusionCounts: null,
+    }).expect('pending')
+    given({
+      total: 1,
       statusCounts: { completed: 1 },
       conclusionCounts: { success: 1 },
     }).expect('passing')
