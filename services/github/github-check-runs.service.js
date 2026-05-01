@@ -133,7 +133,10 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
         : checkRuns
 
     return {
-      total: totalCount,
+      total:
+        nameFilter && nameFilter.length > 0
+          ? filteredCheckRuns.length
+          : totalCount,
       statusCounts: countBy(filteredCheckRuns, 'status'),
       conclusionCounts: countBy(filteredCheckRuns, 'conclusion'),
     }

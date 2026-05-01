@@ -46,9 +46,25 @@ describe('GithubCheckRuns.transform', function () {
       },
       'test1',
     ).expect({
-      total: 3,
+      total: 1,
       statusCounts: { completed: 1 },
       conclusionCounts: { success: 1 },
+    })
+
+    given(
+      {
+        total_count: 3,
+        check_runs: [
+          { name: 'test1', status: 'completed', conclusion: 'success' },
+          { name: 'test2', status: 'completed', conclusion: 'failure' },
+          { name: 'test3', status: 'in_progress', conclusion: null },
+        ],
+      },
+      'missing',
+    ).expect({
+      total: 0,
+      statusCounts: {},
+      conclusionCounts: {},
     })
   })
 })
