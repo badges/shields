@@ -12,9 +12,9 @@ const CANDIDATE_PATHS = [
 
 export default class TangledLicense extends BaseService {
   static category = 'license'
-  static route = { base: 'tangled/license', pattern: ':owner/:repo' }
+  static route = { base: 'tangled/l', pattern: ':owner/:repo' }
   static openApi = {
-    '/tangled/license/{owner}/{repo}': {
+    '/tangled/l/{owner}/{repo}': {
       get: {
         summary: 'Tangled License',
         description,
