@@ -2,7 +2,7 @@ import { fromString } from 'css-color-converter'
 
 // When updating these, be sure also to update the list in `badge-maker/README.md`.
 export const namedColors = {
-  brightgreen: '#40bf00',
+  brightgreen: '#4b0',
   green: '#67ac09',
   yellow: '#d8b800',
   yellowgreen: '#95991a',
