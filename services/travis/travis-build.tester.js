@@ -27,7 +27,3 @@ t.create('invalid svg response')
     nock('https://api.travis-ci.com').get('/foo/bar.svg').reply(200),
   )
   .expectBadge({ label: 'build', message: 'unparseable svg response' })
-
-t.create('php-v user is rejected')
-  .get('/php-v-starting/some-repo.json')
-  .expectBadge({ label: 'build', message: 'not found' })
