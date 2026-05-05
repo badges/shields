@@ -60,7 +60,7 @@
     "qs": "^6.15.1",
     "re2": "^1.24.0",
     "semver": "~7.7.4",
-    "simple-icons": "16.15.0",
+    "simple-icons": "16.18.1",
     "smol-toml": "1.6.1",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
