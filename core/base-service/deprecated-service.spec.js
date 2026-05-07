@@ -4,7 +4,7 @@ import deprecatedService from './deprecated-service.js'
 describe('DeprecatedService', function () {
   const route = {
     base: 'service/that/no/longer/exists',
-    format: '(?:.+)',
+    pattern: ':various+',
   }
   const category = 'analysis'
   const dateAdded = new Date()

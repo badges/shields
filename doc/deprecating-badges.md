@@ -24,7 +24,7 @@ export default deprecatedService({
   category: 'size',
   route: {
     base: 'imagelayers',
-    format: '(?:.+?)',
+    pattern: ':various+',
   },
   label: 'imagelayers',
   dateAdded: new Date('2019-xx-xx'), // Be sure to update this with today's date!
