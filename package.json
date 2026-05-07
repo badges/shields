@@ -172,7 +172,7 @@
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-sort-class-members": "1.21.0",
+    "eslint-plugin-sort-class-members": "1.22.1",
     "globals": "17.6.0",
     "http-deceiver": "file:vendor/http-deceiver",
     "icedfrisby": "4.0.0",
