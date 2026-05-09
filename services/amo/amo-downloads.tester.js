@@ -20,3 +20,17 @@ t.create('/d URL should return deprecated badge')
     label: 'mozilla-add-on',
     message: 'https://github.com/badges/shields/pull/11583',
   })
+
+t.create('Weekly Downloads (thunderbird)')
+  .get('/dw/tbkeys-lite.json?registry=thunderbird')
+  .intercept(nock =>
+    nock('https://addons.thunderbird.net')
+      .get('/api/v5/addons/addon/tbkeys-lite/')
+      .reply(200, {
+        average_daily_users: 1000,
+        current_version: { version: '4.0.0' },
+        ratings: { average: 4.5 },
+        weekly_downloads: 200,
+      }),
+  )
+  .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
