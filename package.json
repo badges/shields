@@ -170,7 +170,7 @@
     "eslint-plugin-jsdoc": "62.9.0",
     "eslint-plugin-mocha": "11.2.0",
     "eslint-plugin-prettier": "5.5.5",
-    "eslint-plugin-promise": "7.2.1",
+    "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-sort-class-members": "1.22.1",
     "globals": "17.6.0",
