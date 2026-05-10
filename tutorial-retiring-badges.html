@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/base-service/base-xml</title>
+    <title>JSDoc: Tutorial: retiring-badges</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,104 +17,142 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/base-service/base-xml</h1>
+    <h1 class="page-title">Tutorial: retiring-badges</h1>
 
-    
-
-
-
-
-<section>
+    <section>
 
 <header>
     
+
+    <h2>retiring-badges</h2>
 </header>
 
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Deprecating Badges</h1>
+<p>When a service that Shields integrates with shuts down, those badges will no longer work and need to be retired (deprecated) within Shields.</p>
+<p>Deprecating a badge involves two steps:</p>
+<ol>
+<li>Updating the service code to use the <code>RetiredService</code> class</li>
+<li>Updating the service tests to reflect the new behavior of the retired service</li>
+</ol>
+<h2>Update Service Implementation</h2>
+<p>Locate the source file(s) for the service, which can be found in <code>*.service.js</code> files located within the directory for the service (<code>./services/:service-name/</code>) such as <code>./services/imagelayers/imagelayers.service.js</code>.</p>
+<p>Replace the existing service class implementation with the <code>RetiredService</code> class from <code>./core/base-service/retired-service.js</code> using the respective <code>category</code>, <code>route</code>, and <code>label</code> values for that service.</p>
+<p>Set the badge label to the service name. This ensures users can immediately identify which service is no longer available at a glance.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-js"><code>import { retiredService } from '../index.js'
 
-        
+export default retiredService({
+  category: 'size',
+  route: {
+    base: 'imagelayers',
+    pattern: ':various+',
+  },
+  label: 'imagelayers',
+  dateAdded: new Date('2019-xx-xx'), // Be sure to update this with today's date!
+})
+</code></pre>
+<h2>Update Service Tests</h2>
+<p>Locate the test file(s) for the service, which can be found in <code>*.tester.js</code> files located in the service directory (<code>./services/:service-name/</code>), such as <code>./services/imagelayers/imagelayers.tester.js</code>.</p>
+<p>With <code>RetiredService</code> classes we cannot use <code>createServiceTester()</code> so you will need to create the <code>ServiceTester</code> class directly. For example:</p>
+<pre class="prettyprint source lang-js"><code>import { ServiceTester } from '../tester.js'
 
+export const t = new ServiceTester({
+  id: 'imagelayers',
+  title: 'ImageLayers',
+})
+</code></pre>
+<p>Next you will need to replace/refactor the existing tests to validate the new retired badge behavior for this service. Retired badges always return a message of <code>retired badge</code> (such as <code>imagelayers | retired badge</code>) so the tests need to be updated to reflect that message value. For example:</p>
+<pre class="prettyprint source lang-js"><code>t.create('retired badge (previously image size)')
+  .get('/image-size/_/ubuntu/latest.json')
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'retired badge',
+  })
+</code></pre>
+<p>Make sure to have a live (non-mocked) test for each badge the service provides that validates the each badge returns the <code>retired badge</code> message.</p>
+<p>Here is an example of what the final result would look like for a test file:</p>
+<pre class="prettyprint source lang-js"><code>import { ServiceTester } from '../tester.js'
 
-<dl class="details">
+export const t = new ServiceTester({
+  id: 'imagelayers',
+  title: 'ImageLayers',
+})
 
-    
+t.create('retired badge (previously image size)')
+  .get('/image-size/_/ubuntu/latest.json')
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'retired badge',
+  })
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_base-service_base-xml.js.html">core/base-service/base-xml.js</a>, <a href="core_base-service_base-xml.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_base-service_base-xml-BaseXmlService.html">BaseXmlService</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+t.create('retired badge (previously number of layers)')
+  .get('/layers/_/ubuntu/latest.json')
+  .expectBadge({
+    label: 'imagelayers',
+    message: 'retired badge',
+  })
+</code></pre>
+<h2>What Happens Next?</h2>
+<p>Once a service is retired, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows: <img src="https://img.shields.io/badge/gratipay-no%20longer%20available-inactive" alt=""></p>
+<p>Past that point, all related code will be deleted, and a not found error will be rendered instead: <img src="https://img.shields.io/badge/404-badge%20not%20found-critical" alt=""></p>
+<p>Here is a listing of all deleted badges that were once part of the Shields.io service:</p>
+<ul>
+<li>Ansible Collection, Role, Quality</li>
+<li>APM</li>
+<li>Beerpay</li>
+<li>Bintray</li>
+<li>bitHound</li>
+<li>Bountysource</li>
+<li>Cauditor</li>
+<li>Chrome Web Store Price</li>
+<li>CocoaPods Apps</li>
+<li>CocoaPods Downloads</li>
+<li>Codetally</li>
+<li>continuousphp</li>
+<li>Coverity</li>
+<li>Criterion</li>
+<li>David</li>
+<li>dependabot</li>
+<li>Dockbit</li>
+<li>Dotnet Status</li>
+<li>Gemnasium</li>
+<li>Gratipay/Gittip</li>
+<li>ImageLayers</li>
+<li>Issue Stats</li>
+<li>JitPack Downloads</li>
+<li>Leanpub</li>
+<li>LGTM</li>
+<li>Libscore</li>
+<li>Magnum CI</li>
+<li>MicroBadger</li>
+<li>NSP</li>
+<li>pkgreview</li>
+<li>PHP Eye</li>
+<li>Redmine</li>
+<li>requires.io</li>
+<li>Shippable</li>
+<li>Snap CI</li>
+<li>Snyk</li>
+<li>Tas</li>
+<li>Tokei</li>
+<li>Travis.org</li>
+<li>VersionEye</li>
+<li>Waffle</li>
+<li>Wercker</li>
+<li>Wheelmap</li>
+</ul>
+<h2>Additional Information</h2>
+<p>Some other information that may be useful:</p>
+<ul>
+<li><a href="../CONTRIBUTING.md">Contributing Docs</a></li>
+<li><a href="./TUTORIAL.md">Badge Tutorial</a></li>
+<li><a href="./service-tests.md">Service Tests Tutorial</a></li>
+<li>Previous Pull Requests that retired badges like <a href="https://github.com/badges/shields/pull/10371">#10371</a> and <a href="https://github.com/badges/shields/pull/11075">#11075</a></li>
+</ul>
 </article>
 
 </section>
-
-
-
 
 </div>
 
