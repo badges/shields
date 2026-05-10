@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import retiredService from './deprecated-service.js'
+import retiredService from './retired-service.js'
 
 describe('RetiredService', function () {
   const route = {
