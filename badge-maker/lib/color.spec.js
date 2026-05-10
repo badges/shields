@@ -2,7 +2,7 @@ import { test, given, forCases } from 'sazerac'
 import { isHexColor, normalizeColor, toSvgColor, brightness } from './color.js'
 
 test(isHexColor, () => {
-  forCases([given('f00bae'), given('4c1'), given('ABC123')]).expect(true)
+  forCases([given('f00bae'), given('4b0'), given('ABC123')]).expect(true)
   forCases([
     given('f00bar'),
     given(''),
@@ -18,7 +18,7 @@ test(isHexColor, () => {
 test(normalizeColor, () => {
   given('red').expect('red')
   given('blue').expect('blue')
-  given('4c1').expect('#4c1')
+  given('4b0').expect('#4b0')
   given('f00f00').expect('#f00f00')
   given('111111').expect('#111111')
   given(111111).expect('#111111')
@@ -61,9 +61,9 @@ test(normalizeColor, () => {
 })
 
 test(toSvgColor, () => {
-  given('red').expect('#e05d44')
+  given('red').expect('#dd4343')
   given('blue').expect('#007ec6')
-  given('4c1').expect('#4c1')
+  given('4b0').expect('#4b0')
   given('f00f00').expect('#f00f00')
   given('ABC123').expect('#abc123')
   given('#ABC123').expect('#abc123')
@@ -72,7 +72,7 @@ test(toSvgColor, () => {
   forCases([given(''), given(undefined), given('not-a-color')]).expect(
     undefined,
   )
-  given('lightgray').expect('#9f9f9f')
+  given('lightgray').expect('#939393')
   given('informational').expect('#007ec6')
 })
 

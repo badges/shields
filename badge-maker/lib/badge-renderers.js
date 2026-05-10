@@ -123,7 +123,7 @@ class Badge {
     logo,
     logoWidth,
     logoPadding,
-    color = '#4c1',
+    color = '#4b0',
     labelColor,
     idSuffix = '',
   }) {
@@ -223,7 +223,24 @@ class Badge {
         textLength: FONT_SCALE_UP_FACTOR * textWidth,
       },
     })
-    const shadow = this.constructor.shadow ? shadowText : ''
+    const shadowBlur = new XmlElement({
+      name: 'text',
+      content: [content],
+      attrs: {
+        'aria-hidden': 'true',
+        x,
+        y: 150 + this.constructor.verticalMargin,
+        fill: shadowColor,
+        'fill-opacity': '.80',
+        filter: 'url(#blur)',
+        transform: FONT_SCALE_DOWN_VALUE,
+        textLength: FONT_SCALE_UP_FACTOR * textWidth,
+      },
+    })
+
+    const shadow = this.constructor.shadow
+      ? new ElementList({ content: [shadowBlur, shadowText] })
+      : ''
 
     if (!link) {
       return new ElementList({ content: [shadow, text] })
@@ -339,6 +356,19 @@ class Badge {
     })
   }
 
+  getBlurElement() {
+    return new XmlElement({
+      name: 'filter',
+      content: [
+        new XmlElement({
+          name: 'feGaussianBlur',
+          attrs: { in: 'SourceGraphic', stdDeviation: '16' },
+        }),
+      ],
+      attrs: { id: 'blur' },
+    })
+  }
+
   render() {
     throw new Error('Not implemented')
   }
@@ -381,6 +411,8 @@ class Plastic extends Badge {
       attrs: { id: `s${this.idSuffix}`, x2: 0, y2: '100%' },
     })
 
+    const blur = this.getBlurElement()
+
     const clipPath = this.getClipPathElement(4)
 
     const backgroundGroup = this.getBackgroundGroupElement({
@@ -396,7 +428,7 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -415,6 +447,8 @@ class Flat extends Badge {
   }
 
   render() {
+    const blur = this.getBlurElement()
+
     const gradient = new XmlElement({
       name: 'linearGradient',
       content: [
@@ -445,7 +479,7 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -489,7 +523,7 @@ function social({
   logo,
   logoWidth,
   logoPadding,
-  color = '#4c1',
+  color = '#4b0',
   labelColor = '#555',
   idSuffix = '',
 }) {
@@ -757,7 +791,7 @@ function forTheBadge({
   links,
   logo,
   logoWidth,
-  color = '#4c1',
+  color = '#4b0',
   labelColor,
 }) {
   const FONT_SIZE = 10
