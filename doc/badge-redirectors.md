@@ -213,7 +213,7 @@ We'll keep the redirector for a minimum of one year. It may stay in place for si
 - The redirector led to less than 100 badge renders on a weekday.
 - The redirector serves less than 1% of the traffic of the new badge URL it points to.
 
-It can then be removed and replaced with a deprecated badge linking to an issue that explains the migration path, for example:
+It can then be removed and replaced with a retired badge linking to an issue that explains the migration path, for example:
 
 ```js
 import { retiredService } from '../index.js'
@@ -232,4 +232,4 @@ export default retiredService({
 
 Doing so will render badges similar to the following: ![](https://img.shields.io/badge/githubworkflowstatus-https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues%2F8671-red)
 
-Removal of the resulting deprecated badge follows the process documented [here](./retiring-badges.md).
+Removal of the resulting retired badge follows the process documented [here](./retiring-badges.md).

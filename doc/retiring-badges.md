@@ -11,7 +11,7 @@ Deprecating a badge involves two steps:
 
 Locate the source file(s) for the service, which can be found in `*.service.js` files located within the directory for the service (`./services/:service-name/`) such as `./services/imagelayers/imagelayers.service.js`.
 
-Replace the existing service class implementation with the `RetiredService` class from `./core/base-service/deprecated-service.js` using the respective `category`, `route`, and `label` values for that service.
+Replace the existing service class implementation with the `RetiredService` class from `./core/base-service/retired-service.js` using the respective `category`, `route`, and `label` values for that service.
 
 Set the badge label to the service name. This ensures users can immediately identify which service is no longer available at a glance.
 
@@ -143,4 +143,4 @@ Some other information that may be useful:
 - [Contributing Docs](../CONTRIBUTING.md)
 - [Badge Tutorial](./TUTORIAL.md)
 - [Service Tests Tutorial](./service-tests.md)
-- Previous Pull Requests that deprecated badges like [#10371](https://github.com/badges/shields/pull/10371) and [#11075](https://github.com/badges/shields/pull/11075)
+- Previous Pull Requests that retired badges like [#10371](https://github.com/badges/shields/pull/10371) and [#11075](https://github.com/badges/shields/pull/11075)
