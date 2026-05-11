@@ -18,8 +18,6 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          node-version-file: .node-version
 
       - name: Build
         run: npm run build-docs
