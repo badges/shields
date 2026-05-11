@@ -31,6 +31,7 @@ jobs:
           echo "version=${version}" >> "$GITHUB_OUTPUT"
 
       - name: Create Pull Request if simple-icons has changed
+        # create-pull-request only opens or updates a PR when the install leaves a git diff.
         uses: peter-evans/create-pull-request@v8
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
