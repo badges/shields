@@ -19,7 +19,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          node-version: 22
+          node-version-file: .node-version
 
       - name: Update simple-icons
         run: npm install simple-icons@latest --save-exact
