@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@renovatebot/pep440": "^5.0.0",
-    "@renovatebot/ruby-semver": "^4.1.2",
+    "@renovatebot/ruby-semver": "^5.0.0",
     "@sentry/node-core": "^10.51.0",
     "@shields_io/camp": "^18.1.2",
     "@xmldom/xmldom": "0.9.10",
