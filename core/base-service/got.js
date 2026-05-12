@@ -1,4 +1,4 @@
-import got, { CancelError } from 'got'
+import got from 'got'
 import { Inaccessible, InvalidResponse } from './errors.js'
 import {
   fetchLimitBytes as fetchLimitBytesDefault,
@@ -17,7 +17,7 @@ async function sendRequest(gotWrapper, url, options = {}, systemErrors = {}) {
     const resp = await gotWrapper(url, gotOptions)
     return { res: resp, buffer: resp.body }
   } catch (err) {
-    if (err instanceof CancelError) {
+    if (err.code === 'ERR_ABORTED') {
       throw new InvalidResponse({
         underlyingError: new Error('Maximum response size exceeded'),
       })
@@ -33,7 +33,9 @@ async function sendRequest(gotWrapper, url, options = {}, systemErrors = {}) {
 }
 
 function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
+  const abortController = new AbortController()
   const gotWithLimit = got.extend({
+    signal: abortController.signal,
     handlers: [
       (options, next) => {
         const promiseOrStream = next(options)
@@ -49,7 +51,7 @@ function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
             https://github.com/sindresorhus/got/blob/main/documentation/advanced-creation.md#examples
             but by the time we catch it, err.message is just "Promise was canceled"
             */
-            promiseOrStream.cancel('Maximum response size exceeded')
+            abortController.abort('Maximum response size exceeded')
           }
         })
 
