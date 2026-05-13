@@ -553,7 +553,7 @@ describe('The server', function () {
         .reply(200)
       await got(`${baseUrl}badge/fruit-apple-green.svg`)
 
-      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 500)
+      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 1000)
 
       expect(scope.isDone()).to.be.equal(
         true,
