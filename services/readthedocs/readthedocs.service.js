@@ -21,64 +21,64 @@ const description =
 export default class ReadTheDocs extends BaseJsonService {
   static category = 'build'
 
-static route = {
-  base: 'readthedocs',
-  pattern: ':domain(org|com)?/:project/:version?',
-}
+  static route = {
+    base: 'readthedocs',
+    pattern: ':domain(org|com)?/:project/:version?',
+  }
 
   static auth = {
     passKey: 'readthedocs_token',
     authorizedOrigins: ['https://app.readthedocs.org'],
   }
 
- static openApi = {
-  '/readthedocs/{packageName}': {
-    get: {
-      summary: 'Read the Docs',
-      description,
-      parameters: pathParams({
-        name: 'packageName',
-        example: 'pip',
-      }),
-    },
-  },
-  '/readthedocs/{domain}/{packageName}': {
-    get: {
-      summary: 'Read the Docs (domain)',
-      description,
-      parameters: pathParams(
-        {
-          name: 'domain',
-          example: 'org',
-        },
-        {
+  static openApi = {
+    '/readthedocs/{packageName}': {
+      get: {
+        summary: 'Read the Docs',
+        description,
+        parameters: pathParams({
           name: 'packageName',
           example: 'pip',
-        },
-      ),
+        }),
+      },
     },
-  },
-  '/readthedocs/{domain}/{packageName}/{version}': {
-    get: {
-      summary: 'Read the Docs (version)',
-      description,
-      parameters: pathParams(
-        {
-          name: 'domain',
-          example: 'org',
-        },
-        {
-          name: 'packageName',
-          example: 'pip',
-        },
-        {
-          name: 'version',
-          example: 'stable',
-        },
-      ),
+    '/readthedocs/{domain}/{packageName}': {
+      get: {
+        summary: 'Read the Docs (domain)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
+          {
+            name: 'packageName',
+            example: 'pip',
+          },
+        ),
+      },
     },
-  },
-}
+    '/readthedocs/{domain}/{packageName}/{version}': {
+      get: {
+        summary: 'Read the Docs (version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
+          {
+            name: 'packageName',
+            example: 'pip',
+          },
+          {
+            name: 'version',
+            example: 'stable',
+          },
+        ),
+      },
+    },
+  }
 
   static _cacheLength = 300
 
