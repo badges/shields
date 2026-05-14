@@ -2,20 +2,18 @@ import { expect } from 'chai'
 import { test, given } from 'sazerac'
 import sinon from 'sinon'
 import { InvalidResponse } from '../index.js'
-import { BaseCangjieService } from './cangjie-base.js'
+import CangjieVersion from './cangjie-version.service.js'
 
-describe('BaseCangjieService', function () {
+describe('CangjieVersion', function () {
   describe('getIndexPath', function () {
-    test(BaseCangjieService.getIndexPath, () => {
+    test(CangjieVersion.getIndexPath, () => {
       given({ moduleName: 'dep' }).expect('de/p/dep')
       given({ moduleName: 'aabbcc' }).expect('aa/bb/aabbcc')
       given({ moduleName: 'f_store' }).expect('f_/st/f_store')
     })
 
     it('rejects undocumented short module names', function () {
-      expect(() =>
-        BaseCangjieService.getIndexPath({ moduleName: 'ab' }),
-      ).to.throw()
+      expect(() => CangjieVersion.getIndexPath({ moduleName: 'ab' })).to.throw()
     })
   })
 
@@ -29,7 +27,7 @@ describe('BaseCangjieService', function () {
         res: { statusCode: 200 },
       })
 
-      const service = new BaseCangjieService(
+      const service = new CangjieVersion(
         { requestFetcher },
         { handleInternalErrors: false },
       )
@@ -56,7 +54,7 @@ describe('BaseCangjieService', function () {
         res: { statusCode: 200 },
       })
 
-      const service = new BaseCangjieService(
+      const service = new CangjieVersion(
         { requestFetcher },
         { handleInternalErrors: false },
       )
@@ -76,7 +74,7 @@ describe('BaseCangjieService', function () {
         res: { statusCode: 200 },
       })
 
-      const service = new BaseCangjieService(
+      const service = new CangjieVersion(
         { requestFetcher },
         { handleInternalErrors: false },
       )
@@ -99,14 +97,12 @@ describe('BaseCangjieService', function () {
         { version: '1.0.5', yanked: false },
       ]
 
-      expect(BaseCangjieService.getLatestVersion(entries)).to.equal('1.0.5')
+      expect(CangjieVersion.getLatestVersion(entries)).to.equal('1.0.5')
     })
 
     it('throws when all versions are yanked', function () {
       expect(() =>
-        BaseCangjieService.getLatestVersion([
-          { version: '1.0.0', yanked: true },
-        ]),
+        CangjieVersion.getLatestVersion([{ version: '1.0.0', yanked: true }]),
       ).to.throw()
     })
   })
