@@ -14,59 +14,59 @@ const description =
 export default class ReadTheDocs extends BaseSvgScrapingService {
   static category = 'build'
 
-static route = {
-  base: 'readthedocs',
-  pattern: ':domain(org|com)?/:project/:version?',
-}
+  static route = {
+    base: 'readthedocs',
+    pattern: ':domain(org|com)?/:project/:version?',
+  }
 
- static openApi = {
-  '/readthedocs/{packageName}': {
-    get: {
-      summary: 'Read the Docs',
-      description,
-      parameters: pathParams({
-        name: 'packageName',
-        example: 'pip',
-      }),
-    },
-  },
-  '/readthedocs/{domain}/{packageName}': {
-    get: {
-      summary: 'Read the Docs (domain)',
-      description,
-      parameters: pathParams(
-        {
-          name: 'domain',
-          example: 'org',
-        },
-        {
+  static openApi = {
+    '/readthedocs/{packageName}': {
+      get: {
+        summary: 'Read the Docs',
+        description,
+        parameters: pathParams({
           name: 'packageName',
           example: 'pip',
-        },
-      ),
+        }),
+      },
     },
-  },
-  '/readthedocs/{domain}/{packageName}/{version}': {
-    get: {
-      summary: 'Read the Docs (version)',
-      description,
-      parameters: pathParams(
-        {
-          name: 'domain',
-          example: 'org',
-        },
-        {
-          name: 'packageName',
-          example: 'pip',
-        },
-        {
-          name: 'version',
-          example: 'stable',
-        },
-      ),
+    '/readthedocs/{domain}/{packageName}': {
+      get: {
+        summary: 'Read the Docs (domain)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
+          {
+            name: 'packageName',
+            example: 'pip',
+          },
+        ),
+      },
     },
-  },
-}
+    '/readthedocs/{domain}/{packageName}/{version}': {
+      get: {
+        summary: 'Read the Docs (version)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
+          {
+            name: 'packageName',
+            example: 'pip',
+          },
+          {
+            name: 'version',
+            example: 'stable',
+          },
+        ),
+      },
+    },
+  }
 
   static defaultBadgeData = {
     label: 'docs',
@@ -77,11 +77,11 @@ static route = {
   }
 
   async handle({ domain = 'org', project, version }) {
-  const { message: status } = await this._requestSvg({
-    schema,
-    url: `https://readthedocs.${domain}/projects/${encodeURIComponent(
-      project,
-    )}/badge/`,
+    const { message: status } = await this._requestSvg({
+      schema,
+      url: `https://readthedocs.${domain}/projects/${encodeURIComponent(
+        project,
+      )}/badge/`,
       options: { searchParams: { version } },
     })
     if (status === 'unknown') {

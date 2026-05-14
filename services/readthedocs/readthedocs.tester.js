@@ -54,4 +54,4 @@ t.create('build status on readthedocs.org (explicit)')
   .expectBadge({
     label: 'docs',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })  
+  })
