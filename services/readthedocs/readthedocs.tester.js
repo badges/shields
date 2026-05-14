@@ -35,3 +35,23 @@ t.create('build status for nonexistent version')
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({ label: 'docs', message: 'project or version not found' })
+t.create('build status on readthedocs.com')
+  .get('/com/pip.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
+
+t.create('build status for named version on readthedocs.com')
+  .get('/com/pip/stable.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
+
+t.create('build status on readthedocs.org (explicit)')
+  .get('/org/pip.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })  
