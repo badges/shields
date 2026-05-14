@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { isBuildStatus } from '../build-status.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -72,3 +73,23 @@ t.create('no finished builds')
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({ label: 'docs', message: 'no finished builds' })
+t.create('build status on readthedocs.com')
+  .get('/com/pip.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
+
+t.create('build status for named version on readthedocs.com')
+  .get('/com/pip/stable.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })
+
+t.create('build status on readthedocs.org (explicit)')
+  .get('/org/pip.json')
+  .expectBadge({
+    label: 'docs',
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+  })  

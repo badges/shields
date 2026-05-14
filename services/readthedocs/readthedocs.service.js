@@ -21,44 +21,64 @@ const description =
 export default class ReadTheDocs extends BaseJsonService {
   static category = 'build'
 
-  static route = {
-    base: 'readthedocs',
-    pattern: ':project/:version?',
-  }
+static route = {
+  base: 'readthedocs',
+  pattern: ':domain(org|com)?/:project/:version?',
+}
 
   static auth = {
     passKey: 'readthedocs_token',
     authorizedOrigins: ['https://app.readthedocs.org'],
   }
 
-  static openApi = {
-    '/readthedocs/{packageName}': {
-      get: {
-        summary: 'Read the Docs',
-        description,
-        parameters: pathParams({
+ static openApi = {
+  '/readthedocs/{packageName}': {
+    get: {
+      summary: 'Read the Docs',
+      description,
+      parameters: pathParams({
+        name: 'packageName',
+        example: 'pip',
+      }),
+    },
+  },
+  '/readthedocs/{domain}/{packageName}': {
+    get: {
+      summary: 'Read the Docs (domain)',
+      description,
+      parameters: pathParams(
+        {
+          name: 'domain',
+          example: 'org',
+        },
+        {
           name: 'packageName',
           example: 'pip',
-        }),
-      },
+        },
+      ),
     },
-    '/readthedocs/{packageName}/{version}': {
-      get: {
-        summary: 'Read the Docs (version)',
-        description,
-        parameters: pathParams(
-          {
-            name: 'packageName',
-            example: 'pip',
-          },
-          {
-            name: 'version',
-            example: 'stable',
-          },
-        ),
-      },
+  },
+  '/readthedocs/{domain}/{packageName}/{version}': {
+    get: {
+      summary: 'Read the Docs (version)',
+      description,
+      parameters: pathParams(
+        {
+          name: 'domain',
+          example: 'org',
+        },
+        {
+          name: 'packageName',
+          example: 'pip',
+        },
+        {
+          name: 'version',
+          example: 'stable',
+        },
+      ),
     },
-  }
+  },
+}
 
   static _cacheLength = 300
 
@@ -70,12 +90,12 @@ export default class ReadTheDocs extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  async fetch({ project, version = 'latest' }) {
+  async fetch({ domain, project, version = 'latest' }) {
     return this._requestJson(
       this.authHelper.withBearerAuthHeader(
         {
           schema,
-          url: `https://app.readthedocs.org/api/v3/projects/${encodeURIComponent(project)}/versions/${encodeURIComponent(version)}/builds/`,
+          url: `https://app.readthedocs.${domain}/api/v3/projects/${encodeURIComponent(project)}/versions/${encodeURIComponent(version)}/builds/`,
           options: {
             searchParams: {
               fields: 'state,success',
@@ -89,8 +109,8 @@ export default class ReadTheDocs extends BaseJsonService {
     )
   }
 
-  async handle({ project, version }) {
-    const { results } = await this.fetch({ project, version })
+  async handle({ domain = 'org', project, version }) {
+    const { results } = await this.fetch({ domain, project, version })
     const build = results.find(({ state }) => state.code === 'finished')
     if (!build) {
       throw new NotFound({
