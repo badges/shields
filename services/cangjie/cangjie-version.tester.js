@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import { isVPlusDottedVersionNClausesWithOptionalSuffix as isVersion } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
@@ -6,14 +6,14 @@ t.create('live cangjie version unicode_case')
   .get('/unicode_case.json')
   .expectBadge({
     label: 'cangjie',
-    message: Joi.string().pattern(/^v\d+\.\d+\.\d+$/),
+    message: isVersion,
   })
 
 t.create('live cangjie version organization')
   .get('/f_store.json?organization=fountain')
   .expectBadge({
     label: 'cangjie',
-    message: Joi.string().pattern(/^v\d+\.\d+\.\d+$/),
+    message: isVersion,
   })
 
 t.create('version')

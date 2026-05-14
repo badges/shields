@@ -1,5 +1,4 @@
 import Joi from 'joi'
-import { parseJsonl } from '../../core/base-service/jsonl.js'
 import {
   BaseJsonlService,
   InvalidParameter,
@@ -81,10 +80,6 @@ export default class CangjieVersion extends BaseJsonlService {
 
   static render({ version }) {
     return renderVersionBadge({ version })
-  }
-
-  _parseJsonl(buffer) {
-    return parseJsonl(buffer, { prettyErrorMessage: 'invalid index entry' })
   }
 
   async fetch({ moduleName, organization }) {

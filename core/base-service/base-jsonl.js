@@ -15,10 +15,11 @@ class BaseJsonlService extends BaseService {
    * Parse data from a JSONL endpoint
    *
    * @param {string} buffer JSONL response from upstream API
+   * @param {object} [options] Options passed to the JSONL parser
    * @returns {object[]} Parsed response
    */
-  _parseJsonl(buffer) {
-    return parseJsonl(buffer)
+  _parseJsonl(buffer, options) {
+    return parseJsonl(buffer, options)
   }
 
   static headers = {
@@ -47,7 +48,7 @@ class BaseJsonlService extends BaseService {
    * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
    *    that will be logged (to sentry, if configured).
    * @param {string} [attrs.prettyErrorMessage='invalid response data']
-   *    Error message to surface when a parsed line fails schema validation.
+   *    Error message to surface when JSONL parsing or schema validation fails.
    * @returns {object[]} Parsed response
    * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
    */
@@ -71,7 +72,7 @@ class BaseJsonlService extends BaseService {
       systemErrors,
       logErrors,
     })
-    const jsonl = this._parseJsonl(buffer)
+    const jsonl = this._parseJsonl(buffer, { prettyErrorMessage })
 
     return jsonl.map(line =>
       this.constructor._validate(line, schema, { prettyErrorMessage }),
