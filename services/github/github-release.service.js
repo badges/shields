@@ -10,10 +10,12 @@ import {
 import { documentation } from './github-helpers.js'
 
 const displayNameEnum = ['tag', 'release']
+
 const extendedQueryParamSchema = Joi.object({
   display_name: Joi.string()
     .valid(...displayNameEnum)
     .default('tag'),
+  branch: Joi.string(),
 })
 
 class GithubRelease extends GithubAuthV3Service {
@@ -38,6 +40,12 @@ class GithubRelease extends GithubAuthV3Service {
             example: 'tag',
             schema: { type: 'string', enum: displayNameEnum },
           }),
+          queryParam({
+            name: 'branch',
+            example: '9.x',
+            schema: { type: 'string' },
+            description: 'Filter releases by target branch',
+          }),
         ],
       },
     },
@@ -50,7 +58,6 @@ class GithubRelease extends GithubAuthV3Service {
     if (display === 'tag') {
       return { isPrerelease, version: tagName }
     }
-
     return { version: name || tagName, isPrerelease }
   }
 
