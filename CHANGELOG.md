@@ -4,6 +4,20 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-05-15
+
+- refactor: replace route format with pattern in website redirect service [#11858](https://github.com/badges/shields/issues/11858)
+- Change simple-icons update schedule to weekly [#11814](https://github.com/badges/shields/issues/11814)
+- Centralize CI node-version in `.node-version` [#11815](https://github.com/badges/shields/issues/11815)
+- refactor: replace route format with pattern for [Travis] [#11813](https://github.com/badges/shields/issues/11813)
+- feat: add [SdkmanVersion] badge [#11806](https://github.com/badges/shields/issues/11806)
+- refactor: rename deprecatedService to retiredService [*****] [#11803](https://github.com/badges/shields/issues/11803)
+- feat: improve badges color contrast [#11783](https://github.com/badges/shields/issues/11783)
+- refactor: replace 'format' with 'pattern' in deprecated example/test [#11812](https://github.com/badges/shields/issues/11812)
+- Make github-actions commit author consistent [#11804](https://github.com/badges/shields/issues/11804)
+- docs: add JSDoc comments to test-validators.js [#11799](https://github.com/badges/shields/issues/11799)
+- Dependency updates
+
 ## server-2026-04-15
 
 **Noteable changes:**
