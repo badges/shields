@@ -3,10 +3,7 @@ import emojic from 'emojic'
 import { InvalidResponse } from './errors.js'
 import trace from './trace.js'
 
-function parseJsonl(
-  buffer,
-  { prettyErrorMessage = 'unparseable jsonl response' } = {},
-) {
+function parseJsonl(buffer) {
   const logTrace = (...args) => trace.logTrace('fetch', ...args)
   let jsonl
   try {
@@ -19,7 +16,7 @@ function parseJsonl(
   } catch (err) {
     logTrace(emojic.dart, 'Response JSONL (unparseable)', buffer)
     throw new InvalidResponse({
-      prettyMessage: prettyErrorMessage,
+      prettyMessage: 'unparseable jsonl response',
       underlyingError: err,
     })
   }

@@ -48,7 +48,7 @@ describe('CangjieVersion', function () {
       ])
     })
 
-    it('throws invalid index entry for malformed jsonl', async function () {
+    it('throws unparseable jsonl response for malformed jsonl', async function () {
       const requestFetcher = sinon.stub().resolves({
         buffer: 'not json',
         res: { statusCode: 200 },
@@ -64,7 +64,7 @@ describe('CangjieVersion', function () {
         expect.fail('expected fetch() to throw')
       } catch (e) {
         expect(e).to.be.instanceOf(InvalidResponse)
-        expect(e.prettyMessage).to.equal('invalid index entry')
+        expect(e.prettyMessage).to.equal('unparseable jsonl response')
       }
     })
 

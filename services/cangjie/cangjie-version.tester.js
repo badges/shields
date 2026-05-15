@@ -64,12 +64,21 @@ t.create('version (invalid module name)')
   .get('/ab.json')
   .expectBadge({ label: 'cangjie', message: 'invalid module name' })
 
-t.create('version (invalid index entry)')
+t.create('version (unparseable jsonl response)')
   .get('/stdx.json')
   .intercept(nock =>
     nock('https://pkg.cangjie-lang.cn')
       .get('/registry/index/st/dx/stdx')
       .reply(200, 'not json'),
+  )
+  .expectBadge({ label: 'cangjie', message: 'unparseable jsonl response' })
+
+t.create('version (invalid index entry)')
+  .get('/stdx.json')
+  .intercept(nock =>
+    nock('https://pkg.cangjie-lang.cn')
+      .get('/registry/index/st/dx/stdx')
+      .reply(200, '{"name":"stdx","version":"0.0.1","index-version":"1"}'),
   )
   .expectBadge({ label: 'cangjie', message: 'invalid index entry' })
 
