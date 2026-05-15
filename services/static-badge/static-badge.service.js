@@ -1,5 +1,6 @@
 import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
 import { BaseStaticService } from '../index.js'
+import { splitDashSeparatedOptionalParams } from '../dash-badge-content-helpers.js'
 
 const description = `
 The static badge accepts a single required path parameter which encodes either:
@@ -61,8 +62,7 @@ export default class StaticBadge extends BaseStaticService {
   static category = 'static'
   static route = {
     base: '',
-    format: '(?::|badge/)((?:[^-]|--)*?)-?((?:[^-]|--)*)-((?:[^-.]|--)+)',
-    capture: ['label', 'message', 'color'],
+    pattern: 'badge/:badgeContent',
   }
 
   static openApi = {
@@ -85,7 +85,9 @@ export default class StaticBadge extends BaseStaticService {
     },
   }
 
-  handle({ label, message, color }) {
+  handle({ badgeContent }) {
+    const [label, message, color] =
+      splitDashSeparatedOptionalParams(badgeContent)
     return { label: escapeFormat(label), message: escapeFormat(message), color }
   }
 }
