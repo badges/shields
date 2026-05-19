@@ -62,11 +62,6 @@ function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
             // the entire file before we went over the limit
             progress.percent !== 1
           ) {
-            /*
-            TODO: we should be able to pass cancel() a message
-            https://github.com/sindresorhus/got/blob/main/documentation/advanced-creation.md#examples
-            but by the time we catch it, err.message is just "Promise was canceled"
-            */
             abortController.abort('Maximum response size exceeded')
           }
         })
