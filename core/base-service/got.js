@@ -33,11 +33,27 @@ async function sendRequest(gotWrapper, url, options = {}, systemErrors = {}) {
 }
 
 function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
-  const abortController = new AbortController()
   const gotWithLimit = got.extend({
-    signal: abortController.signal,
     handlers: [
       (options, next) => {
+        const abortController = new AbortController()
+        const originalSignal = options.signal
+        if (originalSignal) {
+          if (originalSignal.aborted) {
+            abortController.abort(originalSignal.reason)
+          } else if (typeof originalSignal.addEventListener === 'function') {
+            const onAbort = () => {
+              abortController.abort(originalSignal.reason)
+              if (typeof originalSignal.removeEventListener === 'function') {
+                originalSignal.removeEventListener('abort', onAbort)
+              }
+            }
+            originalSignal.addEventListener('abort', onAbort)
+          }
+        }
+
+        options.signal = abortController.signal
+
         const promiseOrStream = next(options)
         promiseOrStream.on('downloadProgress', progress => {
           if (
