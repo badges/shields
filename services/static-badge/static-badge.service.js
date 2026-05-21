@@ -1,4 +1,5 @@
 import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import { InvalidParameter } from '../../core/base-service/errors.js'
 import { BaseStaticService } from '../index.js'
 import { splitDashSeparatedOptionalParams } from '../dash-badge-content-helpers.js'
 
@@ -86,8 +87,25 @@ export default class StaticBadge extends BaseStaticService {
   }
 
   handle({ badgeContent }) {
-    const [label, message, color] =
-      splitDashSeparatedOptionalParams(badgeContent)
-    return { label: escapeFormat(label), message: escapeFormat(message), color }
+    const parts = splitDashSeparatedOptionalParams(badgeContent)
+    switch (parts.length) {
+      case 2: {
+        const [message, color] = parts
+        return { label: '', message: escapeFormat(message), color }
+      }
+      case 3: {
+        const [label, message, color] = parts
+        return {
+          label: escapeFormat(label),
+          message: escapeFormat(message),
+          color,
+        }
+      }
+      default:
+        throw new InvalidParameter({
+          prettyMessage:
+            'badgeContent must have either 2 or 3 dash-separated parts',
+        })
+    }
   }
 }
