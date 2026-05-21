@@ -103,3 +103,37 @@ t.create('code coverage API v4+: job found')
 t.create('code coverage API v4+: job not found')
   .get('/apiv4.json?jobUrl=https://jenkins.mm12.xyz/jenkins/job/does-not-exist')
   .expectBadge({ label: 'coverage', message: 'job or coverage not found' })
+
+const coverageApiV4Response = {
+  _class: 'io.jenkins.plugins.coverage.metrics.restapi.CoverageApi',
+  projectStatistics: {
+    branch: '31.39%',
+    file: '53.27%',
+    instruction: '70.69%',
+    line: '70.69%',
+    method: '65.36%',
+    module: '100.00%',
+  },
+}
+
+t.create('code coverage API v4+: line coverage (default metric)')
+  .get('/apiv4.json?jobUrl=https://jenkins.example.com/job/myproject')
+  .intercept(nock =>
+    nock('https://jenkins.example.com/job/myproject/lastCompletedBuild')
+      .get('/coverage/api/json')
+      .query(true)
+      .reply(200, coverageApiV4Response),
+  )
+  .expectBadge({ label: 'coverage', message: '71%' })
+
+t.create('code coverage API v4+: branch coverage metric')
+  .get(
+    '/apiv4.json?jobUrl=https://jenkins.example.com/job/myproject&metric=branch',
+  )
+  .intercept(nock =>
+    nock('https://jenkins.example.com/job/myproject/lastCompletedBuild')
+      .get('/coverage/api/json')
+      .query(true)
+      .reply(200, coverageApiV4Response),
+  )
+  .expectBadge({ label: 'coverage', message: '31%' })

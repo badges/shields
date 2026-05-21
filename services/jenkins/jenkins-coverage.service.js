@@ -1,12 +1,16 @@
 import Joi from 'joi'
 import { pathParam, queryParam } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
+import { optionalUrl } from '../validators.js'
 import JenkinsBase from './jenkins-base.js'
-import {
-  buildTreeParamQueryString,
-  buildUrl,
-  queryParamSchema,
-} from './jenkins-common.js'
+import { buildTreeParamQueryString, buildUrl } from './jenkins-common.js'
+
+const queryParamSchema = Joi.object({
+  jobUrl: optionalUrl,
+  metric: Joi.string()
+    .valid('line', 'branch', 'instruction', 'method', 'module', 'file')
+    .default('line'),
+}).required()
 
 const formatMap = {
   jacoco: {
@@ -72,17 +76,30 @@ const formatMap = {
       projectStatistics: Joi.object({
         line: Joi.string()
           .pattern(/\d+\.\d+%/)
-          .required(),
+          .optional(),
+        branch: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .optional(),
+        instruction: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .optional(),
+        method: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .optional(),
+        module: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .optional(),
+        file: Joi.string()
+          .pattern(/\d+\.\d+%/)
+          .optional(),
       }).required(),
     }).required(),
-    treeQueryParam: 'projectStatistics[line]',
-    transform: json => {
-      const lineCoverageStr = json.projectStatistics.line
-      const lineCoverage = lineCoverageStr.substring(
-        0,
-        lineCoverageStr.length - 1,
-      )
-      return { coverage: Number.parseFloat(lineCoverage) }
+    treeQueryParam:
+      'projectStatistics[line,branch,instruction,method,module,file]',
+    transform: (json, metric) => {
+      const raw = json.projectStatistics[metric]
+      if (!raw) throw new Error(`metric '${metric}' not found`)
+      return { coverage: Number.parseFloat(raw) }
     },
     pluginSpecificPath: 'coverage',
   },
@@ -95,6 +112,7 @@ We support coverage metrics from a variety of Jenkins plugins:
   <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
   <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
   <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
+  <li>The new <a href="https://plugins.jenkins.io/coverage">Coverage Plugin</a> (use format <code>apiv4</code> with optional <code>metric</code> parameter)</li>
 </ul>
 `
 
@@ -124,6 +142,23 @@ export default class JenkinsCoverage extends JenkinsBase {
               'https://jenkins-2.sse.uni-hildesheim.de/job/Teaching_SubmissionCheck',
             required: true,
           }),
+          queryParam({
+            name: 'metric',
+            example: 'line',
+            description:
+              'Coverage metric to display (only for apiv4 format). One of: line, branch, instruction, method, module, file. Defaults to line.',
+            schema: {
+              type: 'string',
+              enum: [
+                'line',
+                'branch',
+                'instruction',
+                'method',
+                'module',
+                'file',
+              ],
+            },
+          }),
         ],
       },
     },
@@ -138,7 +173,7 @@ export default class JenkinsCoverage extends JenkinsBase {
     }
   }
 
-  async handle({ format }, { jobUrl }) {
+  async handle({ format }, { jobUrl, metric = 'line' }) {
     const { schema, transform, treeQueryParam, pluginSpecificPath } =
       formatMap[format]
     const json = await this.fetch({
@@ -149,7 +184,7 @@ export default class JenkinsCoverage extends JenkinsBase {
         404: 'job or coverage not found',
       },
     })
-    const { coverage } = transform(json)
+    const { coverage } = transform(json, metric)
     return this.constructor.render({ coverage })
   }
 }
