@@ -1,4 +1,4 @@
-import { retiredService } from '../index.js'
+import { redirector, retiredService } from '../index.js'
 
 const commonProps = {
   category: 'coverage',
@@ -29,5 +29,14 @@ export default [
       pattern: '',
     },
     ...commonProps,
+  }),
+  redirector({
+    category: 'coverage',
+    route: {
+      base: 'jenkins/coverage',
+      pattern: ':format(jacoco|cobertura|apiv1|apiv4)',
+    },
+    transformPath: () => '/jenkins/coverage',
+    dateAdded: new Date('2026-05-17'),
   }),
 ]
