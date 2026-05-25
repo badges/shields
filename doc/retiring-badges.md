@@ -1,8 +1,8 @@
-# Deprecating Badges
+# Retiring Badges
 
 When a service that Shields integrates with shuts down, those badges will no longer work and need to be retired (deprecated) within Shields.
 
-Deprecating a badge involves two steps:
+Retiring a badge involves two steps:
 
 1.  Updating the service code to use the `RetiredService` class
 2.  Updating the service tests to reflect the new behavior of the retired service
@@ -86,7 +86,7 @@ t.create('retired badge (previously number of layers)')
 
 ## What Happens Next?
 
-Once a service is retired, we'll keep the deprecation notice for a minimum of one year. During that time, the badge will render as follows: ![](https://img.shields.io/badge/gratipay-no%20longer%20available-inactive)
+Once a service is retired, we'll keep the retirement notice for a minimum of one year. During that time, the badge will render as follows: ![](https://img.shields.io/badge/gratipay-retired%20badge-inactive)
 
 Past that point, all related code will be deleted, and a not found error will be rendered instead: ![](https://img.shields.io/badge/404-badge%20not%20found-critical)
 
@@ -103,6 +103,7 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - CocoaPods Apps
 - CocoaPods Downloads
 - Codetally
+- Coincap
 - continuousphp
 - Coverity
 - Criterion
@@ -112,6 +113,7 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - Dotnet Status
 - Gemnasium
 - Gratipay/Gittip
+- Hackage (dependencies)
 - ImageLayers
 - Issue Stats
 - JitPack Downloads
@@ -123,6 +125,7 @@ Here is a listing of all deleted badges that were once part of the Shields.io se
 - NSP
 - pkgreview
 - PHP Eye
+- Pub (popularity)
 - Redmine
 - requires.io
 - Shippable
