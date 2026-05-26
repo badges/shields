@@ -11,3 +11,16 @@ t.create('Version (not found)').get('/non-existent.json').expectBadge({
   label: 'version',
   message: 'no active version found',
 })
+
+t.create('No active versions')
+  .get('/no-active.json')
+  .intercept(nock =>
+    nock('https://extensions.gnome.org')
+      .get('/api/v1/extensions/no-active/versions/')
+      .query({ page_size: '100' })
+      .reply(200, { results: [] }),
+  )
+  .expectBadge({
+    label: 'version',
+    message: 'no active version found',
+  })

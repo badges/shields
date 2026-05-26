@@ -43,7 +43,7 @@ export default class GnomeExtensionsVersion extends BaseJsonService {
     return renderVersionBadge({ version })
   }
 
-  async getVersions({ extensionId }) {
+  async fetch({ extensionId }) {
     return await this._requestJson({
       schema: versionSchema,
       url: `https://extensions.gnome.org/api/v1/extensions/${extensionId}/versions/?page_size=100`,
@@ -54,7 +54,7 @@ export default class GnomeExtensionsVersion extends BaseJsonService {
   }
 
   async handle({ extensionId }) {
-    const { results } = await this.getVersions({ extensionId })
+    const { results } = await this.fetch({ extensionId })
     const activeVersions = results.filter(r => r.status === ACTIVE_STATUS)
     if (activeVersions.length === 0) {
       throw new NotFound({ prettyMessage: 'no active version found' })
