@@ -5,7 +5,7 @@ This tutorial should help you add a service to shields.io in form of a badge. Yo
 ## (1) Reading
 
 - [Contributing Guidance](../CONTRIBUTING.md)
-- [Documentation](https://contributing.shields.io/index.html) for the Shields Core API
+- [Documentation](https://contributing.shields.io/tutorial-TUTORIAL.html) for the Shields Core API
 - You can also read previous [merged pull-requests with the 'service-badge' label](https://github.com/badges/shields/pulls?utf8=%E2%9C%93&q=is%3Apr+label%3Aservice-badge+is%3Amerged) to see how other people implemented their badges.
 
 ## (2) Setup
