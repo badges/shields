@@ -168,3 +168,36 @@ For local development, ensure the following are set:
 - `BADGES_PORT` (optional, defaults to 3000)
 
 See `.env.example` for the full list of supported variables.
+
+## Troubleshooting Common Badge Failures
+
+### Upstream API Timeouts
+
+If badge requests timeout, check:
+
+- Is the upstream service (e.g., GitHub, npm) currently available?
+- Try running the badge locally with `npm run dev`
+- Check the [.shields.io status page](https://status.shields.io)
+
+### Token Pool Exhaustion
+
+When you see `401 Unauthorized` errors:
+
+- The GitHub token pool may be exhausted for your tier
+- Reduce request frequency or wait for rate limit reset
+- For local dev, set `GITHUB_TOKEN` in your `.env` file
+
+### Common Badge Rendering Failures
+
+- **Badge not loading:** Check browser console for CORS errors; badges must be served from allowed domains
+- **Wrong data shown:** Verify your GitHub token has correct scopes
+- **SVG malformed:** Ensure `Content-Type: image/svg+xml` header is set correctly
+
+### Running Service-Specific Tests
+
+Run tests for a specific badge service:
+
+```bash
+npm test -- --grep "GitHub"
+npm test -- --grep "npm"
+```
