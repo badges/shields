@@ -201,3 +201,5 @@ Run tests for a specific badge service:
 npm test -- --grep "GitHub"
 npm test -- --grep "npm"
 ```
+
+<!-- Thanks for contributing! -->
