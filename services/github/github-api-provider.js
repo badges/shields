@@ -65,11 +65,11 @@ class GithubApiProvider {
     this.restApiVersion = restApiVersion
   }
 
-  addToken(tokenString) {
+  addToken(tokenString, data) {
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
-      this.standardTokens.add(tokenString)
-      this.searchTokens.add(tokenString)
-      this.graphqlTokens.add(tokenString)
+      this.standardTokens.add(tokenString, data)
+      this.searchTokens.add(tokenString, data)
+      this.graphqlTokens.add(tokenString, data)
     } else {
       throw Error('When not using a token pool, do not provide tokens')
     }

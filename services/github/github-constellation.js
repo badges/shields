@@ -92,8 +92,8 @@ class GithubConstellation {
       log.error(e)
     }
 
-    tokens.forEach(tokenString => {
-      this.apiProvider.addToken(tokenString)
+    tokens.forEach(({ token, scopes }) => {
+      this.apiProvider.addToken(token, { scopes })
     })
 
     if (this.oauthHelper.isConfigured) {

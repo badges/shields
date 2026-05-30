@@ -16,9 +16,9 @@ export default class SqlTokenPersistence {
       this.pool = new pg.Pool({ connectionString: this.url })
     }
     const result = await this.pool.query(
-      `SELECT token FROM ${this.table} ORDER BY RANDOM();`,
+      `SELECT token, scopes FROM ${this.table} ORDER BY RANDOM();`,
     )
-    return result.rows.map(row => row.token)
+    return result.rows.map(({ token, scopes }) => ({ token, scopes }))
   }
 
   async stop() {
@@ -27,10 +27,16 @@ export default class SqlTokenPersistence {
     }
   }
 
-  async onTokenAdded(token) {
+  async onTokenAdded(token, { scopes } = {}) {
     return await this.pool.query(
-      `INSERT INTO ${this.table} (token) VALUES ($1::text) ON CONFLICT (token) DO NOTHING;`,
-      [token],
+      `
+        INSERT INTO ${this.table} (token, scopes)
+        VALUES ($1::text, $2::text[])
+        ON CONFLICT (token) DO UPDATE
+        SET scopes = EXCLUDED.scopes
+        WHERE EXCLUDED.scopes IS NOT NULL;
+      `,
+      [token, scopes],
     )
   }
 
@@ -41,9 +47,9 @@ export default class SqlTokenPersistence {
     )
   }
 
-  async noteTokenAdded(token) {
+  async noteTokenAdded(token, data) {
     try {
-      await this.onTokenAdded(token)
+      await this.onTokenAdded(token, data)
     } catch (e) {
       log.error(e)
     }
