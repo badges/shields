@@ -158,3 +158,13 @@ Note that many services are part of a "family" of related services. Depending on
 For example, a PR title of **[GitHubForks] Foo** will only run the service tests specifically for the GitHub Forks badge, whereas a title of **[GitHub] Foo** will run the service tests for all of the GitHub badges.
 
 In the rare case when it's necessary to see the output of a full service-test run in a PR (all 2,000+ tests), include `[*****]` in the title. Unless all the tests pass, the build will fail, so likely it will be necessary to remove it and re-run the tests before merging.
+
+### Required Environment Variables
+
+For local development, ensure the following are set:
+
+- `NODE_ENV=development`
+- `DOMAIN` (defaults to `img.shields.io`)
+- `BADGES_PORT` (optional, defaults to 3000)
+
+See `.env.example` for the full list of supported variables.
