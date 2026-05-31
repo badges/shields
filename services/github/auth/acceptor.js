@@ -14,9 +14,9 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       // it's not setting a bad example.
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
-      // This OAuth flow does not request extra scopes yet. Adding scopes changes
-      // the user consent prompt and is tracked in
-      // https://github.com/badges/shields/issues/4169.
+      // TODO: Request the OAuth scopes needed for scoped GitHub API features.
+      // Remove this TODO once this authorize URL includes a `scope` parameter.
+      // See https://github.com/badges/shields/issues/4169.
     })
     ask.res.setHeader(
       'Location',
