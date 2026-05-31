@@ -215,7 +215,7 @@ class Badge {
         content: [content],
         attrs: withTextFill({ x, y, textLength }, textColor),
       })
-      const shadowY = 150 + this.constructor.verticalMargin
+      const shadowY = y + 10
       const shadowText = new XmlElement({
         name: 'text',
         content: [content],
