@@ -85,6 +85,15 @@ class Token {
   }
 
   /**
+   * Update user-provided data associated with the token.
+   *
+   * @param {*} data reserved for future use
+   */
+  updateData(data) {
+    this._data = data
+  }
+
+  /**
    * Update the uses remaining and next reset time for a token.
    *
    * @param {number} usesRemaining
@@ -126,6 +135,13 @@ class Token {
    */
   invalidate() {
     this._isValid = false
+  }
+
+  /**
+   * Indicate that the token should be used again.
+   */
+  validate() {
+    this._isValid = true
   }
 
   /**
@@ -184,8 +200,8 @@ class TokenPool {
 
     this.currentBatch = { currentToken: null, remaining: 0 }
 
-    // A set of IDs used for deduplication.
-    this.tokenIds = new Set()
+    // A map of IDs to tokens, used for deduplication and metadata updates.
+    this.tokensById = new Map()
 
     // See discussion on the FIFO and priority queues in `next()`.
     this.fifoQueue = []
@@ -216,15 +232,22 @@ class TokenPool {
    * @returns {boolean} Was the token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
-    if (this.tokenIds.has(id)) {
+    const existingToken = this.tokensById.get(id)
+    if (existingToken) {
+      const wasInvalid = !existingToken.isValid
+      existingToken.updateData(data)
+      existingToken.validate()
+      if (wasInvalid) {
+        this.fifoQueue.push(existingToken)
+      }
       return false
     }
-    this.tokenIds.add(id)
 
     usesRemaining = usesRemaining === undefined ? this.batchSize : usesRemaining
     nextReset = nextReset === undefined ? Token.nextResetNever : nextReset
 
     const token = new Token(id, data, usesRemaining, nextReset)
+    this.tokensById.set(id, token)
     this.fifoQueue.push(token)
 
     return true

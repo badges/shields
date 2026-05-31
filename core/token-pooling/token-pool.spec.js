@@ -35,6 +35,35 @@ describe('The token pool', function () {
     )
   })
 
+  it('updates data when an existing token is added again', function () {
+    const tokenPool = new TokenPool()
+
+    expect(tokenPool.add('token', { scopes: [] })).to.equal(true)
+    expect(tokenPool.add('token', { scopes: ['read:packages'] })).to.equal(
+      false,
+    )
+
+    expect(tokenPool.next().data).to.deep.equal({
+      scopes: ['read:packages'],
+    })
+  })
+
+  it('revalidates invalid tokens when they are added again', function () {
+    const tokenPool = new TokenPool()
+    expect(tokenPool.add('token', { scopes: [] })).to.equal(true)
+
+    tokenPool.next().invalidate()
+    expectPoolToBeExhausted(tokenPool)
+
+    expect(tokenPool.add('token', { scopes: ['read:packages'] })).to.equal(
+      false,
+    )
+
+    const token = tokenPool.next()
+    expect(token.id).to.equal('token')
+    expect(token.data).to.deep.equal({ scopes: ['read:packages'] })
+  })
+
   context('tokens are marked exhausted immediately', function () {
     it('should be exhausted', function () {
       ids.forEach(() => {
