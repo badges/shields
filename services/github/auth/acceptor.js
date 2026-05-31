@@ -14,6 +14,10 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       // it's not setting a bad example.
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
+      // Do not add OAuth scopes here as part of scope persistence plumbing.
+      // Requesting scopes changes the user consent surface and should be a
+      // separate change. Until then, persisted scopes only reflect what GitHub
+      // returns for the current OAuth request.
     })
     ask.res.setHeader(
       'Location',
