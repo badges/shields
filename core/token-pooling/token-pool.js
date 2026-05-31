@@ -237,7 +237,11 @@ class TokenPool {
       const wasInvalid = !existingToken.isValid
       existingToken.updateData(data)
       existingToken.validate()
-      if (wasInvalid) {
+      const isQueued = this.fifoQueue.includes(existingToken)
+      const isCurrent =
+        this.currentBatch.token === existingToken &&
+        this.currentBatch.remaining > 0
+      if (wasInvalid && !isQueued && !isCurrent) {
         this.fifoQueue.push(existingToken)
       }
       return false

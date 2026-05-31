@@ -64,6 +64,20 @@ describe('The token pool', function () {
     expect(token.data).to.deep.equal({ scopes: ['read:packages'] })
   })
 
+  it('does not duplicate queued tokens when they are revalidated', function () {
+    const tokenPool = new TokenPool({ batchSize: 2 })
+    tokenPool.add('first')
+    tokenPool.add('second')
+
+    tokenPool.next().invalidate()
+    tokenPool.add('first')
+
+    expect(tokenPool.next().id).to.equal('first')
+    expect(tokenPool.next().id).to.equal('second')
+    expect(tokenPool.next().id).to.equal('second')
+    expect(tokenPool.next().id).to.equal('first')
+  })
+
   context('tokens are marked exhausted immediately', function () {
     it('should be exhausted', function () {
       ids.forEach(() => {
