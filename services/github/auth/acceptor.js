@@ -58,10 +58,11 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       return end('The GitHub OAuth token could not be parsed.')
     }
 
-    const { access_token: token } = content
+    const { access_token: token, scope = '' } = content
     if (!token) {
       return end('The GitHub OAuth process did not return a user token.')
     }
+    const scopes = scope.split(',').filter(Boolean)
 
     ask.res.setHeader('Content-Type', 'text/html')
     end(
@@ -76,7 +77,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         '<p><a href="/">Back to the website</a></p>',
     )
 
-    onTokenAccepted(token)
+    onTokenAccepted(token, { scopes })
   })
 }
 

@@ -100,19 +100,20 @@ class GithubConstellation {
       setAcceptorRoutes({
         server,
         authHelper: this.oauthHelper,
-        onTokenAccepted: tokenString => this.onTokenAdded(tokenString),
+        onTokenAccepted: (tokenString, data) =>
+          this.onTokenAdded(tokenString, data),
       })
     }
   }
 
-  onTokenAdded(tokenString) {
+  onTokenAdded(tokenString, data) {
     if (!this.persistence) {
       throw Error('Token persistence is not configured')
     }
-    this.apiProvider.addToken(tokenString)
+    this.apiProvider.addToken(tokenString, data)
     process.nextTick(async () => {
       try {
-        await this.persistence.noteTokenAdded(tokenString)
+        await this.persistence.noteTokenAdded(tokenString, data)
       } catch (e) {
         log.error(e)
       }
