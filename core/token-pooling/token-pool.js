@@ -219,6 +219,16 @@ class TokenPool {
     return second.nextReset - first.nextReset
   }
 
+  _removeFromPriorityQueue(token) {
+    const priorityQueue = new PriorityQueue(this.constructor.compareTokens)
+    this.priorityQueue.forEach(queuedToken => {
+      if (queuedToken !== token) {
+        priorityQueue.enq(queuedToken)
+      }
+    })
+    this.priorityQueue = priorityQueue
+  }
+
   /**
    * Add a token with user-provided ID and data.
    *
@@ -236,6 +246,10 @@ class TokenPool {
     if (existingToken) {
       const wasInvalid = !existingToken.isValid
       existingToken.updateData(data)
+      if (wasInvalid) {
+        this._removeFromPriorityQueue(existingToken)
+        existingToken.unfreeze()
+      }
       existingToken.validate()
       const isQueued = this.fifoQueue.includes(existingToken)
       const isCurrent =

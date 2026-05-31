@@ -78,6 +78,29 @@ describe('The token pool', function () {
     expect(tokenPool.next().id).to.equal('first')
   })
 
+  it('does not duplicate exhausted tokens when they are revalidated', function () {
+    const tokenPool = new TokenPool()
+    tokenPool.add('first')
+    tokenPool.add('second')
+
+    const first = tokenPool.next()
+    first.update(0, Token.nextResetNever)
+    tokenPool.next()
+
+    first.invalidate()
+    tokenPool.add('first')
+
+    const { allTokenDebugInfo } = tokenPool.serializeDebugInfo({
+      sanitize: false,
+    })
+    const tokenIds = allTokenDebugInfo.map(({ id }) => id)
+
+    expect(tokenIds).to.have.members(['first', 'second'])
+    expect(
+      allTokenDebugInfo.find(({ id }) => id === 'first').isFrozen,
+    ).to.equal(false)
+  })
+
   context('tokens are marked exhausted immediately', function () {
     it('should be exhausted', function () {
       ids.forEach(() => {
