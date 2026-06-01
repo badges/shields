@@ -540,6 +540,7 @@ describe('The server', function () {
     })
 
     it('should push custom metrics', async function () {
+      const { promise: sentReq, resolve: markSentReq } = Promise.withResolvers()
       scope = nock('http://localhost:1112', {
         reqheaders: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -550,10 +551,14 @@ describe('The server', function () {
           /prometheus,application=shields,category=static,env=localhost-env,family=static-badge,instance=test-instance,service=static_badge service_requests_total=1\n/,
         )
         .basicAuth({ user: 'influx-username', pass: 'influx-password' })
-        .reply(200)
-      await got(`${baseUrl}badge/fruit-apple-green.svg`)
+        .reply(200, () => {
+          markSentReq()
+          return ''
+        })
 
-      await clock.tickAsync(1000 * metricsPushIntervalSeconds + 500)
+      await got(`${baseUrl}badge/fruit-apple-green.svg`)
+      await clock.tickAsync(1000 * metricsPushIntervalSeconds)
+      await sentReq
 
       expect(scope.isDone()).to.be.equal(
         true,
