@@ -8,7 +8,7 @@ import BaseService from './base.js'
 import trace from './trace.js'
 import { InvalidResponse } from './errors.js'
 
-const defaultValueMatcher = />([^<>]+)<\/text><\/g>/
+const defaultValueMatcher = /.*>([^<>]+)<\/text><\/g>/
 const leadingWhitespace = /(?:\r\n\s*|\r\s*|\n\s*)/g
 
 /**
