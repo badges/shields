@@ -36,7 +36,7 @@ function _formatLabelForStage(stage, label) {
  * @param {string} symbol - Short symbol or emoji prefixed to the log line.
  * @param {string} label - Descriptive label shown alongside the symbol.
  * @param {*} content - Data to print; logged with `console.dir` when `deep` is true.
- * @param {object} [options={}]
+ * @param {object} [options={}] - Optional logging configuration.
  * @param {boolean} [options.deep=false] - When `true`, uses `console.dir` for full-depth output.
  * @returns {boolean} `true` if the message was logged, `false` when trace logging is disabled.
  */
