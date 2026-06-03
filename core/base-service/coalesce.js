@@ -1,9 +1,9 @@
 /**
  * Returns the first non-null, non-undefined value from the provided candidates.
  *
- * Mirrors SQL's {@code COALESCE}: iterates the arguments in order and returns
- * the first one that is neither {@code undefined} nor {@code null}.
- * Returns {@code undefined} when all candidates are null or undefined.
+ * Mirrors SQL's COALESCE: iterates the arguments in order and returns
+ * the first one that is neither `undefined` nor `null`.
+ * Returns `undefined` when all candidates are null or undefined.
  *
  * @param {...*} candidates - Values to evaluate in order.
  * @returns {*} The first defined, non-null candidate, or `undefined`.
