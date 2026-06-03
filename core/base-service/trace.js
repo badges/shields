@@ -26,7 +26,7 @@ function _formatLabelForStage(stage, label) {
     unhandledError: chalk.white.bgRed,
     outbound: chalk.black.bgBlue,
   }[stage]
-  return colorFn(  )
+  return colorFn(` ${label} `)
 }
 
 /**
