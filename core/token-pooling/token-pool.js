@@ -87,6 +87,8 @@ class Token {
   /**
    * Update user-provided data associated with the token.
    *
+   * Callers should only invoke this when they have fresh data to store.
+   *
    * @param {*} data reserved for future use
    */
   updateData(data) {
@@ -231,6 +233,10 @@ class TokenPool {
 
   /**
    * Add a token with user-provided ID and data.
+   *
+   * Adding an existing token updates its data only when `data` is provided.
+   * This keeps calls which only revalidate or deduplicate a token from
+   * clearing previously stored metadata.
    *
    * @param {string} id token string
    * @param {*} data reserved for future use
