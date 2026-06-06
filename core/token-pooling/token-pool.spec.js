@@ -48,6 +48,17 @@ describe('The token pool', function () {
     })
   })
 
+  it('preserves existing data when an existing token is added again without data', function () {
+    const tokenPool = new TokenPool()
+
+    expect(tokenPool.add('token', { scopes: ['read:packages'] })).to.equal(true)
+    expect(tokenPool.add('token')).to.equal(false)
+
+    expect(tokenPool.next().data).to.deep.equal({
+      scopes: ['read:packages'],
+    })
+  })
+
   it('revalidates invalid tokens when they are added again', function () {
     const tokenPool = new TokenPool()
     expect(tokenPool.add('token', { scopes: [] })).to.equal(true)

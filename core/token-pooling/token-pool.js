@@ -245,7 +245,9 @@ class TokenPool {
     const existingToken = this.tokensById.get(id)
     if (existingToken) {
       const wasInvalid = !existingToken.isValid
-      existingToken.updateData(data)
+      if (data !== undefined) {
+        existingToken.updateData(data)
+      }
       if (wasInvalid) {
         this._removeFromPriorityQueue(existingToken)
         existingToken.unfreeze()
