@@ -65,7 +65,10 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
     if (!token) {
       return end('The GitHub OAuth process did not return a user token.')
     }
-    const scopes = scope.split(',').filter(Boolean)
+    const scopes = scope
+      .split(',')
+      .map(scope => scope.trim())
+      .filter(Boolean)
 
     ask.res.setHeader('Content-Type', 'text/html')
     end(

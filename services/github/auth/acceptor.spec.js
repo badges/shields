@@ -122,7 +122,7 @@ describe('Github token acceptor', function () {
       })
 
       it('should pass token scopes from the OAuth response', async function () {
-        tokenResponse.scope = 'read:packages,read:user'
+        tokenResponse.scope = 'read:packages, read:user'
 
         const form = new FormData()
         form.append('code', fakeCode)
