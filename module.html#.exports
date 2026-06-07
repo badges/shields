@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/resource-cache.js</title>
+    <title>JSDoc: Class: exports</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,87 +17,141 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/resource-cache.js</h1>
+    <h1 class="page-title">Class: exports</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>exports<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Base class for services that generate static badges from route parameters
+and query parameters.</p>
+<p>Registers the service route, handles cache validation, invokes the service,
+builds the badge data, sets cache headers, renders the badge, and records
+request metrics.</p></div>
+        
+    
+</header>
 
-import { InvalidResponse } from './errors.js'
-import { fetch } from './got.js'
-import checkErrorResponse from './check-error-response.js'
+<article>
+    <div class="container-overview">
+    
+        
 
-const oneDay = 24 * 3600 * 1000 // 1 day in milliseconds
+    
+    <h2>Constructor</h2>
+    
 
-// Map from URL to { timestamp: last fetch time, data: data }.
-let resourceCache = Object.create(null)
+    
+    <h4 class="name" id=".exports"><span class="type-signature"></span>new exports<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-/**
- * Make a HTTP request using an in-memory cache
- *
- * @async
- * @param {object} attrs - Refer to individual attrs
- * @param {string} attrs.url - URL to request
- * @param {number} attrs.ttl - Number of milliseconds to keep cached value for
- * @param {boolean} [attrs.json=true] - True if we expect to parse the response as JSON
- * @param {Function} [attrs.scraper=buffer => buffer] - Function to extract value from the response
- * @param {object} [attrs.options={}] - Options to pass to got
- * @param {Function} [attrs.requestFetcher=fetch] - Custom fetch function
- * @throws {InvalidResponse} - Error if unable to parse response
- * @returns {Promise&lt;*>} Promise that resolves to parsed response
- */
-async function getCachedResource({
-  url,
-  ttl = oneDay,
-  json = true,
-  scraper = buffer => buffer,
-  options = {},
-  requestFetcher = fetch,
-}) {
-  const timestamp = Date.now()
-  const cached = resourceCache[url]
-  if (cached != null &amp;&amp; timestamp - cached.timestamp &lt; ttl) {
-    return cached.data
-  }
+    
 
-  const { buffer } = await checkErrorResponse({})(
-    await requestFetcher(url, options),
-  )
 
-  let reqData
-  if (json) {
-    try {
-      reqData = JSON.parse(buffer)
-    } catch (e) {
-      throw new InvalidResponse({
-        prettyMessage: 'unparseable intermediate json response',
-        underlyingError: e,
-      })
-    }
-  } else {
-    reqData = buffer
-  }
 
-  const data = scraper(reqData)
-  resourceCache[url] = { timestamp, data }
-  return data
-}
 
-function clearResourceCache() {
-  resourceCache = Object.create(null)
-}
 
-export { getCachedResource, clearResourceCache }
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_base-service_base-static.js.html">core/base-service/base-static.js</a>, <a href="core_base-service_base-static.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
