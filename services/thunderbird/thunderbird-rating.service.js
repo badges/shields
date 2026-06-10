@@ -5,7 +5,10 @@ import { BaseThunderbirdService, description } from './thunderbird-base.js'
 
 export default class ThunderbirdRating extends BaseThunderbirdService {
   static category = 'rating'
-  static route = { base: 'thunderbird', pattern: ':format(stars|rating)/:addonId' }
+  static route = {
+    base: 'thunderbird',
+    pattern: ':format(stars|rating)/:addonId',
+  }
 
   static openApi = {
     '/thunderbird/rating/{addonId}': {

@@ -1,6 +1,9 @@
 import { renderDownloadsBadge } from '../downloads.js'
 import { retiredService, pathParams } from '../index.js'
-import { BaseThunderbirdService, description as baseDescription } from './thunderbird-base.js'
+import {
+  BaseThunderbirdService,
+  description as baseDescription,
+} from './thunderbird-base.js'
 
 const description = `${baseDescription}
 

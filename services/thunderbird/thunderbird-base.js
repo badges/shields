@@ -2,8 +2,7 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService } from '../index.js'
 
-const description =
-'[addons.thunderbird.net](https://addons.thunderbird.net)'
+const description = '[addons.thunderbird.net](https://addons.thunderbird.net)'
 const schema = Joi.object({
   average_daily_users: nonNegativeInteger,
   current_version: Joi.object({
