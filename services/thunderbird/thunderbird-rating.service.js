@@ -8,7 +8,7 @@ export default class ThunderbirdRating extends BaseThunderbirdService {
   static route = { base: 'thunderbird', pattern: ':format(stars|rating)/:addonId' }
 
   static openApi = {
-     '/thunderbird/rating/{addonId}': {
+    '/thunderbird/rating/{addonId}': {
       get: {
         summary: 'Thunderbird Add-on Rating',
         description,
