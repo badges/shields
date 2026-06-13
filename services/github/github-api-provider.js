@@ -1,6 +1,9 @@
 import Joi from 'joi'
 import log from '../../core/server/log.js'
-import { TokenPool } from '../../core/token-pooling/token-pool.js'
+import {
+  TokenPool,
+  sanitizeToken,
+} from '../../core/token-pooling/token-pool.js'
 import { getUserAgent } from '../../core/base-service/got-config.js'
 import { nonNegativeInteger } from '../validators.js'
 import { ImproperlyConfigured } from '../index.js'
@@ -56,6 +59,8 @@ class GithubApiProvider {
       globalToken,
       reserveFraction,
     })
+
+    this.metricInstance = undefined
 
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
       this.standardTokens = new TokenPool({ batchSize: 25 })
@@ -113,7 +118,7 @@ class GithubApiProvider {
 
         if ('message' in parsedBody && !('data' in parsedBody)) {
           if (parsedBody.message === 'Sorry. Your account was suspended.') {
-            this.invalidateToken(token)
+            this.invalidateToken(token, 'account_suspended')
             return
           }
         }
@@ -155,7 +160,15 @@ class GithubApiProvider {
     token.update(usesRemaining, nextReset)
   }
 
-  invalidateToken(token) {
+  invalidateToken(token, reason) {
+    log.log(
+      `GitHub token invalidated and removed from pool (reason: ${reason}, token: ${sanitizeToken(
+        token.id,
+      )})`,
+    )
+    if (this.metricInstance) {
+      this.metricInstance.noteGithubTokenInvalidation({ reason })
+    }
     token.invalidate()
     this.onTokenInvalidated(token.id)
   }
@@ -209,7 +222,7 @@ class GithubApiProvider {
     const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
       if (response.res.statusCode === 401) {
-        this.invalidateToken(token)
+        this.invalidateToken(token, 'http_401')
       } else if (response.res.statusCode < 500) {
         this.updateToken({ token, url, res: response.res })
       }
