@@ -38,6 +38,8 @@ export default class CratesSize extends BaseCratesService {
     },
   }
 
+  static _cacheLength = 3600 // We're hitting the API more frequently than requested by upstream maintainers (see https://github.com/badges/shields/issues/11879).
+
   async handle({ crate, version }) {
     const json = await this.fetch({ crate, version })
     const size = this.constructor.getVersionObj(json).crate_size
