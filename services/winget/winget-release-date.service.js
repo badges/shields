@@ -1,4 +1,3 @@
-//
 import yaml from 'js-yaml'
 import { renderDateBadge } from '../date.js'
 import { pathParam, InvalidResponse } from '../index.js'
@@ -33,10 +32,7 @@ export default class WingetReleaseDate extends WingetBase {
 
   async handle({ name }) {
     const version = await this.getLatestVersion({ name })
-
-    const nameFirstLower = name[0].toLowerCase()
-    const nameSlashed = name.replaceAll('.', '/')
-    const manifestPath = `manifests/${nameFirstLower}/${nameSlashed}/${version}`
+    const manifestPath = this.constructor.manifestPathFor({ name, version })
     const filesToTry = [`${name}.installer.yaml`, `${name}.yaml`]
 
     let releaseDate

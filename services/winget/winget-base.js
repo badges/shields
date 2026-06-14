@@ -45,6 +45,12 @@ export default class WingetBase extends GithubAuthV4Service {
     label: 'winget',
   }
 
+  static manifestPathFor({ name, version }) {
+    const nameFirstLower = name[0].toLowerCase()
+    const nameSlashed = name.replaceAll('.', '/')
+    return `manifests/${nameFirstLower}/${nameSlashed}/${version}`
+  }
+
   // Returns GraphQL response for the package's version directory listing.
   async fetchVersions({ name }) {
     const nameFirstLower = name[0].toLowerCase()
