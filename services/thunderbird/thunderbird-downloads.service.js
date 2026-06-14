@@ -42,15 +42,4 @@ class ThunderbirdWeeklyDownloads extends BaseThunderbirdService {
   }
 }
 
-const ThunderbirdLegacyRedirect = retiredService({
-  category: 'downloads',
-  label: 'Thunderbird-add-on',
-  route: {
-    base: 'thunderbird/d',
-    pattern: ':addonId',
-  },
-  dateAdded: new Date('2025-12-20'),
-  issueUrl: 'https://github.com/badges/shields/pull/11583',
-})
-
-export { ThunderbirdWeeklyDownloads, ThunderbirdLegacyRedirect }
+export { ThunderbirdWeeklyDownloads }
