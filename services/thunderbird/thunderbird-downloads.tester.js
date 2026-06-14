@@ -13,4 +13,3 @@ t.create('Weekly Downloads')
 t.create('Weekly Downloads (not found)')
   .get('/dw/not-a-real-plugin.json')
   .expectBadge({ label: 'downloads', message: 'not found' })
-
