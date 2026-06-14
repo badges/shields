@@ -6,6 +6,12 @@ describe('Github API provider', function () {
   const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
+  const makeMockToken = id => ({
+    id,
+    update: sinon.spy(),
+    invalidate: sinon.spy(),
+  })
+
   let mockStandardToken, mockSearchToken, mockGraphqlToken, provider
   beforeEach(function () {
     provider = new GithubApiProvider({
@@ -14,13 +20,13 @@ describe('Github API provider', function () {
       reserveFraction,
     })
 
-    mockStandardToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockStandardToken = makeMockToken('standard-token')
     sinon.stub(provider.standardTokens, 'next').returns(mockStandardToken)
 
-    mockSearchToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockSearchToken = makeMockToken('search-token')
     sinon.stub(provider.searchTokens, 'next').returns(mockSearchToken)
 
-    mockGraphqlToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockGraphqlToken = makeMockToken('graphql-token')
     sinon.stub(provider.graphqlTokens, 'next').returns(mockGraphqlToken)
   })
 
