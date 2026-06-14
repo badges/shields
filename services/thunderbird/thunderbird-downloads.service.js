@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { retiredService, pathParams } from '../index.js'
+import { pathParams } from '../index.js'
 import {
   BaseThunderbirdService,
   description as baseDescription,
