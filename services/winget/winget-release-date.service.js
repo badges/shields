@@ -1,49 +1,10 @@
 //
-import Joi from 'joi'
-import gql from 'graphql-tag'
 import yaml from 'js-yaml'
 import { renderDateBadge } from '../date.js'
-import { InvalidParameter, pathParam, InvalidResponse } from '../index.js'
-import { GithubAuthV4Service } from '../github/github-auth-service.js'
-import { transformErrors } from '../github/github-helpers.js'
-import { latest } from './version.js'
+import { pathParam, InvalidResponse } from '../index.js'
+import WingetBase from './winget-base.js'
 
-const schema = Joi.object({
-  data: Joi.object({
-    repository: Joi.object({
-      object: Joi.object({
-        entries: Joi.array().items(
-          Joi.object({
-            type: Joi.string().required(),
-            name: Joi.string().required(),
-            object: Joi.object({
-              entries: Joi.array().items(
-                Joi.object({
-                  type: Joi.string().required(),
-                  name: Joi.string().required(),
-                }),
-              ),
-            }).required(),
-          }),
-        ),
-      })
-        .allow(null)
-        .required(),
-    }).required(),
-  }).required(),
-}).required()
-
-const manifestSchema = Joi.object({
-  data: Joi.object({
-    repository: Joi.object({
-      object: Joi.object({
-        text: Joi.string().required(),
-      }).allow(null),
-    }).required(),
-  }).required(),
-}).required()
-
-export default class WingetReleaseDate extends GithubAuthV4Service {
+export default class WingetReleaseDate extends WingetBase {
   static category = 'activity'
 
   static route = {
@@ -70,65 +31,11 @@ export default class WingetReleaseDate extends GithubAuthV4Service {
     label: 'release date',
   }
 
-  async fetch({ name }) {
-    const nameFirstLower = name[0].toLowerCase()
-    const nameSlashed = name.replaceAll('.', '/')
-    const path = `manifests/${nameFirstLower}/${nameSlashed}`
-    const expression = `HEAD:${path}`
-    return this._requestGraphql({
-      query: gql`
-        query RepoFiles($expression: String!) {
-          repository(owner: "microsoft", name: "winget-pkgs") {
-            object(expression: $expression) {
-              ... on Tree {
-                entries {
-                  type
-                  name
-                  object {
-                    ... on Tree {
-                      entries {
-                        type
-                        name
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: { expression },
-      schema,
-      transformErrors,
-    })
-  }
-
   async handle({ name }) {
+    const version = await this.getLatestVersion({ name })
+
     const nameFirstLower = name[0].toLowerCase()
     const nameSlashed = name.replaceAll('.', '/')
-    const json = await this.fetch({ name })
-    if (json.data.repository.object?.entries == null) {
-      throw new InvalidParameter({
-        prettyMessage: 'package not found',
-      })
-    }
-    const entries = json.data.repository.object.entries
-    const directories = entries.filter(entry => entry.type === 'tree')
-    const versionDirs = directories.filter(dir =>
-      dir.object.entries.some(
-        file => file.type === 'blob' && file.name === `${name}.yaml`,
-      ),
-    )
-    const versions = versionDirs.map(dir => dir.name)
-    const version = latest(versions)
-
-    if (version == null) {
-      throw new InvalidParameter({
-        prettyMessage: 'no versions found',
-      })
-    }
-
     const manifestPath = `manifests/${nameFirstLower}/${nameSlashed}/${version}`
     const filesToTry = [`${name}.installer.yaml`, `${name}.yaml`]
 
@@ -151,24 +58,5 @@ export default class WingetReleaseDate extends GithubAuthV4Service {
     }
 
     return renderDateBadge(releaseDate)
-  }
-
-  async fetchManifest({ expression }) {
-    return this._requestGraphql({
-      query: gql`
-        query Manifest($expression: String!) {
-          repository(owner: "microsoft", name: "winget-pkgs") {
-            object(expression: $expression) {
-              ... on Blob {
-                text
-              }
-            }
-          }
-        }
-      `,
-      variables: { expression },
-      schema: manifestSchema,
-      transformErrors,
-    })
   }
 }
