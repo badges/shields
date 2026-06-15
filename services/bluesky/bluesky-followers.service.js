@@ -1,56 +1,47 @@
 import Joi from 'joi'
-import { metric } from '../text-formatters.js'
-import { nonNegativeInteger } from '../validators.js'
 import { BaseJsonService, pathParams } from '../index.js'
-
-const schema = Joi.object({
-  followersCount: nonNegativeInteger,
-}).required()
 
 export default class BlueskyFollowers extends BaseJsonService {
   static category = 'social'
-  static route = { base: 'bluesky/followers', pattern: ':actor' }
+
+  static route = {
+    base: 'bluesky/follow',
+    pattern: ':handle',
+  }
 
   static openApi = {
-    '/bluesky/followers/{actor}': {
+    '/bluesky/follow/{handle}': {
       get: {
-        summary: 'Bluesky followers',
-        description:
-          'Displays the number of Bluesky followers for a given handle using the public Bluesky API.',
+        summary: 'Bluesky Follow',
         parameters: pathParams({
-          name: 'actor',
-          description: 'Bluesky handle (user ID)',
-          example: 'chitvs.bsky.social',
+          name: 'handle',
+          example: 'bsky.app',
         }),
       },
     },
   }
 
-  static defaultBadgeData = { label: 'followers', namedLogo: 'bluesky' }
+  static defaultBadgeData = { label: 'follow on bluesky' }
 
   static render({ followers }) {
     return {
-      message: metric(followers),
+      message: `${followers} followers`,
       color: 'blue',
-      style: 'social',
     }
   }
 
-  async fetch({ actor }) {
+  async fetch({ handle }) {
     return this._requestJson({
-      schema,
-      url: 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile',
-      options: {
-        searchParams: { actor },
-      },
-      httpErrors: {
-        400: 'user not found',
-      },
+      schema: Joi.object({
+        followersCount: Joi.number().required(),
+      }).required(),
+      url: `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile`,
+      options: { searchParams: { actor: handle } },
     })
   }
 
-  async handle({ actor }) {
-    const data = await this.fetch({ actor })
+  async handle({ handle }) {
+    const data = await this.fetch({ handle })
     return this.constructor.render({ followers: data.followersCount })
   }
 }

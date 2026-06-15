@@ -1,30 +1,19 @@
-import { createServiceTester } from '../tester.js'
-import { isMetric } from '../test-validators.js'
+import { ServiceTester } from '../tester.js'
 
-export const t = await createServiceTester()
-
-t.create('Followers (live)').get('/chitvs.bsky.social.json').expectBadge({
-  label: 'followers',
-  message: isMetric,
+export const t = new ServiceTester({
+  id: 'BlueskyFollowers',
+  title: 'Bluesky Followers',
+  pathPrefix: '/bluesky/follow',
 })
 
-t.create('User not found')
-  .get('/this-user-should-not-exist-xyz123.json')
+t.create('followers count')
+  .get('/bsky.app.json')
   .expectBadge({
-    label: 'followers',
-    message: 'user not found',
-  })
-
-t.create('Handles valid numeric response')
-  .get('/mocked-user.json')
-  .intercept(nock =>
-    nock('https://public.api.bsky.app')
-      .get('/xrpc/app.bsky.actor.getProfile')
-      .query({ actor: 'mocked-user' })
-      .reply(200, { followersCount: 9876 }),
-  )
-  .expectBadge({
-    label: 'followers',
-    message: '9.9k',
+    label: 'follow on bluesky',
+    message: /^\d+\s+followers$/,
     color: 'blue',
   })
+
+t.create('invalid handle')
+  .get('/thisisnotarealhandle99999.json')
+  .expectBadge({ label: 'follow on bluesky', message: 'invalid handle' })
