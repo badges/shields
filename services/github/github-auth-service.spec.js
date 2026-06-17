@@ -44,7 +44,12 @@ describe('GithubAuthV3Service', function () {
       authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
       restApiVersion: '2022-11-28',
     })
-    const mockToken = { update: sinon.mock(), invalidate: sinon.mock() }
+    const mockToken = {
+      update: sinon.mock(),
+      invalidate: sinon.mock(),
+      recordFailedAttempt: sinon.mock(),
+      resetFailedAttempts: sinon.mock(),
+    }
     sinon.stub(githubApiProvider.standardTokens, 'next').returns(mockToken)
 
     DummyGithubAuthV3Service.invoke({
