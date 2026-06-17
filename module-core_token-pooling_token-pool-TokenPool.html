@@ -151,7 +151,7 @@ on to the next one.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line174">line 174</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line196">line 196</a>
     </li></ul></dd>
     
 
@@ -377,7 +377,7 @@ on to the next one.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line218">line 218</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line240">line 240</a>
     </li></ul></dd>
     
 
@@ -424,6 +424,146 @@ on to the next one.</p></td>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="endBatchFor"><span class="type-signature"></span>endBatchFor<span class="signature">(token)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Abandon the current batch if it belongs to <code>token</code>, so that the next call
+to <code>next()</code> rotates to a different token. The token stays in the rotation
+(it was already returned to the FIFO queue when its batch began) and is
+retried when it next reaches the front of the queue.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>token</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Token</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the token whose batch should be ended</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line350">line 350</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -536,7 +676,7 @@ on to the next one.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line325">line 325</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line361">line 361</a>
     </li></ul></dd>
     
 
@@ -643,7 +783,7 @@ indicate it should not be reused.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line300">line 300</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line322">line 322</a>
     </li></ul></dd>
     
 
@@ -851,7 +991,7 @@ indicate it should not be reused.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line343">line 343</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line379">line 379</a>
     </li></ul></dd>
     
 
@@ -1033,7 +1173,7 @@ indicate it should not be reused.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line202">line 202</a>
+        <a href="core_token-pooling_token-pool.js.html">core/token-pooling/token-pool.js</a>, <a href="core_token-pooling_token-pool.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -1107,7 +1247,7 @@ indicate it should not be reused.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Jun 17 2026 06:02:20 GMT+0000 (Coordinated Universal Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Jun 17 2026 09:27:59 GMT+0000 (Coordinated Universal Time)
 </footer>
 
 <script> prettyPrint(); </script>
