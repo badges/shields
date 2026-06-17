@@ -37,5 +37,8 @@ jobs:
           token: '${{ secrets.GITHUB_TOKEN }}'
           commit-message: Update simple-icons to ${{ steps.simple_icons_version.outputs.version }}
           title: Update simple-icons to ${{ steps.simple_icons_version.outputs.version }}
+          body: |
+            Release: https://github.com/simple-icons/simple-icons/releases/tag/${{ steps.simple_icons_version.outputs.version }}
           branch: update-simple-icons
+          draft: always-true
           delete-branch: true
