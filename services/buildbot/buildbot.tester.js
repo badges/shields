@@ -25,6 +25,6 @@ t.create('buildbot (valid, mocked)')
   )
   .expectBadge({ label: 'build', message: 'passing' })
 
-t.create('buildbot (builder not found)')
+t.create('buildbot (no builds)')
   .get('/does-not-exist.json?baseUrl=https://buildbot.mariadb.org')
-  .expectBadge({ label: 'build', message: 'builder not found' })
+  .expectBadge({ label: 'build', message: 'no builds found' })
