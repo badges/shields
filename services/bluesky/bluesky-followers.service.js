@@ -32,7 +32,6 @@ export default class BlueskyFollowers extends BaseJsonService {
     return {
       message: metric(followers),
       color: 'blue',
-      style: 'social',
     }
   }
 
