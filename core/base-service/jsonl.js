@@ -3,6 +3,14 @@ import emojic from 'emojic'
 import { InvalidResponse } from './errors.js'
 import trace from './trace.js'
 
+/**
+ * Parse a JSONL (newline-delimited JSON) response buffer. Splits the buffer
+ * by newlines, trims each line, filters empty lines, and parses each line
+ * as JSON. Throws an `InvalidResponse` error when any line is unparseable.
+ *
+ * @param {string|Buffer} buffer - The raw response body.
+ * @returns {Array<object>} Array of parsed JSON values, one per line.
+ */
 function parseJsonl(buffer) {
   const logTrace = (...args) => trace.logTrace('fetch', ...args)
   let jsonl
