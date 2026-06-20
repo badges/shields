@@ -4,7 +4,7 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Release by branch (valid)')
-  .get('/v/release/laravel/framework/13.x.json')
+  .get('/laravel/framework/13.x.json')
   .expectBadge({
     label: 'latest-release@13.x',
     message: isSemver,
@@ -12,7 +12,7 @@ t.create('Release by branch (valid)')
   })
 
 t.create('Release by branch (valid, mocked)')
-  .get('/v/release/user/repo/main.json')
+  .get('/user/repo/main.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -23,7 +23,6 @@ t.create('Release by branch (valid, mocked)')
           target_commitish: 'main',
           prerelease: false,
           name: '',
-          assets: [],
         },
       ]),
   )
@@ -34,7 +33,7 @@ t.create('Release by branch (valid, mocked)')
   })
 
 t.create('Release by branch (prerelease, mocked)')
-  .get('/v/release/user/repo/main.json?include_prereleases')
+  .get('/user/repo/main.json?include_prereleases')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -45,7 +44,6 @@ t.create('Release by branch (prerelease, mocked)')
           target_commitish: 'main',
           prerelease: true,
           name: '',
-          assets: [],
         },
       ]),
   )
@@ -56,7 +54,7 @@ t.create('Release by branch (prerelease, mocked)')
   })
 
 t.create('Release by branch (paginated, mocked)')
-  .get('/v/release/user/repo/1.x.json')
+  .get('/user/repo/1.x.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -67,7 +65,6 @@ t.create('Release by branch (paginated, mocked)')
           target_commitish: 'main',
           prerelease: false,
           name: '',
-          assets: [],
         },
       ])
       .get('/repos/user/repo/releases')
@@ -78,7 +75,6 @@ t.create('Release by branch (paginated, mocked)')
           target_commitish: '1.x',
           prerelease: false,
           name: '',
-          assets: [],
         },
       ]),
   )
@@ -89,7 +85,7 @@ t.create('Release by branch (paginated, mocked)')
   })
 
 t.create('Release by branch (no matching branch, mocked)')
-  .get('/v/release/user/repo/2.x.json')
+  .get('/user/repo/2.x.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -100,7 +96,6 @@ t.create('Release by branch (no matching branch, mocked)')
           target_commitish: '1.x',
           prerelease: false,
           name: '',
-          assets: [],
         },
       ])
       .get('/repos/user/repo/releases')
@@ -113,11 +108,11 @@ t.create('Release by branch (no matching branch, mocked)')
   })
 
 t.create('Release by branch (repo not found)')
-  .get('/v/release/badges/helmets/1.x.json')
+  .get('/badges/helmets/1.x.json')
   .expectBadge({ label: 'latest-release', message: 'repo not found' })
 
 t.create('Release by branch (no releases, mocked)')
-  .get('/v/release/user/repo/main.json')
+  .get('/user/repo/main.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -127,7 +122,7 @@ t.create('Release by branch (no releases, mocked)')
   .expectBadge({ label: 'latest-release', message: 'no releases found' })
 
 t.create('Release by branch (prerelease excluded, mocked)')
-  .get('/v/release/user/repo/main.json')
+  .get('/user/repo/main.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -138,7 +133,6 @@ t.create('Release by branch (prerelease excluded, mocked)')
           target_commitish: 'main',
           prerelease: true,
           name: '',
-          assets: [],
         },
       ])
       .get('/repos/user/repo/releases')
@@ -151,7 +145,7 @@ t.create('Release by branch (prerelease excluded, mocked)')
   })
 
 t.create('Release by branch (stable after prerelease, mocked)')
-  .get('/v/release/user/repo/main.json')
+  .get('/user/repo/main.json')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/user/repo/releases')
@@ -162,14 +156,12 @@ t.create('Release by branch (stable after prerelease, mocked)')
           target_commitish: 'main',
           prerelease: true,
           name: '',
-          assets: [],
         },
         {
           tag_name: 'v2.0.0',
           target_commitish: 'main',
           prerelease: false,
           name: '',
-          assets: [],
         },
       ]),
   )
@@ -180,7 +172,7 @@ t.create('Release by branch (stable after prerelease, mocked)')
   })
 
 t.create('Release by branch (prerelease color)')
-  .get('/v/release/laravel/framework/13.x.json?include_prereleases')
+  .get('/laravel/framework/13.x.json?include_prereleases')
   .expectBadge({
     label: 'latest-release@13.x',
     message: isSemver,
