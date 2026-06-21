@@ -1,17 +1,25 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import {
-  BaseSvgScrapingService,
-  NotFound,
-  queryParam,
-  pathParam,
-} from '../index.js'
-import { fetch } from './azure-devops-helpers.js'
+import { queryParam, pathParam } from '../index.js'
+import AzureDevOpsBase from './azure-devops-base.js'
 
 const queryParamSchema = Joi.object({
   stage: Joi.string(),
   job: Joi.string(),
 })
+
+const buildSchema = Joi.object({
+  count: Joi.number().required(),
+  value: Joi.array()
+    .items(
+      Joi.object({
+        id: Joi.number().required(),
+        status: Joi.string().required(),
+        result: Joi.string().allow(null),
+      }),
+    )
+    .required(),
+}).required()
 
 const description = `
 [Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
@@ -35,7 +43,7 @@ Navigate to \`https://dev.azure.com/ORGANIZATION/_apis/projects/PROJECT_NAME\`
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-export default class AzureDevOpsBuild extends BaseSvgScrapingService {
+export default class AzureDevOpsBuild extends AzureDevOpsBase {
   static category = 'build'
 
   static route = {
@@ -107,28 +115,49 @@ export default class AzureDevOpsBuild extends BaseSvgScrapingService {
     },
   }
 
-  async handle(
-    { organization, projectId, definitionId, branch },
-    { stage, job },
-  ) {
-    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
-    const { status } = await fetch(this, {
-      url: `https://dev.azure.com/${organization}/${projectId}/_apis/build/status/${definitionId}`,
+  static defaultBadgeData = { label: 'build' }
+
+  // Map Azure DevOps build `result` values onto the status vocabulary
+  // understood by renderBuildStatusBadge (services/build-status.js).
+  static resultMap = {
+    canceled: 'canceled',
+    failed: 'failed',
+    none: 'no builds',
+    partiallySucceeded: 'partially succeeded',
+    succeeded: 'succeeded',
+  }
+
+  async handle({ organization, projectId, definitionId, branch }) {
+    const httpErrors = {
+      404: 'user or project not found',
+    }
+    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list
+    const url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/builds`
+    const options = {
       searchParams: {
-        branchName: branch,
-        stageName: stage,
-        jobName: job,
+        definitions: definitionId,
+        $top: 1,
+        statusFilter: 'completed',
+        'api-version': '5.0-preview.4',
       },
-      httpErrors: {
-        404: 'user or project not found',
-      },
+    }
+    if (branch) {
+      options.searchParams.branchName = `refs/heads/${branch}`
+    }
+
+    const { count, value } = await this.fetch({
+      url,
+      options,
+      schema: buildSchema,
+      httpErrors,
     })
-    if (status === 'set up now') {
-      throw new NotFound({ prettyMessage: 'definition not found' })
+
+    if (count === 0) {
+      return renderBuildStatusBadge({ status: 'never built' })
     }
-    if (status === 'unknown') {
-      throw new NotFound({ prettyMessage: 'project not found' })
-    }
+
+    const { result } = value[0]
+    const status = this.constructor.resultMap[result] || result
     return renderBuildStatusBadge({ status })
   }
 }
