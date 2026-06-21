@@ -65,3 +65,78 @@ t.create('404 latest build error response')
 t.create('partially succeeded build')
   .get('/totodem/shields.io/4/master.json')
   .expectBadge({ label: 'build', message: 'passing', color: 'orange' })
+
+// Overall build is `succeeded` but the requested stage `failed` — the badge
+// must reflect the stage, proving the Timeline lookup is used.
+t.create('stage status reflects the stage, not the overall build')
+  .get('/totodem/someproject/5.json?stage=Failing%20Stage')
+  .intercept(nock =>
+    nock('https://dev.azure.com/totodem/someproject/_apis')
+      .get('/build/builds')
+      .query({
+        definitions: 5,
+        $top: 1,
+        statusFilter: 'completed',
+        'api-version': '5.0-preview.4',
+      })
+      .reply(200, {
+        count: 1,
+        value: [{ id: 999, status: 'completed', result: 'succeeded' }],
+      })
+      .get('/build/builds/999/timeline')
+      .reply(200, {
+        records: [
+          { type: 'Stage', name: 'Successful Stage', result: 'succeeded' },
+          { type: 'Stage', name: 'Failing Stage', result: 'failed' },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'build', message: 'failing', color: 'red' })
+
+// A job takes precedence over a stage, and timeline `succeededWithIssues`
+// maps to the orange partially-succeeded badge.
+t.create('job status (succeededWithIssues -> partially succeeded)')
+  .get('/totodem/someproject/5.json?stage=Successful%20Stage&job=Flaky%20Job')
+  .intercept(nock =>
+    nock('https://dev.azure.com/totodem/someproject/_apis')
+      .get('/build/builds')
+      .query({
+        definitions: 5,
+        $top: 1,
+        statusFilter: 'completed',
+        'api-version': '5.0-preview.4',
+      })
+      .reply(200, {
+        count: 1,
+        value: [{ id: 999, status: 'completed', result: 'succeeded' }],
+      })
+      .get('/build/builds/999/timeline')
+      .reply(200, {
+        records: [
+          { type: 'Job', name: 'Flaky Job', result: 'succeededWithIssues' },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'build', message: 'passing', color: 'orange' })
+
+t.create('unknown stage')
+  .get('/totodem/someproject/5.json?stage=Nonexistent%20Stage')
+  .intercept(nock =>
+    nock('https://dev.azure.com/totodem/someproject/_apis')
+      .get('/build/builds')
+      .query({
+        definitions: 5,
+        $top: 1,
+        statusFilter: 'completed',
+        'api-version': '5.0-preview.4',
+      })
+      .reply(200, {
+        count: 1,
+        value: [{ id: 999, status: 'completed', result: 'succeeded' }],
+      })
+      .get('/build/builds/999/timeline')
+      .reply(200, {
+        records: [{ type: 'Stage', name: 'Other Stage', result: 'succeeded' }],
+      }),
+  )
+  .expectBadge({ label: 'build', message: 'stage not found' })

@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import { queryParam, pathParam } from '../index.js'
+import { NotFound, queryParam, pathParam } from '../index.js'
 import AzureDevOpsBase from './azure-devops-base.js'
 
 const queryParamSchema = Joi.object({
@@ -15,6 +15,18 @@ const buildSchema = Joi.object({
       Joi.object({
         id: Joi.number().required(),
         status: Joi.string().required(),
+        result: Joi.string().allow(null),
+      }),
+    )
+    .required(),
+}).required()
+
+const timelineSchema = Joi.object({
+  records: Joi.array()
+    .items(
+      Joi.object({
+        type: Joi.string().required(),
+        name: Joi.string().required(),
         result: Joi.string().allow(null),
       }),
     )
@@ -117,17 +129,58 @@ export default class AzureDevOpsBuild extends AzureDevOpsBase {
 
   static defaultBadgeData = { label: 'build' }
 
-  // Map Azure DevOps build `result` values onto the status vocabulary
-  // understood by renderBuildStatusBadge (services/build-status.js).
+  // Map Azure DevOps `result` values (both build-level and timeline
+  // stage/job-level) onto the status vocabulary understood by
+  // renderBuildStatusBadge (services/build-status.js).
   static resultMap = {
+    // build-level results (builds list)
     canceled: 'canceled',
     failed: 'failed',
     none: 'no builds',
     partiallySucceeded: 'partially succeeded',
     succeeded: 'succeeded',
+    // timeline record-level results (stage / job)
+    abandoned: 'canceled',
+    skipped: 'skipped',
+    succeededWithIssues: 'partially succeeded',
   }
 
-  async handle({ organization, projectId, definitionId, branch }) {
+  // Look up the result of a single stage or job within a build via the
+  // Timeline API. A job takes precedence over a stage when both are given.
+  // Note: the Timeline endpoint does not accept the api-version used by the
+  // other Azure DevOps build endpoints.
+  async getStageOrJobResult(
+    organization,
+    projectId,
+    buildId,
+    stage,
+    job,
+    httpErrors,
+  ) {
+    const url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/builds/${buildId}/timeline`
+    const { records } = await this.fetch({
+      url,
+      options: {},
+      schema: timelineSchema,
+      httpErrors,
+    })
+    const recordType = job ? 'Job' : 'Stage'
+    const recordName = job || stage
+    const record = records.find(
+      r => r.type === recordType && r.name === recordName,
+    )
+    if (!record) {
+      throw new NotFound({
+        prettyMessage: `${recordType.toLowerCase()} not found`,
+      })
+    }
+    return record.result
+  }
+
+  async handle(
+    { organization, projectId, definitionId, branch },
+    { stage, job },
+  ) {
     const httpErrors = {
       404: 'user or project not found',
     }
@@ -156,7 +209,17 @@ export default class AzureDevOpsBuild extends AzureDevOpsBase {
       return renderBuildStatusBadge({ status: 'never built' })
     }
 
-    const { result } = value[0]
+    const result =
+      stage || job
+        ? await this.getStageOrJobResult(
+            organization,
+            projectId,
+            value[0].id,
+            stage,
+            job,
+            httpErrors,
+          )
+        : value[0].result
     const status = this.constructor.resultMap[result] || result
     return renderBuildStatusBadge({ status })
   }
