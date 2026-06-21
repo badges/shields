@@ -7,28 +7,32 @@ import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
 
-// Translate modern badge data to the legacy schema understood by the badge
-// maker. Allow the user to override the label, color, logo, etc. through the
-// query string. Provide support for most badge options via `serviceData` so
-// the Endpoint badge can specify logos and colors, though allow that the
-// user's logo or color to take precedence. A notable exception is the case of
-// errors. When the service specifies that an error has occurred, the user's
-// requested color does not override the error color.
-//
-// Logos are resolved in this manner:
-//
-// 1. When `?logo=` contains a simple-icons logo or contains a base64-encoded
-//    SVG, that logo is used. When a `&logoColor=` is specified, that color is
-//    used (except for the base64-encoded logos). Otherwise the default color
-//    is used.
-//    When `?logo=` is specified, any logo-related parameters specified
-//    dynamically by the service, or by default in the service, are ignored.
-// 2. The second precedence is the dynamic logo returned by a service. This is
-//    used only by the Endpoint badge. The `logoColor` can be overridden by the
-//    query string.
-// 3. In the case of the `social` style only, the last precedence is the
-//    service's default logo. The `logoColor` can be overridden by the query
-//    string.
+/**
+ * Translate modern badge data to the legacy schema understood by the badge
+ * maker. Allows the user to override label, color, logo, etc. through the
+ * query string. Provides support for most badge options via `serviceData` so
+ * the Endpoint badge can specify logos and colors, though the user's logo or
+ * color takes precedence. A notable exception: when the service specifies an
+ * error, the user's color override is disregarded.
+ *
+ * Logos are resolved in this precedence order:
+ *
+ * 1. `?logo=` query param (named simple-icons logo or base64-encoded SVG).
+ * 2. Dynamic logo returned by the service (Endpoint badge only).
+ * 3. Service's default logo (social style only).
+ *
+ * @param {object} overrides - Query-string override values (style, label,
+ *    logo, color, etc.).
+ * @param {object} serviceData - Badge data from the service (message, color,
+ *    logo, cache seconds, etc.).
+ * @param {object} defaultBadgeData - Default badge values (color, label,
+ *    named logo).
+ * @param {object} [context] - Optional context including category and cache
+ *    length.
+ * @param {string} [context.category] - Badge category for the default label.
+ * @param {number} [context._cacheLength] - Default cache duration in seconds.
+ * @returns {object} Normalized badge data object ready for rendering.
+ */
 export default function coalesceBadge(
   overrides,
   serviceData,
