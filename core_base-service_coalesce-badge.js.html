@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/service-test-runner/icedfrisby-shields.js</title>
+    <title>JSDoc: Source: core/base-service/coalesce-badge.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/service-test-runner/icedfrisby-shields.js</h1>
+    <h1 class="page-title">Source: core/base-service/coalesce-badge.js</h1>
 
     
 
@@ -26,110 +26,194 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
-
-import Joi from 'joi'
-import { expect } from 'chai'
+            <pre class="prettyprint source linenums"><code>import {
+  decodeDataUrlFromQueryParam,
+  prepareNamedLogo,
+} from '../../lib/logos.js'
+import { svg2base64, getIconSize } from '../../lib/svg-helpers.js'
+import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
+import coalesce from './coalesce.js'
+import toArray from './to-array.js'
 
 /**
- * Factory which wraps an "icedfrisby-nock" with some additional functionality:
- * - check if a request was intercepted
- * - set expectations on the badge JSON response
+ * Translate modern badge data to the legacy schema understood by the badge
+ * maker. Allows the user to override label, color, logo, etc. through the
+ * query string. Provides support for most badge options via `serviceData` so
+ * the Endpoint badge can specify logos and colors, though the user's logo or
+ * color takes precedence. A notable exception: when the service specifies an
+ * error, the user's color override is disregarded.
  *
- * @param {Function} superclass class to extend
- * @see https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
- * @returns {Function} wrapped class
+ * Logos are resolved in this precedence order:
+ *
+ * 1. `?logo=` query param (named simple-icons logo or base64-encoded SVG).
+ * 2. Dynamic logo returned by the service (Endpoint badge only).
+ * 3. Service's default logo (social style only).
+ *
+ * @param {object} overrides - Query-string override values (style, label,
+ *    logo, color, etc.).
+ * @param {object} serviceData - Badge data from the service (message, color,
+ *    logo, cache seconds, etc.).
+ * @param {object} defaultBadgeData - Default badge values (color, label,
+ *    named logo).
+ * @param {object} [context] - Optional context including category and cache
+ *    length.
+ * @param {string} [context.category] - Badge category for the default label.
+ * @param {number} [context._cacheLength] - Default cache duration in seconds.
+ * @returns {object} Normalized badge data object ready for rendering.
  */
-const factory = superclass =>
-  class IcedFrisbyNock extends superclass {
-    constructor(message) {
-      super(message)
-      this.intercepted = false
-      super.networkOn()
-    }
+export default function coalesceBadge(
+  overrides,
+  serviceData,
+  // These two parameters were kept separate to make tests clearer.
+  defaultBadgeData,
+  { category, _cacheLength: defaultCacheSeconds } = {},
+) {
+  // The "overrideX" naming is based on services that provide badge
+  // parameters themselves, which can be overridden by a query string
+  // parameter. (For a couple services, the dynamic badge and the
+  // query-string-based static badge, the service never sets a value
+  // so the query string overrides are the _only_ way to configure
+  // these badge parameters.
+  const {
+    style: overrideStyle,
+    label: overrideLabel,
+    logo: overrideLogo,
+    logoColor: overrideLogoColor,
+    logoSize: overrideLogoSize,
+    link: overrideLink,
+    colorB: legacyOverrideColor,
+    colorA: legacyOverrideLabelColor,
+  } = overrides
+  let { color: overrideColor, labelColor: overrideLabelColor } = overrides
 
-    get(uri, options = { followRedirect: false }) {
-      if (!options.followRedirect) {
-        options.followRedirect = false
-      }
-      super.get(uri, options)
-      return this
-    }
-
-    intercept(setup) {
-      super.intercept(setup)
-      super.networkOff()
-      this.intercepted = true
-      return this
-    }
-
-    networkOff() {
-      super.networkOff()
-      this.intercepted = true
-      return this
-    }
-
-    networkOn() {
-      super.networkOn()
-      this.intercepted = true
-      return this
-    }
-
-    expectBadge(badge) {
-      const expectedKeys = [
-        'label',
-        'message',
-        'logoWidth',
-        'labelColor',
-        'color',
-        'link',
-      ]
-
-      for (const key of Object.keys(badge)) {
-        if (!expectedKeys.includes(key)) {
-          throw new Error(`Found unexpected object key '${key}'`)
-        }
-      }
-
-      return this.afterJSON(json => {
-        this.constructor._expectField(json, 'label', badge.label)
-        this.constructor._expectField(json, 'message', badge.message)
-        this.constructor._expectField(json, 'logoWidth', badge.logoWidth)
-        this.constructor._expectField(json, 'labelColor', badge.labelColor)
-        this.constructor._expectField(json, 'color', badge.color)
-        this.constructor._expectField(json, 'link', badge.link)
-      })
-    }
-
-    expectRedirect(location) {
-      return this.expectStatus(301).expectHeader('Location', location)
-    }
-
-    static _expectField(json, name, expected) {
-      if (typeof expected === 'undefined') return
-      if (typeof expected === 'string' || typeof expected === 'number') {
-        expect(json[name], `${name} mismatch`).to.equal(expected)
-      } else if (Array.isArray(expected)) {
-        expect(json[name], `${name} mismatch`).to.deep.equal(expected)
-      } else if (Joi.isSchema(expected)) {
-        Joi.attempt(json[name], expected, `${name} mismatch:`)
-      } else if (expected instanceof RegExp) {
-        Joi.attempt(
-          json[name],
-          Joi.string().regex(expected),
-          `${name} mismatch:`,
-        )
-      } else {
-        throw new Error(
-          "'expected' must be a string, a number, a regex, an array or a Joi schema",
-        )
-      }
-    }
+  // Only use the legacy properties if the new ones are not provided
+  if (typeof overrideColor === 'undefined') {
+    overrideColor = legacyOverrideColor
+  }
+  if (typeof overrideLabelColor === 'undefined') {
+    overrideLabelColor = legacyOverrideLabelColor
   }
 
-export default factory
+  // Scoutcamp converts numeric query params to numbers. Convert them back.
+  if (typeof overrideColor === 'number') {
+    overrideColor = `${overrideColor}`
+  }
+  if (typeof overrideLabelColor === 'number') {
+    overrideLabelColor = `${overrideLabelColor}`
+  }
+
+  const {
+    isError,
+    label: serviceLabel,
+    message: serviceMessage,
+    color: serviceColor,
+    labelColor: serviceLabelColor,
+    logoSvg: serviceLogoSvg,
+    namedLogo: serviceNamedLogo,
+    logoColor: serviceLogoColor,
+    logoSize: serviceLogoSize,
+    link: serviceLink,
+    cacheSeconds: serviceCacheSeconds,
+    style: serviceStyle,
+  } = serviceData
+
+  const {
+    color: defaultColor,
+    namedLogo: defaultNamedLogo,
+    label: defaultLabel,
+    labelColor: defaultLabelColor,
+  } = defaultBadgeData
+
+  let style = coalesce(overrideStyle, serviceStyle)
+  const styleValues = [
+    'plastic',
+    'flat',
+    'flat-square',
+    'for-the-badge',
+    'social',
+  ]
+  if (!styleValues.includes(style)) {
+    style = 'flat'
+  }
+
+  let namedLogo, namedLogoColor, logoSize, logoWidth, logoSvgBase64
+  if (overrideLogo) {
+    // `?logo=` could be a named logo or encoded svg.
+    const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
+    if (overrideLogoSvgBase64) {
+      logoSvgBase64 = overrideLogoSvgBase64
+    } else {
+      namedLogo = overrideLogo
+      // If the logo has been overridden it does not make sense to inherit the
+      // original color.
+      namedLogoColor = overrideLogoColor
+    }
+    // If the logo has been overridden it does not make sense to inherit the
+    // original width or position.
+    logoSize = overrideLogoSize
+  } else {
+    if (serviceLogoSvg) {
+      logoSvgBase64 = svg2base64(serviceLogoSvg)
+    } else {
+      namedLogo = coalesce(
+        serviceNamedLogo,
+        style === 'social' ? defaultNamedLogo : undefined,
+      )
+      namedLogoColor = coalesce(overrideLogoColor, serviceLogoColor)
+    }
+    logoSize = coalesce(overrideLogoSize, serviceLogoSize)
+  }
+  if (namedLogo) {
+    const iconSize = getIconSize(String(namedLogo).toLowerCase())
+
+    if (iconSize &amp;&amp; logoSize === 'auto') {
+      logoWidth = (iconSize.width / iconSize.height) * DEFAULT_LOGO_HEIGHT
+    }
+
+    logoSvgBase64 = prepareNamedLogo({
+      name: namedLogo,
+      color: namedLogoColor,
+      size: logoSize,
+      style,
+    })
+  }
+
+  const badgeData = {
+    // Use `coalesce()` to support empty labels and messages, as in the static
+    // badge.
+    label: coalesce(overrideLabel, serviceLabel, defaultLabel, category),
+    message: coalesce(serviceMessage, 'n/a'),
+    color: coalesce(
+      // In case of an error, disregard user's color override.
+      isError ? undefined : overrideColor,
+      serviceColor,
+      defaultColor,
+      'lightgrey',
+    ),
+    labelColor: coalesce(
+      // In case of an error, disregard user's color override.
+      isError ? undefined : overrideLabelColor,
+      serviceLabelColor,
+      defaultLabelColor,
+    ),
+    style,
+    namedLogo,
+    logo: logoSvgBase64,
+    logoWidth,
+    logoSize,
+    links: toArray(overrideLink || serviceLink),
+    cacheLengthSeconds: coalesce(serviceCacheSeconds, defaultCacheSeconds),
+  }
+  badgeData.label =
+    typeof badgeData.label === 'string'
+      ? badgeData.label.slice(0, 255)
+      : badgeData.label
+  badgeData.message =
+    typeof badgeData.message === 'string'
+      ? badgeData.message.slice(0, 255)
+      : badgeData.message
+  return badgeData
+}
 </code></pre>
         </article>
     </section>

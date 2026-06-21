@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/service-test-runner/icedfrisby-shields.js</title>
+    <title>JSDoc: Source: core/base-service/jsonl.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/service-test-runner/icedfrisby-shields.js</h1>
+    <h1 class="page-title">Source: core/base-service/jsonl.js</h1>
 
     
 
@@ -26,110 +26,43 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
-
-import Joi from 'joi'
-import { expect } from 'chai'
+            <pre class="prettyprint source linenums"><code>// See available emoji at http://emoji.muan.co/
+import emojic from 'emojic'
+import { InvalidResponse } from './errors.js'
+import trace from './trace.js'
 
 /**
- * Factory which wraps an "icedfrisby-nock" with some additional functionality:
- * - check if a request was intercepted
- * - set expectations on the badge JSON response
+ * Parse a JSONL (newline-delimited JSON) response buffer. Splits the buffer
+ * by newlines, trims each line, filters empty lines, and parses each line
+ * as JSON. Throws an `InvalidResponse` error when any line is unparseable.
  *
- * @param {Function} superclass class to extend
- * @see https://github.com/paulmelnikow/icedfrisby-nock/blob/master/icedfrisby-nock.js
- * @returns {Function} wrapped class
+ * @param {string|Buffer} buffer - The raw response body.
+ * @returns {Array&lt;object>} Array of parsed JSON values, one per line.
  */
-const factory = superclass =>
-  class IcedFrisbyNock extends superclass {
-    constructor(message) {
-      super(message)
-      this.intercepted = false
-      super.networkOn()
-    }
-
-    get(uri, options = { followRedirect: false }) {
-      if (!options.followRedirect) {
-        options.followRedirect = false
-      }
-      super.get(uri, options)
-      return this
-    }
-
-    intercept(setup) {
-      super.intercept(setup)
-      super.networkOff()
-      this.intercepted = true
-      return this
-    }
-
-    networkOff() {
-      super.networkOff()
-      this.intercepted = true
-      return this
-    }
-
-    networkOn() {
-      super.networkOn()
-      this.intercepted = true
-      return this
-    }
-
-    expectBadge(badge) {
-      const expectedKeys = [
-        'label',
-        'message',
-        'logoWidth',
-        'labelColor',
-        'color',
-        'link',
-      ]
-
-      for (const key of Object.keys(badge)) {
-        if (!expectedKeys.includes(key)) {
-          throw new Error(`Found unexpected object key '${key}'`)
-        }
-      }
-
-      return this.afterJSON(json => {
-        this.constructor._expectField(json, 'label', badge.label)
-        this.constructor._expectField(json, 'message', badge.message)
-        this.constructor._expectField(json, 'logoWidth', badge.logoWidth)
-        this.constructor._expectField(json, 'labelColor', badge.labelColor)
-        this.constructor._expectField(json, 'color', badge.color)
-        this.constructor._expectField(json, 'link', badge.link)
-      })
-    }
-
-    expectRedirect(location) {
-      return this.expectStatus(301).expectHeader('Location', location)
-    }
-
-    static _expectField(json, name, expected) {
-      if (typeof expected === 'undefined') return
-      if (typeof expected === 'string' || typeof expected === 'number') {
-        expect(json[name], `${name} mismatch`).to.equal(expected)
-      } else if (Array.isArray(expected)) {
-        expect(json[name], `${name} mismatch`).to.deep.equal(expected)
-      } else if (Joi.isSchema(expected)) {
-        Joi.attempt(json[name], expected, `${name} mismatch:`)
-      } else if (expected instanceof RegExp) {
-        Joi.attempt(
-          json[name],
-          Joi.string().regex(expected),
-          `${name} mismatch:`,
-        )
-      } else {
-        throw new Error(
-          "'expected' must be a string, a number, a regex, an array or a Joi schema",
-        )
-      }
-    }
+function parseJsonl(buffer) {
+  const logTrace = (...args) => trace.logTrace('fetch', ...args)
+  let jsonl
+  try {
+    jsonl = buffer
+      .toString()
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => JSON.parse(line))
+  } catch (err) {
+    logTrace(emojic.dart, 'Response JSONL (unparseable)', buffer)
+    throw new InvalidResponse({
+      prettyMessage: 'unparseable jsonl response',
+      underlyingError: err,
+    })
   }
+  logTrace(emojic.dart, 'Response JSONL (before validation)', jsonl, {
+    deep: true,
+  })
+  return jsonl
+}
 
-export default factory
+export { parseJsonl }
 </code></pre>
         </article>
     </section>
