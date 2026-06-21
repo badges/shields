@@ -6,22 +6,13 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2026-06-15
 
-- Add telemetry when GitHub token is removed [#11922](https://github.com/badges/shields/issues/11922)
-- ci: reduce duplicate service test runs [#11916](https://github.com/badges/shields/issues/11916)
-- Add JSDoc for BaseStaticService [#11914](https://github.com/badges/shields/issues/11914)
-- docs(core): add JSDoc to toArray, coalesce, and trace utilities [#11909](https://github.com/badges/shields/issues/11909)
-- fix(test): await SQL token fixture inserts [#11885](https://github.com/badges/shields/issues/11885)
 - Optimise SVG badge sizes [#11860](https://github.com/badges/shields/issues/11860)
-- Revert "Exclude NPM 11.12.0 and newer (#11779)" [#11876](https://github.com/badges/shields/issues/11876)
-- Update simple-icons to 16.21.0 [#11880](https://github.com/badges/shields/issues/11880)
-- Add [GnomeExtensions] Version Badge [#11875](https://github.com/badges/shields/issues/11875)
-- Update simple-icons to 16.20.0 [#11874](https://github.com/badges/shields/issues/11874)
-- Delete old retired services [#11863](https://github.com/badges/shields/issues/11863)
+- Add [GnomeExtensions] version badges [#11875](https://github.com/badges/shields/issues/11875)
+- Add [Cangjie] version badges [#11789](https://github.com/badges/shields/issues/11789)
 - Streamline [JenkinsCoverage] support [#11867](https://github.com/badges/shields/issues/11867)
-- Polish `TZ` variable format [#11872](https://github.com/badges/shields/issues/11872)
-- [Cangjie] Add new service [#11789](https://github.com/badges/shields/issues/11789)
-- Update simple-icons to 16.19.0 [#11862](https://github.com/badges/shields/issues/11862)
-- Dependency updates
+- Delete old retired services [#11863](https://github.com/badges/shields/issues/11863)
+- Update simple-icons to 16.21.0 [#11880](https://github.com/badges/shields/issues/11880)
+- Other dependency updates
 
 ## server-2026-05-15
 
