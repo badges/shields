@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
+import { renderBuildStatusBadge } from '../build-status.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
 const resultStatusMap = {
@@ -33,6 +33,10 @@ const description = `
 Shows the build status of the most recent build for a Buildbot builder.
 
 Each Buildbot installation has its own URL (for example \`https://buildbot.mariadb.org\`).
+
+The Buildbot REST API does not document or enforce request rate limits; any
+throttling is left to the operator (for example via a reverse proxy in front of
+the instance). See the [Buildbot REST API documentation](https://docs.buildbot.net/latest/developer/rest.html).
 `
 
 export default class Buildbot extends BaseJsonService {
@@ -82,19 +86,6 @@ export default class Buildbot extends BaseJsonService {
     return `${trimmedBaseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`
   }
 
-  transform({ builds }) {
-    if (builds.length === 0) {
-      throw new NotFound({ prettyMessage: 'no builds found' })
-    }
-
-    const { complete, results } = builds[0]
-    if (!complete) {
-      return { status: 'building' }
-    }
-
-    return { status: resultStatusMap[results] ?? 'unknown' }
-  }
-
   async fetch({ baseUrl, builder }) {
     return this._requestJson({
       schema,
@@ -106,6 +97,19 @@ export default class Buildbot extends BaseJsonService {
         404: 'builder not found',
       },
     })
+  }
+
+  transform({ builds }) {
+    if (builds.length === 0) {
+      throw new NotFound({ prettyMessage: 'no builds found' })
+    }
+
+    const { complete, results } = builds[0]
+    if (!complete) {
+      return { status: 'building' }
+    }
+
+    return { status: resultStatusMap[results] ?? 'unknown' }
   }
 
   async handle({ builder }, { baseUrl }) {

@@ -5,9 +5,7 @@ export const t = await createServiceTester()
 const isBuildbotStatus = isBuildStatus
 
 t.create('buildbot (valid)')
-  .get(
-    '/amd64-rhel8-dockerlibrary.json?baseUrl=https://buildbot.mariadb.org',
-  )
+  .get('/amd64-rhel8-dockerlibrary.json?baseUrl=https://buildbot.mariadb.org')
   .expectBadge({
     label: 'build',
     message: isBuildbotStatus,
