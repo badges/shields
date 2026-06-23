@@ -36,6 +36,12 @@ Navigate to \`https://dev.azure.com/ORGANIZATION/_apis/projects/PROJECT_NAME\`
 `
 
 export default class AzureDevOpsBuild extends BaseSvgScrapingService {
+  static auth = {
+    passKey: 'azure_devops_token',
+    authorizedOrigins: ['https://dev.azure.com'],
+    defaultToEmptyStringForUser: true,
+  }
+
   static category = 'build'
 
   static route = {

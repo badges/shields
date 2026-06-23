@@ -15,12 +15,16 @@ const schema = Joi.object({
 
 async function fetch(serviceInstance, { url, searchParams = {}, httpErrors }) {
   // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
-  const { message: status } = await serviceInstance._requestSvg({
+  let requestParams = {
     schema,
     url,
     options: { searchParams },
     httpErrors,
-  })
+  }
+  if (serviceInstance.authHelper?.isConfigured) {
+    requestParams = serviceInstance.authHelper.withBasicAuth(requestParams)
+  }
+  const { message: status } = await serviceInstance._requestSvg(requestParams)
   return { status }
 }
 
