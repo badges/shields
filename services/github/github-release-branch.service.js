@@ -63,11 +63,6 @@ export default class GithubReleaseBranch extends GithubAuthV3Service {
     return undefined
   }
 
-  transform({ release, branch }) {
-    const { tag_name: version, prerelease: isPrerelease } = release
-    return { version, isPrerelease, branch }
-  }
-
   static render({ version, isPrerelease, branch }) {
     return renderVersionBadge({
       version,
@@ -75,6 +70,10 @@ export default class GithubReleaseBranch extends GithubAuthV3Service {
       defaultLabel: GithubReleaseBranch.defaultBadgeData.label,
       tag: branch,
     })
+  }
+  transform({ release, branch }) {
+    const { tag_name: version, prerelease: isPrerelease } = release
+    return { version, isPrerelease, branch }
   }
 
   async fetchPage({ user, repo, page }) {
