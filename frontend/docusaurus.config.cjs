@@ -110,6 +110,10 @@ const config = {
                 label: 'Awesome Badges',
                 href: 'https://github.com/badges/awesome-badges',
               },
+              {
+                label: 'Endpoint Badges Directory',
+                href: 'https://github.com/badges/endpoint-badges-directory',
+              },
             ],
           },
           {

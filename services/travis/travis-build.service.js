@@ -66,7 +66,6 @@ export class TravisComBuild extends BaseSvgScrapingService {
       schema,
       url: `https://api.travis-ci.com/${user}/${repo}.svg`,
       options: { searchParams: { branch } },
-      valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 
     return this.constructor.render({ status })

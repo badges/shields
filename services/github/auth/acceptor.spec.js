@@ -1,6 +1,5 @@
 import { expect } from 'chai'
 import Camp from '@shields_io/camp'
-import { FormData } from 'undici'
 import sinon from 'sinon'
 import portfinder from 'portfinder'
 import qs from 'qs'

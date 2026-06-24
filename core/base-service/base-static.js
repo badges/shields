@@ -9,6 +9,14 @@ import { MetricHelper } from './metric-helper.js'
 import coalesceBadge from './coalesce-badge.js'
 import { prepareRoute, namedParamsForMatch } from './route.js'
 
+/**
+ * Base class for services that generate static badges from route parameters
+ * and query parameters.
+ *
+ * Registers the service route, handles cache validation, invokes the service,
+ * builds the badge data, sets cache headers, renders the badge, and records
+ * request metrics.
+ */
 export default class BaseStaticService extends BaseService {
   static register({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
