@@ -88,15 +88,6 @@ export default class Copr extends BaseJsonService {
     return `${trimmedServer}/api_3/package`
   }
 
-  transform({ builds }) {
-    const { state } = builds.latest
-    const status = stateStatusMap[state]
-    if (!status) {
-      throw new NotFound({ prettyMessage: 'unknown build state' })
-    }
-    return { status }
-  }
-
   async fetch({ server, owner, project, package: packageName }) {
     return this._requestJson({
       schema,
@@ -113,6 +104,15 @@ export default class Copr extends BaseJsonService {
         404: 'project or package not found',
       },
     })
+  }
+
+  transform({ builds }) {
+    const { state } = builds.latest
+    const status = stateStatusMap[state]
+    if (!status) {
+      throw new NotFound({ prettyMessage: 'unknown build state' })
+    }
+    return { status }
   }
 
   async handle(
