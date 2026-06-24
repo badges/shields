@@ -16,24 +16,20 @@ describe('GithubReleaseBranch service', function () {
     given({ releases, branch: '2.x', includePrereleases: false }).expect(
       undefined,
     )
-    given(
-      {
-        releases: [
-          { tag_name: 'v2.0.0-beta', target_commitish: 'main', prerelease: true },
-        ],
-        branch: 'main',
-        includePrereleases: false,
-      },
-    ).expect(undefined)
-    given(
-      {
-        releases: [
-          { tag_name: 'v2.0.0-beta', target_commitish: 'main', prerelease: true },
-        ],
-        branch: 'main',
-        includePrereleases: true,
-      },
-    ).expect({
+    given({
+      releases: [
+        { tag_name: 'v2.0.0-beta', target_commitish: 'main', prerelease: true },
+      ],
+      branch: 'main',
+      includePrereleases: false,
+    }).expect(undefined)
+    given({
+      releases: [
+        { tag_name: 'v2.0.0-beta', target_commitish: 'main', prerelease: true },
+      ],
+      branch: 'main',
+      includePrereleases: true,
+    }).expect({
       tag_name: 'v2.0.0-beta',
       target_commitish: 'main',
       prerelease: true,
