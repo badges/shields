@@ -10,10 +10,12 @@ t.create('macports (valid)').get('/git.json').expectBadge({
   message: isVPlusDottedVersionNClausesWithOptionalSuffix,
 })
 
-t.create('macports (valid, hyphenated name)').get('/proxy-audio-device.json').expectBadge({
-  label: 'macports',
-  message: isVPlusTripleDottedVersion,
-})
+t.create('macports (valid, hyphenated name)')
+  .get('/proxy-audio-device.json')
+  .expectBadge({
+    label: 'macports',
+    message: isVPlusTripleDottedVersion,
+  })
 
 t.create('macports (valid, mocked)')
   .get('/proxy-audio-device.json')
