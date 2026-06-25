@@ -1,6 +1,14 @@
-import { isVPlusTripleDottedVersion } from '../test-validators.js'
+import {
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+  isVPlusTripleDottedVersion,
+} from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
+
+t.create('macports (valid)').get('/git.json').expectBadge({
+  label: 'macports',
+  message: isVPlusDottedVersionNClausesWithOptionalSuffix,
+})
 
 t.create('macports (valid)').get('/proxy-audio-device.json').expectBadge({
   label: 'macports',

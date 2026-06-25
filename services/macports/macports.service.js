@@ -1,6 +1,16 @@
+/**
+ * MacPorts port version badge.
+ *
+ * API endpoint: GET https://ports.macports.org/api/v1/ports/{port-name}/
+ * Rate limits: not documented in the official API documentation.
+ * Auth requirements: none; all endpoints are open and do not require authentication.
+ *
+ * @see https://github.com/macports/macports-webapp/blob/main/docs/API_v1/ENDPOINTS.md
+ */
+
 import Joi from 'joi'
 import { renderVersionBadge } from '../version.js'
-import { BaseJsonService, pathParam } from '../index.js'
+import { BaseJsonService, pathParams } from '../index.js'
 
 const schema = Joi.object({
   version: Joi.string().required(),
@@ -17,6 +27,8 @@ authentication, and does not document request rate limits. See the
 export default class Macports extends BaseJsonService {
   static category = 'version'
 
+  static apiBaseUrl = 'https://ports.macports.org/api/v1'
+
   static route = {
     base: 'macports/v',
     pattern: ':packageName',
@@ -27,12 +39,12 @@ export default class Macports extends BaseJsonService {
       get: {
         summary: 'MacPorts Package Version',
         description,
-        parameters: [
-          pathParam({
-            name: 'packageName',
-            example: 'proxy-audio-device',
-          }),
-        ],
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'git',
+          description:
+            'MacPorts port name, e.g. `git` or `proxy-audio-device`.',
+        }),
       },
     },
   }
@@ -41,19 +53,23 @@ export default class Macports extends BaseJsonService {
     label: 'macports',
   }
 
-  portUrl({ packageName }) {
-    return `https://ports.macports.org/api/v1/ports/${encodeURIComponent(packageName)}/`
+  static portUrl({ packageName }) {
+    return `${Macports.apiBaseUrl}/ports/${encodeURIComponent(packageName)}/`
+  }
+
+  static render({ version }) {
+    return renderVersionBadge({ version })
   }
 
   async fetch({ packageName }) {
     return this._requestJson({
       schema,
-      url: this.portUrl({ packageName }),
+      url: this.constructor.portUrl({ packageName }),
     })
   }
 
   async handle({ packageName }) {
     const data = await this.fetch({ packageName })
-    return renderVersionBadge({ version: data.version })
+    return this.constructor.render({ version: data.version })
   }
 }
