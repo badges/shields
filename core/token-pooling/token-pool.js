@@ -45,6 +45,7 @@ class Token {
       _nextReset: nextReset,
       _isValid: true,
       _isFrozen: false,
+      _failedAttempts: 0,
     })
   }
 
@@ -70,6 +71,10 @@ class Token {
 
   get isFrozen() {
     return this._isFrozen
+  }
+
+  get failedAttempts() {
+    return this._failedAttempts
   }
 
   get hasReset() {
@@ -144,6 +149,23 @@ class Token {
    */
   validate() {
     this._isValid = true
+  }
+
+  /**
+   * Record a failed authentication attempt (HTTP 401) for this token.
+   *
+   * @returns {number} The number of consecutive failed attempts so far.
+   */
+  recordFailedAttempt() {
+    this._failedAttempts += 1
+    return this._failedAttempts
+  }
+
+  /**
+   * Reset the failed-attempt counter, e.g. after a successful response.
+   */
+  resetFailedAttempts() {
+    this._failedAttempts = 0
   }
 
   /**
@@ -364,6 +386,20 @@ class TokenPool {
     this.currentBatch.remaining -= 1
 
     return token
+  }
+
+  /**
+   * Abandon the current batch if it belongs to `token`, so that the next call
+   * to `next()` rotates to a different token. The token stays in the rotation
+   * (it was already returned to the FIFO queue when its batch began) and is
+   * retried when it next reaches the front of the queue.
+   *
+   * @param {Token} token the token whose batch should be ended
+   */
+  endBatchFor(token) {
+    if (this.currentBatch.token === token) {
+      this.currentBatch.remaining = 0
+    }
   }
 
   /**

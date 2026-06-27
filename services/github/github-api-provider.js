@@ -1,6 +1,9 @@
 import Joi from 'joi'
 import log from '../../core/server/log.js'
-import { TokenPool } from '../../core/token-pooling/token-pool.js'
+import {
+  TokenPool,
+  sanitizeToken,
+} from '../../core/token-pooling/token-pool.js'
 import { getUserAgent } from '../../core/base-service/got-config.js'
 import { nonNegativeInteger } from '../validators.js'
 import { ImproperlyConfigured } from '../index.js'
@@ -41,6 +44,9 @@ class GithubApiProvider {
 
   // reserveFraction: The amount of much of a token's quota we avoid using, to
   //   reserve it for the user.
+  // maxTokenFailedAttempts: How many consecutive 401s a token may receive
+  //   before it is evicted from the pool. Earlier failures rotate to other
+  //   tokens and retry this one later.
   constructor({
     baseUrl,
     authType = this.constructor.AUTH_TYPES.NO_AUTH,
@@ -48,6 +54,7 @@ class GithubApiProvider {
     globalToken,
     reserveFraction = 0.25,
     restApiVersion,
+    maxTokenFailedAttempts = 3,
   }) {
     Object.assign(this, {
       baseUrl,
@@ -55,7 +62,10 @@ class GithubApiProvider {
       onTokenInvalidated,
       globalToken,
       reserveFraction,
+      maxTokenFailedAttempts,
     })
+
+    this.metricInstance = undefined
 
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
       this.standardTokens = new TokenPool({ batchSize: 25 })
@@ -113,7 +123,7 @@ class GithubApiProvider {
 
         if ('message' in parsedBody && !('data' in parsedBody)) {
           if (parsedBody.message === 'Sorry. Your account was suspended.') {
-            this.invalidateToken(token)
+            this.invalidateToken(token, 'account_suspended')
             return
           }
         }
@@ -155,18 +165,44 @@ class GithubApiProvider {
     token.update(usesRemaining, nextReset)
   }
 
-  invalidateToken(token) {
+  invalidateToken(token, reason) {
+    log.log(
+      `GitHub token invalidated and removed from pool (reason: ${reason}, token: ${sanitizeToken(
+        token.id,
+      )})`,
+    )
+    if (this.metricInstance) {
+      this.metricInstance.noteGithubTokenInvalidation({ reason })
+    }
     token.invalidate()
     this.onTokenInvalidated(token.id)
   }
 
-  tokenForUrl(url) {
+  poolForUrl(url) {
     if (url.startsWith('/search')) {
-      return this.searchTokens.next()
+      return this.searchTokens
     } else if (url.startsWith('/graphql')) {
-      return this.graphqlTokens.next()
+      return this.graphqlTokens
     } else {
-      return this.standardTokens.next()
+      return this.standardTokens
+    }
+  }
+
+  // Handle a 401 for a token. A single 401 may be transient, so rather than
+  // evicting immediately, we count the failure, rotate to other tokens, and
+  // retry this one when it next comes around. Only after
+  // `maxTokenFailedAttempts` consecutive failures is the token evicted.
+  handleUnauthorized(token, pool) {
+    const failedAttempts = token.recordFailedAttempt()
+    if (failedAttempts >= this.maxTokenFailedAttempts) {
+      this.invalidateToken(token, 'http_401')
+    } else {
+      log.log(
+        `GitHub token got a 401, rotating away and retrying later (attempt ${failedAttempts}/${this.maxTokenFailedAttempts}, token: ${sanitizeToken(
+          token.id,
+        )})`,
+      )
+      pool.endBatchFor(token)
     }
   }
 
@@ -175,9 +211,11 @@ class GithubApiProvider {
 
     let token
     let tokenString
+    let pool
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
+      pool = this.poolForUrl(url)
       try {
-        token = this.tokenForUrl(url)
+        token = pool.next()
       } catch (e) {
         log.error(e)
         throw new ImproperlyConfigured({
@@ -209,8 +247,11 @@ class GithubApiProvider {
     const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
     if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
       if (response.res.statusCode === 401) {
-        this.invalidateToken(token)
+        this.handleUnauthorized(token, pool)
       } else if (response.res.statusCode < 500) {
+        // A non-401 response means the token authenticated successfully,
+        // so clear any earlier failed attempts.
+        token.resetFailedAttempts()
         this.updateToken({ token, url, res: response.res })
       }
     }

@@ -77,6 +77,7 @@ class GithubConstellation {
     }
 
     this.metricInstance = metricInstance
+    this.apiProvider.metricInstance = metricInstance
 
     this.scheduleDebugLogging()
     this.scheduleMetricsCollection()

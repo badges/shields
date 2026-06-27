@@ -4,6 +4,16 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-06-15
+
+- Optimise SVG badge sizes [#11860](https://github.com/badges/shields/issues/11860)
+- Add [GnomeExtensions] version badges [#11875](https://github.com/badges/shields/issues/11875)
+- Add [Cangjie] version badges [#11789](https://github.com/badges/shields/issues/11789)
+- Streamline [JenkinsCoverage] support [#11867](https://github.com/badges/shields/issues/11867)
+- Delete old retired services [#11863](https://github.com/badges/shields/issues/11863)
+- Update simple-icons to 16.21.0 [#11880](https://github.com/badges/shields/issues/11880)
+- Other dependency updates
+
 ## server-2026-05-15
 
 - feat: add [SdkmanVersion] badge [#11806](https://github.com/badges/shields/issues/11806)

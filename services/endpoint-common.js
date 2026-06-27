@@ -51,9 +51,7 @@ const endpointSchema = Joi.object({
   .required()
 
 /**
- * Strictly validate the data according to the endpoint schema.
- * This rejects unknown/invalid keys.
- * Optionally it prints those keys in the message to provide detailed feedback.
+ * Validate the data according to the endpoint schema.
  *
  * @param {object} data Object containing the data for validation
  * @param {object} attrs Refer to individual attributes
@@ -73,7 +71,6 @@ function validateEndpointData(
       includeKeys,
       traceErrorMessage: 'Response did not match schema',
       traceSuccessMessage: 'Response after validation',
-      allowAndStripUnknownKeys: false,
     },
     data,
     endpointSchema,

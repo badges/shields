@@ -201,6 +201,43 @@ describe('The token pool', function () {
     })
   })
 
+  context('failed attempts', function () {
+    it('should count and reset consecutive failed attempts', function () {
+      const token = new Token('1')
+      expect(token.failedAttempts).to.equal(0)
+      token.recordFailedAttempt()
+      token.recordFailedAttempt()
+      expect(token.failedAttempts).to.equal(2)
+      token.resetFailedAttempts()
+      expect(token.failedAttempts).to.equal(0)
+    })
+  })
+
+  context('endBatchFor()', function () {
+    it('rotates to a different token on the next call', function () {
+      const first = tokenPool.next()
+      tokenPool.endBatchFor(first)
+      expect(tokenPool.next().id).to.not.equal(first.id)
+    })
+
+    it('keeps the abandoned token in the rotation', function () {
+      const first = tokenPool.next()
+      tokenPool.endBatchFor(first)
+      // Cycle through the rest of the pool; the abandoned token should reappear
+      // once the other tokens' batches have been served.
+      const seen = times(ids.length * batchSize, () => tokenPool.next().id)
+      expect(seen).to.include(first.id)
+    })
+
+    it('does nothing when the token is not the current batch', function () {
+      const first = tokenPool.next()
+      const other = new Token('not-in-batch')
+      tokenPool.endBatchFor(other)
+      // first's batch is untouched, so it is returned again.
+      expect(tokenPool.next().id).to.equal(first.id)
+    })
+  })
+
   context('serializeDebugInfo()', function () {
     let clock
     beforeEach(function () {
