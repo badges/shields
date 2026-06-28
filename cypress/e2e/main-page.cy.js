@@ -16,7 +16,7 @@ describe('Frontend', function () {
 
     cy.get(SEARCH_INPUT).type('pypi')
 
-    cy.contains('PyPI - License')
+    cy.contains('PyPI License')
   })
 
   it('Shows badges from category', function () {

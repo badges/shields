@@ -10,7 +10,7 @@ export default class PypiVersion extends PypiBase {
   static openApi = {
     '/pypi/v/{packageName}': {
       get: {
-        summary: 'PyPI - Version',
+        summary: 'PyPI Version',
         parameters: pypiGeneralParams,
       },
     },
