@@ -1,4 +1,4 @@
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import { renderDateBadge } from '../date.js'
 import { pathParam, InvalidResponse } from '../index.js'
 import WingetBase from './winget-base.js'
