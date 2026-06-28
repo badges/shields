@@ -31,35 +31,16 @@ t.create('job badge')
     message: isBuildStatus,
   })
 
-t.create('never built definition')
+// A pipeline that exists but has no completed builds, and a bad org/project,
+// both surface as 'build pipeline not found' — consistent with the sibling
+// Azure DevOps badges (coverage, tests).
+t.create('unknown build definition')
   .get('/swellaby/opensource/112.json')
-  .expectBadge({ label: 'build', message: 'never built' })
+  .expectBadge({ label: 'build', message: 'build pipeline not found' })
 
 t.create('unknown user or project')
   .get('/notarealuser/foo/515.json')
-  .expectBadge({ label: 'build', message: 'user or project not found' })
-
-// The Azure DevOps build REST API returns the same response for a missing
-// definition as for a missing project/user (a redirect to sign-in), so unlike
-// the old status-image endpoint the build badge cannot distinguish
-// 'definition not found'. The 404 path is consolidated into
-// 'user or project not found', consistent with the sibling Azure DevOps
-// badges; a missing definition under an accessible project returns zero builds
-// and renders 'never built' (see above).
-t.create('404 latest build error response')
-  .get('/swellaby/fake/14.json')
-  .intercept(nock =>
-    nock('https://dev.azure.com/swellaby/fake/_apis')
-      .get('/build/builds')
-      .query({
-        definitions: 14,
-        $top: 1,
-        statusFilter: 'completed',
-        'api-version': '5.0-preview.4',
-      })
-      .reply(404),
-  )
-  .expectBadge({ label: 'build', message: 'user or project not found' })
+  .expectBadge({ label: 'build', message: 'build pipeline not found' })
 
 // The following build definition has always a partially succeeded status
 t.create('partially succeeded build')

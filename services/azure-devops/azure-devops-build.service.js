@@ -182,7 +182,7 @@ export default class AzureDevOpsBuild extends AzureDevOpsBase {
     { stage, job },
   ) {
     const httpErrors = {
-      404: 'user or project not found',
+      404: 'build pipeline not found',
     }
     // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list
     const url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/builds`
@@ -205,8 +205,8 @@ export default class AzureDevOpsBuild extends AzureDevOpsBase {
       httpErrors,
     })
 
-    if (count === 0) {
-      return renderBuildStatusBadge({ status: 'never built' })
+    if (count !== 1) {
+      throw new NotFound({ prettyMessage: 'build pipeline not found' })
     }
 
     const result =
