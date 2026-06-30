@@ -21,8 +21,9 @@ export default class MozillaObservatory extends BaseJsonService {
 
   static route = {
     base: 'mozilla-observatory',
-    pattern: ':format(grade|grade-score)/:host',
+    pattern: ':format/:host',
   }
+  static routeEnum = ['grade', 'grade-score']
 
   static openApi = {
     '/mozilla-observatory/{format}/{host}': {

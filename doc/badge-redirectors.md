@@ -60,8 +60,9 @@ export default redirector({
   category: 'analysis',
   route: {
     base: 'scrutinizer',
-    pattern: ':vcs(g|b)/:user/:repo/:branch*',
+    pattern: ':vcs/:user/:repo/:branch*',
   },
+  routeEnum: ['g', 'b'],
   transformPath: ({ vcs, user, repo, branch }) =>
     `/scrutinizer/quality/${vcs}/${user}/${repo}${branch ? `/${branch}` : ''}`,
   dateAdded: new Date('2025-02-02'),
@@ -81,8 +82,9 @@ export default redirector({
   category: 'monitoring',
   route: {
     base: 'website',
-    pattern: ':protocol(https|http)/:hostAndPath+',
+    pattern: ':protocol/:hostAndPath+',
   },
+  routeEnum: ['https', 'http'],
   transformPath: () => '/website',
   transformQueryParams: ({ protocol, hostAndPath }) => ({
     url: `${protocol}://${hostAndPath}`,

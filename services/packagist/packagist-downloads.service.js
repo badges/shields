@@ -42,9 +42,10 @@ export default class PackagistDownloads extends BasePackagistService {
 
   static route = {
     base: 'packagist',
-    pattern: ':interval(dd|dm|dt)/:user/:repo',
+    pattern: ':interval/:user/:repo',
     queryParamSchema,
   }
+  static routeEnum = ['dd', 'dm', 'dt']
 
   static openApi = {
     '/packagist/{interval}/{user}/{repo}': {

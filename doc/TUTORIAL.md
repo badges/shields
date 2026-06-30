@@ -109,7 +109,26 @@ Description of the code:
 4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any number of named parameters. These are converted into regular expressions by [`path-to-regexp`][path-to-regexp]. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
-   - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
+
+- `routeEnum` (optional): an array of strings that defines a finite set of allowed values for an enum-like parameter in the route. When `routeEnum` is present, the first named parameter in the route `pattern` is treated as the enum value to validate against `routeEnum`.
+  - Example: for a route with pattern `:type/:user/:repo` you would set `static routeEnum = ['dt', 'dm', 'dd']` and the incoming `type` value will be validated against that array.
+  - If the first named parameter is not present in `routeEnum`, the request will be rejected before `handle()` is invoked.
+
+  ```js
+  // Example service that uses routeEnum
+  export default class Downloads extends BaseService {
+    static route = { base: 'downloads', pattern: ':type/:user/:repo' }
+    static routeEnum = ['dt', 'dm', 'dd']
+
+    async handle({ type, user, repo }) {
+      // `type` is guaranteed to be one of 'dt', 'dm', or 'dd'
+      // implement fetch/render logic here
+    }
+  }
+  ```
+
+- There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
+
 5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex
