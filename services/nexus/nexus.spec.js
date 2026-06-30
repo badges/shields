@@ -42,6 +42,33 @@ describe('Nexus', function () {
       })
       expect(version).to.equal('1.2.3')
     })
+
+    it('filters versions and returns highest matching version', function () {
+      const { version } = Nexus.prototype.transform({
+        json: {
+          items: [
+            { version: '1.2.3' },
+            { version: '1.2.10' },
+            { version: '2.0.0' },
+          ],
+        },
+        filter: '1.2.*',
+      })
+      expect(version).to.equal('1.2.10')
+    })
+
+    it('throws NotFound when filter matches no versions', function () {
+      try {
+        Nexus.prototype.transform({
+          json: { items: [{ version: '1.2.3' }] },
+          filter: '9.*',
+        })
+        expect.fail('Expected to throw')
+      } catch (e) {
+        expect(e).to.be.an.instanceof(NotFound)
+        expect(e.prettyMessage).to.equal('no matching versions found')
+      }
+    })
   })
 
   describe('auth', function () {

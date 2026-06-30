@@ -1,4 +1,6 @@
 import Joi from 'joi'
+import { matcher } from 'matcher'
+import { compare } from 'mvncmp'
 import { renderVersionBadge } from '../version.js'
 import { url } from '../validators.js'
 import { BaseJsonService, NotFound, pathParams, queryParams } from '../index.js'
@@ -18,6 +20,7 @@ const queryParamSchema = Joi.object({
   queryOpt: Joi.string()
     .regex(/(:[\w.]+=[^:]*)+/i)
     .optional(),
+  filter: Joi.string().optional(),
 }).required()
 
 const openApiQueryParams = queryParams(
@@ -32,6 +35,11 @@ Query options should be provided as key=value pairs separated by a colon.
 
 Possible values: <a href="https://help.sonatype.com/en/searching-for-components.html">Searching for Component</a>
 `,
+  },
+  {
+    name: 'filter',
+    example: '9.3.*',
+    description: 'Glob filter to select matching versions',
   },
 )
 
@@ -149,17 +157,27 @@ export default class Nexus extends BaseJsonService {
     return { json }
   }
 
-  transform({ repo, json }) {
+  transform({ repo, json, filter }) {
     if (json.items.length === 0) {
       const versionType = repo === 's' ? 'snapshot ' : ''
       throw new NotFound({
         prettyMessage: `artifact or ${versionType}version not found`,
       })
     }
+
+    if (filter) {
+      const versions = json.items.map(item => item.version)
+      const filtered = matcher(versions, filter)
+      if (filtered.length === 0) {
+        throw new NotFound({ prettyMessage: 'no matching versions found' })
+      }
+      return { version: filtered.sort(compare).reverse()[0] }
+    }
+
     return { version: json.items[0].version }
   }
 
-  async handle({ repo, groupId, artifactId }, { server, queryOpt }) {
+  async handle({ repo, groupId, artifactId }, { server, queryOpt, filter }) {
     const { json } = await this.fetch({
       repo,
       server,
@@ -168,7 +186,7 @@ export default class Nexus extends BaseJsonService {
       queryOpt,
     })
 
-    const { version } = this.transform({ repo, json })
+    const { version } = this.transform({ repo, json, filter })
     return renderVersionBadge({ version })
   }
 }
