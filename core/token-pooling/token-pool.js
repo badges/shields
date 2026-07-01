@@ -90,6 +90,17 @@ class Token {
   }
 
   /**
+   * Update user-provided data associated with the token.
+   *
+   * Callers should only invoke this when they have fresh data to store.
+   *
+   * @param {*} data reserved for future use
+   */
+  updateData(data) {
+    this._data = data
+  }
+
+  /**
    * Update the uses remaining and next reset time for a token.
    *
    * @param {number} usesRemaining
@@ -131,6 +142,13 @@ class Token {
    */
   invalidate() {
     this._isValid = false
+  }
+
+  /**
+   * Indicate that the token should be used again.
+   */
+  validate() {
+    this._isValid = true
   }
 
   /**
@@ -206,8 +224,8 @@ class TokenPool {
 
     this.currentBatch = { currentToken: null, remaining: 0 }
 
-    // A set of IDs used for deduplication.
-    this.tokenIds = new Set()
+    // A map of IDs to tokens, used for deduplication and metadata updates.
+    this.tokensById = new Map()
 
     // See discussion on the FIFO and priority queues in `next()`.
     this.fifoQueue = []
@@ -225,8 +243,22 @@ class TokenPool {
     return second.nextReset - first.nextReset
   }
 
+  _removeFromPriorityQueue(token) {
+    const priorityQueue = new PriorityQueue(this.constructor.compareTokens)
+    this.priorityQueue.forEach(queuedToken => {
+      if (queuedToken !== token) {
+        priorityQueue.enq(queuedToken)
+      }
+    })
+    this.priorityQueue = priorityQueue
+  }
+
   /**
    * Add a token with user-provided ID and data.
+   *
+   * Adding an existing token updates its data only when `data` is provided.
+   * This keeps calls which only revalidate or deduplicate a token from
+   * clearing previously stored metadata.
    *
    * @param {string} id token string
    * @param {*} data reserved for future use
@@ -238,15 +270,32 @@ class TokenPool {
    * @returns {boolean} Was the token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
-    if (this.tokenIds.has(id)) {
+    const existingToken = this.tokensById.get(id)
+    if (existingToken) {
+      const wasInvalid = !existingToken.isValid
+      if (data !== undefined) {
+        existingToken.updateData(data)
+      }
+      if (wasInvalid) {
+        this._removeFromPriorityQueue(existingToken)
+        existingToken.unfreeze()
+      }
+      existingToken.validate()
+      const isQueued = this.fifoQueue.includes(existingToken)
+      const isCurrent =
+        this.currentBatch.token === existingToken &&
+        this.currentBatch.remaining > 0
+      if (wasInvalid && !isQueued && !isCurrent) {
+        this.fifoQueue.push(existingToken)
+      }
       return false
     }
-    this.tokenIds.add(id)
 
     usesRemaining = usesRemaining === undefined ? this.batchSize : usesRemaining
     nextReset = nextReset === undefined ? Token.nextResetNever : nextReset
 
     const token = new Token(id, data, usesRemaining, nextReset)
+    this.tokensById.set(id, token)
     this.fifoQueue.push(token)
 
     return true

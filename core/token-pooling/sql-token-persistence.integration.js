@@ -66,7 +66,28 @@ describe('SQL token persistence', function () {
 
     it('loads the contents', async function () {
       const tokens = await persistence.initialize(pool)
-      expect(tokens.sort()).to.deep.equal(initialTokens)
+      expect(tokens.map(({ token }) => token).sort()).to.deep.equal(
+        initialTokens,
+      )
+      expect(tokens.map(({ scopes }) => scopes)).to.deep.equal([
+        null,
+        null,
+        null,
+      ])
+    })
+
+    it('loads token scopes', async function () {
+      const scopedToken = 'd'.repeat(40)
+      await pool.query(
+        `INSERT INTO pg_temp.${tableName} (token, scopes) VALUES ($1::text, $2::text[]);`,
+        [scopedToken, ['read:packages', 'read:user']],
+      )
+
+      const tokens = await persistence.initialize(pool)
+      expect(tokens).to.deep.include({
+        token: scopedToken,
+        scopes: ['read:packages', 'read:user'],
+      })
     })
 
     context('when tokens are added', function () {
@@ -83,6 +104,40 @@ describe('SQL token persistence', function () {
         )
         const savedTokens = result.rows.map(row => row.token)
         expect(savedTokens.sort()).to.deep.equal(expected)
+      })
+
+      it('saves token scopes', async function () {
+        const newToken = 'e'.repeat(40)
+
+        await persistence.initialize(pool)
+        await persistence.noteTokenAdded(newToken, {
+          scopes: ['read:packages'],
+        })
+
+        const result = await pool.query(
+          `SELECT token, scopes FROM pg_temp.${tableName} WHERE token=$1::text;`,
+          [newToken],
+        )
+        expect(result.rows).to.deep.equal([
+          { token: newToken, scopes: ['read:packages'] },
+        ])
+      })
+
+      it('updates token scopes when a known token is re-added with scopes', async function () {
+        const knownToken = initialTokens[0]
+
+        await persistence.initialize(pool)
+        await persistence.noteTokenAdded(knownToken, {
+          scopes: ['read:packages'],
+        })
+
+        const result = await pool.query(
+          `SELECT token, scopes FROM pg_temp.${tableName} WHERE token=$1::text;`,
+          [knownToken],
+        )
+        expect(result.rows).to.deep.equal([
+          { token: knownToken, scopes: ['read:packages'] },
+        ])
       })
     })
 
