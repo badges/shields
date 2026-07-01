@@ -48,6 +48,8 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     },
   }
 
+  static _cacheLength = 300
+
   static defaultBadgeData = {
     label: 'docs',
   }

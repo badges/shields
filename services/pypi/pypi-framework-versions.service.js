@@ -54,7 +54,7 @@ export default class PypiFrameworkVersion extends PypiBase {
   static openApi = {
     '/pypi/frameworkversions/{frameworkName}/{packageName}': {
       get: {
-        summary: 'PyPI - Versions from Framework Classifiers',
+        summary: 'PyPI Versions from Framework Classifiers',
         description,
         parameters: pathParams(
           {
