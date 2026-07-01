@@ -15,9 +15,9 @@ const releaseInfoSchema = Joi.object({
   tag_name: Joi.string().required(),
   name: Joi.string().allow(null).allow(''),
   prerelease: Joi.boolean().required(),
+  target_commitish: Joi.string().required(),
 }).required()
 
-// Fetch the 'latest' release as defined by the GitHub API
 async function fetchLatestGitHubRelease(serviceInstance, { user, repo }) {
   const commonAttrs = {
     httpErrors: httpErrorsFor('no releases or repo not found'),
@@ -97,6 +97,12 @@ const openApiQueryParams = queryParams(
     schema: { type: 'string', enum: sortEnum },
   },
   { name: 'filter', example: '*beta*', description: filterDocs },
+  {
+    name: 'branch',
+    example: '9.x',
+    schema: { type: 'string' },
+    description: 'Filter releases by target branch',
+  },
 )
 
 function applyFilter({ releases, filter, displayName }) {
@@ -119,7 +125,13 @@ function applyFilter({ releases, filter, displayName }) {
   return releases.filter(release => filteredReleaseNames.includes(release.name))
 }
 
-// Fetch the latest release as defined by query params
+function applyBranchFilter({ releases, branch }) {
+  if (!branch) {
+    return releases
+  }
+  return releases.filter(release => release.target_commitish === branch)
+}
+
 async function fetchLatestRelease(
   serviceInstance,
   { user, repo },
@@ -129,8 +141,9 @@ async function fetchLatestRelease(
   const includePrereleases = queryParams.include_prereleases !== undefined
   const filter = queryParams.filter
   const displayName = queryParams.display_name
+  const branch = queryParams.branch
 
-  if (!includePrereleases && sort === 'date' && !filter) {
+  if (!includePrereleases && sort === 'date' && !filter && !branch) {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -138,23 +151,27 @@ async function fetchLatestRelease(
     return releaseInfo
   }
 
-  const releases = applyFilter({
-    releases: await fetchReleases(serviceInstance, { user, repo }),
-    filter,
-    displayName,
-  })
+  let releases = await fetchReleases(serviceInstance, { user, repo })
+
+  releases = applyBranchFilter({ releases, branch })
+
+  releases = applyFilter({ releases, filter, displayName })
+
   if (releases.length === 0) {
-    const prettyMessage = filter
-      ? 'no matching releases found'
-      : 'no releases found'
+    const prettyMessage = branch
+      ? 'no releases found for branch'
+      : filter
+        ? 'no matching releases found'
+        : 'no releases found'
     throw new NotFound({ prettyMessage })
   }
+
   const latestRelease = getLatestRelease({ releases, sort, includePrereleases })
   return latestRelease
 }
 
 export { fetchLatestRelease, queryParamSchema, openApiQueryParams }
 
-// currently only used for tests
 export const _getLatestRelease = getLatestRelease
 export const _applyFilter = applyFilter
+export const _applyBranchFilter = applyBranchFilter
