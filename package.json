@@ -177,7 +177,7 @@
     "eslint-plugin-promise": "7.3.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-sort-class-members": "1.22.1",
-    "globals": "17.6.0",
+    "globals": "17.7.0",
     "http-deceiver": "file:vendor/http-deceiver",
     "icedfrisby": "4.0.0",
     "icedfrisby-nock": "^2.1.0",
