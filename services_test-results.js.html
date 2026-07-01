@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/service-test-runner/service-tester</title>
+    <title>JSDoc: Source: services/test-results.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,101 +17,172 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/service-test-runner/service-tester</h1>
+    <h1 class="page-title">Source: services/test-results.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Helpers for formatting test-result badge messages and colors.
+ *
+ * @module
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
+import Joi from 'joi'
+import { queryParams } from './index.js'
 
-        
+const testResultQueryParamSchema = Joi.object({
+  compact_message: Joi.equal(''),
+  passed_label: Joi.string(),
+  failed_label: Joi.string(),
+  skipped_label: Joi.string(),
+}).required()
 
+const testResultOpenApiQueryParams = queryParams(
+  {
+    name: 'compact_message',
+    example: null,
+    schema: { type: 'boolean' },
+  },
+  { name: 'passed_label', example: 'good' },
+  { name: 'failed_label', example: 'bad' },
+  { name: 'skipped_label', example: 'n/a' },
+)
 
-<dl class="details">
+/**
+ * Format test counts into a badge message string.
+ *
+ * @param {object} attrs Refer to individual attrs
+ * @param {number} attrs.passed Number of passing tests.
+ * @param {number} attrs.failed Number of failing tests.
+ * @param {number} attrs.skipped Number of skipped tests.
+ * @param {number} attrs.total Total number of tests.
+ * @param {string} [attrs.passedLabel] Label for passing tests in verbose mode.
+ * @param {string} [attrs.failedLabel] Label for failing tests in verbose mode.
+ * @param {string} [attrs.skippedLabel] Label for skipped tests in verbose mode.
+ * @param {boolean} [attrs.isCompact] When true, use compact symbols separated by ` | `.
+ * @returns {string} Formatted message, or `no tests` when total is zero.
+ */
+function renderTestResultMessage({
+  passed,
+  failed,
+  skipped,
+  total,
+  passedLabel,
+  failedLabel,
+  skippedLabel,
+  isCompact,
+}) {
+  const labels = { passedLabel, failedLabel, skippedLabel }
+  if (total === 0) {
+    return 'no tests'
+  } else if (isCompact) {
+    ;({ passedLabel = '✔', failedLabel = '✘', skippedLabel = '➟' } = labels)
+    return [
+      `${passedLabel} ${passed}`,
+      failed > 0 &amp;&amp; `${failedLabel} ${failed}`,
+      skipped > 0 &amp;&amp; `${skippedLabel} ${skipped}`,
+    ]
+      .filter(Boolean)
+      .join(' | ')
+  } else {
+    ;({
+      passedLabel = 'passed',
+      failedLabel = 'failed',
+      skippedLabel = 'skipped',
+    } = labels)
+    return [
+      `${passed} ${passedLabel}`,
+      failed > 0 &amp;&amp; `${failed} ${failedLabel}`,
+      skipped > 0 &amp;&amp; `${skipped} ${skippedLabel}`,
+    ]
+      .filter(Boolean)
+      .join(', ')
+  }
+}
 
-    
+/**
+ * Render badge data for a test result summary.
+ *
+ * Chooses badge color from pass/fail/skip counts and delegates message formatting
+ * to {@link renderTestResultMessage}.
+ *
+ * @param {object} attrs Refer to individual attrs
+ * @param {number} attrs.passed Number of passing tests.
+ * @param {number} attrs.failed Number of failing tests.
+ * @param {number} attrs.skipped Number of skipped tests.
+ * @param {number} attrs.total Total number of tests.
+ * @param {string} [attrs.passedLabel] Label for passing tests in verbose mode.
+ * @param {string} [attrs.failedLabel] Label for failing tests in verbose mode.
+ * @param {string} [attrs.skippedLabel] Label for skipped tests in verbose mode.
+ * @param {boolean} [attrs.isCompact] When true, use compact symbols in the message.
+ * @returns {{message: string, color: string}} Badge message and shields color name.
+ */
+function renderTestResultBadge({
+  passed,
+  failed,
+  skipped,
+  total,
+  passedLabel,
+  failedLabel,
+  skippedLabel,
+  isCompact,
+}) {
+  const message = renderTestResultMessage({
+    passed,
+    failed,
+    skipped,
+    total,
+    passedLabel,
+    failedLabel,
+    skippedLabel,
+    isCompact,
+  })
 
-    
+  let color
+  if (total === 0) {
+    color = 'yellow'
+  } else if (failed > 0) {
+    color = 'red'
+  } else if (skipped > 0 &amp;&amp; passed > 0) {
+    color = 'green'
+  } else if (skipped > 0) {
+    color = 'yellow'
+  } else {
+    color = 'brightgreen'
+  }
 
-    
+  return { message, color }
+}
 
-    
+const documentation = `
+You may change the "passed", "failed" and "skipped" text on this badge by supplying query parameters &lt;code>&amp;passed_label=&lt;/code>, &lt;code>&amp;failed_label=&lt;/code> and &lt;code>&amp;skipped_label=&lt;/code> respectively.
 
-    
+For example, if you want to use a different terminology:
 
-    
+\`?passed_label=good&amp;failed_label=bad&amp;skipped_label=n%2Fa\`
 
-    
+Or symbols:
 
-    
+\`?compact_message&amp;passed_label=💃&amp;failed_label=🤦‍♀️&amp;skipped_label=🤷\`
 
-    
+There is also a &lt;code>&amp;compact_message&lt;/code> query parameter, which will default to displaying ✔, ✘ and ➟, separated by a horizontal bar |.
+`
 
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_service-tester.js.html">core/service-test-runner/service-tester.js</a>, <a href="core_service-test-runner_service-tester.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+export {
+  testResultQueryParamSchema,
+  testResultOpenApiQueryParams,
+  renderTestResultMessage,
+  renderTestResultBadge,
+  documentation,
+}
+</code></pre>
+        </article>
+    </section>
 
 
 

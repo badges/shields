@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: services/downloads</title>
+    <title>JSDoc: Module: services/test-results</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: services/downloads</h1>
+    <h1 class="page-title">Module: services/test-results</h1>
 
     
 
@@ -33,6 +33,8 @@
 <article>
     <div class="container-overview">
     
+        
+            <div class="description"><p>Helpers for formatting test-result badge messages and colors.</p></div>
         
 
         
@@ -67,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_downloads.js.html">services/downloads.js</a>, <a href="services_downloads.js.html#line1">line 1</a>
+        <a href="services_test-results.js.html">services/test-results.js</a>, <a href="services_test-results.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -106,7 +108,7 @@
     
 
     
-    <h4 class="name" id="~renderDownloadsBadge"><span class="type-signature">(inner) </span>renderDownloadsBadge<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="~renderTestResultBadge"><span class="type-signature">(inner) </span>renderTestResultBadge<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {Object}</span></h4>
     
 
     
@@ -114,8 +116,9 @@
 
 
 <div class="description">
-    <p>Handles rendering concerns of badges that display
-download counts, with override/customization support</p>
+    <p>Render badge data for a test result summary.</p>
+<p>Chooses badge color from pass/fail/skip counts and delegates message formatting
+to renderTestResultMessage.</p>
 </div>
 
 
@@ -195,7 +198,7 @@ download counts, with override/customization support</p>
 
         <tr>
             
-                <td class="name"><code>downloads</code></td>
+                <td class="name"><code>passed</code></td>
             
 
             <td class="type">
@@ -219,14 +222,107 @@ download counts, with override/customization support</p>
 
             
 
-            <td class="description last"><p>Number of downloads</p></td>
+            <td class="description last"><p>Number of passing tests.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>interval</code></td>
+                <td class="name"><code>failed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of failing tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>skipped</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of skipped tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>total</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Total number of tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passedLabel</code></td>
             
 
             <td class="type">
@@ -252,16 +348,14 @@ download counts, with override/customization support</p>
 
             
 
-            <td class="description last"><p>Period or interval the downloads occurred
-(e.g. day, week, month). If provided then this Will be reflected
-in the badge message unless overridden by other message-related parameters</p></td>
+            <td class="description last"><p>Label for passing tests in verbose mode.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>version</code></td>
+                <td class="name"><code>failedLabel</code></td>
             
 
             <td class="type">
@@ -287,15 +381,14 @@ in the badge message unless overridden by other message-related parameters</p></
 
             
 
-            <td class="description last"><p>Version or tag that was downloaded
-which will be reflected in the badge label (unless the label is overridden)</p></td>
+            <td class="description last"><p>Label for failing tests in verbose mode.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>labelOverride</code></td>
+                <td class="name"><code>skippedLabel</code></td>
             
 
             <td class="type">
@@ -321,21 +414,20 @@ which will be reflected in the badge label (unless the label is overridden)</p><
 
             
 
-            <td class="description last"><p>If provided then the badge label is set to this
-value overriding any other label-related parameters</p></td>
+            <td class="description last"><p>Label for skipped tests in verbose mode.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>colorOverride</code></td>
+                <td class="name"><code>isCompact</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -355,42 +447,7 @@ value overriding any other label-related parameters</p></td>
 
             
 
-            <td class="description last"><p>If provided then the badge color is set to this
-value instead of the color being based on the count of downloads</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>messageSuffixOverride</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>If provided then the badge message will
-will have this value added to the download count, separated with a space</p></td>
+            <td class="description last"><p>When true, use compact symbols in the message.</p></td>
         </tr>
 
     
@@ -438,7 +495,7 @@ will have this value added to the download count, separated with a space</p></td
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_downloads.js.html">services/downloads.js</a>, <a href="services_downloads.js.html#line27">line 27</a>
+        <a href="services_test-results.js.html">services/test-results.js</a>, <a href="services_test-results.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -467,7 +524,7 @@ will have this value added to the download count, separated with a space</p></td
 
         
 <div class="param-desc">
-    <p>Badge</p>
+    <p>Badge message and shields color name.</p>
 </div>
 
 
@@ -478,7 +535,450 @@ will have this value added to the download count, separated with a space</p></td
     </dt>
     <dd>
         
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~renderTestResultMessage"><span class="type-signature">(inner) </span>renderTestResultMessage<span class="signature">(attrs)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Format test counts into a badge message string.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attrs</code></td>
+            
+
+            <td class="type">
+            
+                
 <span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Refer to individual attrs</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>passed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of passing tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>failed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of failing tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>skipped</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Number of skipped tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>total</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Total number of tests.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passedLabel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for passing tests in verbose mode.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>failedLabel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for failing tests in verbose mode.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>skippedLabel</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Label for skipped tests in verbose mode.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isCompact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>When true, use compact symbols separated by <code>|</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="services_test-results.js.html">services/test-results.js</a>, <a href="services_test-results.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Formatted message, or <code>no tests</code> when total is zero.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
 
 
     </dd>

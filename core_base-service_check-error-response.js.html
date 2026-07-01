@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: core/service-test-runner/service-tester</title>
+    <title>JSDoc: Source: core/base-service/check-error-response.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,101 +17,94 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: core/service-test-runner/service-tester</h1>
+    <h1 class="page-title">Source: core/base-service/check-error-response.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
+import log from '../server/log.js'
+import { NotFound, InvalidResponse, Inaccessible } from './errors.js'
 
-        
+const defaultErrorMessages = {
+  404: 'not found',
+  429: 'rate limited by upstream service',
+}
 
+const headersToInclude = ['cf-ray']
 
-<dl class="details">
+/**
+ * Create a handler that validates HTTP status codes from upstream API responses.
+ *
+ * Used in the `got` response pipeline by {@link module:core/base-service/base~BaseService}
+ * and related helpers. On status 200 the handler returns the inputs unchanged.
+ * On other status codes it throws a {@link NotFound}, {@link InvalidResponse}, or
+ * {@link Inaccessible} exception. Thrown errors include `response` and `buffer`
+ * from the upstream call for debugging.
+ *
+ * @param {object} [httpErrors={}] Status-code-to-message map merged with defaults.
+ *   Keys are numeric HTTP status codes. Values set the `prettyMessage` shown on
+ *   the badge. Defaults include `404: 'not found'` and
+ *   `429: 'rate limited by upstream service'`.
+ * @param {number[]} [logErrors=[429]] Status codes to log when encountered.
+ *   Selected response headers (for example `cf-ray`) are attached as log tags.
+ * @returns {function({buffer: Buffer, res: object}): Promise&lt;{buffer: Buffer, res: object}>}
+ *   Async handler. Resolves with `{ buffer, res }` on 200; otherwise throws.
+ */
+export default function checkErrorResponse(httpErrors = {}, logErrors = [429]) {
+  return async function ({ buffer, res }) {
+    let error
+    httpErrors = { ...defaultErrorMessages, ...httpErrors }
+    if (res.statusCode === 404) {
+      error = new NotFound({ prettyMessage: httpErrors[404] })
+    } else if (res.statusCode !== 200) {
+      const underlying = Error(
+        `Got status code ${res.statusCode} (expected 200)`,
+      )
+      const props = { underlyingError: underlying }
+      if (httpErrors[res.statusCode] !== undefined) {
+        props.prettyMessage = httpErrors[res.statusCode]
+      }
+      if (res.statusCode >= 500) {
+        error = new Inaccessible(props)
+      } else {
+        error = new InvalidResponse(props)
+      }
+    }
 
-    
+    if (logErrors.includes(res.statusCode)) {
+      const tags = {}
+      for (const headerKey of headersToInclude) {
+        const headerValue = res.headers[headerKey]
+        if (headerValue) {
+          tags[`header-${headerKey}`] = headerValue
+        }
+      }
+      log.error(
+        new Error(`${res.statusCode} calling ${res.requestUrl.origin}`),
+        tags,
+      )
+    }
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="core_service-test-runner_service-tester.js.html">core/service-test-runner/service-tester.js</a>, <a href="core_service-test-runner_service-tester.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-core_service-test-runner_service-tester-ServiceTester.html">ServiceTester</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    if (error) {
+      error.response = res
+      error.buffer = buffer
+      throw error
+    } else {
+      return { buffer, res }
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
