@@ -33,6 +33,10 @@ const description = `
 [COPR](https://copr.fedorainfracloud.org/) is a build system for creating RPM packages.
 
 For group projects, prefix the owner with \`@\` (for example \`@copr\`).
+
+The [Copr API v3 documentation](https://copr.fedorainfracloud.org/api_3/docs/) does not
+document request rate limits for read-only endpoints. This badge issues one GET per
+render to \`/api_3/package\` with \`with_latest_build=True\`.
 `
 
 export default class Copr extends BaseJsonService {
