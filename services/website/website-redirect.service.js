@@ -1,5 +1,6 @@
 import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
 import { redirector } from '../index.js'
+import { splitDashSeparatedOptionalParams } from '../dash-badge-content-helpers.js'
 
 function escapeFormatSlashes(t) {
   return (
@@ -7,31 +8,6 @@ function escapeFormatSlashes(t) {
       // Double slash
       .replace(/\/\//g, '/')
   )
-}
-
-function splitDashSeparatedOptionalParams(s) {
-  const parts = []
-  let cur = ''
-  for (let i = 0; i < s.length; ) {
-    const ch = s[i]
-    const next = s[i + 1]
-    if (ch === '-' && next === '-') {
-      cur += '-'
-      i += 2
-    } else if (ch === '/' && next === '/') {
-      cur += '/'
-      i += 2
-    } else if (ch === '-') {
-      parts.push(cur)
-      cur = ''
-      i += 1
-    } else {
-      cur += ch
-      i += 1
-    }
-  }
-  parts.push(cur)
-  return parts
 }
 
 /*
