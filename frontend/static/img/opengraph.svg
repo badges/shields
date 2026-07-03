@@ -67,14 +67,14 @@
 
     <g transform="translate(178 356)">
       <rect x="0" y="8" width="237.6" height="44" rx="7" fill="#1f2933" opacity="0.14" />
-      <!-- https://img.shields.io/badge/stars-community-blue -->
-      <image href="opengraph-badges/stars.svg" width="237.6" height="44" />
+      <!-- https://img.shields.io/badge/rating-★★★★☆-brightgreen -->
+      <image href="opengraph-badges/rating.svg" width="237.6" height="44" />
     </g>
 
     <g transform="translate(10 428)">
-      <rect x="0" y="8" width="246.4" height="44" rx="7" fill="#1f2933" opacity="0.14" />
-      <!-- https://img.shields.io/badge/static-customized-red -->
-      <image href="opengraph-badges/static.svg" width="246.4" height="44" />
+      <rect x="0" y="8" width="213.4" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/npm/v/badge-maker?logo=npm -->
+      <image href="opengraph-badges/npm.svg" width="213.4" height="44" />
     </g>
   </g>
 </svg>
