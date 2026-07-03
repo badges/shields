@@ -12,7 +12,7 @@ function escapeFormatSlashes(t) {
 function splitDashSeparatedOptionalParams(s) {
   const parts = []
   let cur = ''
-  for (let i = 0; i < s.length; ) {
+  for (let i = 0; i < s.length;) {
     const ch = s[i]
     const next = s[i + 1]
     if (ch === '-' && next === '-') {
