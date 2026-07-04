@@ -49,13 +49,13 @@
 
     <g transform="translate(2 144)">
       <rect x="0" y="8" width="211.2" height="44" rx="7" fill="#1f2933" opacity="0.14" />
-      <!-- https://img.shields.io/badge/coverage-95%25-yellowgreen -->
+      <!-- https://img.shields.io/badge/coverage-95%25-green -->
       <image href="opengraph-badges/coverage.svg" width="211.2" height="44" />
     </g>
 
     <g transform="translate(100 216)">
       <rect x="0" y="8" width="308" height="44" rx="7" fill="#1f2933" opacity="0.14" />
-      <!-- https://img.shields.io/badge/downloads-13k%2Fmonth-orange -->
+      <!-- https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen -->
       <image href="opengraph-badges/downloads.svg" width="308" height="44" />
     </g>
 
