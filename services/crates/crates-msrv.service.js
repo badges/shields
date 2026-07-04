@@ -49,6 +49,8 @@ export default class CratesMSRV extends BaseCratesService {
     },
   }
 
+  static _cacheLength = 3600 // We're hitting the API more frequently than requested by upstream maintainers (see https://github.com/badges/shields/issues/11879).
+
   static defaultBadgeData = { label: 'msrv', color: 'blue' }
 
   static transform(response) {

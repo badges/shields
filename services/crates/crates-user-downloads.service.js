@@ -24,6 +24,8 @@ export default class CratesUserDownloads extends BaseCratesUserService {
     },
   }
 
+  static _cacheLength = 3600 // We're hitting the API more frequently than requested by upstream maintainers (see https://github.com/badges/shields/issues/11879).
+
   async handle({ userId }) {
     const json = await this.fetch({ userId })
     const { total_downloads: downloads } = json

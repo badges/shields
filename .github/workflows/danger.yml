@@ -14,10 +14,13 @@ jobs:
     if: github.actor != 'dependabot[bot]' && github.actor != 'repo-ranger[bot]'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          # Pin below Node 22.23.0 which regressed node-fetch@2 (https://github.com/nodejs/node/issues/63989).
+          node-version: '22.22'
 
       - name: Danger
         run: npm run danger ci

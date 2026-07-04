@@ -293,11 +293,7 @@ class BaseService {
   static _validate(
     data,
     schema,
-    {
-      prettyErrorMessage = 'invalid response data',
-      includeKeys = false,
-      allowAndStripUnknownKeys = true,
-    } = {},
+    { prettyErrorMessage = 'invalid response data', includeKeys = false } = {},
   ) {
     return validate(
       {
@@ -306,7 +302,6 @@ class BaseService {
         includeKeys,
         traceErrorMessage: 'Response did not match schema',
         traceSuccessMessage: 'Response after validation',
-        allowAndStripUnknownKeys,
       },
       data,
       schema,

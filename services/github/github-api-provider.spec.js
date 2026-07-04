@@ -6,21 +6,39 @@ describe('Github API provider', function () {
   const baseUrl = 'https://github-api.example.com'
   const reserveFraction = 0.333
 
+  const maxTokenFailedAttempts = 3
+
+  // A stateful mock so recordFailedAttempt/resetFailedAttempts drive the
+  // provider's eviction threshold the same way the real Token would.
+  const makeMockToken = id => {
+    let failedAttempts = 0
+    return {
+      id,
+      update: sinon.spy(),
+      invalidate: sinon.spy(),
+      recordFailedAttempt: sinon.spy(() => (failedAttempts += 1)),
+      resetFailedAttempts: sinon.spy(() => {
+        failedAttempts = 0
+      }),
+    }
+  }
+
   let mockStandardToken, mockSearchToken, mockGraphqlToken, provider
   beforeEach(function () {
     provider = new GithubApiProvider({
       baseUrl,
       authType: GithubApiProvider.AUTH_TYPES.TOKEN_POOL,
       reserveFraction,
+      maxTokenFailedAttempts,
     })
 
-    mockStandardToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockStandardToken = makeMockToken('standard-token')
     sinon.stub(provider.standardTokens, 'next').returns(mockStandardToken)
 
-    mockSearchToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockSearchToken = makeMockToken('search-token')
     sinon.stub(provider.searchTokens, 'next').returns(mockSearchToken)
 
-    mockGraphqlToken = { update: sinon.spy(), invalidate: sinon.spy() }
+    mockGraphqlToken = makeMockToken('graphql-token')
     sinon.stub(provider.graphqlTokens, 'next').returns(mockGraphqlToken)
   })
 
@@ -131,23 +149,52 @@ describe('Github API provider', function () {
   })
 
   context('unauthorized API responses', function () {
-    it('should invoke the callback and update the token with the expected values (unauthorized, v3)', async function () {
+    it('does not evict the token on a single 401, but records the attempt (v3)', async function () {
       const mockResponse = { res: { statusCode: 401, headers: {} } }
       const mockRequest = sinon.stub().resolves(mockResponse)
       await provider.fetch(mockRequest, '/foo', {})
-      expect(mockStandardToken.invalidate).to.have.been.calledOnce
+      expect(mockStandardToken.recordFailedAttempt).to.have.been.calledOnce
+      expect(mockStandardToken.invalidate).not.to.have.been.called
       expect(mockStandardToken.update).not.to.have.been.called
     })
 
-    it('should invoke the callback and update the token with the expected values (unauthorized, v4)', async function () {
+    it('evicts the token after maxTokenFailedAttempts consecutive 401s (v3)', async function () {
+      const mockResponse = { res: { statusCode: 401, headers: {} } }
+      const mockRequest = sinon.stub().resolves(mockResponse)
+      for (let i = 0; i < maxTokenFailedAttempts; i++) {
+        await provider.fetch(mockRequest, '/foo', {})
+      }
+      expect(mockStandardToken.invalidate).to.have.been.calledOnce
+    })
+
+    it('evicts the token after maxTokenFailedAttempts consecutive 401s (v4)', async function () {
       const mockResponse = { res: { statusCode: 401, body: {} } }
       const mockRequest = sinon.stub().resolves(mockResponse)
-      await provider.fetch(mockRequest, '/graphql', {})
+      for (let i = 0; i < maxTokenFailedAttempts; i++) {
+        await provider.fetch(mockRequest, '/graphql', {})
+      }
       expect(mockGraphqlToken.invalidate).to.have.been.calledOnce
       expect(mockGraphqlToken.update).not.to.have.been.called
     })
 
-    it('should invoke the callback and update the token with the expected values (suspended, v4)', async function () {
+    it('resets the failed-attempt counter on a successful response (v3)', async function () {
+      const failResponse = { res: { statusCode: 401, headers: {} } }
+      const okResponse = {
+        res: {
+          statusCode: 200,
+          headers: {
+            'x-ratelimit-limit': 5000,
+            'x-ratelimit-remaining': 4000,
+            'x-ratelimit-reset': 123456789,
+          },
+        },
+      }
+      await provider.fetch(sinon.stub().resolves(failResponse), '/foo', {})
+      await provider.fetch(sinon.stub().resolves(okResponse), '/foo', {})
+      expect(mockStandardToken.resetFailedAttempts).to.have.been.calledOnce
+    })
+
+    it('invalidates immediately when the account is suspended (v4)', async function () {
       const mockResponse = {
         res: {
           statusCode: 200,

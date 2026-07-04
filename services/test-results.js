@@ -1,3 +1,9 @@
+/**
+ * Helpers for formatting test-result badge messages and colors.
+ *
+ * @module
+ */
+
 import Joi from 'joi'
 import { queryParams } from './index.js'
 
@@ -19,6 +25,20 @@ const testResultOpenApiQueryParams = queryParams(
   { name: 'skipped_label', example: 'n/a' },
 )
 
+/**
+ * Format test counts into a badge message string.
+ *
+ * @param {object} attrs Refer to individual attrs
+ * @param {number} attrs.passed Number of passing tests.
+ * @param {number} attrs.failed Number of failing tests.
+ * @param {number} attrs.skipped Number of skipped tests.
+ * @param {number} attrs.total Total number of tests.
+ * @param {string} [attrs.passedLabel] Label for passing tests in verbose mode.
+ * @param {string} [attrs.failedLabel] Label for failing tests in verbose mode.
+ * @param {string} [attrs.skippedLabel] Label for skipped tests in verbose mode.
+ * @param {boolean} [attrs.isCompact] When true, use compact symbols separated by ` | `.
+ * @returns {string} Formatted message, or `no tests` when total is zero.
+ */
 function renderTestResultMessage({
   passed,
   failed,
@@ -57,6 +77,23 @@ function renderTestResultMessage({
   }
 }
 
+/**
+ * Render badge data for a test result summary.
+ *
+ * Chooses badge color from pass/fail/skip counts and delegates message formatting
+ * to {@link renderTestResultMessage}.
+ *
+ * @param {object} attrs Refer to individual attrs
+ * @param {number} attrs.passed Number of passing tests.
+ * @param {number} attrs.failed Number of failing tests.
+ * @param {number} attrs.skipped Number of skipped tests.
+ * @param {number} attrs.total Total number of tests.
+ * @param {string} [attrs.passedLabel] Label for passing tests in verbose mode.
+ * @param {string} [attrs.failedLabel] Label for failing tests in verbose mode.
+ * @param {string} [attrs.skippedLabel] Label for skipped tests in verbose mode.
+ * @param {boolean} [attrs.isCompact] When true, use compact symbols in the message.
+ * @returns {{message: string, color: string}} Badge message and shields color name.
+ */
 function renderTestResultBadge({
   passed,
   failed,

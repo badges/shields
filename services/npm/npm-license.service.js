@@ -41,9 +41,12 @@ export default class NpmLicense extends NpmBase {
       packageName,
       registryUrl,
     })
-    const licenses = toArray(license).map(license =>
-      typeof license === 'string' ? license : license.type,
-    )
+    const licenses = toArray(license)
+      .map(license => (typeof license === 'string' ? license : license.type))
+      .flatMap(license => {
+        const match = license.match(/^\((.+)\)$/)
+        return match ? match[1].split(/\s+(?:OR|AND)\s+/) : [license]
+      })
     return this.constructor.render({ licenses })
   }
 }

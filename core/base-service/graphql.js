@@ -30,12 +30,12 @@ function mergeQueries(...queries) {
     parsedQuery.definitions.forEach(definition => {
       merged.definitions[0].directives = [
         ...merged.definitions[0].directives,
-        ...definition.directives,
+        ...(definition.directives ?? []),
       ]
 
       merged.definitions[0].variableDefinitions = [
         ...merged.definitions[0].variableDefinitions,
-        ...definition.variableDefinitions,
+        ...(definition.variableDefinitions ?? []),
       ]
 
       merged.definitions[0].selectionSet.selections = [
