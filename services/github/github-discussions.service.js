@@ -16,7 +16,7 @@ const schema = Joi.object({
 }).required()
 
 const variantConfig = {
-  total: { color: 'blue', suffix: 'total', answered: null },
+  all: { color: 'blue', suffix: 'total', answered: null },
   answered: { color: 'brightgreen', suffix: 'answered', answered: true },
   unanswered: { color: 'orange', suffix: 'unanswered', answered: false },
 }
@@ -25,7 +25,7 @@ export default class GithubDiscussions extends GithubAuthV4Service {
   static category = 'other'
   static route = {
     base: 'github/discussions',
-    pattern: ':user/:repo/:variant(answered|unanswered)?',
+    pattern: ':variant(all|answered|unanswered)?/:user/:repo',
   }
 
   static openApi = {
@@ -38,7 +38,16 @@ export default class GithubDiscussions extends GithubAuthV4Service {
         ],
       },
     },
-    '/github/discussions/{user}/{repo}/answered': {
+    '/github/discussions/all/{user}/{repo}': {
+      get: {
+        summary: 'GitHub Discussions (all)',
+        parameters: [
+          pathParam({ name: 'user', example: 'vercel' }),
+          pathParam({ name: 'repo', example: 'next.js' }),
+        ],
+      },
+    },
+    '/github/discussions/answered/{user}/{repo}': {
       get: {
         summary: 'GitHub Answered Discussions',
         parameters: [
@@ -47,7 +56,7 @@ export default class GithubDiscussions extends GithubAuthV4Service {
         ],
       },
     },
-    '/github/discussions/{user}/{repo}/unanswered': {
+    '/github/discussions/unanswered/{user}/{repo}': {
       get: {
         summary: 'GitHub Unanswered Discussions',
         parameters: [
@@ -83,7 +92,7 @@ export default class GithubDiscussions extends GithubAuthV4Service {
   }
 
   async handle({ user, repo, variant }) {
-    const { answered, color, suffix } = variantConfig[variant || 'total']
+    const { answered, color, suffix } = variantConfig[variant || 'all']
     const json = await this.fetch({ user, repo, answered })
     const {
       data: {
