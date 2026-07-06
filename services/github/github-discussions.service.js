@@ -29,15 +29,6 @@ export default class GithubDiscussions extends GithubAuthV4Service {
   }
 
   static openApi = {
-    '/github/discussions/{user}/{repo}': {
-      get: {
-        summary: 'GitHub Discussions',
-        parameters: [
-          pathParam({ name: 'user', example: 'vercel' }),
-          pathParam({ name: 'repo', example: 'next.js' }),
-        ],
-      },
-    },
     '/github/discussions/all/{user}/{repo}': {
       get: {
         summary: 'GitHub Discussions (all)',
