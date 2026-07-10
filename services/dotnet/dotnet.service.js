@@ -49,10 +49,12 @@ Shows the .NET target frameworks supported by a NuGet package, based on the
 package's dependency groups in the NuGet registration API.
 
 The [NuGet API rate limits documentation](https://learn.microsoft.com/en-us/nuget/api/rate-limits)
-states that the V3 registration API used by this badge is not currently rate limited.
-Other NuGet.org endpoints enforce IP-based limits (for example, 50 requests/minute for
-package detail pages). This badge issues one GET per render to the
-\`registration5-gz-semver2\` index.
+lists IP-based limits for V1/V2 search and nuget.org package detail pages (for
+example, 50 requests/minute for \`/package/{id}/{version}\`). It states that V3
+search APIs are not currently rate limited. The V3 registration API
+(\`registration5-gz-semver2\`) used by this badge is not listed in those
+rate-limit tables. This badge issues one GET per render to the registration
+index.
 `
 
 async function collectCatalogEntries(service, url) {
