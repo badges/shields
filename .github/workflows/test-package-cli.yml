@@ -16,9 +16,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '20'
           - node: '22'
           - node: '24'
+          - node: '26'
     steps:
       - name: Checkout
         uses: actions/checkout@v7
