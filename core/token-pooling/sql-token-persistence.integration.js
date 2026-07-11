@@ -54,12 +54,14 @@ describe('SQL token persistence', function () {
     const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
 
     beforeEach(async function () {
-      initialTokens.forEach(async token => {
-        await pool.query(
-          `INSERT INTO pg_temp.${tableName} (token) VALUES ($1::text);`,
-          [token],
-        )
-      })
+      await Promise.all(
+        initialTokens.map(token =>
+          pool.query(
+            `INSERT INTO pg_temp.${tableName} (token) VALUES ($1::text);`,
+            [token],
+          ),
+        ),
+      )
     })
 
     it('loads the contents', async function () {

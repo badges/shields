@@ -86,7 +86,7 @@ class BaseService {
     throw new Error(`Category not set for ${this.name}`)
   }
 
-  static isDeprecated = false
+  static isRetired = false
 
   /**
    * Route to mount this service on
@@ -241,7 +241,7 @@ class BaseService {
   }
 
   static getDefinition() {
-    const { category, name, isDeprecated, openApi } = this
+    const { category, name, isRetired, openApi } = this
     const { base, format, pattern } = this.route
     const queryParams = getQueryParamNames(this.route)
 
@@ -254,7 +254,7 @@ class BaseService {
       route = undefined
     }
 
-    const result = { category, name, isDeprecated, route, openApi }
+    const result = { category, name, isRetired, route, openApi }
 
     assertValidServiceDefinition(result, `getDefinition() for ${this.name}`)
 
@@ -326,11 +326,7 @@ class BaseService {
   static _validate(
     data,
     schema,
-    {
-      prettyErrorMessage = 'invalid response data',
-      includeKeys = false,
-      allowAndStripUnknownKeys = true,
-    } = {},
+    { prettyErrorMessage = 'invalid response data', includeKeys = false } = {},
   ) {
     return validate(
       {
@@ -339,7 +335,6 @@ class BaseService {
         includeKeys,
         traceErrorMessage: 'Response did not match schema',
         traceSuccessMessage: 'Response after validation',
-        allowAndStripUnknownKeys,
       },
       data,
       schema,

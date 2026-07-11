@@ -66,6 +66,7 @@ Service badge code is stored in the [/services](https://github.com/badges/shield
 All service badge classes inherit from [BaseService] or another class which extends it. Other classes implement useful behavior on top of [BaseService].
 
 - [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html) implements methods for performing requests to a JSON API and schema validation.
+- [BaseJsonlService](https://contributing.shields.io/module-core_base-service_base-jsonl-BaseJsonlService.html) implements methods for performing requests to a JSONL API and schema validation.
 - [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html) implements methods for performing requests to an XML API and schema validation.
 - [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html) implements methods for performing requests to a YAML API and schema validation.
 - [BaseTomlService](https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html) implements methods for performing requests to a TOML API and schema validation.

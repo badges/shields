@@ -1,6 +1,6 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export const SecurityHeaders = deprecatedService({
+export const SecurityHeaders = retiredService({
   category: 'monitoring',
   route: {
     base: 'security-headers',

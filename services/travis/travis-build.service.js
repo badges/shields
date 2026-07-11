@@ -12,9 +12,8 @@ export class TravisComBuild extends BaseSvgScrapingService {
   static category = 'build'
 
   static route = {
-    base: 'travis',
-    format: 'com/(?!php-v)([^/]+/[^/]+?)(?:/(.+?))?',
-    capture: ['userRepo', 'branch'],
+    base: 'travis/com',
+    pattern: ':user/:repo/:branch*',
   }
 
   static openApi = {
@@ -62,12 +61,11 @@ export class TravisComBuild extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ userRepo, branch }) {
+  async handle({ user, repo, branch }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://api.travis-ci.com/${userRepo}.svg`,
+      url: `https://api.travis-ci.com/${user}/${repo}.svg`,
       options: { searchParams: { branch } },
-      valueMatcher: />([^<>]+)<\/text><\/g>/,
     })
 
     return this.constructor.render({ status })

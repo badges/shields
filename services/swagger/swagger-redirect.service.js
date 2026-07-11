@@ -1,7 +1,7 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
 export default [
-  deprecatedService({
+  retiredService({
     category: 'other',
     label: 'swagger',
     name: 'SwaggerRedirect',

@@ -1,7 +1,7 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
 // https://github.com/badges/shields/issues/8138
-export default deprecatedService({
+export default retiredService({
   category: 'build',
   label: 'gitlab',
   route: {

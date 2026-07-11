@@ -1,7 +1,7 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
 export default [
-  deprecatedService({
+  retiredService({
     category: 'coverage',
     label: 'codecov',
     route: {

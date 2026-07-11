@@ -1,6 +1,6 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export const BitComponents = deprecatedService({
+export const BitComponents = retiredService({
   category: 'other',
   route: {
     base: 'bit/collection/total-components',

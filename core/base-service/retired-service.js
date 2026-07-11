@@ -13,22 +13,22 @@ const attrSchema = Joi.object({
   issueUrl: Joi.string().uri(),
 }).required()
 
-function deprecatedService(attrs) {
+function retiredService(attrs) {
   const { route, name, label, category, issueUrl } = Joi.attempt(
     attrs,
     attrSchema,
-    `Deprecated service for ${attrs.route.base}`,
+    `Retired service for ${attrs.route.base}`,
   )
 
-  return class DeprecatedService extends BaseService {
+  return class RetiredService extends BaseService {
     static name = name
-      ? `Deprecated${name}`
-      : `Deprecated${camelcase(route.base.replace(/\//g, '_'), {
+      ? `Retired${name}`
+      : `Retired${camelcase(route.base.replace(/\//g, '_'), {
           pascalCase: true,
         })}`
 
     static category = category
-    static isDeprecated = true
+    static isRetired = true
     static route = route
     static _cacheLength = 86400
     static defaultBadgeData = {
@@ -45,10 +45,10 @@ function deprecatedService(attrs) {
         }
       }
       return {
-        message: 'no longer available',
+        message: 'retired badge',
       }
     }
   }
 }
 
-export default deprecatedService
+export default retiredService

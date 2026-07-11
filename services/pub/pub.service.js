@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { latest, renderVersionBadge } from '../version.js'
 import {
   BaseJsonService,
-  deprecatedService,
+  retiredService,
   pathParam,
   queryParam,
 } from '../index.js'
@@ -65,7 +65,7 @@ class PubVersion extends BaseJsonService {
   }
 }
 
-const PubVersionRedirector = deprecatedService({
+const PubVersionRedirector = retiredService({
   category: 'version',
   label: 'pub',
   route: {

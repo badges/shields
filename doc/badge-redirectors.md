@@ -24,8 +24,8 @@ Every redirector must specify:
 - **`name`** - Custom name for the service class (auto-generated from route if not specified)
 - **`transformQueryParams`** - A function to transform path parameters into query parameters
 - **`overrideTransformedQueryParams`** - Boolean (default: `false`). When `true`, query params from the URL take precedence over transformed params in case of conflicts
-- **`isDeprecated`** - Boolean (default: `true`). Set to `false` for non-deprecated redirectors that should appear in the API documentation
-- **`openApi`** - OpenAPI documentation object. Only needed for non-deprecated redirectors (`isDeprecated: false`) that should appear in the user-facing documentation
+- **`isRetired`** - Boolean (default: `true`). Set to `false` for non-retired redirectors that should appear in the API documentation
+- **`openApi`** - OpenAPI documentation object. Only needed for non-retired redirectors (`isRetired: false`) that should appear in the user-facing documentation
 
 ## Examples
 
@@ -119,7 +119,7 @@ If a user specifies `/old/service/token/abc123/foo?token=xyz789`, `xyz789` takes
 
 ### Example 5: Non-Deprecated Redirector with Documentation
 
-In some cases, a badged based on a redirector may not be deprecated and should appear on the website. This requires setting `isDeprecated: false` and providing an `openApi` specification:
+In some cases, a badged based on a redirector may not be retired and should appear on the website. This requires setting `isRetired: false` and providing an `openApi` specification:
 
 ```js
 import { redirector, pathParam } from '../index.js'
@@ -127,7 +127,7 @@ import { commonParams } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
-  isDeprecated: false,
+  isRetired: false,
   route: {
     base: 'gradle-plugin-portal/v',
     pattern: ':pluginId',
@@ -215,12 +215,12 @@ We'll keep the redirector for a minimum of one year. It may stay in place for si
 - The redirector led to less than 100 badge renders on a weekday.
 - The redirector serves less than 1% of the traffic of the new badge URL it points to.
 
-It can then be removed and replaced with a deprecated badge linking to an issue that explains the migration path, for example:
+It can then be removed and replaced with a retired badge linking to an issue that explains the migration path, for example:
 
 ```js
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export default deprecatedService({
+export default retiredService({
   category: 'build',
   route: {
     base: 'github/workflow/status',
@@ -234,4 +234,4 @@ export default deprecatedService({
 
 Doing so will render badges similar to the following: ![](https://img.shields.io/badge/githubworkflowstatus-https%3A%2F%2Fgithub.com%2Fbadges%2Fshields%2Fissues%2F8671-red)
 
-Removal of the resulting deprecated badge follows the process documented [here](./deprecating-badges.md).
+Removal of the resulting retired badge follows the process documented [here](./retiring-badges.md).

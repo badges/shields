@@ -7,8 +7,8 @@ export const t = new ServiceTester({
 
 t.create('Extension')
   .get('/extension/installs/ParserFunctions.json')
-  .expectBadge({ label: 'wikiapiary', message: 'no longer available' })
+  .expectBadge({ label: 'wikiapiary', message: 'retired badge' })
 
 t.create('Skins')
   .get('/skin/installs/Vector.json')
-  .expectBadge({ label: 'wikiapiary', message: 'no longer available' })
+  .expectBadge({ label: 'wikiapiary', message: 'retired badge' })

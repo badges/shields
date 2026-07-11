@@ -4,7 +4,7 @@ import { nonNegativeInteger } from '../validators.js'
 import {
   BaseXmlService,
   NotFound,
-  deprecatedService,
+  retiredService,
   pathParams,
   pathParam,
   queryParam,
@@ -135,7 +135,7 @@ function createServiceFamily({
     }
   }
 
-  const NugetVersionRedirector = deprecatedService({
+  const NugetVersionRedirector = retiredService({
     category: 'version',
     label: defaultLabel,
     route: {

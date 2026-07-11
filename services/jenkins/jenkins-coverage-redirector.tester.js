@@ -57,3 +57,35 @@ t.create('old v1 api prefix to new prefix')
     label: 'jenkins',
     message: 'https://github.com/badges/shields/pull/11583',
   })
+
+t.create('jacoco format redirects to unique route')
+  .get(
+    `/coverage/jacoco.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+  .expectRedirect(
+    `/jenkins/coverage.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+
+t.create('cobertura format redirects to unique route')
+  .get(
+    `/coverage/cobertura.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+  .expectRedirect(
+    `/jenkins/coverage.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+
+t.create('apiv1 format redirects to unique route')
+  .get(
+    `/coverage/apiv1.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+  .expectRedirect(
+    `/jenkins/coverage.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+
+t.create('apiv4 format redirects to unique route')
+  .get(
+    `/coverage/apiv4.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )
+  .expectRedirect(
+    `/jenkins/coverage.svg?jobUrl=https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master`,
+  )

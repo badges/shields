@@ -4,6 +4,44 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-06-15
+
+- Optimise SVG badge sizes [#11860](https://github.com/badges/shields/issues/11860)
+- Add [GnomeExtensions] version badges [#11875](https://github.com/badges/shields/issues/11875)
+- Add [Cangjie] version badges [#11789](https://github.com/badges/shields/issues/11789)
+- Streamline [JenkinsCoverage] support [#11867](https://github.com/badges/shields/issues/11867)
+- Delete old retired services [#11863](https://github.com/badges/shields/issues/11863)
+- Update simple-icons to 16.21.0 [#11880](https://github.com/badges/shields/issues/11880)
+- Other dependency updates
+
+## server-2026-05-15
+
+- feat: add [SdkmanVersion] badge [#11806](https://github.com/badges/shields/issues/11806)
+- feat: improve badges color contrast [#11783](https://github.com/badges/shields/issues/11783)
+- Dependency updates
+
+## server-2026-04-15
+
+**Noteable changes:**
+
+- change deprecated badge messages to 'retired badge' [Bit Codeclimate Codeship Coincap DockerCloud GithubWorkflowStatus Hackage NostrBand Pub Security-Headers VisualStudioAppCenter VisualStudioMarketplace Wikiapiary] [#11798](https://github.com/badges/shields/issues/11798)
+- Migrate [Polymart] to [VoxelShop] [#11786](https://github.com/badges/shields/issues/11786)
+
+**Deprecation:**
+
+- deprecate [VisualStudioMarketplace] [#11792](https://github.com/badges/shields/issues/11792)
+
+Other changes:
+
+- fix(nuget): fix double URL encoding for non-ASCII package names; test [Nuget MyGet] [#11795](https://github.com/badges/shields/issues/11795)
+- Validate [WordPress] versions schema [#11787](https://github.com/badges/shields/issues/11787)
+- fix: strip build metadata suffix from packageManager field (fixes #9514) [GithubPackageJson] [#11782](https://github.com/badges/shields/issues/11782)
+- feat: add GitHub branch count badge (fixes #11283) [#11781](https://github.com/badges/shields/issues/11781)
+- production-hosting: Update Sentry [#11778](https://github.com/badges/shields/issues/11778)
+- Update [Cookbook] host [#11735](https://github.com/badges/shields/issues/11735)
+- Tests updates
+- Dependency updates
+
 ## server-2026-03-15
 
 **Important notice:**
