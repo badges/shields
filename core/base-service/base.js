@@ -533,7 +533,7 @@ class BaseService {
         for (const enumValue of this.routeEnum) {
           const pattern = this.route.pattern.replace(
             firstParamName,
-            `firstParamName(${enumValue})`, // keep capture for backwards compatibility
+            `${firstParamName}(${enumValue})`, // keep capture for backwards compatibility
           )
           routesToRegister.push({
             route: { ...this.route, pattern },
