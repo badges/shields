@@ -6,7 +6,7 @@
  * @module
  */
 
-import { fetch } from '../core/base-service/got.js'
+import { fetch } from '../core/base-service/ky.js'
 import { getCachedResource } from '../core/base-service/resource-cache.js'
 import { listCompare } from './version.js'
 import { omitv } from './text-formatters.js'

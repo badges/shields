@@ -5,7 +5,7 @@ import portfinder from 'portfinder'
 import qs from 'qs'
 import nock from 'nock'
 import '../../../core/register-chai-plugins.spec.js'
-import got from '../../../core/got-test-client.js'
+import request from '../../../core/ky-test-client.js'
 import GithubConstellation from '../github-constellation.js'
 import { setRoutes } from './acceptor.js'
 
@@ -46,7 +46,7 @@ describe('Github token acceptor', function () {
   })
 
   it('should start the OAuth process', async function () {
-    const res = await got(`${baseUrl}/github-auth`, { followRedirect: false })
+    const res = await request(`${baseUrl}/github-auth`, { redirect: 'manual' })
 
     expect(res.statusCode).to.equal(302)
 
@@ -61,7 +61,7 @@ describe('Github token acceptor', function () {
   describe('Finishing the OAuth process', function () {
     context('no code is provided', function () {
       it('should return an error', async function () {
-        const res = await got(`${baseUrl}/github-auth/done`)
+        const res = await request(`${baseUrl}/github-auth/done`)
         expect(res.body).to.equal(
           'GitHub OAuth authentication failed to provide a code.',
         )
@@ -110,7 +110,7 @@ describe('Github token acceptor', function () {
         const form = new FormData()
         form.append('code', fakeCode)
 
-        const res = await got.post(`${baseUrl}/github-auth/done`, {
+        const res = await request.post(`${baseUrl}/github-auth/done`, {
           body: form,
         })
         expect(
@@ -127,7 +127,7 @@ describe('Github token acceptor', function () {
         const form = new FormData()
         form.append('code', fakeCode)
 
-        await got.post(`${baseUrl}/github-auth/done`, {
+        await request.post(`${baseUrl}/github-auth/done`, {
           body: form,
         })
 

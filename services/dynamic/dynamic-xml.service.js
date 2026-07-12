@@ -138,7 +138,7 @@ export default class DynamicXml extends BaseService {
       url,
       options: {
         headers: { Accept: 'application/xml, text/xml' },
-        timeout: { request: 3500 },
+        timeout: 3500,
       },
       httpErrors,
       logErrors: [],
