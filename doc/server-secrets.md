@@ -232,6 +232,16 @@ The Pepy API requires authentication. To obtain a key, Create an account, sign i
 
 `PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry, users can also override this by query parameter `pypiBaseUrl`.
 
+### Read the Docs
+
+- `READTHEDOCS_TOKEN` (yml: `private.readthedocs_token`)
+
+Authentication is optional, but a [Read the Docs API token][readthedocs api authentication] increases the API rate limit for Read the Docs badges.
+
+Use a token from a dedicated account that has access only to public projects. Badge endpoints are public, so a token whose account can access private projects could allow badge requests to reveal those projects' build status.
+
+[readthedocs api authentication]: https://docs.readthedocs.com/platform/stable/api/v3.html#authentication-and-authorization
+
 ### Reddit
 
 Using a token for Reddit is optional but will allow higher API rates.

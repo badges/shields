@@ -1,22 +1,34 @@
 import Joi from 'joi'
-import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
-import { BaseSvgScrapingService, NotFound, pathParams } from '../index.js'
+import { renderBuildStatusBadge } from '../build-status.js'
+import { BaseJsonService, NotFound, pathParams } from '../index.js'
 
 const schema = Joi.object({
-  message: Joi.alternatives()
-    .try(isBuildStatus, Joi.equal('unknown'))
+  results: Joi.array()
+    .items(
+      Joi.object({
+        state: Joi.object({
+          code: Joi.string().required(),
+        }).required(),
+        success: Joi.boolean().required(),
+      }),
+    )
     .required(),
 }).required()
 
 const description =
   '[ReadTheDocs](https://readthedocs.com/) is a hosting service for documentation.'
 
-export default class ReadTheDocs extends BaseSvgScrapingService {
+export default class ReadTheDocs extends BaseJsonService {
   static category = 'build'
 
   static route = {
     base: 'readthedocs',
     pattern: ':project/:version?',
+  }
+
+  static auth = {
+    passKey: 'readthedocs_token',
+    authorizedOrigins: ['https://app.readthedocs.org'],
   }
 
   static openApi = {
@@ -58,19 +70,36 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
+  async fetch({ project, version = 'latest' }) {
+    return this._requestJson(
+      this.authHelper.withBearerAuthHeader(
+        {
+          schema,
+          url: `https://app.readthedocs.org/api/v3/projects/${encodeURIComponent(project)}/versions/${encodeURIComponent(version)}/builds/`,
+          options: {
+            searchParams: {
+              fields: 'state,success',
+              limit: 10,
+              running: false,
+            },
+          },
+          httpErrors: { 404: 'project or version not found' },
+        },
+        'Token',
+      ),
+    )
+  }
+
   async handle({ project, version }) {
-    const { message: status } = await this._requestSvg({
-      schema,
-      url: `https://readthedocs.org/projects/${encodeURIComponent(
-        project,
-      )}/badge/`,
-      options: { searchParams: { version } },
-    })
-    if (status === 'unknown') {
+    const { results } = await this.fetch({ project, version })
+    const build = results.find(({ state }) => state.code === 'finished')
+    if (!build) {
       throw new NotFound({
         prettyMessage: 'project or version not found',
       })
     }
-    return this.constructor.render({ status })
+    return this.constructor.render({
+      status: build.success ? 'passing' : 'failing',
+    })
   }
 }
