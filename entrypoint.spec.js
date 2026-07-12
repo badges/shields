@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import isSvg from 'is-svg'
-import got from './core/got-test-client.js'
+import request from './core/ky-test-client.js'
 
 let serverModule
 before(async function () {
@@ -17,7 +17,7 @@ after('shut down the server', async function () {
 
 it('should render a badge', async function () {
   this.timeout('30s')
-  const { statusCode, body } = await got(
+  const { statusCode, body } = await request(
     'http://localhost:1111/badge/fruit-apple-green.svg',
   )
   expect(statusCode).to.equal(200)

@@ -1,13 +1,13 @@
 import { expect } from 'chai'
 import portfinder from 'portfinder'
 import Camp from '@shields_io/camp'
-import got from '../got-test-client.js'
+import request from '../ky-test-client.js'
 import coalesceBadge from './coalesce-badge.js'
 import { handleRequest } from './legacy-request-handler.js'
 
 async function performTwoRequests(baseUrl, first, second) {
-  expect((await got(`${baseUrl}${first}`)).statusCode).to.equal(200)
-  expect((await got(`${baseUrl}${second}`)).statusCode).to.equal(200)
+  expect((await request(`${baseUrl}${first}`)).statusCode).to.equal(200)
+  expect((await request(`${baseUrl}${second}`)).statusCode).to.equal(200)
 }
 
 function fakeHandler(queryParams, match, sendBadge, request) {
@@ -71,11 +71,9 @@ describe('The request handler', function () {
     })
 
     it('should return the expected response', async function () {
-      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        responseType: 'json',
-      })
+      const { statusCode, body } = await request(`${baseUrl}/testing/123.json`)
       expect(statusCode).to.equal(200)
-      expect(body).to.deep.equal({
+      expect(JSON.parse(body)).to.deep.equal({
         name: 'testing',
         value: '123',
         label: 'testing',
@@ -95,11 +93,9 @@ describe('The request handler', function () {
     })
 
     it('should return the expected response', async function () {
-      const { statusCode, body } = await got(`${baseUrl}/testing/123.json`, {
-        responseType: 'json',
-      })
+      const { statusCode, body } = await request(`${baseUrl}/testing/123.json`)
       expect(statusCode).to.equal(200)
-      expect(body).to.deep.equal({
+      expect(JSON.parse(body)).to.deep.equal({
         name: 'testing',
         value: '123',
         label: 'testing',
@@ -126,7 +122,7 @@ describe('The request handler', function () {
 
       it('should set the expires header to current time + defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
-        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        const { headers } = await request(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
           +new Date(headers.date) + 900000,
         ).toGMTString()
@@ -138,9 +134,9 @@ describe('The request handler', function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 900 } })
 
         // Make first request.
-        await got(`${baseUrl}/testing/123.json`)
+        await request(`${baseUrl}/testing/123.json`)
 
-        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        const { headers } = await request(`${baseUrl}/testing/123.json`)
         const expectedExpiry = new Date(
           +new Date(headers.date) + 900000,
         ).toGMTString()
@@ -164,7 +160,7 @@ describe('The request handler', function () {
           ),
         )
 
-        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        const { headers } = await request(`${baseUrl}/testing/123.json`)
         expect(headers['cache-control']).to.equal('max-age=400, s-maxage=400')
       })
 
@@ -184,13 +180,13 @@ describe('The request handler', function () {
           ),
         )
 
-        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        const { headers } = await request(`${baseUrl}/testing/123.json`)
         expect(headers['cache-control']).to.equal('max-age=200, s-maxage=200')
       })
 
       it('should set the expires header to current time + cacheSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
-        const { headers } = await got(
+        const { headers } = await request(
           `${baseUrl}/testing/123.json?cacheSeconds=3600`,
         )
         const expectedExpiry = new Date(
@@ -202,7 +198,7 @@ describe('The request handler', function () {
 
       it('should ignore cacheSeconds when shorter than defaultCacheLengthSeconds', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 600 } })
-        const { headers } = await got(
+        const { headers } = await request(
           `${baseUrl}/testing/123.json?cacheSeconds=300`,
         )
         const expectedExpiry = new Date(
@@ -214,7 +210,7 @@ describe('The request handler', function () {
 
       it('should set Cache-Control: no-cache, no-store, must-revalidate if cache seconds is 0', async function () {
         register({ cacheHeaderConfig: { defaultCacheLengthSeconds: 0 } })
-        const { headers } = await got(`${baseUrl}/testing/123.json`)
+        const { headers } = await request(`${baseUrl}/testing/123.json`)
         expect(headers.expires).to.equal(headers.date)
         expect(headers['cache-control']).to.equal(
           'no-cache, no-store, must-revalidate',

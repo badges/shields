@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { expect } from 'chai'
 import nock from 'nock'
 import config from 'config'
-import { fetch } from '../core/base-service/got.js'
+import { fetch } from '../core/base-service/ky.js'
 import BaseService from '../core/base-service/base.js'
 const runnerConfig = config.util.toObject()
 

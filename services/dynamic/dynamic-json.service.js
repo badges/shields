@@ -52,7 +52,7 @@ export default class DynamicJson extends jsonPath(BaseJsonService) {
       url,
       httpErrors,
       logErrors: [],
-      options: { timeout: { request: 3500 } },
+      options: { timeout: 3500 },
     })
   }
 }

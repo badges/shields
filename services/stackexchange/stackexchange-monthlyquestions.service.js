@@ -56,7 +56,6 @@ export default class StackExchangeMonthlyQuestions extends StackExchangeBase {
     const parsedData = await this.fetch({
       schema: tagSchema,
       options: {
-        decompress: true,
         searchParams: {
           site: stackexchangesite,
           fromdate: prevMonthStart,

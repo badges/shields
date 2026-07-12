@@ -77,9 +77,8 @@ export default class Website extends BaseService {
         url,
         options: {
           method: 'HEAD',
-          timeout: {
-            response: 3500,
-          },
+          redirect: 'manual',
+          timeout: 3500,
         },
       })
       // We consider all HTTP status codes below 310 as success.
