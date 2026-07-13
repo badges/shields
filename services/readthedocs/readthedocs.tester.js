@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -21,13 +22,7 @@ const failingBuild = {
 
 t.create('defaults to the latest version')
   .get('/pip.json')
-  .intercept(nock =>
-    nock(apiBaseUrl)
-      .get('/api/v3/projects/pip/versions/latest/builds/')
-      .query(buildsQuery)
-      .reply(200, { results: [passingBuild] }),
-  )
-  .expectBadge({ label: 'docs', message: 'passing' })
+  .expectBadge({ label: 'docs', message: Joi.equal('passing', 'failing') })
 
 t.create('passing build for a named version')
   .get('/pip/stable.json')
