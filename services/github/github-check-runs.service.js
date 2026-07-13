@@ -12,8 +12,32 @@ import {
 const description = `
 The Check Runs service shows the status of GitHub action runs.
 
+For an aggregate status that follows the parent check suite result, use the
+corresponding [Check Suites badge][check-suites-link] instead.
+
 ${commonDocumentation}
 `
+
+const checkStatuses = [
+  'completed',
+  'in_progress',
+  'pending',
+  'queued',
+  'requested',
+  'waiting',
+]
+
+const checkRunConclusions = [
+  'action_required',
+  'cancelled',
+  'failure',
+  'neutral',
+  'skipped',
+  'stale',
+  'startup_failure',
+  'success',
+  'timed_out',
+]
 
 const schema = Joi.object({
   total_count: nonNegativeInteger,
@@ -21,17 +45,8 @@ const schema = Joi.object({
     .items(
       Joi.object({
         name: Joi.string().required(),
-        status: Joi.equal('completed', 'in_progress', 'queued').required(),
-        conclusion: Joi.equal(
-          'action_required',
-          'cancelled',
-          'failure',
-          'neutral',
-          'skipped',
-          'success',
-          'timed_out',
-          null,
-        ).required(),
+        status: Joi.equal(...checkStatuses).required(),
+        conclusion: Joi.equal(...checkRunConclusions, null).required(),
       }),
     )
     .default([]),
@@ -53,7 +68,8 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     '/github/check-runs/{user}/{repo}/{branch}': {
       get: {
         summary: 'GitHub branch check runs',
-        description,
+        description: `${description}
+        [check-suites-link]: https://shields.io/badges/git-hub-branch-check-suites`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -62,6 +78,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
             name: 'nameFilter',
             description: 'Name of a check run',
             example: 'test-lint',
+            required: true,
           }),
         ],
       },
@@ -69,7 +86,8 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     '/github/check-runs/{user}/{repo}/{commit}': {
       get: {
         summary: 'GitHub commit check runs',
-        description,
+        description: `${description}
+        [check-suites-link]: https://shields.io/badges/git-hub-commit-check-suites`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -81,6 +99,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
             name: 'nameFilter',
             description: 'Name of a check run',
             example: 'test-lint',
+            required: true,
           }),
         ],
       },
@@ -88,7 +107,8 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     '/github/check-runs/{user}/{repo}/{tag}': {
       get: {
         summary: 'GitHub tag check runs',
-        description,
+        description: `${description}
+        [check-suites-link]: https://shields.io/badges/git-hub-tag-check-suites`,
         parameters: [
           pathParam({ name: 'user', example: 'badges' }),
           pathParam({ name: 'repo', example: 'shields' }),
@@ -97,6 +117,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
             name: 'nameFilter',
             description: 'Name of a check run',
             example: 'test-lint',
+            required: true,
           }),
         ],
       },
@@ -115,7 +136,10 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
         : checkRuns
 
     return {
-      total: totalCount,
+      total:
+        nameFilter && nameFilter.length > 0
+          ? filteredCheckRuns.length
+          : totalCount,
       statusCounts: countBy(filteredCheckRuns, 'status'),
       conclusionCounts: countBy(filteredCheckRuns, 'conclusion'),
     }
@@ -127,12 +151,14 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
       state = 'no check runs'
     } else if (statusCounts.queued) {
       state = 'queued'
-    } else if (statusCounts.in_progress) {
+    } else if (statusCounts.requested || statusCounts.waiting) {
+      state = 'queued'
+    } else if (statusCounts.in_progress || statusCounts.pending) {
       state = 'pending'
     } else if (statusCounts.completed) {
       // all check runs are completed, now evaluate conclusions
       const orangeStates = ['action_required', 'stale']
-      const redStates = ['cancelled', 'failure', 'timed_out']
+      const redStates = ['cancelled', 'failure', 'startup_failure', 'timed_out']
 
       // assume "passing (green)"
       state = 'passing'
