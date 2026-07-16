@@ -30,13 +30,10 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const description = `
-[COPR](https://copr.fedorainfracloud.org/) is a build system for creating RPM packages.
+Shows the latest build status for a package on
+[COPR](https://copr.fedorainfracloud.org/).
 
 For group projects, prefix the owner with \`@\` (for example \`@copr\`).
-
-The [Copr API v3 documentation](https://copr.fedorainfracloud.org/api_3/docs/) does not
-document request rate limits for read-only endpoints. This badge issues one GET per
-render to \`/api_3/package\` with \`with_latest_build=True\`.
 `
 
 export default class Copr extends BaseJsonService {
@@ -58,8 +55,6 @@ export default class Copr extends BaseJsonService {
             {
               name: 'owner',
               example: 'msuchy',
-              description:
-                'Project owner. For group projects, prefix with `@`.',
             },
             {
               name: 'project',
@@ -73,8 +68,6 @@ export default class Copr extends BaseJsonService {
           queryParam({
             name: 'server',
             example: 'https://copr.fedorainfracloud.org',
-            description:
-              'Copr server URL. Defaults to `https://copr.fedorainfracloud.org`.',
           }),
         ],
       },
@@ -87,15 +80,11 @@ export default class Copr extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  packageUrl({ server, owner, project, package: packageName }) {
-    const trimmedServer = server.replace(/\/$/, '')
-    return `${trimmedServer}/api_3/package`
-  }
-
   async fetch({ server, owner, project, package: packageName }) {
+    const trimmedServer = server.replace(/\/$/, '')
     return this._requestJson({
       schema,
-      url: this.packageUrl({ server, owner, project, package: packageName }),
+      url: `${trimmedServer}/api_3/package`,
       options: {
         searchParams: {
           ownername: owner,
