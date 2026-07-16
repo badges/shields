@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: core/base-service/base-jsonl.js</title>
+    <title>JSDoc: Module: core/base-service/categories</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,100 +17,404 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: core/base-service/base-jsonl.js</h1>
+    <h1 class="page-title">Module: core/base-service/categories</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @module
- */
+</header>
 
-import BaseService from './base.js'
-import { parseJsonl } from './jsonl.js'
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Helpers for validating service category identifiers.</p></div>
+        
 
-/**
- * Services which query a JSONL endpoint should extend BaseJsonlService
- *
- * @abstract
- */
-class BaseJsonlService extends BaseService {
-  /**
-   * Parse data from a JSONL endpoint
-   *
-   * @param {string} buffer JSONL response from upstream API
-   * @returns {object[]} Parsed response
-   */
-  _parseJsonl(buffer) {
-    return parseJsonl(buffer)
-  }
+        
 
-  static headers = {
-    Accept: 'application/jsonl, application/x-ndjson, text/plain',
-  }
 
-  /**
-   * Request data from an upstream API serving JSONL,
-   * parse it line-by-line and validate each entry against a schema
-   *
-   * @param {object} attrs Refer to individual attrs
-   * @param {Joi} attrs.schema Joi schema to validate each response line against
-   * @param {string} attrs.url URL to request
-   * @param {object} [attrs.options={}] Options to pass to got. See
-   *    [documentation](https://github.com/sindresorhus/got/blob/main/documentation/2-options.md)
-   * @param {object} [attrs.httpErrors={}] Key-value map of status codes
-   *    and custom error messages e.g: `{ 404: 'package not found' }`.
-   *    This can be used to extend or override the
-   *    [default](https://github.com/badges/shields/blob/master/core/base-service/check-error-response.js#L5)
-   * @param {object} [attrs.systemErrors={}] Key-value map of got network exception codes
-   *    and an object of params to pass when we construct an Inaccessible exception object
-   *    e.g: `{ ECONNRESET: { prettyMessage: 'connection reset' } }`.
-   *    See {@link https://github.com/sindresorhus/got/blob/main/documentation/7-retry.md#errorcodes got error codes}
-   *    for allowed keys
-   *    and {@link module:core/base-service/errors~RuntimeErrorProps} for allowed values
-   * @param {number[]} [attrs.logErrors=[429]] An array of http error codes
-   *    that will be logged (to sentry, if configured).
-   * @param {string} [attrs.prettyErrorMessage='invalid response data']
-   *    Error message to surface when schema validation fails.
-   * @returns {object[]} Parsed response
-   * @see https://github.com/sindresorhus/got/blob/main/documentation/2-options.md
-   */
-  async _requestJsonl({
-    schema,
-    url,
-    options = {},
-    httpErrors = {},
-    systemErrors = {},
-    logErrors = [429],
-    prettyErrorMessage = 'invalid response data',
-  }) {
-    const mergedOptions = {
-      ...{ headers: this.constructor.headers },
-      ...options,
-    }
-    const { buffer } = await this._request({
-      url,
-      options: mergedOptions,
-      httpErrors,
-      systemErrors,
-      logErrors,
-    })
-    const jsonl = this._parseJsonl(buffer)
+<dl class="details">
 
-    return jsonl.map(line =>
-      this.constructor._validate(line, schema, { prettyErrorMessage }),
-    )
-  }
-}
+    
 
-export default BaseJsonlService
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_base-service_categories.js.html">core/base-service/categories.js</a>, <a href="core_base-service_categories.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~isValidCategory"><span class="type-signature">(inner, constant) </span>isValidCategory<span class="type-signature"> :Joi</span></h4>
+
+
+
+
+<div class="description">
+    <p>Joi validator for service categories registered by Shields, including the
+special <code>debug</code>, <code>dynamic</code>, and <code>static</code> categories.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Joi</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_base-service_categories.js.html">core/base-service/categories.js</a>, <a href="core_base-service_categories.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~assertValidCategory"><span class="type-signature">(inner) </span>assertValidCategory<span class="signature">(category, message<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Assert that a value is a valid Shields service category.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>category</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Service category identifier to validate.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Optional prefix for the validation error.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="core_base-service_categories.js.html">core/base-service/categories.js</a>, <a href="core_base-service_categories.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>When the category is not recognized.</p>
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
