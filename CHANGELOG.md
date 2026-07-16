@@ -4,6 +4,30 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-07-15
+
+**Important notice:**
+
+- The project was switched to MIT and Apache 2.0 licenses. See our [blog post](https://shields.io/blog/mit-apache-license) for more information.
+- Node.js 22 is now the minimum supported version to run Shields.io.
+
+**Retired badges:**
+
+- Retire [Cirrus] badges [#11924](https://github.com/badges/shields/issues/11924)
+
+Other changes:
+
+- Add [GithubCheckSuites] badge and update [GithubCheckRuns] [#11839](https://github.com/badges/shields/issues/11839)
+- Add an answered/unanswered variant of [GitHubDiscussions] [#11951](https://github.com/badges/shields/issues/11951)
+- Make the [AzureDevops] build badge send the PAT so it works on private projects [#11945](https://github.com/badges/shields/issues/11945)
+- Support multiple licenses in [NpmLicense] [#11956](https://github.com/badges/shields/issues/11956)
+- Add [Macports] package version badge [#11936](https://github.com/badges/shields/issues/11936)
+- Add [WingetReleaseDate] badge [#11919](https://github.com/badges/shields/issues/11919)
+- Add OpenGraph image [#11987](https://github.com/badges/shields/issues/11987)
+- Remake Shields.io favicon [#11947](https://github.com/badges/shields/issues/11947)
+- Stop disallowing unknown keys for [Endpoint] badges [#11942](https://github.com/badges/shields/issues/11942)
+- Dependency updates
+
 ## server-2026-06-15
 
 - Optimise SVG badge sizes [#11860](https://github.com/badges/shields/issues/11860)
