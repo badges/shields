@@ -30,13 +30,11 @@ const queryParamSchema = Joi.object({
 }).required()
 
 const description = `
-Shows the build status of the most recent build for a Buildbot builder.
+Shows the build status of the most recent build for a
+[Buildbot](https://buildbot.net/) builder.
 
-Each Buildbot installation has its own URL (for example \`https://buildbot.mariadb.org\`).
-
-The Buildbot REST API does not document or enforce request rate limits; any
-throttling is left to the operator (for example via a reverse proxy in front of
-the instance). See the [Buildbot REST API documentation](https://docs.buildbot.net/latest/developer/rest.html).
+Each Buildbot installation has its own URL (for example
+\`https://buildbot.mariadb.org\`).
 `
 
 export default class Buildbot extends BaseJsonService {
@@ -81,15 +79,11 @@ export default class Buildbot extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  buildsUrl({ baseUrl, builder }) {
-    const trimmedBaseUrl = baseUrl.replace(/\/$/, '')
-    return `${trimmedBaseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`
-  }
-
   async fetch({ baseUrl, builder }) {
+    const trimmedBaseUrl = baseUrl.replace(/\/$/, '')
     return this._requestJson({
       schema,
-      url: this.buildsUrl({ baseUrl, builder }),
+      url: `${trimmedBaseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`,
       options: {
         searchParams: { limit: '1', order: '-number' },
       },
