@@ -18,7 +18,7 @@ export default class SymfonyInsightGrade extends SymfonyInsightBase {
         description,
         parameters: pathParams({
           name: 'projectUuid',
-          example: '825be328-29f8-44f7-a750-f82818ae9111',
+          example: 'a92cacf2-ba32-4f36-b040-5a9f1d7f8f25',
         }),
       },
     },
