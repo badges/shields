@@ -1,3 +1,13 @@
+/**
+ * Convert metrics from `prom-client` JSON to InfluxDB v2 line protocol.
+ *
+ * Samples with identical labels are grouped on one line. Labels and metric
+ * fields are sorted so the output is deterministic.
+ *
+ * @param {object[]} metrics Metrics returned by `Registry#getMetricsAsJSON()`.
+ * @param {object} [extraLabels={}] Labels appended to every metric.
+ * @returns {string} Metrics encoded as InfluxDB v2 line protocol.
+ */
 function promClientJsonToInfluxV2(metrics, extraLabels = {}) {
   return metrics
     .flatMap(metric => {
