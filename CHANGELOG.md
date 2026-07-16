@@ -6,28 +6,26 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ## server-2026-07-15
 
-- Add [GithubCheckSuites] badge and update [GithubCheckRuns] [#11839](https://github.com/badges/shields/issues/11839)
-- Deploy on Node.js 24 [#11994](https://github.com/badges/shields/issues/11994)
-- ci: remove test bug run badge workflow [#11992](https://github.com/badges/shields/issues/11992)
-- Update simple-icons to 16.25.0 [#11993](https://github.com/badges/shields/issues/11993)
-- [GitHubDiscussions] Add the variant badge of github discussion (answered/unanswered) [#11951](https://github.com/badges/shields/issues/11951)
-- Update simple-icons to 16.24.1 [#11991](https://github.com/badges/shields/issues/11991)
-- Add OpenGraph image [#11987](https://github.com/badges/shields/issues/11987)
-- Revert "update [crates] dependents badge description to include timeout issue (#11635)" [#11962](https://github.com/badges/shields/issues/11962)
-- docs: add JSDoc to checkErrorResponse and test-results helpers [#11988](https://github.com/badges/shields/issues/11988)
-- [AzureDevops] Make the build badge send the PAT so it works on private projects [#11945](https://github.com/badges/shields/issues/11945)
-- Support multiple licenses in [NpmLicense] [#11956](https://github.com/badges/shields/issues/11956)
-- Fix Danger action by pinning Node.js version [#11957](https://github.com/badges/shields/issues/11957)
-- Increase [ReadTheDocs] cache length [#11955](https://github.com/badges/shields/issues/11955)
-- Align PyPI service naming with other services [#11953](https://github.com/badges/shields/issues/11953)
-- [Macports] Add MacPorts package version badge [#11936](https://github.com/badges/shields/issues/11936)
-- Update simple-icons to 16.24.0 [#11954](https://github.com/badges/shields/issues/11954)
-- [WingetReleaseDate] Add Winget Release Date Badge [#11919](https://github.com/badges/shields/issues/11919)
-- Remake Shields.io logo [#11947](https://github.com/badges/shields/issues/11947)
-- Stop disallowing unknown keys [#11942](https://github.com/badges/shields/issues/11942)
+**Important notice:**
+
+- The project was switched to MIT and Apache 2.0 licenses. See our [blog post](https://shields.io/blog/mit-apache-license) for more information.
+- Node.js 22 is now the minimum supported version to run Shields.io.
+
+**Retired badges:**
+
 - Retire [Cirrus] badges [#11924](https://github.com/badges/shields/issues/11924)
-- badge-maker 6.0.0 release [#11944](https://github.com/badges/shields/issues/11944)
-- Switch from CC0 to MIT and Apache 2.0 licenses [#11492](https://github.com/badges/shields/issues/11492)
+
+Other changes:
+
+- Add [GithubCheckSuites] badge and update [GithubCheckRuns] [#11839](https://github.com/badges/shields/issues/11839)
+- Add an answered/unanswered variant of [GitHubDiscussions] [#11951](https://github.com/badges/shields/issues/11951)
+- Make the [AzureDevops] build badge send the PAT so it works on private projects [#11945](https://github.com/badges/shields/issues/11945)
+- Support multiple licenses in [NpmLicense] [#11956](https://github.com/badges/shields/issues/11956)
+- Add [Macports] package version badge [#11936](https://github.com/badges/shields/issues/11936)
+- Add [WingetReleaseDate] badge [#11919](https://github.com/badges/shields/issues/11919)
+- Add OpenGraph image [#11987](https://github.com/badges/shields/issues/11987)
+- Remake Shields.io favicon [#11947](https://github.com/badges/shields/issues/11947)
+- Stop disallowing unknown keys for [Endpoint] badges [#11942](https://github.com/badges/shields/issues/11942)
 - Dependency updates
 
 ## server-2026-06-15
