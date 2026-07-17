@@ -2,7 +2,10 @@ import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { BaseJsonService, NotFound, pathParam, queryParam } from '../index.js'
 
-const resultStatusMap = {
+// Buildbot result codes:
+// https://docs.buildbot.net/latest/developer/results.html
+// SUCCESS=0, WARNINGS=1, FAILURE=2, SKIPPED=3, EXCEPTION=4, RETRY=5, CANCELLED=6
+const resultMap = {
   0: 'passing',
   1: 'unstable',
   2: 'failing',
@@ -12,12 +15,19 @@ const resultStatusMap = {
   6: 'cancelled',
 }
 
-const schema = Joi.object({
+const builderSchema = Joi.object({
+  builders: Joi.array().required(),
+}).required()
+
+const buildsSchema = Joi.object({
   builds: Joi.array()
     .items(
       Joi.object({
         complete: Joi.boolean().required(),
-        results: Joi.number().integer().min(0).max(6),
+        results: Joi.number()
+          .integer()
+          .valid(...Object.keys(resultMap).map(Number))
+          .allow(null),
       }),
     )
     .required(),
@@ -69,26 +79,25 @@ export default class Buildbot extends BaseJsonService {
   static defaultBadgeData = { label: 'build' }
 
   static render({ status }) {
-    if (status === 'unstable') {
-      return {
-        message: status,
-        color: 'yellow',
-      }
-    }
-
     return renderBuildStatusBadge({ status })
   }
 
   async fetch({ baseUrl, builder }) {
-    const trimmedBaseUrl = baseUrl.replace(/\/$/, '')
-    return this._requestJson({
-      schema,
-      url: `${trimmedBaseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`,
-      options: {
-        searchParams: { limit: '1', order: '-number' },
-      },
+    // The builds collection returns HTTP 200 with an empty list for unknown
+    // builder names, so resolve the builder first to surface a real 404.
+    await this._requestJson({
+      schema: builderSchema,
+      url: `${baseUrl}/api/v2/builders/${encodeURIComponent(builder)}`,
       httpErrors: {
         404: 'builder not found',
+      },
+    })
+
+    return this._requestJson({
+      schema: buildsSchema,
+      url: `${baseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`,
+      options: {
+        searchParams: { limit: '1', order: '-number' },
       },
     })
   }
@@ -103,7 +112,7 @@ export default class Buildbot extends BaseJsonService {
       return { status: 'building' }
     }
 
-    return { status: resultStatusMap[results] ?? 'unknown' }
+    return { status: resultMap[results] ?? 'unknown' }
   }
 
   async handle({ builder }, { baseUrl }) {
