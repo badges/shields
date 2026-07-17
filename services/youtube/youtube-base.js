@@ -41,6 +41,11 @@ const schema = Joi.object({
   ),
 }).required()
 
+/**
+ * Base class for all YouTube badges.
+ *
+ * @abstract
+ */
 class YouTubeBase extends BaseJsonService {
   static category = 'social'
 
@@ -56,6 +61,16 @@ class YouTubeBase extends BaseJsonService {
     namedLogo: 'youtube',
   }
 
+  /**
+   * Renders the badge for a single statistic.
+   *
+   * @param {object} props - The properties for rendering the badge.
+   * @param {object} props.statistics - The statistics object from the API response.
+   * @param {string} props.statisticName - The name of the statistic to render (e.g., 'view', 'like').
+   * @param {string} props.id - The channel or video ID.
+   * @returns {object} The badge data.
+   * @see {@link https://github.com/badges/shields/blob/master/doc/TUTORIAL.md#render}
+   */
   static renderSingleStat({ statistics, statisticName, id }) {
     return {
       label: `${statisticName}s`,
@@ -65,6 +80,13 @@ class YouTubeBase extends BaseJsonService {
     }
   }
 
+  /**
+   * Fetches the data from the YouTube API.
+   *
+   * @param {object} props - The properties for the fetch operation.
+   * @param {string} props.id - The channel or video ID.
+   * @returns {Promise<object>} The JSON response from the API.
+   */
   async fetch({ id }) {
     return this._requestJson(
       this.authHelper.withQueryStringAuth(
@@ -83,6 +105,14 @@ class YouTubeBase extends BaseJsonService {
     )
   }
 
+  /**
+   * Handles the request for the badge.
+   *
+   * @param {object} props - The properties for handling the request.
+   * @param {string} [props.channelId] - The YouTube channel ID.
+   * @param {string} [props.videoId] - The YouTube video ID.
+   * @returns {Promise<object>} The badge data.
+   */
   async handle({ channelId, videoId }) {
     const id = channelId || videoId
     const json = await this.fetch({ id })
@@ -96,10 +126,20 @@ class YouTubeBase extends BaseJsonService {
   }
 }
 
+/**
+ * Base class for YouTube video-specific badges.
+ *
+ * @abstract
+ */
 class YouTubeVideoBase extends YouTubeBase {
   static type = 'video'
 }
 
+/**
+ * Base class for YouTube channel-specific badges.
+ *
+ * @abstract
+ */
 class YouTubeChannelBase extends YouTubeBase {
   static type = 'channel'
 }

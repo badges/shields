@@ -1,5 +1,5 @@
 /**
- * Commonly-used functions for determining the colour to use for a badge,
+ * Commonly-used functions for determining the color to use for a badge,
  * including colours based off download count, version number, etc.
  *
  * @module
@@ -11,7 +11,10 @@ import { valid, explain } from '@renovatebot/pep440'
  * Determines the color used for a badge based on version.
  *
  * @param {string|number} version Version used for determining badge color
+ * @throws {Error} When the version is not a string or a number.
  * @returns {string} Badge color
+ * @see {@link https://shields.io/docs/colors}
+ * @example version('1.2.3') // "blue"
  */
 function version(version) {
   if (typeof version !== 'string' && typeof version !== 'number') {
@@ -36,6 +39,8 @@ function version(version) {
  * Determines the color used for a badge based on PEP440 versioning.
  *
  * @param {string|number} version Version used for determining badge color
+ * @see {@link https://peps.python.org/pep-0440/}
+ * @see {@link https://shields.io/docs/colors}
  * @returns {string} Badge color
  */
 function pep440VersionColor(version) {
@@ -59,6 +64,7 @@ function pep440VersionColor(version) {
  * @param {number} yellow Yellow color threshold, should be greater than 0
  * @param {number} yellowgreen Yellowgreen color threshold, should be greater than yellow
  * @param {number} green Green color threshold, should be greater than yellowgreen
+ * @see {@link https://shields.io/docs/colors}
  * @returns {string} Badge color
  */
 function floorCount(value, yellow, yellowgreen, green) {
@@ -80,6 +86,7 @@ function floorCount(value, yellow, yellowgreen, green) {
  * The color varies from red to bright green as the download count increases.
  *
  * @param {number} downloads Download count
+ * @see {@link https://shields.io/docs/colors}
  * @returns {string} Badge color
  */
 function downloadCount(downloads) {
@@ -91,6 +98,7 @@ function downloadCount(downloads) {
  * The color varies from red to bright green as the percentage increases.
  *
  * @param {number} percentage Percentage value
+ * @see {@link https://shields.io/docs/colors}
  * @returns {string} Badge color
  */
 function coveragePercentage(percentage) {
@@ -104,6 +112,7 @@ function coveragePercentage(percentage) {
  * The color defaults to red if the score does not matches with any of the grade values.
  *
  * @param {string} score Score value
+ * @see {@link https://shields.io/docs/colors}
  * @returns {string} Badge color
  */
 function letterScore(score) {
@@ -131,6 +140,7 @@ function letterScore(score) {
  * @param {number[]} steps Steps array
  * @param {string[]} colors Colors array. If provided, should be of length steps.length + 1
  * @param {boolean} reversed If true then the colors array will be considered in reverse order
+ * @throws {Error} When steps are not provided, or when the number of colors doesn't match the number of steps.
  * @returns {function(number): string} Function that finds the step index by comparing value
  * with steps array and returns color from colors array for the corresponding step index
  */
