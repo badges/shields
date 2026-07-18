@@ -4,6 +4,7 @@
 
 import Joi from 'joi'
 import { expect } from 'chai'
+import nock from 'nock'
 
 /**
  * Factory which wraps an "icedfrisby-nock" with some additional functionality:
@@ -19,7 +20,15 @@ const factory = superclass =>
     constructor(message) {
       super(message)
       this.intercepted = false
-      super.networkOn()
+      // Nock 14's passthrough socket imposes its own timeout on live requests
+      // and does not preserve custom Fetch dispatchers. Keep Nock disabled for
+      // live tests; intercept(), networkOff(), and networkOn() reactivate it in
+      // their later before hooks when a test explicitly needs interception.
+      this.before(() => {
+        if (nock.isActive()) {
+          nock.restore()
+        }
+      })
     }
 
     get(uri, options = { followRedirect: false }) {
