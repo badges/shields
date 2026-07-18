@@ -81,7 +81,8 @@ class BaseGraphqlService extends BaseService {
       ...options,
     }
     mergedOptions.method = 'POST'
-    mergedOptions.body = JSON.stringify({ query: print(query), variables })
+    delete mergedOptions.body
+    mergedOptions.json = { query: print(query), variables }
     const { buffer } = await this._request({
       url,
       options: mergedOptions,

@@ -77,7 +77,6 @@ export default class Website extends BaseService {
         url,
         options: {
           method: 'HEAD',
-          redirect: 'manual',
           timeout: 3500,
         },
       })
