@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { Agent, MockAgent, setGlobalDispatcher } from 'undici'
+import { Agent, getGlobalDispatcher, setGlobalDispatcher } from 'undici'
 import { isStarRating } from '../test-validators.js'
 import { ServiceTester } from '../tester.js'
 
@@ -40,16 +40,21 @@ t.create('Stars (not found)')
   .expectBadge({ label: 'rating', message: 'not found' })
 
 // Keep this "inaccessible" test, since this service does not use BaseService#_request.
-const mockAgent = new MockAgent()
+const failingAgent = new Agent({
+  connect(_options, callback) {
+    callback(new Error('mock connection failure'))
+  },
+})
+let previousDispatcher
 t.create('Rating (inaccessible)')
   .get('/rating/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
   // webextension-store-meta uses undici internally, so we can't mock it with nock
   .before(function () {
-    setGlobalDispatcher(mockAgent)
-    mockAgent.disableNetConnect()
+    previousDispatcher = getGlobalDispatcher()
+    setGlobalDispatcher(failingAgent)
   })
   .after(async function () {
-    await mockAgent.close()
-    setGlobalDispatcher(new Agent())
+    setGlobalDispatcher(previousDispatcher)
+    await failingAgent.close()
   })
   .expectBadge({ label: 'rating', message: 'inaccessible' })

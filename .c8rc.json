@@ -12,7 +12,7 @@
     "**/*.test-d.ts",
     "dangerfile.js",
     "core/service-test-runner",
-    "core/got-test-client.js",
+    "core/ky-test-client.js",
     "services/**/*.tester.js",
     "services/test-validators.js",
     "services/tester.js",

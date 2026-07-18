@@ -130,14 +130,12 @@ describe('AuthHelper', function () {
           { userKey: 'myci_user', passKey: 'myci_pass' },
           { myci_user: 'admin', myci_pass: 'abc123' },
         ),
-      ]).expect({ username: 'admin', password: 'abc123' })
+      ]).expect({ Authorization: 'Basic YWRtaW46YWJjMTIz' })
       given({ userKey: 'myci_user' }, { myci_user: 'admin' }).expect({
-        username: 'admin',
-        password: '',
+        Authorization: 'Basic YWRtaW46',
       })
       given({ passKey: 'myci_pass' }, { myci_pass: 'abc123' }).expect({
-        username: '',
-        password: 'abc123',
+        Authorization: 'Basic OmFiYzEyMw==',
       })
       given({ userKey: 'myci_user', passKey: 'myci_pass' }, {}).expect(
         undefined,
@@ -146,8 +144,7 @@ describe('AuthHelper', function () {
         { passKey: 'myci_pass', defaultToEmptyStringForUser: true },
         { myci_pass: 'abc123' },
       ).expect({
-        username: '',
-        password: 'abc123',
+        Authorization: 'Basic OmFiYzEyMw==',
       })
     })
   })
@@ -356,8 +353,7 @@ describe('AuthHelper', function () {
         }).expect({
           url: 'https://myci.test/api',
           options: {
-            username: 'admin',
-            password: 'abc123',
+            headers: { Authorization: 'Basic YWRtaW46YWJjMTIz' },
           },
         })
         given({
@@ -368,9 +364,35 @@ describe('AuthHelper', function () {
         }).expect({
           url: 'https://myci.test/api',
           options: {
-            headers: { Accept: 'application/json' },
-            username: 'admin',
-            password: 'abc123',
+            headers: {
+              Accept: 'application/json',
+              Authorization: 'Basic YWRtaW46YWJjMTIz',
+            },
+          },
+        })
+        given({
+          url: 'https://myci.test/api',
+          options: {
+            headers: { authorization: 'Bearer old-token' },
+          },
+        }).expect({
+          url: 'https://myci.test/api',
+          options: {
+            headers: { Authorization: 'Basic YWRtaW46YWJjMTIz' },
+          },
+        })
+        given({
+          url: 'https://myci.test/api',
+          options: {
+            headers: new Headers({ Accept: 'application/json' }),
+          },
+        }).expect({
+          url: 'https://myci.test/api',
+          options: {
+            headers: {
+              accept: 'application/json',
+              Authorization: 'Basic YWRtaW46YWJjMTIz',
+            },
           },
         })
       })

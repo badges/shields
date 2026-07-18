@@ -32,7 +32,7 @@ export default class RedditBase extends BaseJsonService {
         url: 'https://www.reddit.com/api/v1/access_token',
         options: {
           method: 'POST',
-          body: 'grant_type=client_credentials',
+          body: new URLSearchParams({ grant_type: 'client_credentials' }),
         },
         httpErrors: {
           401: 'invalid token',

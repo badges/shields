@@ -1,8 +1,10 @@
 import fs from 'fs/promises'
-import got from 'got'
+import ky from 'ky'
 import * as yaml from 'js-yaml'
 
-const resp = await got('https://api.github.com/versions').json()
+const resp = await ky('https://api.github.com/versions', {
+  timeout: false,
+}).json()
 const latestDate = resp.sort()[resp.length - 1]
 
 const config = yaml.load(await fs.readFile('./config/default.yml', 'utf8'))

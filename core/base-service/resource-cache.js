@@ -3,7 +3,7 @@
  */
 
 import { InvalidResponse } from './errors.js'
-import { fetch } from './got.js'
+import { fetch } from './ky.js'
 import checkErrorResponse from './check-error-response.js'
 
 const oneDay = 24 * 3600 * 1000 // 1 day in milliseconds
@@ -20,7 +20,7 @@ let resourceCache = Object.create(null)
  * @param {number} attrs.ttl - Number of milliseconds to keep cached value for
  * @param {boolean} [attrs.json=true] - True if we expect to parse the response as JSON
  * @param {Function} [attrs.scraper=buffer => buffer] - Function to extract value from the response
- * @param {object} [attrs.options={}] - Options to pass to got
+ * @param {object} [attrs.options={}] - Options to pass to Ky
  * @param {Function} [attrs.requestFetcher=fetch] - Custom fetch function
  * @throws {InvalidResponse} - Error if unable to parse response
  * @returns {Promise<*>} Promise that resolves to parsed response

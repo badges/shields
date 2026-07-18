@@ -5,6 +5,7 @@
 import path from 'path'
 import url, { fileURLToPath } from 'url'
 import { bootstrap } from 'global-agent'
+import { EnvHttpProxyAgent, setGlobalDispatcher } from 'undici'
 import cloudflareMiddleware from 'cloudflare-middleware'
 import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
@@ -212,6 +213,9 @@ const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
   influx_password: Joi.string().required(),
 })
+
+let globalAgentConfigured = false
+let proxyDispatcher
 
 function addHandlerAtIndex(camp, index, handlerFn) {
   camp.stack.splice(index, 0, handlerFn)
@@ -493,7 +497,7 @@ class Server {
 
   bootstrapAgent() {
     /*
-    Bootstrap global agent.
+    Configure the dispatcher used by Ky and Node's native Fetch.
     This allows self-hosting users to configure a proxy with
     HTTP_PROXY, HTTPS_PROXY, NO_PROXY variables
     */
@@ -502,11 +506,35 @@ class Server {
     }
 
     const proxyPrefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
-    const HTTP_PROXY = process.env[`${proxyPrefix}HTTP_PROXY`] || null
-    const HTTPS_PROXY = process.env[`${proxyPrefix}HTTPS_PROXY`] || null
+    const HTTP_PROXY =
+      process.env[`${proxyPrefix}http_proxy`] ||
+      process.env[`${proxyPrefix}HTTP_PROXY`] ||
+      null
+    const HTTPS_PROXY =
+      process.env[`${proxyPrefix}https_proxy`] ||
+      process.env[`${proxyPrefix}HTTPS_PROXY`] ||
+      null
+    const NO_PROXY =
+      process.env[`${proxyPrefix}no_proxy`] ||
+      process.env[`${proxyPrefix}NO_PROXY`] ||
+      ''
 
     if (HTTP_PROXY || HTTPS_PROXY) {
-      bootstrap()
+      if (!globalAgentConfigured) {
+        bootstrap()
+        globalAgentConfigured = true
+      }
+      globalThis.GLOBAL_AGENT.HTTP_PROXY = HTTP_PROXY
+      globalThis.GLOBAL_AGENT.HTTPS_PROXY = HTTPS_PROXY
+      globalThis.GLOBAL_AGENT.NO_PROXY = NO_PROXY || null
+      if (!proxyDispatcher) {
+        proxyDispatcher = new EnvHttpProxyAgent({
+          httpProxy: HTTP_PROXY || '',
+          httpsProxy: HTTPS_PROXY || HTTP_PROXY || '',
+          noProxy: NO_PROXY,
+        })
+      }
+      setGlobalDispatcher(proxyDispatcher)
     }
   }
 

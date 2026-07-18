@@ -1,7 +1,7 @@
 import Camp from '@shields_io/camp'
 import portfinder from 'portfinder'
 import { expect } from 'chai'
-import got from '../got-test-client.js'
+import request from '../ky-test-client.js'
 import redirector from './redirector.js'
 
 describe('Redirector', function () {
@@ -80,10 +80,10 @@ describe('Redirector', function () {
     })
 
     it('should redirect as configured', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}/very/old/service/hello-world.svg`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
 
@@ -92,10 +92,10 @@ describe('Redirector', function () {
     })
 
     it('should redirect raster extensions to the canonical path as configured', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}/very/old/service/hello-world.png`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
 
@@ -106,10 +106,10 @@ describe('Redirector', function () {
     })
 
     it('should forward the query params', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}/very/old/service/hello-world.svg?color=123&style=flat-square`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
 
@@ -120,10 +120,10 @@ describe('Redirector', function () {
     })
 
     it('should correctly encode the redirect URL', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}/very/old/service/hello%0Dworld.svg?foobar=a%0Db`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
 
@@ -152,10 +152,10 @@ describe('Redirector', function () {
       })
 
       it('should forward the transformed query params', async function () {
-        const { statusCode, headers } = await got(
+        const { statusCode, headers } = await request(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg`,
           {
-            followRedirect: false,
+            redirect: 'manual',
           },
         )
 
@@ -166,10 +166,10 @@ describe('Redirector', function () {
       })
 
       it('should forward the specified and transformed query params', async function () {
-        const { statusCode, headers } = await got(
+        const { statusCode, headers } = await request(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square`,
           {
-            followRedirect: false,
+            redirect: 'manual',
           },
         )
 
@@ -180,10 +180,10 @@ describe('Redirector', function () {
       })
 
       it('should use transformed query params on param conflicts by default', async function () {
-        const { statusCode, headers } = await got(
+        const { statusCode, headers } = await request(
           `${baseUrl}/another/old/service/token/abc123/hello-world.svg?color=123&style=flat-square&token=def456`,
           {
-            followRedirect: false,
+            redirect: 'manual',
           },
         )
 
@@ -207,10 +207,10 @@ describe('Redirector', function () {
           dateAdded,
         })
         ServiceClass.register({ camp }, {})
-        const { statusCode, headers } = await got(
+        const { statusCode, headers } = await request(
           `${baseUrl}/override/service/token/abc123/hello-world.svg?style=flat-square&token=def456`,
           {
-            followRedirect: false,
+            redirect: 'manual',
           },
         )
 

@@ -1,6 +1,6 @@
 import { parseArgs } from 'util'
 import config from 'config'
-import got from 'got'
+import ky from 'ky'
 import Server from '../core/server/server.js'
 
 async function main() {
@@ -10,7 +10,9 @@ async function main() {
     options: { iterations: { type: 'string' } },
   }).values
   for (let i = 0; i < parseInt(iterations); ++i) {
-    await got(`${server.baseUrl}badge/coverage-${i}-green.svg`)
+    await ky(`${server.baseUrl}badge/coverage-${i}-green.svg`, {
+      timeout: false,
+    }).text()
   }
   await server.stop()
 }

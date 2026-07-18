@@ -132,10 +132,10 @@ class SteamCollectionSize extends BaseSteamAPI {
   async handle({ collectionId }) {
     const options = {
       method: 'POST',
-      form: {
+      body: new URLSearchParams({
         collectioncount: '1',
         'publishedfileids[0]': collectionId,
-      },
+      }),
     }
 
     const json = await this.fetch({
@@ -167,10 +167,10 @@ class SteamFileService extends BaseSteamAPI {
   async handle({ fileId }) {
     const options = {
       method: 'POST',
-      form: {
+      body: new URLSearchParams({
         itemcount: 1,
         'publishedfileids[0]': fileId,
-      },
+      }),
     }
 
     const json = await this.fetch({ schema: fileFoundOrNotSchema, options })

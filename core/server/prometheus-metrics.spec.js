@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import Camp from '@shields_io/camp'
 import portfinder from 'portfinder'
-import got from '../got-test-client.js'
+import request from '../ky-test-client.js'
 import Metrics from './prometheus-metrics.js'
 
 describe('Prometheus metrics route', function () {
@@ -26,7 +26,7 @@ describe('Prometheus metrics route', function () {
     metrics = new Metrics()
     metrics.registerMetricsEndpoint(camp)
 
-    const { statusCode, body } = await got(`${baseUrl}/metrics`)
+    const { statusCode, body } = await request(`${baseUrl}/metrics`)
 
     expect(statusCode).to.be.equal(200)
     expect(body).to.contain('nodejs_version_info')

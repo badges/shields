@@ -4,7 +4,7 @@ import {
   TokenPool,
   sanitizeToken,
 } from '../../core/token-pooling/token-pool.js'
-import { getUserAgent } from '../../core/base-service/got-config.js'
+import { getUserAgent } from '../../core/base-service/ky-config.js'
 import { nonNegativeInteger } from '../validators.js'
 import { ImproperlyConfigured } from '../index.js'
 

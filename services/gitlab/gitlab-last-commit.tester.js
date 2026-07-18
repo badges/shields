@@ -61,7 +61,9 @@ t.create('last commit (project not found)')
 
 t.create('last commit (no commits found)')
   .timeout(10000)
-  .get('/gitlab-org/gitlab.json?path=not/a/dir')
+  // Keep this query on a small repository; path filtering on the main GitLab
+  // repository can take longer than the service test timeout.
+  .get('/gitlab-org/gitlab-shell.json?path=not/a/dir')
   .expectBadge({
     label: 'last commit',
     message: 'no commits found',
