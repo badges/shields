@@ -45,16 +45,9 @@ const registrationPageSchema = Joi.object({
 }).required()
 
 const description = `
-Shows the .NET target frameworks supported by a NuGet package, based on the
-package's dependency groups in the NuGet registration API.
-
-The [NuGet API rate limits documentation](https://learn.microsoft.com/en-us/nuget/api/rate-limits)
-lists IP-based limits for V1/V2 search and nuget.org package detail pages (for
-example, 50 requests/minute for \`/package/{id}/{version}\`). It states that V3
-search APIs are not currently rate limited. The V3 registration API
-(\`registration5-gz-semver2\`) used by this badge is not listed in those
-rate-limit tables. This badge issues one GET per render to the registration
-index.
+Shows the .NET target frameworks supported by a
+[NuGet](https://www.nuget.org/) package, based on the package's dependency
+groups in the NuGet registration API.
 `
 
 async function collectCatalogEntries(service, url) {
