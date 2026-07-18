@@ -6,7 +6,11 @@ t.create('get room state as guest')
   .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
-      .post('/_matrix/client/r0/register?kind=guest')
+      .post('/_matrix/client/r0/register?kind=guest', {
+        password: '',
+        auth: { type: 'm.login.dummy' },
+      })
+      .matchHeader('content-type', 'application/json')
       .reply(
         200,
         JSON.stringify({
@@ -77,7 +81,11 @@ t.create('get room state as member (backup method)')
   .get('/ALIAS:DUMMY.dumb.json')
   .intercept(nock =>
     nock('https://DUMMY.dumb/')
-      .post('/_matrix/client/r0/register?kind=guest')
+      .post('/_matrix/client/r0/register?kind=guest', {
+        password: '',
+        auth: { type: 'm.login.dummy' },
+      })
+      .matchHeader('content-type', 'application/json')
       .reply(
         403,
         JSON.stringify({
@@ -85,7 +93,11 @@ t.create('get room state as member (backup method)')
           error: 'Guest access not allowed',
         }),
       )
-      .post('/_matrix/client/r0/register')
+      .post('/_matrix/client/r0/register', {
+        password: '',
+        auth: { type: 'm.login.dummy' },
+      })
+      .matchHeader('content-type', 'application/json')
       .reply(
         200,
         JSON.stringify({

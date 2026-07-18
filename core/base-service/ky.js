@@ -1,5 +1,5 @@
 import ky from 'ky'
-import { EnvHttpProxyAgent } from 'undici'
+import { Dispatcher1Wrapper, EnvHttpProxyAgent } from 'undici'
 import { Inaccessible, InvalidResponse } from './errors.js'
 import {
   fetchLimitBytes as fetchLimitBytesDefault,
@@ -7,30 +7,53 @@ import {
 } from './ky-config.js'
 
 const userAgent = getUserAgent()
-let insecureHttpsDispatcher
+const customDispatchers = new Map()
 
-function getInsecureHttpsDispatcher() {
-  if (!insecureHttpsDispatcher) {
-    const prefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE || ''
-    const httpProxy =
-      process.env[`${prefix}http_proxy`] ||
-      process.env[`${prefix}HTTP_PROXY`] ||
-      ''
-    const httpsProxy =
-      process.env[`${prefix}https_proxy`] ||
-      process.env[`${prefix}HTTPS_PROXY`] ||
-      httpProxy
-    const noProxy =
-      process.env[`${prefix}no_proxy`] || process.env[`${prefix}NO_PROXY`] || ''
-    insecureHttpsDispatcher = new EnvHttpProxyAgent({
-      httpProxy,
-      httpsProxy,
-      noProxy,
-      connect: { rejectUnauthorized: false },
-      requestTls: { rejectUnauthorized: false },
-    })
+function getProxySettings() {
+  const prefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE || ''
+  const httpProxy =
+    process.env[`${prefix}http_proxy`] ||
+    process.env[`${prefix}HTTP_PROXY`] ||
+    ''
+  const httpsProxy =
+    process.env[`${prefix}https_proxy`] ||
+    process.env[`${prefix}HTTPS_PROXY`] ||
+    httpProxy
+  const noProxy =
+    process.env[`${prefix}no_proxy`] || process.env[`${prefix}NO_PROXY`] || ''
+  return { httpProxy, httpsProxy, noProxy }
+}
+
+function getCustomDispatcher({ rejectUnauthorized, dnsLookupIpVersion }) {
+  const proxySettings = getProxySettings()
+  const key = JSON.stringify({
+    ...proxySettings,
+    rejectUnauthorized,
+    dnsLookupIpVersion,
+  })
+  if (!customDispatchers.has(key)) {
+    const connect = {}
+    if (rejectUnauthorized === false) {
+      connect.rejectUnauthorized = false
+    }
+    if (dnsLookupIpVersion !== undefined) {
+      connect.family = dnsLookupIpVersion
+    }
+
+    customDispatchers.set(
+      key,
+      new Dispatcher1Wrapper(
+        new EnvHttpProxyAgent({
+          ...proxySettings,
+          connect,
+          ...(rejectUnauthorized === false
+            ? { requestTls: { rejectUnauthorized: false } }
+            : {}),
+        }),
+      ),
+    )
   }
-  return insecureHttpsDispatcher
+  return customDispatchers.get(key)
 }
 
 class ResponseSizeError extends Error {}
@@ -177,51 +200,74 @@ const client = ky.create({
 
 function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
   return async function sendRequest(url, options = {}, systemErrors = {}) {
-    const requestOptions = { ...options }
-    requestOptions.throwHttpErrors = false
-    requestOptions.retry = { limit: 0 }
-    const httpsOptions = requestOptions.https
-    delete requestOptions.https
-    if (
-      httpsOptions?.rejectUnauthorized === false &&
-      requestOptions.dispatcher === undefined
-    ) {
-      requestOptions.dispatcher = getInsecureHttpsDispatcher()
-    }
-
-    const headers = new Headers(withoutUndefinedHeaders(requestOptions.headers))
-    headers.set('User-Agent', userAgent)
-    requestOptions.headers = headers
-
-    let requestUrl = url
-    if (requestOptions.searchParams !== undefined) {
-      requestUrl = new URL(url)
-      requestUrl.search = normalizeSearchParams(
-        requestOptions.searchParams,
-      ).toString()
-      delete requestOptions.searchParams
-    }
-
-    const timeoutMilliseconds = requestOptions.timeout
-    requestOptions.timeout = false
-
-    const onDownloadProgress = requestOptions.onDownloadProgress
-    delete requestOptions.onDownloadProgress
-
     let timeoutId
     let timedOut = false
-    if (typeof timeoutMilliseconds === 'number') {
-      const timeoutController = new AbortController()
-      requestOptions.signal = requestOptions.signal
-        ? AbortSignal.any([requestOptions.signal, timeoutController.signal])
-        : timeoutController.signal
-      timeoutId = setTimeout(() => {
-        timedOut = true
-        timeoutController.abort()
-      }, timeoutMilliseconds)
-    }
+    let timeoutMilliseconds
 
     try {
+      const requestOptions = { ...options }
+      requestOptions.throwHttpErrors = false
+      requestOptions.retry = { limit: 0 }
+      const httpsOptions = requestOptions.https
+      delete requestOptions.https
+      const dnsLookupIpVersion = requestOptions.dnsLookupIpVersion
+      delete requestOptions.dnsLookupIpVersion
+      if (
+        (httpsOptions?.rejectUnauthorized === false ||
+          dnsLookupIpVersion !== undefined) &&
+        requestOptions.dispatcher === undefined
+      ) {
+        requestOptions.dispatcher = getCustomDispatcher({
+          rejectUnauthorized: httpsOptions?.rejectUnauthorized,
+          dnsLookupIpVersion,
+        })
+      }
+
+      const headers = new Headers(
+        withoutUndefinedHeaders(requestOptions.headers),
+      )
+      headers.set('User-Agent', userAgent)
+
+      const requestUrl = new URL(url)
+      if (requestUrl.username || requestUrl.password) {
+        if (!headers.has('Authorization')) {
+          const username = decodeURIComponent(requestUrl.username)
+          const password = decodeURIComponent(requestUrl.password)
+          const credentials = Buffer.from(`${username}:${password}`).toString(
+            'base64',
+          )
+          headers.set('Authorization', `Basic ${credentials}`)
+        }
+        requestUrl.username = ''
+        requestUrl.password = ''
+      }
+      requestOptions.headers = headers
+
+      if (requestOptions.searchParams !== undefined) {
+        requestUrl.search = normalizeSearchParams(
+          requestOptions.searchParams,
+        ).toString()
+        delete requestOptions.searchParams
+      }
+      const initialRequestUrl = new URL(requestUrl)
+
+      timeoutMilliseconds = requestOptions.timeout
+      requestOptions.timeout = false
+
+      const onDownloadProgress = requestOptions.onDownloadProgress
+      delete requestOptions.onDownloadProgress
+
+      if (typeof timeoutMilliseconds === 'number') {
+        const timeoutController = new AbortController()
+        requestOptions.signal = requestOptions.signal
+          ? AbortSignal.any([requestOptions.signal, timeoutController.signal])
+          : timeoutController.signal
+        timeoutId = setTimeout(() => {
+          timedOut = true
+          timeoutController.abort()
+        }, timeoutMilliseconds)
+      }
+
       const response = await client(requestUrl, requestOptions)
       const body = await readResponseBody(
         response,
@@ -235,7 +281,8 @@ function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
         headers: Object.fromEntries(response.headers),
         body,
         redirected: response.redirected,
-        requestUrl: new URL(response.url || requestUrl),
+        requestUrl: initialRequestUrl,
+        url: response.url || requestUrl.toString(),
       }
       return { res, buffer: body }
     } catch (error) {

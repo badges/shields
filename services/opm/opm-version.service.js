@@ -49,7 +49,7 @@ export default class OpmVersion extends BaseService {
     if (!res.redirected) {
       throw new NotFound({ prettyMessage: 'module not found' })
     }
-    const location = res.requestUrl.toString()
+    const location = res.url
     const version = location.match(`${moduleName}-(.+).opm`)[1]
     if (!version) {
       throw new InvalidResponse({ prettyMessage: 'version invalid' })

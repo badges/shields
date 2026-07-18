@@ -1,5 +1,6 @@
 import { Readable } from 'stream'
 import { gzipSync } from 'zlib'
+import { createServer } from 'node:http'
 import { expect, use } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import nock from 'nock'
@@ -175,6 +176,78 @@ describe('ky wrapper', function () {
     })
   })
 
+  it('should support basic auth credentials embedded in the URL', async function () {
+    nock('https://www.google.com', {
+      reqheaders: { authorization: 'Basic dXNlcjpwQHNzd29yZA==' },
+    })
+      .get('/foo/bar')
+      .reply(200)
+    const sendRequest = _fetchFactory(1024)
+
+    const { res } = await sendRequest(
+      'https://user:p%40ssword@www.google.com/foo/bar',
+    )
+
+    expect(res.requestUrl.username).to.equal('')
+    expect(res.requestUrl.password).to.equal('')
+  })
+
+  it('should prefer an explicit authorization header over URL credentials', async function () {
+    nock('https://www.google.com', {
+      reqheaders: { authorization: 'Bearer explicit-token' },
+    })
+      .get('/foo/bar')
+      .reply(200)
+    const sendRequest = _fetchFactory(1024)
+
+    await sendRequest('https://user:password@www.google.com/foo/bar', {
+      headers: { Authorization: 'Bearer explicit-token' },
+    })
+  })
+
+  it('should wrap malformed URL credentials in an Inaccessible error', async function () {
+    const sendRequest = _fetchFactory(1024)
+
+    await expect(
+      sendRequest('https://user:%E0%A4%A@www.google.com/foo/bar'),
+    ).to.be.rejectedWith(Inaccessible, 'URI malformed')
+  })
+
+  it('should support selecting an IP version for DNS lookup', async function () {
+    const server = createServer((request, response) => response.end('ok'))
+    const sendRequest = _fetchFactory(1024)
+    const originalProxyNamespace =
+      process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
+    process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE = `KY_DISPATCHER_TEST_${process.pid}_`
+    nock.restore()
+
+    try {
+      await new Promise((resolve, reject) => {
+        server.once('error', reject)
+        server.listen(0, '127.0.0.1', resolve)
+      })
+      const { port } = server.address()
+
+      const { buffer } = await sendRequest(`http://localhost:${port}`, {
+        dnsLookupIpVersion: 4,
+      })
+
+      expect(buffer).to.equal('ok')
+    } finally {
+      server.closeAllConnections()
+      if (server.listening) {
+        await new Promise(resolve => server.close(resolve))
+      }
+      nock.activate()
+      if (originalProxyNamespace === undefined) {
+        delete process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
+      } else {
+        process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE =
+          originalProxyNamespace
+      }
+    }
+  })
+
   it('should expose the final URL after redirects', async function () {
     nock('https://www.google.com')
       .get('/foo/bar')
@@ -186,7 +259,8 @@ describe('ky wrapper', function () {
     const { res, buffer } = await sendRequest('https://www.google.com/foo/bar')
 
     expect(res.redirected).to.be.true
-    expect(res.requestUrl.href).to.equal('https://www.google.com/foo/baz')
+    expect(res.requestUrl.href).to.equal('https://www.google.com/foo/bar')
+    expect(res.url).to.equal('https://www.google.com/foo/baz')
     expect(buffer).to.equal('redirected')
   })
 
