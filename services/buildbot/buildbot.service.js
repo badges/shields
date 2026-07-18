@@ -15,11 +15,7 @@ const resultMap = {
   6: 'cancelled',
 }
 
-const builderSchema = Joi.object({
-  builders: Joi.array().required(),
-}).required()
-
-const buildsSchema = Joi.object({
+const schema = Joi.object({
   builds: Joi.array()
     .items(
       Joi.object({
@@ -83,21 +79,14 @@ export default class Buildbot extends BaseJsonService {
   }
 
   async fetch({ baseUrl, builder }) {
-    // The builds collection returns HTTP 200 with an empty list for unknown
-    // builder names, so resolve the builder first to surface a real 404.
-    await this._requestJson({
-      schema: builderSchema,
-      url: `${baseUrl}/api/v2/builders/${encodeURIComponent(builder)}`,
-      httpErrors: {
-        404: 'builder not found',
-      },
-    })
-
     return this._requestJson({
-      schema: buildsSchema,
+      schema,
       url: `${baseUrl}/api/v2/builders/${encodeURIComponent(builder)}/builds`,
       options: {
         searchParams: { limit: '1', order: '-number' },
+      },
+      httpErrors: {
+        404: 'builder not found',
       },
     })
   }
