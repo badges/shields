@@ -18,7 +18,7 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
         summary: 'Codacy coverage',
         parameters: pathParams({
           name: 'projectId',
-          example: '84c0a068ce9349f2bcaa07b5977bd932',
+          example: 'b6a59cdf5ca64eab9104928d4f9bbb97',
         }),
       },
     },
@@ -28,7 +28,7 @@ export default class CodacyCoverage extends BaseSvgScrapingService {
         parameters: pathParams(
           {
             name: 'projectId',
-            example: '84c0a068ce9349f2bcaa07b5977bd932',
+            example: 'b6a59cdf5ca64eab9104928d4f9bbb97',
           },
           {
             name: 'branch',
