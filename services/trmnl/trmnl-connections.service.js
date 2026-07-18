@@ -38,21 +38,16 @@ export default class TrmnlConnections extends TrmnlBase {
 
   static defaultBadgeData = { label: 'connections', namedLogo: 'trmnl' }
 
-  static render({ recipeId, connections }) {
+  static render({ connections }) {
     return {
       message: metric(connections),
-      style: 'social',
       color: 'blue',
-      link: [
-        `https://trmnl.com/recipes/${recipeId}`,
-        `https://trmnl.com/recipes/${recipeId}`,
-      ],
     }
   }
 
   async handle({ recipeId }) {
     const data = await this.fetch({ recipeId, schema })
     const connections = data.stats.installs + data.stats.forks
-    return this.constructor.render({ recipeId, connections })
+    return this.constructor.render({ connections })
   }
 }

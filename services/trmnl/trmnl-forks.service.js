@@ -37,20 +37,15 @@ export default class TrmnlForks extends TrmnlBase {
 
   static defaultBadgeData = { label: 'forks', namedLogo: 'trmnl' }
 
-  static render({ recipeId, forks }) {
+  static render({ forks }) {
     return {
       message: metric(forks),
-      style: 'social',
       color: 'blue',
-      link: [
-        `https://trmnl.com/recipes/${recipeId}`,
-        `https://trmnl.com/recipes/${recipeId}`,
-      ],
     }
   }
 
   async handle({ recipeId }) {
     const data = await this.fetch({ recipeId, schema })
-    return this.constructor.render({ recipeId, forks: data.stats.forks })
+    return this.constructor.render({ forks: data.stats.forks })
   }
 }

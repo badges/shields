@@ -3,17 +3,11 @@ import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
-t.create('Recipe connections')
-  .get('/227153.json')
-  .expectBadge({
-    label: 'connections',
-    message: isMetric,
-    color: 'blue',
-    link: [
-      'https://trmnl.com/recipes/227153',
-      'https://trmnl.com/recipes/227153',
-    ],
-  })
+t.create('Recipe connections').get('/227153.json').expectBadge({
+  label: 'connections',
+  message: isMetric,
+  color: 'blue',
+})
 
 t.create('Calculates connections from installs and forks')
   .get('/227153.json')
