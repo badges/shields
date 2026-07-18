@@ -17,12 +17,12 @@ export default class TrmnlInstalls extends TrmnlBase {
   static category = 'downloads'
 
   static route = {
-    base: 'trmnl/installs',
+    base: 'trmnl/dt',
     pattern: ':recipeId',
   }
 
   static openApi = {
-    '/trmnl/installs/{recipeId}': {
+    '/trmnl/dt/{recipeId}': {
       get: {
         summary: 'TRMNL Recipe Installs',
         description,
