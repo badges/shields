@@ -3,6 +3,32 @@ import { isMetric, isMetricOpenIssues } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
+t.create('GitHub open issues remain on the repository query')
+  .get('/issues/example/project.json')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql', requestBody => {
+        const { query, variables } =
+          typeof requestBody === 'string'
+            ? JSON.parse(requestBody)
+            : requestBody
+        return (
+          query.includes('repository(owner: $user, name: $repo)') &&
+          query.includes('issues(states: $states, labels: $labels)') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.[0] === 'OPEN'
+        )
+      })
+      .reply(200, {
+        data: { repository: { issues: { totalCount: 4 } } },
+      }),
+  )
+  .expectBadge({
+    label: 'issues',
+    message: '4 open',
+  })
+
 t.create('GitHub closed issues')
   .get('/issues-closed/badges/shields.json')
   .expectBadge({

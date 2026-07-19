@@ -263,6 +263,20 @@ t.create('GitHub pull requests (repo not found)')
     message: 'repo not found',
   })
 
+t.create('GitHub pull requests with malformed response data')
+  .get('/issues-pr/example/project.json')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql')
+      .reply(200, {
+        data: { repository: {}, search: { issueCount: 5 } },
+      }),
+  )
+  .expectBadge({
+    label: 'pull requests',
+    message: 'invalid response data',
+  })
+
 t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/service-badge.json')
   .expectBadge({
