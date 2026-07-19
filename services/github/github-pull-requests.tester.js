@@ -219,6 +219,50 @@ t.create('GitHub pull requests by multi-word label excluding drafts')
     message: '2 open',
   })
 
+t.create('GitHub pull requests with conflicting draft filters')
+  .get('/issues-pr/example/project.json?excludeDrafts&onlyDrafts')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql')
+      .optionally()
+      .reply(() => {
+        throw new Error('GitHub should not be called for invalid query params')
+      }),
+  )
+  .expectBadge({
+    label: 'pull requests',
+    message: Joi.string().pattern(/^invalid query parameter/),
+  })
+
+t.create('GitHub pull requests (repo not found)')
+  .get('/issues-pr/example/missing.json')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql', requestBody => {
+        const { query, variables } =
+          typeof requestBody === 'string'
+            ? JSON.parse(requestBody)
+            : requestBody
+        return (
+          query.includes('repository(owner: $user, name: $repo)') &&
+          query.includes('search(query: $query, type: ISSUE)') &&
+          variables.user === 'example' &&
+          variables.repo === 'missing' &&
+          variables.query === 'repo:example/missing is:pr is:open'
+        )
+      })
+      .reply(200, {
+        data: { repository: null, search: { issueCount: 0 } },
+        errors: [
+          { type: 'NOT_FOUND', message: 'Could not resolve repository' },
+        ],
+      }),
+  )
+  .expectBadge({
+    label: 'pull requests',
+    message: 'repo not found',
+  })
+
 t.create('GitHub open pull requests by label')
   .get('/issues-pr/badges/shields/service-badge.json')
   .expectBadge({
