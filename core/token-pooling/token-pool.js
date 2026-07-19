@@ -145,13 +145,6 @@ class Token {
   }
 
   /**
-   * Indicate that the token should be used again.
-   */
-  validate() {
-    this._isValid = true
-  }
-
-  /**
    * Record a failed authentication attempt (HTTP 401) for this token.
    *
    * @returns {number} The number of consecutive failed attempts so far.
@@ -243,22 +236,12 @@ class TokenPool {
     return second.nextReset - first.nextReset
   }
 
-  _removeFromPriorityQueue(token) {
-    const priorityQueue = new PriorityQueue(this.constructor.compareTokens)
-    this.priorityQueue.forEach(queuedToken => {
-      if (queuedToken !== token) {
-        priorityQueue.enq(queuedToken)
-      }
-    })
-    this.priorityQueue = priorityQueue
-  }
-
   /**
    * Add a token with user-provided ID and data.
    *
-   * Adding an existing token updates its data only when `data` is provided.
-   * This keeps calls which only revalidate or deduplicate a token from
-   * clearing previously stored metadata.
+   * Adding an existing valid token updates its data only when `data` is
+   * provided. Adding an invalid token creates a replacement, allowing stale
+   * queue entries to remain invalid until they are discarded on access.
    *
    * @param {string} id token string
    * @param {*} data reserved for future use
@@ -267,28 +250,19 @@ class TokenPool {
    * @param {number} nextReset
    *    Time when the token can be used again even if it's exhausted (unix timestamp)
    *
-   * @returns {boolean} Was the token added to the pool?
+   * @returns {boolean} Was a previously unknown token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
     const existingToken = this.tokensById.get(id)
-    if (existingToken) {
-      const wasInvalid = !existingToken.isValid
+    if (existingToken?.isValid) {
       if (data !== undefined) {
         existingToken.updateData(data)
       }
-      if (wasInvalid) {
-        this._removeFromPriorityQueue(existingToken)
-        existingToken.unfreeze()
-      }
-      existingToken.validate()
-      const isQueued = this.fifoQueue.includes(existingToken)
-      const isCurrent =
-        this.currentBatch.token === existingToken &&
-        this.currentBatch.remaining > 0
-      if (wasInvalid && !isQueued && !isCurrent) {
-        this.fifoQueue.push(existingToken)
-      }
       return false
+    }
+
+    if (data === undefined && existingToken) {
+      data = existingToken.data
     }
 
     usesRemaining = usesRemaining === undefined ? this.batchSize : usesRemaining
@@ -298,7 +272,7 @@ class TokenPool {
     this.tokensById.set(id, token)
     this.fifoQueue.push(token)
 
-    return true
+    return existingToken === undefined
   }
 
   // Prepare to start a new batch by obtaining and returning the next usable
@@ -323,7 +297,7 @@ class TokenPool {
       (next = this.priorityQueue.peek())
     ) {
       if (!next.isValid) {
-        // Discard, and
+        this.priorityQueue.deq()
         continue
       } else if (next.isExhausted) {
         // No need to check any more tokens, since they all reset after this

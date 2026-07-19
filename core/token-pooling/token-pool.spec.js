@@ -59,7 +59,7 @@ describe('The token pool', function () {
     })
   })
 
-  it('revalidates invalid tokens when they are added again', function () {
+  it('replaces invalid tokens when they are added again', function () {
     const tokenPool = new TokenPool()
     expect(tokenPool.add('token', { scopes: [] })).to.equal(true)
 
@@ -75,7 +75,36 @@ describe('The token pool', function () {
     expect(token.data).to.deep.equal({ scopes: ['read:packages'] })
   })
 
-  it('does not duplicate queued tokens when they are revalidated', function () {
+  it('isolates re-added tokens from stale references', function () {
+    const tokenPool = new TokenPool()
+    expect(tokenPool.add('token', { scopes: [] })).to.equal(true)
+
+    const staleToken = tokenPool.next()
+    staleToken.invalidate()
+    expect(tokenPool.add('token', { scopes: ['read:packages'] })).to.equal(
+      false,
+    )
+
+    staleToken.update(0, Token.nextResetNever)
+
+    const token = tokenPool.next()
+    expect(token).to.not.equal(staleToken)
+    expect(token.data).to.deep.equal({ scopes: ['read:packages'] })
+  })
+
+  it('preserves data when an invalid token is replaced without new data', function () {
+    const tokenPool = new TokenPool()
+    tokenPool.add('token', { scopes: ['read:packages'] })
+    tokenPool.next().invalidate()
+
+    expect(tokenPool.add('token')).to.equal(false)
+
+    expect(tokenPool.next().data).to.deep.equal({
+      scopes: ['read:packages'],
+    })
+  })
+
+  it('does not duplicate queued tokens when they are replaced', function () {
     const tokenPool = new TokenPool({ batchSize: 2 })
     tokenPool.add('first')
     tokenPool.add('second')
@@ -83,13 +112,13 @@ describe('The token pool', function () {
     tokenPool.next().invalidate()
     tokenPool.add('first')
 
+    expect(tokenPool.next().id).to.equal('second')
+    expect(tokenPool.next().id).to.equal('second')
     expect(tokenPool.next().id).to.equal('first')
-    expect(tokenPool.next().id).to.equal('second')
-    expect(tokenPool.next().id).to.equal('second')
     expect(tokenPool.next().id).to.equal('first')
   })
 
-  it('does not duplicate exhausted tokens when they are revalidated', function () {
+  it('does not duplicate exhausted tokens when they are replaced', function () {
     const tokenPool = new TokenPool()
     tokenPool.add('first')
     tokenPool.add('second')
@@ -110,6 +139,19 @@ describe('The token pool', function () {
     expect(
       allTokenDebugInfo.find(({ id }) => id === 'first').isFrozen,
     ).to.equal(false)
+  })
+
+  it('removes invalid priority queue entries on access', function () {
+    const tokenPool = new TokenPool()
+    tokenPool.add('token', undefined, 0, Token.nextResetNever)
+    const token = tokenPool.tokensById.get('token')
+
+    expectPoolToBeExhausted(tokenPool)
+    token.invalidate()
+    expect(tokenPool.priorityQueue.size()).to.equal(1)
+
+    expectPoolToBeExhausted(tokenPool)
+    expect(tokenPool.priorityQueue.size()).to.equal(0)
   })
 
   context('tokens are marked exhausted immediately', function () {
