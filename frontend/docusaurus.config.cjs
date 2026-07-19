@@ -65,6 +65,7 @@ const config = {
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
+      image: 'img/opengraph.png',
       languageTabs: [],
       navbar: {
         title: 'Shields.io',
