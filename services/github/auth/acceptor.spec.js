@@ -4,6 +4,7 @@ import sinon from 'sinon'
 import portfinder from 'portfinder'
 import qs from 'qs'
 import nock from 'nock'
+import '../../../core/register-chai-plugins.spec.js'
 import got from '../../../core/got-test-client.js'
 import GithubConstellation from '../github-constellation.js'
 import { setRoutes } from './acceptor.js'
@@ -72,8 +73,10 @@ describe('Github token acceptor', function () {
 
     context('a code is provided', function () {
       let scope
+      let tokenResponse
       beforeEach(function () {
         nock.enableNetConnect(/127\.0\.0\.1/)
+        tokenResponse = { access_token: fakeAccessToken }
 
         scope = nock('https://github.com')
           .post('/login/oauth/access_token')
@@ -82,7 +85,7 @@ describe('Github token acceptor', function () {
             expect(parsedBody.client_id).to.equal(fakeClientId)
             expect(parsedBody.client_secret).to.equal(fakeClientSecret)
             expect(parsedBody.code).to.equal(fakeCode)
-            return [200, qs.stringify({ access_token: fakeAccessToken })]
+            return [200, qs.stringify(tokenResponse)]
           })
       })
 
@@ -116,6 +119,21 @@ describe('Github token acceptor', function () {
           ),
         ).to.be.true
         expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken)
+      })
+
+      it('should pass token scopes from the OAuth response', async function () {
+        tokenResponse.scope = 'read:packages, read:user'
+
+        const form = new FormData()
+        form.append('code', fakeCode)
+
+        await got.post(`${baseUrl}/github-auth/done`, {
+          body: form,
+        })
+
+        expect(onTokenAccepted).to.have.been.calledWith(fakeAccessToken, {
+          scopes: ['read:packages', 'read:user'],
+        })
       })
     })
   })
