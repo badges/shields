@@ -1,11 +1,7 @@
 import Joi from 'joi'
-import { NotFound, pathParam } from '../index.js'
+import { NotFound, pathParam, queryParam } from '../index.js'
 import { renderVersionBadge } from '../version.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
-import {
-  openApiQueryParams,
-  queryParamSchema,
-} from './github-common-release.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
 
 const releaseSchema = Joi.object({
@@ -19,6 +15,10 @@ const releaseArraySchema = Joi.alternatives().try(
   Joi.array().items(releaseSchema),
   Joi.array().length(0),
 )
+
+const queryParamSchema = Joi.object({
+  include_prereleases: Joi.equal(''),
+}).required()
 
 const branchDescription = `
 Returns the latest release associated with the specified branch.
@@ -43,7 +43,11 @@ export default class GithubReleaseBranch extends GithubAuthV3Service {
           pathParam({ name: 'user', example: 'laravel' }),
           pathParam({ name: 'repo', example: 'framework' }),
           pathParam({ name: 'branch', example: '13.x' }),
-          ...openApiQueryParams,
+          queryParam({
+            name: 'include_prereleases',
+            example: null,
+            schema: { type: 'boolean' },
+          }),
         ],
       },
     },
