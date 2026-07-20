@@ -9,6 +9,16 @@ import { documentation, transformErrors } from './github-helpers.js'
 const pullRequestCountSchema = Joi.object({
   data: Joi.object({
     repository: Joi.object({
+      pullRequests: Joi.object({
+        totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
+
+const pullRequestSearchSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
       id: Joi.string().required(),
     }).required(),
     search: Joi.object({
@@ -110,9 +120,9 @@ export default class GithubPullRequests extends GithubAuthV4Service {
       : ''
     let draftText = ''
     if (excludeDrafts) {
-      draftText = 'non-drafts '
+      draftText = 'non-draft '
     } else if (onlyDrafts) {
-      draftText = 'drafts '
+      draftText = 'draft '
     }
 
     return {
@@ -123,6 +133,40 @@ export default class GithubPullRequests extends GithubAuthV4Service {
   }
 
   async fetch({ user, repo, label, isClosed, excludeDrafts, onlyDrafts }) {
+    if (!excludeDrafts && !onlyDrafts) {
+      const {
+        data: {
+          repository: {
+            pullRequests: { totalCount },
+          },
+        },
+      } = await this._requestGraphql({
+        query: gql`
+          query (
+            $user: String!
+            $repo: String!
+            $states: [PullRequestState!]
+            $labels: [String!]
+          ) {
+            repository(owner: $user, name: $repo) {
+              pullRequests(states: $states, labels: $labels) {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          user,
+          repo,
+          states: isClosed ? ['MERGED', 'CLOSED'] : ['OPEN'],
+          labels: label ? [label] : undefined,
+        },
+        schema: pullRequestCountSchema,
+        transformErrors,
+      })
+      return totalCount
+    }
+
     const searchQualifiers = [
       `repo:${user}/${repo}`,
       'is:pr',
@@ -150,7 +194,7 @@ export default class GithubPullRequests extends GithubAuthV4Service {
         }
       `,
       variables: { query: searchQualifiers.join(' '), user, repo },
-      schema: pullRequestCountSchema,
+      schema: pullRequestSearchSchema,
       transformErrors,
     })
 

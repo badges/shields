@@ -21,12 +21,16 @@ t.create('GitHub pull requests without a draft filter')
             ? JSON.parse(requestBody)
             : requestBody
         return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:open'
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
+          !query.includes('search(') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.[0] === 'OPEN' &&
+          variables.labels === undefined
         )
       })
       .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 5 } },
+        data: { repository: { pullRequests: { totalCount: 5 } } },
       }),
   )
   .expectBadge({
@@ -44,12 +48,16 @@ t.create('GitHub pull requests raw without a draft filter')
             ? JSON.parse(requestBody)
             : requestBody
         return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:open'
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
+          !query.includes('search(') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.[0] === 'OPEN' &&
+          variables.labels === undefined
         )
       })
       .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 5 } },
+        data: { repository: { pullRequests: { totalCount: 5 } } },
       }),
   )
   .expectBadge({
@@ -74,12 +82,16 @@ t.create('GitHub closed pull requests without a draft filter')
             ? JSON.parse(requestBody)
             : requestBody
         return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:closed'
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
+          !query.includes('search(') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.join(',') === 'MERGED,CLOSED' &&
+          variables.labels === undefined
         )
       })
       .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 7 } },
+        data: { repository: { pullRequests: { totalCount: 7 } } },
       }),
   )
   .expectBadge({
@@ -106,12 +118,16 @@ t.create('GitHub closed pull requests raw without a draft filter')
             ? JSON.parse(requestBody)
             : requestBody
         return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:closed'
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
+          !query.includes('search(') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.join(',') === 'MERGED,CLOSED' &&
+          variables.labels === undefined
         )
       })
       .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 7 } },
+        data: { repository: { pullRequests: { totalCount: 7 } } },
       }),
   )
   .expectBadge({
@@ -145,7 +161,7 @@ t.create('GitHub closed pull requests raw with only drafts')
       }),
   )
   .expectBadge({
-    label: 'closed drafts pull requests',
+    label: 'closed draft pull requests',
     message: '1',
   })
 
@@ -168,7 +184,7 @@ t.create('GitHub pull requests excluding drafts')
       }),
   )
   .expectBadge({
-    label: 'non-drafts pull requests',
+    label: 'non-draft pull requests',
     message: '3 open',
   })
 
@@ -191,7 +207,7 @@ t.create('GitHub pull requests with only drafts')
       }),
   )
   .expectBadge({
-    label: 'drafts pull requests',
+    label: 'draft pull requests',
     message: '2 open',
   })
 
@@ -215,7 +231,7 @@ t.create('GitHub pull requests by multi-word label excluding drafts')
       }),
   )
   .expectBadge({
-    label: '"feature request" non-drafts pull requests',
+    label: '"feature request" non-draft pull requests',
     message: '2 open',
   })
 
@@ -245,14 +261,14 @@ t.create('GitHub pull requests (repo not found)')
             : requestBody
         return (
           query.includes('repository(owner: $user, name: $repo)') &&
-          query.includes('search(query: $query, type: ISSUE)') &&
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
           variables.user === 'example' &&
           variables.repo === 'missing' &&
-          variables.query === 'repo:example/missing is:pr is:open'
+          variables.states?.[0] === 'OPEN'
         )
       })
       .reply(200, {
-        data: { repository: null, search: { issueCount: 0 } },
+        data: { repository: null },
         errors: [
           { type: 'NOT_FOUND', message: 'Could not resolve repository' },
         ],
@@ -264,12 +280,12 @@ t.create('GitHub pull requests (repo not found)')
   })
 
 t.create('GitHub pull requests with malformed response data')
-  .get('/issues-pr/example/project.json')
+  .get('/issues-pr/example/project.json?excludeDrafts')
   .intercept(nock =>
     nock('https://api.github.com/')
       .post('/graphql')
       .reply(200, {
-        data: { repository: {}, search: { issueCount: 5 } },
+        data: { repository: { id: 'R_example' }, search: {} },
       }),
   )
   .expectBadge({
@@ -277,11 +293,31 @@ t.create('GitHub pull requests with malformed response data')
     message: 'invalid response data',
   })
 
-t.create('GitHub open pull requests by label')
-  .get('/issues-pr/badges/shields/service-badge.json')
+t.create('GitHub open pull requests by label without a draft filter')
+  .get('/issues-pr/example/project/service-badge.json')
+  .intercept(nock =>
+    nock('https://api.github.com/')
+      .post('/graphql', requestBody => {
+        const { query, variables } =
+          typeof requestBody === 'string'
+            ? JSON.parse(requestBody)
+            : requestBody
+        return (
+          query.includes('pullRequests(states: $states, labels: $labels)') &&
+          !query.includes('search(') &&
+          variables.user === 'example' &&
+          variables.repo === 'project' &&
+          variables.states?.[0] === 'OPEN' &&
+          variables.labels?.join(',') === 'service-badge'
+        )
+      })
+      .reply(200, {
+        data: { repository: { pullRequests: { totalCount: 4 } } },
+      }),
+  )
   .expectBadge({
     label: 'service-badge pull requests',
-    message: isMetricOpenIssues,
+    message: '4 open',
   })
 
 t.create('GitHub open pull requests by label (raw)')
