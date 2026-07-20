@@ -16,6 +16,15 @@ t.create('build (valid group project)')
     message: isBuildStatus,
   })
 
+t.create('build (openEuler server)')
+  .get(
+    '/mywaaagh_admin/i3wm/acpi.json?server=https://eur.openeuler.openatom.cn',
+  )
+  .expectBadge({
+    label: 'build',
+    message: isBuildStatus,
+  })
+
 t.create('build (not found)')
   .get('/not-a-user/not-a-project/not-a-package.json')
   .expectBadge({ label: 'build', message: 'project or package not found' })
