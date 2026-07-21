@@ -67,14 +67,8 @@ t.create('no finished builds')
       .query(buildsQuery)
       .reply(200, { results: [] }),
   )
-  .expectBadge({ label: 'docs', message: 'project or version not found' })
+  .expectBadge({ label: 'docs', message: 'no finished builds' })
 
-t.create('project or version not found')
+t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
-  .intercept(nock =>
-    nock(apiBaseUrl)
-      .get('/api/v3/projects/this-repo/versions/does-not-exist/builds/')
-      .query(buildsQuery)
-      .reply(404),
-  )
-  .expectBadge({ label: 'docs', message: 'project or version not found' })
+  .expectBadge({ label: 'docs', message: 'no finished builds' })

@@ -83,7 +83,6 @@ export default class ReadTheDocs extends BaseJsonService {
               running: false,
             },
           },
-          httpErrors: { 404: 'project or version not found' },
         },
         'Token',
       ),
@@ -95,7 +94,7 @@ export default class ReadTheDocs extends BaseJsonService {
     const build = results.find(({ state }) => state.code === 'finished')
     if (!build) {
       throw new NotFound({
-        prettyMessage: 'project or version not found',
+        prettyMessage: 'no finished builds',
       })
     }
     return this.constructor.render({
