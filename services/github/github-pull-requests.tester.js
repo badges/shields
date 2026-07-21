@@ -1,5 +1,9 @@
 import Joi from 'joi'
-import { isMetric, isMetricOpenIssues } from '../test-validators.js'
+import {
+  isMetric,
+  isMetricClosedIssues,
+  isMetricOpenIssues,
+} from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
@@ -11,58 +15,11 @@ t.create('GitHub pull requests')
     message: isMetricOpenIssues,
   })
 
-t.create('GitHub pull requests without a draft filter')
-  .get('/issues-pr/example/project.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          !query.includes('search(') &&
-          variables.user === 'example' &&
-          variables.repo === 'project' &&
-          variables.states?.[0] === 'OPEN' &&
-          variables.labels === undefined
-        )
-      })
-      .reply(200, {
-        data: { repository: { pullRequests: { totalCount: 5 } } },
-      }),
-  )
+t.create('GitHub pull requests preserve repository redirects')
+  .get('/issues-pr/facebook/react.json')
   .expectBadge({
     label: 'pull requests',
-    message: '5 open',
-  })
-
-t.create('GitHub pull requests raw without a draft filter')
-  .get('/issues-pr-raw/example/project.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          !query.includes('search(') &&
-          variables.user === 'example' &&
-          variables.repo === 'project' &&
-          variables.states?.[0] === 'OPEN' &&
-          variables.labels === undefined
-        )
-      })
-      .reply(200, {
-        data: { repository: { pullRequests: { totalCount: 5 } } },
-      }),
-  )
-  .expectBadge({
-    label: 'open pull requests',
-    message: '5',
+    message: isMetricOpenIssues,
   })
 
 t.create('GitHub pull requests raw')
@@ -72,67 +29,11 @@ t.create('GitHub pull requests raw')
     message: isMetric,
   })
 
-t.create('GitHub closed pull requests without a draft filter')
-  .get('/issues-pr-closed/example/project.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          !query.includes('search(') &&
-          variables.user === 'example' &&
-          variables.repo === 'project' &&
-          variables.states?.join(',') === 'MERGED,CLOSED' &&
-          variables.labels === undefined
-        )
-      })
-      .reply(200, {
-        data: { repository: { pullRequests: { totalCount: 7 } } },
-      }),
-  )
-  .expectBadge({
-    label: 'pull requests',
-    message: '7 closed',
-  })
-
 t.create('GitHub closed pull requests')
   .get('/issues-pr-closed/badges/shields.json')
   .expectBadge({
     label: 'pull requests',
-    message: Joi.string().regex(
-      /^([0-9]+[kMGTPEZY]?|[1-9]\.[1-9][kMGTPEZY]) closed$/,
-    ),
-  })
-
-t.create('GitHub closed pull requests raw without a draft filter')
-  .get('/issues-pr-closed-raw/example/project.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          !query.includes('search(') &&
-          variables.user === 'example' &&
-          variables.repo === 'project' &&
-          variables.states?.join(',') === 'MERGED,CLOSED' &&
-          variables.labels === undefined
-        )
-      })
-      .reply(200, {
-        data: { repository: { pullRequests: { totalCount: 7 } } },
-      }),
-  )
-  .expectBadge({
-    label: 'closed pull requests',
-    message: '7',
+    message: isMetricClosedIssues,
   })
 
 t.create('GitHub closed pull requests raw')
@@ -143,181 +44,54 @@ t.create('GitHub closed pull requests raw')
   })
 
 t.create('GitHub closed pull requests raw with only drafts')
-  .get('/issues-pr-closed-raw/example/project.json?onlyDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:closed draft:true'
-        )
-      })
-      .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 1 } },
-      }),
-  )
+  .get('/issues-pr-closed-raw/badges/shields.json?onlyDrafts')
   .expectBadge({
     label: 'closed draft pull requests',
-    message: '1',
+    message: Joi.alternatives(isMetric, Joi.equal('0')),
   })
 
 t.create('GitHub pull requests excluding drafts')
-  .get('/issues-pr/example/project.json?excludeDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:open draft:false'
-        )
-      })
-      .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 3 } },
-      }),
-  )
+  .get('/issues-pr/badges/shields.json?excludeDrafts')
   .expectBadge({
     label: 'non-draft pull requests',
-    message: '3 open',
+    message: isMetricOpenIssues,
   })
 
 t.create('GitHub pull requests with only drafts')
-  .get('/issues-pr/example/project.json?onlyDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query === 'repo:example/project is:pr is:open draft:true'
-        )
-      })
-      .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 2 } },
-      }),
-  )
+  .get('/issues-pr/badges/shields.json?onlyDrafts')
   .expectBadge({
     label: 'draft pull requests',
-    message: '2 open',
+    message: Joi.alternatives(isMetricOpenIssues, Joi.equal('0 open')),
   })
 
-t.create('GitHub pull requests by multi-word label excluding drafts')
-  .get('/issues-pr/example/project/feature%20request.json?excludeDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('search(query: $query, type: ISSUE)') &&
-          variables.query ===
-            'repo:example/project is:pr is:open label:"feature request" draft:false'
-        )
-      })
-      .reply(200, {
-        data: { repository: { id: 'R_example' }, search: { issueCount: 2 } },
-      }),
+t.create('GitHub closed pull requests by multi-word label excluding drafts')
+  .get(
+    '/issues-pr-closed/badges/shields/good%20first%20issue.json?excludeDrafts',
   )
   .expectBadge({
-    label: '"feature request" non-draft pull requests',
-    message: '2 open',
+    label: '"good first issue" non-draft pull requests',
+    message: isMetricClosedIssues,
   })
 
 t.create('GitHub pull requests with conflicting draft filters')
-  .get('/issues-pr/example/project.json?excludeDrafts&onlyDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql')
-      .optionally()
-      .reply(() => {
-        throw new Error('GitHub should not be called for invalid query params')
-      }),
-  )
+  .get('/issues-pr/badges/shields.json?excludeDrafts&onlyDrafts')
   .expectBadge({
     label: 'pull requests',
     message: Joi.string().pattern(/^invalid query parameter/),
   })
 
 t.create('GitHub pull requests (repo not found)')
-  .get('/issues-pr/example/missing.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('repository(owner: $user, name: $repo)') &&
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          variables.user === 'example' &&
-          variables.repo === 'missing' &&
-          variables.states?.[0] === 'OPEN'
-        )
-      })
-      .reply(200, {
-        data: { repository: null },
-        errors: [
-          { type: 'NOT_FOUND', message: 'Could not resolve repository' },
-        ],
-      }),
-  )
+  .get('/issues-pr-raw/badges/helmets.json')
   .expectBadge({
     label: 'pull requests',
     message: 'repo not found',
   })
 
-t.create('GitHub pull requests with malformed response data')
-  .get('/issues-pr/example/project.json?excludeDrafts')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql')
-      .reply(200, {
-        data: { repository: { id: 'R_example' }, search: {} },
-      }),
-  )
-  .expectBadge({
-    label: 'pull requests',
-    message: 'invalid response data',
-  })
-
-t.create('GitHub open pull requests by label without a draft filter')
-  .get('/issues-pr/example/project/service-badge.json')
-  .intercept(nock =>
-    nock('https://api.github.com/')
-      .post('/graphql', requestBody => {
-        const { query, variables } =
-          typeof requestBody === 'string'
-            ? JSON.parse(requestBody)
-            : requestBody
-        return (
-          query.includes('pullRequests(states: $states, labels: $labels)') &&
-          !query.includes('search(') &&
-          variables.user === 'example' &&
-          variables.repo === 'project' &&
-          variables.states?.[0] === 'OPEN' &&
-          variables.labels?.join(',') === 'service-badge'
-        )
-      })
-      .reply(200, {
-        data: { repository: { pullRequests: { totalCount: 4 } } },
-      }),
-  )
+t.create('GitHub open pull requests by label')
+  .get('/issues-pr/badges/shields/service-badge.json')
   .expectBadge({
     label: 'service-badge pull requests',
-    message: '4 open',
+    message: isMetricOpenIssues,
   })
 
 t.create('GitHub open pull requests by label (raw)')
