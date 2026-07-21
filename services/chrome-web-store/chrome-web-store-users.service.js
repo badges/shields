@@ -24,7 +24,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
   static defaultBadgeData = { label: 'users' }
 
   static transform(users) {
-    return String(users.replace(/,/g, ''))
+    return String(users.replaceAll(',', ''))
   }
 
   async handle({ storeId }) {
