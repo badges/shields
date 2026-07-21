@@ -23,6 +23,10 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
 
   static defaultBadgeData = { label: 'users' }
 
+  static transform(users) {
+    return String(users.replaceAll(',', ''))
+  }
+
   async handle({ storeId }) {
     const chromeWebStore = await this.fetch({ storeId })
     const downloads = chromeWebStore.users()
@@ -30,7 +34,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
       throw new NotFound({ prettyMessage: 'not found' })
     }
     return renderDownloadsBadge({
-      downloads: String(downloads.replace(',', '')),
+      downloads: this.constructor.transform(downloads),
     })
   }
 }
