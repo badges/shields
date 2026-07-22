@@ -187,7 +187,7 @@
     "mocha": "^11.7.6",
     "neostandard": "0.13.0",
     "nock": "13.5.6",
-    "node-mocks-http": "^1.17.2",
+    "node-mocks-http": "^1.18.1",
     "nodemon": "^3.1.14",
     "npm-run-all": "^4.1.5",
     "open-cli": "^9.0.0",
