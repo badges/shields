@@ -68,3 +68,12 @@ jobs:
         run: |
           echo '# Services' >> $GITHUB_STEP_SUMMARY
           node scripts/mocha2md.js Report reports/service-tests.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Service Tests Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: service-tests-report
+          path: reports/service-tests.json
+          retention-days: 7
+          if-no-files-found: warn
