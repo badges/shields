@@ -56,10 +56,9 @@ t.create('Open issues by label (raw)')
   })
 
 t.create('Opened issues by Scoped labels')
-  .timeout(10000)
-  .get('/open/gitlab-org%2Fgitlab.json?labels=test,failure::new')
+  .get('/open/gitlab-org%2Fcli.json?labels=type::bug')
   .expectBadge({
-    label: 'test,failure::new issues',
+    label: 'type::bug issues',
     message: isMetricOpenIssues,
   })
 

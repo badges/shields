@@ -47,7 +47,7 @@ export default class GitLabRelease extends GitLabBase {
         parameters: [
           pathParam({
             name: 'project',
-            example: 'gitlab-org/gitlab',
+            example: 'inkscape/inkscape',
           }),
           queryParam({
             name: 'gitlab_url',
