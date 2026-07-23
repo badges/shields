@@ -4,6 +4,21 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-07-23
+
+- [readthedocs] Move to readthedocs API v3 [#11995](https://github.com/badges/shields/issues/11995)
+- Remove decamelize and humanize-string Dependabot exclusions [#12032](https://github.com/badges/shields/issues/12032)
+- [GithubIssues GithubPullRequests] Add draft filters without changing unfiltered counts [#12026](https://github.com/badges/shields/issues/12026)
+- [ChromeWebStoreUsers] Fix 1M+ counts rendering as "12000,000" not "12M" [#12028](https://github.com/badges/shields/issues/12028)
+- [GitHub] Store accepted token scopes [#11915](https://github.com/badges/shields/issues/11915)
+- Migrate [Jenkins] tests and examples from Eclipse to FreeBSD [#12016](https://github.com/badges/shields/issues/12016)
+- [Buildbot] Add Buildbot build status badge [#11938](https://github.com/badges/shields/issues/11938)
+- Fix [Symfony] tests [#12017](https://github.com/badges/shields/issues/12017)
+- Fix [Codecov] tests [#12019](https://github.com/badges/shields/issues/12019)
+- Fix [Codacy] tests [#12018](https://github.com/badges/shields/issues/12018)
+- Update simple-icons to 16.26.0 [#12020](https://github.com/badges/shields/issues/12020)
+- Dependency updates
+
 ## server-2026-07-15
 
 **Important notice:**
