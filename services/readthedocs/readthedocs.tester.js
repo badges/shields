@@ -1,37 +1,74 @@
 import Joi from 'joi'
-import { isBuildStatus } from '../build-status.js'
 import { createServiceTester } from '../tester.js'
+
 export const t = await createServiceTester()
 
-t.create('build status')
+const apiBaseUrl = 'https://app.readthedocs.org'
+const buildsQuery = {
+  fields: 'state,success',
+  limit: 10,
+  running: false,
+}
+
+const passingBuild = {
+  state: { code: 'finished' },
+  success: true,
+}
+
+const failingBuild = {
+  state: { code: 'finished' },
+  success: false,
+}
+
+t.create('defaults to the latest version')
   .get('/pip.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .expectBadge({ label: 'docs', message: Joi.equal('passing', 'failing') })
 
-t.create('build status for named version')
+t.create('passing build for a named version')
   .get('/pip/stable.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .intercept(nock =>
+    nock(apiBaseUrl)
+      .get('/api/v3/projects/pip/versions/stable/builds/')
+      .query(buildsQuery)
+      .reply(200, { results: [passingBuild] }),
+  )
+  .expectBadge({ label: 'docs', message: 'passing' })
 
-t.create('build status for named semantic version')
+t.create('failing build for a named version')
   .get('/scrapy/1.0.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .intercept(nock =>
+    nock(apiBaseUrl)
+      .get('/api/v3/projects/scrapy/versions/1.0/builds/')
+      .query(buildsQuery)
+      .reply(200, { results: [failingBuild] }),
+  )
+  .expectBadge({ label: 'docs', message: 'failing' })
 
-t.create('build status for nonexistent version')
-  // This establishes that the version is being sent.
-  .get('/pip/foobar-is-not-a-version.json')
-  .expectBadge({
-    label: 'docs',
-    message: 'project or version not found',
-  })
+t.create('uses the latest finished build')
+  .get('/pip/latest.json')
+  .intercept(nock =>
+    nock(apiBaseUrl)
+      .get('/api/v3/projects/pip/versions/latest/builds/')
+      .query(buildsQuery)
+      .reply(200, {
+        results: [
+          { state: { code: 'cancelled' }, success: false },
+          passingBuild,
+        ],
+      }),
+  )
+  .expectBadge({ label: 'docs', message: 'passing' })
+
+t.create('no finished builds')
+  .get('/pip/unbuilt.json')
+  .intercept(nock =>
+    nock(apiBaseUrl)
+      .get('/api/v3/projects/pip/versions/unbuilt/builds/')
+      .query(buildsQuery)
+      .reply(200, { results: [] }),
+  )
+  .expectBadge({ label: 'docs', message: 'no finished builds' })
 
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
-  .expectBadge({ label: 'docs', message: 'project or version not found' })
+  .expectBadge({ label: 'docs', message: 'no finished builds' })
