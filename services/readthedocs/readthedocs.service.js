@@ -16,7 +16,7 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
 
   static route = {
     base: 'readthedocs',
-    pattern: ':project/:version?',
+    pattern: ':domain(org|com)?/:project/:version?',
   }
 
   static openApi = {
@@ -30,11 +30,31 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
         }),
       },
     },
-    '/readthedocs/{packageName}/{version}': {
+    '/readthedocs/{domain}/{packageName}': {
+      get: {
+        summary: 'Read the Docs (domain)',
+        description,
+        parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
+          {
+            name: 'packageName',
+            example: 'pip',
+          },
+        ),
+      },
+    },
+    '/readthedocs/{domain}/{packageName}/{version}': {
       get: {
         summary: 'Read the Docs (version)',
         description,
         parameters: pathParams(
+          {
+            name: 'domain',
+            example: 'org',
+          },
           {
             name: 'packageName',
             example: 'pip',
@@ -58,10 +78,10 @@ export default class ReadTheDocs extends BaseSvgScrapingService {
     return renderBuildStatusBadge({ status })
   }
 
-  async handle({ project, version }) {
+  async handle({ domain = 'org', project, version }) {
     const { message: status } = await this._requestSvg({
       schema,
-      url: `https://readthedocs.org/projects/${encodeURIComponent(
+      url: `https://readthedocs.${domain}/projects/${encodeURIComponent(
         project,
       )}/badge/`,
       options: { searchParams: { version } },
