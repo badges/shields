@@ -1,3 +1,10 @@
+/**
+ * Helpers for returning rendered badge responses through the legacy request
+ * pipeline.
+ *
+ * @module
+ */
+
 import stream from 'stream'
 
 function streamFromString(str) {
@@ -26,6 +33,15 @@ function sendEmpty(end) {
   end(null, { template: streamFromString('') })
 }
 
+/**
+ * Create a sender for a rendered badge response in the requested format.
+ *
+ * @param {'svg'|'json'|'empty'} format - Response format to send.
+ * @param {object} askres - HTTP response used to set format-specific headers.
+ * @param {Function} end - Callback that completes the request.
+ * @throws {Error} When the response format is not recognized.
+ * @returns {Function} Function that sends the rendered response body.
+ */
 function makeSend(format, askres, end) {
   if (format === 'svg') {
     return res => sendSVG(res, askres, end)
