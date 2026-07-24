@@ -23,15 +23,7 @@ t.create('Calculates connections from installs and forks')
     color: 'blue',
   })
 
-t.create('Recipe not found')
-  .get('/0.json')
-  .intercept(nock =>
-    nock('https://trmnl-badges.gohk.xyz')
-      .get('/api/stats')
-      .query({ recipe: '0' })
-      .reply(404, { error: 'Recipe not found' }),
-  )
-  .expectBadge({
-    label: 'connections',
-    message: 'recipe not found',
-  })
+t.create('Recipe not found').get('/0.json').expectBadge({
+  label: 'connections',
+  message: 'recipe not found',
+})

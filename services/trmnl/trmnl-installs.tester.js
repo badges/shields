@@ -8,18 +8,10 @@ t.create('Recipe installs').get('/227153.json').expectBadge({
   message: isMetric,
 })
 
-t.create('Recipe not found')
-  .get('/0.json')
-  .intercept(nock =>
-    nock('https://trmnl-badges.gohk.xyz')
-      .get('/api/stats')
-      .query({ recipe: '0' })
-      .reply(404, { error: 'Recipe not found' }),
-  )
-  .expectBadge({
-    label: 'installs',
-    message: 'recipe not found',
-  })
+t.create('Recipe not found').get('/0.json').expectBadge({
+  label: 'installs',
+  message: 'recipe not found',
+})
 
 t.create('Invalid response')
   .get('/227153.json')
