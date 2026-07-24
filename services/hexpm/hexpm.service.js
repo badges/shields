@@ -127,8 +127,9 @@ class HexPmDownloads extends BaseHexPmService {
 
   static route = {
     base: 'hexpm',
-    pattern: ':interval(dd|dw|dt)/:packageName',
+    pattern: ':interval/:packageName',
   }
+  static routeEnum = ['dd', 'dw', 'dt']
 
   static openApi = {
     '/hexpm/{interval}/{packageName}': {

@@ -5,6 +5,8 @@
   - singular if the badge message represents a single entity, such as the current status of a build (e.g: `/build`), or a more abstract or aggregate representation of the thing (e.g.: `/coverage`, `/quality`)
   - plural if there are (or may) be many of the thing (e.g: `/dependencies`, `/stars`)
 - Parameters should always be part of the route if they are required to display a badge e.g: `:packageName` and should be lower camelCase.
+- Parameters should always be part of the route if they are required to display a badge e.g: `:packageName` and should be lower camelCase.
+- `routeEnum` support: when a service defines a finite set of allowed values for a parameter, the service can declare `static routeEnum = [...]`. In that case the first named parameter in the route `pattern` is treated as the enum to validate against `routeEnum`.
 - Common optional params like, `:branch` or `:tag` should also be passed as part of the route.
 - Query string parameters should be used when:
   - The parameter is related to formatting. e.g: `/appveyor/tests/:user/:repo?compact_message`.
