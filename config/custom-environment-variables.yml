@@ -70,6 +70,7 @@ public:
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
   requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'
 
+  dynamicAndEndpointBadgesEnabled: 'DYNAMIC_AND_ENDPOINT_BADGES_ENABLED'
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
