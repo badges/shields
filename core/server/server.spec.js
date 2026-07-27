@@ -1,5 +1,6 @@
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { execFileSync } from 'node:child_process'
 import { expect } from 'chai'
 import isSvg from 'is-svg'
 import config from 'config'
@@ -436,20 +437,35 @@ describe('The server', function () {
       server = await createTestServer()
       await server.start()
 
-      const [dynamicResponse, endpointResponse] = await Promise.all([
-        got(
-          `${server.baseUrl}badge/dynamic/json.json?url=https%3A%2F%2Fexample.test%2Fdynamic&query=%24.secret`,
-        ),
-        got(
-          `${server.baseUrl}endpoint.json?url=https%3A%2F%2Fexample.test%2Fendpoint`,
-        ),
-      ])
+      const [dynamicResponse, endpointResponse, retiredEndpointResponse] =
+        await Promise.all([
+          got(
+            `${server.baseUrl}badge/dynamic/json.json?url=https%3A%2F%2Fexample.test%2Fdynamic&query=%24.secret`,
+          ),
+          got(
+            `${server.baseUrl}endpoint.json?url=https%3A%2F%2Fexample.test%2Fendpoint`,
+          ),
+          got(`${server.baseUrl}badge/endpoint.json`),
+        ])
 
       expect(
-        [dynamicResponse, endpointResponse].map(
+        [dynamicResponse, endpointResponse, retiredEndpointResponse].map(
           ({ body }) => JSON.parse(body).message,
         ),
-      ).to.deep.equal(['internal-data', 'internal-data'])
+      ).to.deep.equal([
+        'internal-data',
+        'internal-data',
+        'https://github.com/badges/shields/pull/11583',
+      ])
+
+      const remainingDynamicResponses = await Promise.all(
+        ['regex', 'toml', 'xml', 'yaml'].map(format =>
+          got(`${server.baseUrl}badge/dynamic/${format}.json`),
+        ),
+      )
+      remainingDynamicResponses.forEach(({ body }) => {
+        expect(JSON.parse(body).message).not.to.equal('badge not found')
+      })
     })
   })
 
@@ -461,6 +477,37 @@ describe('The server', function () {
       expect(() => new Server(customConfig)).to.throw(
         '"dynamicAndEndpointBadgesEnabled" must be a boolean',
       )
+    })
+
+    it('should parse dynamicAndEndpointBadgesEnabled environment values as booleans', function () {
+      const script = `
+        import config from 'config'
+        import Server from './core/server/server.js'
+        const server = new Server(config.util.toObject())
+        const value = server.config.public.dynamicAndEndpointBadgesEnabled
+        console.log(\`validated:\${typeof value}:\${value}\`)
+      `
+      const readEnvironmentValue = value =>
+        execFileSync(
+          process.execPath,
+          ['--input-type=module', '--eval', script],
+          {
+            encoding: 'utf8',
+            env: {
+              ...process.env,
+              NODE_CONFIG_ENV: 'test',
+              DYNAMIC_AND_ENDPOINT_BADGES_ENABLED: value,
+            },
+          },
+        )
+          .trim()
+          .split('\n')
+          .at(-1)
+
+      expect(['true', 'false'].map(readEnvironmentValue)).to.deep.equal([
+        'validated:boolean:true',
+        'validated:boolean:false',
+      ])
     })
 
     describe('influx', function () {
