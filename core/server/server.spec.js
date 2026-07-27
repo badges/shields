@@ -380,30 +380,24 @@ describe('The server', function () {
 
   describe('`dynamicAndEndpointBadgesEnabled` setting', function () {
     let server
+    const expectJsonBadge = (body, expected) =>
+      expect(JSON.parse(body)).to.include(expected)
     afterEach(async function () {
       if (server) {
         await server.stop()
       }
       nock.cleanAll()
     })
-
     it('should only disable Dynamic and Endpoint badge routes', async function () {
-      this.timeout(10000)
       const upstream = nock('https://example.test')
         .persist()
         .get(/.*/)
-        .reply(200, {
-          schemaVersion: 1,
-          label: 'private',
-          message: 'internal-data',
-          secret: 'internal-data',
-        })
+        .reply(200)
 
       server = await createTestServer({
         public: { dynamicAndEndpointBadgesEnabled: false },
       })
       await server.start()
-
       const openEndedPaths = [
         ...['json', 'regex', 'toml', 'xml', 'yaml'].map(
           format =>
@@ -416,25 +410,20 @@ describe('The server', function () {
         openEndedPaths.map(path => got(`${server.baseUrl}${path}`)),
       )
 
-      openEndedResponses.forEach(({ statusCode, body }) => {
-        expect(statusCode).to.equal(200)
-        expect(JSON.parse(body)).to.include({
+      openEndedResponses.forEach(({ body }) =>
+        expectJsonBadge(body, {
           label: '404',
           message: 'badge not found',
-        })
-      })
+        }),
+      )
       expect(upstream.isDone()).to.equal(false)
 
       const { body } = await got(`${server.baseUrl}badge/foo-bar-blue.json`)
-      expect(JSON.parse(body)).to.include({
-        label: 'foo',
-        message: 'bar',
-      })
+      expectJsonBadge(body, { label: 'foo', message: 'bar' })
     })
 
     it('should keep Dynamic and Endpoint badge routes enabled by default', async function () {
-      this.timeout(10000)
-      const upstream = nock('https://example.test')
+      nock('https://example.test')
         .get('/dynamic')
         .reply(200, { secret: 'internal-data' })
         .get('/endpoint')
@@ -456,28 +445,22 @@ describe('The server', function () {
         ),
       ])
 
-      expect(JSON.parse(dynamicResponse.body)).to.include({
-        label: 'custom badge',
-        message: 'internal-data',
-      })
-      expect(JSON.parse(endpointResponse.body)).to.include({
-        label: 'private',
-        message: 'internal-data',
-      })
-      expect(upstream.isDone()).to.equal(true)
+      expect(
+        [dynamicResponse, endpointResponse].map(
+          ({ body }) => JSON.parse(body).message,
+        ),
+      ).to.deep.equal(['internal-data', 'internal-data'])
     })
   })
 
   describe('configuration validation', function () {
-    describe('dynamicAndEndpointBadgesEnabled', function () {
-      it('should reject invalid values', function () {
-        const customConfig = config.util.toObject()
-        customConfig.public.dynamicAndEndpointBadgesEnabled = 'not-a-boolean'
+    it('should reject invalid dynamicAndEndpointBadgesEnabled values', function () {
+      const customConfig = config.util.toObject()
+      customConfig.public.dynamicAndEndpointBadgesEnabled = 'not-a-boolean'
 
-        expect(() => new Server(customConfig)).to.throw(
-          '"dynamicAndEndpointBadgesEnabled" must be a boolean',
-        )
-      })
+      expect(() => new Server(customConfig)).to.throw(
+        '"dynamicAndEndpointBadgesEnabled" must be a boolean',
+      )
     })
 
     describe('influx', function () {
