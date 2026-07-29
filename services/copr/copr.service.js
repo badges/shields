@@ -31,7 +31,7 @@ const queryParamSchema = Joi.object({
 
 const description = `
 Shows the latest build status for a package on
-[COPR](https://copr.fedorainfracloud.org/).
+a Copr instance, for example [Fedora Copr](https://copr.fedorainfracloud.org/).
 
 For group projects, prefix the owner with \`@\` (for example \`@copr\`).
 `
