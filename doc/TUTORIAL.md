@@ -109,10 +109,11 @@ Description of the code:
 4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any number of named parameters. These are converted into regular expressions by [`path-to-regexp`][path-to-regexp]. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
-   - `routeEnum` (optional): an array of strings that defines a finite set of allowed values for an enum-like parameter in the route. When `routeEnum` is present, the first named parameter in the route `pattern` is treated as the enum value to validate against `routeEnum`.
-     - Example: for a route with pattern `:type/:user/:repo` you would set `static routeEnum = ['dt', 'dm', 'dd']` and the incoming `type` value will be validated against that array.
-     - If the first named parameter is not present in `routeEnum`, the request will be rejected before `handle()` is invoked.
-     - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md).
+   - `routeEnum` (optional): an array of strings that defines the allowed values for the first named parameter in `pattern`.
+     - Only the first named parameter is validated by `routeEnum`.
+     - Example: for `pattern: ':type/:user/:repo'`, set `static routeEnum = ['dt', 'dm', 'dd']`; the incoming `type` value is validated against that array.
+     - If that first parameter value is not present in `routeEnum`, the request is rejected before `handle()` is invoked.
+     - See [designing badge URLs](./badge-urls.md) for additional naming and URL conventions.
 
 ```js
 // Example service that uses routeEnum
