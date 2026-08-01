@@ -125,6 +125,21 @@ Assuming Docker is running locally, you should be able to get to the application
 
 If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the IP address of that virtual machine.
 
+### Disabling Dynamic and Endpoint badges
+
+Dynamic and Endpoint badges are enabled by default. These badge families fetch URLs supplied by the requester, which may be unsuitable for an internet-facing self-hosted server that can reach private network resources.
+
+To disable both badge families, set the following public configuration:
+
+```yml
+public:
+  dynamicAndEndpointBadgesEnabled: false
+```
+
+Alternatively, set the environment variable `DYNAMIC_AND_ENDPOINT_BADGES_ENABLED=false`.
+
+When disabled, Dynamic and Endpoint routes are not registered. Requests to those routes receive the standard `404 | badge not found` badge response. Other badge services remain available.
+
 ## Raster server
 
 If you want to host PNG badges, you can also self-host a [raster server][] which points to your badge server. It's a docker container. We host it on Fly.io but should be possible to host on a wide variety of platforms.
