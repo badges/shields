@@ -70,6 +70,7 @@ public:
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
   requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'
 
+  dynamicAndEndpointBadgesEnabled: 'DYNAMIC_AND_ENDPOINT_BADGES_ENABLED'
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
@@ -101,6 +102,7 @@ private:
   opencollective_token: 'OPENCOLLECTIVE_TOKEN'
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'
+  readthedocs_token: 'READTHEDOCS_TOKEN'
   reddit_client_id: 'REDDIT_CLIENT_ID'
   reddit_client_secret: 'REDDIT_CLIENT_SECRET'
   sentry_dsn: 'SENTRY_DSN'

@@ -42,7 +42,7 @@ export default class GitlabIssues extends GitLabBase {
           }),
           pathParam({
             name: 'project',
-            example: 'gitlab-org/gitlab',
+            example: 'gitlab-org/cli',
           }),
           queryParam({
             name: 'gitlab_url',
@@ -50,7 +50,7 @@ export default class GitlabIssues extends GitLabBase {
           }),
           queryParam({
             name: 'labels',
-            example: 'test,failure::new',
+            example: 'type::bug',
             description:
               'If you want to use multiple labels, you can use a comma (<code>,</code>) to separate them, e.g. <code>foo,bar</code>',
           }),

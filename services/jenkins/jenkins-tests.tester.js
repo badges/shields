@@ -13,43 +13,52 @@ export const t = await createServiceTester()
 // https://wiki.jenkins.io/pages/viewpage.action?pageId=58001258
 
 t.create('Test status')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/jgit/job/jgit')
+  .get('/tests.json?jobUrl=https://ci.freebsd.org/job/FreeBSD-main-amd64-test')
   .expectBadge({ label: 'tests', message: isDefaultTestTotals })
 
 t.create('Test status with compact message')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/jgit/job/jgit', {
-    qs: { compact_message: null },
-  })
+  .get(
+    '/tests.json?jobUrl=https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
+    {
+      qs: { compact_message: null },
+    },
+  )
   .expectBadge({ label: 'tests', message: isDefaultCompactTestTotals })
 
 t.create('Test status with custom labels')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/jgit/job/jgit', {
-    qs: {
-      passed_label: 'good',
-      failed_label: 'bad',
-      skipped_label: 'n/a',
+  .get(
+    '/tests.json?jobUrl=https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
+    {
+      qs: {
+        passed_label: 'good',
+        failed_label: 'bad',
+        skipped_label: 'n/a',
+      },
     },
-  })
+  )
   .expectBadge({ label: 'tests', message: isCustomTestTotals })
 
 t.create('Test status with compact message and custom labels')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/jgit/job/jgit', {
-    qs: {
-      compact_message: null,
-      passed_label: '💃',
-      failed_label: '🤦‍♀️',
-      skipped_label: '🤷',
+  .get(
+    '/tests.json?jobUrl=https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
+    {
+      qs: {
+        compact_message: null,
+        passed_label: '💃',
+        failed_label: '🤦‍♀️',
+        skipped_label: '🤷',
+      },
     },
-  })
+  )
   .expectBadge({
     label: 'tests',
     message: isCustomCompactTestTotals,
   })
 
 t.create('Test status on job with no tests')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/orbit-shell')
+  .get('/tests.json?jobUrl=https://ci.freebsd.org/job/FreeBSD-main-amd64-build')
   .expectBadge({ label: 'tests', message: 'no tests found' })
 
 t.create('Test status on non-existent job')
-  .get('/tests.json?jobUrl=https://ci.eclipse.org/orbit/job/does-not-exist')
+  .get('/tests.json?jobUrl=https://ci.freebsd.org/job/does-not-exist')
   .expectBadge({ label: 'tests', message: 'instance or job not found' })

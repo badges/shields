@@ -18,7 +18,7 @@ You should have [git](https://git-scm.com/) installed. If you do not, [install g
 
 #### Node, NPM
 
-Node 22 and NPM 10.x or 11.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/
+Node 24 and NPM 11.x or 12.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
 

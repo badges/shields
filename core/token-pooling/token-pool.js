@@ -90,6 +90,17 @@ class Token {
   }
 
   /**
+   * Update user-provided data associated with the token.
+   *
+   * Callers should only invoke this when they have fresh data to store.
+   *
+   * @param {*} data reserved for future use
+   */
+  updateData(data) {
+    this._data = data
+  }
+
+  /**
    * Update the uses remaining and next reset time for a token.
    *
    * @param {number} usesRemaining
@@ -206,8 +217,8 @@ class TokenPool {
 
     this.currentBatch = { currentToken: null, remaining: 0 }
 
-    // A set of IDs used for deduplication.
-    this.tokenIds = new Set()
+    // A map of IDs to tokens, used for deduplication and metadata updates.
+    this.tokensById = new Map()
 
     // See discussion on the FIFO and priority queues in `next()`.
     this.fifoQueue = []
@@ -228,6 +239,10 @@ class TokenPool {
   /**
    * Add a token with user-provided ID and data.
    *
+   * Adding an existing valid token updates its data only when `data` is
+   * provided. Adding an invalid token creates a replacement, allowing stale
+   * queue entries to remain invalid until they are discarded on access.
+   *
    * @param {string} id token string
    * @param {*} data reserved for future use
    * @param {number} usesRemaining
@@ -235,21 +250,29 @@ class TokenPool {
    * @param {number} nextReset
    *    Time when the token can be used again even if it's exhausted (unix timestamp)
    *
-   * @returns {boolean} Was the token added to the pool?
+   * @returns {boolean} Was a previously unknown token added to the pool?
    */
   add(id, data, usesRemaining, nextReset) {
-    if (this.tokenIds.has(id)) {
+    const existingToken = this.tokensById.get(id)
+    if (existingToken?.isValid) {
+      if (data !== undefined) {
+        existingToken.updateData(data)
+      }
       return false
     }
-    this.tokenIds.add(id)
+
+    if (data === undefined && existingToken) {
+      data = existingToken.data
+    }
 
     usesRemaining = usesRemaining === undefined ? this.batchSize : usesRemaining
     nextReset = nextReset === undefined ? Token.nextResetNever : nextReset
 
     const token = new Token(id, data, usesRemaining, nextReset)
+    this.tokensById.set(id, token)
     this.fifoQueue.push(token)
 
-    return true
+    return existingToken === undefined
   }
 
   // Prepare to start a new batch by obtaining and returning the next usable
@@ -274,7 +297,7 @@ class TokenPool {
       (next = this.priorityQueue.peek())
     ) {
       if (!next.isValid) {
-        // Discard, and
+        this.priorityQueue.deq()
         continue
       } else if (next.isExhausted) {
         // No need to check any more tokens, since they all reset after this

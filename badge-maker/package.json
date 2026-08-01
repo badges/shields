@@ -37,7 +37,7 @@
     "badge": "lib/badge-cli.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "collective": {
     "type": "opencollective",

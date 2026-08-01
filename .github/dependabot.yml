@@ -14,12 +14,6 @@ updates:
           - 'version-update:semver-major'
           - 'version-update:semver-minor'
           - 'version-update:semver-patch'
-      # https://github.com/badges/shields/issues/7324
-      # https://github.com/badges/shields/issues/7447
-      # we're stuck with these versions until Safari is compatible with lookbehind regex syntax
-      # https://caniuse.com/js-regexp-lookbehind
-      - dependency-name: 'decamelize'
-      - dependency-name: 'humanize-string'
     groups:
       # All official @docusaurus/* packages should have the exact same version as @docusaurus/core.
       # From https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups:

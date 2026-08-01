@@ -79,7 +79,7 @@ export default class Codecov extends BaseSvgScrapingService {
             schema: { type: 'string', enum: this.getEnum('vcsName') },
           }),
           pathParam({ name: 'user', example: 'codecov' }),
-          pathParam({ name: 'repo', example: 'example-node' }),
+          pathParam({ name: 'repo', example: 'umbrella' }),
           queryParam({
             name: 'token',
             description: tokenDescription,
