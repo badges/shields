@@ -112,6 +112,7 @@ Description of the code:
    - `routeEnum` (optional): an array of strings that defines a finite set of allowed values for an enum-like parameter in the route. When `routeEnum` is present, the first named parameter in the route `pattern` is treated as the enum value to validate against `routeEnum`.
      - Example: for a route with pattern `:type/:user/:repo` you would set `static routeEnum = ['dt', 'dm', 'dd']` and the incoming `type` value will be validated against that array.
      - If the first named parameter is not present in `routeEnum`, the request will be rejected before `handle()` is invoked.
+     - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md).
 
 ```js
 // Example service that uses routeEnum
