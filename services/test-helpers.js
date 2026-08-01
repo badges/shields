@@ -73,18 +73,45 @@ function getBadgeExampleCall(serviceClass, paramType) {
   let enumParam
   if (paramType === 'path' && serviceClass.routeEnum) {
     const { captureNames } = prepareRoute(serviceClass.route)
-    const matchingEnum = serviceClass.routeEnum.find(enumValue =>
-      firstOpenapiPath.includes(enumValue),
-    )
-    if (matchingEnum && captureNames.length > 0) {
-      enumParam = { [captureNames[0]]: matchingEnum }
-    } else if (
-      captureNames.length > 0 &&
-      !firstOpenapiPath.includes(captureNames[0])
+    const routeParamName = captureNames[0]
+    if (!routeParamName) {
+      throw new TypeError(
+        `Missing route parameter name for ${serviceClass.name} while routeEnum is defined. Check the route pattern.`,
+      )
+    }
+    const firstOpenapiPathParams =
+      serviceClass.openApi[firstOpenapiPath].get.parameters
+    if (
+      !Array.isArray(firstOpenapiPathParams) ||
+      firstOpenapiPathParams.length === 0
     ) {
       throw new TypeError(
-        `Unable to match routeEnum to OpenAPI path for ${serviceClass.name}. Check the openApi first path and routeEnum values.`,
+        `Missing OpenAPI path parameters for ${serviceClass.name} while routeEnum is defined. Check the OpenAPI specification.`,
       )
+    }
+    const routeParam = firstOpenapiPathParams.find(
+      obj => obj.in === 'path' && obj.name === routeParamName,
+    )
+
+    if (routeParam?.example) {
+      if (!serviceClass.routeEnum.includes(routeParam.example)) {
+        throw new TypeError(
+          `Route parameter example ${routeParam.example} for ${serviceClass.name} is not included in routeEnum.`,
+        )
+      }
+      enumParam = { [routeParamName]: routeParam.example }
+    } else {
+      // fallback to exact match of routeEnum in the OpenAPI path if no example is provided
+      const exactMatchingEnum = firstOpenapiPath
+        .split('/')
+        .find(pathPart => serviceClass.routeEnum.includes(pathPart))
+      if (exactMatchingEnum) {
+        enumParam = { [routeParamName]: exactMatchingEnum }
+      } else {
+        throw new TypeError(
+          `Unable to match routeEnum to OpenAPI path for ${serviceClass.name}. Check the openApi first path and routeEnum values.`,
+        )
+      }
     }
   }
 
