@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-services:
-    name: ${{ github.event.action == 'edited' && !github.event.changes.title && 'description-edit (no service tests)' || 'test-services' }}
+    name: test-services
     concurrency:
       # Do not let an ignored description edit cancel an in-progress service test.
       group: services-${{ github.event.action == 'edited' && !github.event.changes.title && github.run_id || github.event.pull_request.number || github.ref }}
@@ -19,7 +19,9 @@ jobs:
     steps:
       - name: Skip service tests for description-only edit
         if: env.RUN_SERVICE_TESTS != 'true'
-        run: echo 'The PR title did not change.'
+        run: |
+          echo 'The PR title did not change.'
+          echo 'Service tests were not rerun for this description-only edit.' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Checkout
         if: env.RUN_SERVICE_TESTS == 'true'
