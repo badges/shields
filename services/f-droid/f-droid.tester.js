@@ -1,5 +1,8 @@
 import { ServiceTester } from '../tester.js'
-import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
+import {
+  isVPlusDottedVersionAtLeastOne,
+  isVPlusDottedVersionNClausesWithOptionalSuffix,
+} from '../test-validators.js'
 
 export const t = new ServiceTester({
   id: 'f-droid',
@@ -80,7 +83,7 @@ t.create('f-droid.org: The real api did not change')
   .get('/v/org.thosp.yourlocalweather.json')
   .expectBadge({
     label: 'f-droid',
-    message: isVPlusDottedVersionAtLeastOne,
+    message: isVPlusDottedVersionNClausesWithOptionalSuffix,
   })
 
 const base2 = 'https://apt.izzysoft.de/fdroid/api/v1'
