@@ -1,19 +1,17 @@
 name: Services
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, reopened, synchronize]
   push:
     branches:
       - 'gh-readonly-queue/**'
 
 concurrency:
-  # Do not let an ignored description edit cancel an in-progress service test.
-  group: services-${{ github.event.action == 'edited' && !github.event.changes.title && github.run_id || github.event.pull_request.number || github.ref }}
+  group: services-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   test-services:
-    if: github.event_name == 'push' || github.event.action != 'edited' || github.event.changes.title
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
