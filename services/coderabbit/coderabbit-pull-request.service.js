@@ -10,8 +10,9 @@ class CodeRabbitPullRequest extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'coderabbit',
-    pattern: 'prs/:provider(github|bitbucket|gitlab)/:org/:repo',
+    pattern: 'prs/:provider/:org/:repo',
   }
+  static routeEnum = ['github', 'bitbucket', 'gitlab']
 
   static openApi = {
     '/coderabbit/prs/{provider}/{org}/{repo}': {
