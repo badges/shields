@@ -8,22 +8,29 @@ on:
 
 jobs:
   test-services:
-    name: ${{ github.event.action == 'edited' && !github.event.changes.title && 'description-edit (service tests skipped)' || 'test-services' }}
-    if: github.event_name == 'push' || github.event.action != 'edited' || github.event.changes.title
+    name: ${{ github.event.action == 'edited' && !github.event.changes.title && 'description-edit (no service tests)' || 'test-services' }}
     concurrency:
       # Do not let an ignored description edit cancel an in-progress service test.
       group: services-${{ github.event.action == 'edited' && !github.event.changes.title && github.run_id || github.event.pull_request.number || github.ref }}
       cancel-in-progress: true
     runs-on: ubuntu-latest
+    env:
+      RUN_SERVICE_TESTS: ${{ github.event_name == 'push' || github.event.action != 'edited' || github.event.changes.title }}
     steps:
+      - name: Skip service tests for description-only edit
+        if: env.RUN_SERVICE_TESTS != 'true'
+        run: echo 'The PR title did not change.'
+
       - name: Checkout
+        if: env.RUN_SERVICE_TESTS == 'true'
         uses: actions/checkout@v7
 
       - name: Setup
+        if: env.RUN_SERVICE_TESTS == 'true'
         uses: ./.github/actions/setup
 
       - name: Service tests (triggered from local branch)
-        if: github.event.pull_request.head.repo.full_name == github.repository
+        if: env.RUN_SERVICE_TESTS == 'true' && github.event.pull_request.head.repo.full_name == github.repository
         uses: ./.github/actions/service-tests
         with:
           github-token: '${{ secrets.GH_PAT }}'
@@ -42,7 +49,7 @@ jobs:
           youtube-api-key: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Service tests (triggered from fork)
-        if: github.event.pull_request.head.repo.full_name != github.repository
+        if: env.RUN_SERVICE_TESTS == 'true' && github.event.pull_request.head.repo.full_name != github.repository
         uses: ./.github/actions/service-tests
         with:
           github-token: '${{ secrets.GITHUB_TOKEN }}'
