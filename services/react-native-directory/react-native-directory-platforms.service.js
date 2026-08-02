@@ -22,13 +22,13 @@ const librarySchema = Joi.object({
 const schema = Joi.object().pattern(Joi.string(), librarySchema).required()
 
 const platforms = {
-  ios: 'iOS',
   android: 'Android',
+  ios: 'iOS',
   web: 'Web',
-  windows: 'Windows',
   macos: 'macOS',
   tvos: 'tvOS',
   visionos: 'visionOS',
+  windows: 'Windows',
   expoGo: 'Expo Go',
   fireos: 'Fire OS',
   harmony: 'Harmony',
