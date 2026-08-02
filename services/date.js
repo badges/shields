@@ -7,11 +7,13 @@
 import dayjs from 'dayjs'
 import calendar from 'dayjs/plugin/calendar.js'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
 import { colorScale } from './color-formatters.js'
 import { InvalidResponse } from './index.js'
 
 dayjs.extend(calendar)
 dayjs.extend(customParseFormat)
+dayjs.extend(relativeTime)
 
 /**
  * Parse and validate a string date into a dayjs object. Use this helper
