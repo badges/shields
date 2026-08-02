@@ -66,7 +66,7 @@ export default class ReactNativeDirectory extends BaseJsonService {
 
     return {
       message:
-        supportedPlatforms.length > 0 ? supportedPlatforms.join(', ') : 'none',
+        supportedPlatforms.length > 0 ? supportedPlatforms.join(' | ') : 'none',
     }
   }
 

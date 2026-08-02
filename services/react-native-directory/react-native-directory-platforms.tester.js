@@ -7,12 +7,12 @@ t.create('supported platforms of react-native-reanimated')
   .expectBadge({
     label: 'platforms',
     message:
-      'Android, iOS, Web, macOS, tvOS, visionOS, Expo Go, Fire OS, Harmony, VegaOS',
+      'Android | iOS | Web | macOS | tvOS | visionOS | Expo Go | Fire OS | Harmony | VegaOS',
   })
 
 t.create('supported platforms of @react-native-menu/menu')
   .get('/@react-native-menu/menu.json')
-  .expectBadge({ label: 'platforms', message: 'Android, iOS, visionOS' })
+  .expectBadge({ label: 'platforms', message: 'Android | iOS | visionOS' })
 
 t.create('package not found').get('/not-a-package.json').expectBadge({
   label: 'platforms',
