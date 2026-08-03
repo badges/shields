@@ -5,8 +5,9 @@ export default class CondaPlatform extends BaseCondaService {
   static category = 'platform-support'
   static route = {
     base: 'conda',
-    pattern: ':variant(p|pn)/:channel/:packageName',
+    pattern: ':variant/:channel/:packageName',
   }
+  static routeEnum = ['p', 'pn']
 
   static openApi = {
     '/conda/{variant}/{channel}/{packageName}': {

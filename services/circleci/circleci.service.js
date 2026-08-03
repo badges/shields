@@ -25,9 +25,10 @@ class CircleCi extends BaseSvgScrapingService {
   static category = 'build'
   static route = {
     base: 'circleci/build',
-    pattern: ':vcsType(github|gh|bitbucket|bb)/:user/:repo/:branch*',
+    pattern: ':vcsType/:user/:repo/:branch*',
     queryParamSchema,
   }
+  static routeEnum = ['github', 'gh', 'bitbucket', 'bb']
 
   static openApi = {
     '/circleci/build/{vcsType}/{user}/{repo}': {
