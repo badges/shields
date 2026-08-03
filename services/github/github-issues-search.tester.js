@@ -3,20 +3,18 @@ import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'GithubIssuesSearch',
   title: 'Github Issues Search',
-  pathPrefix: '/github',
+  pathPrefix: '/github/issues-search',
 })
 
 t.create('GitHub issue search (valid query string)')
-  .get(
-    '/issues-search.json?query=repo%3Abadges%2Fshields%20is%3Aclosed%20label%3Ablocker%20',
-  )
+  .get('.json?query=repo%3Abadges%2Fshields%20is%3Aclosed%20label%3Ablocker%20')
   .expectBadge({
     label: 'query',
     message: isMetric,
   })
 
 t.create('GitHub issue search (invalid query string)')
-  .get('/issues-search.json?query=')
+  .get('.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
