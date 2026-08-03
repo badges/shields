@@ -3,12 +3,12 @@ import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'GithubDiscussionsSearch',
   title: 'Github Discussions Search',
-  pathPrefix: '/github',
+  pathPrefix: '/github/discussions-search',
 })
 
 t.create('GitHub discussions search (valid query string)')
   .get(
-    '/discussions-search.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s',
+    '.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s',
   )
   .expectBadge({
     label: 'query',
@@ -16,7 +16,7 @@ t.create('GitHub discussions search (valid query string)')
   })
 
 t.create('GitHub discussions search (invalid query string)')
-  .get('/discussions-search.json?query=')
+  .get('.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
