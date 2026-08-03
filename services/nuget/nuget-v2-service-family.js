@@ -152,8 +152,8 @@ function createServiceFamily({
     static category = 'downloads'
 
     static route = {
-      base: serviceBaseUrl,
-      pattern: 'dt/:packageName',
+      base: `${serviceBaseUrl}/dt`,
+      pattern: ':packageName',
     }
 
     static get openApi() {

@@ -6,8 +6,8 @@ export default class OpenVSXReleaseDate extends OpenVSXBase {
   static category = 'activity'
 
   static route = {
-    base: 'open-vsx',
-    pattern: 'release-date/:namespace/:extension',
+    base: 'open-vsx/release-date',
+    pattern: ':namespace/:extension',
   }
 
   static openApi = {
