@@ -23,25 +23,21 @@ t.create('GitHub issue search (invalid query string)')
   })
 
 t.create('GitHub Repo issue search (valid query string)')
-  .get(
-    '/issues-search/badges/shields.json?query=is%3Aclosed%20label%3Ablocker%20',
-  )
+  .get('/badges/shields.json?query=is%3Aclosed%20label%3Ablocker%20')
   .expectBadge({
     label: 'query',
     message: isMetric,
   })
 
 t.create('GitHub Repo issue search (invalid query string)')
-  .get('/issues-search/badges/shields.json?query=')
+  .get('/badges/shields.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
   })
 
 t.create('GitHub Repo issue search (invalid repo)')
-  .get(
-    '/issues-search/badges/helmets.json?query=is%3Aclosed%20label%3Ablocker%20',
-  )
+  .get('/badges/helmets.json?query=is%3Aclosed%20label%3Ablocker%20')
   .expectBadge({
     label: 'query',
     message: '0',

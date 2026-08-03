@@ -23,25 +23,21 @@ t.create('GitHub discussions search (invalid query string)')
   })
 
 t.create('GitHub Repo discussions search (valid query string)')
-  .get(
-    '/discussions-search/badges/shields.json?query=is%3Aanswered%20author%3Achris48s',
-  )
+  .get('/badges/shields.json?query=is%3Aanswered%20author%3Achris48s')
   .expectBadge({
     label: 'query',
     message: isMetric,
   })
 
 t.create('GitHub Repo discussions search (invalid query string)')
-  .get('/discussions-search/badges/shields.json?query=')
+  .get('/badges/shields.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
   })
 
 t.create('GitHub Repo discussions search (invalid repo)')
-  .get(
-    '/discussions-search/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s',
-  )
+  .get('/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s')
   .expectBadge({
     label: 'query',
     message: '0',
