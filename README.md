@@ -152,7 +152,6 @@ You can read more about [the project's inception][thread], [the motivation of th
 
 Maintainers:
 
-- [calebcartwright](https://github.com/calebcartwright)
 - [jNullj](https://github.com/jnullj)
 - [LitoMore](https://github.com/LitoMore)
 - [paulmelnikow](https://github.com/paulmelnikow)
@@ -160,6 +159,7 @@ Maintainers:
 
 Alumni:
 
+- [calebcartwright](https://github.com/calebcartwright)
 - [chris48s](https://github.com/chris48s)
 - [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
