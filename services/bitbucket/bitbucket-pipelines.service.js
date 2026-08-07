@@ -22,6 +22,9 @@ const bitbucketPipelinesSchema = Joi.object({
               'EXPIRED',
             ),
           }),
+          stage: Joi.object({
+            name: Joi.string().required(),
+          }),
         }).required(),
       }),
     )
@@ -91,6 +94,14 @@ class BitbucketPipelines extends BaseJsonService {
         throw new InvalidResponse({ prettyMessage: 'invalid response data' })
       }
       return values[0].state.result.name
+    }
+    const inProgress = data.values.filter(
+      value => value.state && value.state.name === 'IN_PROGRESS',
+    )
+    if (inProgress.length > 0 && inProgress[0].state?.stage?.name) {
+      // e.g: a pipeline HALTED because the account ran out of build minutes
+      // https://github.com/badges/shields/issues/9096
+      return inProgress[0].state.stage.name.toLowerCase()
     }
     return 'never built'
   }

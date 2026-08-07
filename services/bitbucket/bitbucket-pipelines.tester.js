@@ -129,6 +129,39 @@ t.create('build result (with manual build steps)')
   )
   .expectBadge({ label: 'build', message: 'passing' })
 
+// regression test for https://github.com/badges/shields/issues/9096
+t.create('build result (halted, no completed builds)')
+  .get('/shields-io/test-repo/main.json')
+  .intercept(nock =>
+    nock('https://api.bitbucket.org')
+      .get(/^\/2.0\/.*/)
+      .reply(200, {
+        values: [
+          {
+            state: {
+              name: 'IN_PROGRESS',
+              type: 'pipeline_state_in_progress',
+              stage: {
+                name: 'HALTED',
+                type: 'pipeline_state_in_progress_halted',
+              },
+            },
+          },
+          {
+            state: {
+              name: 'IN_PROGRESS',
+              type: 'pipeline_state_in_progress',
+              stage: {
+                name: 'HALTED',
+                type: 'pipeline_state_in_progress_halted',
+              },
+            },
+          },
+        ],
+      }),
+  )
+  .expectBadge({ label: 'build', message: 'halted', color: 'lightgrey' })
+
 t.create('build result no branch redirect')
   .get('/shields-io/test-repo.svg')
   .expectRedirect('/bitbucket/pipelines/shields-io/test-repo/master.svg')
