@@ -53,15 +53,23 @@ runs:
   using: 'composite'
   steps:
     - name: Derive list of service tests to run
-      # Note: In this step we are using an intermediate env var instead of
-      # passing github.event.pull_request.title as an argument
-      # to prevent a shell injection attack. Further reading:
+      # Fetch the current title so a rerun after a title edit selects the
+      # correct services. Pass it through a quoted shell variable to prevent
+      # shell injection. Further reading:
       # https://securitylab.github.com/research/github-actions-untrusted-input/#exploitability-and-impact
       # https://securitylab.github.com/research/github-actions-untrusted-input/#remediation
       if: always()
       env:
-        TITLE: ${{ github.event.pull_request.title }}
-      run: npm run test:services:pr:prepare "$TITLE"
+        EVENT_TITLE: ${{ github.event.pull_request.title }}
+        GH_TOKEN: '${{ inputs.github-token }}'
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+      run: |
+        if test -n "$PR_NUMBER"; then
+          TITLE="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" --jq '.title')"
+        else
+          TITLE="$EVENT_TITLE"
+        fi
+        npm run test:services:pr:prepare -- "$TITLE"
       shell: bash
 
     - name: Run service tests
