@@ -31,6 +31,14 @@ function withTextFill(attrs, textColor) {
   return textColor === DEFAULT_TEXT_FILL ? attrs : { ...attrs, fill: textColor }
 }
 
+function withPreservedSpacing(attrs, content) {
+  return /\s{2,}/.test(content) ? { ...attrs, 'xml:space': 'preserve' } : attrs
+}
+
+function withTextAttrs(attrs, textColor, content) {
+  return withPreservedSpacing(withTextFill(attrs, textColor), content)
+}
+
 function roundUpToOdd(val) {
   return val % 2 === 0 ? val + 1 : val
 }
@@ -213,24 +221,30 @@ class Badge {
       const text = new XmlElement({
         name: 'text',
         content: [content],
-        attrs: withTextFill({ x, y, textLength }, textColor),
+        attrs: withTextAttrs({ x, y, textLength }, textColor, content),
       })
       const shadowY = y + 10
       const shadowText = new XmlElement({
         name: 'text',
         content: [content],
-        attrs: { x, y: shadowY, 'fill-opacity': '.3', textLength },
+        attrs: withPreservedSpacing(
+          { x, y: shadowY, 'fill-opacity': '.3', textLength },
+          content,
+        ),
       })
       const shadowBlur = new XmlElement({
         name: 'text',
         content: [content],
-        attrs: {
-          x,
-          y: shadowY,
-          'fill-opacity': '.8',
-          filter: 'url(#blur)',
-          textLength,
-        },
+        attrs: withPreservedSpacing(
+          {
+            x,
+            y: shadowY,
+            'fill-opacity': '.8',
+            filter: 'url(#blur)',
+            textLength,
+          },
+          content,
+        ),
       })
       const shadowGroup = new XmlElement({
         name: 'g',
@@ -246,9 +260,10 @@ class Badge {
       element = new XmlElement({
         name: 'text',
         content: [content],
-        attrs: withTextFill(
+        attrs: withTextAttrs(
           { x, y, textLength, transform: FONT_SCALE_DOWN_VALUE },
           textColor,
+          content,
         ),
       })
     }

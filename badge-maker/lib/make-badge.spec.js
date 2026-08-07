@@ -85,6 +85,16 @@ describe('The badge generator', function () {
         .and.to.include('grown')
     })
 
+    it('should preserve consecutive spaces in SVG text', function () {
+      const svg = makeBadge({
+        label: 'foo    bar',
+        message: 'grown',
+        format: 'svg',
+      })
+
+      expect(svg).to.include('xml:space="preserve">foo    bar</text>')
+    })
+
     it('should match snapshot', async function () {
       await expectBadgeToMatchSnapshot({
         label: 'cactus',
