@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { pathParams } from '../index.js'
+import { pathParams, queryParams } from '../index.js'
 import { coveragePercentage as coveragePercentageColor } from '../color-formatters.js'
 import AzureDevOpsBase from './azure-devops-base.js'
 
@@ -20,6 +20,10 @@ Your badge will then have the form:
 
 Optionally, you can specify a named branch:
 \`https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID/NAMED_BRANCH.svg\`.
+
+By default the badge shows line coverage. To show branch coverage instead,
+append the \`metric\` query parameter:
+\`https://img.shields.io/azure-devops/coverage/ORGANIZATION/PROJECT/DEFINITION_ID.svg?metric=branch\`.
 `
 
 const buildCodeCoverageSchema = Joi.object({
@@ -41,12 +45,32 @@ const buildCodeCoverageSchema = Joi.object({
     .required(),
 }).required()
 
+const metricEnum = ['line', 'branch']
+
+const metricLabels = {
+  line: ['Line', 'Lines'],
+  branch: ['Branch', 'Branches'],
+}
+
+const queryParamSchema = Joi.object({
+  metric: Joi.string()
+    .valid(...metricEnum)
+    .default('line'),
+}).required()
+
+const openApiQueryParams = queryParams({
+  name: 'metric',
+  example: 'branch',
+  schema: { type: 'string', enum: metricEnum },
+})
+
 export default class AzureDevOpsCoverage extends AzureDevOpsBase {
   static category = 'coverage'
 
   static route = {
     base: 'azure-devops/coverage',
     pattern: ':organization/:project/:definitionId/:branch*',
+    queryParamSchema,
   }
 
   static openApi = {
@@ -54,44 +78,50 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
       get: {
         summary: 'Azure DevOps coverage',
         description,
-        parameters: pathParams(
-          {
-            name: 'organization',
-            example: 'swellaby',
-          },
-          {
-            name: 'project',
-            example: 'opensource',
-          },
-          {
-            name: 'definitionId',
-            example: '25',
-          },
-        ),
+        parameters: [
+          ...pathParams(
+            {
+              name: 'organization',
+              example: 'swellaby',
+            },
+            {
+              name: 'project',
+              example: 'opensource',
+            },
+            {
+              name: 'definitionId',
+              example: '25',
+            },
+          ),
+          ...openApiQueryParams,
+        ],
       },
     },
     '/azure-devops/coverage/{organization}/{project}/{definitionId}/{branch}': {
       get: {
         summary: 'Azure DevOps coverage (branch)',
         description,
-        parameters: pathParams(
-          {
-            name: 'organization',
-            example: 'swellaby',
-          },
-          {
-            name: 'project',
-            example: 'opensource',
-          },
-          {
-            name: 'definitionId',
-            example: '25',
-          },
-          {
-            name: 'branch',
-            example: 'master',
-          },
-        ),
+        parameters: [
+          ...pathParams(
+            {
+              name: 'organization',
+              example: 'swellaby',
+            },
+            {
+              name: 'project',
+              example: 'opensource',
+            },
+            {
+              name: 'definitionId',
+              example: '25',
+            },
+            {
+              name: 'branch',
+              example: 'master',
+            },
+          ),
+          ...openApiQueryParams,
+        ],
       },
     },
   }
@@ -105,7 +135,10 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
     }
   }
 
-  async handle({ organization, project, definitionId, branch }) {
+  async handle(
+    { organization, project, definitionId, branch },
+    { metric = 'line' },
+  ) {
     const httpErrors = {
       404: 'build pipeline or coverage not found',
     }
@@ -135,7 +168,7 @@ export default class AzureDevOpsCoverage extends AzureDevOpsBase {
     let total = 0
     json.coverageData.forEach(cd => {
       cd.coverageStats.forEach(coverageStat => {
-        if (coverageStat.label === 'Line' || coverageStat.label === 'Lines') {
+        if (metricLabels[metric].includes(coverageStat.label)) {
           covered += coverageStat.covered
           total += coverageStat.total
         }
