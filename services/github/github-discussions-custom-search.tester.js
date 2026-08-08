@@ -3,12 +3,12 @@ import { ServiceTester } from '../tester.js'
 export const t = new ServiceTester({
   id: 'GithubDiscussionsSearch',
   title: 'Github Discussions Search',
-  pathPrefix: '/github',
+  pathPrefix: '/github/discussions-search',
 })
 
 t.create('GitHub discussions search (valid query string)')
   .get(
-    '/discussions-search.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s',
+    '.json?query=repo%3Abadges%2Fshields%20is%3Aanswered%20author%3Achris48s',
   )
   .expectBadge({
     label: 'query',
@@ -16,32 +16,28 @@ t.create('GitHub discussions search (valid query string)')
   })
 
 t.create('GitHub discussions search (invalid query string)')
-  .get('/discussions-search.json?query=')
+  .get('.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
   })
 
 t.create('GitHub Repo discussions search (valid query string)')
-  .get(
-    '/discussions-search/badges/shields.json?query=is%3Aanswered%20author%3Achris48s',
-  )
+  .get('/badges/shields.json?query=is%3Aanswered%20author%3Achris48s')
   .expectBadge({
     label: 'query',
     message: isMetric,
   })
 
 t.create('GitHub Repo discussions search (invalid query string)')
-  .get('/discussions-search/badges/shields.json?query=')
+  .get('/badges/shields.json?query=')
   .expectBadge({
     label: 'query',
     message: 'invalid query parameter: query',
   })
 
 t.create('GitHub Repo discussions search (invalid repo)')
-  .get(
-    '/discussions-search/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s',
-  )
+  .get('/badges/helmets.json?query=is%3Aanswered%20author%3Achris48s')
   .expectBadge({
     label: 'query',
     message: '0',

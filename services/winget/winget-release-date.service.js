@@ -7,8 +7,8 @@ export default class WingetReleaseDate extends WingetBase {
   static category = 'activity'
 
   static route = {
-    base: 'winget',
-    pattern: 'release-date/:name',
+    base: 'winget/release-date',
+    pattern: ':name',
   }
 
   static openApi = {
