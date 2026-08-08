@@ -87,10 +87,10 @@ export default class POEditor extends BaseJsonService {
       url: 'https://api.poeditor.com/v2/languages/list',
       options: {
         method: 'POST',
-        form: {
+        body: new URLSearchParams({
           api_token: token,
           id: projectId,
-        },
+        }),
       },
     })
   }
