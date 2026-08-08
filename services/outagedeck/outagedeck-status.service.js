@@ -35,6 +35,12 @@ export default class OutageDeckStatus extends BaseJsonService {
     pattern: ':provider',
   }
 
+  static auth = {
+    passKey: 'outagedeck_api_key',
+    authorizedOrigins: ['https://outagedeck.com'],
+    isRequired: false,
+  }
+
   static openApi = {
     '/outagedeck/status/{provider}': {
       get: {
@@ -52,6 +58,8 @@ export default class OutageDeckStatus extends BaseJsonService {
     },
   }
 
+  static _cacheLength = 600
+
   static defaultBadgeData = {
     label: 'status',
   }
@@ -64,10 +72,12 @@ export default class OutageDeckStatus extends BaseJsonService {
   }
 
   async fetch({ provider }) {
-    return this._requestJson({
-      schema,
-      url: `https://outagedeck.com/api/v1/providers/${encodeURIComponent(provider)}`,
-    })
+    return this._requestJson(
+      this.authHelper.withBearerAuthHeader({
+        schema,
+        url: `https://outagedeck.com/api/v1/providers/${encodeURIComponent(provider)}`,
+      }),
+    )
   }
 
   async handle({ provider }) {

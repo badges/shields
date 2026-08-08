@@ -192,6 +192,7 @@ const privateConfigSchema = Joi.object({
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
   opencollective_token: Joi.string(),
+  outagedeck_api_key: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
   readthedocs_token: Joi.string(),

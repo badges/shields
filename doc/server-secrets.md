@@ -220,6 +220,12 @@ While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-us
 
 OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users. An [API token](https://graphql-docs-v2.opencollective.com/access) can be provided to access a higher rate limit of 100 reqs/minute.
 
+### OutageDeck
+
+- `OUTAGEDECK_API_KEY` (yml: `private.outagedeck_api_key`)
+
+An optional Bearer key raises the OutageDeck API rate limit. The hosted Shields.io service can use its complimentary dedicated key; self-hosted instances can leave this unset and use anonymous access, which is limited to 120 requests per IP address per hour.
+
 ### Pepy
 
 - `PEPY_KEY` (yml: `private.pepy_key`)
