@@ -9,6 +9,15 @@ t.create('search release version valid artifact')
     message: isVersion,
   })
 
+t.create('search release version with filter param')
+  .get(
+    '/r/me.neznamy/tab-api.json?server=https://repo.tomkeuper.com&filter=4.*.*',
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isVersion,
+  })
+
 t.create('search release version of an nonexistent artifact')
   .get(
     '/r/me.neznamy/nonexistent-artifact-id.json?server=https://repo.tomkeuper.com',
