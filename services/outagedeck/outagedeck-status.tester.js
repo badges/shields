@@ -43,19 +43,6 @@ t.create('OutageDeck provider status (live)').get('/github.json').expectBadge({
 
 t.create('OutageDeck provider not found')
   .get('/not-a-provider.json')
-  .intercept(nock =>
-    nock('https://outagedeck.com')
-      .get('/api/v1/providers/not-a-provider')
-      .reply(404, {
-        meta: { version: 'v1', generatedAt: '2026-08-05T00:00:00Z' },
-        data: {
-          error: {
-            code: 'not_found',
-            message: 'No provider matches that slug.',
-          },
-        },
-      }),
-  )
   .expectBadge({ label: 'status', message: 'not found' })
 
 t.create('OutageDeck invalid response')
