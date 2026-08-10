@@ -82,8 +82,10 @@ export default class DockerLastUpdated extends BaseJsonService {
     if (tag) {
       return { date: data.last_updated }
     }
+    // 404 from the Hub API already maps to "repository or tag not found".
+    // An empty results list is a 200 for a repo that exists but has no tags yet.
     if (data.count === 0 || data.results.length === 0) {
-      throw new NotFound({ prettyMessage: 'repository not found' })
+      throw new NotFound({ prettyMessage: 'no tags found' })
     }
     return { date: data.results[0].last_updated }
   }

@@ -30,7 +30,7 @@ describe('DockerLastUpdated', function () {
       })
     })
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'repository not found')
+      .with.property('prettyMessage', 'no tags found')
   })
 
   it('throws NotFound when results list is empty', function () {
@@ -41,6 +41,6 @@ describe('DockerLastUpdated', function () {
       })
     })
       .to.throw(NotFound)
-      .with.property('prettyMessage', 'repository not found')
+      .with.property('prettyMessage', 'no tags found')
   })
 })
