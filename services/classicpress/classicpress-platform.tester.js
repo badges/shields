@@ -18,6 +18,8 @@ const mockedPlugin = {
   },
 }
 
+const directoryQuery = slug => ({ byslug: slug, _fields: 'meta' })
+
 t.create('Plugin Required CP Version')
   .get('/plugin/cp-version/switch-to-classicpress.json')
   .expectBadge({
@@ -37,7 +39,7 @@ t.create('Plugin Required CP Version | Not Set')
   .intercept(nock =>
     nock('https://directory.classicpress.net')
       .get('/wp-json/wp/v2/plugins/')
-      .query({ byslug: 'switch-to-classicpress' })
+      .query(directoryQuery('switch-to-classicpress'))
       .reply(200, [{ meta: { ...mockedPlugin.meta, requires_cp: '' } }]),
   )
   .expectBadge({
@@ -50,7 +52,7 @@ t.create('Plugin Required CP Version | Not Found')
   .intercept(nock =>
     nock('https://directory.classicpress.net')
       .get('/wp-json/wp/v2/plugins/')
-      .query({ byslug: '100' })
+      .query(directoryQuery('100'))
       .reply(200, []),
   )
   .expectBadge({
@@ -63,7 +65,7 @@ t.create('Theme Required CP Version | Not Found')
   .intercept(nock =>
     nock('https://directory.classicpress.net')
       .get('/wp-json/wp/v2/themes/')
-      .query({ byslug: '100' })
+      .query(directoryQuery('100'))
       .reply(200, []),
   )
   .expectBadge({
@@ -90,7 +92,7 @@ t.create('Plugin Required PHP Version | Not Set')
   .intercept(nock =>
     nock('https://directory.classicpress.net')
       .get('/wp-json/wp/v2/plugins/')
-      .query({ byslug: 'switch-to-classicpress' })
+      .query(directoryQuery('switch-to-classicpress'))
       .reply(200, [{ meta: { ...mockedPlugin.meta, requires_php: '' } }]),
   )
   .expectBadge({
@@ -103,7 +105,7 @@ t.create('Theme Required PHP Version | Not Found')
   .intercept(nock =>
     nock('https://directory.classicpress.net')
       .get('/wp-json/wp/v2/themes/')
-      .query({ byslug: '100' })
+      .query(directoryQuery('100'))
       .reply(200, []),
   )
   .expectBadge({
