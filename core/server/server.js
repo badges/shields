@@ -542,6 +542,7 @@ class Server {
       port,
       hostname,
       secure,
+      spdy: false,
       staticMaxAge: 300,
       cert,
       key,
