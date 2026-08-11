@@ -100,6 +100,7 @@ private:
   obs_user: 'OBS_USER'
   obs_pass: 'OBS_PASS'
   opencollective_token: 'OPENCOLLECTIVE_TOKEN'
+  outagedeck_api_key: 'OUTAGEDECK_API_KEY'
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'
   readthedocs_token: 'READTHEDOCS_TOKEN'
