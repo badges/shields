@@ -1,6 +1,6 @@
 import { NotFound, pathParams } from '../index.js'
 import { renderVersionBadge } from '../version.js'
-import { BaseClassicpress, description } from './classicpress-base.js'
+import { BaseClassicpress } from './classicpress-base.js'
 
 const extensionData = {
   plugin: {
@@ -32,7 +32,6 @@ function ClassicpressRequiresVersion(extensionType) {
       route[key] = {
         get: {
           summary: `ClassicPress ${capt}: Required CP Version`,
-          description,
           parameters: pathParams({
             name: 'slug',
             example: exampleSlug,
@@ -80,7 +79,6 @@ function ClassicpressRequiresPHPVersion(extensionType) {
       route[key] = {
         get: {
           summary: `ClassicPress ${capt} Required PHP Version`,
-          description,
           parameters: pathParams({
             name: 'slug',
             example: exampleSlug,
