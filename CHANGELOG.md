@@ -4,6 +4,45 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-08-15
+
+- Fix Explicitly disable broken server SPDY mode [#12108](https://github.com/badges/shields/issues/12108)
+- [OutageDeck] Add provider status badge [#12096](https://github.com/badges/shields/issues/12096)
+- Add [DockerLastUpdated] badge for newest image date [#12105](https://github.com/badges/shields/issues/12105)
+- Fix [PubDownloads] test [#12101](https://github.com/badges/shields/issues/12101)
+- [AzureDevOpsCoverage] Support branch coverage via metric query param [#12099](https://github.com/badges/shields/issues/12099)
+- [BitbucketPipelines] Show halted status for halted pipelines [#12098](https://github.com/badges/shields/issues/12098)
+- Update simple-icons to 16.28.0 [#12103](https://github.com/badges/shields/issues/12103)
+- Switch calebcartwright to alumni team [#12091](https://github.com/badges/shields/issues/12091)
+- refactor [Amo CiiBestPractices CircleCi Codecov CodeFactor CodeRabbit Conda Feedz Wordpress Debug] to use `routeEnum` [#12090](https://github.com/badges/shields/issues/12090)
+- Add [ReactNativeDirectory] supported platforms badge [#12066](https://github.com/badges/shields/issues/12066)
+- Retire [WhatPulse] badges [#12087](https://github.com/badges/shields/issues/12087)
+- Fix [FDroid] test [#12083](https://github.com/badges/shields/issues/12083)
+- Fix [GithubPullRequestCheckState] tests and examples [#12084](https://github.com/badges/shields/issues/12084)
+- Fix [Depfu] test and example [#12085](https://github.com/badges/shields/issues/12085)
+- Add routeEnum with validation and enhance error handling in BaseService [Twitter Gem TeamCity Packagist MozillaObservatory HexPm Greasyfork] [#11800](https://github.com/badges/shields/issues/11800)
+- Update simple-icons to 16.27.1 [#12081](https://github.com/badges/shields/issues/12081)
+- Fix [GitLab] tests [#12052](https://github.com/badges/shields/issues/12052)
+- [Dynamic Endpoint] Allow self-hosters to disable open-ended badges [#12064](https://github.com/badges/shields/issues/12064)
+- Drop deprecated github-tagger [#12062](https://github.com/badges/shields/issues/12062)
+- Use `GITHUB_OUTPUT` instead of `set-output` [#12061](https://github.com/badges/shields/issues/12061)
+- Upload daily tests report [#12053](https://github.com/badges/shields/issues/12053)
+- Update the changelog commit message [#12057](https://github.com/badges/shields/issues/12057)
+- Update simple-icons to 16.27.0 [#12055](https://github.com/badges/shields/issues/12055)
+- Update Changelog [#12054](https://github.com/badges/shields/issues/12054)
+- [readthedocs] Move to readthedocs API v3 [#11995](https://github.com/badges/shields/issues/11995)
+- Remove decamelize and humanize-string Dependabot exclusions [#12032](https://github.com/badges/shields/issues/12032)
+- [GithubIssues GithubPullRequests] Add draft filters without changing unfiltered counts [#12026](https://github.com/badges/shields/issues/12026)
+- [ChromeWebStoreUsers] Fix 1M+ counts rendering as "12000,000" not "12M" [#12028](https://github.com/badges/shields/issues/12028)
+- [GitHub] Store accepted token scopes [#11915](https://github.com/badges/shields/issues/11915)
+- Migrate [Jenkins] tests and examples from Eclipse to FreeBSD [#12016](https://github.com/badges/shields/issues/12016)
+- [Buildbot] Add Buildbot build status badge [#11938](https://github.com/badges/shields/issues/11938)
+- Fix [Symfony] tests [#12017](https://github.com/badges/shields/issues/12017)
+- Fix [Codecov] tests [#12019](https://github.com/badges/shields/issues/12019)
+- Fix [Codacy] tests [#12018](https://github.com/badges/shields/issues/12018)
+- Update simple-icons to 16.26.0 [#12020](https://github.com/badges/shields/issues/12020)
+- Dependency updates
+
 ## server-2026-07-23
 
 - [readthedocs] Move to readthedocs API v3 [#11995](https://github.com/badges/shields/issues/11995)
