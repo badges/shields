@@ -16,9 +16,9 @@ t.create('build (valid group project)')
     message: isBuildStatus,
   })
 
-t.create('build (openEuler server)')
+t.create('build (openEuler baseUrl)')
   .get(
-    '/mywaaagh_admin/i3wm/acpi.json?server=https://eur.openeuler.openatom.cn',
+    '/mywaaagh_admin/i3wm/acpi.json?baseUrl=https://eur.openeuler.openatom.cn',
   )
   .expectBadge({
     label: 'build',

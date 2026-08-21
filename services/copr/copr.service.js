@@ -1,6 +1,7 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
 import { BaseJsonService, NotFound, pathParams, queryParam } from '../index.js'
+import { optionalUrl } from '../validators.js'
 
 const stateStatusMap = {
   succeeded: 'passing',
@@ -24,9 +25,7 @@ const schema = Joi.object({
 }).required()
 
 const queryParamSchema = Joi.object({
-  server: Joi.string()
-    .uri({ scheme: ['http', 'https'] })
-    .optional(),
+  baseUrl: optionalUrl,
 }).required()
 
 const description = `
@@ -66,7 +65,7 @@ export default class Copr extends BaseJsonService {
             },
           ),
           queryParam({
-            name: 'server',
+            name: 'baseUrl',
             example: 'https://copr.fedorainfracloud.org',
           }),
         ],
@@ -80,11 +79,10 @@ export default class Copr extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  async fetch({ server, owner, project, package: packageName }) {
-    const trimmedServer = server.replace(/\/$/, '')
+  async fetch({ baseUrl, owner, project, package: packageName }) {
     return this._requestJson({
       schema,
-      url: `${trimmedServer}/api_3/package`,
+      url: `${baseUrl}/api_3/package`,
       options: {
         searchParams: {
           ownername: owner,
@@ -110,10 +108,10 @@ export default class Copr extends BaseJsonService {
 
   async handle(
     { owner, project, package: packageName },
-    { server = 'https://copr.fedorainfracloud.org' },
+    { baseUrl = 'https://copr.fedorainfracloud.org' },
   ) {
     const json = await this.fetch({
-      server,
+      baseUrl,
       owner,
       project,
       package: packageName,
