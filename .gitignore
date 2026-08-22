@@ -6,6 +6,9 @@ Desktop.ini
 .vscode/settings.json
 *.code-workspace
 
+# Zed Editor
+.zed/settings.json
+
 # eclipse
 .project
 .settings
