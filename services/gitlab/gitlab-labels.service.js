@@ -5,7 +5,7 @@ import GitLabBase from './gitlab-base.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
 
 const schema = Joi.object({
-  color: Joi.string().hex().required(),
+  color: Joi.string().replace('#', '').hex().required(),
 }).required()
 
 const queryParamSchema = Joi.object({
