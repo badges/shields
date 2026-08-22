@@ -116,22 +116,22 @@ export default class DockerVersion extends BaseJsonService {
     })
   }
 
-  transform({ tag, sort, data, pagedData, arch = 'amd64' }) {
+  transform({ tag, sort, data, arch = 'amd64' }) {
     let version
 
     if (!tag && sort === 'date') {
-      version = data.results[0].name
+      version = data[0].name
       if (version !== 'latest') {
         return { version }
       }
-      const imageTag = data.results[0].images.find(i => i.architecture === arch) // Digest is the unique field that we utilise to match images
+      const imageTag = data[0].images.find(i => i.architecture === arch) // Digest is the unique field that we utilise to match images
       if (!imageTag) {
         throw new InvalidResponse({
           prettyMessage: 'digest not found for latest tag',
         })
       }
       const { digest } = imageTag
-      return { version: getDigestSemVerMatches({ data: pagedData, digest }) }
+      return { version: getDigestSemVerMatches({ data, digest }) }
     } else if (!tag && sort === 'semver') {
       const matches = data
         .filter(d => d.images.some(image => image.architecture === arch))
@@ -162,35 +162,17 @@ export default class DockerVersion extends BaseJsonService {
   }
 
   async handle({ user, repo, tag }, { sort, arch }) {
-    let data, pagedData
-
-    if (!tag && sort === 'date') {
-      data = await this.fetch({ user, repo })
-      if (data.count === 0) {
-        throw new NotFound({ prettyMessage: 'repository not found' })
-      }
-      if (data.results[0].name === 'latest') {
-        pagedData = await getMultiPageData({
-          user,
-          repo,
-          fetch: this.fetch.bind(this),
-        })
-      }
-    } else {
-      data = await getMultiPageData({
-        user,
-        repo,
-        fetch: this.fetch.bind(this),
-      })
-    }
-
-    const { version } = this.transform({
-      tag,
-      sort,
-      data,
-      pagedData,
-      arch,
+    const isDateSort = !tag && sort === 'date'
+    const data = await getMultiPageData({
+      user,
+      repo,
+      fetch: this.fetch.bind(this),
+      isAuthenticated: this.authHelper.isConfigured,
+      shouldFetchRemainingPages: ([firstTag]) =>
+        !isDateSort || firstTag.name === 'latest',
     })
+
+    const { version } = this.transform({ tag, sort, data, arch })
     return this.constructor.render({ version })
   }
 }

@@ -223,6 +223,7 @@ export default class DockerSize extends BaseJsonService {
         user,
         repo,
         fetch: this.fetch.bind(this),
+        isAuthenticated: this.authHelper.isConfigured,
       })
     } else {
       data = await this.fetch({ user, repo, tag })
