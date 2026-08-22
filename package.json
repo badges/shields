@@ -221,12 +221,5 @@
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
-  },
-  "allowScripts": {
-    "core-js@3.36.0": true,
-    "cypress@15.19.0": true,
-    "postman-code-generators@1.14.2": true,
-    "re2@1.26.1": true,
-    "simple-git-hooks@2.13.1": true
   }
 }
