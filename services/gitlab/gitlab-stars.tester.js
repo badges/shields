@@ -1,7 +1,7 @@
 import { isMetric } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 
-export const t = createServiceTester()
+export const t = await createServiceTester()
 
 t.create('Stars')
   .get('/gitlab-org/gitlab.json')
