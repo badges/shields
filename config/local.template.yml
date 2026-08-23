@@ -16,4 +16,3 @@ private:
   twitch_client_secret: '...'
   weblate_api_key: '...'
   wheelmap_token: '...'
-  youtube_api_key: '...'

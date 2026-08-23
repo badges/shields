@@ -304,14 +304,6 @@ You can find your Weblate API key in your profile under ["API access"][weblate a
 [weblate authentication]: https://docs.weblate.org/en/latest/api.html#authentication-and-generic-parameters
 [weblate api key location]: https://hosted.weblate.org/accounts/profile/#api
 
-### YouTube
-
-- `YOUTUBE_API_KEY` (yml: `private.youtube_api_key`)
-
-The YouTube API requires authentication. To obtain an API key, log in to a Google account, go to the [credentials page][youtube credentials], and create an API key for the YouTube Data API v3.
-
-[youtube credentials]: https://console.developers.google.com/apis/credentials
-
 ## Error reporting
 
 - `SENTRY_DSN` (yml: `private.sentry_dsn`)
