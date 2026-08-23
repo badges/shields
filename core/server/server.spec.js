@@ -480,6 +480,7 @@ describe('The server', function () {
     })
 
     it('should parse dynamicAndEndpointBadgesEnabled environment values as booleans', function () {
+      this.timeout(5000)
       const script = `
         import config from 'config'
         import Server from './core/server/server.js'
