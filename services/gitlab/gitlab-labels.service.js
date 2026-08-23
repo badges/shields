@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { pathParam } from '../index.js'
+import { pathParam, queryParam } from '../index.js'
 import { optionalUrl } from '../validators.js'
 import GitLabBase from './gitlab-base.js'
 import { description, httpErrorsFor } from './gitlab-helper.js'
@@ -14,6 +14,7 @@ const queryParamSchema = Joi.object({
 
 export default class GitLabLabels extends GitLabBase {
   static category = 'issue-tracking'
+
   static route = {
     base: 'gitlab/labels',
     pattern: ':project+/:name',
@@ -34,6 +35,10 @@ export default class GitLabLabels extends GitLabBase {
             name: 'name',
             example: 'bug::ux',
           }),
+          queryParam({
+            name: 'gitlab_url',
+            example: 'https://gitlab.com',
+          }),
         ],
       },
     },
@@ -41,10 +46,14 @@ export default class GitLabLabels extends GitLabBase {
 
   static defaultBadgeData = { label: ' ' }
 
-  static render({ name, color }) {
+  static render({ baseUrl, project, name, color }) {
     return {
       message: name,
       color,
+      link: [
+        `${baseUrl}/${project}`,
+        encodeURI(`${baseUrl}/${project}/-/work-items?label_name[]=${name}`),
+      ],
     }
   }
 
@@ -62,6 +71,6 @@ export default class GitLabLabels extends GitLabBase {
       baseUrl,
       name,
     })
-    return this.constructor.render({ name, color })
+    return this.constructor.render({ baseUrl, project, name, color })
   }
 }
