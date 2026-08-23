@@ -65,7 +65,7 @@ export default class GitLabLabels extends GitLabBase {
     })
   }
 
-  async handle({ project, gitlab_url: baseUrl = 'https://gitlab.com', name }) {
+  async handle({ project, name, gitlab_url: baseUrl = 'https://gitlab.com' }) {
     const { color } = await this.fetch({
       project,
       baseUrl,
