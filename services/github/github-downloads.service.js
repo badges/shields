@@ -163,6 +163,8 @@ export default class GithubDownloads extends GithubAuthV3Service {
     { sort, displayAssetName },
   ) {
     let releases
+    // "total" with no assetName means "all releases, all assets" (e.g. /github/downloads/user/repo/total)
+    const isTotalAllReleases = tag === 'total' && !assetName
     if (tag === 'latest') {
       const includePre = variant === 'downloads-pre' || undefined
       const latestRelease = await fetchLatestRelease(
@@ -171,7 +173,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
         { sort, include_prereleases: includePre },
       )
       releases = [latestRelease]
-    } else if (tag) {
+    } else if (tag && !isTotalAllReleases) {
       const wantedRelease = await this._requestJson({
         schema: releaseSchema,
         url: `/repos/${user}/${repo}/releases/tags/${tag}`,
