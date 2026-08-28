@@ -46,14 +46,10 @@ export default class GitLabLabels extends GitLabBase {
 
   static defaultBadgeData = { label: ' ' }
 
-  static render({ baseUrl, project, name, color }) {
+  static render({ name, color }) {
     return {
       message: name,
       color,
-      link: [
-        `${baseUrl}/${project}`,
-        encodeURI(`${baseUrl}/${project}/-/work-items?label_name[]=${name}`),
-      ],
     }
   }
 
@@ -65,12 +61,15 @@ export default class GitLabLabels extends GitLabBase {
     })
   }
 
-  async handle({ project, name, gitlab_url: baseUrl = 'https://gitlab.com' }) {
+  async handle(
+    { project, name },
+    { gitlab_url: baseUrl = 'https://gitlab.com' },
+  ) {
     const { color } = await this.fetch({
       project,
       baseUrl,
       name,
     })
-    return this.constructor.render({ baseUrl, project, name, color })
+    return this.constructor.render({ name, color })
   }
 }

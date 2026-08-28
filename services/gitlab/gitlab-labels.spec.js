@@ -30,12 +30,6 @@ describe('GitLabLabel', function () {
         .reply(200, {
           message: 'bug',
           color: '6699cc',
-          link: [
-            'https://gitlab.com/foo/bar',
-            encodeURI(
-              'https://gitlab.com/foo/bar/-/work-items?label_name[]=bug',
-            ),
-          ],
         })
 
       expect(
@@ -48,10 +42,6 @@ describe('GitLabLabel', function () {
       ).to.deep.equal({
         message: 'bug',
         color: '6699cc',
-        link: [
-          'https://gitlab.com/foo/bar',
-          encodeURI('https://gitlab.com/foo/bar/-/work-items?label_name[]=bug'),
-        ],
       })
 
       scope.done()
