@@ -210,7 +210,7 @@ const privateConfigSchema = Joi.object({
   influx_username: Joi.string(),
   influx_password: Joi.string(),
   weblate_api_key: Joi.string(),
-  youtube_api_key: Joi.string(),
+  youtube_api_key: Joi.string(), // Deprecated, will be removed in an upcoming release.
 }).required()
 const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),

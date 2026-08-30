@@ -61,7 +61,6 @@ jobs:
           TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
           WEBLATE_API_KEY: '${{ secrets.SERVICETESTS_WEBLATE_API_KEY }}'
-          YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Write Service Tests Markdown Summary
         if: always()
