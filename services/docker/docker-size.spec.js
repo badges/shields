@@ -1,3 +1,5 @@
+import { expect } from 'chai'
+import sinon from 'sinon'
 import { test, given } from 'sazerac'
 import DockerSize from './docker-size.service.js'
 import { sizeDataNoTagSemVerSort } from './docker-fixtures.js'
@@ -97,5 +99,39 @@ describe('DockerSize', function () {
     given(sizeDataNoTagSemVerSort, 'nonexistentArch').expectError(
       'Not Found: architecture not found',
     )
+  })
+
+  it('fetches anonymous pages 1 through 10 exactly once for semver sorting', async function () {
+    const service = new DockerSize({ authHelper: { isConfigured: false } }, {})
+    service.fetch = sinon.stub().resolves({
+      count: 1001,
+      results: [{ name: '1.0.0', full_size: 1, images: [] }],
+    })
+
+    await service.handle(
+      { user: 'example', repo: 'repository' },
+      { sort: 'semver' },
+    )
+
+    expect(
+      service.fetch.getCalls().map(({ args: [params] }) => params.page),
+    ).to.deep.equal([undefined, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  })
+
+  it('fetches authenticated pages 1 through 11 exactly once for semver sorting', async function () {
+    const service = new DockerSize({ authHelper: { isConfigured: true } }, {})
+    service.fetch = sinon.stub().resolves({
+      count: 1001,
+      results: [{ name: '1.0.0', full_size: 1, images: [] }],
+    })
+
+    await service.handle(
+      { user: 'example', repo: 'repository' },
+      { sort: 'semver' },
+    )
+
+    expect(
+      service.fetch.getCalls().map(({ args: [params] }) => params.page),
+    ).to.deep.equal([undefined, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
   })
 })
