@@ -4,6 +4,31 @@ Note: this changelog is for the shields.io server. The changelog for the badge-m
 
 ---
 
+## server-2026-08-15
+
+**New configuration:**
+
+- Open-ended Dynamic and Endpoint badges can now be disabled via the `public.dynamicAndEndpointBadgesEnabled`/`DYNAMIC_AND_ENDPOINT_BADGES_ENABLED` configurations [#12064](https://github.com/badges/shields/issues/12064)
+
+**Retired badges:**
+
+- Retire [WhatPulse] badges [#12087](https://github.com/badges/shields/issues/12087)
+
+Other changes:
+
+- Disable broken server SPDY mode [#12108](https://github.com/badges/shields/issues/12108)
+- Add [OutageDeck] provider status badge [#12096](https://github.com/badges/shields/issues/12096)
+- Add [DockerLastUpdated] badge for newest image date [#12105](https://github.com/badges/shields/issues/12105)
+- Support [AzureDevOpsCoverage] branch coverage via metric query param [#12099](https://github.com/badges/shields/issues/12099)
+- Show halted status for halted [BitbucketPipelines] pipelines [#12098](https://github.com/badges/shields/issues/12098)
+- Add [ReactNativeDirectory] supported platforms badge [#12066](https://github.com/badges/shields/issues/12066)
+- Move to readthedocs API v3 [#11995](https://github.com/badges/shields/issues/11995)
+- Add [GithubIssues GithubPullRequests] draft filters without changing unfiltered counts [#12026](https://github.com/badges/shields/issues/12026)
+- Fix [ChromeWebStoreUsers] 1M+ counts rendering as "12000,000" not "12M" [#12028](https://github.com/badges/shields/issues/12028)
+- Store [GitHub] accepted token scopes [#11915](https://github.com/badges/shields/issues/11915)
+- Add [Buildbot] build status badge [#11938](https://github.com/badges/shields/issues/11938)
+- Dependency updates
+
 ## server-2026-07-23
 
 - [readthedocs] Move to readthedocs API v3 [#11995](https://github.com/badges/shields/issues/11995)

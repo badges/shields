@@ -36,7 +36,7 @@ This Code of Conduct applies within all community spaces, and also applies when 
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at ![](https://img.shields.io/badge/conduct-%40shields.io-blue) or directly to [@calebcartwright](https://github.com/calebcartwright) ![](https://img.shields.io/badge/caleb-%40shields.io-blue) or [@paulmelnikow](https://github.com/paulmelnikow) ![](https://img.shields.io/badge/paul-%40shields.io-blue)
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at ![](https://img.shields.io/badge/conduct-%40shields.io-blue)
 
 All complaints will be reviewed and investigated promptly and fairly.
 
