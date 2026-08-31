@@ -3,7 +3,7 @@ import { commonParams } from '../maven-metadata/maven-metadata.js'
 
 export default redirector({
   category: 'version',
-  isDeprecated: false,
+  isRetired: false,
   route: {
     base: 'maven-central/v',
     pattern: ':groupId/:artifactId/:versionPrefix?',

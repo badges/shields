@@ -1,6 +1,6 @@
-import { deprecatedService } from '../../index.js'
+import { retiredService } from '../../index.js'
 
-export default deprecatedService({
+export default retiredService({
   category: 'social',
   label: 'github',
   route: { base: 'github/stars/gists', pattern: ':gistId' },

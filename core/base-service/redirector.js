@@ -16,8 +16,9 @@ import trace from './trace.js'
 const attrSchema = Joi.object({
   name: Joi.string().min(3),
   category: isValidCategory,
-  isDeprecated: Joi.boolean().default(true),
+  isRetired: Joi.boolean().default(true),
   route: isValidRoute,
+  routeEnum: Joi.array().items(Joi.string()).optional(),
   openApi: openApiSchema,
   transformPath: Joi.func()
     .maxArity(1)
@@ -35,8 +36,9 @@ export default function redirector(attrs) {
   const {
     name,
     category,
-    isDeprecated,
+    isRetired,
     route,
+    routeEnum,
     openApi,
     transformPath,
     transformQueryParams,
@@ -51,8 +53,9 @@ export default function redirector(attrs) {
       })}Redirect`
 
     static category = category
-    static isDeprecated = isDeprecated
+    static isRetired = isRetired
     static route = route
+    static routeEnum = routeEnum
     static openApi = openApi
 
     static register({ camp, metricInstance }, { rasterUrl }) {

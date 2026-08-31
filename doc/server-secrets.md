@@ -220,6 +220,12 @@ While OBS supports [API tokens](https://openbuildservice.org/help/manuals/obs-us
 
 OpenCollective's GraphQL API only allows 10 reqs/minute for anonymous users. An [API token](https://graphql-docs-v2.opencollective.com/access) can be provided to access a higher rate limit of 100 reqs/minute.
 
+### OutageDeck
+
+- `OUTAGEDECK_API_KEY` (yml: `private.outagedeck_api_key`)
+
+An optional Bearer key raises the OutageDeck API rate limit. The hosted Shields.io service can use its complimentary dedicated key; self-hosted instances can leave this unset and use anonymous access, which is limited to 120 requests per IP address per hour.
+
 ### Pepy
 
 - `PEPY_KEY` (yml: `private.pepy_key`)
@@ -231,6 +237,16 @@ The Pepy API requires authentication. To obtain a key, Create an account, sign i
 - `PYPI_URL` (yml: `public.pypi.baseUri`)
 
 `PYPI_URL` can be used to optionally send all the PyPI requests to a Self-hosted Pypi registry, users can also override this by query parameter `pypiBaseUrl`.
+
+### Read the Docs
+
+- `READTHEDOCS_TOKEN` (yml: `private.readthedocs_token`)
+
+Authentication is optional, but a [Read the Docs API token][readthedocs api authentication] increases the API rate limit for Read the Docs badges.
+
+Use a token from a dedicated account that has access only to public projects. Badge endpoints are public, so a token whose account can access private projects could allow badge requests to reveal those projects' build status.
+
+[readthedocs api authentication]: https://docs.readthedocs.com/platform/stable/api/v3.html#authentication-and-authorization
 
 ### Reddit
 
@@ -287,14 +303,6 @@ You can find your Weblate API key in your profile under ["API access"][weblate a
 
 [weblate authentication]: https://docs.weblate.org/en/latest/api.html#authentication-and-generic-parameters
 [weblate api key location]: https://hosted.weblate.org/accounts/profile/#api
-
-### YouTube
-
-- `YOUTUBE_API_KEY` (yml: `private.youtube_api_key`)
-
-The YouTube API requires authentication. To obtain an API key, log in to a Google account, go to the [credentials page][youtube credentials], and create an API key for the YouTube Data API v3.
-
-[youtube credentials]: https://console.developers.google.com/apis/credentials
 
 ## Error reporting
 

@@ -14,6 +14,9 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       // it's not setting a bad example.
       client_id: authHelper._user,
       redirect_uri: `${baseUrl}/github-auth/done`,
+      // TODO: Request the OAuth scopes needed for scoped GitHub API features.
+      // Remove this TODO once this authorize URL includes a `scope` parameter.
+      // See https://github.com/badges/shields/issues/4169.
     })
     ask.res.setHeader(
       'Location',
@@ -58,10 +61,14 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       return end('The GitHub OAuth token could not be parsed.')
     }
 
-    const { access_token: token } = content
+    const { access_token: token, scope = '' } = content
     if (!token) {
       return end('The GitHub OAuth process did not return a user token.')
     }
+    const scopes = scope
+      .split(',')
+      .map(scope => scope.trim())
+      .filter(Boolean)
 
     ask.res.setHeader('Content-Type', 'text/html')
     end(
@@ -76,7 +83,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         '<p><a href="/">Back to the website</a></p>',
     )
 
-    onTokenAccepted(token)
+    onTokenAccepted(token, { scopes })
   })
 }
 

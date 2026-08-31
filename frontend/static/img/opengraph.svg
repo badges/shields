@@ -1,0 +1,80 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Shields.io OpenGraph image</title>
+  <desc>Social preview image for Shields.io featuring the logo and sample badges.</desc>
+  <defs>
+    <pattern id="dot-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#d5dde6" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#f7f9fb" />
+  <rect width="1200" height="630" fill="url(#dot-grid)" opacity="0.85" />
+
+  <path d="M702 -24H1200V630H514L702 -24Z" fill="#eef3f6" />
+  <path d="M846 0H1200V630H672L846 0Z" fill="#e8eef2" />
+  <path d="M946 0H1200V630H812L946 0Z" fill="#dde7ec" />
+
+  <g transform="translate(72 70)">
+    <rect x="0" y="0" width="64" height="64" rx="16" fill="#555555" />
+    <path d="M32 0H48C56.837 0 64 7.163 64 16V48C64 56.837 56.837 64 48 64H32V0Z" fill="#97ca00" />
+    <text font-family="Arial" x="88" y="44" fill="#1f2933" font-size="38" font-weight="800">Shields.io</text>
+  </g>
+
+  <g font-family="Arial" transform="translate(72 224)">
+    <text x="0" y="0" fill="#17202a" font-size="64" font-weight="800">Concise, consistent,</text>
+    <text x="0" y="76" fill="#17202a" font-size="64" font-weight="800">and legible badges.</text>
+    <text x="0" y="150" fill="#485766" font-size="28" font-weight="500">Build status, versions, downloads,</text>
+    <text x="0" y="188" fill="#485766" font-size="28" font-weight="500">coverage, funding, and more.</text>
+  </g>
+
+  <g transform="translate(72 506)">
+    <rect x="0" y="0" width="236" height="48" rx="12" fill="#ffffff" stroke="#d8e1e8" />
+    <rect x="14" y="14" width="20" height="20" rx="5" fill="#555555" />
+    <path d="M24 14H29C31.761 14 34 16.239 34 19V29C34 31.761 31.761 34 29 34H24V14Z" fill="#97ca00" />
+    <text font-family="Arial" x="48" y="31" fill="#2d3742" font-size="20" font-weight="700">img.shields.io</text>
+  </g>
+
+  <g transform="translate(716 112) rotate(-7 235 197)">
+    <g transform="translate(38 0)">
+      <rect x="0" y="8" width="193.6" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/build-passing-brightgreen -->
+      <image href="opengraph-badges/build.svg" width="193.6" height="44" />
+    </g>
+
+    <g transform="translate(142 72)">
+      <rect x="0" y="8" width="198" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/version-1.2.3-blue -->
+      <image href="opengraph-badges/version.svg" width="198" height="44" />
+    </g>
+
+    <g transform="translate(2 144)">
+      <rect x="0" y="8" width="211.2" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/coverage-95%25-green -->
+      <image href="opengraph-badges/coverage.svg" width="211.2" height="44" />
+    </g>
+
+    <g transform="translate(100 216)">
+      <rect x="0" y="8" width="308" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/downloads-13k%2Fmonth-brightgreen -->
+      <image href="opengraph-badges/downloads.svg" width="308" height="44" />
+    </g>
+
+    <g transform="translate(28 288)">
+      <rect x="0" y="8" width="171.6" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/license-MIT-green -->
+      <image href="opengraph-badges/license.svg" width="171.6" height="44" />
+    </g>
+
+    <g transform="translate(178 356)">
+      <rect x="0" y="8" width="237.6" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/badge/rating-★★★★☆-brightgreen -->
+      <image href="opengraph-badges/rating.svg" width="237.6" height="44" />
+    </g>
+
+    <g transform="translate(10 428)">
+      <rect x="0" y="8" width="213.4" height="44" rx="7" fill="#1f2933" opacity="0.14" />
+      <!-- https://img.shields.io/npm/v/badge-maker?logo=npm -->
+      <image href="opengraph-badges/npm.svg" width="213.4" height="44" />
+    </g>
+  </g>
+</svg>

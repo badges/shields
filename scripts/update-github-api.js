@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import got from 'got'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 
 const resp = await got('https://api.github.com/versions').json()
 const latestDate = resp.sort()[resp.length - 1]
@@ -15,5 +15,5 @@ if (latestDate === config.public.services.github.restApiVersion) {
 config.public.services.github.restApiVersion = latestDate
 await fs.writeFile(
   './config/default.yml',
-  yaml.dump(config, { forceQuotes: true }),
+  yaml.dump(config, { quoteStyle: 'double' }),
 )

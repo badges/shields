@@ -8,7 +8,7 @@ export default class PypiTypes extends PypiBase {
   static openApi = {
     '/pypi/types/{packageName}': {
       get: {
-        summary: 'PyPI - Types',
+        summary: 'PyPI Types',
         description:
           'Type information provided by the package, as indicated by the presence of the `Typing :: Typed` and `Typing :: Stubs Only` classifiers in the package metadata',
         parameters: pypiGeneralParams,

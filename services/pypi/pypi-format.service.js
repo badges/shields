@@ -9,7 +9,7 @@ export default class PypiFormat extends PypiBase {
   static openApi = {
     '/pypi/format/{packageName}': {
       get: {
-        summary: 'PyPI - Format',
+        summary: 'PyPI Format',
         parameters: pypiGeneralParams,
       },
     },

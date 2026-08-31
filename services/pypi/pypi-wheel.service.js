@@ -9,7 +9,7 @@ export default class PypiWheel extends PypiBase {
   static openApi = {
     '/pypi/wheel/{packageName}': {
       get: {
-        summary: 'PyPI - Wheel',
+        summary: 'PyPI Wheel',
         parameters: pypiGeneralParams,
       },
     },

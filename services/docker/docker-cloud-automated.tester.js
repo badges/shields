@@ -10,5 +10,5 @@ t.create('docker cloud automated build')
   .get('/pavics/magpie.json')
   .expectBadge({
     label: 'dockercloud',
-    message: 'no longer available',
+    message: 'retired badge',
   })

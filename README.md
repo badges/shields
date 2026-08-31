@@ -88,7 +88,7 @@ If you intend on reporting or contributing a fix related to security vulnerabili
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/badges/shields?quickstart=1)
 
-1. Install Node 22. You can use the [package manager][] of your choice.
+1. Install Node 24. You can use the [package manager][] of your choice.
 2. Clone this repository.
 3. Run `npm ci` to install the dependencies.
 4. Run `npm start` to start the badge server and the frontend dev server.
@@ -152,7 +152,6 @@ You can read more about [the project's inception][thread], [the motivation of th
 
 Maintainers:
 
-- [calebcartwright](https://github.com/calebcartwright)
 - [jNullj](https://github.com/jnullj)
 - [LitoMore](https://github.com/LitoMore)
 - [paulmelnikow](https://github.com/paulmelnikow)
@@ -160,6 +159,7 @@ Maintainers:
 
 Alumni:
 
+- [calebcartwright](https://github.com/calebcartwright)
 - [chris48s](https://github.com/chris48s)
 - [Daniel15](https://github.com/Daniel15)
 - [espadrine](https://github.com/espadrine)
@@ -169,7 +169,7 @@ Alumni:
 
 ## License
 
-All assets and code are under the [CC0 LICENSE](LICENSE) and in the public domain unless specified otherwise.
+Shields.io is dual licensed and distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache license (Version 2.0)](LICENSE-APACHE).
 
 ## Community
 

@@ -21,7 +21,9 @@ configurable, subject to the Shields minimum. The endpoint URL is
 provided to Shields through the query string. Shields fetches it and
 formats the badge.
 
-The endpoint badge takes a single required query param: <code>url</code>, which is the URL to your JSON endpoint
+The endpoint badge takes a single required query param: <code>url</code>, which is the URL to your JSON endpoint.
+
+A collection of APIs compatible with Shields.io's endpoint badge is available <a href="https://github.com/badges/endpoint-badges-directory">here</a>.
 
 <div>
   <h2>Example JSON Endpoint Response</h2>

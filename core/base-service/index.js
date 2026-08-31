@@ -1,12 +1,13 @@
 import BaseService from './base.js'
 import BaseJsonService from './base-json.js'
+import BaseJsonlService from './base-jsonl.js'
 import BaseGraphqlService from './base-graphql.js'
 import BaseStaticService from './base-static.js'
 import BaseSvgScrapingService from './base-svg-scraping.js'
 import BaseTomlService from './base-toml.js'
 import BaseXmlService from './base-xml.js'
 import BaseYamlService from './base-yaml.js'
-import deprecatedService from './deprecated-service.js'
+import retiredService from './retired-service.js'
 import redirector from './redirector.js'
 import {
   NotFound,
@@ -20,13 +21,14 @@ import { pathParam, pathParams, queryParam, queryParams } from './openapi.js'
 export {
   BaseService,
   BaseJsonService,
+  BaseJsonlService,
   BaseGraphqlService,
   BaseStaticService,
   BaseSvgScrapingService,
   BaseTomlService,
   BaseXmlService,
   BaseYamlService,
-  deprecatedService,
+  retiredService,
   redirector,
   NotFound,
   InvalidResponse,

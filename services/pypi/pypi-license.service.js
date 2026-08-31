@@ -10,7 +10,7 @@ export default class PypiLicense extends PypiBase {
   static openApi = {
     '/pypi/l/{packageName}': {
       get: {
-        summary: 'PyPI - License',
+        summary: 'PyPI License',
         parameters: pypiGeneralParams,
       },
     },

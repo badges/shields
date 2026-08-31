@@ -1,5 +1,5 @@
 import { renderDownloadsBadge } from '../downloads.js'
-import { deprecatedService, pathParams } from '../index.js'
+import { retiredService, pathParams } from '../index.js'
 import { BaseAmoService, description as baseDescription } from './amo-base.js'
 
 const description = `${baseDescription}
@@ -39,7 +39,7 @@ class AmoWeeklyDownloads extends BaseAmoService {
   }
 }
 
-const AmoLegacyRedirect = deprecatedService({
+const AmoLegacyRedirect = retiredService({
   category: 'downloads',
   label: 'mozilla-add-on',
   route: {

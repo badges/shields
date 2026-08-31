@@ -24,11 +24,11 @@ describe('The badge generator', function () {
     test(testColor, () => {
       // valid hex
       forCases([
-        given('#4c1'),
-        given('#4C1'),
-        given('4C1'),
-        given('4c1'),
-      ]).expect('#4c1')
+        given('#4b0'),
+        given('#4b0'),
+        given('4B0'),
+        given('4b0'),
+      ]).expect('#4b0')
       forCases([
         given('#abc123'),
         given('#ABC123'),
@@ -72,7 +72,7 @@ describe('The badge generator', function () {
 
   describe('color aliases', function () {
     test(testColor, () => {
-      forCases([given('#4c1', 'color')]).expect('#4c1')
+      forCases([given('#4b0', 'color')]).expect('#4b0')
     })
   })
 

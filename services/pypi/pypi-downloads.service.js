@@ -40,7 +40,7 @@ export default class PypiDownloads extends BaseJsonService {
   static openApi = {
     '/pypi/{period}/{packageName}': {
       get: {
-        summary: 'PyPI - Downloads',
+        summary: 'PyPI Downloads',
         description:
           'Python package downloads from [pypistats](https://pypistats.org/)',
         parameters: [

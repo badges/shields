@@ -1,7 +1,7 @@
 import { noToken } from '../test-helpers.js'
 import { SymfonyInsightBase } from './symfony-insight-base.js'
 
-const sampleProjectUuid = '825be328-29f8-44f7-a750-f82818ae9111'
+const sampleProjectUuid = 'a92cacf2-ba32-4f36-b040-5a9f1d7f8f25'
 
 function createMockResponse({ status = 'finished', grade, violations }) {
   let response = `

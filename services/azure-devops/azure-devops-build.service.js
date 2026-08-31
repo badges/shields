@@ -1,17 +1,37 @@
 import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import {
-  BaseSvgScrapingService,
-  NotFound,
-  queryParam,
-  pathParam,
-} from '../index.js'
-import { fetch } from './azure-devops-helpers.js'
+import { NotFound, queryParam, pathParam } from '../index.js'
+import AzureDevOpsBase from './azure-devops-base.js'
 
 const queryParamSchema = Joi.object({
   stage: Joi.string(),
   job: Joi.string(),
 })
+
+const buildSchema = Joi.object({
+  count: Joi.number().required(),
+  value: Joi.array()
+    .items(
+      Joi.object({
+        id: Joi.number().required(),
+        status: Joi.string().required(),
+        result: Joi.string().allow(null),
+      }),
+    )
+    .required(),
+}).required()
+
+const timelineSchema = Joi.object({
+  records: Joi.array()
+    .items(
+      Joi.object({
+        type: Joi.string().required(),
+        name: Joi.string().required(),
+        result: Joi.string().allow(null),
+      }),
+    )
+    .required(),
+}).required()
 
 const description = `
 [Azure Devops](https://dev.azure.com/) (formerly VSO, VSTS) is Microsoft Azure's CI/CD platform.
@@ -35,7 +55,7 @@ Navigate to \`https://dev.azure.com/ORGANIZATION/_apis/projects/PROJECT_NAME\`
   alt="PROJECT_ID is in the id property of the API response." />
 `
 
-export default class AzureDevOpsBuild extends BaseSvgScrapingService {
+export default class AzureDevOpsBuild extends AzureDevOpsBase {
   static category = 'build'
 
   static route = {
@@ -107,28 +127,100 @@ export default class AzureDevOpsBuild extends BaseSvgScrapingService {
     },
   }
 
+  static defaultBadgeData = { label: 'build' }
+
+  // Map Azure DevOps `result` values (both build-level and timeline
+  // stage/job-level) onto the status vocabulary understood by
+  // renderBuildStatusBadge (services/build-status.js).
+  static resultMap = {
+    // build-level results (builds list)
+    canceled: 'canceled',
+    failed: 'failed',
+    none: 'no builds',
+    partiallySucceeded: 'partially succeeded',
+    succeeded: 'succeeded',
+    // timeline record-level results (stage / job)
+    abandoned: 'canceled',
+    skipped: 'skipped',
+    succeededWithIssues: 'partially succeeded',
+  }
+
+  // Look up the result of a single stage or job within a build via the
+  // Timeline API. A job takes precedence over a stage when both are given.
+  // Note: the Timeline endpoint does not accept the api-version used by the
+  // other Azure DevOps build endpoints.
+  async getStageOrJobResult(
+    organization,
+    projectId,
+    buildId,
+    stage,
+    job,
+    httpErrors,
+  ) {
+    const url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/builds/${buildId}/timeline`
+    const { records } = await this.fetch({
+      url,
+      options: {},
+      schema: timelineSchema,
+      httpErrors,
+    })
+    const recordType = job ? 'Job' : 'Stage'
+    const recordName = job || stage
+    const record = records.find(
+      r => r.type === recordType && r.name === recordName,
+    )
+    if (!record) {
+      throw new NotFound({
+        prettyMessage: `${recordType.toLowerCase()} not found`,
+      })
+    }
+    return record.result
+  }
+
   async handle(
     { organization, projectId, definitionId, branch },
     { stage, job },
   ) {
-    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/vsts/build/status/get
-    const { status } = await fetch(this, {
-      url: `https://dev.azure.com/${organization}/${projectId}/_apis/build/status/${definitionId}`,
+    const httpErrors = {
+      404: 'build pipeline not found',
+    }
+    // Microsoft documentation: https://docs.microsoft.com/en-us/rest/api/azure/devops/build/builds/list
+    const url = `https://dev.azure.com/${organization}/${projectId}/_apis/build/builds`
+    const options = {
       searchParams: {
-        branchName: branch,
-        stageName: stage,
-        jobName: job,
+        definitions: definitionId,
+        $top: 1,
+        statusFilter: 'completed',
+        'api-version': '5.0-preview.4',
       },
-      httpErrors: {
-        404: 'user or project not found',
-      },
+    }
+    if (branch) {
+      options.searchParams.branchName = `refs/heads/${branch}`
+    }
+
+    const { count, value } = await this.fetch({
+      url,
+      options,
+      schema: buildSchema,
+      httpErrors,
     })
-    if (status === 'set up now') {
-      throw new NotFound({ prettyMessage: 'definition not found' })
+
+    if (count !== 1) {
+      throw new NotFound({ prettyMessage: 'build pipeline not found' })
     }
-    if (status === 'unknown') {
-      throw new NotFound({ prettyMessage: 'project not found' })
-    }
+
+    const result =
+      stage || job
+        ? await this.getStageOrJobResult(
+            organization,
+            projectId,
+            value[0].id,
+            stage,
+            job,
+            httpErrors,
+          )
+        : value[0].result
+    const status = this.constructor.resultMap[result] || result
     return renderBuildStatusBadge({ status })
   }
 }

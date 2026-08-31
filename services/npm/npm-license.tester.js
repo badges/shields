@@ -31,8 +31,8 @@ t.create(
   .get('/rho-cc-promise.json')
   .expectBadge({
     label: 'license',
-    message: '(MPL-2.0 OR MIT)',
-    color: 'lightgrey',
+    message: 'MPL-2.0, MIT',
+    color: 'green',
   })
 
 t.create('license for package without a license property')

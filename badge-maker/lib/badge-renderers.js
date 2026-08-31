@@ -10,6 +10,8 @@ const FONT_FAMILY = 'Verdana,Geneva,DejaVu Sans,sans-serif'
 const WIDTH_FONT = '11px Verdana'
 const SOCIAL_FONT_FAMILY = 'Helvetica Neue,Helvetica,Arial,sans-serif'
 
+const DEFAULT_TEXT_FILL = '#fff'
+
 function capitalize(s) {
   return `${s.charAt(0).toUpperCase()}${s.slice(1)}`
 }
@@ -17,10 +19,16 @@ function capitalize(s) {
 function colorsForBackground(color) {
   const brightnessThreshold = 0.69
   if (brightness(color) <= brightnessThreshold) {
-    return { textColor: '#fff', shadowColor: '#010101' }
+    return { textColor: DEFAULT_TEXT_FILL, shadowColor: '#010101' }
   } else {
     return { textColor: '#333', shadowColor: '#ccc' }
   }
+}
+
+function withTextFill(attrs, textColor) {
+  // For non-social badges, parent text groups set fill="#fff", so child text fill
+  // attributes that match can be omitted to shrink the SVG.
+  return textColor === DEFAULT_TEXT_FILL ? attrs : { ...attrs, fill: textColor }
 }
 
 function roundUpToOdd(val) {
@@ -123,7 +131,7 @@ class Badge {
     logo,
     logoWidth,
     logoPadding,
-    color = '#4c1',
+    color = '#4b0',
     labelColor,
     idSuffix = '',
   }) {
@@ -197,36 +205,56 @@ class Badge {
     const { textColor, shadowColor } = colorsForBackground(color)
     const x =
       FONT_SCALE_UP_FACTOR * (leftMargin + 0.5 * textWidth + this.horizPadding)
+    const y = 140 + this.constructor.verticalMargin
+    const textLength = FONT_SCALE_UP_FACTOR * textWidth
 
-    const text = new XmlElement({
-      name: 'text',
-      content: [content],
-      attrs: {
-        x,
-        y: 140 + this.constructor.verticalMargin,
-        transform: FONT_SCALE_DOWN_VALUE,
-        fill: textColor,
-        textLength: FONT_SCALE_UP_FACTOR * textWidth,
-      },
-    })
-
-    const shadowText = new XmlElement({
-      name: 'text',
-      content: [content],
-      attrs: {
-        'aria-hidden': 'true',
-        x,
-        y: 150 + this.constructor.verticalMargin,
-        fill: shadowColor,
-        'fill-opacity': '.3',
-        transform: FONT_SCALE_DOWN_VALUE,
-        textLength: FONT_SCALE_UP_FACTOR * textWidth,
-      },
-    })
-    const shadow = this.constructor.shadow ? shadowText : ''
+    let element
+    if (this.constructor.shadow) {
+      const text = new XmlElement({
+        name: 'text',
+        content: [content],
+        attrs: withTextFill({ x, y, textLength }, textColor),
+      })
+      const shadowY = y + 10
+      const shadowText = new XmlElement({
+        name: 'text',
+        content: [content],
+        attrs: { x, y: shadowY, 'fill-opacity': '.3', textLength },
+      })
+      const shadowBlur = new XmlElement({
+        name: 'text',
+        content: [content],
+        attrs: {
+          x,
+          y: shadowY,
+          'fill-opacity': '.8',
+          filter: 'url(#blur)',
+          textLength,
+        },
+      })
+      const shadowGroup = new XmlElement({
+        name: 'g',
+        content: [shadowBlur, shadowText],
+        attrs: { 'aria-hidden': 'true', fill: shadowColor },
+      })
+      element = new XmlElement({
+        name: 'g',
+        content: [shadowGroup, text],
+        attrs: { transform: FONT_SCALE_DOWN_VALUE },
+      })
+    } else {
+      element = new XmlElement({
+        name: 'text',
+        content: [content],
+        attrs: withTextFill(
+          { x, y, textLength, transform: FONT_SCALE_DOWN_VALUE },
+          textColor,
+        ),
+      })
+    }
 
     if (!link) {
-      return new ElementList({ content: [shadow, text] })
+      return element
     }
 
     const rect = new XmlElement({
@@ -240,7 +268,7 @@ class Badge {
     })
     return new XmlElement({
       name: 'a',
-      content: [rect, shadow, text],
+      content: [rect, element],
       attrs: { target: '_blank', href: link },
     })
   }
@@ -281,7 +309,6 @@ class Badge {
             width: this.width,
             height: this.constructor.height,
             rx,
-            fill: '#fff',
           },
         }),
       ],
@@ -330,12 +357,25 @@ class Badge {
         this.getMessageElement(),
       ],
       attrs: {
-        fill: '#fff',
+        fill: DEFAULT_TEXT_FILL,
         'text-anchor': 'middle',
         'font-family': FONT_FAMILY,
         'text-rendering': 'geometricPrecision',
         'font-size': 110,
       },
+    })
+  }
+
+  getBlurElement() {
+    return new XmlElement({
+      name: 'filter',
+      content: [
+        new XmlElement({
+          name: 'feGaussianBlur',
+          attrs: { stdDeviation: '16' },
+        }),
+      ],
+      attrs: { id: 'blur' },
     })
   }
 
@@ -381,6 +421,8 @@ class Plastic extends Badge {
       attrs: { id: `s${this.idSuffix}`, x2: 0, y2: '100%' },
     })
 
+    const blur = this.getBlurElement()
+
     const clipPath = this.getClipPathElement(4)
 
     const backgroundGroup = this.getBackgroundGroupElement({
@@ -396,7 +438,7 @@ class Plastic extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -415,6 +457,8 @@ class Flat extends Badge {
   }
 
   render() {
+    const blur = this.getBlurElement()
+
     const gradient = new XmlElement({
       name: 'linearGradient',
       content: [
@@ -445,7 +489,7 @@ class Flat extends Badge {
         accessibleText: this.accessibleText,
         height: this.constructor.height,
       },
-      [gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
+      [blur, gradient, clipPath, backgroundGroup, this.foregroundGroupElement],
     )
   }
 }
@@ -489,7 +533,7 @@ function social({
   logo,
   logoWidth,
   logoPadding,
-  color = '#4c1',
+  color = '#4b0',
   labelColor = '#555',
   idSuffix = '',
 }) {
@@ -526,7 +570,7 @@ function social({
         name: 'rect',
         attrs: {
           x: messageBubbleMainX,
-          y: 0.5,
+          y: '.5',
           width: messageRectWidth,
           height: internalHeight,
           rx: 2,
@@ -538,7 +582,7 @@ function social({
         attrs: {
           x: messageBubbleNotchX,
           y: 7.5,
-          width: 0.5,
+          width: '.5',
           height: 5,
           stroke: '#fafafa',
         },
@@ -703,8 +747,8 @@ function social({
     attrs: {
       stroke: 'none',
       fill: '#fcfcfc',
-      x: 0.5,
-      y: 0.5,
+      x: '.5',
+      y: '.5',
       width: labelRectWidth,
       height: internalHeight,
       rx: 2,
@@ -757,7 +801,7 @@ function forTheBadge({
   links,
   logo,
   logoWidth,
-  color = '#4c1',
+  color = '#4b0',
   labelColor,
 }) {
   const FONT_SIZE = 10
@@ -842,13 +886,15 @@ function forTheBadge({
     const text = new XmlElement({
       name: 'text',
       content: [label],
-      attrs: {
-        transform: FONT_SCALE_DOWN_VALUE,
-        x: FONT_SCALE_UP_FACTOR * midX,
-        y: 175,
-        textLength: FONT_SCALE_UP_FACTOR * labelTextWidth,
-        fill: textColor,
-      },
+      attrs: withTextFill(
+        {
+          transform: FONT_SCALE_DOWN_VALUE,
+          x: FONT_SCALE_UP_FACTOR * midX,
+          y: 175,
+          textLength: FONT_SCALE_UP_FACTOR * labelTextWidth,
+        },
+        textColor,
+      ),
     })
 
     if (hasLeftLink && !shouldWrapBodyWithLink({ links })) {
@@ -879,14 +925,16 @@ function forTheBadge({
     const text = new XmlElement({
       name: 'text',
       content: [message],
-      attrs: {
-        transform: FONT_SCALE_DOWN_VALUE,
-        x: FONT_SCALE_UP_FACTOR * midX,
-        y: 175,
-        textLength: FONT_SCALE_UP_FACTOR * messageTextWidth,
-        fill: textColor,
-        'font-weight': 'bold',
-      },
+      attrs: withTextFill(
+        {
+          transform: FONT_SCALE_DOWN_VALUE,
+          x: FONT_SCALE_UP_FACTOR * midX,
+          y: 175,
+          textLength: FONT_SCALE_UP_FACTOR * messageTextWidth,
+          'font-weight': 'bold',
+        },
+        textColor,
+      ),
     })
 
     if (hasRightLink) {
@@ -961,7 +1009,7 @@ function forTheBadge({
       getMessageElement(),
     ],
     attrs: {
-      fill: '#fff',
+      fill: DEFAULT_TEXT_FILL,
       'text-anchor': 'middle',
       'font-family': FONT_FAMILY,
       'text-rendering': 'geometricPrecision',

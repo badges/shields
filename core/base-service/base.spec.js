@@ -309,7 +309,6 @@ describe('BaseService', function () {
   })
 
   describe('ScoutCamp integration', function () {
-    // TODO Strangely, without the useless escape the regexes do not match in Node 12.
     // eslint-disable-next-line no-useless-escape
     const expectedRouteRegex = /^\/foo(?:\/([^\/#\?]+?))(|\.svg|\.json)$/
 
@@ -370,17 +369,17 @@ describe('BaseService', function () {
 
   describe('getDefinition', function () {
     it('returns the expected result', function () {
-      const { category, name, isDeprecated, route, openApi } =
+      const { category, name, isRetired, route, openApi } =
         DummyService.getDefinition()
       expect({
         category,
         name,
-        isDeprecated,
+        isRetired,
         route,
       }).to.deep.equal({
         category: 'other',
         name: 'DummyService',
-        isDeprecated: false,
+        isRetired: false,
         route: {
           pattern: '/foo/:namedParamA',
           queryParams: ['queryParamA', 'legacyQueryParamA'],
@@ -617,6 +616,105 @@ describe('BaseService', function () {
 
       expect(() => FormatService.getEnum('notAValidParam')).to.throw(
         'getEnum() requires route to have a .pattern property',
+      )
+    })
+
+    it('returns routeEnum when set', function () {
+      class RouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = ['alpha', 'beta']
+      }
+
+      expect(RouteEnumService.getEnum('namedParamA')).to.deep.equal([
+        'alpha',
+        'beta',
+      ])
+    })
+
+    it('invoke rejects first named param not in routeEnum', async function () {
+      class RouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = ['alpha', 'beta']
+      }
+
+      const result = await RouteEnumService.invoke({}, defaultConfig, {
+        namedParamA: 'gamma',
+      })
+      expect(result).to.deep.equal({
+        isError: true,
+        color: 'red',
+        message: 'invalid parameter namedParamA: gamma',
+      })
+    })
+
+    it('invoke allows first named param present in routeEnum', async function () {
+      class RouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = ['alpha', 'beta']
+      }
+
+      const result = await RouteEnumService.invoke({}, defaultConfig, {
+        namedParamA: 'alpha',
+      })
+      expect(result).to.deep.equal({
+        message: 'Hello namedParamA: alpha with queryParamA: undefined',
+      })
+    })
+
+    it('throws when routeEnum is not a non-empty array of strings (not an array)', function () {
+      class BadRouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = { alpha: true }
+      }
+
+      expect(() => BadRouteEnumService.getEnum('namedParamA')).to.throw(
+        `getEnum() requires routeEnum for ${BadRouteEnumService.name} to be a non-empty array of strings`,
+      )
+    })
+
+    it('throws when routeEnum is an empty array', function () {
+      class BadRouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = []
+      }
+
+      expect(() => BadRouteEnumService.getEnum('namedParamA')).to.throw(
+        `getEnum() requires routeEnum for ${BadRouteEnumService.name} to be a non-empty array of strings`,
+      )
+    })
+
+    it('throws when routeEnum contains non-string values', function () {
+      class BadRouteEnumService extends DummyService {
+        static route = {
+          base: 'foo',
+          pattern: ':namedParamA',
+          queryParamSchema,
+        }
+        static routeEnum = ['alpha', 42]
+      }
+
+      expect(() => BadRouteEnumService.getEnum('namedParamA')).to.throw(
+        `getEnum() requires routeEnum for ${BadRouteEnumService.name} to be a non-empty array of strings`,
       )
     })
   })

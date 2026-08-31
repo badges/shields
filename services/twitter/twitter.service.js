@@ -54,7 +54,7 @@ This badge is unusual.
 We don't usually host badges that don't show any dynamic information.
 Also when an upstream API is removed, we usually deprecate/remove badges
 according to the process in
-https://github.com/badges/shields/blob/master/doc/deprecating-badges.md
+https://github.com/badges/shields/blob/master/doc/retiring-badges.md
 
 In the case of twitter, we decided to provide a static fallback instead
 due to how widely used the badge was. See

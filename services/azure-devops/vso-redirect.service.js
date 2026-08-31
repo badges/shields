@@ -1,6 +1,6 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export const VsoBuildRedirector = deprecatedService({
+export const VsoBuildRedirector = retiredService({
   category: 'build',
   label: 'vso',
   route: {
@@ -10,7 +10,7 @@ export const VsoBuildRedirector = deprecatedService({
   dateAdded: new Date('2025-12-20'),
   issueUrl: 'https://github.com/badges/shields/pull/11583',
 })
-export const VsoReleaseRedirector = deprecatedService({
+export const VsoReleaseRedirector = retiredService({
   category: 'build',
   label: 'vso',
   route: {

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import Joi from 'joi'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import { renderVersionBadge } from '../version.js'
 import { GithubAuthV4Service } from '../github/github-auth-service.js'
 import { NotFound, InvalidResponse, pathParams } from '../index.js'

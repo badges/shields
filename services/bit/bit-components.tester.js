@@ -8,5 +8,5 @@ export const t = new ServiceTester({
 
 t.create('collection').get('/ramda/ramda.json').expectBadge({
   label: 'bitcomponents',
-  message: 'no longer available',
+  message: 'retired badge',
 })

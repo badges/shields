@@ -1,5 +1,16 @@
 # Changelog
 
+## 6.0.0
+
+### Visual Changes
+
+- Generated badges have a new standard palette with higher text contrast. See [this PR](https://github.com/badges/shields/pull/11783) for more information.
+
+### Other Changes
+
+- badge-maker was switched from CC0 to MIT and Apache 2.0 licenses. See [this blog post](https://shields.io/blog/mit-apache-license) for more information.
+- The structure of the generated SVGs has been optimised.
+
 ## 5.0.2
 
 ### Bug Fixes

@@ -1,7 +1,7 @@
-import { deprecatedService, redirector } from '../index.js'
+import { retiredService, redirector } from '../index.js'
 
 export default [
-  deprecatedService({
+  retiredService({
     name: 'TeamCityBuildLegacyCodeBetterRedirect',
     category: 'build',
     label: 'teamcity',

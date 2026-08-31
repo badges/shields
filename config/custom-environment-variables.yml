@@ -70,6 +70,7 @@ public:
   requestTimeoutSeconds: 'REQUEST_TIMEOUT_SECONDS'
   requestTimeoutMaxAgeSeconds: 'REQUEST_TIMEOUT_MAX_AGE_SECONDS'
 
+  dynamicAndEndpointBadgesEnabled: 'DYNAMIC_AND_ENDPOINT_BADGES_ENABLED'
   requireCloudflare: 'REQUIRE_CLOUDFLARE'
 
 private:
@@ -99,8 +100,10 @@ private:
   obs_user: 'OBS_USER'
   obs_pass: 'OBS_PASS'
   opencollective_token: 'OPENCOLLECTIVE_TOKEN'
+  outagedeck_api_key: 'OUTAGEDECK_API_KEY'
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'
+  readthedocs_token: 'READTHEDOCS_TOKEN'
   reddit_client_id: 'REDDIT_CLIENT_ID'
   reddit_client_secret: 'REDDIT_CLIENT_SECRET'
   sentry_dsn: 'SENTRY_DSN'
@@ -115,4 +118,3 @@ private:
   influx_username: 'INFLUX_USERNAME'
   influx_password: 'INFLUX_PASSWORD'
   weblate_api_key: 'WEBLATE_API_KEY'
-  youtube_api_key: 'YOUTUBE_API_KEY'

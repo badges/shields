@@ -4,14 +4,6 @@ import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { BaseCratesService, description } from './crates-base.js'
 
-const dependentsDescription = `
-${description}
-
-Due to upstream API timeouts, crates with a very large number of dependents may fail to retrieve data.
-
-See [#11633](https://github.com/badges/shields/issues/11633) for more info.
-`
-
 const dependentsResponseSchema = Joi.object({
   meta: Joi.object({
     total: nonNegativeInteger,
@@ -26,7 +18,7 @@ export default class CratesDependents extends BaseCratesService {
     '/crates/dependents/{crate}': {
       get: {
         summary: 'Crates.io Dependents',
-        description: dependentsDescription,
+        description,
         parameters: pathParams({
           name: 'crate',
           example: 'tokio',

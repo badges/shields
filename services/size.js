@@ -1,4 +1,6 @@
 /**
+ * Common functions and utilities for tasks related to file sizes.
+ *
  * @module
  */
 

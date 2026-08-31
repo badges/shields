@@ -9,7 +9,7 @@ export default class PypiImplementation extends PypiBase {
   static openApi = {
     '/pypi/implementation/{packageName}': {
       get: {
-        summary: 'PyPI - Implementation',
+        summary: 'PyPI Implementation',
         parameters: pypiGeneralParams,
       },
     },

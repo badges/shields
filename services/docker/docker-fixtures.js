@@ -32,62 +32,7 @@ const sizeDataNoTagSemVerSort = [
     ],
   },
 ]
-const versionDataNoTagDateSort = {
-  count: 4,
-  results: [
-    {
-      name: 'latest',
-      images: [
-        {
-          digest:
-            'sha256:6bdb610acd12a4446d6dd839ebf8c2927c8e6bbde8b7beb2562d1f7f7c4437fb',
-          architecture: 'arm64',
-        },
-        {
-          digest:
-            'sha256:4070dd02827ed3545acb745de3b567a42b87828bb842181e80a2b69f6e3b37b2',
-          architecture: 'amd64',
-        },
-        {
-          digest:
-            'sha256:6f21523ebe450faa23e688b7ea3556ddf4415032263a80ad1f1543463098a779',
-          architecture: 'arm',
-        },
-      ],
-    },
-    {
-      name: 'arm64v8-latest',
-      images: [
-        {
-          digest:
-            'sha256:6bdb610acd12a4446d6dd839ebf8c2927c8e6bbde8b7beb2562d1f7f7c4437fb',
-          architecture: 'amd64',
-        },
-      ],
-    },
-    {
-      name: 'arm32v7-latest',
-      images: [
-        {
-          digest:
-            'sha256:6f21523ebe450faa23e688b7ea3556ddf4415032263a80ad1f1543463098a779',
-          architecture: 'amd64',
-        },
-      ],
-    },
-    {
-      name: 'amd64-latest',
-      images: [
-        {
-          digest:
-            'sha256:4070dd02827ed3545acb745de3b567a42b87828bb842181e80a2b69f6e3b37b2',
-          architecture: 'amd64',
-        },
-      ],
-    },
-  ],
-}
-const versionPagedDataNoTagDateSort = [
+const versionDataNoTagDateSort = [
   {
     name: 'latest',
     images: [
@@ -3044,7 +2989,6 @@ const versionDataWithArchSpecificVersions = [
 export {
   sizeDataNoTagSemVerSort,
   versionDataNoTagDateSort,
-  versionPagedDataNoTagDateSort,
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,

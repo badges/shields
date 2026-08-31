@@ -11,8 +11,8 @@ org="shields-io"
 pr_json=$(curl --fail "https://api.github.com/repos/badges/shields/pulls/$PR_NUMBER")
 
 # Checkout the PR branch
-git config user.name "actions[bot]"
-git config user.email "actions@users.noreply.github.com"
+git config user.name "github-actions[bot]"
+git config user.email "github-actions[bot]@users.noreply.github.com"
 git fetch origin "pull/$PR_NUMBER/head:pr-$PR_NUMBER"
 git checkout "pr-$PR_NUMBER"
 
