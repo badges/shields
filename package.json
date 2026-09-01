@@ -29,7 +29,7 @@
     "@renovatebot/ruby-semver": "^5.0.0",
     "@sentry/node-core": "^10.69.0",
     "@shields_io/camp": "^18.1.2",
-    "@xmldom/xmldom": "0.9.10",
+    "@xmldom/xmldom": "0.9.12",
     "badge-maker": "file:badge-maker",
     "byte-size": "^9.0.1",
     "camelcase": "^9.0.0",
