@@ -30,6 +30,14 @@ t.create('gets the package version + valid custom server')
 
 t.create('invalid custom server')
   .get('/symfony/symfony/twig/twig.json?server=https://packagisttttttt.org')
+  .intercept(nock =>
+    nock('https://packagisttttttt.org')
+      .get('/p2/symfony/symfony.json')
+      .replyWithError({
+        code: 'ENOTFOUND',
+        message: 'getaddrinfo ENOTFOUND packagisttttttt.org',
+      }),
+  )
   .expectBadge({
     label: 'dependency version',
     message: 'inaccessible',

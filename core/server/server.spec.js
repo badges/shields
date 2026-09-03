@@ -6,7 +6,7 @@ import isSvg from 'is-svg'
 import config from 'config'
 import nock from 'nock'
 import sinon from 'sinon'
-import got from '../got-test-client.js'
+import request from '../ky-test-client.js'
 import Server from './server.js'
 import { createTestServer } from './in-process-server-test-helpers.js'
 
@@ -47,7 +47,9 @@ describe('The server', function () {
     })
 
     it('should produce colorscheme badges', async function () {
-      const { statusCode, body } = await got(`${baseUrl}:fruit-apple-green.svg`)
+      const { statusCode, body } = await request(
+        `${baseUrl}:fruit-apple-green.svg`,
+      )
       expect(statusCode).to.equal(200)
       expect(body)
         .to.satisfy(isSvg)
@@ -56,26 +58,26 @@ describe('The server', function () {
     })
 
     it('should serve front-end with default maxAge', async function () {
-      const { headers } = await got(`${baseUrl}/`)
+      const { headers } = await request(`${baseUrl}/`)
       expect(headers['cache-control']).to.equal('max-age=300, s-maxage=300')
     })
 
     it('should serve static badges without logo with maxAge=432000', async function () {
-      const { headers } = await got(`${baseUrl}badge/foo-bar-blue`)
+      const { headers } = await request(`${baseUrl}badge/foo-bar-blue`)
       expect(headers['cache-control']).to.equal(
         'max-age=432000, s-maxage=432000',
       )
     })
 
     it('should serve badges with with logo with maxAge=86400', async function () {
-      const { headers } = await got(
+      const { headers } = await request(
         `${baseUrl}badge/foo-bar-blue?logo=javascript`,
       )
       expect(headers['cache-control']).to.equal('max-age=86400, s-maxage=86400')
     })
 
     it('should return cors header for the request', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}badge/foo-bar-blue.svg`,
       )
       expect(statusCode).to.equal(200)
@@ -84,10 +86,10 @@ describe('The server', function () {
     })
 
     it('should redirect colorscheme PNG badges as configured', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}:fruit-apple-green.png`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
       expect(statusCode).to.equal(301)
@@ -97,10 +99,10 @@ describe('The server', function () {
     })
 
     it('should redirect modern PNG badges as configured', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}badge/foo-bar-blue.png`,
         {
-          followRedirect: false,
+          redirect: 'manual',
         },
       )
       expect(statusCode).to.equal(301)
@@ -110,12 +112,12 @@ describe('The server', function () {
     })
 
     it('should not redirect for PNG requests in /img', async function () {
-      const { statusCode } = await got(`${baseUrl}img/frontend-image.png`)
+      const { statusCode } = await request(`${baseUrl}img/frontend-image.png`)
       expect(statusCode).to.equal(200)
     })
 
     it('should produce SVG badges with expected headers', async function () {
-      const { statusCode, headers } = await got(
+      const { statusCode, headers } = await request(
         `${baseUrl}:fruit-apple-green.svg`,
       )
       expect(statusCode).to.equal(200)
@@ -124,12 +126,12 @@ describe('The server', function () {
     })
 
     it('correctly calculates the content-length header for multi-byte unicode characters', async function () {
-      const { headers } = await got(`${baseUrl}:fruit-apple🍏-green.json`)
+      const { headers } = await request(`${baseUrl}:fruit-apple🍏-green.json`)
       expect(headers['content-length']).to.equal('100')
     })
 
     it('should produce JSON badges with expected headers', async function () {
-      const { statusCode, body, headers } = await got(
+      const { statusCode, body, headers } = await request(
         `${baseUrl}:fruit-apple-green.json`,
       )
       expect(statusCode).to.equal(200)
@@ -142,34 +144,36 @@ describe('The server', function () {
 
     describe('Content Security Policy', function () {
       it('should disable javascript when serving SVG content (no extension)', async function () {
-        const { headers } = await got(`${baseUrl}:fruit-apple-green`)
+        const { headers } = await request(`${baseUrl}:fruit-apple-green`)
         expect(headers['content-security-policy']).to.equal(
           "script-src 'none';",
         )
       })
 
       it('should disable javascript when serving SVG content (with extension)', async function () {
-        const { headers } = await got(`${baseUrl}:fruit-apple-green.svg`)
+        const { headers } = await request(`${baseUrl}:fruit-apple-green.svg`)
         expect(headers['content-security-policy']).to.equal(
           "script-src 'none';",
         )
       })
 
       it('should not send content security headers when serving JSON content', async function () {
-        const { headers } = await got(`${baseUrl}:fruit-apple-green.json`)
+        const { headers } = await request(`${baseUrl}:fruit-apple-green.json`)
         expect(headers).not.to.have.property('content-security-policy')
       })
     })
 
     it('should preserve label case', async function () {
-      const { statusCode, body } = await got(`${baseUrl}:fRuiT-apple-green.svg`)
+      const { statusCode, body } = await request(
+        `${baseUrl}:fRuiT-apple-green.svg`,
+      )
       expect(statusCode).to.equal(200)
       expect(body).to.satisfy(isSvg).and.to.include('fRuiT')
     })
 
     // https://github.com/badges/shields/pull/1319
     it('should not crash with a numeric logo', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}:fruit-apple-green.svg?logo=1`,
       )
       expect(statusCode).to.equal(200)
@@ -180,7 +184,7 @@ describe('The server', function () {
     })
 
     it('should not crash with a numeric link', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}:fruit-apple-green.svg?link=1`,
       )
       expect(statusCode).to.equal(200)
@@ -191,7 +195,7 @@ describe('The server', function () {
     })
 
     it('should not crash with a boolean link', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}:fruit-apple-green.svg?link=true`,
       )
       expect(statusCode).to.equal(200)
@@ -202,7 +206,7 @@ describe('The server', function () {
     })
 
     it('should return the 404 badge for unknown badges', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}this/is/not/a/badge.svg`,
         {
           throwHttpErrors: false,
@@ -216,7 +220,7 @@ describe('The server', function () {
     })
 
     it('should return the 404 badge page for random links', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}this/is/most/definitely/not/a/badge.js`,
         {
           throwHttpErrors: false,
@@ -230,8 +234,8 @@ describe('The server', function () {
     })
 
     it('should redirect the root as configured', async function () {
-      const { statusCode, headers } = await got(baseUrl, {
-        followRedirect: false,
+      const { statusCode, headers } = await request(baseUrl, {
+        redirect: 'manual',
       })
 
       expect(statusCode).to.equal(302)
@@ -240,9 +244,12 @@ describe('The server', function () {
     })
 
     it('should return the 404 page with empty response for favicon.icon', async function () {
-      const { statusCode, body, headers } = await got(`${baseUrl}favicon.ico`, {
-        throwHttpErrors: false,
-      })
+      const { statusCode, body, headers } = await request(
+        `${baseUrl}favicon.ico`,
+        {
+          throwHttpErrors: false,
+        },
+      )
       expect(statusCode).to.equal(404)
       expect(body).to.equal('')
       expect(headers['cache-control']).to.equal(
@@ -251,7 +258,7 @@ describe('The server', function () {
     })
 
     it('should return the 410 badge for obsolete formats', async function () {
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${baseUrl}badge/foo-bar-blue.jpg`,
         {
           throwHttpErrors: false,
@@ -278,7 +285,7 @@ describe('The server', function () {
       server = await createTestServer({ public: { requireCloudflare: true } })
       await server.start()
 
-      const { statusCode, body } = await got(
+      const { statusCode, body } = await request(
         `${server.baseUrl}badge/foo-bar-blue.svg`,
       )
 
@@ -323,7 +330,7 @@ describe('The server', function () {
 
     it('should time out slow requests', async function () {
       this.timeout(10000)
-      const { statusCode, body } = await got(`${server.baseUrl}slow`, {
+      const { statusCode, body } = await request(`${server.baseUrl}slow`, {
         throwHttpErrors: false,
       })
       expect(statusCode).to.be.equal(408)
@@ -332,7 +339,7 @@ describe('The server', function () {
 
     it('should not time out fast requests', async function () {
       this.timeout(10000)
-      const { statusCode, body } = await got(`${server.baseUrl}fast`)
+      const { statusCode, body } = await request(`${server.baseUrl}fast`)
       expect(statusCode).to.be.equal(200)
       expect(body).to.equal('')
     })
@@ -356,7 +363,7 @@ describe('The server', function () {
       })
       await server.start()
 
-      const { statusCode } = await got(`${server.baseUrl}metrics`)
+      const { statusCode } = await request(`${server.baseUrl}metrics`)
 
       expect(statusCode).to.be.equal(200)
     })
@@ -371,7 +378,7 @@ describe('The server', function () {
       })
       await server.start()
 
-      const { statusCode } = await got(`${server.baseUrl}metrics`, {
+      const { statusCode } = await request(`${server.baseUrl}metrics`, {
         throwHttpErrors: false,
       })
 
@@ -688,7 +695,7 @@ describe('The server', function () {
           return ''
         })
 
-      await got(`${baseUrl}badge/fruit-apple-green.svg`)
+      await request(`${baseUrl}badge/fruit-apple-green.svg`)
       await clock.tickAsync(1000 * metricsPushIntervalSeconds)
       await sentReq
 
