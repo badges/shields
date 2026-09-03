@@ -1,7 +1,7 @@
 name: Services
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, reopened, synchronize]
   push:
     branches:
       - 'gh-readonly-queue/**'
@@ -12,7 +12,6 @@ concurrency:
 
 jobs:
   test-services:
-    if: github.event_name == 'push' || github.event.action != 'edited' || github.event.changes.title
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
