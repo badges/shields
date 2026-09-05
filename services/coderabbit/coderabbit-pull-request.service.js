@@ -9,8 +9,8 @@ const schema = Joi.object({
 class CodeRabbitPullRequest extends BaseJsonService {
   static category = 'analysis'
   static route = {
-    base: 'coderabbit',
-    pattern: 'prs/:provider/:org/:repo',
+    base: 'coderabbit/prs',
+    pattern: ':provider/:org/:repo',
   }
   static routeEnum = ['github', 'bitbucket', 'gitlab']
 
