@@ -182,6 +182,9 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
+      options: {
+        searchParams: nameFilter ? { check_name: nameFilter } : undefined,
+      },
       httpErrors: httpErrorsFor('ref or repo not found'),
       schema,
     })
