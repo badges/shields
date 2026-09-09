@@ -46,6 +46,10 @@ t.create('"Shields-encoded" dash')
   .get('/badge/best--license-Apache--2.0-blue.json')
   .expectBadge({ label: 'best-license', message: 'Apache-2.0', color: 'blue' })
 
+t.create('URL decoding happens once')
+  .get('/badge/label-100%2525-blue.json')
+  .expectBadge({ label: 'label', message: '100%25', color: 'blue' })
+
 t.create('Override color')
   .get('/badge/label-message-blue.json?color=yellow')
   .expectBadge({ label: 'label', message: 'message', color: 'yellow' })
