@@ -117,9 +117,7 @@ export default class BundlejsPackage extends BaseJsonService {
       url: 'https://deno.bundlejs.com',
       options: {
         searchParams,
-        timeout: {
-          request: 3500,
-        },
+        timeout: 3500,
       },
       systemErrors: {
         ETIMEDOUT: { prettyMessage: 'timeout', cacheSeconds: 10 },

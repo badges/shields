@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import Joi from 'joi'
 import checkErrorResponse from './check-error-response.js'
 import { InvalidParameter, InvalidResponse } from './errors.js'
-import { fetch } from './got.js'
+import { fetch } from './ky.js'
 import { parseJson } from './json.js'
 import validate from './validate.js'
 
@@ -120,8 +120,11 @@ class AuthHelper {
 
   get _basicAuth() {
     const { _user: username, _pass: password } = this
+    const credentials = Buffer.from(
+      `${username || ''}:${password || ''}`,
+    ).toString('base64')
     return this.isConfigured
-      ? { username: username || '', password: password || '' }
+      ? { Authorization: `Basic ${credentials}` }
       : undefined
   }
 
@@ -141,20 +144,9 @@ class AuthHelper {
     return shouldAuthenticate ? mergeAuthFn(requestParams) : requestParams
   }
 
-  static _mergeAuth(requestParams, auth) {
-    const { options, ...rest } = requestParams
-    return {
-      options: {
-        ...auth,
-        ...options,
-      },
-      ...rest,
-    }
-  }
-
   withBasicAuth(requestParams) {
     return this._withAnyAuth(requestParams, requestParams =>
-      this.constructor._mergeAuth(requestParams, this._basicAuth),
+      this.constructor._mergeHeaders(requestParams, this._basicAuth),
     )
   }
 
@@ -175,12 +167,21 @@ class AuthHelper {
       options: { headers: existingHeaders, ...restOptions } = {},
       ...rest
     } = requestParams
+    const mergedHeaders =
+      existingHeaders instanceof Headers || Array.isArray(existingHeaders)
+        ? Object.fromEntries(new Headers(existingHeaders))
+        : { ...existingHeaders }
+    for (const [name, value] of Object.entries(headers)) {
+      for (const existingName of Object.keys(mergedHeaders)) {
+        if (existingName.toLowerCase() === name.toLowerCase()) {
+          delete mergedHeaders[existingName]
+        }
+      }
+      mergedHeaders[name] = value
+    }
     return {
       options: {
-        headers: {
-          ...existingHeaders,
-          ...headers,
-        },
+        headers: mergedHeaders,
         ...restOptions,
       },
       ...rest,
@@ -283,7 +284,7 @@ class AuthHelper {
     const { buffer } = await checkErrorResponse({})(
       await fetch(loginEndpoint, {
         method: 'POST',
-        form: { username, password },
+        body: new URLSearchParams({ username, password }),
       }),
     )
 

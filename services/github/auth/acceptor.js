@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { fetch } from '../../../core/base-service/got.js'
+import { fetch } from '../../../core/base-service/ky.js'
 import log from '../../../core/server/log.js'
 
 function setRoutes({ server, authHelper, onTokenAccepted }) {
@@ -36,7 +36,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
       headers: {
         'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
-      form: {
+      body: new URLSearchParams({
         // TODO The `_user` and `_pass` properties bypass security checks in
         // AuthHelper (e.g: enforceStrictSsl and shouldAuthenticateRequest).
         // Do not use them elsewhere. It would be better to clean
@@ -44,7 +44,7 @@ function setRoutes({ server, authHelper, onTokenAccepted }) {
         client_id: authHelper._user,
         client_secret: authHelper._pass,
         code: data.code,
-      },
+      }),
     }
 
     let resp

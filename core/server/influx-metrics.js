@@ -1,5 +1,5 @@
 import os from 'os'
-import got from 'got'
+import ky from 'ky'
 import generateInstanceId from './instance-id-generator.js'
 import { promClientJsonToInfluxV2 } from './metrics/format-converters.js'
 import log from './log.js'
@@ -13,17 +13,22 @@ export default class InfluxMetrics {
 
   async sendMetrics() {
     const request = {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${Buffer.from(
+          `${this._config.username}:${this._config.password}`,
+        ).toString('base64')}`,
+      },
       body: await this.metrics(),
-      timeout: { request: this._config.timeoutMillseconds },
-      username: this._config.username,
-      password: this._config.password,
+      signal: AbortSignal.timeout(this._config.timeoutMilliseconds),
+      timeout: false,
       throwHttpErrors: false,
     }
 
     let response
     try {
-      response = await got.post(this._config.url, request)
+      response = await ky.post(this._config.url, request)
+      await response.text()
     } catch (error) {
       log.error(
         new Error(
@@ -31,10 +36,10 @@ export default class InfluxMetrics {
         ),
       )
     }
-    if (response && response.statusCode >= 300) {
+    if (response && response.status >= 300) {
       log.error(
         new Error(
-          `Cannot push metrics. ${this._config.url} responded with status code ${response.statusCode}`,
+          `Cannot push metrics. ${this._config.url} responded with status code ${response.status}`,
         ),
       )
     }

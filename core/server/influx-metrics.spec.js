@@ -77,7 +77,7 @@ describe('Influx metrics', function () {
   describe('startPushingMetrics', function () {
     let influxMetrics, clock
     beforeEach(function () {
-      clock = sinon.useFakeTimers()
+      clock = sinon.useFakeTimers({ toFake: ['setInterval'] })
     })
     afterEach(function () {
       influxMetrics.stopPushingMetrics()
@@ -88,23 +88,26 @@ describe('Influx metrics', function () {
     })
 
     it('should send metrics', async function () {
+      const { promise: sentReq, resolve: markSentReq } = Promise.withResolvers()
       const scope = nock('https://shields-metrics.io/', {
         reqheaders: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       })
-        .persist()
         .post(
           '/metrics',
           'prometheus,application=shields,env=test-env,instance=instance2 counter1=11',
         )
         .basicAuth({ user: 'metrics-username', pass: 'metrics-password' })
-        .reply(200)
+        .reply(200, () => {
+          markSentReq()
+          return ''
+        })
       process.env.INSTANCE_ID = 'instance2'
       influxMetrics = new InfluxMetrics(metricInstance, {
         url: 'https://shields-metrics.io/metrics',
-        timeoutMillseconds: 100,
-        intervalSeconds: 0.001,
+        timeoutMilliseconds: 100,
+        intervalSeconds: 0.01,
         username: 'metrics-username',
         password: 'metrics-password',
         instanceIdFrom: 'env-var',
@@ -115,6 +118,7 @@ describe('Influx metrics', function () {
       influxMetrics.startPushingMetrics()
 
       await clock.tickAsync(10)
+      await sentReq
       expect(scope.isDone()).to.be.equal(
         true,
         `pending mocks: ${scope.pendingMocks()}`,
@@ -134,7 +138,7 @@ describe('Influx metrics', function () {
 
     const influxMetrics = new InfluxMetrics(metricInstance, {
       url: 'https://shields-metrics.io/metrics',
-      timeoutMillseconds: 50,
+      timeoutMilliseconds: 50,
       intervalSeconds: 0,
       username: 'metrics-username',
       password: 'metrics-password',
@@ -150,7 +154,7 @@ describe('Influx metrics', function () {
           .and(
             sinon.match.has(
               'message',
-              'Cannot push metrics. Cause: RequestError: Nock: Disallowed net connect for "shields-metrics.io:443/metrics"',
+              'Cannot push metrics. Cause: NetConnectNotAllowedError: Nock: Disallowed net connect for "shields-metrics.io:443/metrics"',
             ),
           ),
       )
@@ -168,6 +172,26 @@ describe('Influx metrics', function () {
             sinon.match.has(
               'message',
               'Cannot push metrics. https://shields-metrics.io/metrics responded with status code 400',
+            ),
+          ),
+      )
+    })
+
+    it('should time out while reading the response body', async function () {
+      nock('https://shields-metrics.io/')
+        .post('/metrics')
+        .delayBody(200)
+        .reply(200, 'ok')
+
+      await influxMetrics.sendMetrics()
+
+      expect(log.error).to.be.calledWith(
+        sinon.match
+          .instanceOf(Error)
+          .and(
+            sinon.match.has(
+              'message',
+              sinon.match(/^Cannot push metrics\. Cause: TimeoutError:/),
             ),
           ),
       )

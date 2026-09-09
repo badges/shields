@@ -1,3 +1,5 @@
+/** @module */
+
 import configModule from 'config'
 import Joi from 'joi'
 import { fileSizeBytes } from '../../services/validators.js'

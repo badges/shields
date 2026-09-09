@@ -18,6 +18,10 @@ function manifestText(packageName, nReleaseDate) {
   return `PackageIdentifier: ${packageName}\nReleaseDate: ${nReleaseDate}\n`
 }
 
+function parseRequestBody(requestBody) {
+  return typeof requestBody === 'string' ? JSON.parse(requestBody) : requestBody
+}
+
 // basic test
 t.create('release date for WSL')
   .get('/release-date/Microsoft.WSL.json')
@@ -27,10 +31,11 @@ t.create('release date for WSL')
 t.create('gets release date for latest version (not ASCII order)')
   .intercept(nock =>
     nock('https://api.github.com/')
+      .matchHeader('content-type', 'application/json')
       .post('/graphql')
       .twice()
       .reply((uri, requestBody) => {
-        const { query, variables } = JSON.parse(requestBody)
+        const { query, variables } = parseRequestBody(requestBody)
         if (query.includes('Tree')) {
           return [
             200,
@@ -74,10 +79,11 @@ t.create('gets release date for latest version (not ASCII order)')
 t.create('do not pick sub-package release date')
   .intercept(nock =>
     nock('https://api.github.com/')
+      .matchHeader('content-type', 'application/json')
       .post('/graphql')
       .twice()
       .reply((uri, requestBody) => {
-        const { query, variables } = JSON.parse(requestBody)
+        const { query, variables } = parseRequestBody(requestBody)
 
         if (query.includes('Tree')) {
           return [

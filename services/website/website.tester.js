@@ -31,10 +31,17 @@ t.create('status is up if response code is 299')
   .intercept(nock => nock('http://online.com').head('/').reply(299))
   .expectBadge({ label: 'website', message: 'up' })
 
-t.create('status is up if response code is 301')
+t.create('status is down if a redirect target returns an error')
   .get('/website.json?url=http://online.com')
-  .intercept(nock => nock('http://online.com').head('/').reply(301))
-  .expectBadge({ label: 'website', message: 'up' })
+  .intercept(nock =>
+    nock('http://online.com')
+      .head('/')
+      .reply(301, undefined, { Location: '/unavailable' })
+      // Nock's Fetch interceptor replays the redirected HEAD request as GET.
+      .get('/unavailable')
+      .reply(500),
+  )
+  .expectBadge({ label: 'website', message: 'down' })
 
 t.create('status is up if response code is 309')
   .get('/website.json?url=http://online.com')

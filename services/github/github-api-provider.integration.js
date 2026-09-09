@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import config from 'config'
-import { fetch } from '../../core/base-service/got.js'
+import { fetch } from '../../core/base-service/ky.js'
 import GithubApiProvider from './github-api-provider.js'
 
 describe('Github API provider', function () {

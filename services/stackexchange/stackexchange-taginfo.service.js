@@ -52,7 +52,7 @@ export default class StackExchangeQuestions extends StackExchangeBase {
 
     const parsedData = await this.fetch({
       schema: tagSchema,
-      options: { decompress: true, searchParams: { site: stackexchangesite } },
+      options: { searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
     })
 

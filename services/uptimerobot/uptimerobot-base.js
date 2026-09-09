@@ -68,11 +68,11 @@ export default class UptimeRobotBase extends BaseJsonService {
           'cache-control': 'no-cache',
           'content-type': 'application/x-www-form-urlencoded',
         },
-        form: {
+        body: new URLSearchParams({
           api_key: monitorSpecificKey,
           format: 'json',
           ...opts,
-        },
+        }),
       },
       logErrors: [],
     })

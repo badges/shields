@@ -15,7 +15,7 @@ const headersToInclude = ['cf-ray']
 /**
  * Create a handler that validates HTTP status codes from upstream API responses.
  *
- * Used in the `got` response pipeline by {@link module:core/base-service/base~BaseService}
+ * Used in the outbound response pipeline by {@link module:core/base-service/base~BaseService}
  * and related helpers. On status 200 the handler returns the inputs unchanged.
  * On other status codes it throws a {@link NotFound}, {@link InvalidResponse}, or
  * {@link Inaccessible} exception. Thrown errors include `response` and `buffer`

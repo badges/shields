@@ -139,10 +139,10 @@ export default class Matrix extends BaseJsonService {
               kind: 'guest',
             }
           : {},
-        body: JSON.stringify({
+        json: {
           password: '',
           auth: { type: 'm.login.dummy' },
-        }),
+        },
       },
       httpErrors: {
         401: 'auth failed',

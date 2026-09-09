@@ -108,7 +108,7 @@ export default class DynamicRegex extends BaseService {
       url,
       httpErrors,
       logErrors: [],
-      options: { timeout: { request: 3500 } },
+      options: { timeout: 3500 },
     })
     const value = this.constructor.transform(buffer, search, replace, flags)
     return renderDynamicBadge({ value })

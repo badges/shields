@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getUserAgent } from './got-config.js'
+import { getUserAgent } from './ky-config.js'
 
 describe('getUserAgent function', function () {
   afterEach(function () {

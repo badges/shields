@@ -54,7 +54,7 @@ export default class StackExchangeReputation extends StackExchangeBase {
 
     const parsedData = await this.fetch({
       schema: reputationSchema,
-      options: { decompress: true, searchParams: { site: stackexchangesite } },
+      options: { searchParams: { site: stackexchangesite } },
       url: `https://api.stackexchange.com/2.2/${path}`,
       httpErrors: {
         400: 'invalid parameters',
