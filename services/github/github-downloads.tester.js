@@ -13,6 +13,35 @@ const mockReleases = releases => nock =>
     .get('/repos/photonstorm/phaser/releases?per_page=100')
     .reply(200, releases)
 
+const mockAllReleases = releases => nock =>
+  nock('https://api.github.com')
+    .get('/repos/photonstorm/phaser/releases?per_page=500')
+    .reply(200, releases)
+
+t.create('Downloads all releases (total across all releases)')
+  .get('/downloads/photonstorm/phaser/total.json')
+  .intercept(
+    mockAllReleases([
+      {
+        assets: [
+          { name: 'phaser.js', download_count: 10 },
+          { name: 'phaser.min.js', download_count: 20 },
+        ],
+        tag_name: 'v3.15.0',
+        prerelease: false,
+      },
+      {
+        assets: [
+          { name: 'phaser.js', download_count: 5 },
+          { name: 'phaser.min.js', download_count: 15 },
+        ],
+        tag_name: 'v3.15.1',
+        prerelease: false,
+      },
+    ]),
+  )
+  .expectBadge({ label: 'downloads', message: '50' })
+
 t.create('Downloads all releases')
   .get('/downloads/photonstorm/phaser/total.json')
   .expectBadge({ label: 'downloads', message: isMetric })
