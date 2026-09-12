@@ -3,25 +3,25 @@ import { isMetricOverTimePeriod } from '../test-validators.js'
 export const t = await createServiceTester()
 
 t.create('daily downloads (valid)')
-  .get('/installs/dm/cake.json')
+  .get('/dm/cake.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('yearly downloads (valid)')
-  .get('/installs/dq/cake.json')
+  .get('/dq/cake.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('yearly downloads (valid)')
-  .get('/installs/dy/cake.json')
+  .get('/dy/cake.json')
   .expectBadge({ label: 'downloads', message: isMetricOverTimePeriod })
 
 t.create('daily downloads (not found)')
-  .get('/installs/dm/not-a-package.json')
+  .get('/dm/not-a-package.json')
   .expectBadge({ label: 'downloads', message: 'formula not found' })
 
 t.create('yearly downloads (not found)')
-  .get('/installs/dq/not-a-package.json')
+  .get('/dq/not-a-package.json')
   .expectBadge({ label: 'downloads', message: 'formula not found' })
 
 t.create('yearly downloads (not found)')
-  .get('/installs/dy/not-a-package.json')
+  .get('/dy/not-a-package.json')
   .expectBadge({ label: 'downloads', message: 'formula not found' })

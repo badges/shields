@@ -5,8 +5,8 @@ import { BaseCratesUserService, description } from './crates-base.js'
 export default class CratesUserDownloads extends BaseCratesUserService {
   static category = 'downloads'
   static route = {
-    base: 'crates',
-    pattern: 'udt/:userId',
+    base: 'crates/udt',
+    pattern: ':userId',
   }
 
   static openApi = {

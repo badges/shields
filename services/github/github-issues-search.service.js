@@ -82,8 +82,8 @@ class GithubIssuesSearch extends BaseGithubIssuesSearch {
 
 class GithubRepoIssuesSearch extends BaseGithubIssuesSearch {
   static route = {
-    base: 'github',
-    pattern: 'issues-search/:user/:repo',
+    base: 'github/issues-search',
+    pattern: ':user/:repo',
     queryParamSchema,
   }
 

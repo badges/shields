@@ -20,7 +20,7 @@ function manifestText(packageName, nReleaseDate) {
 
 // basic test
 t.create('release date for WSL')
-  .get('/release-date/Microsoft.WSL.json')
+  .get('/Microsoft.WSL.json')
   .expectBadge({ label: 'release date', message: isFormattedDate })
 
 // 0.200.170 would sort higher in ASCII, 0.1201.422.0 is latest in winget order
@@ -67,7 +67,7 @@ t.create('gets release date for latest version (not ASCII order)')
         return [200, { data: { repository: { object: null } } }]
       }),
   )
-  .get('/release-date/Microsoft.DevHome.json')
+  .get('/Microsoft.DevHome.json')
   .expectBadge({ label: 'release date', message: 'march 2024' })
 
 // 2404 is Ubuntu 24.04 sub-package folder, NOT canonical Ubuntu 24.04
@@ -120,5 +120,5 @@ t.create('do not pick sub-package release date')
         return [200, { data: { repository: { object: null } } }]
       }),
   )
-  .get('/release-date/Canonical.Ubuntu.json')
+  .get('/Canonical.Ubuntu.json')
   .expectBadge({ label: 'release date', message: 'march 2024' })

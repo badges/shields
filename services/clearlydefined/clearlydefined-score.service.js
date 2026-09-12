@@ -21,8 +21,8 @@ const schema = Joi.object({
 export default class ClearlyDefinedService extends BaseService {
   static category = 'analysis'
   static route = {
-    base: 'clearlydefined',
-    pattern: 'score/:type/:provider/:namespace/:name/:revision',
+    base: 'clearlydefined/score',
+    pattern: ':type/:provider/:namespace/:name/:revision',
   }
 
   static openApi = {
