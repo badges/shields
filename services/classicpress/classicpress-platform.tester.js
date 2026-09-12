@@ -49,12 +49,6 @@ t.create('Plugin Required CP Version | Not Set')
 
 t.create('Plugin Required CP Version | Not Found')
   .get('/plugin/cp-version/100.json')
-  .intercept(nock =>
-    nock('https://directory.classicpress.net')
-      .get('/wp-json/wp/v2/plugins/')
-      .query(directoryQuery('100'))
-      .reply(200, []),
-  )
   .expectBadge({
     label: 'classicpress',
     message: 'not found',
@@ -62,12 +56,6 @@ t.create('Plugin Required CP Version | Not Found')
 
 t.create('Theme Required CP Version | Not Found')
   .get('/theme/cp-version/100.json')
-  .intercept(nock =>
-    nock('https://directory.classicpress.net')
-      .get('/wp-json/wp/v2/themes/')
-      .query(directoryQuery('100'))
-      .reply(200, []),
-  )
   .expectBadge({
     label: 'classicpress',
     message: 'not found',
@@ -102,12 +90,6 @@ t.create('Plugin Required PHP Version | Not Set')
 
 t.create('Theme Required PHP Version | Not Found')
   .get('/theme/required-php/100.json')
-  .intercept(nock =>
-    nock('https://directory.classicpress.net')
-      .get('/wp-json/wp/v2/themes/')
-      .query(directoryQuery('100'))
-      .reply(200, []),
-  )
   .expectBadge({
     label: 'php',
     message: 'not found',
