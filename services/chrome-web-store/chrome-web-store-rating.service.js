@@ -1,6 +1,6 @@
 import { floorCount as floorCountColor } from '../color-formatters.js'
 import { metric, starRating } from '../text-formatters.js'
-import { NotFound, pathParams } from '../index.js'
+import { InvalidResponse, NotFound, pathParams } from '../index.js'
 import BaseChromeWebStoreService, {
   description,
 } from './chrome-web-store-base.js'
@@ -24,7 +24,7 @@ class ChromeWebStoreRating extends BaseChromeWebStoreRating {
         description,
         parameters: pathParams({
           name: 'storeId',
-          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+          example: 'ddkjiahejlhfcafbddmgiahcphecmpfh',
         }),
       },
     },
@@ -61,7 +61,7 @@ class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
         description,
         parameters: pathParams({
           name: 'storeId',
-          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+          example: 'ddkjiahejlhfcafbddmgiahcphecmpfh',
         }),
       },
     },
@@ -74,6 +74,17 @@ class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
     }
   }
 
+  static transform(ratingCount) {
+    const match = ratingCount.match(/^(\d+(?:\.\d+)?)(k)?$/i)
+    if (!match) {
+      throw new InvalidResponse({
+        prettyMessage: 'unexpected rating count format',
+      })
+    }
+
+    return Number.parseFloat(ratingCount) * (match[2] ? 1e3 : 1)
+  }
+
   async handle({ storeId }) {
     const chromeWebStore = await this.fetch({
       storeId,
@@ -83,7 +94,9 @@ class ChromeWebStoreRatingCount extends BaseChromeWebStoreRating {
     if (ratingCount == null) {
       throw new NotFound({ prettyMessage: 'not found' })
     }
-    return this.constructor.render({ ratingCount })
+    return this.constructor.render({
+      ratingCount: this.constructor.transform(ratingCount),
+    })
   }
 }
 
@@ -100,7 +113,7 @@ class ChromeWebStoreRatingStars extends BaseChromeWebStoreRating {
         description,
         parameters: pathParams({
           name: 'storeId',
-          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+          example: 'ddkjiahejlhfcafbddmgiahcphecmpfh',
         }),
       },
     },
