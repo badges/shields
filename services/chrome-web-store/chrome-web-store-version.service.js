@@ -15,7 +15,7 @@ export default class ChromeWebStoreVersion extends BaseChromeWebStoreService {
         description,
         parameters: pathParams({
           name: 'storeId',
-          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+          example: 'ddkjiahejlhfcafbddmgiahcphecmpfh',
         }),
       },
     },
