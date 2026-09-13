@@ -16,7 +16,7 @@ export default class PypiTypes extends PypiBase {
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'types' }
 
