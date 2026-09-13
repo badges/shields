@@ -49,9 +49,10 @@ class DiscourseBase extends BaseJsonService {
 class DiscourseMetric extends DiscourseBase {
   static route = {
     base: 'discourse',
-    pattern: ':variant(topics|users|posts|likes)',
+    pattern: ':variant',
     queryParamSchema,
   }
+  static routeEnum = ['topics', 'users', 'posts', 'likes']
 
   static openApi = {
     '/discourse/topics': {
