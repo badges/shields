@@ -11,8 +11,9 @@ export default class TerraformProviderDownloads extends BaseTerraformService {
 
   static route = {
     base: 'terraform/provider',
-    pattern: ':interval(dw|dm|dy|dt)/:providerId',
+    pattern: ':interval/:providerId',
   }
+  static routeEnum = ['dw', 'dm', 'dy', 'dt']
 
   static openApi = {
     '/terraform/provider/{interval}/{providerId}': {
