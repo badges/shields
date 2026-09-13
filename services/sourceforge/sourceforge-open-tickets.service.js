@@ -27,7 +27,7 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
           {
             name: 'type',
             example: 'bugs',
-            schema: { type: 'string', enum: this.getEnum('type') },
+            schema: { type: 'string', enum: ['bugs', 'feature-requests'] },
           },
         ),
       },
