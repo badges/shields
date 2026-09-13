@@ -9,8 +9,9 @@ export default [
   redirector({
     route: {
       base: 'scrutinizer',
-      pattern: ':vcs(g|b)/:user/:repo/:branch*',
+      pattern: ':vcs/:user/:repo/:branch*',
     },
+    routeEnum: ['g', 'b'],
     transformPath: ({ vcs, user, repo, branch }) =>
       `/scrutinizer/quality/${vcs}/${user}/${repo}${
         branch ? `/${branch}` : ''
