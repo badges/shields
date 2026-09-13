@@ -7,8 +7,9 @@ export default class VaadinDirectoryVersion extends BaseVaadinDirectoryService {
 
   static route = {
     base: 'vaadin-directory',
-    pattern: ':alias(v|version)/:packageName',
+    pattern: ':alias/:packageName',
   }
+  static routeEnum = ['v', 'version']
 
   static openApi = {
     '/vaadin-directory/v/{packageName}': {
