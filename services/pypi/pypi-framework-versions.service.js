@@ -68,7 +68,7 @@ export default class PypiFrameworkVersion extends PypiBase {
     },
   }
 
-  static _cacheLength = 21600
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'versions' }
 
