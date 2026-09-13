@@ -34,8 +34,9 @@ export default class PypiDownloads extends BaseJsonService {
 
   static route = {
     base: 'pypi',
-    pattern: ':period(dd|dw|dm)/:packageName',
+    pattern: ':period/:packageName',
   }
+  static routeEnum = ['dd', 'dw', 'dm']
 
   static openApi = {
     '/pypi/{period}/{packageName}': {
