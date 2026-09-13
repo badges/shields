@@ -8,8 +8,9 @@ export default class SpigetRatings extends BaseSpigetService {
 
   static route = {
     base: 'spiget',
-    pattern: ':format(rating|stars)/:resourceId',
+    pattern: ':format/:resourceId',
   }
+  static routeEnum = ['rating', 'stars']
 
   static openApi = {
     '/spiget/{format}/{resourceId}': {

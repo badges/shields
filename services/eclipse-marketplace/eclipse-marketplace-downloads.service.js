@@ -17,8 +17,9 @@ export default class EclipseMarketplaceDownloads extends EclipseMarketplaceBase 
   static category = 'downloads'
   static route = {
     base: 'eclipse-marketplace',
-    pattern: ':interval(dm|dt)/:name',
+    pattern: ':interval/:name',
   }
+  static routeEnum = ['dm', 'dt']
 
   static openApi = {
     '/eclipse-marketplace/{interval}/{name}': {

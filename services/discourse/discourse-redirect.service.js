@@ -5,8 +5,9 @@ export default [
     category: 'chat',
     route: {
       base: 'discourse',
-      pattern: ':protocol(http|https)/:hostAndPath(.+)/:metric',
+      pattern: ':protocol/:hostAndPath(.+)/:metric',
     },
+    routeEnum: ['http', 'https'],
     transformPath: ({ metric }) => `/discourse/${metric}`,
     transformQueryParams: ({ protocol, hostAndPath }) => ({
       server: `${protocol}://${hostAndPath}`,
