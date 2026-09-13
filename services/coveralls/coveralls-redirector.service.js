@@ -29,8 +29,9 @@ export default [
     category: 'coverage',
     route: {
       base: 'coveralls',
-      pattern: ':vcsType(github|bitbucket)/:user/:repo/:branch+',
+      pattern: ':vcsType/:user/:repo/:branch+',
     },
+    routeEnum: ['github', 'bitbucket'],
     transformPath: ({ vcsType, user, repo }) =>
       `/coverallsCoverage/${vcsType}/${user}/${repo}`,
     transformQueryParams: ({ branch }) => ({ branch }),
@@ -41,8 +42,9 @@ export default [
     category: 'coverage',
     route: {
       base: 'coveralls',
-      pattern: ':vcsType(github|bitbucket)/:user/:repo',
+      pattern: ':vcsType/:user/:repo',
     },
+    routeEnum: ['github', 'bitbucket'],
     transformPath: ({ vcsType, user, repo }) =>
       `/coverallsCoverage/${vcsType}/${user}/${repo}`,
     dateAdded: new Date('2022-11-20'),
