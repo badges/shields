@@ -4,8 +4,9 @@ import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   static route = {
     base: 'jsdelivr/npm',
-    pattern: ':period(hd|hw|hm|hy)/:scope(@[^/]+)?/:packageName',
+    pattern: ':period/:scope(@[^/]+)?/:packageName',
   }
+  static routeEnum = ['hd', 'hw', 'hm', 'hy']
 
   static openApi = {
     '/jsdelivr/npm/{period}/{packageName}': {

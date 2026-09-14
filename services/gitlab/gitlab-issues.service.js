@@ -25,9 +25,18 @@ export default class GitlabIssues extends GitLabBase {
 
   static route = {
     base: 'gitlab/issues',
-    pattern: ':variant(all|all-raw|open|open-raw|closed|closed-raw)/:project+',
+    pattern: ':variant/:project+',
     queryParamSchema,
   }
+
+  static routeEnum = [
+    'all',
+    'all-raw',
+    'open',
+    'open-raw',
+    'closed',
+    'closed-raw',
+  ]
 
   static openApi = {
     '/gitlab/issues/{variant}/{project}': {

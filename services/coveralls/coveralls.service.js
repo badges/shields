@@ -14,9 +14,10 @@ export default class Coveralls extends BaseJsonService {
   static category = 'coverage'
   static route = {
     base: 'coverallsCoverage',
-    pattern: ':vcsType(github|bitbucket|gitlab)/:user/:repo+',
+    pattern: ':vcsType/:user/:repo+',
     queryParamSchema,
   }
+  static routeEnum = ['github', 'bitbucket', 'gitlab']
 
   static openApi = {
     '/coverallsCoverage/{vcsType}/{user}/{repo}': {

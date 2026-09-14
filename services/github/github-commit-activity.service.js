@@ -31,9 +31,10 @@ export default class GitHubCommitActivity extends GithubAuthV4Service {
   static category = 'activity'
   static route = {
     base: 'github/commit-activity',
-    pattern: ':interval(t|y|m|4w|w)/:user/:repo/:branch*',
+    pattern: ':interval/:user/:repo/:branch*',
     queryParamSchema,
   }
+  static routeEnum = ['t', 'y', 'm', '4w', 'w']
 
   static openApi = {
     '/github/commit-activity/{interval}/{user}/{repo}': {

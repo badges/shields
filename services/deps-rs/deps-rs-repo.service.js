@@ -5,8 +5,9 @@ export default class DepsRsRepo extends BaseDepsRsService {
   static category = 'dependencies'
   static route = {
     base: 'deps-rs/repo',
-    pattern: ':site(github|gitlab|bitbucket|sourcehut|codeberg)/:user/:repo',
+    pattern: ':site/:user/:repo',
   }
+  static routeEnum = ['github', 'gitlab', 'bitbucket', 'sourcehut', 'codeberg']
 
   static openApi = {
     '/deps-rs/repo/{site}/{user}/{repo}': {

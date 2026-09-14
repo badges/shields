@@ -23,7 +23,8 @@ const dailySchema = Joi.array()
 
 export default class GemRank extends BaseJsonService {
   static category = 'downloads'
-  static route = { base: 'gem', pattern: ':period(rt|rd)/:gem' }
+  static route = { base: 'gem', pattern: ':period/:gem' }
+  static routeEnum = ['rt', 'rd']
   static openApi = {
     '/gem/{period}/{gem}': {
       get: {
