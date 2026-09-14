@@ -59,9 +59,11 @@ export default class GithubDownloads extends GithubAuthV3Service {
   static category = 'downloads'
   static route = {
     base: 'github',
-    pattern: ':variant(downloads|downloads-pre)/:user/:repo/:tag*/:assetName',
+    pattern: ':variant/:user/:repo/:tag*/:assetName',
     queryParamSchema,
   }
+
+  static routeEnum = ['downloads', 'downloads-pre']
 
   static openApi = {
     '/github/downloads/{user}/{repo}/total': {

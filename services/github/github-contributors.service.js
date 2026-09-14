@@ -19,8 +19,10 @@ export default class GithubContributors extends GithubAuthV3Service {
     base: 'github',
     // note we call this param 'metric' instead of 'variant' because of
     // https://github.com/badges/shields/issues/10323
-    pattern: ':metric(contributors|contributors-anon)/:user/:repo',
+    pattern: ':metric/:user/:repo',
   }
+
+  static routeEnum = ['contributors', 'contributors-anon']
 
   static openApi = {
     '/github/{metric}/{user}/{repo}': {
