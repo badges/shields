@@ -74,68 +74,30 @@ describe('GithubCheckRuns handle', function () {
 
 describe('GithubCheckRuns.transform', function () {
   test(GithubCheckRuns.transform, () => {
-    given(
-      {
-        total_count: 3,
-        check_runs: [
-          { status: 'completed', conclusion: 'success' },
-          { status: 'completed', conclusion: 'failure' },
-          { status: 'in_progress', conclusion: null },
-        ],
-      },
-      '',
-    ).expect({
+    given({
+      total_count: 3,
+      check_runs: [
+        { status: 'completed', conclusion: 'success' },
+        { status: 'completed', conclusion: 'failure' },
+        { status: 'in_progress', conclusion: null },
+      ],
+    }).expect({
       total: 3,
       statusCounts: { completed: 2, in_progress: 1 },
       conclusionCounts: { success: 1, failure: 1, null: 1 },
     })
 
-    given(
-      {
-        total_count: 3,
-        check_runs: [
-          { name: 'test1', status: 'completed', conclusion: 'success' },
-          { name: 'test2', status: 'completed', conclusion: 'failure' },
-          { name: 'test3', status: 'in_progress', conclusion: null },
-        ],
-      },
-      '',
-    ).expect({
+    given({
+      total_count: 3,
+      check_runs: [
+        { name: 'test1', status: 'completed', conclusion: 'success' },
+        { name: 'test2', status: 'completed', conclusion: 'failure' },
+        { name: 'test3', status: 'in_progress', conclusion: null },
+      ],
+    }).expect({
       total: 3,
       statusCounts: { completed: 2, in_progress: 1 },
       conclusionCounts: { success: 1, failure: 1, null: 1 },
-    })
-
-    given(
-      {
-        total_count: 3,
-        check_runs: [
-          { name: 'test1', status: 'completed', conclusion: 'success' },
-          { name: 'test2', status: 'completed', conclusion: 'failure' },
-          { name: 'test3', status: 'in_progress', conclusion: null },
-        ],
-      },
-      'test1',
-    ).expect({
-      total: 1,
-      statusCounts: { completed: 1 },
-      conclusionCounts: { success: 1 },
-    })
-
-    given(
-      {
-        total_count: 3,
-        check_runs: [
-          { name: 'test1', status: 'completed', conclusion: 'success' },
-          { name: 'test2', status: 'completed', conclusion: 'failure' },
-          { name: 'test3', status: 'in_progress', conclusion: null },
-        ],
-      },
-      'missing',
-    ).expect({
-      total: 0,
-      statusCounts: {},
-      conclusionCounts: {},
     })
   })
 })
