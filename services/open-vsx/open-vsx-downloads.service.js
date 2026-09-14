@@ -6,8 +6,8 @@ export default class OpenVSXDownloads extends OpenVSXBase {
   static category = 'downloads'
 
   static route = {
-    base: 'open-vsx',
-    pattern: ':interval(dt)/:namespace/:extension/:version*',
+    base: 'open-vsx/dt',
+    pattern: ':namespace/:extension/:version*',
   }
 
   static openApi = {

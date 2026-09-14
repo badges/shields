@@ -8,8 +8,9 @@ export default class VaadinDirectoryRating extends BaseVaadinDirectoryService {
 
   static route = {
     base: 'vaadin-directory',
-    pattern: ':format(star|stars|rating)/:packageName',
+    pattern: ':format/:packageName',
   }
+  static routeEnum = ['star', 'stars', 'rating']
 
   static openApi = {
     '/vaadin-directory/{format}/{packageName}': {
