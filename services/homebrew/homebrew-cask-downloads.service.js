@@ -35,8 +35,9 @@ export default class HomebrewCaskDownloads extends BaseJsonService {
 
   static route = {
     base: 'homebrew/cask/installs',
-    pattern: ':interval(dm|dq|dy)/:cask',
+    pattern: ':interval/:cask',
   }
+  static routeEnum = ['dm', 'dq', 'dy']
 
   static openApi = {
     '/homebrew/cask/installs/{interval}/{cask}': {

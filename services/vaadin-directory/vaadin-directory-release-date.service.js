@@ -7,8 +7,9 @@ export default class VaadinDirectoryReleaseDate extends BaseVaadinDirectoryServi
 
   static route = {
     base: 'vaadin-directory',
-    pattern: ':alias(rd|release-date)/:packageName',
+    pattern: ':alias/:packageName',
   }
+  static routeEnum = ['rd', 'release-date']
 
   static openApi = {
     '/vaadin-directory/release-date/{packageName}': {
