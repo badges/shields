@@ -18,6 +18,14 @@ import { prepareRoute, namedParamsForMatch } from './route.js'
  * request metrics.
  */
 export default class BaseStaticService extends BaseService {
+  /**
+   * Optional parser for services which need the complete decoded pathname
+   * instead of individual route captures.
+   *
+   * @type {Function|undefined}
+   */
+  static parsePath
+
   static register({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
 
@@ -36,7 +44,12 @@ export default class BaseStaticService extends BaseService {
 
       const metricHandle = metricHelper.startRequest()
 
-      const namedParams = namedParamsForMatch(captureNames, match, this)
+      const namedParams = this.parsePath
+        ? this.parsePath(ask.req.path)
+        : namedParamsForMatch(captureNames, match, this)
+      if (!namedParams) {
+        throw new Error(`${this.name} could not parse its matched route`)
+      }
       const serviceData = await this.invoke(
         {},
         serviceConfig,
