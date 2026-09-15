@@ -2,30 +2,7 @@ import makeBadge from '../../badge-maker/lib/make-badge.js'
 import { setCacheHeaders } from './cache-headers.js'
 import { makeSend } from './legacy-result-sender.js'
 import coalesceBadge from './coalesce-badge.js'
-
-// These query parameters are available to any badge. They are handled by
-// `coalesceBadge`.
-const globalQueryParams = new Set([
-  'label',
-  'style',
-  'link',
-  'logo',
-  'logoColor',
-  'logoSize',
-  'link',
-  'colorA',
-  'colorB',
-  'color',
-  'labelColor',
-])
-
-function flattenQueryParams(queryParams) {
-  const union = new Set(globalQueryParams)
-  ;(queryParams || []).forEach(name => {
-    union.add(name)
-  })
-  return Array.from(union).sort()
-}
+import { flattenQueryParams, filterQueryParams } from './query-params.js'
 
 // handlerOptions can contain:
 // - handler: The service's request handler function
@@ -33,13 +10,6 @@ function flattenQueryParams(queryParams) {
 //   the service uses
 // - cacheLength: An optional badge or category-specific cache length
 //   (in number of seconds) to be used in preference to the default
-//
-// For safety, the service must declare the query parameters it wants to use.
-// Only the declared parameters (and the global parameters) are provided to
-// the service. Consequently, failure to declare a parameter results in the
-// parameter not working at all (which is undesirable, but easy to debug)
-// rather than indeterminate behavior that depends on the cache state
-// (undesirable and hard to debug).
 //
 // Pass just the handler function as shorthand.
 function handleRequest(cacheHeaderConfig, handlerOptions) {
@@ -90,10 +60,7 @@ function handleRequest(cacheHeaderConfig, handlerOptions) {
       })
     }
 
-    const filteredQueryParams = {}
-    allowedKeys.forEach(key => {
-      filteredQueryParams[key] = queryParams[key]
-    })
+    const filteredQueryParams = filterQueryParams(queryParams, allowedKeys)
 
     // In case our vendor servers are unresponsive.
     let serverUnresponsive = false
