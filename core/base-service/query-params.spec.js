@@ -15,7 +15,18 @@ describe('Query params', function () {
     })
 
     it('returns the global params when nothing is declared', function () {
-      const expected = Array.from(globalQueryParams).sort()
+      const expected = [
+        'color',
+        'colorA',
+        'colorB',
+        'label',
+        'labelColor',
+        'link',
+        'logo',
+        'logoColor',
+        'logoSize',
+        'style',
+      ]
       expect(flattenQueryParams()).to.deep.equal(expected)
       expect(flattenQueryParams(undefined)).to.deep.equal(expected)
     })
