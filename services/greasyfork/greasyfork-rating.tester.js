@@ -3,12 +3,12 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('Rating Count')
-  .get('/rating-count/406540.json')
+  .get('/406540.json')
   .expectBadge({
     label: 'rating',
     message: Joi.string().regex(/^\d+ good, \d+ ok, \d+ bad$/),
   })
 
 t.create('Rating Count (not found)')
-  .get('/rating-count/000000.json')
+  .get('/000000.json')
   .expectBadge({ label: 'rating', message: 'not found' })

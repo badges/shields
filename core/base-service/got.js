@@ -1,4 +1,4 @@
-import got, { CancelError } from 'got'
+import got from 'got'
 import { Inaccessible, InvalidResponse } from './errors.js'
 import {
   fetchLimitBytes as fetchLimitBytesDefault,
@@ -17,7 +17,7 @@ async function sendRequest(gotWrapper, url, options = {}, systemErrors = {}) {
     const resp = await gotWrapper(url, gotOptions)
     return { res: resp, buffer: resp.body }
   } catch (err) {
-    if (err instanceof CancelError) {
+    if (err.code === 'ERR_ABORTED') {
       throw new InvalidResponse({
         underlyingError: new Error('Maximum response size exceeded'),
       })
@@ -36,6 +36,24 @@ function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
   const gotWithLimit = got.extend({
     handlers: [
       (options, next) => {
+        const abortController = new AbortController()
+        const originalSignal = options.signal
+        if (originalSignal) {
+          if (originalSignal.aborted) {
+            abortController.abort(originalSignal.reason)
+          } else if (typeof originalSignal.addEventListener === 'function') {
+            const onAbort = () => {
+              abortController.abort(originalSignal.reason)
+              if (typeof originalSignal.removeEventListener === 'function') {
+                originalSignal.removeEventListener('abort', onAbort)
+              }
+            }
+            originalSignal.addEventListener('abort', onAbort)
+          }
+        }
+
+        options.signal = abortController.signal
+
         const promiseOrStream = next(options)
         promiseOrStream.on('downloadProgress', progress => {
           if (
@@ -44,12 +62,7 @@ function _fetchFactory(fetchLimitBytes = fetchLimitBytesDefault) {
             // the entire file before we went over the limit
             progress.percent !== 1
           ) {
-            /*
-            TODO: we should be able to pass cancel() a message
-            https://github.com/sindresorhus/got/blob/main/documentation/advanced-creation.md#examples
-            but by the time we catch it, err.message is just "Promise was canceled"
-            */
-            promiseOrStream.cancel('Maximum response size exceeded')
+            abortController.abort('Maximum response size exceeded')
           }
         })
 

@@ -35,5 +35,6 @@ public:
   requestTimeoutSeconds: 120
   requestTimeoutMaxAgeSeconds: 30
   allowUnsecuredEndpointRequests: false
+  dynamicAndEndpointBadgesEnabled: true
   requireCloudflare: false
 private: {}

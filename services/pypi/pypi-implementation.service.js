@@ -9,13 +9,13 @@ export default class PypiImplementation extends PypiBase {
   static openApi = {
     '/pypi/implementation/{packageName}': {
       get: {
-        summary: 'PyPI - Implementation',
+        summary: 'PyPI Implementation',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'implementation' }
 

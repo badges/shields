@@ -29,7 +29,8 @@ const versionSchema = Joi.array()
 
 export default class GemDownloads extends BaseJsonService {
   static category = 'downloads'
-  static route = { base: 'gem', pattern: ':variant(dt|dtv|dv)/:gem/:version?' }
+  static route = { base: 'gem', pattern: ':variant/:gem/:version?' }
+  static routeEnum = ['dt', 'dtv', 'dv']
   static openApi = {
     '/gem/dt/{gem}': {
       get: {

@@ -16,15 +16,15 @@ jobs:
     strategy:
       matrix:
         include:
-          - node: '20'
           - node: '22'
           - node: '24'
+          - node: '26'
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Node JS ${{ inputs.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
 

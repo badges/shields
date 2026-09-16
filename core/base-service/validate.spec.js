@@ -102,20 +102,12 @@ describe('validate', function () {
     })
   })
 
-  it('allowAndStripUnknownKeys', function () {
-    try {
-      validate(
-        { ...options, allowAndStripUnknownKeys: false, includeKeys: true },
-        { requiredString: 'bar', extra: 'nonsense', more: 'bogus' },
-        schema,
-      )
-      expect.fail('Expected to throw')
-    } catch (e) {
-      expect(e).to.be.an.instanceof(InvalidParameter)
-      expect(e.message).to.equal(
-        'Invalid Parameter: "extra" is not allowed. "more" is not allowed',
-      )
-      expect(e.prettyMessage).to.equal(`${prettyErrorMessage}: extra, more`)
-    }
+  it('allows but strips unknown keys', function () {
+    const result = validate(
+      { ...options, includeKeys: true },
+      { requiredString: 'bar', extra: 'nonsense', more: 'bogus' },
+      schema,
+    )
+    expect(result).to.deep.equal({ requiredString: 'bar' })
   })
 })

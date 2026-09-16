@@ -9,13 +9,13 @@ export default class PypiFormat extends PypiBase {
   static openApi = {
     '/pypi/format/{packageName}': {
       get: {
-        summary: 'PyPI - Format',
+        summary: 'PyPI Format',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'format' }
 

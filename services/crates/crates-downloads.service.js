@@ -6,8 +6,9 @@ export default class CratesDownloads extends BaseCratesService {
   static category = 'downloads'
   static route = {
     base: 'crates',
-    pattern: ':variant(d|dv|dr)/:crate/:version?',
+    pattern: ':variant/:crate/:version?',
   }
+  static routeEnum = ['d', 'dv', 'dr']
 
   static openApi = {
     '/crates/d/{crate}': {
@@ -57,6 +58,8 @@ export default class CratesDownloads extends BaseCratesService {
       },
     },
   }
+
+  static _cacheLength = 3600 // We're hitting the API more frequently than requested by upstream maintainers (see https://github.com/badges/shields/issues/11879).
 
   static render({ variant, downloads, version }) {
     let labelOverride

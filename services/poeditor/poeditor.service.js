@@ -40,8 +40,8 @@ export default class POEditor extends BaseJsonService {
   static category = 'other'
 
   static route = {
-    base: 'poeditor',
-    pattern: 'progress/:projectId/:languageCode',
+    base: 'poeditor/progress',
+    pattern: ':projectId/:languageCode',
     queryParamSchema,
   }
 

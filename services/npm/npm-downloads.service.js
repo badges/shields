@@ -48,8 +48,9 @@ export default class NpmDownloads extends BaseJsonService {
 
   static route = {
     base: 'npm',
-    pattern: ':interval(dw|dm|dy|d18m)/:scope(@.+)?/:packageName',
+    pattern: ':interval/:scope(@.+)?/:packageName',
   }
+  static routeEnum = ['dw', 'dm', 'dy', 'd18m']
 
   static openApi = {
     '/npm/{interval}/{packageName}': {

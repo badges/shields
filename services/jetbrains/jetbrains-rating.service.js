@@ -35,8 +35,10 @@ export default class JetbrainsRating extends JetbrainsBase {
 
   static route = {
     base: 'jetbrains/plugin/r',
-    pattern: ':format(rating|stars)/:pluginId',
+    pattern: ':format/:pluginId',
   }
+
+  static routeEnum = ['rating', 'stars']
 
   static openApi = {
     '/jetbrains/plugin/r/{format}/{pluginId}': {

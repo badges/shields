@@ -166,7 +166,7 @@ t.create('Invalid schema')
     message: 'invalid properties: schemaVersion, label, message',
   })
 
-t.create('Invalid schema')
+t.create('Valid schema with extra keys')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
     nock('https://example.com/').get('/badge').reply(200, {
@@ -178,8 +178,8 @@ t.create('Invalid schema')
     }),
   )
   .expectBadge({
-    label: 'custom badge',
-    message: 'invalid properties: extra, bogus',
+    label: 'hey',
+    message: 'yo',
   })
 
 t.create('User color overrides success color')

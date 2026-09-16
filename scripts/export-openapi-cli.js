@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import { collectDefinitions } from '../core/base-service/loader.js'
 import { category2openapi } from '../core/base-service/openapi.js'
 
@@ -13,7 +13,7 @@ function writeSpec(filename, spec) {
 
   fs.writeFileSync(
     filename,
-    yaml.dump(cleaned, { flowLevel: 5, forceQuotes: true }),
+    yaml.dump(cleaned, { flowLevel: 5, quoteStyle: 'double' }),
   )
 }
 
@@ -22,7 +22,7 @@ function writeSpec(filename, spec) {
 
   for (const category of definitions.categories) {
     const services = definitions.services.filter(
-      service => service.category === category.id && !service.isDeprecated,
+      service => service.category === category.id && !service.isRetired,
     )
 
     writeSpec(
@@ -34,12 +34,12 @@ function writeSpec(filename, spec) {
   let coreServices = []
   coreServices = coreServices.concat(
     definitions.services.filter(
-      service => service.category === 'static' && !service.isDeprecated,
+      service => service.category === 'static' && !service.isRetired,
     ),
   )
   coreServices = coreServices.concat(
     definitions.services.filter(
-      service => service.category === 'dynamic' && !service.isDeprecated,
+      service => service.category === 'dynamic' && !service.isRetired,
     ),
   )
   writeSpec(

@@ -11,7 +11,7 @@ const isDependencyStatus = Joi.string().valid(
 export const t = new ServiceTester({ id: 'depfu', title: 'Depfu' })
 
 t.create('depfu Github dependencies (valid)')
-  .get('/dependencies/github/depfu/example-ruby.json')
+  .get('/dependencies/github/openSUSE/open-build-service.json')
   .expectBadge({
     label: 'dependencies',
     message: isDependencyStatus,

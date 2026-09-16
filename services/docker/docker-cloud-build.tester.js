@@ -8,5 +8,5 @@ export const t = new ServiceTester({
 
 t.create('docker cloud build status').get('/pavics/magpie.json').expectBadge({
   label: 'dockercloud',
-  message: 'no longer available',
+  message: 'retired badge',
 })

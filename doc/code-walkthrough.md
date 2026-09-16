@@ -84,7 +84,7 @@ Our test strategy for the service code is a bit different. It’s primarily base
 
 ## How the server makes a badge
 
-1.  An HTTPS request arrives. Scoutcamp inspects the URL path and matches it against the regexes for all the registered routes until it finds one that matches. (See *Initialization* above for an explanation of how routes are registered.)
+1.  An HTTPS request arrives. Scoutcamp inspects the URL path and matches it against the regexes for all the registered routes until it finds one that matches. (See _Initialization_ above for an explanation of how routes are registered.)
 2.  Scoutcamp invokes a callback with the four parameters: `( queryParams, match, end, ask )`. This callback is defined in [`legacy-request-handler`][legacy-request-handler]. A timeout is set to handle unresponsive service code and the next callback is invoked: the legacy handler function.
 3.  The legacy handler function receives `( queryParams, match, sendBadge )`. Its job is to extract data from the regex `match` and `queryParams`, and then invoke `sendBadge` with the result.
 4.  The implementation of this function is in `BaseService.register`. It works by running `BaseService.invoke`, which instantiates the service, injects more dependencies, and invokes `BaseService.handle` which is implemented by the service subclass.

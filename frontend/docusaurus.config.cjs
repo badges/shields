@@ -65,6 +65,7 @@ const config = {
   themeConfig:
     /** @type {import('docusaurus-preset-openapi').ThemeConfig} */
     ({
+      image: 'img/opengraph.png',
       languageTabs: [],
       navbar: {
         title: 'Shields.io',
@@ -109,6 +110,10 @@ const config = {
               {
                 label: 'Awesome Badges',
                 href: 'https://github.com/badges/awesome-badges',
+              },
+              {
+                label: 'Endpoint Badges Directory',
+                href: 'https://github.com/badges/endpoint-badges-directory',
               },
             ],
           },

@@ -1,6 +1,6 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export const CodeClimate = deprecatedService({
+export const CodeClimate = retiredService({
   category: 'analysis',
   route: {
     base: 'codeclimate',

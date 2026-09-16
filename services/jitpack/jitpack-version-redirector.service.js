@@ -1,7 +1,7 @@
-import { deprecatedService, redirector } from '../index.js'
+import { retiredService, redirector } from '../index.js'
 
 export default [
-  deprecatedService({
+  retiredService({
     category: 'version',
     label: 'jitpack',
     name: 'JitpackVersionGitHubRedirect',
@@ -17,8 +17,9 @@ export default [
     name: 'JitpackVersionVcsRedirect',
     route: {
       base: 'jitpack/v',
-      pattern: ':vcs(github|bitbucket|gitlab|gitee)/:user/:repo',
+      pattern: ':vcs/:user/:repo',
     },
+    routeEnum: ['github', 'bitbucket', 'gitlab', 'gitee'],
     transformPath: ({ vcs, user, repo }) =>
       `/jitpack/version/com.${vcs}.${user}/${repo}`,
     dateAdded: new Date('2022-08-21'),

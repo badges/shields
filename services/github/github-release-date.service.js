@@ -31,9 +31,11 @@ export default class GithubReleaseDate extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github',
-    pattern: ':variant(release-date|release-date-pre)/:user/:repo',
+    pattern: ':variant/:user/:repo',
     queryParamSchema,
   }
+
+  static routeEnum = ['release-date', 'release-date-pre']
 
   static openApi = {
     '/github/{variant}/{user}/{repo}': {

@@ -4,7 +4,7 @@ import BaseGreasyForkService from './greasyfork-base.js'
 
 export default class GreasyForkLicense extends BaseGreasyForkService {
   static category = 'license'
-  static route = { base: 'greasyfork', pattern: 'l/:scriptId' }
+  static route = { base: 'greasyfork/l', pattern: ':scriptId' }
 
   static openApi = {
     '/greasyfork/l/{scriptId}': {

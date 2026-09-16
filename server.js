@@ -32,6 +32,15 @@ if (process.argv[3]) {
 console.log('Configuration:')
 console.dir(config.public, { depth: null })
 
+if (
+  config.private.youtube_api_key != null ||
+  process.env.YOUTUBE_API_KEY != null
+) {
+  console.error(
+    'youtube_api_key is no longer supported, its value will be ignored. Please remove it from your config.',
+  )
+}
+
 export const server = new Server(config)
 
 process.on('SIGTERM', async () => {

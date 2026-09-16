@@ -115,7 +115,7 @@ const servicesConfig = {
         order: [
           'name',
           'category',
-          'isDeprecated',
+          'isRetired',
           'route',
           'auth',
           'openApi',

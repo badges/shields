@@ -15,8 +15,9 @@ class Depfu extends BaseJsonService {
   static category = 'dependencies'
   static route = {
     base: 'depfu/dependencies',
-    pattern: ':vcsType(github|gitlab)/:project+',
+    pattern: ':vcsType/:project+',
   }
+  static routeEnum = ['github', 'gitlab']
 
   static openApi = {
     '/depfu/dependencies/{vcsType}/{project}': {
@@ -30,7 +31,7 @@ class Depfu extends BaseJsonService {
           },
           {
             name: 'project',
-            example: 'depfu/example-ruby',
+            example: 'openSUSE/open-build-service',
           },
         ),
       },

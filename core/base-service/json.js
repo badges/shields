@@ -3,6 +3,13 @@ import emojic from 'emojic'
 import { InvalidResponse } from './errors.js'
 import trace from './trace.js'
 
+/**
+ * Parse a JSON response buffer. Throws an `InvalidResponse` error when the
+ * JSON is unparseable.
+ *
+ * @param {string|Buffer} buffer - The raw response body.
+ * @returns {object|Array} The parsed JSON value.
+ */
 function parseJson(buffer) {
   const logTrace = (...args) => trace.logTrace('fetch', ...args)
   let json

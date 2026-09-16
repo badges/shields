@@ -10,5 +10,5 @@ t.create('test coverage')
   .get('/coverage/codeclimate/codeclimate.json')
   .expectBadge({
     label: 'codeclimate',
-    message: 'no longer available',
+    message: 'retired badge',
   })

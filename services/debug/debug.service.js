@@ -5,7 +5,8 @@ let bitFlip = false
 
 export default class Debug extends BaseService {
   static category = 'debug'
-  static route = { base: 'debug', pattern: ':variant(time|starttime|flip)' }
+  static route = { base: 'debug', pattern: ':variant' }
+  static routeEnum = ['time', 'starttime', 'flip']
 
   static defaultBadgeData = { label: 'debug', color: 'blue' }
 

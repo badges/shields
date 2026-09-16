@@ -17,12 +17,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          node-version: 22
 
       - name: Core tests
         uses: ./.github/actions/core-tests

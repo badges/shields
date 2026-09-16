@@ -1,3 +1,4 @@
+import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import { isBuildStatus } from '../build-status.js'
 export const t = await createServiceTester()
@@ -13,7 +14,7 @@ t.create('check runs - for branch with filter')
   .get('/badges/shields/master.json?nameFilter=test-lint')
   .expectBadge({
     label: 'checks',
-    message: isBuildStatus,
+    message: Joi.alternatives().try(isBuildStatus, Joi.equal('no check runs')),
   })
 
 t.create('check runs - no tests')

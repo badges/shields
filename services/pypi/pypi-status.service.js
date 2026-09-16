@@ -9,13 +9,13 @@ export default class PypiStatus extends PypiBase {
   static openApi = {
     '/pypi/status/{packageName}': {
       get: {
-        summary: 'PyPI - Status',
+        summary: 'PyPI Status',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'status' }
 

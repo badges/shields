@@ -13,7 +13,6 @@ export default class InfluxMetrics {
 
   async sendMetrics() {
     const request = {
-      url: this._config.url,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: await this.metrics(),
       timeout: { request: this._config.timeoutMillseconds },
@@ -24,7 +23,7 @@ export default class InfluxMetrics {
 
     let response
     try {
-      response = await got.post(request)
+      response = await got.post(this._config.url, request)
     } catch (error) {
       log.error(
         new Error(
@@ -35,7 +34,7 @@ export default class InfluxMetrics {
     if (response && response.statusCode >= 300) {
       log.error(
         new Error(
-          `Cannot push metrics. ${request.url} responded with status code ${response.statusCode}`,
+          `Cannot push metrics. ${this._config.url} responded with status code ${response.statusCode}`,
         ),
       )
     }

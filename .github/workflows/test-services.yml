@@ -6,18 +6,20 @@ on:
     branches:
       - 'gh-readonly-queue/**'
 
+concurrency:
+  group: services-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test-services:
+    if: github.event_name == 'push' || github.event.action != 'edited' || github.event.changes.title
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup
         uses: ./.github/actions/setup
-        with:
-          node-version: 22
 
       - name: Service tests (triggered from local branch)
         if: github.event.pull_request.head.repo.full_name == github.repository
@@ -36,7 +38,6 @@ jobs:
           twitch-client-id: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           twitch-client-secret: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
           weblate-api-key: '${{ secrets.SERVICETESTS_WEBLATE_API_KEY }}'
-          youtube-api-key: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Service tests (triggered from fork)
         if: github.event.pull_request.head.repo.full_name != github.repository

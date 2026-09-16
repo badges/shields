@@ -30,6 +30,13 @@ t.create('docker image size (valid, user)')
     message: isIecFileSize,
   })
 
+t.create('docker image size (valid, user, semver sort)')
+  .get('/jrottenberg/ffmpeg.json?sort=semver')
+  .expectBadge({
+    label: 'image size',
+    message: isIecFileSize,
+  })
+
 t.create('docker image size (valid, user with tag)')
   .get('/jrottenberg/ffmpeg/3.2-alpine.json')
   .expectBadge({

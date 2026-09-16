@@ -63,6 +63,7 @@ const origins = Joi.arrayFromString().items(Joi.string().origin())
 const defaultService = Joi.object({ authorizedOrigins: origins }).default({
   authorizedOrigins: [],
 })
+const openEndedServiceFamilies = new Set(['dynamic', 'endpoint'])
 
 const publicConfigSchema = Joi.object({
   bind: {
@@ -160,6 +161,7 @@ const publicConfigSchema = Joi.object({
     ),
   ),
   allowUnsecuredEndpointRequests: Joi.boolean().required(),
+  dynamicAndEndpointBadgesEnabled: Joi.boolean().required(),
   requireCloudflare: Joi.boolean().required(),
 }).required()
 
@@ -190,8 +192,10 @@ const privateConfigSchema = Joi.object({
   obs_user: Joi.string(),
   obs_pass: Joi.string(),
   opencollective_token: Joi.string(),
+  outagedeck_api_key: Joi.string(),
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
+  readthedocs_token: Joi.string(),
   reddit_client_id: Joi.string(),
   reddit_client_secret: Joi.string(),
   sentry_dsn: Joi.string(),
@@ -206,7 +210,7 @@ const privateConfigSchema = Joi.object({
   influx_username: Joi.string(),
   influx_password: Joi.string(),
   weblate_api_key: Joi.string(),
-  youtube_api_key: Joi.string(),
+  youtube_api_key: Joi.string(), // Deprecated, will be removed in an upcoming release.
 }).required()
 const privateMetricsInfluxConfigSchema = privateConfigSchema.append({
   influx_username: Joi.string().required(),
@@ -471,24 +475,30 @@ class Server {
     const { apiProvider: githubApiProvider } = this.githubConstellation
     const { apiProvider: librariesIoApiProvider } =
       this.librariesioConstellation
-    ;(await loadServiceClasses()).forEach(serviceClass =>
-      serviceClass.register(
-        {
-          camp,
-          handleRequest,
-          githubApiProvider,
-          librariesIoApiProvider,
-          metricInstance,
-        },
-        {
-          handleInternalErrors: config.public.handleInternalErrors,
-          cacheHeaders: config.public.cacheHeaders,
-          rasterUrl: config.public.rasterUrl,
-          private: config.private,
-          public: config.public,
-        },
-      ),
-    )
+    ;(await loadServiceClasses())
+      .filter(
+        ({ serviceFamily }) =>
+          config.public.dynamicAndEndpointBadgesEnabled ||
+          !openEndedServiceFamilies.has(serviceFamily),
+      )
+      .forEach(serviceClass =>
+        serviceClass.register(
+          {
+            camp,
+            handleRequest,
+            githubApiProvider,
+            librariesIoApiProvider,
+            metricInstance,
+          },
+          {
+            handleInternalErrors: config.public.handleInternalErrors,
+            cacheHeaders: config.public.cacheHeaders,
+            rasterUrl: config.public.rasterUrl,
+            private: config.private,
+            public: config.public,
+          },
+        ),
+      )
   }
 
   bootstrapAgent() {
@@ -532,6 +542,7 @@ class Server {
       port,
       hostname,
       secure,
+      spdy: false,
       staticMaxAge: 300,
       cert,
       key,

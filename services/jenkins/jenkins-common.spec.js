@@ -5,33 +5,33 @@ describe('jenkins-common', function () {
   describe('buildUrl', function () {
     it('returns the json api url', function () {
       const actualResult = buildUrl({
-        jobUrl: 'https://ci.eclipse.org/jgit/job/jgit',
+        jobUrl: 'https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
       })
 
       expect(actualResult).to.equal(
-        'https://ci.eclipse.org/jgit/job/jgit/lastCompletedBuild/api/json',
+        'https://ci.freebsd.org/job/FreeBSD-main-amd64-test/lastCompletedBuild/api/json',
       )
     })
 
     it('returns the json api url including a plugin name', function () {
       const actualResult = buildUrl({
-        jobUrl: 'https://ci.eclipse.org/jgit/job/jgit',
+        jobUrl: 'https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
         plugin: 'cobertura',
       })
 
       expect(actualResult).to.equal(
-        'https://ci.eclipse.org/jgit/job/jgit/lastCompletedBuild/cobertura/api/json',
+        'https://ci.freebsd.org/job/FreeBSD-main-amd64-test/lastCompletedBuild/cobertura/api/json',
       )
     })
 
     it('returns the json api url without the lastCompletedBuild element', function () {
       const actualResult = buildUrl({
-        jobUrl: 'https://ci.eclipse.org/jgit/job/jgit',
+        jobUrl: 'https://ci.freebsd.org/job/FreeBSD-main-amd64-test',
         lastCompletedBuild: false,
       })
 
       expect(actualResult).to.equal(
-        'https://ci.eclipse.org/jgit/job/jgit/api/json',
+        'https://ci.freebsd.org/job/FreeBSD-main-amd64-test/api/json',
       )
     })
   })

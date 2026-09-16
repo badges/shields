@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { version as versionColor } from '../color-formatters.js'
-import { deprecatedService, pathParam, queryParam } from '../index.js'
+import { retiredService, pathParam, queryParam } from '../index.js'
 import { BaseClojarsService, description } from './clojars-base.js'
 
 const queryParamSchema = Joi.object({
@@ -58,7 +58,7 @@ class ClojarsVersionService extends BaseClojarsService {
   }
 }
 
-const ClojarsVersionRedirector = deprecatedService({
+const ClojarsVersionRedirector = retiredService({
   category: 'version',
   label: 'clojars',
   route: {

@@ -43,7 +43,7 @@ const openApiSchema = Joi.object()
 const serviceDefinition = Joi.object({
   category: Joi.string().required(),
   name: Joi.string().required(),
-  isDeprecated: Joi.boolean().required(),
+  isRetired: Joi.boolean().required(),
   route: Joi.alternatives().try(
     Joi.object({
       pattern: Joi.string().required(),

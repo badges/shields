@@ -1,4 +1,4 @@
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import { NotFound, InvalidResponse } from '../index.js'
 import { latest } from '../version.js'
 

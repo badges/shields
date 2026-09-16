@@ -10,13 +10,13 @@ export default class PypiVersion extends PypiBase {
   static openApi = {
     '/pypi/v/{packageName}': {
       get: {
-        summary: 'PyPI - Version',
+        summary: 'PyPI Version',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 10800
+  static _cacheLength = 43200
 
   static defaultBadgeData = { label: 'pypi' }
 

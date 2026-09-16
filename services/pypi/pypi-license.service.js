@@ -10,13 +10,13 @@ export default class PypiLicense extends PypiBase {
   static openApi = {
     '/pypi/l/{packageName}': {
       get: {
-        summary: 'PyPI - License',
+        summary: 'PyPI License',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static render({ licenses }) {
     return renderLicenseBadge({ licenses })

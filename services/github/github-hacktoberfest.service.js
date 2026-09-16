@@ -53,9 +53,14 @@ export default class GithubHacktoberfestCombinedStatus extends GithubAuthV4Servi
   static category = 'issue-tracking'
   static route = {
     base: 'github/hacktoberfest',
-    pattern: ':year(2019|2020|2021|2022|2023|2024|2025)/:user/:repo',
+    pattern: ':year/:user/:repo',
     queryParamSchema,
   }
+
+  static routeEnum = Array.from(
+    { length: 2026 - 2019 + 1 },
+    (_, i) => `${2019 + i}`,
+  )
 
   static openApi = {
     '/github/hacktoberfest/{year}/{user}/{repo}': {

@@ -19,8 +19,9 @@ export default class NpmStatDownloads extends BaseJsonService {
 
   static route = {
     base: 'npm-stat',
-    pattern: ':interval(dw|dm|dy)/:author',
+    pattern: ':interval/:author',
   }
+  static routeEnum = ['dw', 'dm', 'dy']
 
   static openApi = {
     '/npm-stat/{interval}/{author}': {

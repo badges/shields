@@ -12,8 +12,9 @@ class FeedzVersionService extends BaseJsonService {
 
   static route = {
     base: 'feedz',
-    pattern: ':variant(v|vpre)/:organization/:repository/:packageName',
+    pattern: ':variant/:organization/:repository/:packageName',
   }
+  static routeEnum = ['v', 'vpre']
 
   static openApi = {
     '/feedz/{variant}/{organization}/{repository}/{packageName}': {

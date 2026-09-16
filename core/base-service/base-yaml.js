@@ -3,7 +3,7 @@
  */
 
 import emojic from 'emojic'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 import BaseService from './base.js'
 import { InvalidResponse } from './errors.js'
 import trace from './trace.js'

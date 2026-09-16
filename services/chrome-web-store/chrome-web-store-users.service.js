@@ -15,13 +15,17 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
         description,
         parameters: pathParams({
           name: 'storeId',
-          example: 'ogffaloegjglncjfehdfplabnoondfjo',
+          example: 'ddkjiahejlhfcafbddmgiahcphecmpfh',
         }),
       },
     },
   }
 
   static defaultBadgeData = { label: 'users' }
+
+  static transform(users) {
+    return String(users.replaceAll(',', ''))
+  }
 
   async handle({ storeId }) {
     const chromeWebStore = await this.fetch({ storeId })
@@ -30,7 +34,7 @@ class ChromeWebStoreUsers extends BaseChromeWebStoreService {
       throw new NotFound({ prettyMessage: 'not found' })
     }
     return renderDownloadsBadge({
-      downloads: String(downloads.replace(',', '')),
+      downloads: this.constructor.transform(downloads),
     })
   }
 }

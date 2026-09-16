@@ -81,8 +81,8 @@ class GithubDiscussionsSearch extends BaseGithubDiscussionsSearch {
 
 class GithubRepoDiscussionsSearch extends BaseGithubDiscussionsSearch {
   static route = {
-    base: 'github',
-    pattern: 'discussions-search/:user/:repo',
+    base: 'github/discussions-search',
+    pattern: ':user/:repo',
     queryParamSchema,
   }
 

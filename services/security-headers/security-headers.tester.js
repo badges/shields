@@ -7,5 +7,5 @@ export const t = new ServiceTester({
 
 t.create('deprecated service').get('/security-headers.json').expectBadge({
   label: 'securityheaders',
-  message: 'no longer available',
+  message: 'retired badge',
 })

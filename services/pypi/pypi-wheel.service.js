@@ -9,13 +9,13 @@ export default class PypiWheel extends PypiBase {
   static openApi = {
     '/pypi/wheel/{packageName}': {
       get: {
-        summary: 'PyPI - Wheel',
+        summary: 'PyPI Wheel',
         parameters: pypiGeneralParams,
       },
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'wheel' }
 

@@ -1,7 +1,7 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
 // Visual Studio App Center was retired. See: https://learn.microsoft.com/en-us/appcenter/retirement
-const VisualStudioAppCenterBuilds = deprecatedService({
+const VisualStudioAppCenterBuilds = retiredService({
   category: 'build',
   route: {
     base: 'visual-studio-app-center/builds',

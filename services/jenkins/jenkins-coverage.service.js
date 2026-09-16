@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
+import { queryParam } from '../index.js'
 import { coveragePercentage } from '../color-formatters.js'
 import JenkinsBase from './jenkins-base.js'
 import {
@@ -8,120 +8,35 @@ import {
   queryParamSchema,
 } from './jenkins-common.js'
 
-const formatMap = {
-  jacoco: {
-    schema: Joi.object({
-      instructionCoverage: Joi.object({
-        percentage: Joi.number().min(0).max(100).required(),
-      }).required(),
-    }).required(),
-    treeQueryParam: 'instructionCoverage[percentage]',
-    transform: json => ({ coverage: json.instructionCoverage.percentage }),
-    pluginSpecificPath: 'jacoco',
-  },
-  cobertura: {
-    schema: Joi.object({
-      results: Joi.object({
-        elements: Joi.array()
-          .items(
-            Joi.object({
-              name: Joi.string().required(),
-              ratio: Joi.number().min(0).max(100).required(),
-            }),
-          )
-          .has(Joi.object({ name: 'Lines' }))
-          .min(1)
-          .required(),
-      }).required(),
-    }).required(),
-    treeQueryParam: 'results[elements[name,ratio]]',
-    transform: json => {
-      const lineCoverage = json.results.elements.find(
-        element => element.name === 'Lines',
-      )
-      return { coverage: lineCoverage.ratio }
-    },
-    pluginSpecificPath: 'cobertura',
-  },
-  apiv1: {
-    schema: Joi.object({
-      results: Joi.object({
-        elements: Joi.array()
-          .items(
-            Joi.object({
-              name: Joi.string().required(),
-              ratio: Joi.number().min(0).max(100).required(),
-            }),
-          )
-          .has(Joi.object({ name: 'Line' }))
-          .min(1)
-          .required(),
-      }).required(),
-    }).required(),
-    treeQueryParam: 'results[elements[name,ratio]]',
-    transform: json => {
-      const lineCoverage = json.results.elements.find(
-        element => element.name === 'Line',
-      )
-      return { coverage: lineCoverage.ratio }
-    },
-    pluginSpecificPath: 'coverage/result',
-  },
-  apiv4: {
-    schema: Joi.object({
-      projectStatistics: Joi.object({
-        line: Joi.string()
-          .pattern(/\d+\.\d+%/)
-          .required(),
-      }).required(),
-    }).required(),
-    treeQueryParam: 'projectStatistics[line]',
-    transform: json => {
-      const lineCoverageStr = json.projectStatistics.line
-      const lineCoverage = lineCoverageStr.substring(
-        0,
-        lineCoverageStr.length - 1,
-      )
-      return { coverage: Number.parseFloat(lineCoverage) }
-    },
-    pluginSpecificPath: 'coverage',
-  },
-}
+const schemaCoverage = Joi.object({
+  projectStatistics: Joi.object({
+    line: Joi.string()
+      .pattern(/\d+\.\d+%/)
+      .required(),
+  }).required(),
+}).required()
 
-const description = `
-We support coverage metrics from a variety of Jenkins plugins:
-
-<ul>
-  <li><a href="https://plugins.jenkins.io/jacoco">JaCoCo</a></li>
-  <li><a href="https://plugins.jenkins.io/cobertura">Cobertura</a></li>
-  <li>Any plugin which integrates with version 1 or 4+ of the <a href="https://plugins.jenkins.io/code-coverage-api">Code Coverage API</a> (e.g. llvm-cov, Cobertura 1.13+, etc.)</li>
-</ul>
-`
+const description =
+  'We support coverage metrics from the <a href="https://github.com/jenkinsci/coverage-plugin">Jenkins Coverage Plugin</a>.'
 
 export default class JenkinsCoverage extends JenkinsBase {
   static category = 'coverage'
 
   static route = {
     base: 'jenkins/coverage',
-    pattern: ':format(jacoco|cobertura|apiv1|apiv4)',
+    pattern: '',
     queryParamSchema,
   }
 
   static openApi = {
-    '/jenkins/coverage/{format}': {
+    '/jenkins/coverage': {
       get: {
         summary: 'Jenkins Coverage',
         description,
         parameters: [
-          pathParam({
-            name: 'format',
-            example: 'jacoco',
-            schema: { type: 'string', enum: this.getEnum('format') },
-          }),
           queryParam({
             name: 'jobUrl',
-            example:
-              'https://jenkins-2.sse.uni-hildesheim.de/job/Teaching_SubmissionCheck',
+            example: 'https://jenkins.mm12.xyz/jenkins/job/nmfu/job/master',
             required: true,
           }),
         ],
@@ -138,18 +53,23 @@ export default class JenkinsCoverage extends JenkinsBase {
     }
   }
 
-  async handle({ format }, { jobUrl }) {
-    const { schema, transform, treeQueryParam, pluginSpecificPath } =
-      formatMap[format]
+  async handle(_routeParams, { jobUrl }) {
     const json = await this.fetch({
-      url: buildUrl({ jobUrl, plugin: pluginSpecificPath }),
-      schema,
-      searchParams: buildTreeParamQueryString(treeQueryParam),
+      url: buildUrl({ jobUrl, plugin: 'coverage' }),
+      schema: schemaCoverage,
+      searchParams: buildTreeParamQueryString('projectStatistics[line]'),
       httpErrors: {
         404: 'job or coverage not found',
       },
     })
-    const { coverage } = transform(json)
-    return this.constructor.render({ coverage })
+    const lineCoverageStr = json.projectStatistics.line
+    const lineCoverage = lineCoverageStr.substring(
+      0,
+      lineCoverageStr.length - 1,
+    )
+
+    return this.constructor.render({
+      coverage: Number.parseFloat(lineCoverage),
+    })
   }
 }

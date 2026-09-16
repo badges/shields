@@ -34,13 +34,14 @@ export default class PypiDownloads extends BaseJsonService {
 
   static route = {
     base: 'pypi',
-    pattern: ':period(dd|dw|dm)/:packageName',
+    pattern: ':period/:packageName',
   }
+  static routeEnum = ['dd', 'dw', 'dm']
 
   static openApi = {
     '/pypi/{period}/{packageName}': {
       get: {
-        summary: 'PyPI - Downloads',
+        summary: 'PyPI Downloads',
         description:
           'Python package downloads from [pypistats](https://pypistats.org/)',
         parameters: [
@@ -56,7 +57,7 @@ export default class PypiDownloads extends BaseJsonService {
     },
   }
 
-  static _cacheLength = 43200
+  static _cacheLength = 86400
 
   static defaultBadgeData = { label: 'downloads' }
 

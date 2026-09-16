@@ -3,14 +3,14 @@ import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
 t.create('gets POEditor progress online')
-  .get('/progress/323337/de.json?token=7a666b44c0985d16a7b59748f488275c')
+  .get('/323337/de.json?token=7a666b44c0985d16a7b59748f488275c')
   .expectBadge({
     label: 'German',
     message: isIntegerPercentage,
   })
 
 t.create('gets POEditor progress online')
-  .get('/progress/1/zh.json?token=7a666b44c0985d16a7b59748f488275c')
+  .get('/1/zh.json?token=7a666b44c0985d16a7b59748f488275c')
   .expectBadge({
     label: 'other',
     message: "You don't have permission to access this resource",
@@ -44,7 +44,7 @@ const apiResponse = {
 }
 
 t.create('gets mock POEditor progress')
-  .get('/progress/1234/fr.json?token=abc123def456')
+  .get('/1234/fr.json?token=abc123def456')
   .intercept(nock =>
     nock('https://api.poeditor.com')
       .post('/v2/languages/list', {
@@ -59,7 +59,7 @@ t.create('gets mock POEditor progress')
   })
 
 t.create('handles requests for missing languages')
-  .get('/progress/1234/zh.json?token=abc123def456')
+  .get('/1234/zh.json?token=abc123def456')
   .intercept(nock =>
     nock('https://api.poeditor.com')
       .post('/v2/languages/list', {
@@ -74,7 +74,7 @@ t.create('handles requests for missing languages')
   })
 
 t.create('handles requests for wrong keys')
-  .get('/progress/1234/fr.json?token=abc123def456')
+  .get('/1234/fr.json?token=abc123def456')
   .intercept(nock =>
     nock('https://api.poeditor.com')
       .post('/v2/languages/list', {

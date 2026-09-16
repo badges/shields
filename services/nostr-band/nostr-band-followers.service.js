@@ -1,6 +1,6 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
-export default deprecatedService({
+export default retiredService({
   category: 'social',
   route: {
     base: 'nostrband/followers',

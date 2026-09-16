@@ -14,8 +14,8 @@ describe('Redirector', function () {
   const dateAdded = new Date()
   const attrs = { category, route, transformPath, dateAdded }
 
-  it('returns true on isDeprecated', function () {
-    expect(redirector(attrs).isDeprecated).to.be.true
+  it('returns true on isRetired', function () {
+    expect(redirector(attrs).isRetired).to.be.true
   })
 
   it('has the expected name', function () {

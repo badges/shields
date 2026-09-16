@@ -18,7 +18,7 @@ You should have [git](https://git-scm.com/) installed. If you do not, [install g
 
 #### Node, NPM
 
-Node 22 and NPM 10.x or 11.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/
+Node 24 and NPM 11.x or 12.x is required. If you don't already have them, install node and npm: https://nodejs.org/en/download/
 
 ### Setup a dev install
 
@@ -66,6 +66,7 @@ Service badge code is stored in the [/services](https://github.com/badges/shield
 All service badge classes inherit from [BaseService] or another class which extends it. Other classes implement useful behavior on top of [BaseService].
 
 - [BaseJsonService](https://contributing.shields.io/module-core_base-service_base-json-BaseJsonService.html) implements methods for performing requests to a JSON API and schema validation.
+- [BaseJsonlService](https://contributing.shields.io/module-core_base-service_base-jsonl-BaseJsonlService.html) implements methods for performing requests to a JSONL API and schema validation.
 - [BaseXmlService](https://contributing.shields.io/module-core_base-service_base-xml-BaseXmlService.html) implements methods for performing requests to an XML API and schema validation.
 - [BaseYamlService](https://contributing.shields.io/module-core_base-service_base-yaml-BaseYamlService.html) implements methods for performing requests to a YAML API and schema validation.
 - [BaseTomlService](https://contributing.shields.io/module-core_base-service_base-toml-BaseTomlService.html) implements methods for performing requests to a TOML API and schema validation.
@@ -108,7 +109,24 @@ Description of the code:
 4. `route` declares the URL path at which the service operates. It also maps components of the URL path to handler parameters.
    - `base` defines the first part of the URL that doesn't change, e.g. `/example/`.
    - `pattern` defines the variable part of the route, everything that comes after `/example/`. It can include any number of named parameters. These are converted into regular expressions by [`path-to-regexp`][path-to-regexp]. Because a service instance won't be created until it's time to handle a request, the route and other metadata must be obtained by examining the classes themselves. [That's why they're marked `static`.][static]
-   - There is additional documentation on conventions for [designing badge URLs](./badge-urls.md)
+   - See [designing badge URLs](./badge-urls.md) for additional naming and URL conventions.
+   - `routeEnum` (optional): an array of strings that defines the allowed values for the first named parameter in `pattern`.
+     - Only the first named parameter is validated by `routeEnum`.
+     - Example: for `pattern: ':type/:user/:repo'`, set `static routeEnum = ['dt', 'dm', 'dd']`; the incoming `type` value is validated against that array.
+     - If that first parameter value is not present in `routeEnum`, the request is rejected before `handle()` is invoked.
+
+```js
+// Example service that uses routeEnum
+export default class Downloads extends BaseService {
+  static route = { base: 'downloads', pattern: ':type/:user/:repo' }
+  static routeEnum = ['dt', 'dm', 'dd']
+
+  async handle({ type, user, repo }) {
+    // `type` is guaranteed to be one of 'dt', 'dm', or 'dd'
+  }
+}
+```
+
 5. All badges must implement the `async handle()` function that receives parameters to render the badge. Parameters of `handle()` will match the name defined in `route` Because we're capturing a single variable called `text` our function signature is `async handle({ text })`. `async` is needed to let JavaScript do other things while we are waiting for result from external API. Although in this simple case, we don't make any external calls. Our `handle()` function should return an object with 3 properties:
    - `label`: the text on the left side of the badge
    - `message`: the text on the right side of the badge - here we are passing through the parameter we captured in the route regex

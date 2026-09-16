@@ -3,7 +3,7 @@ import { isVPlusDottedVersionAtLeastOne } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-t.create('Version').get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json').expectBadge({
+t.create('Version').get('/ddkjiahejlhfcafbddmgiahcphecmpfh.json').expectBadge({
   label: 'chrome web store',
   message: isVPlusDottedVersionAtLeastOne,
 })
@@ -15,7 +15,7 @@ t.create('Version (not found)')
 // Keep this "inaccessible" test, since this service does not use BaseService#_request.
 const mockAgent = new MockAgent()
 t.create('Version (inaccessible)')
-  .get('/alhjnofcnnpeaphgeakdhkebafjcpeae.json')
+  .get('/ddkjiahejlhfcafbddmgiahcphecmpfh.json')
   // webextension-store-meta uses undici internally, so we can't mock it with nock
   .before(function () {
     setGlobalDispatcher(mockAgent)

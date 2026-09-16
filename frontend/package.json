@@ -4,7 +4,7 @@
   "description": "Shields.io frontend",
   "private": true,
   "homepage": "https://shields.io",
-  "license": "CC0-1.0",
+  "license": "(MIT OR Apache-2.0)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/badges/shields.git",

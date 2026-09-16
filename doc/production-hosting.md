@@ -2,8 +2,8 @@
 
 Production hosting is managed by the Shields ops team:
 
-- [calebcartwright](https://github.com/calebcartwright)
 - [jNullj](https://github.com/jnullj)
+- [LitoMore](https://github.com/LitoMore)
 - [paulmelnikow](https://github.com/paulmelnikow)
 - [PyvesB](https://github.com/PyvesB)
 
@@ -30,7 +30,6 @@ Production hosting is managed by the Shields ops team:
 | Reddit | OAuth app | @chris48s, @PyvesB |
 | Discord | OAuth app | @PyvesB |
 | CurseForge | OAuth app | @PyvesB |
-| YouTube | Account owner | @PyvesB |
 | GitLab | Account owner | @calebcartwright |
 | GitLab | Account access | @calebcartwright, @chris48s, @paulmelnikow, @PyvesB |
 

@@ -1,8 +1,8 @@
-import { deprecatedService } from '../index.js'
+import { retiredService } from '../index.js'
 
 export default [
   // https://github.com/badges/shields/issues/5433
-  deprecatedService({
+  retiredService({
     name: 'OffsetEarthTreesRedirect',
     category: 'other',
     label: 'offset-earth',

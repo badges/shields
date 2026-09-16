@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { isBuildStatus, renderBuildStatusBadge } from '../build-status.js'
 import {
   BaseSvgScrapingService,
-  deprecatedService,
+  retiredService,
   redirector,
   pathParam,
   queryParam,
@@ -25,9 +25,10 @@ class CircleCi extends BaseSvgScrapingService {
   static category = 'build'
   static route = {
     base: 'circleci/build',
-    pattern: ':vcsType(github|gh|bitbucket|bb)/:user/:repo/:branch*',
+    pattern: ':vcsType/:user/:repo/:branch*',
     queryParamSchema,
   }
+  static routeEnum = ['github', 'gh', 'bitbucket', 'bb']
 
   static openApi = {
     '/circleci/build/{vcsType}/{user}/{repo}': {
@@ -108,7 +109,7 @@ class CircleCi extends BaseSvgScrapingService {
 }
 
 const legacyRoutes = [
-  deprecatedService({
+  retiredService({
     category: 'build',
     label: 'circleci',
     route: {

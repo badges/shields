@@ -1,15 +1,19 @@
-import Joi from 'joi'
-import { isBuildStatus } from '../build-status.js'
-import { createServiceTester } from '../tester.js'
-export const t = await createServiceTester()
+import { ServiceTester } from '../tester.js'
 
-t.create('cirrus bad repo')
-  .get('/github/unknown-identifier/unknown-repo.json')
-  .expectBadge({ label: 'build', message: 'unknown' })
+export const t = new ServiceTester({
+  id: 'cirrus',
+  title: 'Cirrus CI',
+  pathPrefix: '/cirrus',
+})
 
-t.create('cirrus fully.valid')
-  .get('/github/flutter/flutter.json')
+t.create('default branch').get('/github/flutter/flutter.json').expectBadge({
+  label: 'build',
+  message: 'retired badge',
+})
+
+t.create('specific branch')
+  .get('/github/flutter/flutter/master.json')
   .expectBadge({
     label: 'build',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
+    message: 'retired badge',
   })

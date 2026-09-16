@@ -16,8 +16,8 @@ export default class PepyDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
-    base: 'pepy',
-    pattern: 'dt/:packageName',
+    base: 'pepy/dt',
+    pattern: ':packageName',
   }
 
   static auth = {

@@ -79,7 +79,7 @@ async function fetch(
     url: await searchServiceUrl(baseUrl, 'SearchQueryService'),
     options: {
       searchParams: {
-        q: `packageid:${encodeURIComponent(packageName.toLowerCase())}`,
+        q: `packageid:${packageName.toLowerCase()}`,
         // Include prerelease versions.
         prerelease: 'true',
         // Include packages with SemVer 2 version numbers.
