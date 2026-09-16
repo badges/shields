@@ -56,8 +56,9 @@ class ScrutinizerQualityBase extends ScrutinizerBase {
 class ScrutinizerQuality extends ScrutinizerQualityBase {
   static route = {
     base: 'scrutinizer/quality',
-    pattern: ':vcs(g|b)/:user/:repo/:branch*',
+    pattern: ':vcs/:user/:repo/:branch*',
   }
+  static routeEnum = ['g', 'b']
 
   static openApi = {
     '/scrutinizer/quality/{vcs}/{user}/{repo}': {
