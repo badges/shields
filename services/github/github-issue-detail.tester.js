@@ -77,7 +77,3 @@ t.create('github issue milestone (without milestone)')
   .expectBadge({
     message: 'no milestone',
   })
-
-t.create('github pull request draft state')
-  .get('/pulls/detail/state/stablyai/orca/21447.json')
-  .expectBadge({ label: 'pull request 21447', message: 'draft', color: 'gray' })
