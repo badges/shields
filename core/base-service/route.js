@@ -39,7 +39,15 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
       sensitive: true,
     })
     // Remove the trailing $ from the regex source to append the extension regex later.
-    const sourceWithoutEnd = pathRegex.source.replace(/\$$/, '')
+    const sourceWithoutEnd = pathRegex.source
+      .replace(/\$$/, '')
+      // path-to-regexp generates greedy capture groups (`[^\/]+`) for named
+      // params. Left greedy, a param at the end of the pattern swallows the
+      // extension (e.g. `.svg`/`.png`) instead of leaving it for the
+      // extension group below, so make them lazy to restore correct
+      // extension splitting.
+      // TODO rewrite
+      .replace(/\[\^\\\/\]\+(?!\?)/g, '[^\\/]+?')
     // workaround for path-to-regexp not supporting regex anymore
     regex = new RegExp(
       `${sourceWithoutEnd}(${extensionRegex})$`,
