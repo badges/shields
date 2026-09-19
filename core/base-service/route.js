@@ -34,16 +34,16 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
     captureNames = capture || []
   } else {
     const fullPatternWithoutExt = `${makeFullUrl(base, pattern)}`
-    const keys = []
-    const pathRegex = pathToRegexp(fullPatternWithoutExt, keys, {
+    const { regexp: pathRegex, keys } = pathToRegexp(fullPatternWithoutExt, {
       trailing: false,
       sensitive: true,
     })
-    const sourceWithoutEnd = pathRegex.regexp.source.replace(/\$$/, '')
+    // Remove the trailing $ from the regex source to append the extension regex later.
+    const sourceWithoutEnd = pathRegex.source.replace(/\$$/, '')
     // workaround for path-to-regexp not supporting regex anymore
     regex = new RegExp(
       `${sourceWithoutEnd}(${extensionRegex})$`,
-      pathRegex.regexp.flags,
+      pathRegex.flags,
     )
     captureNames = keys.map(item => item.name)
   }
