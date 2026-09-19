@@ -114,8 +114,7 @@ const legacyRoutes = [
     label: 'circleci',
     route: {
       base: 'circleci/token',
-      pattern:
-        ':token/project/:vcsType(github|bitbucket)?/:user/:repo{/*branch}',
+      pattern: ':token/project/{:vcsType/}:user/:repo{/*branch}',
     },
     dateAdded: new Date('2025-12-20'),
     issueUrl: 'https://github.com/badges/shields/pull/11583',
