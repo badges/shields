@@ -48,7 +48,7 @@ export default class Nexus extends BaseJsonService {
 
   static route = {
     base: 'nexus',
-    pattern: ':repo(r|s|[^/]+)/:groupId/:artifactId',
+    pattern: ':repo/:groupId/:artifactId',
     queryParamSchema,
   }
 
