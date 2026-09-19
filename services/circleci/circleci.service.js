@@ -123,7 +123,7 @@ const legacyRoutes = [
     category: 'build',
     route: {
       base: 'circleci/project',
-      pattern: ':vcsType(github|bitbucket)?/:user/:repo{/*branch}',
+      pattern: '{:vcsType/}:user/:repo{/*branch}',
     },
     transformPath: ({ vcsType, user, repo, branch }) => {
       const vcs = vcsType || 'gh'
