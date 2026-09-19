@@ -18,7 +18,7 @@ export default class GiteaPullRequests extends GiteaBase {
   static route = {
     base: 'gitea/pull-requests',
     pattern:
-      ':variant(all|all-raw|open|open-raw|closed|closed-raw)/:user//*repo',
+      ':variant(all|all-raw|open|open-raw|closed|closed-raw)/:user/*repo',
     queryParamSchema,
   }
 

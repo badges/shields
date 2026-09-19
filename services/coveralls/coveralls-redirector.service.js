@@ -6,7 +6,7 @@ export default [
     category: 'coverage',
     route: {
       base: 'coveralls',
-      pattern: ':user((?!github|bitbucket).*)/:repo//*branch',
+      pattern: ':user((?!github|bitbucket).*)/:repo/*branch',
     },
     transformPath: ({ user, repo }) =>
       `/coverallsCoverage/github/${user}/${repo}`,
@@ -29,7 +29,7 @@ export default [
     category: 'coverage',
     route: {
       base: 'coveralls',
-      pattern: ':vcsType/:user/:repo//*branch',
+      pattern: ':vcsType/:user/:repo/*branch',
     },
     routeEnum: ['github', 'bitbucket'],
     transformPath: ({ vcsType, user, repo }) =>

@@ -11,7 +11,7 @@ export default [
   retiredService({
     route: {
       base: 'jenkins',
-      pattern: ':coverageFormat(j|c)/:protocol(http|https)/:host//*job',
+      pattern: ':coverageFormat(j|c)/:protocol(http|https)/:host/*job',
     },
     ...commonProps,
   }),
@@ -19,7 +19,7 @@ export default [
     route: {
       base: 'jenkins/coverage',
       pattern:
-        ':coverageFormat(jacoco|cobertura|api)/:protocol(http|https)/:host//*job',
+        ':coverageFormat(jacoco|cobertura|api)/:protocol(http|https)/:host/*job',
     },
     ...commonProps,
   }),

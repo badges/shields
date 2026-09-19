@@ -82,7 +82,7 @@ export default redirector({
   category: 'monitoring',
   route: {
     base: 'website',
-    pattern: ':protocol//*hostAndPath',
+    pattern: ':protocol/*hostAndPath',
   },
   routeEnum: ['https', 'http'],
   transformPath: () => '/website',

@@ -10,7 +10,7 @@ import TestspaceBase from './testspace-base.js'
 export default class TestspaceTests extends TestspaceBase {
   static route = {
     base: 'testspace/tests',
-    pattern: ':org/:project//*space',
+    pattern: ':org/:project/*space',
     queryParamSchema: testResultQueryParamSchema,
   }
 

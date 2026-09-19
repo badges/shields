@@ -15,7 +15,7 @@ class Depfu extends BaseJsonService {
   static category = 'dependencies'
   static route = {
     base: 'depfu/dependencies',
-    pattern: ':vcsType//*project',
+    pattern: ':vcsType/*project',
   }
   static routeEnum = ['github', 'gitlab']
 
