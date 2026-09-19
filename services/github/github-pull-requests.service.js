@@ -93,10 +93,10 @@ export default class GithubPullRequests extends GithubAuthV4Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github',
-    pattern:
-      ':variant(issues-pr|issues-pr-raw|issues-pr-closed|issues-pr-closed-raw)/:user/:repo{/*label}',
+    pattern: ':variant/:user/:repo{/*label}',
     queryParamSchema,
   }
+  static routeEnum = pullRequestVariants
 
   static openApi = openApi
 

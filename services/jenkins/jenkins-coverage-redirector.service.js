@@ -33,8 +33,9 @@ export default [
     category: 'coverage',
     route: {
       base: 'jenkins/coverage',
-      pattern: ':format(jacoco|cobertura|apiv1|apiv4)',
+      pattern: ':format',
     },
+    routeEnum: ['jacoco', 'cobertura', 'apiv1', 'apiv4'],
     transformPath: () => '/jenkins/coverage',
     dateAdded: new Date('2026-05-17'),
   }),

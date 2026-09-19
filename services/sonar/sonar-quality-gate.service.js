@@ -11,9 +11,11 @@ export default class SonarQualityGate extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern: ':metric(quality_gate|alert_status)/:component{/*branch}',
+    pattern: ':metric/:component{/*branch}',
     queryParamSchema,
   }
+
+  static routeEnum = ['quality_gate', 'alert_status']
 
   static openApi = {
     '/sonar/quality_gate/{component}': {

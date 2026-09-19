@@ -25,9 +25,15 @@ export default class GithubIssues extends GithubAuthV4Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github',
-    pattern:
-      ':variant(issues|issues-raw|issues-closed|issues-closed-raw)/:user/:repo{/*label}',
+    pattern: ':variant/:user/:repo{/*label}',
   }
+
+  static routeEnum = [
+    'issues',
+    'issues-raw',
+    'issues-closed',
+    'issues-closed-raw',
+  ]
 
   static openApi = {
     '/github/{variant}/{user}/{repo}': {

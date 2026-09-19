@@ -27,10 +27,18 @@ export default class SonarViolations extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern:
-      ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component{/*branch}',
+    pattern: ':metric/:component{/*branch}',
     queryParamSchema: queryParamWithFormatSchema,
   }
+
+  static routeEnum = [
+    'violations',
+    'blocker_violations',
+    'critical_violations',
+    'major_violations',
+    'minor_violations',
+    'info_violations',
+  ]
 
   static openApi = {
     '/sonar/{metric}/{component}': {

@@ -6,7 +6,7 @@ export default [
     route: {
       base: 'nexus',
       pattern:
-        ':repo(r|s|[^/]+)/:scheme(http|https)/*hostAndPath/:groupId/:artifactId([^/:]+?):queryOpt(:.+?)?',
+        ':repo/:scheme/*hostAndPath/:groupId/:artifactId([^/:]+?):queryOpt(:.+?)?',
     },
     transformPath: ({ repo, groupId, artifactId }) =>
       `/nexus/${repo}/${groupId}/${artifactId}`,

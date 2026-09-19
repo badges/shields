@@ -5,9 +5,16 @@ import TestspaceBase from './testspace-base.js'
 export default class TestspaceTestCount extends TestspaceBase {
   static route = {
     base: 'testspace',
-    pattern:
-      ':metric(total|passed|failed|skipped|errored|untested)/:org/:project/*space',
+    pattern: ':metric/:org/:project/*space',
   }
+  static routeEnum = [
+    'total',
+    'passed',
+    'failed',
+    'skipped',
+    'errored',
+    'untested',
+  ]
 
   static openApi = {
     '/testspace/{metric}/{org}/{project}/{space}': {

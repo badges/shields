@@ -24,9 +24,15 @@ export default class NpmsIOScore extends BaseJsonService {
 
   static route = {
     base: 'npms-io',
-    pattern:
-      ':type(final-score|maintenance-score|popularity-score|quality-score){/:scope}/:packageName',
+    pattern: ':type{/:scope}/:packageName',
   }
+
+  static routeEnum = [
+    'final-score',
+    'maintenance-score',
+    'popularity-score',
+    'quality-score',
+  ]
 
   static openApi = {
     '/npms-io/{type}/{packageName}': {

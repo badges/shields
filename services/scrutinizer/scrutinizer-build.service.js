@@ -36,8 +36,10 @@ class ScrutinizerBuildBase extends ScrutinizerBase {
 class ScrutinizerBuild extends ScrutinizerBuildBase {
   static route = {
     base: 'scrutinizer/build',
-    pattern: ':vcs(g|b)/:user/:repo{/*branch}',
+    pattern: ':vcs/:user/:repo{/*branch}',
   }
+
+  static routeEnum = ['g', 'b']
 
   static openApi = {
     '/scrutinizer/build/{vcs}/{user}/{repo}': {

@@ -28,10 +28,22 @@ export default class GitlabMergeRequests extends GitLabBase {
 
   static route = {
     base: 'gitlab/merge-requests',
-    pattern:
-      ':variant(all|all-raw|open|open-raw|closed|closed-raw|locked|locked-raw|merged|merged-raw)/*project',
+    pattern: ':variant/*project',
     queryParamSchema,
   }
+
+  static routeEnum = [
+    'all',
+    'all-raw',
+    'open',
+    'open-raw',
+    'closed',
+    'closed-raw',
+    'locked',
+    'locked-raw',
+    'merged',
+    'merged-raw',
+  ]
 
   static openApi = {
     '/gitlab/merge-requests/{variant}/{project}': {

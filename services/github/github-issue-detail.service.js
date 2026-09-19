@@ -186,8 +186,10 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
   static route = {
     base: 'github',
     pattern:
-      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
+      ':issueKind/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
   }
+
+  static routeEnum = ['issues', 'pulls']
 
   static openApi = {
     '/github/{issueKind}/detail/{property}/{user}/{repo}/{number}': {

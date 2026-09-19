@@ -25,10 +25,17 @@ export default class WeblateUserStatistic extends WeblateBase {
 
   static route = {
     base: 'weblate',
-    pattern:
-      ':statistic(translations|suggestions|languages|uploads|comments)/:user',
+    pattern: ':statistic/:user',
     queryParamSchema: this.queryParamSchema,
   }
+
+  static routeEnum = [
+    'translations',
+    'suggestions',
+    'languages',
+    'uploads',
+    'comments',
+  ]
 
   static openApi = {
     '/weblate/{statistic}/{user}': {

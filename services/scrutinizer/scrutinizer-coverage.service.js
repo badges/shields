@@ -67,8 +67,10 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
 class ScrutinizerCoverage extends ScrutinizerCoverageBase {
   static route = {
     base: 'scrutinizer/coverage',
-    pattern: ':vcs(g|b)/:user/:repo{/*branch}',
+    pattern: ':vcs/:user/:repo{/*branch}',
   }
+
+  static routeEnum = ['g', 'b']
 
   static openApi = {
     '/scrutinizer/coverage/{vcs}/{user}/{repo}': {

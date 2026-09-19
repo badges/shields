@@ -22,8 +22,9 @@ export default [
     category: 'coverage',
     route: {
       base: 'sonar',
-      pattern: ':protocol(http|https)/:host(.+)/:component(.+)/:metric',
+      pattern: ':protocol/:host(.+)/:component(.+)/:metric',
     },
+    routeEnum: ['http', 'https'],
     transformPath: ({ component, metric }) => `/sonar/${metric}/${component}`,
     transformQueryParams: ({ protocol, host }) => ({
       server: `${protocol}://${host}`,
