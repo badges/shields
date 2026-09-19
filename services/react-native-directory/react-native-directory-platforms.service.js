@@ -47,7 +47,7 @@ export default class ReactNativeDirectory extends BaseJsonService {
 
   static route = {
     base: 'react-native-directory',
-    pattern: '{/:scope}/:packageName',
+    pattern: '{:scope/}:packageName',
   }
 
   static openApi = {

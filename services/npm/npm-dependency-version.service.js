@@ -12,7 +12,7 @@ export default class NpmDependencyVersion extends NpmBase {
   static route = {
     base: 'npm/dependency-version',
     pattern:
-      '{/:scope}/:packageName/:kind(dev|peer)?{/:dependencyScope}/:dependency',
+      '{:scope/}:packageName/:kind(dev|peer)?{/:dependencyScope}/:dependency',
     queryParamSchema,
   }
 

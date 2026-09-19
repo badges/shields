@@ -39,7 +39,7 @@ export default class BundlejsPackage extends BaseJsonService {
 
   static route = {
     base: 'bundlejs/size',
-    pattern: '{:scope}/*packageName',
+    pattern: '{:scope/}*packageName',
     queryParamSchema,
   }
 

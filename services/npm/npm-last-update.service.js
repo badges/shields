@@ -25,7 +25,7 @@ export class NpmLastUpdateWithTag extends NpmBase {
 
   static route = {
     base: 'npm/last-update',
-    pattern: '{/:scope}/:packageName/:tag',
+    pattern: '{:scope/}:packageName/:tag',
     queryParamSchema,
   }
 
