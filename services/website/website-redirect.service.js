@@ -79,7 +79,7 @@ export default [
     category: 'monitoring',
     route: {
       base: '',
-      pattern: 'website-:labels/:protocol/:hostAndPath+',
+      pattern: 'website-:labels/:protocol//*hostAndPath',
     },
     transformPath: () => '/website',
     transformQueryParams: ({ labels, protocol, hostAndPath }) => {
@@ -103,7 +103,7 @@ export default [
     name: 'WebsiteUrlQueryParamRedirect',
     route: {
       base: 'website',
-      pattern: ':protocol(https|http)/:hostAndPath+',
+      pattern: ':protocol(https|http)//*hostAndPath',
     },
     transformPath: () => '/website',
     transformQueryParams: ({ protocol, hostAndPath }) => ({

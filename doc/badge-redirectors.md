@@ -82,7 +82,7 @@ export default redirector({
   category: 'monitoring',
   route: {
     base: 'website',
-    pattern: ':protocol/:hostAndPath+',
+    pattern: ':protocol//*hostAndPath',
   },
   routeEnum: ['https', 'http'],
   transformPath: () => '/website',
@@ -224,7 +224,7 @@ export default retiredService({
   category: 'build',
   route: {
     base: 'github/workflow/status',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   label: 'githubworkflowstatus',
   issueUrl: 'https://github.com/badges/shields/issues/8671',

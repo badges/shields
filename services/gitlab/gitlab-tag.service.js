@@ -26,7 +26,7 @@ export default class GitlabTag extends GitLabBase {
 
   static route = {
     base: 'gitlab/v/tag',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

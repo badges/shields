@@ -35,7 +35,7 @@ class BitbucketPipelines extends BaseJsonService {
   static category = 'build'
   static route = {
     base: 'bitbucket/pipelines',
-    pattern: ':user/:repo/:branch+',
+    pattern: ':user/:repo//*branch',
   }
 
   static openApi = {

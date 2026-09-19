@@ -6,7 +6,7 @@ export default retiredService({
   label: 'gitlab',
   route: {
     base: 'gitlab/v/contributor',
-    pattern: ':project+',
+    pattern: '/*project',
   },
   dateAdded: new Date('2025-12-20'),
   issueUrl: 'https://github.com/badges/shields/pull/11583',

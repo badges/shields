@@ -20,7 +20,7 @@ export default class GitlabLanguageCount extends GitLabBase {
 
   static route = {
     base: 'gitlab/languages/count',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

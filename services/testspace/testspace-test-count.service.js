@@ -6,7 +6,7 @@ export default class TestspaceTestCount extends TestspaceBase {
   static route = {
     base: 'testspace',
     pattern:
-      ':metric(total|passed|failed|skipped|errored|untested)/:org/:project/:space+',
+      ':metric(total|passed|failed|skipped|errored|untested)/:org/:project//*space',
   }
 
   static openApi = {

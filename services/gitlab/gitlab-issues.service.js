@@ -25,7 +25,7 @@ export default class GitlabIssues extends GitLabBase {
 
   static route = {
     base: 'gitlab/issues',
-    pattern: ':variant/:project+',
+    pattern: ':variant//*project',
     queryParamSchema,
   }
 

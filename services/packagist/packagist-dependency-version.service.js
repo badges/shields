@@ -18,7 +18,7 @@ export default class PackagistDependencyVersion extends BasePackagistService {
 
   static route = {
     base: 'packagist/dependency-v',
-    pattern: ':user/:repo/:dependency+',
+    pattern: ':user/:repo//*dependency',
     queryParamSchema,
   }
 
