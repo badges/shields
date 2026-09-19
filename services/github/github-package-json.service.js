@@ -82,12 +82,13 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
 const packageNameDescription =
   'This may be the name of an unscoped package like `package-name` or a [scoped package](https://docs.npmjs.com/about-scopes) like `@author/package-name`'
 
+const kindEnum = ['dev', 'peer', 'optional']
+
 class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service {
   static category = 'platform-support'
   static route = {
     base: 'github/package-json/dependency-version',
-    pattern:
-      ':user/:repo/:kind(dev|peer|optional)?{/:scope}/:packageName{/*branch}',
+    pattern: ':user/:repo{/:kind}{/:scope}/:packageName{/*branch}',
     queryParamSchema: subfolderQueryParamSchema,
   }
 
@@ -143,7 +144,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
             pathParam({
               name: 'kind',
               example: 'dev',
-              schema: { type: 'string', enum: this.getEnum('kind') },
+              schema: { type: 'string', enum: kindEnum },
             }),
             pathParam({
               name: 'packageName',
@@ -169,7 +170,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
             pathParam({
               name: 'kind',
               example: 'dev',
-              schema: { type: 'string', enum: this.getEnum('kind') },
+              schema: { type: 'string', enum: kindEnum },
             }),
             pathParam({
               name: 'packageName',
@@ -202,6 +203,9 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
   ) {
     if (scope && !scoped.validate(scope)) {
       throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
+    if (kind && !kindEnum.includes(kind)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid kind' })
     }
     const {
       dependencies,

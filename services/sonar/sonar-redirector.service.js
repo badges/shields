@@ -6,8 +6,7 @@ export default [
     category: 'analysis',
     route: {
       base: 'sonar',
-      pattern:
-        ':sonarVersion/:protocol(http|https)/:host(.+)/:component(.+)/:metric',
+      pattern: ':sonarVersion/:protocol/:host(.+)/:component(.+)/:metric',
     },
     transformPath: ({ protocol, host, component, metric }) =>
       `/sonar/${metric}/${component}`,
