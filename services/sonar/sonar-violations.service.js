@@ -28,7 +28,7 @@ export default class SonarViolations extends SonarBase {
   static route = {
     base: 'sonar',
     pattern:
-      ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component/:branch*',
+      ':metric(violations|blocker_violations|critical_violations|major_violations|minor_violations|info_violations)/:component{/*branch}',
     queryParamSchema: queryParamWithFormatSchema,
   }
 

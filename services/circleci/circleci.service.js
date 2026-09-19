@@ -25,7 +25,7 @@ class CircleCi extends BaseSvgScrapingService {
   static category = 'build'
   static route = {
     base: 'circleci/build',
-    pattern: ':vcsType/:user/:repo/:branch*',
+    pattern: ':vcsType/:user/:repo{/*branch}',
     queryParamSchema,
   }
   static routeEnum = ['github', 'gh', 'bitbucket', 'bb']
@@ -115,7 +115,7 @@ const legacyRoutes = [
     route: {
       base: 'circleci/token',
       pattern:
-        ':token/project/:vcsType(github|bitbucket)?/:user/:repo/:branch*',
+        ':token/project/:vcsType(github|bitbucket)?/:user/:repo{/*branch}',
     },
     dateAdded: new Date('2025-12-20'),
     issueUrl: 'https://github.com/badges/shields/pull/11583',
@@ -124,7 +124,7 @@ const legacyRoutes = [
     category: 'build',
     route: {
       base: 'circleci/project',
-      pattern: ':vcsType(github|bitbucket)?/:user/:repo/:branch*',
+      pattern: ':vcsType(github|bitbucket)?/:user/:repo{/*branch}',
     },
     transformPath: ({ vcsType, user, repo, branch }) => {
       const vcs = vcsType || 'gh'

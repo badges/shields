@@ -6,7 +6,7 @@ const schema = Joi.object({ message: codacyGrade }).required()
 
 export default class CodacyGrade extends BaseSvgScrapingService {
   static category = 'analysis'
-  static route = { base: 'codacy/grade', pattern: ':projectId/:branch*' }
+  static route = { base: 'codacy/grade', pattern: ':projectId{/*branch}' }
 
   static openApi = {
     '/codacy/grade/{projectId}': {

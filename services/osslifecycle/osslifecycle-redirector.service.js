@@ -9,7 +9,7 @@ export default [
   redirector({
     route: {
       base: 'osslifecycle',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo{/*branch}',
     },
     transformPath: () => '/osslifecycle',
     transformQueryParams: ({ user, repo, branch }) => ({

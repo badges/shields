@@ -36,7 +36,7 @@ class ScrutinizerBuildBase extends ScrutinizerBase {
 class ScrutinizerBuild extends ScrutinizerBuildBase {
   static route = {
     base: 'scrutinizer/build',
-    pattern: ':vcs(g|b)/:user/:repo/:branch*',
+    pattern: ':vcs(g|b)/:user/:repo{/*branch}',
   }
 
   static openApi = {
@@ -85,7 +85,7 @@ class ScrutinizerBuild extends ScrutinizerBuildBase {
 class ScrutinizerGitLabBuild extends ScrutinizerBuildBase {
   static route = {
     base: 'scrutinizer/build/gl',
-    pattern: ':instance/:user/:repo/:branch*',
+    pattern: ':instance/:user/:repo{/*branch}',
   }
 
   // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
@@ -128,7 +128,7 @@ class ScrutinizerGitLabBuild extends ScrutinizerBuildBase {
 class ScrutinizerPlainGitBuild extends ScrutinizerBuildBase {
   static route = {
     base: 'scrutinizer/build/gp',
-    pattern: ':slug/:branch*',
+    pattern: ':slug{/*branch}',
   }
 
   async handle({ slug, branch }) {

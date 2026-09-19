@@ -35,7 +35,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
   static category = 'platform-support'
   static route = {
     base: 'github/pipenv/locked/python-version',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
   }
 
   static openApi = {
@@ -96,7 +96,7 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
   static category = 'dependencies'
   static route = {
     base: 'github/pipenv/locked/dependency-version',
-    pattern: ':user/:repo/:kind(dev)?/:packageName/:branch*',
+    pattern: ':user/:repo/:kind(dev)?/:packageName{/*branch}',
   }
 
   static openApi = {

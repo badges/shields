@@ -94,7 +94,7 @@ export default class GithubPullRequests extends GithubAuthV4Service {
   static route = {
     base: 'github',
     pattern:
-      ':variant(issues-pr|issues-pr-raw|issues-pr-closed|issues-pr-closed-raw)/:user/:repo/:label*',
+      ':variant(issues-pr|issues-pr-raw|issues-pr-closed|issues-pr-closed-raw)/:user/:repo{/*label}',
     queryParamSchema,
   }
 

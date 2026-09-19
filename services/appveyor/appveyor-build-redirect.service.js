@@ -5,7 +5,7 @@ export default [
     category: 'build',
     route: {
       base: 'appveyor/ci',
-      pattern: ':user/:repo/:branch*',
+      pattern: ':user/:repo{/*branch}',
     },
     transformPath: ({ user, repo, branch }) =>
       `/appveyor/build/${user}/${repo}${branch ? `/${branch}` : ''}`,

@@ -10,7 +10,7 @@ import BaseJsonService from './base-json.js'
 
 class OpenApiService extends BaseJsonService {
   static category = 'build'
-  static route = { base: 'openapi/service', pattern: ':packageName/:distTag*' }
+  static route = { base: 'openapi/service', pattern: ':packageName{/*distTag}' }
 
   // this service defines its own API Paths Object
   static openApi = {

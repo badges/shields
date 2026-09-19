@@ -32,7 +32,7 @@ export default class SourceforgeDownloads extends BaseJsonService {
 
   static route = {
     base: 'sourceforge',
-    pattern: ':interval(dd|dw|dm|dt)/:project/:folder*',
+    pattern: ':interval(dd|dw|dm|dt)/:project{/*folder}',
   }
 
   static openApi = {

@@ -12,7 +12,7 @@ export default class SonarCoverage extends SonarBase {
 
   static route = {
     base: 'sonar/coverage',
-    pattern: ':component/:branch*',
+    pattern: ':component{/*branch}',
     queryParamSchema,
   }
 

@@ -18,7 +18,7 @@ export default class NpmUnpackedSize extends NpmBase {
 
   static route = {
     base: 'npm/unpacked-size',
-    pattern: ':scope(@[^/]+)?/:packageName/:version*',
+    pattern: ':scope(@[^/]+)?/:packageName{/*version}',
     queryParamSchema,
   }
 

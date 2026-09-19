@@ -23,7 +23,7 @@ class GithubPackageJsonVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/package-json/v',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema: subfolderQueryParamSchema,
   }
 
@@ -81,7 +81,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
   static route = {
     base: 'github/package-json/dependency-version',
     pattern:
-      ':user/:repo/:kind(dev|peer|optional)?/:scope(@[^/]+)?/:packageName/:branch*',
+      ':user/:repo/:kind(dev|peer|optional)?/:scope(@[^/]+)?/:packageName{/*branch}',
     queryParamSchema: subfolderQueryParamSchema,
   }
 
@@ -230,7 +230,7 @@ class DynamicGithubPackageJson extends ConditionalGithubAuthV3Service {
   static category = 'other'
   static route = {
     base: 'github/package-json',
-    pattern: ':key/:user/:repo/:branch*',
+    pattern: ':key/:user/:repo{/*branch}',
   }
 
   static openApi = {

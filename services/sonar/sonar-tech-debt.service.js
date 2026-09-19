@@ -13,7 +13,7 @@ export default class SonarTechDebt extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern: ':metric(tech_debt|sqale_debt_ratio)/:component/:branch*',
+    pattern: ':metric(tech_debt|sqale_debt_ratio)/:component{/*branch}',
     queryParamSchema,
   }
 

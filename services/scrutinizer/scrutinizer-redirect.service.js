@@ -9,7 +9,7 @@ export default [
   redirector({
     route: {
       base: 'scrutinizer',
-      pattern: ':vcs(g|b)/:user/:repo/:branch*',
+      pattern: ':vcs(g|b)/:user/:repo{/*branch}',
     },
     transformPath: ({ vcs, user, repo, branch }) =>
       `/scrutinizer/quality/${vcs}/${user}/${repo}${
@@ -20,7 +20,7 @@ export default [
   redirector({
     route: {
       base: 'scrutinizer/gl',
-      pattern: ':instance/:user/:repo/:branch*',
+      pattern: ':instance/:user/:repo{/*branch}',
     },
     transformPath: ({ instance, user, repo, branch }) =>
       `/scrutinizer/quality/gl/${instance}/${user}/${repo}${
@@ -31,7 +31,7 @@ export default [
   redirector({
     route: {
       base: 'scrutinizer/gp',
-      pattern: ':slug/:branch*',
+      pattern: ':slug{/*branch}',
     },
     transformPath: ({ slug, branch }) =>
       `/scrutinizer/quality/gp/${slug}${branch ? `/${branch}` : ''}`,

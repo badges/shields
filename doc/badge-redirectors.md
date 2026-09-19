@@ -60,7 +60,7 @@ export default redirector({
   category: 'analysis',
   route: {
     base: 'scrutinizer',
-    pattern: ':vcs/:user/:repo/:branch*',
+    pattern: ':vcs/:user/:repo{/*branch}',
   },
   routeEnum: ['g', 'b'],
   transformPath: ({ vcs, user, repo, branch }) =>
