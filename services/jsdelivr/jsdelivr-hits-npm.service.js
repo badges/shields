@@ -1,10 +1,11 @@
-import { pathParams } from '../index.js'
+import { pathParams, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 
 export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   static route = {
     base: 'jsdelivr/npm',
-    pattern: ':period/:scope(@[^/]+)?/:packageName',
+    pattern: ':period{/:scope}/:packageName',
   }
   static routeEnum = ['hd', 'hw', 'hm', 'hy']
 
@@ -57,6 +58,9 @@ export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   }
 
   async handle({ period, scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { total } = await this.fetch({
       period,
       packageName: `${scope ? `${scope}/` : ''}${packageName}`,

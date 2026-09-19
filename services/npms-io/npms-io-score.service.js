@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { BaseJsonService, pathParams } from '../index.js'
+import { BaseJsonService, pathParams, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { coveragePercentage } from '../color-formatters.js'
 
 // https://api-docs.npms.io/#api-Package-GetPackageInfo
@@ -24,7 +25,7 @@ export default class NpmsIOScore extends BaseJsonService {
   static route = {
     base: 'npms-io',
     pattern:
-      ':type(final-score|maintenance-score|popularity-score|quality-score)/:scope(@.+)?/:packageName',
+      ':type(final-score|maintenance-score|popularity-score|quality-score){/:scope}/:packageName',
   }
 
   static openApi = {
@@ -81,6 +82,9 @@ export default class NpmsIOScore extends BaseJsonService {
   }
 
   async handle({ type, scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const slug = scope ? `${scope}/${packageName}` : packageName
     const url = `https://api.npms.io/v2/package/${encodeURIComponent(slug)}`
 

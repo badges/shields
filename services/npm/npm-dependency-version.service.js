@@ -1,4 +1,5 @@
-import { pathParam, queryParam } from '../index.js'
+import { pathParam, queryParam, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { getDependencyVersion } from '../package-json-helpers.js'
 import NpmBase, {
   queryParamSchema,
@@ -11,7 +12,7 @@ export default class NpmDependencyVersion extends NpmBase {
   static route = {
     base: 'npm/dependency-version',
     pattern:
-      ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependencyScope(@[^/]+)?/:dependency',
+      '{/:scope}/:packageName/:kind(dev|peer)?{/:dependencyScope}/:dependency',
     queryParamSchema,
   }
 
@@ -82,7 +83,13 @@ export default class NpmDependencyVersion extends NpmBase {
       namedParams,
       queryParams,
     )
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { kind, dependency, dependencyScope } = namedParams
+    if (dependencyScope && !scoped.validate(dependencyScope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid dependency scope' })
+    }
     const wantedDependency = `${
       dependencyScope ? `${dependencyScope}/` : ''
     }${dependency}`

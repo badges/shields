@@ -23,7 +23,7 @@ export default class ReadTheDocs extends BaseJsonService {
 
   static route = {
     base: 'readthedocs',
-    pattern: ':project/:version?',
+    pattern: ':project{/:version}',
   }
 
   static auth = {

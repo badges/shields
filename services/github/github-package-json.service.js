@@ -1,5 +1,11 @@
 import Joi from 'joi'
-import { pathParam, pathParams, queryParam } from '../index.js'
+import {
+  pathParam,
+  pathParams,
+  queryParam,
+  InvalidParameter,
+} from '../index.js'
+import { scoped } from '../validators.js'
 import { renderVersionBadge } from '../version.js'
 import { transformAndValidate, renderDynamicBadge } from '../dynamic-common.js'
 import {
@@ -81,7 +87,7 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
   static route = {
     base: 'github/package-json/dependency-version',
     pattern:
-      ':user/:repo/:kind(dev|peer|optional)?/:scope(@[^/]+)?/:packageName{/*branch}',
+      ':user/:repo/:kind(dev|peer|optional)?{/:scope}/:packageName{/*branch}',
     queryParamSchema: subfolderQueryParamSchema,
   }
 
@@ -194,6 +200,9 @@ class GithubPackageJsonDependencyVersion extends ConditionalGithubAuthV3Service 
     { user, repo, kind, branch = 'HEAD', scope, packageName },
     { filename = 'package.json' },
   ) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const {
       dependencies,
       devDependencies,

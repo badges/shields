@@ -17,7 +17,7 @@ export default class CratesMSRV extends BaseCratesService {
   static category = 'platform-support'
   static route = {
     base: 'crates/msrv',
-    pattern: ':crate/:version?',
+    pattern: ':crate{/:version}',
   }
 
   static openApi = {

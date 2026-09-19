@@ -1,5 +1,7 @@
 import { pathParams } from '../index.js'
 import { colorScale } from '../color-formatters.js'
+import { scoped } from '../validators.js'
+import { InvalidParameter } from '../index.js'
 import LibrariesIoBase from './librariesio-base.js'
 
 const sourceRankColor = colorScale([10, 15, 20, 25, 30])
@@ -9,7 +11,7 @@ export default class LibrariesIoSourcerank extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/sourcerank',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName',
+    pattern: ':platform{/:scope}/:packageName',
   }
 
   static openApi = {
@@ -61,6 +63,9 @@ export default class LibrariesIoSourcerank extends LibrariesIoBase {
   }
 
   async handle({ platform, scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { rank } = await this.fetchProject({
       platform,
       scope,

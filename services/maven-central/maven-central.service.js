@@ -6,7 +6,7 @@ export default redirector({
   isRetired: false,
   route: {
     base: 'maven-central/v',
-    pattern: ':groupId/:artifactId/:versionPrefix?',
+    pattern: ':groupId/:artifactId{/:versionPrefix}',
   },
   openApi: {
     '/maven-central/v/{groupId}/{artifactId}': {
