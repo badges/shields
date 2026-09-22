@@ -17,9 +17,10 @@ export default class TeamCityBuild extends TeamCityBase {
 
   static route = {
     base: 'teamcity/build',
-    pattern: ':verbosity(s|e)/:buildId',
+    pattern: ':verbosity/:buildId',
     queryParamSchema,
   }
+  static routeEnum = ['s', 'e']
 
   static openApi = {
     '/teamcity/build/s/{buildId}': {

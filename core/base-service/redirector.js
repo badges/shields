@@ -18,6 +18,7 @@ const attrSchema = Joi.object({
   category: isValidCategory,
   isRetired: Joi.boolean().default(true),
   route: isValidRoute,
+  routeEnum: Joi.array().items(Joi.string()).optional(),
   openApi: openApiSchema,
   transformPath: Joi.func()
     .maxArity(1)
@@ -37,6 +38,7 @@ export default function redirector(attrs) {
     category,
     isRetired,
     route,
+    routeEnum,
     openApi,
     transformPath,
     transformQueryParams,
@@ -53,6 +55,7 @@ export default function redirector(attrs) {
     static category = category
     static isRetired = isRetired
     static route = route
+    static routeEnum = routeEnum
     static openApi = openApi
 
     static register({ camp, metricInstance }, { rasterUrl }) {

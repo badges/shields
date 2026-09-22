@@ -16,8 +16,9 @@ export default class Bundlephobia extends BaseJsonService {
 
   static route = {
     base: 'bundlephobia',
-    pattern: ':format(min|minzip)/:scope(@[^/]+)?/:packageName/:version?',
+    pattern: ':format/:scope(@[^/]+)?/:packageName/:version?',
   }
+  static routeEnum = ['min', 'minzip']
 
   static openApi = {
     '/bundlephobia/{format}/{packageName}': {

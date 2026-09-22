@@ -34,9 +34,10 @@ export default class HomebrewDownloads extends BaseJsonService {
   static category = 'downloads'
 
   static route = {
-    base: 'homebrew',
-    pattern: 'installs/:interval(dm|dq|dy)/:formula',
+    base: 'homebrew/installs',
+    pattern: ':interval/:formula',
   }
+  static routeEnum = ['dm', 'dq', 'dy']
 
   static openApi = {
     '/homebrew/installs/{interval}/{formula}': {

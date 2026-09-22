@@ -50,8 +50,9 @@ function DownloadsForExtensionType(extensionType) {
 
     static route = {
       base: `wordpress/${extensionType}`,
-      pattern: ':interval(dd|dw|dm|dy|dt)/:slug',
+      pattern: ':interval/:slug',
     }
+    static routeEnum = ['dd', 'dw', 'dm', 'dy', 'dt']
 
     static get openApi() {
       const key = `/wordpress/${extensionType}/{interval}/{slug}`

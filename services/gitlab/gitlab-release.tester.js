@@ -2,7 +2,7 @@ import { isSemver, withRegex } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
 export const t = await createServiceTester()
 
-const isGitLabDisplayVersion = withRegex(/^GitLab [1-9][0-9]*.[0-9]*/)
+const isInkscapeDisplayVersion = withRegex(/^Inkscape [1-9][0-9]*\.[0-9]*/)
 
 t.create('Release (latest by date)')
   .get('/shields-ops-group/tag-test.json')
@@ -33,8 +33,8 @@ t.create('Release (latest by semver pre-release)')
   .expectBadge({ label: 'release', message: 'v5.0.0-beta.1', color: 'orange' })
 
 t.create('Release (release display name)')
-  .get('/gitlab-org/gitlab.json?display_name=release')
-  .expectBadge({ label: 'release', message: isGitLabDisplayVersion })
+  .get('/inkscape/inkscape.json?display_name=release')
+  .expectBadge({ label: 'release', message: isInkscapeDisplayVersion })
 
 t.create('Release (custom instance)')
   .get('/GNOME/librsvg.json?gitlab_url=https://gitlab.gnome.org')

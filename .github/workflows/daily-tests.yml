@@ -61,10 +61,18 @@ jobs:
           TWITCH_CLIENT_ID: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_ID }}'
           TWITCH_CLIENT_SECRET: '${{ secrets.SERVICETESTS_TWITCH_CLIENT_SECRET }}'
           WEBLATE_API_KEY: '${{ secrets.SERVICETESTS_WEBLATE_API_KEY }}'
-          YOUTUBE_API_KEY: '${{ secrets.SERVICETESTS_YOUTUBE_API_KEY }}'
 
       - name: Write Service Tests Markdown Summary
         if: always()
         run: |
           echo '# Services' >> $GITHUB_STEP_SUMMARY
           node scripts/mocha2md.js Report reports/service-tests.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Service Tests Report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: service-tests-report
+          path: reports/service-tests.json
+          retention-days: 7
+          if-no-files-found: warn

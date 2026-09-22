@@ -53,7 +53,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
           },
           {
             name: 'number',
-            example: '1110',
+            example: '12083',
           },
         ),
       },
@@ -73,7 +73,7 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
           },
           {
             name: 'number',
-            example: '1110',
+            example: '12083',
           },
         ),
       },

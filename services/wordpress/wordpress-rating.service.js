@@ -73,8 +73,9 @@ function StarsForExtensionType(extensionType) {
 
     static route = {
       base: `wordpress/${extensionType}`,
-      pattern: '(stars|r)/:slug',
+      pattern: ':starsEnum/:slug',
     }
+    static routeEnum = ['stars', 'r']
 
     static get openApi() {
       const key = `/wordpress/${extensionType}/stars/{slug}`

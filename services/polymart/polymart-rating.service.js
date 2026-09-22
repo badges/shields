@@ -6,8 +6,9 @@ export default [
     name: 'PolymartRatingRedirect',
     route: {
       base: 'polymart',
-      pattern: ':format(rating|stars)/:resourceId',
+      pattern: ':format/:resourceId',
     },
+    routeEnum: ['rating', 'stars'],
     transformPath: ({ format, resourceId }) =>
       `/voxel-shop/${format}/${resourceId}`,
     dateAdded: new Date('2026-04-05'),

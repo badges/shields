@@ -1,12 +1,24 @@
 import { isVPlusDottedVersionNClausesWithOptionalSuffix as isVersion } from '../test-validators.js'
 import { createServiceTester } from '../tester.js'
+import { withRegex } from '../test-validators.js'
 export const t = await createServiceTester()
+
+const isTripleDottedVersionWithV4 = withRegex(/^v4\.[0-9]+\.[0-9]+$/)
 
 t.create('search release version valid artifact')
   .get('/r/me.neznamy/tab-api.json?server=https://repo.tomkeuper.com')
   .expectBadge({
     label: 'nexus',
     message: isVersion,
+  })
+
+t.create('search release version with filter param')
+  .get(
+    '/r/me.neznamy/tab-api.json?server=https://repo.tomkeuper.com&filter=4.*.*',
+  )
+  .expectBadge({
+    label: 'nexus',
+    message: isTripleDottedVersionWithV4,
   })
 
 t.create('search release version of an nonexistent artifact')

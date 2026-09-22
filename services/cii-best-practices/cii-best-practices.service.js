@@ -30,8 +30,9 @@ export default class CIIBestPracticesService extends BaseJsonService {
   static category = 'analysis'
   static route = {
     base: 'cii',
-    pattern: ':metric(level|percentage|summary)/:projectId',
+    pattern: ':metric/:projectId',
   }
+  static routeEnum = ['level', 'percentage', 'summary']
 
   static openApi = {
     '/cii/{metric}/{projectId}': {

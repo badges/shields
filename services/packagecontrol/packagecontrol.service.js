@@ -69,8 +69,9 @@ export default class PackageControlDownloads extends BaseJsonService {
 
   static route = {
     base: 'packagecontrol',
-    pattern: ':interval(dd|dw|dm|dt)/:packageName',
+    pattern: ':interval/:packageName',
   }
+  static routeEnum = ['dd', 'dw', 'dm', 'dt']
 
   static openApi = {
     '/packagecontrol/{interval}/{packageName}': {

@@ -6,8 +6,9 @@ export default class CondaDownloads extends BaseCondaService {
   static category = 'downloads'
   static route = {
     base: 'conda',
-    pattern: ':variant(d|dn)/:channel/:packageName',
+    pattern: ':variant/:channel/:packageName',
   }
+  static routeEnum = ['d', 'dn']
 
   static openApi = {
     '/conda/{variant}/{channel}/{packageName}': {

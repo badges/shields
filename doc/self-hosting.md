@@ -4,12 +4,12 @@ This document describes how to host your own shields server either from source o
 
 ## Installing from Source
 
-You will need Node 22, which you can install using a [package manager][].
+You will need Node 24, which you can install using a [package manager][].
 
 On Ubuntu / Debian:
 
 ```sh
-curl -sL https://deb.nodesource.com/setup_22.x | sudo -E bash -; sudo apt-get install -y nodejs
+curl -sL https://deb.nodesource.com/setup_24.x | sudo -E bash -; sudo apt-get install -y nodejs
 ```
 
 ```sh
@@ -124,6 +124,21 @@ Configuration:
 Assuming Docker is running locally, you should be able to get to the application at http://localhost:8080/.
 
 If you run Docker in a virtual machine (such as boot2docker or Docker Machine) then you will need to replace `localhost` with the IP address of that virtual machine.
+
+### Disabling Dynamic and Endpoint badges
+
+Dynamic and Endpoint badges are enabled by default. These badge families fetch URLs supplied by the requester, which may be unsuitable for an internet-facing self-hosted server that can reach private network resources.
+
+To disable both badge families, set the following public configuration:
+
+```yml
+public:
+  dynamicAndEndpointBadgesEnabled: false
+```
+
+Alternatively, set the environment variable `DYNAMIC_AND_ENDPOINT_BADGES_ENABLED=false`.
+
+When disabled, Dynamic and Endpoint routes are not registered. Requests to those routes receive the standard `404 | badge not found` badge response. Other badge services remain available.
 
 ## Raster server
 

@@ -7,7 +7,7 @@ const authConfigOverride = {
   public: {
     services: {
       jenkins: {
-        authorizedOrigins: ['https://ci.eclipse.org'],
+        authorizedOrigins: ['https://ci.freebsd.org'],
       },
     },
   },

@@ -99,8 +99,24 @@ class BaseService {
   }
 
   /**
-   * Extract an array of allowed values from this service's route pattern
-   * for a given route parameter
+   * If the route pattern includes an enum, this property should be set to the
+   * array of allowed values. This is used to validate the route pattern and
+   * generate the OpenAPI spec.
+   * enum applies to the first param in the route pattern.
+   *
+   * @abstract
+   * @type {string[]}
+   */
+  static routeEnum = undefined
+
+  /**
+   * If old route enum is used (legacy):
+   *  Extract an array of allowed values from this service's route pattern
+   *  for a given route parameter
+   *
+   * If new routeEnum is used:
+   *  Return the array of allowed values for a given route parameter from the
+   *  routeEnum property
    *
    * @param {string} param The name of a param in this service's route pattern
    * @returns {string[]} Array of allowed values for this param
@@ -109,6 +125,23 @@ class BaseService {
     if (!('pattern' in this.route)) {
       throw new Error('getEnum() requires route to have a .pattern property')
     }
+
+    if (this.routeEnum) {
+      if (
+        !Array.isArray(this.routeEnum) ||
+        this.routeEnum.length === 0 ||
+        !this.routeEnum.every(item => typeof item === 'string')
+      ) {
+        throw new Error(
+          `getEnum() requires routeEnum for ${this.name} to be a non-empty array of strings`,
+        )
+      }
+
+      return this.routeEnum
+    }
+
+    // TODO Remove after #11371 is merged the old route extraction.
+    // replace with error if routeEnum and this function is called.
     const enumeration = getEnum(this.route.pattern, param)
     if (!Array.isArray(enumeration)) {
       throw new Error(
@@ -408,6 +441,17 @@ class BaseService {
       serviceError = new ImproperlyConfigured({ prettyMessage })
     }
 
+    if (!serviceError && this.routeEnum) {
+      const firstParamName = Object.keys(namedParams || {})[0]
+      if (firstParamName) {
+        if (!this.routeEnum.includes(namedParams[firstParamName])) {
+          serviceError = new InvalidParameter({
+            prettyMessage: `invalid parameter ${firstParamName}: ${namedParams[firstParamName]}`,
+          })
+        }
+      }
+    }
+
     const { queryParamSchema } = this.route
     let transformedQueryParams
     if (!serviceError && queryParamSchema) {
@@ -469,7 +513,6 @@ class BaseService {
     serviceConfig,
   ) {
     const { cacheHeaders: cacheHeaderConfig } = serviceConfig
-    const { regex, captureNames } = prepareRoute(this.route)
     const queryParams = getQueryParamNames(this.route)
 
     const metricHelper = MetricHelper.create({
@@ -477,41 +520,71 @@ class BaseService {
       ServiceClass: this,
     })
 
-    camp.route(
-      regex,
-      handleRequest(cacheHeaderConfig, {
-        queryParams,
-        handler: async (queryParams, match, sendBadge) => {
-          const metricHandle = metricHelper.startRequest()
-
-          const namedParams = namedParamsForMatch(captureNames, match, this)
-          const serviceData = await this.invoke(
-            {
-              requestFetcher: fetch,
-              githubApiProvider,
-              librariesIoApiProvider,
-              metricHelper,
-            },
-            serviceConfig,
-            namedParams,
-            queryParams,
+    const routesToRegister = []
+    if (
+      this.routeEnum &&
+      Array.isArray(this.routeEnum) &&
+      this.routeEnum.length > 0
+    ) {
+      const { captureNames } = prepareRoute(this.route)
+      const firstParamName =
+        captureNames && captureNames.length > 0 ? captureNames[0] : undefined
+      if (firstParamName) {
+        for (const enumValue of this.routeEnum) {
+          const pattern = this.route.pattern.replace(
+            firstParamName,
+            `${firstParamName}(${enumValue})`, // keep capture for backwards compatibility
           )
+          routesToRegister.push({
+            route: { ...this.route, pattern },
+          })
+        }
+      } else {
+        routesToRegister.push({ route: this.route })
+      }
+    } else {
+      routesToRegister.push({ route: this.route })
+    }
 
-          const badgeData = coalesceBadge(
-            queryParams,
-            serviceData,
-            this.defaultBadgeData,
-            this,
-          )
-          // The final capture group is the extension.
-          const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
-          sendBadge(format, badgeData)
+    for (const { route: routeToRegister } of routesToRegister) {
+      const { regex, captureNames } = prepareRoute(routeToRegister)
 
-          metricHandle.noteResponseSent()
-        },
-        cacheLength: this._cacheLength,
-      }),
-    )
+      camp.route(
+        regex,
+        handleRequest(cacheHeaderConfig, {
+          queryParams,
+          handler: async (queryParams, match, sendBadge) => {
+            const metricHandle = metricHelper.startRequest()
+
+            const namedParams = namedParamsForMatch(captureNames, match, this)
+            const serviceData = await this.invoke(
+              {
+                requestFetcher: fetch,
+                githubApiProvider,
+                librariesIoApiProvider,
+                metricHelper,
+              },
+              serviceConfig,
+              namedParams,
+              queryParams,
+            )
+
+            const badgeData = coalesceBadge(
+              queryParams,
+              serviceData,
+              this.defaultBadgeData,
+              this,
+            )
+            // The final capture group is the extension.
+            const format = (match.slice(-1)[0] || '.svg').replace(/^\./, '')
+            sendBadge(format, badgeData)
+
+            metricHandle.noteResponseSent()
+          },
+          cacheLength: this._cacheLength,
+        }),
+      )
+    }
   }
 }
 

@@ -5,7 +5,8 @@ import { BaseAmoService, description } from './amo-base.js'
 
 export default class AmoRating extends BaseAmoService {
   static category = 'rating'
-  static route = { base: 'amo', pattern: ':format(stars|rating)/:addonId' }
+  static route = { base: 'amo', pattern: ':format/:addonId' }
+  static routeEnum = ['stars', 'rating']
 
   static openApi = {
     '/amo/rating/{addonId}': {

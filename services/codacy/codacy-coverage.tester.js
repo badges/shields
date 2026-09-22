@@ -4,13 +4,13 @@ export const t = await createServiceTester()
 
 // https://app.codacy.com/gh/schemacrawler/SchemaCrawler/dashboard
 // https://github.com/schemacrawler/SchemaCrawler
-t.create('Coverage').get('/84c0a068ce9349f2bcaa07b5977bd932.json').expectBadge({
+t.create('Coverage').get('/b6a59cdf5ca64eab9104928d4f9bbb97.json').expectBadge({
   label: 'coverage',
   message: isIntegerPercentage,
 })
 
 t.create('Coverage on branch')
-  .get('/84c0a068ce9349f2bcaa07b5977bd932/main.json')
+  .get('/b6a59cdf5ca64eab9104928d4f9bbb97/master.json')
   .expectBadge({
     label: 'coverage',
     message: isIntegerPercentage,

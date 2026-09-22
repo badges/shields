@@ -5,14 +5,14 @@ export const t = await createServiceTester()
 // https://app.codacy.com/gh/NicolasCARPi/jquery_jeditable/dashboard
 // https://github.com/NicolasCARPi/jquery_jeditable
 t.create('Code quality')
-  .get('/0cb32ce695b743d68257021455330c66.json')
+  .get('/b6a59cdf5ca64eab9104928d4f9bbb97.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,
   })
 
 t.create('Code quality on branch')
-  .get('/0cb32ce695b743d68257021455330c66/master.json')
+  .get('/b6a59cdf5ca64eab9104928d4f9bbb97/master.json')
   .expectBadge({
     label: 'code quality',
     message: codacyGrade,

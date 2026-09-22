@@ -103,8 +103,9 @@ export default [
     name: 'WebsiteUrlQueryParamRedirect',
     route: {
       base: 'website',
-      pattern: ':protocol(https|http)/:hostAndPath+',
+      pattern: ':protocol/:hostAndPath+',
     },
+    routeEnum: ['https', 'http'],
     transformPath: () => '/website',
     transformQueryParams: ({ protocol, hostAndPath }) => ({
       url: `${protocol}://${hostAndPath}`,

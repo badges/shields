@@ -1,10 +1,10 @@
 import { expect } from 'chai'
+import sinon from 'sinon'
 import { test, given } from 'sazerac'
 import { InvalidResponse } from '../index.js'
 import DockerVersion from './docker-version.service.js'
 import {
   versionDataNoTagDateSort,
-  versionPagedDataNoTagDateSort,
   versionDataNoTagSemVerSort,
   versionDataWithTag,
   versionDataWithVaryingArchitectures,
@@ -16,14 +16,14 @@ describe('DockerVersion', function () {
     given({
       tag: '',
       sort: 'date',
-      data: { results: [{ name: 'stable' }] },
+      data: [{ name: 'stable' }],
     }).expect({
       version: 'stable',
     })
     given({
       tag: '',
       sort: 'date',
-      data: { results: [{ name: '3.9.5' }] },
+      data: [{ name: '3.9.5' }],
     }).expect({
       version: '3.9.5',
     })
@@ -31,7 +31,6 @@ describe('DockerVersion', function () {
       tag: '',
       sort: 'date',
       data: versionDataNoTagDateSort,
-      pagedData: versionPagedDataNoTagDateSort,
     }).expect({
       version: 'amd64-latest',
     })
@@ -75,29 +74,109 @@ describe('DockerVersion', function () {
     })
   })
 
+  it('does not paginate date-sorted requests whose newest tag is not latest', async function () {
+    const service = new DockerVersion(
+      { authHelper: { isConfigured: false } },
+      {},
+    )
+    service.fetch = sinon.stub().resolves({
+      count: 1001,
+      results: [{ name: '1.0.0', images: [] }],
+    })
+
+    await service.handle(
+      { user: 'example', repo: 'repository' },
+      { sort: 'date', arch: 'amd64' },
+    )
+
+    expect(
+      service.fetch.getCalls().map(({ args: [params] }) => params.page),
+    ).to.deep.equal([undefined])
+  })
+
+  it('fetches anonymous pages 1 through 10 exactly once', async function () {
+    const service = new DockerVersion(
+      { authHelper: { isConfigured: false } },
+      {},
+    )
+    service.fetch = sinon.stub().resolves({
+      count: 1001,
+      results: [
+        {
+          name: 'latest',
+          images: [
+            {
+              architecture: 'amd64',
+              digest:
+                'sha256:597bd5c319cc09d6bb295b4ef23cac50ec7c373fff5fe923cfd246ec09967b31',
+            },
+          ],
+        },
+      ],
+    })
+
+    await service.handle(
+      { user: 'example', repo: 'repository' },
+      { sort: 'date', arch: 'amd64' },
+    )
+
+    expect(
+      service.fetch.getCalls().map(({ args: [params] }) => params.page),
+    ).to.deep.equal([undefined, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  })
+
+  it('fetches authenticated pages 1 through 11 exactly once', async function () {
+    const service = new DockerVersion(
+      { authHelper: { isConfigured: true } },
+      {},
+    )
+    service.fetch = sinon.stub().resolves({
+      count: 1001,
+      results: [
+        {
+          name: 'latest',
+          images: [
+            {
+              architecture: 'amd64',
+              digest:
+                'sha256:597bd5c319cc09d6bb295b4ef23cac50ec7c373fff5fe923cfd246ec09967b31',
+            },
+          ],
+        },
+      ],
+    })
+
+    await service.handle(
+      { user: 'example', repo: 'repository' },
+      { sort: 'date', arch: 'amd64' },
+    )
+
+    expect(
+      service.fetch.getCalls().map(({ args: [params] }) => params.page),
+    ).to.deep.equal([undefined, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+  })
+
   it('throws InvalidResponse error with latest tag and no amd64 architecture digests', function () {
     expect(() => {
       DockerVersion.prototype.transform({
         sort: 'date',
-        data: {
-          results: [
-            {
-              name: 'latest',
-              images: [
-                {
-                  architecture: 'arm64',
-                  digest:
-                    'sha256:597bd5c319cc09d6bb295b4ef23cac50ec7c373fff5fe923cfd246ec09967b31',
-                },
-                {
-                  architecture: 'arm',
-                  digest:
-                    'sha256:c5ea49127cd44d0f50eafda229a056bb83b6e691883c56fd863d42675fae3909',
-                },
-              ],
-            },
-          ],
-        },
+        data: [
+          {
+            name: 'latest',
+            images: [
+              {
+                architecture: 'arm64',
+                digest:
+                  'sha256:597bd5c319cc09d6bb295b4ef23cac50ec7c373fff5fe923cfd246ec09967b31',
+              },
+              {
+                architecture: 'arm',
+                digest:
+                  'sha256:c5ea49127cd44d0f50eafda229a056bb83b6e691883c56fd863d42675fae3909',
+              },
+            ],
+          },
+        ],
       })
     })
       .to.throw(InvalidResponse)

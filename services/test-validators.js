@@ -23,7 +23,7 @@ const withRegex = re => Joi.string().regex(re)
  *
  * @type {Joi.StringSchema}
  */
-const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+.[0-9]+.[0-9]+$/)
+const isVPlusTripleDottedVersion = withRegex(/^v[0-9]+\.[0-9]+\.[0-9]+$/)
 
 /**
  * Validates a version string prefixed by `v` with at least a major version

@@ -5,6 +5,7 @@ import nock from 'nock'
 import config from 'config'
 import { fetch } from '../core/base-service/got.js'
 import BaseService from '../core/base-service/base.js'
+import { prepareRoute } from '../core/base-service/route.js'
 const runnerConfig = config.util.toObject()
 
 function cleanUpNockAfterEach() {
@@ -69,6 +70,51 @@ function getBadgeExampleCall(serviceClass, paramType) {
 
   const firstOpenapiPath = Object.keys(serviceClass.openApi)[0]
 
+  let enumParam
+  if (paramType === 'path' && serviceClass.routeEnum) {
+    const { captureNames } = prepareRoute(serviceClass.route)
+    const routeParamName = captureNames[0]
+    if (!routeParamName) {
+      throw new TypeError(
+        `Missing route parameter name for ${serviceClass.name} while routeEnum is defined. Check the route pattern.`,
+      )
+    }
+    const firstOpenapiPathParams =
+      serviceClass.openApi[firstOpenapiPath].get.parameters
+    if (
+      !Array.isArray(firstOpenapiPathParams) ||
+      firstOpenapiPathParams.length === 0
+    ) {
+      throw new TypeError(
+        `Missing OpenAPI path parameters for ${serviceClass.name} while routeEnum is defined. Check the OpenAPI specification.`,
+      )
+    }
+    const routeParam = firstOpenapiPathParams.find(
+      obj => obj.in === 'path' && obj.name === routeParamName,
+    )
+
+    if (routeParam?.example) {
+      if (!serviceClass.routeEnum.includes(routeParam.example)) {
+        throw new TypeError(
+          `Route parameter example ${routeParam.example} for ${serviceClass.name} is not included in routeEnum.`,
+        )
+      }
+      enumParam = { [routeParamName]: routeParam.example }
+    } else {
+      // fallback to exact match of routeEnum in the OpenAPI path if no example is provided
+      const exactMatchingEnum = firstOpenapiPath
+        .split('/')
+        .find(pathPart => serviceClass.routeEnum.includes(pathPart))
+      if (exactMatchingEnum) {
+        enumParam = { [routeParamName]: exactMatchingEnum }
+      } else {
+        throw new TypeError(
+          `Unable to match routeEnum to OpenAPI path for ${serviceClass.name}. Check the openApi first path and routeEnum values.`,
+        )
+      }
+    }
+  }
+
   const firstOpenapiExampleParams =
     serviceClass.openApi[firstOpenapiPath].get.parameters
   if (!Array.isArray(firstOpenapiExampleParams)) {
@@ -89,7 +135,8 @@ function getBadgeExampleCall(serviceClass, paramType) {
     return acc
   }, {})
 
-  return exampleInvokeParams
+  // enum param must come first as this is asumed by base service.
+  return { ...enumParam, ...exampleInvokeParams }
 }
 
 /**

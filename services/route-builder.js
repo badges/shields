@@ -1,23 +1,23 @@
 /**
- * Common functions and utilities for tasks related to route building
+ * Common functions and utilities for tasks related to route building.
  *
  * @module
  */
 
 import toArray from '../core/base-service/to-array.js'
 
-/*
+/**
  * Factory class for building a BaseService `route` object. This class is useful
  * in complex collections of service classes, when the URL is built
  * conditionally.
  *
  * Patterns based on path-to-regex may obviate the need for this, though they
  * haven't done so yet.
+ *
+ * @class
  */
 export default class RouteBuilder {
   /**
-   * Creates a RouteBuilder object.
-   *
    * @param {object} attrs - Refer to individual attributes
    * @param {string} attrs.base - Base URL, defaults to ''
    */
@@ -29,18 +29,18 @@ export default class RouteBuilder {
   }
 
   /**
-   * Get the format components separated by '/'
+   * Get the format components separated by '/'.
    *
-   * @returns {string} Format components, for example: "format1/format2/format3"
+   * @returns {string} Format components, for example: "format1/format2/format3".
    */
   get format() {
     return this._formatComponents.join('/')
   }
 
   /**
-   * Saves the format and capture values in the RouteBuilder instance.
+   * Saves the format and capture values in the `RouteBuilder` instance.
    *
-   * @param {string} format - Pattern based on path-to-regex, for example: (?:(.+)\\.)?${serviceBaseUrl}
+   * @param {string} format - Pattern based on path-to-regex, for example: `(?:(.+)\\.)?${serviceBaseUrl}`
    * @param {string} capture - Value to capture
    * @returns {object} RouteBuilder instance for chaining
    */
@@ -52,9 +52,9 @@ export default class RouteBuilder {
   }
 
   /**
-   * Returns a new object based on RouteBuilder instance containing its base, format and capture properties.
+   * Returns a new object based on `RouteBuilder` instance containing its base, format and capture properties.
    *
-   * @returns {object} Object containing base, format and capture properties of the RouteBuilder instance
+   * @returns {{base: string, format: string, capture: string[]}} Object containing base, format and capture properties of the `RouteBuilder` instance
    */
   toObject() {
     const { base, format, capture } = this

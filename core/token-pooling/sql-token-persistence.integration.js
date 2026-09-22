@@ -51,14 +51,18 @@ describe('SQL token persistence', function () {
   })
 
   context('when the key exists', function () {
-    const initialTokens = ['a', 'b', 'c'].map(char => char.repeat(40))
+    const initialTokens = [
+      { token: 'a'.repeat(40), scopes: null },
+      { token: 'b'.repeat(40), scopes: ['read:packages', 'read:user'] },
+      { token: 'c'.repeat(40), scopes: null },
+    ]
 
     beforeEach(async function () {
       await Promise.all(
-        initialTokens.map(token =>
+        initialTokens.map(({ token, scopes }) =>
           pool.query(
-            `INSERT INTO pg_temp.${tableName} (token) VALUES ($1::text);`,
-            [token],
+            `INSERT INTO pg_temp.${tableName} (token, scopes) VALUES ($1::text, $2::text[]);`,
+            [token, scopes],
           ),
         ),
       )
@@ -66,13 +70,15 @@ describe('SQL token persistence', function () {
 
     it('loads the contents', async function () {
       const tokens = await persistence.initialize(pool)
-      expect(tokens.sort()).to.deep.equal(initialTokens)
+      expect(
+        tokens.sort((a, b) => a.token.localeCompare(b.token)),
+      ).to.deep.equal(initialTokens)
     })
 
     context('when tokens are added', function () {
       it('saves the change', async function () {
         const newToken = 'e'.repeat(40)
-        const expected = initialTokens.slice()
+        const expected = initialTokens.map(({ token }) => token)
         expected.push(newToken)
 
         await persistence.initialize(pool)
@@ -84,11 +90,45 @@ describe('SQL token persistence', function () {
         const savedTokens = result.rows.map(row => row.token)
         expect(savedTokens.sort()).to.deep.equal(expected)
       })
+
+      it('saves token scopes', async function () {
+        const newToken = 'e'.repeat(40)
+
+        await persistence.initialize(pool)
+        await persistence.noteTokenAdded(newToken, {
+          scopes: ['read:packages'],
+        })
+
+        const result = await pool.query(
+          `SELECT token, scopes FROM pg_temp.${tableName} WHERE token=$1::text;`,
+          [newToken],
+        )
+        expect(result.rows).to.deep.equal([
+          { token: newToken, scopes: ['read:packages'] },
+        ])
+      })
+
+      it('updates token scopes when a known token is re-added with scopes', async function () {
+        const knownToken = initialTokens[0].token
+
+        await persistence.initialize(pool)
+        await persistence.noteTokenAdded(knownToken, {
+          scopes: ['read:packages'],
+        })
+
+        const result = await pool.query(
+          `SELECT token, scopes FROM pg_temp.${tableName} WHERE token=$1::text;`,
+          [knownToken],
+        )
+        expect(result.rows).to.deep.equal([
+          { token: knownToken, scopes: ['read:packages'] },
+        ])
+      })
     })
 
     context('when tokens are removed', function () {
       it('saves the change', async function () {
-        const expected = Array.from(initialTokens)
+        const expected = initialTokens.map(({ token }) => token)
         const toRemove = expected.pop()
 
         await persistence.initialize(pool)

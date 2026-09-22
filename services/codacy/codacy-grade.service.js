@@ -14,7 +14,7 @@ export default class CodacyGrade extends BaseSvgScrapingService {
         summary: 'Codacy grade',
         parameters: pathParams({
           name: 'projectId',
-          example: '0cb32ce695b743d68257021455330c66',
+          example: 'b6a59cdf5ca64eab9104928d4f9bbb97',
         }),
       },
     },
@@ -24,7 +24,7 @@ export default class CodacyGrade extends BaseSvgScrapingService {
         parameters: pathParams(
           {
             name: 'projectId',
-            example: '0cb32ce695b743d68257021455330c66',
+            example: 'b6a59cdf5ca64eab9104928d4f9bbb97',
           },
           {
             name: 'branch',

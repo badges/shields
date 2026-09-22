@@ -46,12 +46,12 @@ BRANCH_NAME="$RELEASE_NAME"-$(uuidgen | head -c 8)
 git checkout -b "$BRANCH_NAME"
 
 # Commit + push changelog
+TITLE="Changelog for Release $RELEASE_NAME"
 git add CHANGELOG.md
-git commit -m "Update Changelog"
+git commit -m "$TITLE"
 git push origin "$BRANCH_NAME"
 
 # Submit a PR
-TITLE="Changelog for Release $RELEASE_NAME"
 PR_RESP=$(curl https://api.github.com/repos/"$REPO_NAME"/pulls \
     -X POST \
     -H "Authorization: token $GITHUB_TOKEN" \

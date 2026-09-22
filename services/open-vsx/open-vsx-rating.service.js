@@ -8,8 +8,9 @@ export default class OpenVSXRating extends OpenVSXBase {
 
   static route = {
     base: 'open-vsx',
-    pattern: ':format(rating|stars)/:namespace/:extension',
+    pattern: ':format/:namespace/:extension',
   }
+  static routeEnum = ['rating', 'stars']
 
   static openApi = {
     '/open-vsx/{format}/{namespace}/{extension}': {

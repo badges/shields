@@ -14,8 +14,9 @@ const schema = Joi.object({
 export default class RedditUserKarma extends RedditBase {
   static route = {
     base: 'reddit/user-karma',
-    pattern: ':variant(link|comment|combined)/:user',
+    pattern: ':variant/:user',
   }
+  static routeEnum = ['link', 'comment', 'combined']
 
   static openApi = {
     '/reddit/user-karma/{variant}/{user}': {
