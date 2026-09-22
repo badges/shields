@@ -1,4 +1,3 @@
-import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
 import { isBuildStatus } from '../build-status.js'
 export const t = await createServiceTester()
@@ -10,11 +9,41 @@ t.create('check runs - for branch')
     message: isBuildStatus,
   })
 
-t.create('check runs - for branch with filter')
+t.create('check runs - name filter (existing check)')
   .get('/badges/shields/master.json?nameFilter=test-lint')
   .expectBadge({
     label: 'checks',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('no check runs')),
+    message: isBuildStatus,
+  })
+
+t.create('check runs - name filter (nonexistent check)')
+  .get('/badges/shields/master.json?nameFilter=this-check-does-not-exist')
+  .expectBadge({
+    label: 'checks',
+    message: 'no check runs',
+  })
+
+t.create('check runs - name filter is forwarded as check_name')
+  .get('/badges/shields/master.json?nameFilter=test-lint')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/badges/shields/commits/master/check-runs')
+      .query({ check_name: 'test-lint' })
+      .reply(200, {
+        total_count: 1,
+        check_runs: [
+          {
+            name: 'test-lint',
+            status: 'completed',
+            conclusion: 'success',
+          },
+        ],
+      }),
+  )
+  .expectBadge({
+    label: 'checks',
+    message: 'passing',
+    color: 'brightgreen',
   })
 
 t.create('check runs - no tests')
