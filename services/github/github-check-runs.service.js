@@ -126,22 +126,11 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
 
   static defaultBadgeData = { label: 'checks' }
 
-  static transform(
-    { total_count: totalCount, check_runs: checkRuns },
-    nameFilter,
-  ) {
-    const filteredCheckRuns =
-      nameFilter && nameFilter.length > 0
-        ? checkRuns.filter(checkRun => checkRun.name === nameFilter)
-        : checkRuns
-
+  static transform({ total_count: totalCount, check_runs: checkRuns }) {
     return {
-      total:
-        nameFilter && nameFilter.length > 0
-          ? filteredCheckRuns.length
-          : totalCount,
-      statusCounts: countBy(filteredCheckRuns, 'status'),
-      conclusionCounts: countBy(filteredCheckRuns, 'conclusion'),
+      total: totalCount,
+      statusCounts: countBy(checkRuns, 'status'),
+      conclusionCounts: countBy(checkRuns, 'conclusion'),
     }
   }
 
@@ -182,13 +171,14 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
     // https://docs.github.com/en/rest/checks/runs#list-check-runs-for-a-git-reference
     const json = await this._requestJson({
       url: `/repos/${user}/${repo}/commits/${ref}/check-runs`,
+      options: {
+        searchParams: nameFilter ? { check_name: nameFilter } : undefined,
+      },
       httpErrors: httpErrorsFor('ref or repo not found'),
       schema,
     })
 
-    const state = this.constructor.mapState(
-      this.constructor.transform(json, nameFilter),
-    )
+    const state = this.constructor.mapState(this.constructor.transform(json))
 
     return renderBuildStatusBadge({ status: state })
   }
