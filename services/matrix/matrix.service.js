@@ -235,7 +235,7 @@ export default class Matrix extends BaseJsonService {
     } else {
       host = serverFQDN
     }
-    if (host.toLowerCase() === 'matrix.org' || fetchMode === 'summary') {
+    if (fetchMode === 'summary' || host.toLowerCase() === 'matrix.org') {
       // summary endpoint (default for matrix.org)
       return await this.fetchSummary({ host, roomAlias })
     } else {
