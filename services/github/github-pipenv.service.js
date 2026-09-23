@@ -2,7 +2,7 @@ import { pep440VersionColor } from '../color-formatters.js'
 import { renderVersionBadge } from '../version.js'
 import { isLockfile, getDependencyVersion } from '../pipenv-helpers.js'
 import { addv } from '../text-formatters.js'
-import { NotFound, pathParams } from '../index.js'
+import { NotFound, pathParams, InvalidParameter } from '../index.js'
 import { ConditionalGithubAuthV3Service } from './github-auth-service.js'
 import { fetchJsonFromRepo } from './github-common-fetch.js'
 import { documentation as githubDocumentation } from './github-helpers.js'
@@ -35,7 +35,7 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
   static category = 'platform-support'
   static route = {
     base: 'github/pipenv/locked/python-version',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
   }
 
   static openApi = {
@@ -92,11 +92,13 @@ class GithubPipenvLockedPythonVersion extends ConditionalGithubAuthV3Service {
   }
 }
 
+const kindEnum = ['dev']
+
 class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service {
   static category = 'dependencies'
   static route = {
     base: 'github/pipenv/locked/dependency-version',
-    pattern: ':user/:repo/:kind(dev)?/:packageName/:branch*',
+    pattern: ':user/:repo{/:kind}/:packageName{/*branch}',
   }
 
   static openApi = {
@@ -162,6 +164,9 @@ class GithubPipenvLockedDependencyVersion extends ConditionalGithubAuthV3Service
   }
 
   async handle({ user, repo, kind, branch, packageName }) {
+    if (kind && !kindEnum.includes(kind)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid kind' })
+    }
     const lockfileData = await fetchJsonFromRepo(this, {
       schema: isLockfile,
       user,

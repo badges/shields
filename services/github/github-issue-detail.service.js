@@ -2,7 +2,7 @@ import Joi from 'joi'
 import { nonNegativeInteger } from '../validators.js'
 import { metric } from '../text-formatters.js'
 import { renderDateBadge } from '../date.js'
-import { InvalidResponse, pathParams } from '../index.js'
+import { InvalidResponse, pathParams, InvalidParameter } from '../index.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import {
   documentation,
@@ -181,13 +181,16 @@ const propertyMap = {
   milestone: milestoneMap,
 }
 
+const propertyEnum = Object.keys(propertyMap)
+
 export default class GithubIssueDetail extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github',
-    pattern:
-      ':issueKind(issues|pulls)/detail/:property(state|title|author|label|comments|age|last-update|milestone)/:user/:repo/:number([0-9]+)',
+    pattern: ':issueKind/detail/:property/:user/:repo/:number([0-9]+)',
   }
+
+  static routeEnum = ['issues', 'pulls']
 
   static openApi = {
     '/github/{issueKind}/detail/{property}/{user}/{repo}/{number}': {
@@ -203,7 +206,7 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
           {
             name: 'property',
             example: 'state',
-            schema: { type: 'string', enum: this.getEnum('property') },
+            schema: { type: 'string', enum: propertyEnum },
           },
           {
             name: 'user',
@@ -246,6 +249,9 @@ export default class GithubIssueDetail extends GithubAuthV3Service {
   }
 
   async handle({ issueKind, property, user, repo, number }) {
+    if (!propertyEnum.includes(property)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid property' })
+    }
     const json = await this.fetch({ issueKind, property, user, repo, number })
     const { value, isPR } = this.transform({ json, property, issueKind })
     return this.constructor.render({ property, value, isPR, number })

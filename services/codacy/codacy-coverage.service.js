@@ -10,7 +10,7 @@ const schema = Joi.object({
 
 export default class CodacyCoverage extends BaseSvgScrapingService {
   static category = 'coverage'
-  static route = { base: 'codacy/coverage', pattern: ':projectId/:branch*' }
+  static route = { base: 'codacy/coverage', pattern: ':projectId{/*branch}' }
 
   static openApi = {
     '/codacy/coverage/{projectId}': {

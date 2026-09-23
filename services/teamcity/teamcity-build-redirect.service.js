@@ -17,9 +17,9 @@ export default [
     category: 'build',
     route: {
       base: 'teamcity',
-      pattern:
-        ':protocol(http|https)/:hostAndPath(.+)/:verbosity(s|e)/:buildId',
+      pattern: ':protocol/:hostAndPath(.+)/:verbosity/:buildId',
     },
+    routeEnum: ['http', 'https'],
     transformPath: ({ verbosity, buildId }) =>
       `/teamcity/build/${verbosity}/${buildId}`,
     transformQueryParams: ({ protocol, hostAndPath }) => ({

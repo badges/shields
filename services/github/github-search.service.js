@@ -74,7 +74,7 @@ const GitHubCodeSearchRedirect = redirector({
   category: 'analysis',
   route: {
     base: 'github/search',
-    pattern: ':user/:repo/:query+',
+    pattern: ':user/:repo/*query',
   },
   transformPath: () => '/github/search',
   transformQueryParams: ({ query, user, repo }) => ({

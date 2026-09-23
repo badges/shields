@@ -27,7 +27,7 @@ export default class SonarFortifyRating extends SonarBase {
 
   static route = {
     base: 'sonar/fortify-security-rating',
-    pattern: ':component/:branch*',
+    pattern: ':component{/*branch}',
     queryParamSchema,
   }
 

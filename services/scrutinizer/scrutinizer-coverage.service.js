@@ -67,8 +67,9 @@ class ScrutinizerCoverageBase extends ScrutinizerBase {
 class ScrutinizerCoverage extends ScrutinizerCoverageBase {
   static route = {
     base: 'scrutinizer/coverage',
-    pattern: ':vcs/:user/:repo/:branch*',
+    pattern: ':vcs/:user/:repo{/*branch}',
   }
+
   static routeEnum = ['g', 'b']
 
   static openApi = {
@@ -117,7 +118,7 @@ class ScrutinizerCoverage extends ScrutinizerCoverageBase {
 class ScrutinizerCoverageGitLab extends ScrutinizerCoverageBase {
   static route = {
     base: 'scrutinizer/coverage/gl',
-    pattern: ':instance/:user/:repo/:branch*',
+    pattern: ':instance/:user/:repo{/*branch}',
   }
 
   // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
@@ -160,7 +161,7 @@ class ScrutinizerCoverageGitLab extends ScrutinizerCoverageBase {
 class ScrutinizerCoveragePlainGit extends ScrutinizerCoverageBase {
   static route = {
     base: 'scrutinizer/coverage/gp',
-    pattern: ':slug/:branch*',
+    pattern: ':slug{/*branch}',
   }
 
   async handle({ slug, branch }) {

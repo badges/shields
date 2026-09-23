@@ -19,7 +19,7 @@ export default class GithubRPackageVersion extends ConditionalGithubAuthV3Servic
 
   static route = {
     base: 'github/r-package/v',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

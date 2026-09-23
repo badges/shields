@@ -35,7 +35,7 @@ export default class GitLabRelease extends GitLabBase {
 
   static route = {
     base: 'gitlab/v/release',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

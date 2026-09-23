@@ -17,7 +17,7 @@ export default class GitLabLabels extends GitLabBase {
 
   static route = {
     base: 'gitlab/labels',
-    pattern: ':project+/:name',
+    pattern: '/*project/:name',
     queryParamSchema,
   }
 

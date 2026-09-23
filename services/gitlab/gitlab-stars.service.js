@@ -18,7 +18,7 @@ export default class GitlabStars extends GitLabBase {
 
   static route = {
     base: 'gitlab/stars',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

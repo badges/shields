@@ -9,7 +9,7 @@ const queryParamSchema = Joi.object({
 
 class ClojarsVersionService extends BaseClojarsService {
   static category = 'version'
-  static route = { base: 'clojars/v', pattern: ':clojar+', queryParamSchema }
+  static route = { base: 'clojars/v', pattern: '*clojar', queryParamSchema }
 
   static openApi = {
     '/clojars/v/{clojar}': {

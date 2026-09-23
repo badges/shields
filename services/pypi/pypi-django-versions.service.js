@@ -4,7 +4,7 @@ export default redirector({
   category: 'platform-support',
   route: {
     base: 'pypi/djversions',
-    pattern: ':packageName*',
+    pattern: '{/*packageName}',
   },
   transformPath: ({ packageName }) =>
     `/pypi/frameworkversions/django/${packageName}`,

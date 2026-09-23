@@ -6,8 +6,7 @@ export default [
     label: 'github',
     route: {
       base: 'github',
-      pattern:
-        ':issueKind(issues|pulls)/detail/:variant(s|u)/:user/:repo/:number([0-9]+)',
+      pattern: ':issueKind/detail/:variant/:user/:repo/:number',
     },
     dateAdded: new Date('2025-12-20'),
     issueUrl: 'https://github.com/badges/shields/pull/11583',

@@ -90,3 +90,7 @@ export const fileSizeBytes = Joi.number().integer().positive().required()
  * @type {Joi}
  */
 export const relativeUri = Joi.string().uri({ relativeOnly: true })
+
+export const scoped = Joi.string()
+  .regex(/^@[^/]+$/)
+  .required()

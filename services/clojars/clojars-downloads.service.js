@@ -4,7 +4,7 @@ import { BaseClojarsService, description } from './clojars-base.js'
 
 export default class ClojarsDownloads extends BaseClojarsService {
   static category = 'downloads'
-  static route = { base: 'clojars/dt', pattern: ':clojar+' }
+  static route = { base: 'clojars/dt', pattern: '*clojar' }
 
   static openApi = {
     '/clojars/dt/{clojar}': {

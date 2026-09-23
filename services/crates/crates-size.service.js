@@ -6,7 +6,7 @@ export default class CratesSize extends BaseCratesService {
   static category = 'size'
   static route = {
     base: 'crates/size',
-    pattern: ':crate/:version?',
+    pattern: ':crate{/:version}',
   }
 
   static openApi = {

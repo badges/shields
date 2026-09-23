@@ -19,7 +19,7 @@ export default class GithubActionsWorkflowStatus extends BaseSvgScrapingService 
 
   static route = {
     base: 'github/actions/workflow/status',
-    pattern: ':user/:repo/:workflow+',
+    pattern: ':user/:repo/*workflow',
     queryParamSchema,
   }
 

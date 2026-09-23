@@ -28,6 +28,7 @@ export default class WeblateUserStatistic extends WeblateBase {
     pattern: ':statistic/:user',
     queryParamSchema: this.queryParamSchema,
   }
+
   static routeEnum = [
     'translations',
     'suggestions',
