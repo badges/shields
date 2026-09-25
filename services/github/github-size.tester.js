@@ -6,6 +6,19 @@ t.create('File size')
   .get('/webcaetano/craft/build/phaser-craft.min.js.json')
   .expectBadge({ label: 'size', message: isIecFileSize })
 
+t.create('File size for a filename matching a badge format')
+  .get('/badges/shields.json?path=package.json')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/badges/shields/contents/package.json')
+      .reply(200, { size: 1024 }),
+  )
+  .expectBadge({ label: 'size', message: '1 KiB' })
+
+t.create('File size without a path')
+  .get('/badges/shields.json')
+  .expectBadge({ label: 'size', message: 'path is required' })
+
 t.create('File size 404')
   .get('/webcaetano/craft/build/does-not-exist.min.js.json')
   .expectBadge({ label: 'size', message: 'repo or file not found' })
