@@ -11,7 +11,7 @@ t.create('build status on default branch')
   })
 
 t.create('build status on named branch')
-  .get('/ivandelabeldad/rackian-gateway.json')
+  .get('/ivandelabeldad/rackian-gateway/master.json')
   .expectBadge({
     label: 'build',
     message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),

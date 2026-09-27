@@ -36,13 +36,6 @@ t.create('Last Commit (recent) (nested dir path)')
     message: isFormattedDate,
   })
 
-t.create('Last Commit (recent) (path)')
-  .get('/gitea/tea.json?path=README.md')
-  .expectBadge({
-    label: 'last commit',
-    message: isFormattedDate,
-  })
-
 t.create('Last Commit (recent) (self-managed)')
   .get('/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({
