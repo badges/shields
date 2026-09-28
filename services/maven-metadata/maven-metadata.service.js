@@ -128,10 +128,10 @@ export default class MavenMetadata extends BaseXmlService {
     { metadataUrl, versionPrefix, versionSuffix, strategy, filter },
   ) {
     if (
+      strategy !== 'highestVersion' &&
       (versionPrefix !== undefined ||
         versionSuffix !== undefined ||
-        filter !== undefined) &&
-      strategy !== 'highestVersion'
+        filter !== undefined)
     ) {
       throw new InvalidParameter({
         prettyMessage: `filter is not valid with strategy ${strategy}`,
