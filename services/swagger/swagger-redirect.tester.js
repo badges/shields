@@ -11,12 +11,14 @@ t.create('swagger json').get('/https/example.com/example.json').expectBadge({
   message: 'https://github.com/badges/shields/pull/11583',
 })
 
-t.create('swagger yml').get('/https/example.com/example.json').expectBadge({
+t.create('swagger yml').get('/https/example.com/example.yml.json').expectBadge({
   label: 'swagger',
   message: 'https://github.com/badges/shields/pull/11583',
 })
 
-t.create('swagger yaml').get('/https/example.com/example.json').expectBadge({
-  label: 'swagger',
-  message: 'https://github.com/badges/shields/pull/11583',
-})
+t.create('swagger yaml')
+  .get('/https/example.com/example.yaml.json')
+  .expectBadge({
+    label: 'swagger',
+    message: 'https://github.com/badges/shields/pull/11583',
+  })

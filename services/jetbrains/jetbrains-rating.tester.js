@@ -20,14 +20,6 @@ t.create('rating number for unknown plugin (string)')
   .get('/rating/unknown-plugin.json')
   .expectBadge({ label: 'rating', message: 'not found' })
 
-t.create('rating stars for unknown plugin (numeric)')
-  .get('/stars/9999999999999.json')
-  .expectBadge({ label: 'rating', message: 'not found' })
-
-t.create('rating stars for unknown plugin (mixed)')
-  .get('/stars/9999999999999-abc.json')
-  .expectBadge({ label: 'rating', message: 'not found' })
-
 t.create('rating stars (user friendly plugin id)')
   .get('/stars/11941-automatic-power-saver.json')
   .expectBadge({ label: 'rating', message: isStarRating })

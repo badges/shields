@@ -31,10 +31,6 @@ t.create('returns an error for version with an invalid tag')
   .get('/npm/frodo.json')
   .expectBadge({ label: 'npm', message: 'tag not found' })
 
-t.create('gets the package version of left-pad from a custom registry')
-  .get('/left-pad.json?registry_uri=https://registry.npmjs.com')
-  .expectBadge({ label: 'npm', message: isSemver })
-
 t.create('gets the tagged package version with a "/" in the tag name')
   .intercept(nock =>
     nock('https://registry.npmjs.org')

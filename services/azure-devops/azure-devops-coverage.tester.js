@@ -138,17 +138,6 @@ t.create('no code coverage reports')
   )
   .expectBadge({ label: 'coverage', message: '0%' })
 
-t.create('no code coverage reports')
-  .get(mockBadgeUriPath)
-  .intercept(nock =>
-    nock(azureDevOpsApiBaseUri)
-      .get(mockLatestBuildApiUriPath)
-      .reply(200, latestBuildResponse)
-      .get(mockCodeCoverageApiUriPath)
-      .reply(200, { coverageData: [] }),
-  )
-  .expectBadge({ label: 'coverage', message: '0%' })
-
 t.create('no line coverage stats')
   .get(mockBadgeUriPath)
   .intercept(nock =>
@@ -219,6 +208,7 @@ t.create('multiple line coverage stat reports')
         ],
       }),
   )
+  .expectBadge({ label: 'coverage', message: expCoverageMultipleReports })
 
 t.create('single JaCoCo style line coverage stats')
   .get(mockBadgeUriPath)
