@@ -207,6 +207,7 @@
     "url": "^0.11.4"
   },
   "overrides": {
+    "debug@>=4.0.0 <4.3.1": "4.3.1",
     "http-deceiver": "$http-deceiver"
   },
   "engines": {
