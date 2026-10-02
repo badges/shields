@@ -183,7 +183,7 @@
     "icedfrisby-nock": "^2.1.0",
     "is-svg": "^6.1.0",
     "jsdoc": "^4.0.5",
-    "lint-staged": "^17.4.1",
+    "lint-staged": "^17.6.0",
     "mocha": "^11.8.0",
     "neostandard": "0.13.0",
     "nock": "13.5.6",
