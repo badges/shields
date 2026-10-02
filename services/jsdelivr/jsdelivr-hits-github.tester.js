@@ -43,6 +43,14 @@ t.create('jquery/jquery hits/year')
     message: isMetricOverTimePeriod,
   })
 
+t.create('jquery/jquery hits/month (version)')
+  .timeout(10000)
+  .get('/hm/jquery/jquery/3.3.1.json')
+  .expectBadge({
+    label: 'jsdelivr@3.3.1',
+    message: isMetricOverTimePeriod,
+  })
+
 t.create('fake package')
   .timeout(10000)
   .get('/hd/somefakepackage/somefakepackage.json')
