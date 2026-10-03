@@ -7,7 +7,12 @@ import {
 import { makeSend } from './legacy-result-sender.js'
 import { MetricHelper } from './metric-helper.js'
 import coalesceBadge from './coalesce-badge.js'
-import { prepareRoute, namedParamsForMatch } from './route.js'
+import {
+  prepareRoute,
+  namedParamsForMatch,
+  getQueryParamNames,
+} from './route.js'
+import { flattenQueryParams, filterQueryParams } from './query-params.js'
 
 /**
  * Base class for services that generate static badges from route parameters
@@ -20,6 +25,7 @@ import { prepareRoute, namedParamsForMatch } from './route.js'
 export default class BaseStaticService extends BaseService {
   static register({ camp, metricInstance }, serviceConfig) {
     const { regex, captureNames } = prepareRoute(this.route)
+    const allowedKeys = flattenQueryParams(getQueryParamNames(this.route))
 
     const metricHelper = MetricHelper.create({
       metricInstance,
@@ -37,15 +43,16 @@ export default class BaseStaticService extends BaseService {
       const metricHandle = metricHelper.startRequest()
 
       const namedParams = namedParamsForMatch(captureNames, match, this)
+      const filteredQueryParams = filterQueryParams(queryParams, allowedKeys)
       const serviceData = await this.invoke(
         {},
         serviceConfig,
         namedParams,
-        queryParams,
+        filteredQueryParams,
       )
 
       const badgeData = coalesceBadge(
-        queryParams,
+        filteredQueryParams,
         serviceData,
         this.defaultBadgeData,
         this,
@@ -56,7 +63,7 @@ export default class BaseStaticService extends BaseService {
       badgeData.format = format
 
       let maxAge = 24 * 3600 // 1 day
-      if (!queryParams.logo && !badgeData.isError) {
+      if (!filteredQueryParams.logo && !badgeData.isError) {
         maxAge = 5 * 24 * 3600 // 5 days
       }
       setCacheHeadersForStaticResource(ask.res, maxAge)
