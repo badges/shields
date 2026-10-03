@@ -64,7 +64,7 @@
     "qs": "^6.16.0",
     "re2": "^1.26.1",
     "semver": "~7.8.5",
-    "simple-icons": "16.32.0",
+    "simple-icons": "16.33.0",
     "smol-toml": "1.8.0",
     "svg-path-bbox": "^2.1.0",
     "svgpath": "^2.6.0",
@@ -207,6 +207,7 @@
     "url": "^0.11.4"
   },
   "overrides": {
+    "debug@>=4.0.0 <4.3.1": "4.3.1",
     "http-deceiver": "$http-deceiver"
   },
   "engines": {

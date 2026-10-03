@@ -13,13 +13,6 @@ t.create('subreddit-subscribers (valid subreddit)')
     message: isMetric,
   })
 
-t.create('subreddit-subscribers (invalid subreddit)')
-  .get('/badfbasdfadfadfadfadfasdf.json')
-  .expectBadge({
-    label: 'reddit',
-    message: 'subreddit not found',
-  })
-
 t.create('subreddit-subscribers (not existing subreddit)')
   .get('/not-a-real-rubreddit.json')
   .expectBadge({
