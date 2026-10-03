@@ -50,7 +50,7 @@ export default class AzureDevOpsTests extends AzureDevOpsBase {
   static category = 'test-results'
   static route = {
     base: 'azure-devops/tests',
-    pattern: ':organization/:project/:definitionId/:branch*',
+    pattern: ':organization/:project/:definitionId{/*branch}',
     queryParamSchema: testResultQueryParamSchema,
   }
 

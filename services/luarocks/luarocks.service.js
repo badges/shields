@@ -17,7 +17,7 @@ export default class Luarocks extends BaseJsonService {
 
   static route = {
     base: 'luarocks/v',
-    pattern: ':user/:moduleName/:version?',
+    pattern: ':user/:moduleName{/:version}',
   }
 
   static openApi = {

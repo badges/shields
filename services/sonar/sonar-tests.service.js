@@ -18,7 +18,7 @@ class SonarTestsSummary extends SonarBase {
   static category = 'test-results'
   static route = {
     base: 'sonar/tests',
-    pattern: ':component/:branch*',
+    pattern: ':component{/*branch}',
     queryParamSchema: queryParamSchema.concat(testResultQueryParamSchema),
   }
 
@@ -136,10 +136,18 @@ class SonarTests extends SonarBase {
 
   static route = {
     base: 'sonar',
-    pattern:
-      ':metric(total_tests|skipped_tests|test_failures|test_errors|test_execution_time|test_success_density)/:component/:branch*',
+    pattern: ':metric/:component{/*branch}',
     queryParamSchema,
   }
+
+  static routeEnum = [
+    'total_tests',
+    'skipped_tests',
+    'test_failures',
+    'test_errors',
+    'test_execution_time',
+    'test_success_density',
+  ]
 
   static openApi = {
     '/sonar/{metric}/{component}': {

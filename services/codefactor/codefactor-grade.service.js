@@ -10,7 +10,7 @@ export default class CodeFactorGrade extends BaseSvgScrapingService {
   static category = 'analysis'
   static route = {
     base: 'codefactor/grade',
-    pattern: ':vcsType/:user/:repo/:branch*',
+    pattern: ':vcsType/:user/:repo{/*branch}',
   }
   static routeEnum = ['github', 'bitbucket']
 

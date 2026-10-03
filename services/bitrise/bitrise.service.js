@@ -14,7 +14,7 @@ export default class Bitrise extends BaseJsonService {
   static category = 'build'
   static route = {
     base: 'bitrise',
-    pattern: ':appId/:branch?',
+    pattern: ':appId{/:branch}',
     queryParamSchema,
   }
 

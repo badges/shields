@@ -11,7 +11,7 @@ export default class Reuse extends BaseJsonService {
 
   static route = {
     base: 'reuse/compliance',
-    pattern: ':remote+',
+    pattern: '/*remote',
   }
 
   static openApi = {

@@ -16,6 +16,7 @@ export default class WeblateEntities extends WeblateBase {
     pattern: ':type',
     queryParamSchema: this.queryParamSchema,
   }
+
   static routeEnum = ['components', 'projects', 'users', 'languages']
 
   static openApi = {

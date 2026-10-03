@@ -17,7 +17,7 @@ export default class JenkinsPluginInstalls extends BaseJsonService {
 
   static route = {
     base: 'jenkins/plugin/i',
-    pattern: ':plugin/:version?',
+    pattern: ':plugin{/:version}',
   }
 
   static openApi = {

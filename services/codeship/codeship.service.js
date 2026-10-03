@@ -4,7 +4,7 @@ export default retiredService({
   category: 'build',
   route: {
     base: 'codeship',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   label: 'codeship',
   dateAdded: new Date('2026-03-07'),

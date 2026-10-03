@@ -1,6 +1,12 @@
 import Joi from 'joi'
 import byteSize from 'byte-size'
-import { BaseJsonService, pathParam, queryParam } from '../index.js'
+import {
+  BaseJsonService,
+  pathParam,
+  queryParam,
+  InvalidParameter,
+} from '../index.js'
+import { scoped } from '../validators.js'
 import { renderSizeBadge } from '../size.js'
 import { nonNegativeInteger } from '../validators.js'
 
@@ -33,7 +39,7 @@ export default class BundlejsPackage extends BaseJsonService {
 
   static route = {
     base: 'bundlejs/size',
-    pattern: ':scope(@[^/]+)?/:packageName+',
+    pattern: '{:scope/}*packageName',
     queryParamSchema,
   }
 
@@ -131,6 +137,9 @@ export default class BundlejsPackage extends BaseJsonService {
   }
 
   async handle({ scope, packageName }, { exports, externals, format }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const json = await this.fetch({ scope, packageName, exports, externals })
     switch (format) {
       case 'min':

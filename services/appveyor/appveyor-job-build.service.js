@@ -5,7 +5,7 @@ import AppVeyorBase from './appveyor-base.js'
 export default class AppVeyorJobBuild extends AppVeyorBase {
   static route = {
     base: 'appveyor/job/build',
-    pattern: ':user/:repo/:job/:branch*',
+    pattern: ':user/:repo/:job{/*branch}',
   }
 
   static openApi = {

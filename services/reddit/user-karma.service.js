@@ -16,6 +16,7 @@ export default class RedditUserKarma extends RedditBase {
     base: 'reddit/user-karma',
     pattern: ':variant/:user',
   }
+
   static routeEnum = ['link', 'comment', 'combined']
 
   static openApi = {

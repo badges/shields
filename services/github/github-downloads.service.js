@@ -59,7 +59,7 @@ export default class GithubDownloads extends GithubAuthV3Service {
   static category = 'downloads'
   static route = {
     base: 'github',
-    pattern: ':variant/:user/:repo/:tag*/:assetName',
+    pattern: ':variant/:user/:repo{/*tag}/:assetName',
     queryParamSchema,
   }
 

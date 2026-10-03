@@ -4,7 +4,7 @@ export default retiredService({
   category: 'build',
   route: {
     base: 'github/workflow/status',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   label: 'githubworkflowstatus',
   issueUrl: 'https://github.com/badges/shields/issues/8671',

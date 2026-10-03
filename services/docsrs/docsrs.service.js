@@ -7,7 +7,7 @@ const schema = Joi.object({
 
 export default class DocsRs extends BaseJsonService {
   static category = 'build'
-  static route = { base: 'docsrs', pattern: ':crate/:version?' }
+  static route = { base: 'docsrs', pattern: ':crate{/:version}' }
   static openApi = {
     '/docsrs/{crate}/{version}': {
       get: {

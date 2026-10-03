@@ -31,7 +31,7 @@ function buildDockerUrl(badgeName, includeTagRoute) {
   if (includeTagRoute) {
     return {
       base: `docker/${badgeName}`,
-      pattern: ':user/:repo/:tag*',
+      pattern: ':user/:repo{/*tag}',
     }
   } else {
     return {

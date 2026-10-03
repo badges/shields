@@ -14,7 +14,7 @@ export default class GithubLernaJson extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/lerna-json/v',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
   }
 
   static openApi = {

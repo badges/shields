@@ -1,5 +1,11 @@
 import Joi from 'joi'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
+import {
+  BaseJsonService,
+  NotFound,
+  pathParams,
+  InvalidParameter,
+} from '../index.js'
+import { scoped } from '../validators.js'
 import { packageNameDescription } from '../npm/npm-base.js'
 
 const librarySchema = Joi.object({
@@ -41,7 +47,7 @@ export default class ReactNativeDirectory extends BaseJsonService {
 
   static route = {
     base: 'react-native-directory',
-    pattern: ':scope(@[^/]+)?/:packageName',
+    pattern: '{:scope/}:packageName',
   }
 
   static openApi = {
@@ -71,6 +77,9 @@ export default class ReactNativeDirectory extends BaseJsonService {
   }
 
   async handle({ scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const name = scope ? `${scope}/${packageName}` : packageName
     const response = await this._requestJson({
       schema,

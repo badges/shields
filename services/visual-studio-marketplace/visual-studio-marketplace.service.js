@@ -2,7 +2,7 @@ import { retiredService } from '../index.js'
 
 const dateAdded = new Date('2026-04-09')
 const label = 'visual-studio-marketplace'
-const pattern = ':various+'
+const pattern = '*various'
 
 export default [
   // Downloads / Installs

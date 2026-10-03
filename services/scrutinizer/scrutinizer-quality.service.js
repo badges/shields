@@ -56,8 +56,9 @@ class ScrutinizerQualityBase extends ScrutinizerBase {
 class ScrutinizerQuality extends ScrutinizerQualityBase {
   static route = {
     base: 'scrutinizer/quality',
-    pattern: ':vcs/:user/:repo/:branch*',
+    pattern: ':vcs/:user/:repo{/*branch}',
   }
+
   static routeEnum = ['g', 'b']
 
   static openApi = {
@@ -106,7 +107,7 @@ class ScrutinizerQuality extends ScrutinizerQualityBase {
 class ScrutinizerQualityGitLab extends ScrutinizerQualityBase {
   static route = {
     base: 'scrutinizer/quality/gl',
-    pattern: ':instance/:user/:repo/:branch*',
+    pattern: ':instance/:user/:repo{/*branch}',
   }
 
   // There are no known anonymous accessible Scrutinizer reports available for GitLab repos.
@@ -149,7 +150,7 @@ class ScrutinizerQualityGitLab extends ScrutinizerQualityBase {
 class ScrutinizerQualityPlainGit extends ScrutinizerQualityBase {
   static route = {
     base: 'scrutinizer/quality/gp',
-    pattern: ':slug/:branch*',
+    pattern: ':slug{/*branch}',
   }
 
   async handle({ slug, branch }) {

@@ -1,11 +1,13 @@
 import Joi from 'joi'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, InvalidParameter, pathParams } from '../index.js'
+import { BaseJsonService, pathParams, InvalidParameter } from '../index.js'
 
 const schema = Joi.object({
   count: nonNegativeInteger.required(),
 }).required()
+
+const typeEnum = ['bugs', 'feature-requests']
 
 export default class SourceforgeOpenTickets extends BaseJsonService {
   static category = 'other'
@@ -27,7 +29,7 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
           {
             name: 'type',
             example: 'bugs',
-            schema: { type: 'string', enum: ['bugs', 'feature-requests'] },
+            schema: { type: 'string', enum: typeEnum },
           },
         ),
       },
@@ -58,8 +60,8 @@ export default class SourceforgeOpenTickets extends BaseJsonService {
   }
 
   async handle({ type, project }) {
-    if (!['bugs', 'feature-requests'].includes(type)) {
-      throw new InvalidParameter({ prettyMessage: 'invalid ticket type' })
+    if (!typeEnum.includes(type)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid type' })
     }
     const { count } = await this.fetch({ type, project })
     return this.constructor.render({ count })

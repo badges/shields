@@ -17,10 +17,17 @@ export default class GiteaIssues extends GiteaBase {
 
   static route = {
     base: 'gitea/issues',
-    pattern:
-      ':variant(all|all-raw|open|open-raw|closed|closed-raw)/:user/:repo+',
+    pattern: ':variant/:user/*repo',
     queryParamSchema,
   }
+  static routeEnum = [
+    'all',
+    'all-raw',
+    'open',
+    'open-raw',
+    'closed',
+    'closed-raw',
+  ]
 
   static openApi = {
     '/gitea/issues/{variant}/{user}/{repo}': {

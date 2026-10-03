@@ -33,7 +33,7 @@ export default class GithubLastCommit extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/last-commit',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

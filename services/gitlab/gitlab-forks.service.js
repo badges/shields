@@ -18,7 +18,7 @@ export default class GitlabForks extends GitLabBase {
 
   static route = {
     base: 'gitlab/forks',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

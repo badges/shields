@@ -5,7 +5,7 @@ export default retiredService({
   label: 'whatpulse',
   route: {
     base: 'whatpulse',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   dateAdded: new Date('2026-08-02'),
 })

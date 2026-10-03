@@ -6,7 +6,7 @@ export class GalaxyToolshedVersion extends GalaxyToolshedService {
   static category = 'version'
   static route = {
     base: 'galaxytoolshed/v',
-    pattern: ':repository/:owner/:tool?/:requirement?',
+    pattern: ':repository/:owner{/:tool}{/:requirement}',
   }
 
   static openApi = {

@@ -1,6 +1,6 @@
 import Joi from 'joi'
-import { nonNegativeInteger } from '../validators.js'
-import { pathParams } from '../index.js'
+import { nonNegativeInteger, scoped } from '../validators.js'
+import { pathParams, InvalidParameter } from '../index.js'
 import LibrariesIoBase from './librariesio-base.js'
 import {
   transform,
@@ -28,7 +28,7 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/release',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName/:version?',
+    pattern: ':platform{/:scope}/:packageName{/:version}',
   }
 
   static openApi = {
@@ -56,6 +56,9 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
   static _cacheLength = 900
 
   async handle({ platform, scope, packageName, version = 'latest' }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const url = `/${encodeURIComponent(platform)}/${
       scope ? encodeURIComponent(`${scope}/`) : ''
     }${encodeURIComponent(packageName)}/${encodeURIComponent(

@@ -6,7 +6,7 @@ export default [
     label: 'jira',
     route: {
       base: 'jira/issue',
-      pattern: ':protocol(http|https)/:hostAndPath(.+)/:issueKey',
+      pattern: ':protocol/:hostAndPath/:issueKey',
     },
     dateAdded: new Date('2025-12-20'),
     issueUrl: 'https://github.com/badges/shields/pull/11583',

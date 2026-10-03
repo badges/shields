@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderDownloadsBadge } from '../downloads.js'
-import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, pathParams } from '../index.js'
+import { nonNegativeInteger, scoped } from '../validators.js'
+import { BaseJsonService, pathParams, InvalidParameter } from '../index.js'
 import { packageNameDescription } from './npm-base.js'
 
 // https://github.com/npm/registry/blob/master/docs/download-counts.md#output
@@ -48,7 +48,7 @@ export default class NpmDownloads extends BaseJsonService {
 
   static route = {
     base: 'npm',
-    pattern: ':interval/:scope(@.+)?/:packageName',
+    pattern: ':interval{/:scope}/:packageName',
   }
   static routeEnum = ['dw', 'dm', 'dy', 'd18m']
 
@@ -88,6 +88,9 @@ export default class NpmDownloads extends BaseJsonService {
   }
 
   async handle({ interval, scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { query, schema, transform } = intervalMap[interval]
 
     const slug = scope ? `${scope}/${packageName}` : packageName

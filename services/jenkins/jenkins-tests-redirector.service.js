@@ -11,14 +11,14 @@ export default [
   retiredService({
     route: {
       base: 'jenkins/t',
-      pattern: ':protocol(http|https)/:host/:job+',
+      pattern: ':protocol/:host/*job',
     },
     ...commonProps,
   }),
   retiredService({
     route: {
       base: 'jenkins/tests',
-      pattern: ':protocol(http|https)/:host/:job+',
+      pattern: ':protocol/:host/*job',
     },
     ...commonProps,
   }),

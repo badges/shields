@@ -4,7 +4,7 @@ import TestspaceBase from './testspace-base.js'
 export default class TestspacePassRatio extends TestspaceBase {
   static route = {
     base: 'testspace/pass-ratio',
-    pattern: ':org/:project/:space+',
+    pattern: ':org/:project/*space',
   }
 
   static openApi = {

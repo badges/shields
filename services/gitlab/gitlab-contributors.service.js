@@ -15,7 +15,7 @@ export default class GitlabContributors extends GitLabBase {
   static category = 'activity'
   static route = {
     base: 'gitlab/contributors',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

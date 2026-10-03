@@ -20,7 +20,7 @@ export default class GitlabLicense extends GitLabBase {
 
   static route = {
     base: 'gitlab/license',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { pathParam, queryParam } from '../index.js'
+import { pathParam, queryParam, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { renderSizeBadge } from '../size.js'
 import { optionalNonNegativeInteger } from '../validators.js'
 import NpmBase, {
@@ -18,7 +19,7 @@ export default class NpmUnpackedSize extends NpmBase {
 
   static route = {
     base: 'npm/unpacked-size',
-    pattern: ':scope(@[^/]+)?/:packageName/:version*',
+    pattern: '{:scope/}:packageName{/*version}',
     queryParamSchema,
   }
 
@@ -74,6 +75,9 @@ export default class NpmUnpackedSize extends NpmBase {
     { scope, packageName, version },
     { registry_uri: registryUrl = 'https://registry.npmjs.org' },
   ) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const packageNameWithScope = scope ? `${scope}/${packageName}` : packageName
     const { dist } = await this.fetch({
       registryUrl,

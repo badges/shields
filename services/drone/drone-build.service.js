@@ -17,7 +17,7 @@ export default class DroneBuild extends BaseJsonService {
   static category = 'build'
   static route = {
     base: 'drone/build',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

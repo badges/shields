@@ -24,7 +24,7 @@ class GithubManifestVersion extends ConditionalGithubAuthV3Service {
   static category = 'version'
   static route = {
     base: 'github/manifest-json/v',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 
@@ -78,7 +78,7 @@ class DynamicGithubManifest extends ConditionalGithubAuthV3Service {
   static category = 'other'
   static route = {
     base: 'github/manifest-json',
-    pattern: ':key([^v/][^/]*)/:user/:repo/:branch*',
+    pattern: ':key([^v/][^/]*)/:user/:repo{/*branch}',
     queryParamSchema,
   }
 

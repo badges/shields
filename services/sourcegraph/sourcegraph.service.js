@@ -11,7 +11,7 @@ export default class Sourcegraph extends BaseJsonService {
 
   static route = {
     base: 'sourcegraph/rrc',
-    pattern: ':repo(.*?)',
+    pattern: '*repo',
   }
 
   static openApi = {

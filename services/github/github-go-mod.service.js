@@ -18,7 +18,7 @@ export default class GithubGoModGoVersion extends ConditionalGithubAuthV3Service
   static category = 'platform-support'
   static route = {
     base: 'github/go-mod/go-version',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

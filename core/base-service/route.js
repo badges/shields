@@ -33,13 +33,27 @@ function prepareRoute({ base, pattern, format, capture, withPng }) {
     regex = new RegExp(`^${makeFullUrl(base, format)}(${extensionRegex})$`)
     captureNames = capture || []
   } else {
-    const fullPattern = `${makeFullUrl(base, pattern)}:ext(${extensionRegex})`
-    const keys = []
-    regex = pathToRegexp(fullPattern, keys, {
-      strict: true,
+    const fullPatternWithoutExt = `${makeFullUrl(base, pattern)}`
+    const { regexp: pathRegex, keys } = pathToRegexp(fullPatternWithoutExt, {
+      trailing: false,
       sensitive: true,
     })
-    captureNames = keys.map(item => item.name).slice(0, -1)
+    // Remove the trailing $ from the regex source to append the extension regex later.
+    const sourceWithoutEnd = pathRegex.source
+      .replace(/\$$/, '')
+      // path-to-regexp generates greedy capture groups (`[^\/]+`) for named
+      // params. Left greedy, a param at the end of the pattern swallows the
+      // extension (e.g. `.svg`/`.png`) instead of leaving it for the
+      // extension group below, so make them lazy to restore correct
+      // extension splitting.
+      // TODO rewrite
+      .replace(/\[\^\\\/\]\+(?!\?)/g, '[^\\/]+?')
+    // workaround for path-to-regexp not supporting regex anymore
+    regex = new RegExp(
+      `${sourceWithoutEnd}(${extensionRegex})$`,
+      pathRegex.flags,
+    )
+    captureNames = keys.map(item => item.name)
   }
   return { regex, captureNames }
 }

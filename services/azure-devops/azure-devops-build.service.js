@@ -60,7 +60,7 @@ export default class AzureDevOpsBuild extends AzureDevOpsBase {
 
   static route = {
     base: 'azure-devops/build',
-    pattern: ':organization/:projectId/:definitionId/:branch*',
+    pattern: ':organization/:projectId/:definitionId{/*branch}',
     queryParamSchema,
   }
 
