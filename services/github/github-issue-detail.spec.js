@@ -10,13 +10,23 @@ describe('GithubIssueDetail', function () {
   test(GithubIssueDetail.render, () => {
     given({
       property: 'state',
-      value: { state: 'open' },
+      value: { state: 'open', draft: false },
       number: '12',
       isPR: true,
     }).expect({
       label: 'pull request 12',
       message: 'open',
       color: issueStateColor('open'),
+    })
+    given({
+      property: 'state',
+      value: { state: 'open', draft: true },
+      number: '13',
+      isPR: true,
+    }).expect({
+      label: 'pull request 13',
+      message: 'draft',
+      color: 'gray',
     })
     given({
       property: 'state',
@@ -126,35 +136,35 @@ describe('GithubIssueDetail', function () {
       json: { state: 'closed' },
     }).expect({
       // Since it's a PR, the "merged" value is not crucial here.
-      value: { state: 'closed', merged: false },
+      value: { state: 'closed', merged: false, draft: false },
       isPR: false,
     })
     given({
       property: 'state',
       json: { state: 'closed', state_reason: 'not_planned' },
     }).expect({
-      value: { state: 'not planned', merged: false },
+      value: { state: 'not planned', merged: false, draft: false },
       isPR: false,
     })
     given({
       property: 'state',
       json: { state: 'closed', state_reason: 'duplicate' },
     }).expect({
-      value: { state: 'duplicate', merged: false },
+      value: { state: 'duplicate', merged: false, draft: false },
       isPR: false,
     })
     given({
       property: 'state',
       json: { state: 'closed', state_reason: 'other_reason' },
     }).expect({
-      value: { state: 'closed', merged: false },
+      value: { state: 'closed', merged: false, draft: false },
       isPR: false,
     })
     given({
       property: 'state',
       json: { state: 'closed', pull_request: { merged_at: null } },
     }).expect({
-      value: { state: 'closed', merged: false },
+      value: { state: 'closed', merged: false, draft: false },
       isPR: true,
     })
     given({
@@ -164,7 +174,7 @@ describe('GithubIssueDetail', function () {
         pull_request: { merged_at: '2025-01-01T00:00:00Z' },
       },
     }).expect({
-      value: { state: 'closed', merged: true },
+      value: { state: 'closed', merged: true, draft: false },
       isPR: true,
     })
     given({
@@ -172,7 +182,7 @@ describe('GithubIssueDetail', function () {
       issueKind: 'pulls',
       json: { state: 'closed', merged_at: null },
     }).expect({
-      value: { state: 'closed', merged: false },
+      value: { state: 'closed', merged: false, draft: false },
       isPR: true,
     })
     given({
@@ -180,7 +190,15 @@ describe('GithubIssueDetail', function () {
       issueKind: 'pulls',
       json: { state: 'closed', merged_at: 'I am not null' },
     }).expect({
-      value: { state: 'closed', merged: true },
+      value: { state: 'closed', merged: true, draft: false },
+      isPR: true,
+    })
+    given({
+      property: 'state',
+      issueKind: 'pulls',
+      json: { state: 'open', draft: true },
+    }).expect({
+      value: { state: 'open', merged: false, draft: true },
       isPR: true,
     })
     given({

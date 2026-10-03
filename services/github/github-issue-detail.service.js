@@ -20,11 +20,13 @@ const stateMap = {
   schema: Joi.object({
     ...commonSchemaFields,
     state: Joi.equal('open', 'closed').required(),
+    draft: Joi.boolean().optional(),
     state_reason: Joi.string().allow(null), // only for issues
     merged_at: Joi.string().allow(null),
   }).required(),
   transform: ({ json }) => {
     const mergedAt = json.pull_request?.merged_at ?? json.merged_at
+    const isDraft = json.pull_request?.draft ?? json.draft ?? false
     const stateWithReason =
       json.state_reason === 'not_planned' || json.state_reason === 'duplicate'
         ? json.state_reason.replace('_', ' ')
@@ -33,13 +35,20 @@ const stateMap = {
     return {
       state: stateWithReason,
       merged: mergedAt != null,
+      draft: isDraft,
     }
   },
   render: ({ value, isPR, number }) => {
     const state = value.state
     const label = `${isPR ? 'pull request' : 'issue'} ${number}`
 
-    if (!isPR || state === 'open') {
+    if (isPR && value.draft && state === 'open') {
+      return {
+        color: 'gray',
+        label,
+        message: 'draft',
+      }
+    } else if (!isPR || state === 'open') {
       return {
         color: issueStateColor(state),
         label,
