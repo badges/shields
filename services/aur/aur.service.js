@@ -248,6 +248,41 @@ class AurLastModified extends BaseAurService {
   }
 }
 
+class AurOutOfDate extends BaseAurService {
+  static category = 'version'
+
+  static route = { base: 'aur/out-of-date', pattern: ':packageName' }
+
+  static openApi = {
+    '/aur/out-of-date/{packageName}': {
+      get: {
+        summary: 'AUR Out Of Date',
+        description: 'Arch linux User Repository out-of-date status',
+        parameters: pathParams({
+          name: 'packageName',
+          example: 'visual-studio-code-bin',
+        }),
+      },
+    },
+  }
+
+  static defaultBadgeData = { label: 'aur' }
+
+  static render({ outOfDate }) {
+    if (outOfDate === null || outOfDate === undefined) {
+      return { message: 'up to date', color: 'blue' }
+    }
+    return { message: 'out of date', color: 'orange' }
+  }
+
+  async handle({ packageName }) {
+    const {
+      results: [{ OutOfDate: outOfDate }],
+    } = await this.fetch({ packageName })
+    return this.constructor.render({ outOfDate })
+  }
+}
+
 export {
   AurLicense,
   AurVersion,
@@ -255,4 +290,5 @@ export {
   AurPopularity,
   AurMaintainer,
   AurLastModified,
+  AurOutOfDate,
 }

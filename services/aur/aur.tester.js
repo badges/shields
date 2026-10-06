@@ -132,3 +132,16 @@ t.create('last-modified (valid)')
 t.create('last-modified (not found)')
   .get('/last-modified/not-a-package.json')
   .expectBadge({ label: 'last modified', message: 'package not found' })
+
+// out-of-date tests
+
+t.create('out-of-date (valid)')
+  .get('/out-of-date/visual-studio-code-bin.json')
+  .expectBadge({
+    label: 'aur',
+    message: Joi.string().valid('up to date', 'out of date').required(),
+  })
+
+t.create('out-of-date (not found)')
+  .get('/out-of-date/not-a-package.json')
+  .expectBadge({ label: 'aur', message: 'package not found' })
