@@ -20,8 +20,12 @@ class BaseJsDelivrService extends BaseJsonService {
     label: 'jsdelivr',
   }
 
-  static render({ period, hits: downloads }) {
-    return renderDownloadsBadge({ downloads, interval: periodMap[period] })
+  static render({ period, hits: downloads, version }) {
+    return renderDownloadsBadge({
+      downloads,
+      interval: periodMap[period],
+      labelOverride: version ? `jsdelivr@${version}` : undefined,
+    })
   }
 }
 

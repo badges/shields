@@ -47,3 +47,19 @@ t.create('scoped package')
     label: 'jsdelivr',
     message: isMetricOverTimePeriod,
   })
+
+t.create('package with version')
+  .timeout(10000)
+  .get('/hm/jquery/3.3.1.json')
+  .expectBadge({
+    label: 'jsdelivr@3.3.1',
+    message: isMetricOverTimePeriod,
+  })
+
+t.create('scoped package with version')
+  .timeout(10000)
+  .get('/hm/@angular/core/17.0.0.json')
+  .expectBadge({
+    label: 'jsdelivr@17.0.0',
+    message: isDownloadsOverTimePeriod,
+  })

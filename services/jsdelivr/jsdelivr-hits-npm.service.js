@@ -4,7 +4,7 @@ import { schema, periodMap, BaseJsDelivrService } from './jsdelivr-base.js'
 export default class JsDelivrHitsNPM extends BaseJsDelivrService {
   static route = {
     base: 'jsdelivr/npm',
-    pattern: ':period/:scope(@[^/]+)?/:packageName',
+    pattern: ':period/:scope(@[^/]+)?/:packageName/:version?',
   }
   static routeEnum = ['hd', 'hw', 'hm', 'hy']
 
@@ -49,18 +49,20 @@ export default class JsDelivrHitsNPM extends BaseJsDelivrService {
     },
   }
 
-  async fetch({ period, packageName }) {
+  async fetch({ period, packageName, version }) {
+    const pkg = version ? `${packageName}@${version}` : packageName
     return this._requestJson({
       schema,
-      url: `https://data.jsdelivr.com/v1/package/npm/${packageName}/stats/date/${periodMap[period]}`,
+      url: `https://data.jsdelivr.com/v1/package/npm/${pkg}/stats/date/${periodMap[period]}`,
     })
   }
 
-  async handle({ period, scope, packageName }) {
+  async handle({ period, scope, packageName, version }) {
     const { total } = await this.fetch({
       period,
       packageName: `${scope ? `${scope}/` : ''}${packageName}`,
+      version,
     })
-    return this.constructor.render({ period, hits: total })
+    return this.constructor.render({ period, hits: total, version })
   }
 }

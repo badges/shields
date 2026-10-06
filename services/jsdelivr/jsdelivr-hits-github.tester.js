@@ -51,3 +51,11 @@ t.create('fake package')
     // Will return 0 hits/day as the endpoint can't send 404s at present.
     message: '0/day',
   })
+
+t.create('jquery/jquery with version')
+  .timeout(10000)
+  .get('/hm/jquery/jquery/3.3.1.json')
+  .expectBadge({
+    label: 'jsdelivr@3.3.1',
+    message: isMetricOverTimePeriod,
+  })
