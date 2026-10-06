@@ -1,14 +1,10 @@
 import Joi from 'joi'
 import { createServiceTester } from '../tester.js'
+import { buildsQuery } from './readthedocs-common.js'
 
 export const t = await createServiceTester()
 
 const apiBaseUrl = 'https://app.readthedocs.org'
-const buildsQuery = {
-  fields: 'state,success',
-  limit: 10,
-  running: false,
-}
 
 const passingBuild = {
   state: { code: 'finished' },

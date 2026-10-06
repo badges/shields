@@ -104,6 +104,7 @@ private:
   pepy_key: 'PEPY_KEY'
   postgres_url: 'POSTGRES_URL'
   readthedocs_token: 'READTHEDOCS_TOKEN'
+  readthedocs_com_token: 'READTHEDOCS_COM_TOKEN'
   reddit_client_id: 'REDDIT_CLIENT_ID'
   reddit_client_secret: 'REDDIT_CLIENT_SECRET'
   sentry_dsn: 'SENTRY_DSN'

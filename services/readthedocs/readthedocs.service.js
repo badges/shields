@@ -1,28 +1,15 @@
-import Joi from 'joi'
 import { renderBuildStatusBadge } from '../build-status.js'
-import { BaseJsonService, NotFound, pathParams } from '../index.js'
-
-const schema = Joi.object({
-  results: Joi.array()
-    .items(
-      Joi.object({
-        state: Joi.object({
-          code: Joi.string().required(),
-        }).required(),
-        success: Joi.boolean().required(),
-      }),
-    )
-    .required(),
-}).required()
+import { BaseJsonService, pathParams } from '../index.js'
+import { fetchBuildStatus, statusFromResults } from './readthedocs-common.js'
 
 const description =
-  '[ReadTheDocs](https://readthedocs.com/) is a hosting service for documentation.'
+  '[Read the Docs Community](https://about.readthedocs.com/features/read-the-docs-community/) hosts public documentation. The legacy `/readthedocs/` route redirects here.'
 
 export default class ReadTheDocs extends BaseJsonService {
   static category = 'build'
 
   static route = {
-    base: 'readthedocs',
+    base: 'readthedocs.org',
     pattern: ':project/:version?',
   }
 
@@ -32,7 +19,7 @@ export default class ReadTheDocs extends BaseJsonService {
   }
 
   static openApi = {
-    '/readthedocs/{packageName}': {
+    '/readthedocs.org/{packageName}': {
       get: {
         summary: 'Read the Docs',
         description,
@@ -42,7 +29,7 @@ export default class ReadTheDocs extends BaseJsonService {
         }),
       },
     },
-    '/readthedocs/{packageName}/{version}': {
+    '/readthedocs.org/{packageName}/{version}': {
       get: {
         summary: 'Read the Docs (version)',
         description,
@@ -70,35 +57,14 @@ export default class ReadTheDocs extends BaseJsonService {
     return renderBuildStatusBadge({ status })
   }
 
-  async fetch({ project, version = 'latest' }) {
-    return this._requestJson(
-      this.authHelper.withBearerAuthHeader(
-        {
-          schema,
-          url: `https://app.readthedocs.org/api/v3/projects/${encodeURIComponent(project)}/versions/${encodeURIComponent(version)}/builds/`,
-          options: {
-            searchParams: {
-              fields: 'state,success',
-              limit: 10,
-              running: false,
-            },
-          },
-        },
-        'Token',
-      ),
-    )
+  async fetch({ project, version }) {
+    return fetchBuildStatus(this, { domain: 'org', project, version })
   }
 
   async handle({ project, version }) {
     const { results } = await this.fetch({ project, version })
-    const build = results.find(({ state }) => state.code === 'finished')
-    if (!build) {
-      throw new NotFound({
-        prettyMessage: 'no finished builds',
-      })
-    }
     return this.constructor.render({
-      status: build.success ? 'passing' : 'failing',
+      status: statusFromResults(results),
     })
   }
 }

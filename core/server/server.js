@@ -196,6 +196,7 @@ const privateConfigSchema = Joi.object({
   pepy_key: Joi.string(),
   postgres_url: Joi.string().uri({ scheme: 'postgresql' }),
   readthedocs_token: Joi.string(),
+  readthedocs_com_token: Joi.string(),
   reddit_client_id: Joi.string(),
   reddit_client_secret: Joi.string(),
   sentry_dsn: Joi.string(),

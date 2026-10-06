@@ -241,10 +241,11 @@ The Pepy API requires authentication. To obtain a key, Create an account, sign i
 ### Read the Docs
 
 - `READTHEDOCS_TOKEN` (yml: `private.readthedocs_token`)
+- `READTHEDOCS_COM_TOKEN` (yml: `private.readthedocs_com_token`)
 
-Authentication is optional, but a [Read the Docs API token][readthedocs api authentication] increases the API rate limit for Read the Docs badges.
+Authentication is optional. A [Read the Docs API token][readthedocs api authentication] increases the API rate limit. `READTHEDOCS_TOKEN` is sent only to `app.readthedocs.org` (Community). `READTHEDOCS_COM_TOKEN` is sent only to `app.readthedocs.com` (Business).
 
-Use a token from a dedicated account that has access only to public projects. Badge endpoints are public, so a token whose account can access private projects could allow badge requests to reveal those projects' build status.
+Use a token from a dedicated account that has access only to the projects you intend to badge. Badge endpoints are public, so a token whose account can access private projects could allow badge requests to reveal those projects' build status. Do not put a project token in the badge URL.
 
 [readthedocs api authentication]: https://docs.readthedocs.com/platform/stable/api/v3.html#authentication-and-authorization
 
