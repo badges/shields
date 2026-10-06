@@ -1,16 +1,28 @@
+PARTA
 import gql from 'graphql-tag'
 import Joi from 'joi'
 import { pathParams, queryParam } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { nonNegativeInteger } from '../validators.js'
 import { GithubAuthV4Service } from './github-auth-service.js'
-import { documentation, transformErrors } from './github-helpers.js'
+import { documentation, transformErrors } from './github-helpers.js
 
 const pullRequestCountSchema = Joi.object({
   data: Joi.object({
     repository: Joi.object({
       pullRequests: Joi.object({
         totalCount: nonNegativeInteger,
+      }).required(),
+    }).required(),
+  }).required(),
+}).required()
+
+const pullRequestDiffCountSchema = Joi.object({
+  data: Joi.object({
+    repository: Joi.object({
+      pullRequest: Joi.object({
+        additions: nonNegativeInteger,
+        deletions: nonNegativeInteger,
       }).required(),
     }).required(),
   }).required(),
@@ -47,11 +59,10 @@ const variantSummaries = {
   'issues-pr-closed': 'GitHub Closed Pull Requests',
   'issues-pr-closed-raw': 'GitHub Closed Pull Requests (raw)',
 }
-
 function openApiRoute({ variant, label }) {
   return {
     get: {
-      summary: `${variantSummaries[variant]}${label ? ' by label' : ''}`,
+      summary: variantSummaries[variant] + (label ? ' by label' : ''),
       description: documentation,
       parameters: [
         ...pathParams(
@@ -79,12 +90,26 @@ function openApiRoute({ variant, label }) {
 const openApi = Object.fromEntries(
   pullRequestVariants.flatMap(variant => [
     [
-      `/github/${variant}/{user}/{repo}`,
+      '/github/' + variant + '/{user}/{repo}',
       openApiRoute({ variant, label: false }),
     ],
     [
-      `/github/${variant}/{user}/{repo}/{label}`,
+      '/github/' + variant + '/{user}/{repo}/{label}',
       openApiRoute({ variant, label: true }),
+    ],
+    [
+      '/github/pr-diff/{user}/{repo}/{number}',
+      {
+        get: {
+          summary: 'GitHub pull request additions and deletions',
+          description: documentation,
+          parameters: pathParams(
+            { name: 'user', example: 'badges' },
+            { name: 'repo', example: 'shields' },
+            { name: 'number', example: '3459' },
+          ),
+        },
+      },
     ],
   ]),
 )
@@ -94,7 +119,7 @@ export default class GithubPullRequests extends GithubAuthV4Service {
   static route = {
     base: 'github',
     pattern:
-      ':variant(issues-pr|issues-pr-raw|issues-pr-closed|issues-pr-closed-raw)/:user/:repo/:label*',
+      ':variant(issues-pr|issues-pr-raw|issues-pr-closed|issues-pr-closed-raw|pr-diff)/:user/:repo/:number*',
     queryParamSchema,
   }
 
@@ -105,33 +130,42 @@ export default class GithubPullRequests extends GithubAuthV4Service {
     color: 'informational',
   }
 
-  static render({
-    issueCount,
-    label,
-    raw,
-    isClosed,
-    excludeDrafts,
-    onlyDrafts,
-  }) {
-    const state = isClosed ? 'closed' : 'open'
-    const isGhLabelMultiWord = label && label.includes(' ')
-    const labelText = label
-      ? `${isGhLabelMultiWord ? `"${label}"` : label} `
-      : ''
-    let draftText = ''
-    if (excludeDrafts) {
-      draftText = 'non-draft '
-    } else if (onlyDrafts) {
-      draftText = 'draft '
-    }
-
+  render({ additions, deletions }) {
     return {
-      label: `${raw ? `${state} ` : ''}${labelText}${draftText}pull requests`,
-      message: `${metric(issueCount)}${raw ? '' : ` ${state}`}`,
-      color: issueCount > 0 ? 'yellow' : 'brightgreen',
+      label: 'PR',
+      message: '+' + metric(additions) + ' -' + metric(deletions),
+      color: 'informational',
     }
   }
 
+  async fetchDiff(user, repo, number) {
+    const {
+      data: {
+        repository: {
+          pullRequest: { additions, deletions },
+        },
+      },
+    } = await this._requestGraphql({
+      query: gql`
+        query (
+          $user: String!
+          $repo: String!
+          $number: Int!
+        ) {
+          repository(owner: $user, name: $repo) {
+            pullRequest(number: $number) {
+              additions
+              deletions
+            }
+          }
+        }
+      `,
+      variables: { user, repo, number },
+      schema: pullRequestDiffCountSchema,
+      transformErrors,
+    })
+    return { additions, deletions }
+  }
   async fetch({ user, repo, label, isClosed, excludeDrafts, onlyDrafts }) {
     if (!excludeDrafts && !onlyDrafts) {
       const {
@@ -168,12 +202,12 @@ export default class GithubPullRequests extends GithubAuthV4Service {
     }
 
     const searchQualifiers = [
-      `repo:${user}/${repo}`,
+      'repo:' + user + '/' + repo,
       'is:pr',
-      `is:${isClosed ? 'closed' : 'open'}`,
+      'is:' + (isClosed ? 'closed' : 'open'),
     ]
     if (label) {
-      searchQualifiers.push(`label:"${label}"`)
+      searchQualifiers.push('label:"' + label + '"')
     }
     if (excludeDrafts) {
       searchQualifiers.push('draft:false')
@@ -201,7 +235,11 @@ export default class GithubPullRequests extends GithubAuthV4Service {
     return data.data.search.issueCount
   }
 
-  async handle({ variant, user, repo, label }, queryParams) {
+  async handle({ variant, user, repo, label, number }, queryParams) {
+    if (variant === 'pr-diff') {
+      const { additions, deletions } = await this.fetchDiff(user, repo, Number(number))
+      return this.constructor.render({ additions, deletions })
+    }
     const raw = variant.endsWith('-raw')
     const isClosed = variant.includes('-closed')
     const excludeDrafts = queryParams.excludeDrafts !== undefined
