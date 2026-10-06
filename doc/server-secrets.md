@@ -88,7 +88,7 @@ A CurseForge API key is required to use the [CurseForge API][cf api]. To obtain 
 
 ### Discord
 
-Using a token for Discord is optional but will allow higher API rates.
+Using a token for Discord is optional but will allow higher API rates. The same token is sent to the server widget endpoint and to the invite endpoint used by the online/total badge.
 
 - `DISCORD_BOT_TOKEN` (yml: `private.discord_bot_token`)
 
