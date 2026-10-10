@@ -1,4 +1,4 @@
-import chalk from 'chalk'
+import { styleText } from 'node:util'
 import config from 'config'
 const objectConfig = config.util.toObject()
 
@@ -19,14 +19,14 @@ const {
  * @returns {string} ANSI-coloured label string.
  */
 function _formatLabelForStage(stage, label) {
-  const colorFn = {
-    inbound: chalk.black.bgBlue,
-    fetch: chalk.black.bgYellow,
-    validate: chalk.black.bgGreen,
-    unhandledError: chalk.white.bgRed,
-    outbound: chalk.black.bgBlue,
+  const colorFormat = {
+    inbound: ['black', 'bgBlue'],
+    fetch: ['black', 'bgYellow'],
+    validate: ['black', 'bgGreen'],
+    unhandledError: ['white', 'bgRed'],
+    outbound: ['black', 'bgBlue'],
   }[stage]
-  return colorFn(` ${label} `)
+  return styleText(colorFormat, ` ${label} `)
 }
 
 /**
