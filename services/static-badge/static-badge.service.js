@@ -1,4 +1,7 @@
-import { escapeFormat } from '../../core/badge-urls/path-helpers.js'
+import {
+  parseStaticBadgePath,
+  staticBadgeRouteFormat,
+} from '../../core/badge-urls/static-badge-path.js'
 import { BaseStaticService } from '../index.js'
 
 const description = `
@@ -61,8 +64,11 @@ export default class StaticBadge extends BaseStaticService {
   static category = 'static'
   static route = {
     base: '',
-    format: '(?::|badge/)((?:[^-]|--)*?)-?((?:[^-]|--)*)-((?:[^-.]|--)+)',
-    capture: ['label', 'message', 'color'],
+    format: staticBadgeRouteFormat,
+  }
+
+  static parsePath(pathname) {
+    return parseStaticBadgePath(pathname, { isDecoded: true })
   }
 
   static openApi = {
@@ -86,6 +92,6 @@ export default class StaticBadge extends BaseStaticService {
   }
 
   handle({ label, message, color }) {
-    return { label: escapeFormat(label), message: escapeFormat(message), color }
+    return { label, message, color }
   }
 }
