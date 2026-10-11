@@ -156,7 +156,6 @@
     "caller": "^1.1.0",
     "chai": "6.2.2",
     "chai-as-promised": "^8.0.2",
-    "chai-datetime": "^1.8.1",
     "clsx": "^2.1.1",
     "concurrently": "^10.0.5",
     "cypress": "^16.1.0",
