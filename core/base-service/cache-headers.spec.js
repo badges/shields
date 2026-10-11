@@ -1,8 +1,7 @@
 import { test, given } from 'sazerac'
-import { expect, use } from 'chai'
+import { expect } from 'chai'
 import sinon from 'sinon'
 import httpMocks from 'node-mocks-http'
-import chaiDatetime from 'chai-datetime'
 import {
   coalesceCacheLength,
   setHeadersForCacheLength,
@@ -10,7 +9,6 @@ import {
   setCacheHeadersForStaticResource,
   serverHasBeenUpSinceResourceCached,
 } from './cache-headers.js'
-use(chaiDatetime)
 
 describe('Cache header functions', function () {
   let res
@@ -186,12 +184,10 @@ describe('Cache header functions', function () {
     })
 
     it('should set the expected Last-Modified header', function () {
-      const lastModified = res._headers['last-modified']
-      expect(new Date(lastModified)).to.be.withinTime(
-        // Within the last 60 seconds.
-        new Date(Date.now() - 60 * 1000),
-        new Date(),
-      )
+      const lastModifiedTime = Date.parse(res._headers['last-modified'])
+      const now = Date.now()
+      // Within the last 60 seconds.
+      expect(lastModifiedTime).to.be.within(now - 60 * 1000, now)
     })
   })
 
