@@ -3,7 +3,7 @@
  */
 
 import path from 'path'
-import url, { fileURLToPath } from 'url'
+import { fileURLToPath, format as formatUrl, URL } from 'node:url'
 import { bootstrap } from 'global-agent'
 import cloudflareMiddleware from 'cloudflare-middleware'
 import Camp from '@shields_io/camp'
@@ -25,8 +25,6 @@ import {
 import log from './log.js'
 import PrometheusMetrics from './prometheus-metrics.js'
 import InfluxMetrics from './influx-metrics.js'
-const { URL } = url
-
 const Joi = originalJoi
   .extend(base => ({
     type: 'arrayFromString',
@@ -317,7 +315,7 @@ class Server {
       ssl: { isSecure },
     } = this.config.public
 
-    return url.format({
+    return formatUrl({
       protocol: isSecure ? 'https' : 'http',
       hostname: address,
       port,

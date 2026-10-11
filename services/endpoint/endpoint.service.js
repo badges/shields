@@ -1,4 +1,4 @@
-import { URL } from 'url'
+import { URL } from 'node:url'
 import Joi from 'joi'
 import configModule from 'config'
 import { httpErrors } from '../dynamic-common.js'

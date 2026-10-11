@@ -1,5 +1,5 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { expect, use } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import {

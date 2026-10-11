@@ -1,5 +1,5 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { execFile } from 'child_process'
 import { promisify } from 'util'
 import { expect, use } from 'chai'

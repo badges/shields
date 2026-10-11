@@ -1,5 +1,5 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { globSync } from 'glob'
 import countBy from 'lodash.countby'
 import categories from '../../services/categories.js'

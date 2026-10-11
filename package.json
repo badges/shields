@@ -202,8 +202,7 @@
     "sinon-chai": "4.0.1",
     "snap-shot-it": "^7.9.10",
     "start-server-and-test": "3.0.12",
-    "tsd": "^0.33.0",
-    "url": "^0.11.4"
+    "tsd": "^0.33.0"
   },
   "overrides": {
     "debug@>=4.0.0 <4.3.1": "4.3.1",

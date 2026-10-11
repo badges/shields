@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'url'
+import { fileURLToPath, URL } from 'node:url'
 import config from 'config'
 import got from 'got'
 import emojic from 'emojic'

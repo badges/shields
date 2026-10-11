@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import dayjs from 'dayjs'
 
 const dateFormat = 'YYYY-MM-DD'

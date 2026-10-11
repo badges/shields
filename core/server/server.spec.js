@@ -1,5 +1,5 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { execFileSync } from 'node:child_process'
 import { expect } from 'chai'
 import isSvg from 'is-svg'

@@ -1,4 +1,4 @@
-import { URL } from 'url'
+import { URL } from 'node:url'
 import dayjs from 'dayjs'
 import Joi from 'joi'
 import checkErrorResponse from './check-error-response.js'
