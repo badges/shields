@@ -40,7 +40,6 @@
     "dayjs": "^1.11.23",
     "decamelize": "^6.0.1",
     "emojic": "^1.1.18",
-    "escape-string-regexp": "^5.0.0",
     "fast-xml-parser": "^5.11.1",
     "glob": "^13.0.6",
     "global-agent": "^4.1.3",
