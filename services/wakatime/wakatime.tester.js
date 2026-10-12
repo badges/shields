@@ -12,7 +12,7 @@ const isCodingTime = Joi.string().regex(
 
 // Live tests: these hit the real WakaTime badge endpoints.
 t.create('user coding time')
-  .get('/user/b9fcf8ba-3fce-41a4-a480-d3fe6074a1ad.json')
+  .get('/user/66b6796d-eb84-4bb9-b9d2-8dc882f4c6ac.json')
   .expectBadge({ label: 'wakatime', message: isCodingTime })
 
 t.create('project coding time')

@@ -37,10 +37,11 @@ class WakaTimeUser extends WakaTimeBase {
     '/wakatime/user/{user}': {
       get: {
         summary: 'WakaTime coding time',
-        description: 'Total coding time tracked by WakaTime for a user.',
+        description:
+          'Total coding time tracked by WakaTime for a user. The user id is included in the badge snippet on your WakaTime profile.',
         parameters: pathParams({
           name: 'user',
-          example: 'b9fcf8ba-3fce-41a4-a480-d3fe6074a1ad',
+          example: '66b6796d-eb84-4bb9-b9d2-8dc882f4c6ac',
         }),
       },
     },
