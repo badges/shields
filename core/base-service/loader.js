@@ -1,6 +1,6 @@
+import { globSync } from 'node:fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { globSync } from 'glob'
 import countBy from 'lodash.countby'
 import categories from '../../services/categories.js'
 import BaseService from './base.js'
@@ -14,9 +14,7 @@ const serviceDir = path.join(
 )
 
 function toUnixPath(path) {
-  // glob does not allow \ as a path separator
-  // see https://github.com/isaacs/node-glob/blob/main/changelog.md#80
-  // so we need to convert to use / for use with glob
+  // Glob patterns use / as a path separator, including on Windows.
   return path.replace(/\\/g, '/')
 }
 
