@@ -2,7 +2,7 @@
  * @module
  */
 
-import caller from 'caller'
+import { getCallSites } from 'node:util'
 import BaseService from '../base-service/base.js'
 import ServiceTester from './service-tester.js'
 
@@ -19,7 +19,10 @@ import ServiceTester from './service-tester.js'
  *    ServiceTester instance
  */
 async function createServiceTester() {
-  const servicePath = caller().replace('.tester.js', '.service.js')
+  const servicePath = getCallSites()
+    // Skip the stack frame belonging to create-service-tester.js itself.
+    .find(({ scriptName }) => scriptName && scriptName !== import.meta.url)
+    .scriptName.replace('.tester.js', '.service.js')
   const ServiceClass = Object.values(await import(servicePath))[0]
   if (!(ServiceClass.prototype instanceof BaseService)) {
     throw Error(
