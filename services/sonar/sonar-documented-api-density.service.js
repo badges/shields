@@ -15,7 +15,7 @@ export default class SonarDocumentedApiDensity extends SonarBase {
 
   static route = {
     base: `sonar/${metric}`,
-    pattern: ':component/:branch*',
+    pattern: ':component{/*branch}',
     queryParamSchema,
   }
 

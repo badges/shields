@@ -9,7 +9,7 @@ const schema = Joi.object({
 
 export default class Buildkite extends BaseJsonService {
   static category = 'build'
-  static route = { base: 'buildkite', pattern: ':identifier/:branch*' }
+  static route = { base: 'buildkite', pattern: ':identifier{/*branch}' }
 
   static openApi = {
     '/buildkite/{identifier}': {

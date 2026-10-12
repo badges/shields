@@ -36,7 +36,7 @@ export default class GiteaLastCommit extends GiteaBase {
 
   static route = {
     base: 'gitea/last-commit',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

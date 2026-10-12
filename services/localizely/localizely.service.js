@@ -46,7 +46,7 @@ export default class Localizely extends BaseJsonService {
 
   static route = {
     base: 'localizely/progress',
-    pattern: ':projectId/:branch*',
+    pattern: ':projectId{/*branch}',
     queryParamSchema,
   }
 

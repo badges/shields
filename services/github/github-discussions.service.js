@@ -25,8 +25,10 @@ export default class GithubDiscussions extends GithubAuthV4Service {
   static category = 'other'
   static route = {
     base: 'github/discussions',
-    pattern: ':variant(all|answered|unanswered)?/:user/:repo',
+    pattern: '{:variant/}:user/:repo',
   }
+
+  static routeEnum = ['all', 'answered', 'unanswered']
 
   static openApi = {
     '/github/discussions/all/{user}/{repo}': {

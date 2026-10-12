@@ -4,7 +4,7 @@ export default retiredService({
   category: 'downloads',
   route: {
     base: 'wikiapiary',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   label: 'wikiapiary',
   dateAdded: new Date('2025-11-30'),

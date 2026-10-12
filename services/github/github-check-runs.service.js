@@ -60,7 +60,7 @@ export default class GithubCheckRuns extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/check-runs',
-    pattern: ':user/:repo/:ref+',
+    pattern: ':user/:repo/*ref',
     queryParamSchema,
   }
 

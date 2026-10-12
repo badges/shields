@@ -39,7 +39,7 @@ export default class GithubDirectoryFileCount extends GithubAuthV4Service {
 
   static route = {
     base: 'github/directory-file-count',
-    pattern: ':user/:repo/:path*',
+    pattern: ':user/:repo{/*path}',
     queryParamSchema,
   }
 

@@ -34,8 +34,9 @@ export default class GithubPullRequestCheckState extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/status',
-    pattern: ':variant(s|contexts)/pulls/:user/:repo/:number(\\d+)',
+    pattern: ':variant/pulls/:user/:repo/:number(\\d+)',
   }
+  static routeEnum = ['s', 'contexts']
 
   static openApi = {
     '/github/status/s/pulls/{user}/{repo}/{number}': {

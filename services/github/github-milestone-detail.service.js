@@ -15,9 +15,15 @@ export default class GithubMilestoneDetail extends GithubAuthV3Service {
   static category = 'issue-tracking'
   static route = {
     base: 'github/milestones',
-    pattern:
-      ':variant(issues-closed|issues-open|issues-total|progress|progress-percent)/:user/:repo/:number([0-9]+)',
+    pattern: ':variant/:user/:repo/:number([0-9]+)',
   }
+  static routeEnum = [
+    'issues-closed',
+    'issues-open',
+    'issues-total',
+    'progress',
+    'progress-percent',
+  ]
 
   static openApi = {
     '/github/milestones/{variant}/{user}/{repo}/{number}': {

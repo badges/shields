@@ -25,7 +25,7 @@ export default class Debian extends BaseJsonService {
   static category = 'version'
   static route = {
     base: 'debian/v',
-    pattern: ':packageName/:distribution?',
+    pattern: ':packageName{/:distribution}',
   }
 
   static openApi = {

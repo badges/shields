@@ -43,7 +43,7 @@ export default class GitlabPipelineCoverage extends BaseSvgScrapingService {
 
   static route = {
     base: 'gitlab/pipeline-coverage',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

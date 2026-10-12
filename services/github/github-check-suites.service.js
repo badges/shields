@@ -57,7 +57,7 @@ export default class GithubCheckSuites extends GithubAuthV3Service {
   static category = 'build'
   static route = {
     base: 'github/check-suites',
-    pattern: ':user/:repo/:ref+',
+    pattern: ':user/:repo/*ref',
   }
 
   static openApi = {

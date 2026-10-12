@@ -22,7 +22,7 @@ export default class GithubAllContributorsService extends ConditionalGithubAuthV
   static category = 'activity'
   static route = {
     base: 'github/all-contributors',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
   }
 
   static openApi = {
