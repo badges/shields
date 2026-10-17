@@ -30,6 +30,7 @@ const openApiSchema = Joi.object()
                 enum: Joi.array(),
               }).required(),
               allowEmptyValue: Joi.boolean(),
+              'x-display-after': Joi.string(),
               example: Joi.string().allow(null),
             }),
           )
