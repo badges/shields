@@ -55,6 +55,7 @@ class GithubApiProvider {
     reserveFraction = 0.25,
     restApiVersion,
     maxTokenFailedAttempts = 3,
+    maxSamlRetries = 3,
   }) {
     Object.assign(this, {
       baseUrl,
@@ -63,6 +64,7 @@ class GithubApiProvider {
       globalToken,
       reserveFraction,
       maxTokenFailedAttempts,
+      maxSamlRetries,
     })
 
     this.metricInstance = undefined
@@ -206,56 +208,95 @@ class GithubApiProvider {
     }
   }
 
+  // GitHub rejects tokens of SAML-enforcing org members that are not
+  // SSO-authorized, even for public resources. Such tokens remain valid for
+  // other orgs, so they are rotated rather than evicted.
+  isSamlFailure(url, res) {
+    if (url.startsWith('/graphql')) {
+      try {
+        const { errors } = JSON.parse(res.body)
+        return (
+          Array.isArray(errors) &&
+          errors.some(error => error?.extensions?.saml_failure === true)
+        )
+      } catch (e) {
+        return false
+      }
+    } else {
+      return (
+        res.statusCode === 403 && res.headers?.['x-github-sso'] !== undefined
+      )
+    }
+  }
+
+  handleSamlFailure(token, pool, attempt) {
+    log.log(
+      `GitHub token hit SAML enforcement, rotating away and retrying (attempt ${attempt}/${this.maxSamlRetries}, token: ${sanitizeToken(
+        token.id,
+      )})`,
+    )
+    pool.endBatchFor(token)
+  }
+
   async fetch(requestFetcher, url, options = {}) {
     const { baseUrl } = this
 
-    let token
-    let tokenString
-    let pool
-    if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
-      pool = this.poolForUrl(url)
-      try {
-        token = pool.next()
-      } catch (e) {
-        log.error(e)
-        throw new ImproperlyConfigured({
-          prettyMessage: 'Unable to select next GitHub token from pool',
-        })
+    for (let samlRetries = 0; ; samlRetries++) {
+      let token
+      let tokenString
+      let pool
+      if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
+        pool = this.poolForUrl(url)
+        try {
+          token = pool.next()
+        } catch (e) {
+          log.error(e)
+          throw new ImproperlyConfigured({
+            prettyMessage: 'Unable to select next GitHub token from pool',
+          })
+        }
+        tokenString = token.id
+      } else if (this.authType === this.constructor.AUTH_TYPES.GLOBAL_TOKEN) {
+        tokenString = this.globalToken
       }
-      tokenString = token.id
-    } else if (this.authType === this.constructor.AUTH_TYPES.GLOBAL_TOKEN) {
-      tokenString = this.globalToken
-    }
 
-    const mergedOptions = {
-      ...options,
-      ...{
-        headers: {
-          'User-Agent': userAgent,
-          'X-GitHub-Api-Version': this.restApiVersion,
-          ...options.headers,
+      const mergedOptions = {
+        ...options,
+        ...{
+          headers: {
+            'User-Agent': userAgent,
+            'X-GitHub-Api-Version': this.restApiVersion,
+            ...options.headers,
+          },
         },
-      },
-    }
-    if (
-      this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL ||
-      this.authType === this.constructor.AUTH_TYPES.GLOBAL_TOKEN
-    ) {
-      mergedOptions.headers.Authorization = `token ${tokenString}`
-    }
-
-    const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
-    if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
-      if (response.res.statusCode === 401) {
-        this.handleUnauthorized(token, pool)
-      } else if (response.res.statusCode < 500) {
-        // A non-401 response means the token authenticated successfully,
-        // so clear any earlier failed attempts.
-        token.resetFailedAttempts()
-        this.updateToken({ token, url, res: response.res })
       }
+      if (
+        this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL ||
+        this.authType === this.constructor.AUTH_TYPES.GLOBAL_TOKEN
+      ) {
+        mergedOptions.headers.Authorization = `token ${tokenString}`
+      }
+
+      const response = await requestFetcher(`${baseUrl}${url}`, mergedOptions)
+      if (this.authType === this.constructor.AUTH_TYPES.TOKEN_POOL) {
+        if (response.res.statusCode === 401) {
+          this.handleUnauthorized(token, pool)
+        } else if (response.res.statusCode < 500) {
+          // A non-401 response means the token authenticated successfully,
+          // so clear any earlier failed attempts.
+          token.resetFailedAttempts()
+          this.updateToken({ token, url, res: response.res })
+          if (
+            samlRetries < this.maxSamlRetries &&
+            this.isSamlFailure(url, response.res)
+          ) {
+            this.handleSamlFailure(token, pool, samlRetries + 1)
+            continue
+          }
+        }
+      }
+      return response
     }
-    return response
   }
 }
 
