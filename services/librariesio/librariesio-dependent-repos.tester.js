@@ -18,6 +18,14 @@ t.create('dependent repo count (scoped npm package)')
     message: isMetric,
   })
 
+t.create('dependent repo count (package name containing slashes)')
+  .timeout(10000)
+  .get('/go/github.com/ipfs/kubo.json')
+  .expectBadge({
+    label: 'dependent repos',
+    message: isMetric,
+  })
+
 t.create('dependent repo count (not a package)')
   .timeout(10000)
   .get('/npm/foobar-is-not-package.json')
