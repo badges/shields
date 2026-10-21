@@ -69,8 +69,43 @@ function ordinalNumber(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0])
 }
 
-const metricPrefix = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
-const metricPower = metricPrefix.map((a, i) => Math.pow(1000, i + 1))
+const siPrefixes = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+const countPrefixes = ['k', ' million', ' billion', ' trillion']
+
+/**
+ * Formats a number using prefixes for successive powers of 1000.
+ * Values beyond the highest prefix continue using that prefix.
+ *
+ * @param {number} n - Input number
+ * @param {string[]} prefixes - Prefixes in ascending order of magnitude, including any leading spaces
+ * @returns {string} Number with the appropriate prefix
+ */
+function formatNumber(n, prefixes) {
+  const powers = prefixes.map((_, i) => Math.pow(1000, i + 1))
+  const absN = Math.abs(n)
+  for (let i = prefixes.length - 1; i >= 0; i--) {
+    const limit = powers[i]
+    if (absN >= limit) {
+      const scaledN = absN / limit
+      if (scaledN < 10) {
+        // For "small" numbers, display one decimal digit unless it is 0.
+        const oneDecimalN = scaledN.toFixed(1)
+        if (oneDecimalN.charAt(oneDecimalN.length - 1) !== '0') {
+          const res = `${oneDecimalN}${prefixes[i]}`
+          return n > 0 ? res : `-${res}`
+        }
+      }
+      const roundedN = Math.round(scaledN)
+      if (roundedN < 1000 || i === prefixes.length - 1) {
+        const res = `${roundedN}${prefixes[i]}`
+        return n > 0 ? res : `-${res}`
+      }
+      const res = `1${prefixes[i + 1]}`
+      return n > 0 ? res : `-${res}`
+    }
+  }
+  return `${n}`
+}
 
 /**
  * Given a number (positive or negative), returns a string with appropriate unit in the metric system, SI.
@@ -81,30 +116,19 @@ const metricPower = metricPrefix.map((a, i) => Math.pow(1000, i + 1))
  * @returns {string} String with appropriate unit in the metric system, SI
  */
 function metric(n) {
-  for (let i = metricPrefix.length - 1; i >= 0; i--) {
-    const limit = metricPower[i]
-    const absN = Math.abs(n)
-    if (absN >= limit) {
-      const scaledN = absN / limit
-      if (scaledN < 10) {
-        // For "small" numbers, display one decimal digit unless it is 0.
-        const oneDecimalN = scaledN.toFixed(1)
-        if (oneDecimalN.charAt(oneDecimalN.length - 1) !== '0') {
-          const res = `${oneDecimalN}${metricPrefix[i]}`
-          return n > 0 ? res : `-${res}`
-        }
-      }
-      const roundedN = Math.round(scaledN)
-      if (roundedN < 1000) {
-        const res = `${roundedN}${metricPrefix[i]}`
-        return n > 0 ? res : `-${res}`
-      } else {
-        const res = `1${metricPrefix[i + 1]}`
-        return n > 0 ? res : `-${res}`
-      }
-    }
-  }
-  return `${n}`
+  return formatNumber(n, siPrefixes)
+}
+
+/**
+ * Formats a count using k for thousand and the full words million, billion, and trillion.
+ * Full words are separated from the number by a space.
+ * For example, formatCount(13000000000) returns "13 billion".
+ *
+ * @param {number} n - Input count
+ * @returns {string} Count with the appropriate prefix
+ */
+function formatCount(n) {
+  return formatNumber(n, countPrefixes)
 }
 
 /**
@@ -164,6 +188,7 @@ export {
   currencyFromCode,
   ordinalNumber,
   metric,
+  formatCount,
   omitv,
   addv,
   maybePluralize,
