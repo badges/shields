@@ -20,7 +20,7 @@ export default class GitlabTopLanguage extends GitLabBase {
 
   static route = {
     base: 'gitlab/languages',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

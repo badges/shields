@@ -4,7 +4,7 @@ export const SecurityHeaders = retiredService({
   category: 'monitoring',
   route: {
     base: 'security-headers',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   label: 'securityheaders',
   dateAdded: new Date('2025-11-08'),

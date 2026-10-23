@@ -3,7 +3,7 @@ import { BaseCratesService, description } from './crates-base.js'
 
 export default class CratesLicense extends BaseCratesService {
   static category = 'license'
-  static route = { base: 'crates/l', pattern: ':crate/:version?' }
+  static route = { base: 'crates/l', pattern: ':crate{/:version}' }
 
   static openApi = {
     '/crates/l/{crate}': {

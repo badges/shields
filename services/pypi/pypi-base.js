@@ -47,7 +47,7 @@ export default class PypiBase extends BaseJsonService {
   static buildRoute(base) {
     return {
       base,
-      pattern: ':egg+',
+      pattern: '/*egg',
       queryParamSchema,
     }
   }

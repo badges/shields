@@ -10,7 +10,7 @@ export default redirector({
   category: 'platform-support',
   route: {
     base: 'packagist/php-v',
-    pattern: ':user/:repo/:version?',
+    pattern: ':user/:repo{/:version}',
     queryParamSchema,
   },
   transformPath: ({ user, repo }) =>

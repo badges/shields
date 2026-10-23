@@ -1,7 +1,12 @@
 import Joi from 'joi'
-import { optionalUrl } from '../validators.js'
+import { optionalUrl, scoped } from '../validators.js'
 import { isDependencyMap } from '../package-json-helpers.js'
-import { BaseJsonService, InvalidResponse, NotFound } from '../index.js'
+import {
+  BaseJsonService,
+  InvalidResponse,
+  NotFound,
+  InvalidParameter,
+} from '../index.js'
 
 const deprecatedLicenseObjectSchema = Joi.object({
   type: Joi.string().required(),
@@ -49,13 +54,13 @@ export default class NpmBase extends BaseJsonService {
     if (withTag) {
       return {
         base,
-        pattern: ':scope(@[^/]+)?/:packageName/:tag*',
+        pattern: '{:scope/}:packageName{/*tag}',
         queryParamSchema,
       }
     } else {
       return {
         base,
-        pattern: ':scope(@[^/]+)?/:packageName',
+        pattern: '{:scope/}:packageName',
         queryParamSchema,
       }
     }
@@ -74,6 +79,9 @@ export default class NpmBase extends BaseJsonService {
   }
 
   static encodeScopedPackage({ scope, packageName }) {
+    if (!scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const scopeWithoutAt = scope.replace(/^@/, '')
     // e.g. https://registry.npmjs.org/@cedx%2Fgulp-david
     const encoded = encodeURIComponent(`${scopeWithoutAt}/${packageName}`)

@@ -11,6 +11,7 @@ export default class VoxelShopRatings extends BaseVoxelShopService {
     base: 'voxel-shop',
     pattern: ':format/:resourceId',
   }
+
   static routeEnum = ['rating', 'stars']
 
   static openApi = {

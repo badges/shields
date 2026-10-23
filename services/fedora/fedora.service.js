@@ -14,7 +14,7 @@ const description =
 
 export default class Fedora extends BaseJsonService {
   static category = 'version'
-  static route = { base: 'fedora/v', pattern: ':packageName/:branch?' }
+  static route = { base: 'fedora/v', pattern: ':packageName{/:branch}' }
   static openApi = {
     '/fedora/v/{packageName}/{branch}': {
       get: {

@@ -44,6 +44,7 @@ export default class W3cValidation extends BaseJsonService {
     pattern: ':parser',
     queryParamSchema,
   }
+
   static routeEnum = ['default', 'html', 'xml', 'xmldtd']
 
   static openApi = {

@@ -5,7 +5,7 @@ export const VsoBuildRedirector = retiredService({
   label: 'vso',
   route: {
     base: 'vso/build',
-    pattern: ':organization/:projectId/:definitionId/:branch*',
+    pattern: ':organization/:projectId/:definitionId{/*branch}',
   },
   dateAdded: new Date('2025-12-20'),
   issueUrl: 'https://github.com/badges/shields/pull/11583',

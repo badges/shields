@@ -1,5 +1,6 @@
 import Joi from 'joi'
-import { NotFound, pathParam, queryParam } from '../index.js'
+import { NotFound, pathParam, queryParam, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { renderDateBadge } from '../date.js'
 import NpmBase, {
   packageNameDescription,
@@ -24,7 +25,7 @@ export class NpmLastUpdateWithTag extends NpmBase {
 
   static route = {
     base: 'npm/last-update',
-    pattern: ':scope(@[^/]+)?/:packageName/:tag',
+    pattern: '{:scope/}:packageName/:tag',
     queryParamSchema,
   }
 
@@ -56,6 +57,9 @@ export class NpmLastUpdateWithTag extends NpmBase {
   async handle(namedParams, queryParams) {
     const { scope, packageName, tag, registryUrl } =
       this.constructor.unpackParams(namedParams, queryParams)
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
 
     const packageData = await this.fetch({
       registryUrl,
