@@ -58,10 +58,11 @@ This repo hosts:
 [Make your own badges!][custom badges] (Quick example: `https://img.shields.io/badge/left-right-f39f37`)
 
 [custom badges]: https://img.shields.io/badges/static-badge
+[shields.io badges]: https://shields.io/badges
 
 ### Quickstart
 
-Browse a [complete list of badges][shields.io] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
+Browse a [complete list of badges][shields.io badges] and locate a particular badge by using the search bar or by browsing the categories. Click on the badge to fill in required data elements for that badge type (like your username or repo) and optionally customize (label, colors etc.). And it's ready for use!
 
 Use the button at the bottom to copy your badge url or snippet, which can then be added to places like your GitHub readme files or other web pages.
 
