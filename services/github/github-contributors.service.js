@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import parseLinkHeader from 'parse-link-header'
-import { pathParams } from '../index.js'
+import { InvalidResponse, pathParams } from '../index.js'
 import { renderContributorBadge } from '../contributor-count.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
 import { documentation, httpErrorsFor } from './github-helpers.js'
@@ -11,6 +11,7 @@ const schema = Joi.array().items(Joi.object())
 const documentationWithNote = [
   documentation,
   'Note: Co-authors are not included in the count due to endpoint limitations.',
+  "For repositories whose history or contributor list is too large for GitHub's API to compute, the badge shows `High contributor count`.",
 ].join('\n\n')
 
 export default class GithubContributors extends GithubAuthV3Service {
@@ -59,11 +60,25 @@ export default class GithubContributors extends GithubAuthV3Service {
   async handle({ metric, user, repo }) {
     const isAnon = metric === 'contributors-anon'
 
-    const { res, buffer } = await this._request({
-      url: `/repos/${user}/${repo}/contributors`,
-      options: { searchParams: { page: '1', per_page: '1', anon: isAnon } },
-      httpErrors: httpErrorsFor('repo not found'),
-    })
+    let res
+    let buffer
+    try {
+      ;({ res, buffer } = await this._request({
+        url: `/repos/${user}/${repo}/contributors`,
+        options: { searchParams: { page: '1', per_page: '1', anon: isAnon } },
+        httpErrors: httpErrorsFor('repo not found'),
+      }))
+    } catch (error) {
+      if (
+        error.response?.statusCode === 403 &&
+        /history or contributor list is too large/i.test(
+          error.buffer?.toString(),
+        )
+      ) {
+        throw new InvalidResponse({ prettyMessage: 'High contributor count' })
+      }
+      throw error
+    }
 
     const parsed = parseLinkHeader(res.headers.link)
     let contributorCount
