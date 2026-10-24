@@ -1,5 +1,10 @@
-import decamelize from 'decamelize'
 import prometheus from 'prom-client'
+
+const toSnakeCase = name =>
+  name
+    .replace(/([a-z\d])([A-Z])/g, '$1_$2') // npmVersion => npm_Version
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2') // HTTPStatus => HTTP_Status
+    .toLowerCase()
 
 export default class PrometheusMetrics {
   constructor({ register } = {}) {
@@ -109,7 +114,7 @@ export default class PrometheusMetrics {
    * @returns {object} `{ inc() {} }`.
    */
   createNumRequestCounter({ category, serviceFamily, name }) {
-    const service = decamelize(name)
+    const service = toSnakeCase(name)
     return this.counters.numRequests.labels(category, serviceFamily, service)
   }
 
@@ -118,7 +123,7 @@ export default class PrometheusMetrics {
   }
 
   createServiceResponseSizeHistogram({ category, serviceFamily, name }) {
-    const service = decamelize(name)
+    const service = toSnakeCase(name)
     return this.counters.serviceResponseSize.labels(
       category,
       serviceFamily,
