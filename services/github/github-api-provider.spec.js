@@ -314,7 +314,9 @@ describe('Github API provider', function () {
       expect(mockStandardToken.invalidate).not.to.have.been.called
     })
 
-    it('returns the last response after maxSamlRetries retries', async function () {
+    it('returns the last response after maxSamlRetries retries and rotates away from the last token', async function () {
+      const lastGraphqlToken = makeMockToken('last-graphql-token')
+      provider.graphqlTokens.next.onThirdCall().returns(lastGraphqlToken)
       const mockRequest = sinon.stub().resolves(samlV4Response)
 
       const res = await provider.fetch(mockRequest, '/graphql', {})
@@ -322,8 +324,11 @@ describe('Github API provider', function () {
       expect(Object.is(res, samlV4Response)).to.be.true
       expect(mockRequest).to.have.callCount(maxSamlRetries + 1)
       expect(provider.graphqlTokens.endBatchFor).to.have.callCount(
-        maxSamlRetries,
+        maxSamlRetries + 1,
       )
+      expect(
+        provider.graphqlTokens.endBatchFor.lastCall,
+      ).to.have.been.calledWith(lastGraphqlToken)
     })
 
     it('does not retry other GraphQL errors (v4)', async function () {

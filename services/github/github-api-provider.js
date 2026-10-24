@@ -231,7 +231,7 @@ class GithubApiProvider {
 
   handleSamlFailure(token, pool, attempt) {
     log.log(
-      `GitHub token hit SAML enforcement, rotating away and retrying (attempt ${attempt}/${this.maxSamlRetries}, token: ${sanitizeToken(
+      `GitHub token hit SAML enforcement, rotating away (attempt ${attempt}/${this.maxSamlRetries + 1}, token: ${sanitizeToken(
         token.id,
       )})`,
     )
@@ -286,12 +286,11 @@ class GithubApiProvider {
           // so clear any earlier failed attempts.
           token.resetFailedAttempts()
           this.updateToken({ token, url, res: response.res })
-          if (
-            samlRetries < this.maxSamlRetries &&
-            this.isSamlFailure(url, response.res)
-          ) {
+          if (this.isSamlFailure(url, response.res)) {
             this.handleSamlFailure(token, pool, samlRetries + 1)
-            continue
+            if (samlRetries < this.maxSamlRetries) {
+              continue
+            }
           }
         }
       }
