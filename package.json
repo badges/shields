@@ -38,7 +38,6 @@
     "config": "^5.0.1",
     "cross-env": "^10.1.0",
     "dayjs": "^1.11.23",
-    "decamelize": "^6.0.1",
     "emojic": "^1.1.18",
     "fast-xml-parser": "^5.11.1",
     "global-agent": "^4.1.3",
