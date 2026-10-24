@@ -25,6 +25,10 @@ t.create('repo coding time')
   .get('/github/wakatime/sublime-wakatime.json')
   .expectBadge({ label: 'wakatime', message: isCodingTime })
 
+t.create('unknown user')
+  .get('/user/00000000-0000-0000-0000-000000000000.json')
+  .expectBadge({ label: 'wakatime', message: 'not found' })
+
 // Mocked tests: exercise the SVG parsing and error handling.
 t.create('parses coding time from an SVG badge')
   .get('/user/test-id.json')
@@ -47,12 +51,3 @@ t.create('unparseable svg response')
       .reply(200, '<svg></svg>', { 'Content-Type': 'image/svg+xml' }),
   )
   .expectBadge({ label: 'wakatime', message: 'unparseable svg response' })
-
-t.create('unknown user')
-  .get('/user/00000000-0000-0000-0000-000000000000.json')
-  .intercept(nock =>
-    nock('https://wakatime.com')
-      .get('/badge/user/00000000-0000-0000-0000-000000000000.svg')
-      .reply(404),
-  )
-  .expectBadge({ label: 'wakatime', message: 'not found' })
