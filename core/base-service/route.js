@@ -1,4 +1,3 @@
-import escapeStringRegexp from 'escape-string-regexp'
 import Joi from 'joi'
 import { pathToRegexp } from 'path-to-regexp'
 
@@ -26,7 +25,7 @@ function assertValidRoute(route, message = undefined) {
 function prepareRoute({ base, pattern, format, capture, withPng }) {
   const extensionRegex = ['', '.svg', '.json']
     .concat(withPng ? ['.png'] : [])
-    .map(escapeStringRegexp)
+    .map(RegExp.escape)
     .join('|')
   let regex, captureNames
   if (pattern === undefined) {
