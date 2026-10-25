@@ -2,7 +2,6 @@
  * @module
  */
 
-import emojic from 'emojic'
 import * as yaml from 'js-yaml'
 import BaseService from './base.js'
 import { InvalidResponse } from './errors.js'
@@ -69,13 +68,13 @@ class BaseYamlService extends BaseService {
     try {
       parsed = yaml.load(buffer.toString(), encoding)
     } catch (err) {
-      logTrace(emojic.dart, 'Response YAML (unparseable)', buffer)
+      logTrace('🎯', 'Response YAML (unparseable)', buffer)
       throw new InvalidResponse({
         prettyMessage: 'unparseable yaml response',
         underlyingError: err,
       })
     }
-    logTrace(emojic.dart, 'Response YAML (before validation)', parsed, {
+    logTrace('🎯', 'Response YAML (before validation)', parsed, {
       deep: true,
     })
     return this.constructor._validate(parsed, schema)
