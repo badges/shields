@@ -115,6 +115,11 @@ const config = {
                 label: 'Endpoint Badges Directory',
                 href: 'https://github.com/badges/endpoint-badges-directory',
               },
+            ],
+          },
+          {
+            title: 'Projects',
+            items: [
               {
                 label: 'Badge3D',
                 href: 'https://3d.shields.io',
