@@ -17,7 +17,19 @@ const buildStatisticsSchema = Joi.object({
 
 const queryParamSchema = Joi.object({
   server: optionalUrl,
+  metric: Joi.string()
+    .valid('statement', 'line', 'block', 'method', 'class', 'branch')
+    .default('statement'),
 }).required()
+
+const METRIC_CODE = {
+  statement: 'S',
+  line: 'L',
+  block: 'B',
+  method: 'M',
+  class: 'C',
+  branch: 'R',
+}
 
 export default class TeamCityCoverage extends TeamCityBase {
   static category = 'coverage'
@@ -38,6 +50,10 @@ export default class TeamCityCoverage extends TeamCityBase {
             name: 'server',
             example: 'https://teamcity.jetbrains.com',
           }),
+          queryParam({
+            name: 'metric',
+            example: 'statement',
+          }),
         ],
       },
     },
@@ -54,13 +70,16 @@ export default class TeamCityCoverage extends TeamCityBase {
     }
   }
 
-  transform({ data }) {
+  transform({ data, metric }) {
+    const code = METRIC_CODE[metric]
+    const coveredKey = `CodeCoverageAbs${code}Covered`
+    const totalKey = `CodeCoverageAbs${code}Total`
     let covered, total
 
     for (const p of data.property) {
-      if (p.name === 'CodeCoverageAbsSCovered') {
+      if (p.name === coveredKey) {
         covered = +p.value
-      } else if (p.name === 'CodeCoverageAbsSTotal') {
+      } else if (p.name === totalKey) {
         total = +p.value
       }
 
@@ -73,7 +92,10 @@ export default class TeamCityCoverage extends TeamCityBase {
     throw new InvalidResponse({ prettyMessage: 'no coverage data available' })
   }
 
-  async handle({ buildId }, { server = 'https://teamcity.jetbrains.com' }) {
+  async handle(
+    { buildId },
+    { server = 'https://teamcity.jetbrains.com', metric },
+  ) {
     // JetBrains Docs: https://confluence.jetbrains.com/display/TCD18/REST+API#RESTAPI-Statistics
     const buildLocator = `buildType:(id:${buildId})`
     const apiPath = `app/rest/builds/${encodeURIComponent(
@@ -84,7 +106,7 @@ export default class TeamCityCoverage extends TeamCityBase {
       schema: buildStatisticsSchema,
     })
 
-    const { coverage } = this.transform({ data })
+    const { coverage } = this.transform({ data, metric })
     return this.constructor.render({ coverage })
   }
 }
