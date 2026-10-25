@@ -7,7 +7,7 @@ const ratioColor = colorScale([10, 30, 50, 70])
 export default class UptimeObserverRatio extends UptimeObserverBase {
   static route = {
     base: 'uptimeobserver/ratio',
-    pattern: ':period(\\d+)?/:monitorKey',
+    pattern: '{:period/}:monitorKey',
   }
 
   static openApi = {

@@ -17,7 +17,7 @@ export default class Ubuntu extends BaseJsonService {
 
   static route = {
     base: 'ubuntu/v',
-    pattern: ':packageName/:series?',
+    pattern: ':packageName{/:series}',
   }
 
   static openApi = {

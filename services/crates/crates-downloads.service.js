@@ -6,7 +6,7 @@ export default class CratesDownloads extends BaseCratesService {
   static category = 'downloads'
   static route = {
     base: 'crates',
-    pattern: ':variant/:crate/:version?',
+    pattern: ':variant/:crate{/:version}',
   }
   static routeEnum = ['d', 'dv', 'dr']
 

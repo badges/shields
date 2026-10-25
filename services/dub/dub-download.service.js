@@ -35,7 +35,7 @@ export default class DubDownloads extends BaseJsonService {
   static category = 'downloads'
   static route = {
     base: 'dub',
-    pattern: ':interval/:packageName/:version*',
+    pattern: ':interval/:packageName{/*version}',
   }
   static routeEnum = ['dd', 'dw', 'dm', 'dt']
 

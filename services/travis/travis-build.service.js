@@ -13,7 +13,7 @@ export class TravisComBuild extends BaseSvgScrapingService {
 
   static route = {
     base: 'travis/com',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
   }
 
   static openApi = {

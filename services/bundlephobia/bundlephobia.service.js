@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { renderSizeBadge } from '../size.js'
-import { nonNegativeInteger } from '../validators.js'
-import { BaseJsonService, pathParams } from '../index.js'
+import { nonNegativeInteger, scoped } from '../validators.js'
+import { BaseJsonService, pathParams, InvalidParameter } from '../index.js'
 
 const schema = Joi.object({
   size: nonNegativeInteger,
@@ -16,7 +16,7 @@ export default class Bundlephobia extends BaseJsonService {
 
   static route = {
     base: 'bundlephobia',
-    pattern: ':format/:scope(@[^/]+)?/:packageName/:version?',
+    pattern: ':format{/:scope}/:packageName{/:version}',
   }
   static routeEnum = ['min', 'minzip']
 
@@ -117,6 +117,9 @@ export default class Bundlephobia extends BaseJsonService {
   }
 
   async fetch({ scope, packageName, version }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const packageQuery = `${scope ? `${scope}/` : ''}${packageName}${
       version ? `@${version}` : ''
     }`

@@ -6,7 +6,7 @@ export default [
     name: 'TwitterUrlRedirect',
     route: {
       base: 'twitter/url',
-      pattern: ':protocol/:hostAndPath+',
+      pattern: ':protocol/*hostAndPath',
     },
     routeEnum: ['https', 'http'],
     transformPath: () => '/twitter/url',

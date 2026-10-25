@@ -5,7 +5,7 @@ export const Cirrus = retiredService({
   label: 'build',
   route: {
     base: 'cirrus',
-    pattern: ':various+',
+    pattern: '/*various',
   },
   dateAdded: new Date('2026-06-13'),
 })

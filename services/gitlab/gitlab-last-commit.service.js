@@ -30,7 +30,7 @@ export default class GitlabLastCommit extends GitLabBase {
 
   static route = {
     base: 'gitlab/last-commit',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 

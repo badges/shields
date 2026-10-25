@@ -1,17 +1,19 @@
-import { pathParam, queryParam } from '../index.js'
+import { pathParam, queryParam, InvalidParameter } from '../index.js'
+import { scoped } from '../validators.js'
 import { getDependencyVersion } from '../package-json-helpers.js'
 import NpmBase, {
   queryParamSchema,
   packageNameDescription,
 } from './npm-base.js'
 
+const kindEnum = ['dev', 'peer']
+
 export default class NpmDependencyVersion extends NpmBase {
   static category = 'platform-support'
 
   static route = {
     base: 'npm/dependency-version',
-    pattern:
-      ':scope(@[^/]+)?/:packageName/:kind(dev|peer)?/:dependencyScope(@[^/]+)?/:dependency',
+    pattern: '{:scope/}:packageName{/:kind}{/:dependencyScope}/:dependency',
     queryParamSchema,
   }
 
@@ -49,7 +51,7 @@ export default class NpmDependencyVersion extends NpmBase {
           pathParam({
             name: 'kind',
             example: 'dev',
-            schema: { type: 'string', enum: this.getEnum('kind') },
+            schema: { type: 'string', enum: kindEnum },
           }),
           pathParam({
             name: 'dependency',
@@ -82,7 +84,16 @@ export default class NpmDependencyVersion extends NpmBase {
       namedParams,
       queryParams,
     )
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { kind, dependency, dependencyScope } = namedParams
+    if (dependencyScope && !scoped.validate(dependencyScope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid dependency scope' })
+    }
+    if (kind && !kindEnum.includes(kind)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid kind' })
+    }
     const wantedDependency = `${
       dependencyScope ? `${dependencyScope}/` : ''
     }${dependency}`

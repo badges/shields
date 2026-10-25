@@ -18,7 +18,7 @@ export default class GitlabGoModGoVersion extends GitLabBase {
   static category = 'platform-support'
   static route = {
     base: 'gitlab/go-mod/go-version',
-    pattern: ':user/:repo/:branch*',
+    pattern: ':user/:repo{/*branch}',
     queryParamSchema,
   }
 

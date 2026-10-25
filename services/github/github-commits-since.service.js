@@ -20,7 +20,7 @@ export default class GithubCommitsSince extends GithubAuthV3Service {
   static category = 'activity'
   static route = {
     base: 'github/commits-since',
-    pattern: ':user/:repo/:version/:branch*',
+    pattern: ':user/:repo/:version{/*branch}',
     queryParamSchema,
   }
 

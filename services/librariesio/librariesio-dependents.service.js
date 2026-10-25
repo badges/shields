@@ -1,5 +1,6 @@
-import { pathParams } from '../index.js'
+import { pathParams, InvalidParameter } from '../index.js'
 import { metric } from '../text-formatters.js'
+import { scoped } from '../validators.js'
 import LibrariesIoBase from './librariesio-base.js'
 
 // https://libraries.io/api#project-dependents
@@ -8,7 +9,7 @@ export default class LibrariesIoDependents extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/dependents',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName',
+    pattern: ':platform{/:scope}/:packageName',
   }
 
   static openApi = {
@@ -62,6 +63,9 @@ export default class LibrariesIoDependents extends LibrariesIoBase {
   }
 
   async handle({ platform, scope, packageName }) {
+    if (scope && !scoped.validate(scope)) {
+      throw new InvalidParameter({ prettyMessage: 'Invalid scope' })
+    }
     const { dependents_count: dependentCount } = await this.fetchProject({
       platform,
       scope,

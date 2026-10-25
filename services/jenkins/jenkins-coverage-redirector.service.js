@@ -11,15 +11,14 @@ export default [
   retiredService({
     route: {
       base: 'jenkins',
-      pattern: ':coverageFormat(j|c)/:protocol(http|https)/:host/:job+',
+      pattern: ':coverageFormat/:protocol/:host/*job',
     },
     ...commonProps,
   }),
   retiredService({
     route: {
       base: 'jenkins/coverage',
-      pattern:
-        ':coverageFormat(jacoco|cobertura|api)/:protocol(http|https)/:host/:job+',
+      pattern: ':coverageFormat/:protocol/:host/*job',
     },
     ...commonProps,
   }),
@@ -34,8 +33,9 @@ export default [
     category: 'coverage',
     route: {
       base: 'jenkins/coverage',
-      pattern: ':format(jacoco|cobertura|apiv1|apiv4)',
+      pattern: ':format',
     },
+    routeEnum: ['jacoco', 'cobertura', 'apiv1', 'apiv4'],
     transformPath: () => '/jenkins/coverage',
     dateAdded: new Date('2026-05-17'),
   }),

@@ -43,7 +43,7 @@ class GitlabPipelineStatus extends BaseSvgScrapingService {
 
   static route = {
     base: 'gitlab/pipeline-status',
-    pattern: ':project+',
+    pattern: '/*project',
     queryParamSchema,
   }
 
@@ -123,7 +123,7 @@ const GitlabPipelineStatusBranchRouteParamRedirector = redirector({
   name: 'GitlabPipelineStatusBranchRouteParamRedirector',
   route: {
     base: 'gitlab/pipeline',
-    pattern: ':user/:repo/:branch+',
+    pattern: ':user/:repo/*branch',
   },
   transformPath: ({ user, repo }) => `/gitlab/pipeline-status/${user}/${repo}`,
   transformQueryParams: ({ branch }) => ({ branch }),
