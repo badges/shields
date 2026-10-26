@@ -98,3 +98,27 @@ t.create('W3C Validation page has multiple of validation errors with red badge')
     message: isW3CMessage,
     color: isW3CColors,
   })
+
+t.create(
+  'W3C Validation via validator.w3.org: page conforms to standards with brightgreen badge',
+)
+  .get(
+    '/default.json?targetUrl=https://hsivonen.com/test/moz/messages-types/no-message.html&validator=validator.w3.org',
+  )
+  .expectBadge({
+    label: 'w3c',
+    message: isW3CMessage,
+    color: isW3CColors,
+  })
+
+t.create(
+  'W3C Validation via validator.w3.org: page has 1 validation error with red badge',
+)
+  .get(
+    '/html.json?targetUrl=http://hsivonen.com/test/moz/messages-types/warning.html&validator=validator.w3.org',
+  )
+  .expectBadge({
+    label: 'w3c',
+    message: isW3CMessage,
+    color: isW3CColors,
+  })

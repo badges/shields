@@ -27,6 +27,9 @@ const schema = Joi.object({
 const queryParamSchema = Joi.object({
   targetUrl: url,
   preset: Joi.string().regex(presetRegex).allow(''),
+  validator: Joi.equal('validator.nu', 'validator.w3.org').default(
+    'validator.nu',
+  ),
 }).required()
 
 const parserDescription = `The parser that is used for validation. This is a passthru value to the service
@@ -85,6 +88,17 @@ export default class W3cValidation extends BaseJsonService {
               ],
             },
           }),
+          queryParam({
+            name: 'validator',
+            example: 'validator.w3.org',
+            description: `The Nu validator deployment to use. This is a passthru choice of host, both run the same engine and API:
+- \`validator.nu\` (default): the original hsivonen-hosted service
+- \`validator.w3.org\`: the W3C-hosted deployment, at https://validator.w3.org/nu/`,
+            schema: {
+              type: 'string',
+              enum: ['validator.nu', 'validator.w3.org'],
+            },
+          }),
         ],
       },
     },
@@ -101,9 +115,13 @@ export default class W3cValidation extends BaseJsonService {
     }
   }
 
-  async fetch(targetUrl, preset, parser) {
+  async fetch(targetUrl, preset, parser, validator) {
+    const validatorUrl =
+      validator === 'validator.w3.org'
+        ? 'https://validator.w3.org/nu/'
+        : 'https://validator.nu/'
     return this._requestJson({
-      url: 'https://validator.nu/',
+      url: validatorUrl,
       schema,
       options: {
         searchParams: {
@@ -155,8 +173,13 @@ export default class W3cValidation extends BaseJsonService {
     }, {})
   }
 
-  async handle({ parser }, { targetUrl, preset }) {
-    const { url, messages } = await this.fetch(targetUrl, preset, parser)
+  async handle({ parser }, { targetUrl, preset, validator }) {
+    const { url, messages } = await this.fetch(
+      targetUrl,
+      preset,
+      parser,
+      validator,
+    )
     return this.constructor.render({
       messageTypes: this.transform(url, messages),
     })

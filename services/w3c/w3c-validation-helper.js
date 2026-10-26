@@ -88,7 +88,9 @@ The rules are as follows:
   <li>non-document-error: These messages are counted as errors</li>
 </ul>
 
-This badge relies on the https://validator.nu/ service to perform the validation.
+This badge relies on the Nu validator service to perform the validation. By default it
+uses https://validator.nu/; pass \`validator=validator.w3.org\` to use the W3C-hosted
+deployment at https://validator.w3.org/nu/ instead.
 Please refer to https://about.validator.nu/ for the full documentation and Terms of service.
 `
 
