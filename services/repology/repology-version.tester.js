@@ -6,7 +6,7 @@ t.create('Existing project')
   .get('/starship.json')
   .expectBadge({
     label: 'repology',
-    message: Joi.string().regex(/^\d/).required(),
+    message: Joi.string().regex(/^v?\d/).required(),
   })
 
 t.create('Non-existent project')
