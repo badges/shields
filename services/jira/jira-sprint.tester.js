@@ -88,6 +88,44 @@ t.create('no issues in sprint')
     color: 'red',
   })
 
+t.create('jira cloud paginates with nextPageToken')
+  .get(`/${sprintId}.json?baseUrl=https://example.atlassian.net`)
+  .intercept(nock =>
+    nock('https://example.atlassian.net/rest/api/2')
+      .get('/search/jql')
+      .query(sprintQueryString)
+      .reply(200, {
+        nextPageToken: 'page2',
+        isLast: false,
+        issues: [
+          {
+            fields: {
+              resolution: {
+                name: 'done',
+              },
+            },
+          },
+        ],
+      })
+      .get('/search/jql')
+      .query({ ...sprintQueryString, nextPageToken: 'page2' })
+      .reply(200, {
+        isLast: true,
+        issues: [
+          {
+            fields: {
+              resolution: null,
+            },
+          },
+        ],
+      }),
+  )
+  .expectBadge({
+    label: 'completion',
+    message: '50%',
+    color: 'orange',
+  })
+
 t.create('issue with null resolution value')
   .get(`/${sprintId}.json?baseUrl=https://jira.spring.io:8080`)
   .intercept(nock =>
