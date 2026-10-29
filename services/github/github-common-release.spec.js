@@ -1,5 +1,9 @@
 import { test, given } from 'sazerac'
-import { _applyFilter, _getLatestRelease } from './github-common-release.js'
+import {
+  _applyFilter,
+  _filterByBranch,
+  _getLatestRelease,
+} from './github-common-release.js'
 
 describe('GithubRelease', function () {
   test(_getLatestRelease, () => {
@@ -87,5 +91,24 @@ describe('GithubRelease', function () {
       { name: 'release/1.1.0', tag_name: 'tag/1.1.0', prerelease: false },
       { name: 'release/1.2.0', tag_name: 'tag/1.2.0', prerelease: false },
     ])
+  })
+
+  test(_filterByBranch, () => {
+    const releases = [
+      { tag_name: 'v5.3.0', target_commitish: 'master', prerelease: false },
+      { tag_name: 'v4.22.2', target_commitish: '4.x', prerelease: false },
+      { tag_name: 'v5.2.1', target_commitish: 'master', prerelease: false },
+    ]
+
+    given({ releases, branch: undefined }).expect(releases)
+    given({ releases, branch: '' }).expect(releases)
+    given({ releases, branch: 'master' }).expect([
+      { tag_name: 'v5.3.0', target_commitish: 'master', prerelease: false },
+      { tag_name: 'v5.2.1', target_commitish: 'master', prerelease: false },
+    ])
+    given({ releases, branch: '4.x' }).expect([
+      { tag_name: 'v4.22.2', target_commitish: '4.x', prerelease: false },
+    ])
+    given({ releases, branch: 'no-such-branch' }).expect([])
   })
 })

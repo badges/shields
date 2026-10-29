@@ -14,6 +14,7 @@ const extendedQueryParamSchema = Joi.object({
   display_name: Joi.string()
     .valid(...displayNameEnum)
     .default('tag'),
+  branch: Joi.string(),
 })
 
 class GithubRelease extends GithubAuthV3Service {
@@ -37,6 +38,13 @@ class GithubRelease extends GithubAuthV3Service {
             name: 'display_name',
             example: 'tag',
             schema: { type: 'string', enum: displayNameEnum },
+          }),
+          queryParam({
+            name: 'branch',
+            example: 'master',
+            schema: { type: 'string' },
+            description:
+              'Only consider releases targeting this branch. When omitted, releases on all branches are considered.',
           }),
         ],
       },

@@ -15,6 +15,7 @@ const releaseInfoSchema = Joi.object({
   tag_name: Joi.string().required(),
   name: Joi.string().allow(null).allow(''),
   prerelease: Joi.boolean().required(),
+  target_commitish: Joi.string().allow(''),
 }).required()
 
 // Fetch the 'latest' release as defined by the GitHub API
@@ -119,6 +120,13 @@ function applyFilter({ releases, filter, displayName }) {
   return releases.filter(release => filteredReleaseNames.includes(release.name))
 }
 
+function filterByBranch({ releases, branch }) {
+  if (!branch) {
+    return releases
+  }
+  return releases.filter(release => release.target_commitish === branch)
+}
+
 // Fetch the latest release as defined by query params
 async function fetchLatestRelease(
   serviceInstance,
@@ -129,8 +137,9 @@ async function fetchLatestRelease(
   const includePrereleases = queryParams.include_prereleases !== undefined
   const filter = queryParams.filter
   const displayName = queryParams.display_name
+  const branch = queryParams.branch
 
-  if (!includePrereleases && sort === 'date' && !filter) {
+  if (!includePrereleases && sort === 'date' && !filter && !branch) {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -138,15 +147,17 @@ async function fetchLatestRelease(
     return releaseInfo
   }
 
-  const releases = applyFilter({
-    releases: await fetchReleases(serviceInstance, { user, repo }),
-    filter,
-    displayName,
+  const releases = filterByBranch({
+    releases: applyFilter({
+      releases: await fetchReleases(serviceInstance, { user, repo }),
+      filter,
+      displayName,
+    }),
+    branch,
   })
   if (releases.length === 0) {
-    const prettyMessage = filter
-      ? 'no matching releases found'
-      : 'no releases found'
+    const prettyMessage =
+      filter || branch ? 'no matching releases found' : 'no releases found'
     throw new NotFound({ prettyMessage })
   }
   const latestRelease = getLatestRelease({ releases, sort, includePrereleases })
@@ -158,3 +169,4 @@ export { fetchLatestRelease, queryParamSchema, openApiQueryParams }
 // currently only used for tests
 export const _getLatestRelease = getLatestRelease
 export const _applyFilter = applyFilter
+export const _filterByBranch = filterByBranch
