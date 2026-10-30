@@ -9,7 +9,7 @@ export default class LibrariesIoSourcerank extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/sourcerank',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName',
+    pattern: ':platform/:scope(@[^/]+)?/:packageName+',
   }
 
   static openApi = {
