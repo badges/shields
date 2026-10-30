@@ -18,6 +18,9 @@ const schema = Joi.object({
 const description =
   '[ReadTheDocs](https://readthedocs.com/) is a hosting service for documentation.'
 
+const domainDescription =
+  '`org` for Read the Docs Community, `com` for Read the Docs for Business (public projects only)'
+
 export default class ReadTheDocs extends BaseJsonService {
   static category = 'build'
 
@@ -50,6 +53,8 @@ export default class ReadTheDocs extends BaseJsonService {
           {
             name: 'domain',
             example: 'org',
+            schema: { type: 'string', enum: this.getEnum('domain') },
+            description: domainDescription,
           },
           {
             name: 'packageName',
@@ -66,6 +71,8 @@ export default class ReadTheDocs extends BaseJsonService {
           {
             name: 'domain',
             example: 'org',
+            schema: { type: 'string', enum: this.getEnum('domain') },
+            description: domainDescription,
           },
           {
             name: 'packageName',
