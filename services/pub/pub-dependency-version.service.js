@@ -24,12 +24,12 @@ export default class PubDependencyVersion extends BaseJsonService {
   static category = 'platform-support'
 
   static route = {
-    base: 'pub/dependency-version',
+    base: 'pub/dependency-v',
     pattern: ':packageName/:dependency',
   }
 
   static openApi = {
-    '/pub/dependency-version/{packageName}/{dependency}': {
+    '/pub/dependency-v/{packageName}/{dependency}': {
       get: {
         summary: 'Pub Dependency Version',
         description: `${baseDescription}
