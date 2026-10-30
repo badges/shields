@@ -1,10 +1,10 @@
 import Joi from 'joi'
-import { isBuildStatus } from '../build-status.js'
 import { createServiceTester } from '../tester.js'
 
 export const t = await createServiceTester()
 
 const apiBaseUrl = 'https://app.readthedocs.org'
+const businessApiBaseUrl = 'https://app.readthedocs.com'
 const buildsQuery = {
   fields: 'state,success',
   limit: 10,
@@ -73,23 +73,27 @@ t.create('no finished builds')
 t.create('unknown project')
   .get('/this-repo/does-not-exist.json')
   .expectBadge({ label: 'docs', message: 'no finished builds' })
+
 t.create('build status on readthedocs.com')
-  .get('/com/pip.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .get('/com/xanaduai-pennylane.json')
+  .expectBadge({ label: 'docs', message: Joi.equal('passing', 'failing') })
 
 t.create('build status for named version on readthedocs.com')
-  .get('/com/pip/stable.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .get('/com/xanaduai-pennylane/stable.json')
+  .intercept(nock =>
+    nock(businessApiBaseUrl)
+      .get('/api/v3/projects/xanaduai-pennylane/versions/stable/builds/')
+      .query(buildsQuery)
+      .reply(200, { results: [failingBuild] }),
+  )
+  .expectBadge({ label: 'docs', message: 'failing' })
 
 t.create('build status on readthedocs.org (explicit)')
   .get('/org/pip.json')
-  .expectBadge({
-    label: 'docs',
-    message: Joi.alternatives().try(isBuildStatus, Joi.equal('unknown')),
-  })
+  .intercept(nock =>
+    nock(apiBaseUrl)
+      .get('/api/v3/projects/pip/versions/latest/builds/')
+      .query(buildsQuery)
+      .reply(200, { results: [passingBuild] }),
+  )
+  .expectBadge({ label: 'docs', message: 'passing' })
