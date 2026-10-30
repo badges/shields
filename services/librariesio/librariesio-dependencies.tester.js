@@ -38,6 +38,22 @@ t.create('dependencies for scoped npm package with version')
     message: isDependencyState,
   })
 
+t.create('dependencies for package name containing slashes')
+  .timeout(10000)
+  .get('/release/go/github.com/ipfs/kubo.json')
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
+
+t.create('dependencies for package name containing slashes with version')
+  .timeout(10000)
+  .get('/release/go/github.com/ipfs/kubo/v0.30.0.json')
+  .expectBadge({
+    label: 'dependencies',
+    message: isDependencyState,
+  })
+
 t.create('version not found')
   .timeout(10000)
   .get('/release/hex/phoenix/9.9.99.json')
