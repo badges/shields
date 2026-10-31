@@ -261,6 +261,80 @@ describe('coalesceBadge', function () {
         ),
       ).to.include({ logo: logoSvg })
     })
+
+    it('uses default width when custom svg is provided and logoSize is not auto', function () {
+      const logoSvg =
+        'data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHdpZHRoPSI1IiBoZWlnaHQ9IjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+'
+
+      expect(coalesceBadge({ logo: logoSvg }, {}, {}).logoWidth).to.be.undefined
+    })
+
+    it('uses default width when custom svg is provided that is not base64-encoded', function () {
+      const logoSvg = 'data:,HelloWorld'
+
+      expect(
+        coalesceBadge({ logo: logoSvg, logoSize: 'auto' }, {}, {}).logoWidth,
+      ).to.be.undefined
+    })
+
+    it('uses image width when custom svg is provided and logoSize is auto', function () {
+      const logoSvg =
+        'data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHdpZHRoPSI1IiBoZWlnaHQ9IjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+'
+
+      expect(
+        coalesceBadge({ logo: logoSvg, logoSize: 'auto' }, {}, {}),
+      ).to.include({
+        logoSize: 'auto',
+        logoWidth: 70,
+      })
+    })
+
+    it('uses image width when custom non-svg is provided and logoSize is auto', function () {
+      const logoSvg =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAABCAIAAACZnPOkAAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+kFDwkfDkgvZ9oAAAALSURBVAjXY2BABQAAEAABocUhwQAAAABJRU5ErkJggg=='
+
+      expect(
+        coalesceBadge({ logo: logoSvg, logoSize: 'auto' }, {}, {}),
+      ).to.include({
+        logoSize: 'auto',
+        logoWidth: 70,
+      })
+    })
+
+    it('uses default width when custom logo cannot be parsed and logoSize is auto', function () {
+      const logo = 'data:image/png;base64,AAAA'
+
+      expect(coalesceBadge({ logo, logoSize: 'auto' }, {}, {})).to.include({
+        logo,
+        logoSize: 'auto',
+        logoWidth: undefined,
+      })
+    })
+
+    it('uses default width when custom logo has a height of zero and logoSize is auto', function () {
+      // <svg viewBox="0 0 24 0" xmlns="http://www.w3.org/2000/svg"></svg>
+      const logo =
+        'data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48L3N2Zz4='
+
+      expect(coalesceBadge({ logo, logoSize: 'auto' }, {}, {})).to.include({
+        logo,
+        logoSize: 'auto',
+        logoWidth: undefined,
+      })
+    })
+
+    it("does not inherit the service's logoSize when custom svg is provided", function () {
+      const logoSvg =
+        'data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIHdpZHRoPSI1IiBoZWlnaHQ9IjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PC9zdmc+'
+
+      expect(
+        coalesceBadge(
+          { logo: logoSvg },
+          { namedLogo: 'npm', logoSize: 'auto' },
+          {},
+        ),
+      ).to.include({ logoSize: undefined, logoWidth: undefined })
+    })
   })
 
   describe('Logo size', function () {

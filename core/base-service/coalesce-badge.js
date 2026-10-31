@@ -1,3 +1,4 @@
+import { imageSize } from 'image-size'
 import {
   decodeDataUrlFromQueryParam,
   prepareNamedLogo,
@@ -6,6 +7,25 @@ import { svg2base64, getIconSize } from '../../lib/svg-helpers.js'
 import { DEFAULT_LOGO_HEIGHT } from '../../badge-maker/lib/constants.js'
 import coalesce from './coalesce.js'
 import toArray from './to-array.js'
+
+// Custom logos come from user input, so any image we can't decode or measure
+// falls back to the default logo width instead of throwing.
+function getCustomLogoWidth(logoDataUrl) {
+  const [, base64Image] = logoDataUrl.split(';base64,')
+  if (!base64Image) {
+    return undefined
+  }
+
+  let dimensions
+  try {
+    dimensions = imageSize(Buffer.from(base64Image, 'base64'))
+  } catch (e) {
+    return undefined
+  }
+
+  const width = (dimensions.width / dimensions.height) * DEFAULT_LOGO_HEIGHT
+  return Number.isFinite(width) && width > 0 ? width : undefined
+}
 
 /**
  * Translate modern badge data to the legacy schema understood by the badge
@@ -114,6 +134,9 @@ export default function coalesceBadge(
     const overrideLogoSvgBase64 = decodeDataUrlFromQueryParam(overrideLogo)
     if (overrideLogoSvgBase64) {
       logoSvgBase64 = overrideLogoSvgBase64
+      if (overrideLogoSize === 'auto') {
+        logoWidth = getCustomLogoWidth(overrideLogoSvgBase64)
+      }
     } else {
       namedLogo = overrideLogo
       // If the logo has been overridden it does not make sense to inherit the
