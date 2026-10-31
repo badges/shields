@@ -1,5 +1,10 @@
+import { expect } from 'chai'
 import { test, given } from 'sazerac'
-import { _applyFilter, _getLatestRelease } from './github-common-release.js'
+import {
+  fetchLatestRelease,
+  _applyFilter,
+  _getLatestRelease,
+} from './github-common-release.js'
 
 describe('GithubRelease', function () {
   test(_getLatestRelease, () => {
@@ -87,5 +92,37 @@ describe('GithubRelease', function () {
       { name: 'release/1.1.0', tag_name: 'tag/1.1.0', prerelease: false },
       { name: 'release/1.2.0', tag_name: 'tag/1.2.0', prerelease: false },
     ])
+  })
+
+  describe('fetchLatestRelease with branch', function () {
+    const releases = [
+      { tag_name: 'v9.1', prerelease: false, target_commitish: '9.x' },
+      { tag_name: 'v8.2', prerelease: false, target_commitish: '8.x' },
+      { tag_name: 'v8.1', prerelease: false, target_commitish: '8.x' },
+    ]
+    const service = { _requestJson: async () => releases }
+
+    it('returns the latest release on the branch', async function () {
+      const release = await fetchLatestRelease(
+        service,
+        { user: 'u', repo: 'r' },
+        { sort: 'date', branch: '8.x' },
+      )
+      expect(release.tag_name).to.equal('v8.2')
+    })
+
+    it('throws NotFound when no release targets the branch', async function () {
+      let error
+      try {
+        await fetchLatestRelease(
+          service,
+          { user: 'u', repo: 'r' },
+          { sort: 'date', branch: 'nope' },
+        )
+      } catch (e) {
+        error = e
+      }
+      expect(error).to.have.property('name', 'NotFound')
+    })
   })
 })

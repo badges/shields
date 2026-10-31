@@ -15,6 +15,7 @@ const releaseInfoSchema = Joi.object({
   tag_name: Joi.string().required(),
   name: Joi.string().allow(null).allow(''),
   prerelease: Joi.boolean().required(),
+  target_commitish: Joi.string(),
 }).required()
 
 // Fetch the 'latest' release as defined by the GitHub API
@@ -129,8 +130,9 @@ async function fetchLatestRelease(
   const includePrereleases = queryParams.include_prereleases !== undefined
   const filter = queryParams.filter
   const displayName = queryParams.display_name
+  const branch = queryParams.branch
 
-  if (!includePrereleases && sort === 'date' && !filter) {
+  if (!includePrereleases && sort === 'date' && !filter && !branch) {
     const releaseInfo = await fetchLatestGitHubRelease(serviceInstance, {
       user,
       repo,
@@ -138,15 +140,16 @@ async function fetchLatestRelease(
     return releaseInfo
   }
 
-  const releases = applyFilter({
-    releases: await fetchReleases(serviceInstance, { user, repo }),
-    filter,
-    displayName,
-  })
+  let allReleases = await fetchReleases(serviceInstance, { user, repo })
+  if (branch) {
+    allReleases = allReleases.filter(
+      release => release.target_commitish === branch,
+    )
+  }
+  const releases = applyFilter({ releases: allReleases, filter, displayName })
   if (releases.length === 0) {
-    const prettyMessage = filter
-      ? 'no matching releases found'
-      : 'no releases found'
+    const prettyMessage =
+      filter || branch ? 'no matching releases found' : 'no releases found'
     throw new NotFound({ prettyMessage })
   }
   const latestRelease = getLatestRelease({ releases, sort, includePrereleases })

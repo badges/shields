@@ -54,3 +54,7 @@ t.create('(pre-)Release (legacy route: release-pre)')
   .expectRedirect(
     '/github/v/release/photonstorm/phaser.svg?include_prereleases',
   )
+
+t.create('latest release on a branch (not found)')
+  .get('/v/release/expressjs/express.json?branch=no-such-branch-xyz')
+  .expectBadge({ label: 'release', message: 'no matching releases found' })
