@@ -1,5 +1,4 @@
 import camelcase from 'camelcase'
-import emojic from 'emojic'
 import Joi from 'joi'
 import qs from 'qs'
 import BaseService from './base.js'
@@ -80,17 +79,12 @@ export default function redirector(attrs) {
         const metricHandle = metricHelper.startRequest()
 
         const namedParams = namedParamsForMatch(captureNames, match, this)
-        trace.logTrace(
-          'inbound',
-          emojic.arrowHeadingUp,
-          'Redirector',
-          route.base,
-        )
-        trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
-        trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+        trace.logTrace('inbound', '⤴️', 'Redirector', route.base)
+        trace.logTrace('inbound', '🎫', 'Named params', namedParams)
+        trace.logTrace('inbound', '🖍', 'Query params', queryParams)
 
         const targetPath = encodeURI(transformPath(namedParams))
-        trace.logTrace('validate', emojic.dart, 'Target', targetPath)
+        trace.logTrace('validate', '🎯', 'Target', targetPath)
 
         let urlSuffix = ask.uri.search || ''
 
@@ -113,7 +107,7 @@ export default function redirector(attrs) {
         const redirectUrl = `${
           format === 'png' ? rasterUrl : ''
         }${targetPath}.${format}${urlSuffix}`
-        trace.logTrace('outbound', emojic.shield, 'Redirect URL', redirectUrl)
+        trace.logTrace('outbound', '🛡', 'Redirect URL', redirectUrl)
 
         ask.res.statusCode = 301
         ask.res.setHeader('Location', redirectUrl)

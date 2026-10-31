@@ -2,8 +2,6 @@
  * @module
  */
 
-// See available emoji at http://emoji.muan.co/
-import emojic from 'emojic'
 import { XMLParser, XMLValidator } from 'fast-xml-parser'
 import BaseService from './base.js'
 import trace from './trace.js'
@@ -74,7 +72,7 @@ class BaseXmlService extends BaseService {
     }
     const parser = new XMLParser(parserOptions)
     const xml = parser.parse(buffer)
-    logTrace(emojic.dart, 'Response XML (before validation)', xml, {
+    logTrace('🎯', 'Response XML (before validation)', xml, {
       deep: true,
     })
     return this.constructor._validate(xml, schema)

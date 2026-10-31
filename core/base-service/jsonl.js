@@ -1,5 +1,3 @@
-// See available emoji at http://emoji.muan.co/
-import emojic from 'emojic'
 import { InvalidResponse } from './errors.js'
 import trace from './trace.js'
 
@@ -22,13 +20,13 @@ function parseJsonl(buffer) {
       .filter(Boolean)
       .map(line => JSON.parse(line))
   } catch (err) {
-    logTrace(emojic.dart, 'Response JSONL (unparseable)', buffer)
+    logTrace('🎯', 'Response JSONL (unparseable)', buffer)
     throw new InvalidResponse({
       prettyMessage: 'unparseable jsonl response',
       underlyingError: err,
     })
   }
-  logTrace(emojic.dart, 'Response JSONL (before validation)', jsonl, {
+  logTrace('🎯', 'Response JSONL (before validation)', jsonl, {
     deep: true,
   })
   return jsonl

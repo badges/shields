@@ -1,4 +1,3 @@
-import emojic from 'emojic'
 import Joi from 'joi'
 import trace from '../../core/base-service/trace.js'
 import { BaseService, queryParams } from '../index.js'
@@ -52,10 +51,10 @@ export default class Website extends BaseService {
 
   async _request({ url, options = {} }) {
     const logTrace = (...args) => trace.logTrace('fetch', ...args)
-    logTrace(emojic.bowAndArrow, 'Request', url, '\n', options)
+    logTrace('🏹', 'Request', url, '\n', options)
     const { res, buffer } = await this._requestFetcher(url, options)
     await this._meterResponse(res, buffer)
-    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    logTrace('🎯', 'Response status code', res.statusCode)
     return { res, buffer }
   }
 

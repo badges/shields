@@ -1,7 +1,6 @@
 import { fileURLToPath, URL } from 'url'
 import config from 'config'
 import got from 'got'
-import emojic from 'emojic'
 import Server from '../core/server/server.js'
 import trace from '../core/base-service/trace.js'
 
@@ -21,7 +20,7 @@ async function traceBadge(badgeUrl) {
   const body = await got(
     `${server.baseUrl.replace(/\/$/, '')}${badgeUrl}`,
   ).json()
-  trace.logTrace('outbound', emojic.shield, 'Rendered badge', body)
+  trace.logTrace('outbound', '🛡', 'Rendered badge', body)
   await server.stop()
 }
 

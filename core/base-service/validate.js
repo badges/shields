@@ -1,4 +1,3 @@
-import emojic from 'emojic'
 import Joi from 'joi'
 import trace from './trace.js'
 
@@ -20,12 +19,7 @@ function validate(
 
   const { error, value } = schema.validate(data, options)
   if (error) {
-    trace.logTrace(
-      'validate',
-      emojic.womanShrugging,
-      traceErrorMessage,
-      error.message,
-    )
+    trace.logTrace('validate', '🤷', traceErrorMessage, error.message)
 
     let prettyMessage = prettyErrorMessage
     if (includeKeys) {
@@ -37,7 +31,7 @@ function validate(
 
     throw new ErrorClass({ prettyMessage, underlyingError: error })
   } else {
-    trace.logTrace('validate', emojic.bathtub, traceSuccessMessage, value, {
+    trace.logTrace('validate', '🛁', traceSuccessMessage, value, {
       deep: true,
     })
     return value

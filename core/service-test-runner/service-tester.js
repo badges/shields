@@ -2,7 +2,6 @@
  * @module
  */
 
-import emojic from 'emojic'
 import icedfrisbyNockModule from 'icedfrisby-nock'
 import icedfrisbyModule from 'icedfrisby'
 import trace from '../base-service/trace.js'
@@ -92,7 +91,7 @@ class ServiceTester {
         } catch (e) {
           responseBody = this._response.body
         }
-        trace.logTrace('outbound', emojic.shield, 'Response', responseBody)
+        trace.logTrace('outbound', '🛡', 'Response', responseBody)
       })
 
     this.specs.push(spec)
