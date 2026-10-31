@@ -24,3 +24,11 @@ The `logoColor` param can be used to set the color of the SimpleIcons named logo
 
 - ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript
 - ![](https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5) - https://img.shields.io/badge/logo-javascript-blue?logo=javascript&logoColor=f5f5f5
+
+## logoSize parameter
+
+By default a logo is drawn in a square, so wide logos end up small. Set `logoSize=auto` to size the logo to its aspect ratio instead. This works for SimpleIcons and custom logos.
+
+- ![](https://img.shields.io/badge/logo-amd-blue?logo=amd) - https://img.shields.io/badge/logo-amd-blue?logo=amd
+- ![](https://img.shields.io/badge/logo-amd-blue?logo=amd&logoSize=auto) - https://img.shields.io/badge/logo-amd-blue?logo=amd&logoSize=auto
+- ![](https://img.shields.io/badge/logo-custom-blue?logoSize=auto&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNiAxMiIgZmlsbD0iI2ZmZiI+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjUiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjYiIHI9IjUiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjYiIHI9IjUiLz48L3N2Zz4=) - https://img.shields.io/badge/logo-custom-blue?logoSize=auto&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNiAxMiIgZmlsbD0iI2ZmZiI+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjUiLz48Y2lyY2xlIGN4PSIxOCIgY3k9IjYiIHI9IjUiLz48Y2lyY2xlIGN4PSIzMCIgY3k9IjYiIHI9IjUiLz48L3N2Zz4=
