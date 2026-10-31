@@ -24,7 +24,7 @@ t.create('Tag (latest by semver) (self-managed)')
 
 t.create('Tag (latest by semver pre-release) (self-managed)')
   .get(
-    '/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&sort=semver&include_prereleases',
+    '/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org&sort=semver&include_prereleases=true',
   )
   .expectBadge({ label: 'tag', message: 'v5.0.0-rc1', color: 'orange' })
 

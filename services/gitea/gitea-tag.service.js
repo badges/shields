@@ -15,7 +15,7 @@ const sortEnum = ['date', 'semver']
 
 const queryParamSchema = Joi.object({
   gitea_url: optionalUrl,
-  include_prereleases: Joi.equal(''),
+  include_prereleases: Joi.boolean().default(false),
   sort: Joi.string()
     .valid(...sortEnum)
     .default('date'),
@@ -51,7 +51,7 @@ export default class GiteaTag extends GiteaBase {
           queryParam({
             name: 'include_prereleases',
             schema: { type: 'boolean' },
-            example: null,
+            example: 'false',
           }),
           queryParam({
             name: 'sort',
@@ -93,7 +93,7 @@ export default class GiteaTag extends GiteaBase {
     { user, repo },
     {
       gitea_url: baseUrl = 'https://gitea.com',
-      include_prereleases: pre,
+      include_prereleases: includePrereleases,
       sort,
     },
   ) {
@@ -105,7 +105,7 @@ export default class GiteaTag extends GiteaBase {
     const version = this.constructor.transform({
       tags,
       sort,
-      includePrereleases: pre !== undefined,
+      includePrereleases,
     })
     return renderVersionBadge({ version })
   }
