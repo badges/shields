@@ -168,6 +168,37 @@ describe('DynamicXml', function () {
     })
   })
 
+  describe('xmldom log noise', function () {
+    let consoleError
+
+    beforeEach(function () {
+      consoleError = sinon.stub(console, 'error')
+    })
+
+    afterEach(function () {
+      consoleError.restore()
+    })
+
+    it('does not log warnings for a sloppy but parseable document', function () {
+      const { values } = DynamicXml.prototype.transform({
+        pathExpression: '//item/text()',
+        buffer: '<root><item attr=no-quotes>text</item></root>',
+      })
+      expect(values).to.deep.equal(['text'])
+      expect(consoleError.called).to.equal(false)
+    })
+
+    it('throws InvalidResponse, without logging, for a fatal document', function () {
+      expect(() =>
+        DynamicXml.prototype.transform({
+          pathExpression: '//item/text()',
+          buffer: '<root><unclosed></root>',
+        }),
+      ).to.throw(InvalidResponse)
+      expect(consoleError.called).to.equal(false)
+    })
+  })
+
   test(DynamicXml.prototype.getmimeType, () => {
     // known types
     given('text/html').expect('text/html')

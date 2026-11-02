@@ -84,7 +84,17 @@ export default class DynamicXml extends BaseService {
 
     let parsed
     try {
-      parsed = new DOMParser().parseFromString(buffer, contentType)
+      // The documents fetched by this service come from arbitrary remote
+      // servers and are frequently not well formed. The default xmldom
+      // error handler prints every warning and error to the console, which
+      // spews log noise in production, so replace it with a no-op:
+      // non-fatal problems keep being tolerated, and fatal errors still
+      // throw, which is handled below.
+      // https://github.com/badges/shields/issues/2658
+      parsed = new DOMParser({ onError: () => {} }).parseFromString(
+        buffer,
+        contentType,
+      )
     } catch (e) {
       throw new InvalidResponse({ prettyMessage: e.message })
     }
