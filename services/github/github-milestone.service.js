@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import parseLinkHeader from 'parse-link-header'
 import { pathParams } from '../index.js'
 import { metric } from '../text-formatters.js'
 import { GithubAuthV3Service } from './github-auth-service.js'
@@ -50,8 +51,7 @@ export default class GithubMilestone extends GithubAuthV3Service {
     color: 'informational',
   }
 
-  static render({ variant, milestones }) {
-    const milestoneLength = milestones.length
+  static render({ variant, milestoneCount }) {
     let color
     let qualifier = ''
 
@@ -71,21 +71,32 @@ export default class GithubMilestone extends GithubAuthV3Service {
 
     return {
       label: `${qualifier}${qualifier ? ' ' : ''}milestones`,
-      message: metric(milestoneLength),
+      message: metric(milestoneCount),
       color,
     }
   }
 
   async fetch({ user, repo, variant }) {
-    return this._requestJson({
-      url: `/repos/${user}/${repo}/milestones?state=${variant}`,
-      schema,
+    // Request a single milestone per page, so that the number of the last
+    // page in the Link header is the total number of milestones.
+    const { res, buffer } = await this._request({
+      url: `/repos/${user}/${repo}/milestones`,
+      options: { searchParams: { state: variant, per_page: '1' } },
       httpErrors: httpErrorsFor('repo not found'),
     })
+
+    const parsed = parseLinkHeader(res.headers.link)
+    if (parsed && parsed.last) {
+      return +parsed.last.page
+    }
+
+    const json = this._parseJson(buffer)
+    const milestones = this.constructor._validate(json, schema)
+    return milestones.length
   }
 
   async handle({ user, repo, variant }) {
-    const milestones = await this.fetch({ user, repo, variant })
-    return this.constructor.render({ variant, milestones })
+    const milestoneCount = await this.fetch({ user, repo, variant })
+    return this.constructor.render({ variant, milestoneCount })
   }
 }
