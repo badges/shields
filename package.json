@@ -41,7 +41,7 @@
     "decamelize": "^6.0.1",
     "fast-xml-parser": "^5.11.1",
     "global-agent": "^4.1.3",
-    "got": "^16.0.0",
+    "got": "^16.1.0",
     "graphql": "17.0.2",
     "graphql-tag": "^2.12.7",
     "joi": "18.2.9",
