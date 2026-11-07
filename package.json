@@ -155,7 +155,7 @@
     "chai-as-promised": "^8.0.2",
     "clsx": "^2.1.1",
     "concurrently": "^10.0.5",
-    "cypress": "^16.1.0",
+    "cypress": "^16.2.1",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^14.0.7",
     "deepmerge": "^4.3.1",
