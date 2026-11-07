@@ -180,7 +180,7 @@
     "jsdoc": "^4.0.5",
     "lint-staged": "^17.6.0",
     "mocha": "^12.0.3",
-    "neostandard": "0.13.0",
+    "neostandard": "0.14.1",
     "nock": "13.5.6",
     "node-mocks-http": "^1.18.1",
     "nodemon": "^3.1.14",
