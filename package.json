@@ -151,7 +151,7 @@
     "@mdx-js/react": "^3.1.1",
     "@typescript-eslint/parser": "^8.70.1",
     "c8": "^12.0.0",
-    "chai": "6.2.2",
+    "chai": "6.3.0",
     "chai-as-promised": "^8.0.2",
     "clsx": "^2.1.1",
     "concurrently": "^10.0.5",
