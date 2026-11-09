@@ -149,7 +149,6 @@
     "c8": "^12.0.0",
     "chai": "6.3.0",
     "chai-as-promised": "^8.0.2",
-    "clsx": "^2.1.1",
     "cypress": "^16.2.1",
     "cypress-wait-for-stable-dom": "^0.1.0",
     "danger": "^14.1.0",
