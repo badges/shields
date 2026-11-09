@@ -65,11 +65,9 @@ t.create('GitHub pull requests with only drafts')
   })
 
 t.create('GitHub closed pull requests by multi-word label excluding drafts')
-  .get(
-    '/issues-pr-closed/badges/shields/good%20first%20issue.json?excludeDrafts',
-  )
+  .get('/issues-pr-closed/badges/shields/blog%20post.json?excludeDrafts')
   .expectBadge({
-    label: '"good first issue" non-draft pull requests',
+    label: '"blog post" non-draft pull requests',
     message: isMetricClosedIssues,
   })
 

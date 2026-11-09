@@ -27,9 +27,7 @@ t.create('GitHub Hacktoberfest combined status')
 
 t.create('GitHub Hacktoberfest combined status (suggestion label override)')
   .get(
-    `/2019/badges/shields.json?suggestion_label=${encodeURIComponent(
-      'good first issue',
-    )}`,
+    `/2019/badges/shields.json?suggestion_label=${encodeURIComponent('bug')}`,
   )
   .expectBadge({
     label: 'hacktoberfest',
