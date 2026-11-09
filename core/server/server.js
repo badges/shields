@@ -2,9 +2,9 @@
  * @module
  */
 
+import http from 'node:http'
 import path from 'path'
 import url, { fileURLToPath } from 'url'
-import { bootstrap } from 'global-agent'
 import cloudflareMiddleware from 'cloudflare-middleware'
 import Camp from '@shields_io/camp'
 import originalJoi from 'joi'
@@ -502,21 +502,18 @@ class Server {
   }
 
   bootstrapAgent() {
-    /*
-    Bootstrap global agent.
-    This allows self-hosting users to configure a proxy with
-    HTTP_PROXY, HTTPS_PROXY, NO_PROXY variables
-    */
-    if (!('GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE' in process.env)) {
-      process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE = ''
-    }
-
-    const proxyPrefix = process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE
-    const HTTP_PROXY = process.env[`${proxyPrefix}HTTP_PROXY`] || null
-    const HTTPS_PROXY = process.env[`${proxyPrefix}HTTPS_PROXY`] || null
+    // Preserve custom proxy-variable prefixes used by existing self-hosted setups.
+    const proxyPrefix =
+      process.env.GLOBAL_AGENT_ENVIRONMENT_VARIABLE_NAMESPACE ?? ''
+    const HTTP_PROXY = process.env[`${proxyPrefix}HTTP_PROXY`]
+    const HTTPS_PROXY = process.env[`${proxyPrefix}HTTPS_PROXY`] ?? HTTP_PROXY
 
     if (HTTP_PROXY || HTTPS_PROXY) {
-      bootstrap()
+      return http.setGlobalProxyFromEnv({
+        HTTP_PROXY,
+        HTTPS_PROXY,
+        NO_PROXY: process.env[`${proxyPrefix}NO_PROXY`],
+      })
     }
   }
 
