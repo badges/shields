@@ -20,3 +20,12 @@ t.create('Contributors (repo not found)')
     label: 'contributors',
     message: 'repo not found',
   })
+
+t.create('Contributors (too many to compute)')
+  .timeout(20000)
+  .get('/contributors/NixOS/nixpkgs.json')
+  .expectBadge({
+    label: 'contributors',
+    message: 'repository too large',
+    color: 'lightgrey',
+  })
