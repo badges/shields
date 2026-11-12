@@ -28,7 +28,7 @@ t.create('check runs - name filter is forwarded as check_name')
   .intercept(nock =>
     nock('https://api.github.com')
       .get('/repos/badges/shields/commits/master/check-runs')
-      .query({ check_name: 'test-lint' })
+      .query({ check_name: 'test-lint', per_page: 100 })
       .reply(200, {
         total_count: 1,
         check_runs: [
@@ -44,6 +44,34 @@ t.create('check runs - name filter is forwarded as check_name')
     label: 'checks',
     message: 'passing',
     color: 'brightgreen',
+  })
+
+t.create('check runs - failure beyond the default page size')
+  .get('/badges/shields/master.json')
+  .intercept(nock =>
+    nock('https://api.github.com')
+      .get('/repos/badges/shields/commits/master/check-runs')
+      .query({ per_page: 100 })
+      .reply(200, {
+        total_count: 31,
+        check_runs: [
+          ...Array.from({ length: 30 }, (_, i) => ({
+            name: `check-${i}`,
+            status: 'completed',
+            conclusion: 'success',
+          })),
+          {
+            name: 'check-30',
+            status: 'completed',
+            conclusion: 'failure',
+          },
+        ],
+      }),
+  )
+  .expectBadge({
+    label: 'checks',
+    message: 'failing',
+    color: 'red',
   })
 
 t.create('check runs - no tests')
