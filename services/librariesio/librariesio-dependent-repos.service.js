@@ -8,7 +8,7 @@ export default class LibrariesIoDependentRepos extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/dependent-repos',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName',
+    pattern: ':platform/:scope(@[^/]+)?/:packageName+',
   }
 
   static openApi = {
