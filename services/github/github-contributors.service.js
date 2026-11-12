@@ -11,7 +11,7 @@ const schema = Joi.array().items(Joi.object())
 const documentationWithNote = [
   documentation,
   'Note: Co-authors are not included in the count due to endpoint limitations.',
-  "For repositories whose history or contributor list is too large for GitHub's API to compute, the badge shows `High contributor count`.",
+  "For repositories whose history or contributor list is too large for GitHub's API to compute, the badge shows `repository too large`.",
 ].join('\n\n')
 
 export default class GithubContributors extends GithubAuthV3Service {
@@ -75,7 +75,7 @@ export default class GithubContributors extends GithubAuthV3Service {
           error.buffer?.toString(),
         )
       ) {
-        throw new InvalidResponse({ prettyMessage: 'High contributor count' })
+        throw new InvalidResponse({ prettyMessage: 'repository too large' })
       }
       throw error
     }
