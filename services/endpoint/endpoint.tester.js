@@ -15,6 +15,63 @@ t.create('Valid schema')
   )
   .expectBadge({ label: '', message: 'yo' })
 
+t.create('User message overrides endpoint message')
+  .get('.json?url=https://example.com/badge&message=custom')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+    }),
+  )
+  .expectBadge({ label: 'hey', message: 'custom' })
+
+t.create('User label and URL-encoded message override endpoint text')
+  .get(
+    '.json?url=https://example.com/badge&label=custom&message=hello%20%26%20world',
+  )
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+      message: 'yo',
+    }),
+  )
+  .expectBadge({ label: 'custom', message: 'hello & world' })
+
+t.create('User message overrides endpoint error message')
+  .get('.json?url=https://example.com/badge&message=custom')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      isError: true,
+      label: 'hey',
+      message: 'not right',
+      color: 'red',
+    }),
+  )
+  .expectBadge({ label: 'hey', message: 'custom', color: 'red' })
+
+t.create('User message does not override response validation errors')
+  .get('.json?url=https://example.com/badge&message=custom')
+  .intercept(nock =>
+    nock('https://example.com/').get('/badge').reply(200, {
+      schemaVersion: 1,
+      label: 'hey',
+    }),
+  )
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid properties: message',
+  })
+
+t.create('Empty message override is invalid')
+  .get('.json?url=https://example.com/badge&message=')
+  .expectBadge({
+    label: 'custom badge',
+    message: 'invalid query parameter: message',
+  })
+
 t.create('color and labelColor')
   .get('.json?url=https://example.com/badge')
   .intercept(nock =>
