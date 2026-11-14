@@ -147,6 +147,7 @@ export default class GiteaDownloads extends GiteaBase {
 
       return this.constructor.render({ downloads })
     } else {
+      tag ??= 'latest'
       const release = await this.fetch({
         user,
         repo,

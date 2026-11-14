@@ -15,6 +15,10 @@ t.create('Downloads (latest release)')
   .get('/dv/gitea/tea/latest.json')
   .expectBadge({ label: 'downloads@latest', message: isMetric })
 
+t.create('Downloads (latest release, no tag)')
+  .get('/dv/gitea/tea.json')
+  .expectBadge({ label: 'downloads@latest', message: isMetric })
+
 t.create('Downloads (tag)')
   .get('/dv/gitea/tea/v0.16.0.json')
   .expectBadge({ label: 'downloads@v0.16.0', message: isMetric })
@@ -33,6 +37,10 @@ t.create('Downloads (latest release) (self-managed)')
   .get(
     '/dv/CanisHelix/shields-badge-test/latest.json?gitea_url=https://codeberg.org',
   )
+  .expectBadge({ label: 'downloads@latest', message: '0' })
+
+t.create('Downloads (latest release, no tag) (self-managed)')
+  .get('/dv/CanisHelix/shields-badge-test.json?gitea_url=https://codeberg.org')
   .expectBadge({ label: 'downloads@latest', message: '0' })
 
 t.create('Downloads (tag) (self-managed)')
@@ -67,6 +75,10 @@ t.create('Downloads (latest release, no repo) (self-managed)')
   .get(
     '/dv/CanisHelix/does-not-exist/latest.json?gitea_url=https://codeberg.org',
   )
+  .expectBadge({ label: 'downloads', message: 'no releases found' })
+
+t.create('Downloads (latest release, no tag, no repo) (self-managed)')
+  .get('/dv/CanisHelix/does-not-exist.json?gitea_url=https://codeberg.org')
   .expectBadge({ label: 'downloads', message: 'no releases found' })
 
 t.create('Downloads (tag, no repo) (self-managed)')
