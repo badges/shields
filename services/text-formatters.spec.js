@@ -4,6 +4,7 @@ import {
   currencyFromCode,
   ordinalNumber,
   metric,
+  formatCount,
   omitv,
   addv,
   maybePluralize,
@@ -57,6 +58,10 @@ describe('Text formatters', function () {
     given(1100000000000000000000).expect('1.1Z')
     given(2222222222222222222222222).expect('2.2Y')
     given(22222222222222222222222222).expect('22Y')
+    given(999.5e24).expect('1000Y')
+    given(1e27).expect('1000Y')
+    given(-999.5e24).expect('-1000Y')
+    given(-1e27).expect('-1000Y')
     given(-999).expect('-999')
     given(-999).expect('-999')
     given(-1000).expect('-1k')
@@ -79,6 +84,41 @@ describe('Text formatters', function () {
     given(-2222222222222222222222222).expect('-2.2Y')
     given(-22222222222222222222222222).expect('-22Y')
     /* eslint-enable */
+  })
+
+  test(formatCount, () => {
+    given(0).expect('0')
+    given(999).expect('999')
+    given(1000).expect('1k')
+    given(1100).expect('1.1k')
+    given(10100).expect('10k')
+    given(999499).expect('999k')
+    given(999500).expect('1 million')
+    given(1000000).expect('1 million')
+    given(1100000).expect('1.1 million')
+    given(999499999).expect('999 million')
+    given(999500000).expect('1 billion')
+    given(1000000000).expect('1 billion')
+    given(1578896212).expect('1.6 billion')
+    given(13000000000).expect('13 billion')
+    given(999499999999).expect('999 billion')
+    given(999500000000).expect('1 trillion')
+    given(1000000000000).expect('1 trillion')
+    given(1100000000000).expect('1.1 trillion')
+    given(9949999999999).expect('9.9 trillion')
+    given(9950000000001).expect('10 trillion')
+    given(999499999999999).expect('999 trillion')
+    given(999500000000000).expect('1000 trillion')
+    given(1000000000000000).expect('1000 trillion')
+    given(2000000000000000).expect('2000 trillion')
+    given(-999).expect('-999')
+    given(-1100).expect('-1.1k')
+    given(-1100000).expect('-1.1 million')
+    given(-1578896212).expect('-1.6 billion')
+    given(-13000000000).expect('-13 billion')
+    given(-1100000000000).expect('-1.1 trillion')
+    given(-999500000000000).expect('-1000 trillion')
+    given(-1000000000000000).expect('-1000 trillion')
   })
 
   test(omitv, () => {
