@@ -26,7 +26,7 @@ const buildSchema = Joi.object({
       images: Joi.array().items(
         Joi.object({
           digest: Joi.string(),
-          architecture: Joi.string().required(),
+          architecture: Joi.string().allow('').required(),
         }),
       ),
     }),
@@ -107,19 +107,29 @@ export default class DockerVersion extends BaseJsonService {
 
   async fetch({ user, repo, page }) {
     page = page ? `&page=${page}` : ''
-    return await fetch(this, {
+    const data = await fetch(this, {
       schema: buildSchema,
       url: `https://registry.hub.docker.com/v2/repositories/${getDockerHubUser(
         user,
       )}/${repo}/tags?page_size=100&ordering=last_updated${page}`,
       httpErrors: { 404: 'repository or tag not found' },
     })
+    return {
+      ...data,
+      results: data.results.filter(
+        tag =>
+          !tag.images?.length || tag.images.some(image => image.architecture),
+      ),
+    }
   }
 
   transform({ tag, sort, data, arch = 'amd64' }) {
     let version
 
     if (!tag && sort === 'date') {
+      if (data.length === 0) {
+        throw new NotFound({ prettyMessage: 'no image tags found' })
+      }
       version = data[0].name
       if (version !== 'latest') {
         return { version }
@@ -169,7 +179,7 @@ export default class DockerVersion extends BaseJsonService {
       fetch: this.fetch.bind(this),
       isAuthenticated: this.authHelper.isConfigured,
       shouldFetchRemainingPages: ([firstTag]) =>
-        !isDateSort || firstTag.name === 'latest',
+        !isDateSort || !firstTag || firstTag.name === 'latest',
     })
 
     const { version } = this.transform({ tag, sort, data, arch })
