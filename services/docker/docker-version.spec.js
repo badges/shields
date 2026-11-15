@@ -1,7 +1,9 @@
 import { expect } from 'chai'
 import sinon from 'sinon'
+import nock from 'nock'
 import { test, given } from 'sazerac'
 import { InvalidResponse } from '../index.js'
+import { cleanUpNockAfterEach, defaultContext } from '../test-helpers.js'
 import DockerVersion from './docker-version.service.js'
 import {
   versionDataNoTagDateSort,
@@ -12,6 +14,128 @@ import {
 } from './docker-fixtures.js'
 
 describe('DockerVersion', function () {
+  cleanUpNockAfterEach()
+
+  describe('tags with empty architectures', function () {
+    const config = { public: { services: {} }, private: {} }
+    const signature = {
+      name: `sha256-${'a'.repeat(64)}.sig`,
+      images: [{ architecture: '', digest: `sha256:${'c'.repeat(64)}` }],
+    }
+    const images = [
+      { architecture: 'amd64', digest: `sha256:${'b'.repeat(64)}` },
+    ]
+    const results = [
+      signature,
+      { name: 'latest', images },
+      { name: '4.15.0', images },
+    ]
+
+    async function invoke({ tag, sort, results }) {
+      const scope = nock('https://registry.hub.docker.com')
+        .get('/v2/repositories/dnesting/nsd/tags')
+        .query({ page_size: 100, ordering: 'last_updated' })
+        .reply(200, { count: results.length, results })
+
+      const badge = await DockerVersion.invoke(
+        defaultContext,
+        config,
+        { user: 'dnesting', repo: 'nsd', tag },
+        { sort },
+      )
+      scope.done()
+      return badge
+    }
+
+    for (const [tag, sort] of [
+      [undefined, 'date'],
+      [undefined, 'semver'],
+      ['latest', 'date'],
+      ['4.15.0', 'date'],
+    ]) {
+      it(`renders the image version with tag=${tag}, sort=${sort}`, async function () {
+        expect(await invoke({ tag, sort, results })).to.deep.equal({
+          label: undefined,
+          message: 'v4.15.0',
+          color: 'blue',
+        })
+      })
+    }
+
+    for (const [tag, sort, message] of [
+      [undefined, 'date', 'no image tags found'],
+      [undefined, 'semver', 'no images found for arch amd64'],
+      ['latest', 'date', 'tag not found'],
+      [signature.name, 'date', 'tag not found'],
+    ]) {
+      it(`reports ${message} for artifact-only tags with tag=${tag}, sort=${sort}`, async function () {
+        expect(
+          await invoke({
+            tag,
+            sort,
+            results: [signature, { ...signature, name: 'latest' }],
+          }),
+        ).to.include({ isError: true, message })
+      })
+    }
+
+    it('preserves tags with no image metadata', async function () {
+      expect(
+        await invoke({
+          tag: '2.7',
+          results: [{ name: '2.7', images: [] }],
+        }),
+      )
+        .to.include({ message: 'v2.7' })
+        .and.not.have.property('isError')
+    })
+
+    for (const [tag, message] of [
+      [undefined, 'v1.2.3'],
+      ['latest', 'tag not found'],
+    ]) {
+      it(`handles artifact latest alongside an image with tag=${tag}`, async function () {
+        expect(
+          await invoke({
+            tag,
+            results: [
+              { ...signature, name: 'latest' },
+              { name: '1.2.3', images },
+            ],
+          }),
+        ).to.include({ message })
+      })
+    }
+
+    it('fetches the next page when the first page contains only artifacts', async function () {
+      const scope = nock('https://registry.hub.docker.com')
+        .get('/v2/repositories/dnesting/nsd/tags')
+        .query({ page_size: 100, ordering: 'last_updated' })
+        .reply(200, {
+          count: 101,
+          results: Array.from({ length: 100 }, (_, i) => ({
+            ...signature,
+            name: `sha256-${i.toString(16).padStart(64, '0')}.sig`,
+          })),
+        })
+        .get('/v2/repositories/dnesting/nsd/tags')
+        .query({ page_size: 100, ordering: 'last_updated', page: 2 })
+        .reply(200, { count: 101, results: [results[2]] })
+
+      expect(
+        await DockerVersion.invoke(defaultContext, config, {
+          user: 'dnesting',
+          repo: 'nsd',
+        }),
+      ).to.deep.equal({
+        label: undefined,
+        message: 'v4.15.0',
+        color: 'blue',
+      })
+      scope.done()
+    })
+  })
+
   test(DockerVersion.prototype.transform, () => {
     given({
       tag: '',
