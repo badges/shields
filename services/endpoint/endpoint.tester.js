@@ -39,7 +39,7 @@ t.create('User label and URL-encoded message override endpoint text')
   )
   .expectBadge({ label: 'custom', message: 'hello & world' })
 
-t.create('User message overrides endpoint error message')
+t.create('User message does not override endpoint error message')
   .get('.json?url=https://example.com/badge&message=custom')
   .intercept(nock =>
     nock('https://example.com/').get('/badge').reply(200, {
@@ -50,7 +50,7 @@ t.create('User message overrides endpoint error message')
       color: 'red',
     }),
   )
-  .expectBadge({ label: 'hey', message: 'custom', color: 'red' })
+  .expectBadge({ label: 'hey', message: 'not right', color: 'red' })
 
 t.create('User message does not override response validation errors')
   .get('.json?url=https://example.com/badge&message=custom')

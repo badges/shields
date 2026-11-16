@@ -55,7 +55,8 @@ A collection of APIs compatible with Shields.io's endpoint badge is available <a
         <td><code>message</code></td>
         <td>
           Required. Can't be empty. The right text. This can be overridden by
-          the <code>message</code> query parameter.
+          the <code>message</code> query parameter unless <code>isError</code>
+          is <code>true</code>.
         </td>
       </tr>
       <tr>
@@ -77,8 +78,8 @@ A collection of APIs compatible with Shields.io's endpoint badge is available <a
         <td><code>isError</code></td>
         <td>
           Default: <code>false</code>. <code>true</code> to treat this as an
-          error badge. This prevents the user from overriding the color. In the
-          future, it may affect cache behavior.
+          error badge. This prevents the user from overriding the color or
+          message. In the future, it may affect cache behavior.
         </td>
       </tr>
       <tr>
@@ -144,7 +145,7 @@ export default class Endpoint extends BaseJsonService {
             name: 'message',
             displayAfter: 'label',
             description:
-              'Override the message from your JSON endpoint. Cannot be empty. URL-encode spaces and special characters.',
+              'Override the message from your JSON endpoint unless isError is true. Cannot be empty. URL-encode spaces and special characters.',
             example: 'custom message',
           },
         ),
@@ -218,7 +219,9 @@ export default class Endpoint extends BaseJsonService {
 
     return this.constructor.render({
       ...validated,
-      message: message ?? validated.message,
+      message: validated.isError
+        ? validated.message
+        : (message ?? validated.message),
     })
   }
 }
