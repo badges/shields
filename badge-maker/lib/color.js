@@ -36,15 +36,24 @@ export function isHexColor(s = '') {
 }
 
 function isCSSColor(color) {
-  return typeof color === 'string' && fromString(color.trim())
+  if (typeof color !== 'string') {
+    return false
+  }
+  try {
+    return Boolean(fromString(color.trim()))
+  } catch {
+    // css-color-converter looks up names in a plain object, so a name like
+    // `constructor` throws instead of returning null.
+    return false
+  }
 }
 
 export function normalizeColor(color) {
   if (color === undefined) {
     return undefined
-  } else if (color in namedColors) {
+  } else if (Object.hasOwn(namedColors, color)) {
     return color
-  } else if (color in aliases) {
+  } else if (Object.hasOwn(aliases, color)) {
     return aliases[color]
   } else if (isHexColor(color)) {
     return `#${color.toString().toLowerCase()}`
@@ -57,9 +66,9 @@ export function normalizeColor(color) {
 
 export function toSvgColor(color) {
   const normalized = normalizeColor(color)
-  if (normalized in namedColors) {
+  if (Object.hasOwn(namedColors, normalized)) {
     return namedColors[normalized]
-  } else if (normalized in resolvedAliases) {
+  } else if (Object.hasOwn(resolvedAliases, normalized)) {
     return resolvedAliases[normalized]
   } else {
     return normalized
