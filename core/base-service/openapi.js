@@ -67,6 +67,23 @@ function addGlobalProperties(endpoints) {
       ...paths[key].get.parameters,
       ...globalParamRefs,
     ]
+    const parameters = paths[key].get.parameters
+    for (const param of [...parameters]) {
+      const displayAfter = param['x-display-after']
+      if (!displayAfter) {
+        continue
+      }
+      const target = parameters.find(
+        other =>
+          other !== param &&
+          (other.name === displayAfter ||
+            other.$ref === `#/components/parameters/${displayAfter}`),
+      )
+      if (target) {
+        parameters.splice(parameters.indexOf(param), 1)
+        parameters.splice(parameters.indexOf(target) + 1, 0, param)
+      }
+    }
     paths[key].get['x-code-samples'] = getCodeSamples(paths[key].get.summary)
   }
   return paths
@@ -274,8 +291,12 @@ function queryParam({
   schema = { type: 'string' },
   required = false,
   description,
+  displayAfter,
 }) {
   const param = { name, in: 'query', required, schema, example, description }
+  if (displayAfter) {
+    param['x-display-after'] = displayAfter
+  }
   if (example === null && schema.type === 'boolean') {
     param.allowEmptyValue = true
   }
@@ -331,6 +352,7 @@ function queryParams(...params) {
  *    Query params are usually strings. (Optional)
  * @property {boolean} [required=false] Determines whether this parameter is mandatory (Optional)
  * @property {string} description A brief description of the parameter (Optional)
+ * @property {string} [displayAfter] Name of the parameter to appear immediately after in the generated documentation
  */
 
 /**

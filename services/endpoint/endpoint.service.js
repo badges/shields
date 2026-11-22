@@ -10,6 +10,7 @@ const blockedDomains = ['github.com', 'shields.io']
 
 const queryParamSchema = Joi.object({
   url,
+  message: Joi.string(),
 }).required()
 
 const description = `
@@ -52,7 +53,11 @@ A collection of APIs compatible with Shields.io's endpoint badge is available <a
       </tr>
       <tr>
         <td><code>message</code></td>
-        <td>Required. Can't be empty. The right text.</td>
+        <td>
+          Required. Can't be empty. The right text. This can be overridden by
+          the <code>message</code> query parameter unless <code>isError</code>
+          is <code>true</code>.
+        </td>
       </tr>
       <tr>
         <td><code>color</code></td>
@@ -73,8 +78,8 @@ A collection of APIs compatible with Shields.io's endpoint badge is available <a
         <td><code>isError</code></td>
         <td>
           Default: <code>false</code>. <code>true</code> to treat this as an
-          error badge. This prevents the user from overriding the color. In the
-          future, it may affect cache behavior.
+          error badge. This prevents the user from overriding the color or
+          message. In the future, it may affect cache behavior.
         </td>
       </tr>
       <tr>
@@ -129,12 +134,21 @@ export default class Endpoint extends BaseJsonService {
       get: {
         summary: 'Endpoint Badge',
         description,
-        parameters: queryParams({
-          name: 'url',
-          description: 'The URL to your JSON endpoint',
-          required: true,
-          example: 'https://shields.redsparr0w.com/2473/monday',
-        }),
+        parameters: queryParams(
+          {
+            name: 'url',
+            description: 'The URL to your JSON endpoint',
+            required: true,
+            example: 'https://shields.redsparr0w.com/2473/monday',
+          },
+          {
+            name: 'message',
+            displayAfter: 'label',
+            description:
+              'Override the message from your JSON endpoint unless isError is true. Cannot be empty. URL-encode spaces and special characters.',
+            example: 'custom message',
+          },
+        ),
       },
     },
   }
@@ -180,7 +194,7 @@ export default class Endpoint extends BaseJsonService {
       config?.public?.allowUnsecuredEndpointRequests || false
   }
 
-  async handle(namedParams, { url }) {
+  async handle(namedParams, { url, message }) {
     let protocol, hostname
     try {
       const parsedUrl = new URL(url)
@@ -203,6 +217,11 @@ export default class Endpoint extends BaseJsonService {
       includeKeys: true,
     })
 
-    return this.constructor.render(validated)
+    return this.constructor.render({
+      ...validated,
+      message: validated.isError
+        ? validated.message
+        : (message ?? validated.message),
+    })
   }
 }
