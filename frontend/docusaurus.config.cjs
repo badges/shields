@@ -118,6 +118,19 @@ const config = {
             ],
           },
           {
+            title: 'Projects',
+            items: [
+              {
+                label: 'Badge3D',
+                href: 'https://3d.shields.io',
+              },
+              {
+                label: 'Badge Beadgrid',
+                href: 'https://beads.shields.io',
+              },
+            ],
+          },
+          {
             title: 'Stats',
             items: [
               {

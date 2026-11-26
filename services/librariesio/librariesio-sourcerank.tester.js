@@ -15,6 +15,14 @@ t.create('sourcerank (scoped npm package)')
     message: anyInteger,
   })
 
+t.create('sourcerank (package name containing slashes)')
+  .timeout(10000)
+  .get('/go/github.com/ipfs/kubo.json')
+  .expectBadge({
+    label: 'sourcerank',
+    message: anyInteger,
+  })
+
 t.create('sourcerank (not a package)')
   .timeout(10000)
   .get('/npm/foobar-is-not-package.json')

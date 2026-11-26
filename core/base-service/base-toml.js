@@ -2,7 +2,6 @@
  * @module
  */
 
-import emojic from 'emojic'
 import { parse } from 'smol-toml'
 import BaseService from './base.js'
 import { InvalidResponse } from './errors.js'
@@ -70,13 +69,13 @@ class BaseTomlService extends BaseService {
     try {
       parsed = parse(buffer.toString())
     } catch (err) {
-      logTrace(emojic.dart, 'Response TOML (unparseable)', buffer)
+      logTrace('🎯', 'Response TOML (unparseable)', buffer)
       throw new InvalidResponse({
         prettyMessage: 'unparseable toml response',
         underlyingError: err,
       })
     }
-    logTrace(emojic.dart, 'Response TOML (before validation)', parsed, {
+    logTrace('🎯', 'Response TOML (before validation)', parsed, {
       deep: true,
     })
     return this.constructor._validate(parsed, schema)

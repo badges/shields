@@ -70,17 +70,10 @@ Use the button at the bottom to copy your badge url or snippet, which can then b
 
 Shields is a community project. We invite your participation through issues and pull requests! You can peruse the [contributing guidelines][contributing].
 
-When adding or changing a service [please add tests][service-tests].
-
-This project has quite a backlog of suggestions! If you're new to the project, maybe you'd like to open a pull request to address one of them.
-
-You can read a [tutorial on how to add a badge][tutorial].
-
-[![GitHub issues by-label](https://img.shields.io/github/issues/badges/shields/good%20first%20issue)](https://github.com/badges/shields/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+This project has quite a backlog of suggestions! If you're new to the project, maybe you'd like to open a pull request to address one of them. Before adding a new badge, please read our [tutorial][tutorial].
 
 If you intend on reporting or contributing a fix related to security vulnerabilities, please first refer to our [security policy][security].
 
-[service-tests]: https://github.com/badges/shields/blob/master/doc/service-tests.md
 [tutorial]: https://github.com/badges/shields/blob/master/doc/TUTORIAL.md
 [contributing]: https://github.com/badges/shields/blob/master/CONTRIBUTING.md
 [security]: https://github.com/badges/shields/blob/master/SECURITY.md

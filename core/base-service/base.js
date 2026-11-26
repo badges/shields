@@ -2,8 +2,6 @@
  * @module
  */
 
-// See available emoji at http://emoji.muan.co/
-import emojic from 'emojic'
 import Joi from 'joi'
 import log from '../server/log.js'
 import { AuthHelper } from './auth-helper.js'
@@ -293,7 +291,7 @@ class BaseService {
       delete logOptions.searchParams
     }
     logTrace(
-      emojic.bowAndArrow,
+      '🏹',
       'Request',
       `${logUrl}\n${JSON.stringify(logOptions, null, 2)}`,
     )
@@ -303,7 +301,7 @@ class BaseService {
       systemErrors,
     )
     await this._meterResponse(res, buffer)
-    logTrace(emojic.dart, 'Response status code', res.statusCode)
+    logTrace('🎯', 'Response status code', res.statusCode)
     return checkErrorResponse(httpErrors, logErrors)({ buffer, res })
   }
 
@@ -365,7 +363,7 @@ class BaseService {
 
   _handleError(error) {
     if (error instanceof NotFound || error instanceof InvalidParameter) {
-      trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+      trace.logTrace('outbound', '🙅', 'Handled error', error)
       return {
         isError: true,
         message: error.prettyMessage,
@@ -376,7 +374,7 @@ class BaseService {
       error instanceof InvalidResponse ||
       error instanceof Inaccessible
     ) {
-      trace.logTrace('outbound', emojic.noGoodWoman, 'Handled error', error)
+      trace.logTrace('outbound', '🙅', 'Handled error', error)
       const serviceData = {
         isError: true,
         message: error.prettyMessage,
@@ -390,7 +388,7 @@ class BaseService {
       if (
         !trace.logTrace(
           'unhandledError',
-          emojic.boom,
+          '💥',
           'Unhandled internal error',
           error,
         )
@@ -406,12 +404,7 @@ class BaseService {
         color: 'lightgray',
       }
     } else {
-      trace.logTrace(
-        'unhandledError',
-        emojic.boom,
-        'Unhandled internal error',
-        error,
-      )
+      trace.logTrace('unhandledError', '💥', 'Unhandled internal error', error)
       throw error
     }
   }
@@ -422,9 +415,9 @@ class BaseService {
     namedParams = {},
     queryParams = {},
   ) {
-    trace.logTrace('inbound', emojic.womanCook, 'Service class', this.name)
-    trace.logTrace('inbound', emojic.ticket, 'Named params', namedParams)
-    trace.logTrace('inbound', emojic.crayon, 'Query params', queryParams)
+    trace.logTrace('inbound', '👩‍🍳', 'Service class', this.name)
+    trace.logTrace('inbound', '🎫', 'Named params', namedParams)
+    trace.logTrace('inbound', '🖍', 'Query params', queryParams)
 
     // Like the service instance, the auth helper could be reused for each request.
     // However, moving its instantiation to `register()` makes `invoke()` harder
@@ -469,7 +462,7 @@ class BaseService {
         )
         trace.logTrace(
           'inbound',
-          emojic.crayon,
+          '🖍',
           'Query params after validation',
           queryParams,
         )
@@ -497,7 +490,7 @@ class BaseService {
       serviceData = serviceInstance._handleError(serviceError)
     }
 
-    trace.logTrace('outbound', emojic.shield, 'Service data', serviceData)
+    trace.logTrace('outbound', '🛡', 'Service data', serviceData)
 
     return serviceData
   }

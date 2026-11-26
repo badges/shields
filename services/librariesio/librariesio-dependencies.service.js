@@ -1,5 +1,8 @@
 import Joi from 'joi'
-import { nonNegativeInteger } from '../validators.js'
+import {
+  nonNegativeInteger,
+  optionalDottedVersionNClausesWithOptionalSuffix,
+} from '../validators.js'
 import { pathParams } from '../index.js'
 import LibrariesIoBase from './librariesio-base.js'
 import {
@@ -28,7 +31,7 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
 
   static route = {
     base: 'librariesio/release',
-    pattern: ':platform/:scope(@[^/]+)?/:packageName/:version?',
+    pattern: ':platform/:scope(@[^/]+)?/:packageNameAndVersion+',
   }
 
   static openApi = {
@@ -55,7 +58,31 @@ class LibrariesIoProjectDependencies extends LibrariesIoBase {
 
   static _cacheLength = 900
 
-  async handle({ platform, scope, packageName, version = 'latest' }) {
+  // Package names may contain slashes (e.g. Go modules), so the optional
+  // version can't be told apart from the package name by the route alone.
+  // Treat the last fragment as a version if it looks like one (ignoring a
+  // leading "v"), otherwise treat the whole path as the package name.
+  static splitPackageNameAndVersion(packageNameAndVersion) {
+    const lastSlash = packageNameAndVersion.lastIndexOf('/')
+    if (lastSlash !== -1) {
+      const lastFragment = packageNameAndVersion.slice(lastSlash + 1)
+      const { error } =
+        optionalDottedVersionNClausesWithOptionalSuffix.validate(
+          lastFragment.replace(/^v/, ''),
+        )
+      if (!error || lastFragment === 'latest') {
+        return {
+          packageName: packageNameAndVersion.slice(0, lastSlash),
+          version: lastFragment,
+        }
+      }
+    }
+    return { packageName: packageNameAndVersion, version: 'latest' }
+  }
+
+  async handle({ platform, scope, packageNameAndVersion }) {
+    const { packageName, version } =
+      this.constructor.splitPackageNameAndVersion(packageNameAndVersion)
     const url = `/${encodeURIComponent(platform)}/${
       scope ? encodeURIComponent(`${scope}/`) : ''
     }${encodeURIComponent(packageName)}/${encodeURIComponent(
