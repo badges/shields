@@ -12,6 +12,9 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'badges',
   projectName: 'shields',
+  customFields: {
+    simpleIconsVersion: require('../package.json').dependencies['simple-icons'],
+  },
 
   themes: [
     [
