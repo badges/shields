@@ -16,6 +16,12 @@ test(isHexColor, () => {
 })
 
 test(normalizeColor, () => {
+  forCases([
+    given('constructor'),
+    given('toString'),
+    given('valueOf'),
+    given('__proto__'),
+  ]).expect(undefined)
   given('red').expect('red')
   given('blue').expect('blue')
   given('4b0').expect('#4b0')
@@ -74,6 +80,12 @@ test(toSvgColor, () => {
   )
   given('lightgray').expect('#939393')
   given('informational').expect('#007ec6')
+  forCases([
+    given('constructor'),
+    given('toString'),
+    given('hasOwnProperty'),
+    given('__proto__'),
+  ]).expect(undefined)
 })
 
 test(brightness, () => {
